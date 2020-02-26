@@ -1,5 +1,5 @@
-name: home
-description: A new Flutter project.
+name: smart_home
+description: 智慧家庭
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,6 +19,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  graphql_flutter: ^3.0.0
+  flutter_bloc: ^3.2.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
