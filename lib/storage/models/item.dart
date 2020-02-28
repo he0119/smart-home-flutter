@@ -19,7 +19,31 @@ class Item {
   final Storage storage;
   final User editor;
   final String description;
-  final String price;
+  final double price;
   final DateTime expirationDate;
   final DateTime updateDate;
+
+  factory Item.fromJson(Map<String, dynamic> json) {
+    // 检查是否拥有 ExpirationDate
+    DateTime jsonExpirationDate;
+    if (json['expirationDate'] == null) {
+      jsonExpirationDate = null;
+    } else {
+      jsonExpirationDate = DateTime.parse(json['expirationDate']);
+    }
+    return Item(
+      id: int.parse(json['id']),
+      name: json['name'],
+      number: json['number'],
+      description: json['description'],
+      expirationDate: jsonExpirationDate,
+      price: json['price'],
+      updateDate: DateTime.parse(json['updateDate']),
+      storage: Storage(
+        id: int.parse(json['storage']['id']),
+        name: json['storage']['name'],
+      ),
+      editor: User(username: json['editor']['username']),
+    );
+  }
 }

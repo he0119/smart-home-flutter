@@ -2,18 +2,18 @@ import 'package:smart_home/services/shared_preferences_service.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class Client {
-  static final HttpLink httpLink = HttpLink(
-    uri: 'http://118.24.9.142:8000/graphql',
-  );
+  static GraphQLClient initailizeClient(String prefix) {
+    final HttpLink httpLink = HttpLink(
+      uri: 'http://127.0.0.1:8000/graphql',
+    );
 
-  static final AuthLink _authLink = AuthLink(
-      getToken: () async => 'JWT ${await sharedPreferenceService.token}');
+    final AuthLink _authLink =
+        AuthLink(getToken: () async => await sharedPreferenceService.token);
 
-  static final Link _link = _authLink.concat(HttpLink as Link);
+    final Link _link = _authLink.concat(httpLink);
 
-  static GraphQLClient initailizeClient() {
     return GraphQLClient(
-      cache: InMemoryCache(),
+      cache: InMemoryCache(storagePrefix: prefix),
       link: _link,
     );
   }

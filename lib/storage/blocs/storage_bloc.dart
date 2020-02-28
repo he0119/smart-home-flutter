@@ -10,10 +10,10 @@ part 'events.dart';
 part 'states.dart';
 
 class StorageBloc extends Bloc<StorageEvent, StorageState> {
-  final GraphQLClient _client = Client.initailizeClient();
+  final GraphQLClient _client = Client.initailizeClient('storage');
 
   @override
-  StorageState get initialState => new Initial();
+  StorageState get initialState => Initial();
 
   @override
   Stream<StorageState> mapEventToState(StorageEvent event) async* {
@@ -31,31 +31,10 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       }
       final List<dynamic> items = results.data['search']['items'];
       final List<dynamic> storages = results.data['search']['storages'];
-
-      final List<Item> listofItem = items
-          .map((dynamic e) => Item(
-                id: e['id'] as int,
-                name: e['name'] as String,
-                number: e['number'] as int,
-                description: e['description'] as String,
-                expirationDate: e['expirationDate'] as DateTime,
-                price: e['price'] as String,
-                updateDate: e['updateDate'] as DateTime,
-                storage: Storage(
-                  id: e['storage']['id'] as int,
-                  name: e['storage']['name'] as String,
-                ),
-                editor: User(username: e['editor']['username'] as String),
-              ))
-          .toList();
-
-      final List<Storage> listofStorage = storages
-          .map((dynamic e) => Storage(
-                id: e['id'],
-                name: e['name'],
-                description: e['description'],
-              ))
-          .toList();
+      final List<Item> listofItem =
+          items.map((dynamic e) => Item.fromJson(e)).toList();
+      final List<Storage> listofStorage =
+          storages.map((dynamic e) => Storage.fromJson(e)).toList();
       yield SearchResults(listofItem, listofStorage);
     }
   }

@@ -20,10 +20,10 @@ class SearchError extends StorageState {
 
 class SearchResults extends StorageState {
   final List<Item> items;
-  final List<Storage> storage;
+  final List<Storage> storages;
 
-  const SearchResults(this.items, this.storage);
+  SearchResults(this.items, this.storages);
 
   @override
-  List<Object> get props => [items, storage];
+  List<Object> get props => [items, storages];
 }
