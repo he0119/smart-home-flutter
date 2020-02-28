@@ -62,7 +62,12 @@ class MyHomePage extends StatelessWidget {
             return ListView.builder(
               itemCount: state.items.length,
               itemBuilder: (BuildContext context, int index) =>
-                  ListTile(title: Text(state.items[index].name)),
+                  ListTile(title: Column(
+                    children: <Widget>[
+                      Text(state.items[index].name),
+                      Text(state.items[index].expirationDate?.toIso8601String() ?? ''),
+                    ],
+                  )),
             );
           }
           return Center(

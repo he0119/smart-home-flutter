@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:smart_home/services/client.dart';
+import 'package:smart_home/storage/models/serializers.dart';
 
 import '../graphql/queries/queries.dart';
 import '../models/models.dart';
@@ -29,12 +30,15 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
         yield SearchError(results.exception);
         return;
       }
-      final List<dynamic> items = results.data['search']['items'];
       final List<dynamic> storages = results.data['search']['storages'];
-      final List<Item> listofItem =
-          items.map((dynamic e) => Item.fromJson(e)).toList();
-      final List<Storage> listofStorage =
-          storages.map((dynamic e) => Storage.fromJson(e)).toList();
+      final List<dynamic> items = results.data['search']['items'];
+      final List<Storage> listofStorage = storages
+          .map((dynamic e) =>
+              serializers.deserializeWith(Storage.serializer, e))
+          .toList();
+      final List<Item> listofItem = items
+          .map((dynamic e) => serializers.deserializeWith(Item.serializer, e))
+          .toList();
       yield SearchResults(listofItem, listofStorage);
     }
   }
