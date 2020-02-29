@@ -1,93 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/storage/blocs/storage_bloc.dart';
+import 'package:smart_home/screens/login.dart';
 
-import 'services/shared_preferences_service.dart';
+import 'authentication/authentication_bloc.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+      BlocProvider(
+        create: (context) => AuthenticationBloc()..add(AppStarted()),
+        child: MyApp(),
+      ),
+    );
 
 class MyApp extends StatelessWidget {
-  initMethod(context) async {
-    await sharedPreferenceService.getSharedPreferencesInstance();
-    String _token = await sharedPreferenceService.token;
-    if (_token == null || _token == "") {
-      print('未登录');
-    } else
-      print('已登录');
-  }
-
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => initMethod(context));
     return MaterialApp(
-      title: 'Flutter Demo',
-      home: BlocProvider(
-        create: (context) => StorageBloc(),
-        child: MyHomePage(),
-      ),
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+        print(state);
+        if (state is Authenticated) {
+          return HomePage();
+        }
+        if (state is Unauthenticated) {
+          return LoginPage();
+        }
+        return HomePage();
+      }),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('智慧家庭'),
+        title: Text('首页'),
       ),
-      body: BlocBuilder<StorageBloc, StorageState>(
-        builder: (context, state) {
-          if (state is Initial) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('无数据'),
-                ],
-              ),
-            );
-          }
-          if (state is SearchError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(state.errors.toString()),
-                ],
-              ),
-            );
-          }
-          if (state is SearchResults) {
-            return ListView.builder(
-              itemCount: state.items.length,
-              itemBuilder: (BuildContext context, int index) =>
-                  ListTile(title: Column(
-                    children: <Widget>[
-                      Text(state.items[index].name),
-                      Text(state.items[index].expirationDate?.toIso8601String() ?? ''),
-                    ],
-                  )),
-            );
-          }
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '按下按钮获取数据',
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          BlocProvider.of<StorageBloc>(context).add(StartSearch('test'));
-        },
-        tooltip: 'Start',
-        child: Icon(Icons.timer),
+      body: Center(
+        child: Text('欢迎'),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:smart_home/services/client.dart';
+import 'package:smart_home/services/graphql_service.dart';
 import 'package:smart_home/storage/models/serializers.dart';
 
 import '../graphql/queries/queries.dart';
@@ -11,8 +11,6 @@ part 'events.dart';
 part 'states.dart';
 
 class StorageBloc extends Bloc<StorageEvent, StorageState> {
-  final GraphQLClient _client = Client.initailizeClient('storage');
-
   @override
   StorageState get initialState => Initial();
 
@@ -25,7 +23,7 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
           'key': event.key,
         },
       );
-      final results = await _client.query(options);
+      final results = await graphqlService.query(options);
       if (results.hasException) {
         yield SearchError(results.exception);
         return;
