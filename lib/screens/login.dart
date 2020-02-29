@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/authentication/authentication_bloc.dart';
 
 class LoginPage extends StatelessWidget {
@@ -25,7 +26,7 @@ class LoginPage extends StatelessWidget {
             FlatButton(
               child: Text("登录"),
               onPressed: () {
-                AuthenticationBloc().add(LogIn(
+                BlocProvider.of<AuthenticationBloc>(context).add(LogIn(
                   _usernameController.text,
                   _passwordController.text,
                 ));

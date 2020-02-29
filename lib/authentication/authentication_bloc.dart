@@ -50,7 +50,6 @@ Stream<AuthenticationState> _mapLogInToState(LogIn event) async* {
   String token = results.data['tokenAuth']['token'];
   await sharedPreferenceService.setToken('JWT $token');
   graphqlService.reloadClient();
-  // FIX: 无法正确返回 Authenticated 状态
   yield Authenticated(await currentUser());
 }
 
