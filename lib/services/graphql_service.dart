@@ -15,7 +15,7 @@ class GraphQLService {
 
   void initailizeClient() {
     final AuthLink _authLink =
-        AuthLink(getToken: () async => await sharedPreferenceService.token);
+        AuthLink(getToken: () async => 'JWT ${await sharedPreferenceService.token}');
 
     final Link _link = _authLink.concat(_httpLink);
 

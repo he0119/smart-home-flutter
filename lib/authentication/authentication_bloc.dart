@@ -48,7 +48,7 @@ Stream<AuthenticationState> _mapLogInToState(LogIn event) async* {
     print(results.exception.toString());
   }
   String token = results.data['tokenAuth']['token'];
-  await sharedPreferenceService.setToken('JWT $token');
+  await sharedPreferenceService.setToken(token);
   graphqlService.reloadClient();
   yield Authenticated(await currentUser());
 }
