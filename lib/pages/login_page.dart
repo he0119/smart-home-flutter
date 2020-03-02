@@ -26,7 +26,8 @@ class LoginPage extends StatelessWidget {
             FlatButton(
               child: Text("登录"),
               onPressed: () {
-                BlocProvider.of<AuthenticationBloc>(context).add(LogIn(
+                BlocProvider.of<AuthenticationBloc>(context)
+                    .add(AuthenticationLogin(
                   _usernameController.text,
                   _passwordController.text,
                 ));

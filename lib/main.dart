@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/screens/login.dart';
+import 'package:smart_home/pages/login_page.dart';
 
 import 'authentication/authentication_bloc.dart';
 
@@ -20,11 +20,13 @@ class MyApp extends StatelessWidget {
         print(state);
         if (state is Authenticated) {
           return HomePage();
-        }
-        if (state is Unauthenticated) {
+        } else if (state is Unauthenticated) {
           return LoginPage();
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
-        return HomePage();
       }),
     );
   }
@@ -38,7 +40,17 @@ class HomePage extends StatelessWidget {
         title: Text('首页'),
       ),
       body: Center(
-        child: Text('欢迎'),
+        child: Column(
+          children: <Widget>[
+            Text('欢迎'),
+            FlatButton(
+              child: Text('注销'),
+              onPressed: () {
+                BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationLogout());
+              },
+            )
+          ],
+        ),
       ),
     );
   }

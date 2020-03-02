@@ -7,22 +7,22 @@ abstract class StorageState extends Equatable {
   List<Object> get props => [];
 }
 
-class Initial extends StorageState {}
+class StorageInitial extends StorageState {}
 
-class SearchError extends StorageState {
+class StorageSearchError extends StorageState {
   final OperationException errors;
 
-  const SearchError(this.errors);
+  const StorageSearchError(this.errors);
 
   @override
   List<Object> get props => [errors];
 }
 
-class SearchResults extends StorageState {
+class StorageSearchResults extends StorageState {
   final List<Item> items;
   final List<Storage> storages;
 
-  SearchResults(this.items, this.storages);
+  StorageSearchResults(this.items, this.storages);
 
   @override
   List<Object> get props => [items, storages];

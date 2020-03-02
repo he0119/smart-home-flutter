@@ -9,14 +9,14 @@ abstract class AuthenticationEvent extends Equatable {
 
 class AppStarted extends AuthenticationEvent {}
 
-class LogIn extends AuthenticationEvent {
+class AuthenticationLogin extends AuthenticationEvent {
   final String username;
   final String password;
 
-  const LogIn(this.username, this.password);
+  const AuthenticationLogin(this.username, this.password);
 
   @override
   List<Object> get props => [username, password];
 }
 
-class LogOut extends AuthenticationEvent {}
+class AuthenticationLogout extends AuthenticationEvent {}
