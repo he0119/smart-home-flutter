@@ -4,11 +4,11 @@ import 'package:smart_home/graphql/mutations/mutations.dart';
 import 'package:smart_home/graphql/queries/queries.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/serializers.dart';
-import 'package:smart_home/services/graphql_service.dart';
+import 'package:smart_home/repositories/graphql_api_client.dart';
 
-UserService userService = UserService();
+UserRepository userRepository = UserRepository();
 
-class UserService {
+class UserRepository {
   SharedPreferences _prefs;
 
   Future<String> get token async => _prefs.getString('token');
@@ -21,13 +21,14 @@ class UserService {
         'password': password,
       },
     );
-    QueryResult results = await graphqlService.mutation(loginOptions);
+    QueryResult results = await graphqlApiClient.mutation(loginOptions);
     if (results.hasException) {
       return false;
     } else {
       String token = results.data['tokenAuth']['token'];
+      String refreshToken = results.data['tokenAuth']['refreshToken'];
       await setToken(token);
-      graphqlService.reloadClient();
+      await setRefreshToken(refreshToken);
       return true;
     }
   }
@@ -40,17 +41,36 @@ class UserService {
     QueryOptions _options = QueryOptions(
       documentNode: gql(me),
     );
-    QueryResult results = await graphqlService.query(_options);
+    QueryResult results = await graphqlApiClient.query(_options);
     User user =
         serializers.deserializeWith(User.serializer, results.data['me']);
     return user;
   }
 
   Future<bool> hasToken() async {
-    String _token = await userService.token;
-    if (_token == null || _token == "") {
+    String token = await userRepository.token;
+    print(token);
+    if (token == null || token == "") {
       return false;
     } else {
+      return true;
+    }
+  }
+
+  Future<bool> refreshToken() async {
+    String refreshToken = _prefs.getString('refreshToken');
+    MutationOptions options = MutationOptions(
+      documentNode: gql(refreshTokenMutation),
+      variables: {
+        'token': refreshToken,
+      },
+    );
+    QueryResult results = await graphqlApiClient.mutation(options);
+    if (results.hasException) {
+      return false;
+    } else {
+      String token = results.data['refreshToken']['token'];
+      await setToken(token);
       return true;
     }
   }
@@ -65,5 +85,9 @@ class UserService {
 
   Future setToken(String token) async {
     await _prefs.setString('token', token);
+  }
+
+  Future setRefreshToken(String refreshToken) async {
+    await _prefs.setString('refreshToken', refreshToken);
   }
 }

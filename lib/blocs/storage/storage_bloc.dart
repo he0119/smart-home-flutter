@@ -4,7 +4,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:smart_home/graphql/queries/queries.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/serializers.dart';
-import 'package:smart_home/services/graphql_service.dart';
+import 'package:smart_home/repositories/graphql_api_client.dart';
 
 part 'storage_events.dart';
 part 'storage_states.dart';
@@ -22,7 +22,7 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
           'key': event.key,
         },
       );
-      final results = await graphqlService.query(options);
+      final results = await graphqlApiClient.query(options);
       if (results.hasException) {
         yield StorageSearchError(results.exception);
         return;
