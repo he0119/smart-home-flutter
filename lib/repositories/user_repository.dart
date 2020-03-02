@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home/graphql/mutations/mutations.dart';
@@ -7,6 +9,40 @@ import 'package:smart_home/models/serializers.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 
 UserRepository userRepository = UserRepository();
+
+Map<String, dynamic> parseJwt(String token) {
+  final parts = token.split('.');
+  if (parts.length != 3) {
+    throw Exception('invalid token');
+  }
+
+  final payload = _decodeBase64(parts[1]);
+  final payloadMap = json.decode(payload);
+  if (payloadMap is! Map<String, dynamic>) {
+    throw Exception('invalid payload');
+  }
+
+  return payloadMap;
+}
+
+String _decodeBase64(String str) {
+  String output = str.replaceAll('-', '+').replaceAll('_', '/');
+
+  switch (output.length % 4) {
+    case 0:
+      break;
+    case 2:
+      output += '==';
+      break;
+    case 3:
+      output += '=';
+      break;
+    default:
+      throw Exception('Illegal base64url string!"');
+  }
+
+  return utf8.decode(base64Url.decode(output));
+}
 
 class UserRepository {
   SharedPreferences _prefs;
@@ -21,7 +57,7 @@ class UserRepository {
         'password': password,
       },
     );
-    QueryResult results = await graphqlApiClient.mutation(loginOptions);
+    QueryResult results = await graphqlApiClient.client.mutate(loginOptions);
     if (results.hasException) {
       return false;
     } else {
@@ -49,28 +85,9 @@ class UserRepository {
 
   Future<bool> hasToken() async {
     String token = await userRepository.token;
-    print(token);
     if (token == null || token == "") {
       return false;
     } else {
-      return true;
-    }
-  }
-
-  Future<bool> refreshToken() async {
-    String refreshToken = _prefs.getString('refreshToken');
-    MutationOptions options = MutationOptions(
-      documentNode: gql(refreshTokenMutation),
-      variables: {
-        'token': refreshToken,
-      },
-    );
-    QueryResult results = await graphqlApiClient.mutation(options);
-    if (results.hasException) {
-      return false;
-    } else {
-      String token = results.data['refreshToken']['token'];
-      await setToken(token);
       return true;
     }
   }
@@ -83,11 +100,37 @@ class UserRepository {
     return true;
   }
 
-  Future setToken(String token) async {
-    await _prefs.setString('token', token);
+  Future<bool> isTokenValid() async {
+    Map<String, dynamic> result = parseJwt(await token);
+    int now = new DateTime.now().microsecondsSinceEpoch;
+    // 本地时间可能与服务器不相等
+    int exp = result['exp'] - 30;
+    return exp > now;
+  }
+
+  Future<bool> refreshToken() async {
+    String refreshToken = _prefs.getString('refreshToken');
+    MutationOptions options = MutationOptions(
+      documentNode: gql(refreshTokenMutation),
+      variables: {
+        'token': refreshToken,
+      },
+    );
+    QueryResult results = await graphqlApiClient.client.mutate(options);
+    if (results.hasException) {
+      return false;
+    } else {
+      String token = results.data['refreshToken']['token'];
+      await setToken(token);
+      return true;
+    }
   }
 
   Future setRefreshToken(String refreshToken) async {
     await _prefs.setString('refreshToken', refreshToken);
+  }
+
+  Future setToken(String token) async {
+    await _prefs.setString('token', token);
   }
 }
