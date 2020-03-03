@@ -37,4 +37,16 @@ class StorageRepository {
         .toList();
     return [listofItem, listofStorage];
   }
+
+  Future<List<Storage>> rootStorage() async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(rootStorageQuery),
+    );
+    final results = await graphqlApiClient.query(options);
+    final List<dynamic> storages = results.data['rootStorage'];
+    final List<Storage> listofStorage = storages
+        .map((dynamic e) => serializers.deserializeWith(Storage.serializer, e))
+        .toList();
+    return listofStorage;
+  }
 }

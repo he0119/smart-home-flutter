@@ -18,6 +18,9 @@ void main() {
         BlocProvider<StorageSearchBloc>(
           create: (BuildContext context) => StorageSearchBloc(),
         ),
+        BlocProvider<StorageBloc>(
+          create: (BuildContext context) => StorageBloc(),
+        ),
       ],
       child: MyApp(),
     ),
@@ -33,8 +36,8 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: [
-          const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
-        ],
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
+      ],
       title: '智慧家庭',
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {

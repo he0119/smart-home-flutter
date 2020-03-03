@@ -13,7 +13,7 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
   @override
   Stream<StorageSearchState> mapEventToState(StorageSearchEvent event) async* {
     if (event is StorageSearchChanged) {
-      yield StorageLoading();
+      yield StorageSearchLoading();
       try {
         List<dynamic> results = await storageRepository.search(event.key);
         if (results == null) {
@@ -22,9 +22,9 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
         }
         yield StorageSearchResults(results[0], results[1]);
       } on StorageException catch (e) {
-        yield StorageError(e.message);
+        yield StorageSearchError(e.message);
       } catch (e) {
-        yield StorageError('错误：$e');
+        yield StorageSearchError('错误：$e');
       }
     }
     if (event is StorageSearchStarted) {

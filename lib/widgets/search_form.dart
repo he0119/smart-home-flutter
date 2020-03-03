@@ -66,10 +66,10 @@ class _SearchBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<StorageSearchBloc, StorageSearchState>(
       builder: (BuildContext context, StorageSearchState state) {
-        if (state is StorageLoading) {
+        if (state is StorageSearchLoading) {
           return CircularProgressIndicator();
         }
-        if (state is StorageError) {
+        if (state is StorageSearchError) {
           return Text(state.message);
         }
         if (state is StorageSearchResults) {

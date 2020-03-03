@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/pages/search_page.dart';
+import 'package:smart_home/pages/storage/home_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -11,8 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  StorageSearchBloc _storageSearchBloc;
-  int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
@@ -20,25 +19,17 @@ class _HomePageState extends State<HomePage> {
       'Index 0: 主页',
       style: optionStyle,
     ),
-    Text(
-      'Index 1: 物品管理',
-      style: optionStyle,
-    ),
+    StorageHomePage(),
     SearchPage(),
   ];
-
-  void _onItemTapped(int index) {
-    if (index == 2) {
-      _storageSearchBloc.add(StorageSearchChanged(''));
-    }
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  StorageSearchBloc _storageSearchBloc;
+  StorageBloc _storageBloc;
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     _storageSearchBloc = BlocProvider.of<StorageSearchBloc>(context);
+    _storageBloc = BlocProvider.of<StorageBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('智慧家庭'),
@@ -66,5 +57,17 @@ class _HomePageState extends State<HomePage> {
         onTap: _onItemTapped,
       ),
     );
+  }
+
+  void _onItemTapped(int index) {
+    if (index == 1) {
+      _storageBloc.add(StorageRoot());
+    }
+    if (index == 2) {
+      _storageSearchBloc.add(StorageSearchChanged(''));
+    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 }
