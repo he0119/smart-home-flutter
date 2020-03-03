@@ -23,5 +23,10 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
         yield StorageError('错误：$e');
       }
     }
+    if (event is StorageStorageDetail) {
+      yield StorageLoading();
+      Storage results = await storageRepository.storage(event.id);
+      yield StorageStorageDetailResults(results);
+    }
   }
 }

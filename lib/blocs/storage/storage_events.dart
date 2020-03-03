@@ -20,3 +20,15 @@ class StorageItemDetail extends StorageEvent {
   @override
   String toString() => key;
 }
+
+class StorageStorageDetail extends StorageEvent {
+  final String id;
+
+  const StorageStorageDetail(this.id);
+
+  @override
+  List<Object> get props => [id];
+
+  @override
+  String toString() => id;
+}

@@ -2,22 +2,59 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/pages/storage/storage_datail_page.dart';
 
 class StorageHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StorageBloc, StorageState>(
-      builder: (context, state) {
+    return BlocConsumer<StorageBloc, StorageState>(
+      listener: (context, state) {
         if (state is StorageRootResults) {
-          return ListView.builder(
-            itemCount: state.storages.length,
-            itemBuilder: (BuildContext context, int index) {
-              return _RootStorageItem(item: state.storages[index]);
-            },
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => StorageRootList(storages: state.storages)),
           );
         }
-        return CircularProgressIndicator();
+        if (state is StorageStorageDetailResults) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => StorageStoragePage(storage: state.storage)),
+          );
+        }
       },
+      builder: (context, state) {
+        if (state is StorageLoading) {
+          return CircularProgressIndicator();
+        }
+        return FlatButton(
+          child: Text('管理'),
+          onPressed: () {
+            BlocProvider.of<StorageBloc>(context).add(StorageRoot());
+          },
+        );
+      },
+    );
+  }
+}
+
+class StorageRootList extends StatelessWidget {
+  final List<Storage> storages;
+  const StorageRootList({Key key, @required this.storages}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('物品管理'),
+      ),
+      body: ListView.builder(
+        itemCount: storages.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _RootStorageItem(item: storages[index]);
+        },
+      ),
     );
   }
 }
@@ -36,7 +73,10 @@ class _RootStorageItem extends StatelessWidget {
       ),
       title: Text(item.name),
       subtitle: Text(item.description ?? ''),
-      onTap: () async {},
+      onTap: () async {
+        BlocProvider.of<StorageBloc>(context)
+            .add(StorageStorageDetail(item.id));
+      },
     );
   }
 }
