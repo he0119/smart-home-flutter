@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
+import 'package:smart_home/pages/storage/search_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -9,9 +12,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static BuildContext _buildContext;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _pageOptions = <Widget>[
     Text(
       'Index 0: IOT',
       style: optionStyle,
@@ -22,17 +26,37 @@ class _HomePageState extends State<HomePage> {
       style: optionStyle,
     ),
   ];
-  static List<String> _titles = ['IOT', '物品管理', '留言板'];
+  static List<Widget> _appBarOptions = [
+    AppBar(
+      title: Text('IOT'),
+    ),
+    AppBar(
+      title: Text('物品管理'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            BlocProvider.of<StorageSearchBloc>(_buildContext)
+                .add(StorageSearchStarted());
+            Navigator.push(
+              _buildContext,
+              MaterialPageRoute(builder: (_) => SearchPage()),
+            );
+          },
+        ),
+      ],
+    ),
+    AppBar(title: Text('留言板')),
+  ];
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    _buildContext = context;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_titles.elementAt(_selectedIndex)),
-      ),
+      appBar: _appBarOptions.elementAt(_selectedIndex),
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _pageOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -44,6 +68,9 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: Colors.blueAccent,
         onTap: (int index) {
           setState(() {
+            if (index == 1) {
+              BlocProvider.of<StorageBloc>(_buildContext).add(StorageRoot());
+            }
             _selectedIndex = index;
           });
         },

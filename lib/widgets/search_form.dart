@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
-import 'package:smart_home/models/models.dart';
+import 'package:smart_home/widgets/storage_item_list.dart';
 
 class SearchForm extends StatelessWidget {
   @override
@@ -76,62 +76,14 @@ class _SearchBody extends StatelessWidget {
           return state.items.isEmpty && state.storages.isEmpty
               ? Text('无结果')
               : Expanded(
-                  child: _SearchResults(
-                  items: state.items,
-                  storages: state.storages,
-                ));
+                  child: StorageItemList(
+                    items: state.items,
+                    storages: state.storages,
+                  ),
+                );
         }
         return Text('');
       },
     );
-  }
-}
-
-class _SearchResults extends StatelessWidget {
-  final List<Item> items;
-  final List<Storage> storages;
-
-  const _SearchResults({Key key, this.items, this.storages}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    List<dynamic> merged = List.from(items)..addAll(storages);
-    return ListView.builder(
-      itemCount: merged.length,
-      itemBuilder: (BuildContext context, int index) {
-        return _SearchResultItem(item: merged[index]);
-      },
-    );
-  }
-}
-
-class _SearchResultItem extends StatelessWidget {
-  final dynamic item;
-
-  const _SearchResultItem({Key key, @required this.item}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if (item is Item) {
-      return ListTile(
-        leading: const Icon(
-          Icons.insert_drive_file,
-          size: 34.0,
-        ),
-        title: Text(item.name),
-        subtitle: Text(item.description ?? ''),
-        onTap: () async {},
-      );
-    } else {
-      return ListTile(
-        leading: const Icon(
-          Icons.storage,
-          size: 34.0,
-        ),
-        title: Text(item.name),
-        subtitle: Text(item.description ?? ''),
-        onTap: () async {},
-      );
-    }
   }
 }
