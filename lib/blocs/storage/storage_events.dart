@@ -7,10 +7,12 @@ abstract class StorageEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class StorageSearch extends StorageEvent {
+class StorageSearchStarted extends StorageEvent {}
+
+class StorageSearchChanged extends StorageEvent {
   final String key;
 
-  const StorageSearch(this.key);
+  const StorageSearchChanged(this.key);
 
   @override
   List<Object> get props => [key];

@@ -9,13 +9,15 @@ abstract class StorageState extends Equatable {
 
 class StorageInitial extends StorageState {}
 
-class StorageSearchError extends StorageState {
-  final OperationException errors;
+class StorageLoading extends StorageState {}
 
-  const StorageSearchError(this.errors);
+class StorageError extends StorageState {
+  final String message;
+
+  const StorageError(this.message);
 
   @override
-  List<Object> get props => [errors];
+  List<Object> get props => [message];
 }
 
 class StorageSearchResults extends StorageState {

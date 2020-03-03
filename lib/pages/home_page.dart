@@ -24,6 +24,14 @@ class HomePage extends StatelessWidget {
                   BlocProvider.of<AuthenticationBloc>(context)
                       .add(AuthenticationLogout());
                 },
+              ),
+              FlatButton(
+                child: Text('搜索'),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/search');
+                  BlocProvider.of<StorageBloc>(context)
+                      .add(StorageSearchStarted());
+                },
               )
             ],
           ),

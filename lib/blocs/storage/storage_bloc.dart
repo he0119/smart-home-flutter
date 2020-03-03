@@ -1,10 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:smart_home/graphql/queries/queries.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/models/serializers.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
+import 'package:smart_home/repositories/storage_repository.dart';
 
 part 'storage_events.dart';
 part 'storage_states.dart';
@@ -15,28 +12,23 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
 
   @override
   Stream<StorageState> mapEventToState(StorageEvent event) async* {
-    if (event is StorageSearch) {
-      final QueryOptions options = QueryOptions(
-        documentNode: gql(search), // this is the query string you just created
-        variables: {
-          'key': event.key,
-        },
-      );
-      final results = await graphqlApiClient.query(options);
-      if (results.hasException) {
-        yield StorageSearchError(results.exception);
-        return;
+    if (event is StorageSearchChanged) {
+      yield StorageLoading();
+      try {
+        List<dynamic> results = await storageRepository.search(event.key);
+        if (results == null){
+          yield StorageSearchResults([], []);
+          return;
+        }
+        yield StorageSearchResults(results[0], results[1]);
+      } on StorageException catch (e) {
+        yield StorageError(e.message);
+      } catch (e) {
+        yield StorageError('错误：$e');
       }
-      final List<dynamic> storages = results.data['search']['storages'];
-      final List<dynamic> items = results.data['search']['items'];
-      final List<Storage> listofStorage = storages
-          .map(
-              (dynamic e) => serializers.deserializeWith(Storage.serializer, e))
-          .toList();
-      final List<Item> listofItem = items
-          .map((dynamic e) => serializers.deserializeWith(Item.serializer, e))
-          .toList();
-      yield StorageSearchResults(listofItem, listofStorage);
+    }
+    if (event is StorageSearchStarted) {
+      yield StorageSearchResults([], []);
     }
   }
 }
