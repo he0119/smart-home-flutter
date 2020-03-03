@@ -10,15 +10,15 @@ abstract class StorageEvent extends Equatable {
 class StorageRoot extends StorageEvent {}
 
 class StorageItemDetail extends StorageEvent {
-  final String key;
+  final String id;
 
-  const StorageItemDetail(this.key);
-
-  @override
-  List<Object> get props => [key];
+  const StorageItemDetail(this.id);
 
   @override
-  String toString() => key;
+  List<Object> get props => [id];
+
+  @override
+  String toString() => id;
 }
 
 class StorageStorageDetail extends StorageEvent {

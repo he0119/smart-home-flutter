@@ -63,4 +63,17 @@ class StorageRepository {
         serializers.deserializeWith(Storage.serializer, json);
     return storageObject;
   }
+
+  Future<Item> item(String id) async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(itemQuery),
+      variables: {
+        'id': id,
+      },
+    );
+    final result = await graphqlApiClient.query(options);
+    final dynamic json = result.data['item'];
+    final Item itemObject = serializers.deserializeWith(Item.serializer, json);
+    return itemObject;
+  }
 }

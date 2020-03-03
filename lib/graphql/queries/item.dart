@@ -1,4 +1,4 @@
-const String items = r"""
+const String itemsQuery = r"""
 query items {
   items {
     id
@@ -19,7 +19,7 @@ query items {
 }
 """;
 
-const String item = r"""
+const String itemQuery = r"""
 query item($id: ID!) {
   item(id: $id) {
     id

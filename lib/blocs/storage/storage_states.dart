@@ -35,3 +35,12 @@ class StorageStorageDetailResults extends StorageState {
   @override
   List<Object> get props => [storage];
 }
+
+class StorageItemDetailResults extends StorageState {
+  final Item item;
+
+  StorageItemDetailResults(this.item);
+
+  @override
+  List<Object> get props => [item];
+}

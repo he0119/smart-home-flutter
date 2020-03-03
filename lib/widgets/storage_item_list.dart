@@ -12,11 +12,12 @@ class StorageItemList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<dynamic> merged = List.from(items)..addAll(storages);
-    return ListView.builder(
+    return ListView.separated(
       itemCount: merged.length,
       itemBuilder: (BuildContext context, int index) {
         return _StorageItemListItem(item: merged[index]);
       },
+      separatorBuilder: (contexit, index) => Divider(),
     );
   }
 }

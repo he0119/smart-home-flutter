@@ -17,11 +17,13 @@ query storage($id: ID!) {
     children {
       id
       name
+      description
     }
     items {
       id
       name
       number
+      description
       storage {
         id
         name
