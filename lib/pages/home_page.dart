@@ -7,7 +7,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
-        print('home: $state');
         if (state is Unauthenticated) {
           Navigator.of(context).pushNamed('/login');
         }

@@ -8,7 +8,6 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
-        print('login: $state');
         if (state is Authenticated) {
           Navigator.of(context).pop();
         }
