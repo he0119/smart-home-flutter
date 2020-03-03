@@ -1,38 +1,41 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/services/graphql_service.dart';
-import 'package:smart_home/services/user_service.dart';
+import 'package:smart_home/repositories/graphql_api_client.dart';
+import 'package:smart_home/repositories/user_repository.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 Stream<AuthenticationState> _mapAppStartedToState() async* {
   try {
-    await userService.initailize();
-    graphqlService.initailize();
-    if (await userService.hasToken()) {
-      yield Unauthenticated('请登录');
+    await userRepository.initailize();
+    graphqlApiClient.initailize();
+    if (await userRepository.hasToken()) {
+      yield Authenticated(await userRepository.currentUser());
     } else {
-      yield Authenticated(await userService.currentUser());
+      yield Unauthenticated();
     }
   } catch (_) {
-    yield Unauthenticated('未知错误，请登录');
+    yield Unauthenticated();
   }
 }
 
 Stream<AuthenticationState> _mapLoginToState(AuthenticationLogin event) async* {
-  bool result = await userService.authenticate(event.username, event.password);
+  yield Authenticating();
+  bool result =
+      await userRepository.authenticate(event.username, event.password);
   if (result) {
-    yield Authenticated(await userService.currentUser());
+    User user = await userRepository.currentUser();
+    yield Authenticated(user);
   } else {
-    yield Unauthenticated('登陆失败');
+    yield AuthenticationFailure('用户名或密码错误');
   }
 }
 
 Stream<AuthenticationState> _mapLogoutToState() async* {
-  await userService.clearToken();
-  yield Unauthenticated('注销成功');
+  await userRepository.clearToken();
+  yield Unauthenticated();
 }
 
 class AuthenticationBloc

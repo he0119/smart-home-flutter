@@ -23,13 +23,15 @@ class Authenticated extends AuthenticationState {
   String toString() => 'Authenticated { username: ${currentUser.username} }';
 }
 
-class Unauthenticated extends AuthenticationState {
-  final String message;
+class Unauthenticated extends AuthenticationState {}
 
-  const Unauthenticated(
-    this.message,
+class AuthenticationFailure extends AuthenticationState {
+  final String error;
+
+  const AuthenticationFailure(
+    this.error,
   );
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [error];
 }

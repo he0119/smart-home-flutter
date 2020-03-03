@@ -1,54 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of models;
+part of storage;
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<User> _$userSerializer = new _$UserSerializer();
 Serializer<Storage> _$storageSerializer = new _$StorageSerializer();
 Serializer<Item> _$itemSerializer = new _$ItemSerializer();
-
-class _$UserSerializer implements StructuredSerializer<User> {
-  @override
-  final Iterable<Type> types = const [User, _$User];
-  @override
-  final String wireName = 'User';
-
-  @override
-  Iterable<Object> serialize(Serializers serializers, User object,
-      {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'username',
-      serializers.serialize(object.username,
-          specifiedType: const FullType(String)),
-    ];
-
-    return result;
-  }
-
-  @override
-  User deserialize(Serializers serializers, Iterable<Object> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    final result = new UserBuilder();
-
-    final iterator = serialized.iterator;
-    while (iterator.moveNext()) {
-      final key = iterator.current as String;
-      iterator.moveNext();
-      final dynamic value = iterator.current;
-      switch (key) {
-        case 'username':
-          result.username = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-      }
-    }
-
-    return result.build();
-  }
-}
 
 class _$StorageSerializer implements StructuredSerializer<Storage> {
   @override
@@ -76,6 +35,20 @@ class _$StorageSerializer implements StructuredSerializer<Storage> {
         ..add('description')
         ..add(serializers.serialize(object.description,
             specifiedType: const FullType(String)));
+    }
+    if (object.children != null) {
+      result
+        ..add('children')
+        ..add(serializers.serialize(object.children,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(Storage)])));
+    }
+    if (object.items != null) {
+      result
+        ..add('items')
+        ..add(serializers.serialize(object.items,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(Item)])));
     }
     return result;
   }
@@ -107,6 +80,18 @@ class _$StorageSerializer implements StructuredSerializer<Storage> {
           result.description = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'children':
+          result.children.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(Storage)]))
+              as BuiltList<Object>);
+          break;
+        case 'items':
+          result.items.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(Item)]))
+              as BuiltList<Object>);
+          break;
       }
     }
 
@@ -133,11 +118,6 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
       'storage',
       serializers.serialize(object.storage,
           specifiedType: const FullType(Storage)),
-      'editor',
-      serializers.serialize(object.editor, specifiedType: const FullType(User)),
-      'updateDate',
-      serializers.serialize(object.updateDate,
-          specifiedType: const FullType(DateTime)),
     ];
     if (object.description != null) {
       result
@@ -155,6 +135,18 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
       result
         ..add('expirationDate')
         ..add(serializers.serialize(object.expirationDate,
+            specifiedType: const FullType(DateTime)));
+    }
+    if (object.editor != null) {
+      result
+        ..add('editor')
+        ..add(serializers.serialize(object.editor,
+            specifiedType: const FullType(User)));
+    }
+    if (object.updateDate != null) {
+      result
+        ..add('updateDate')
+        ..add(serializers.serialize(object.updateDate,
             specifiedType: const FullType(DateTime)));
     }
     return result;
@@ -187,10 +179,6 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
           result.storage.replace(serializers.deserialize(value,
               specifiedType: const FullType(Storage)) as Storage);
           break;
-        case 'editor':
-          result.editor.replace(serializers.deserialize(value,
-              specifiedType: const FullType(User)) as User);
-          break;
         case 'description':
           result.description = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -203,6 +191,10 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
           result.expirationDate = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime;
           break;
+        case 'editor':
+          result.editor.replace(serializers.deserialize(value,
+              specifiedType: const FullType(User)) as User);
+          break;
         case 'updateDate':
           result.updateDate = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime;
@@ -211,82 +203,6 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
     }
 
     return result.build();
-  }
-}
-
-class _$User extends User {
-  @override
-  final String username;
-
-  factory _$User([void Function(UserBuilder) updates]) =>
-      (new UserBuilder()..update(updates)).build();
-
-  _$User._({this.username}) : super._() {
-    if (username == null) {
-      throw new BuiltValueNullFieldError('User', 'username');
-    }
-  }
-
-  @override
-  User rebuild(void Function(UserBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
-
-  @override
-  UserBuilder toBuilder() => new UserBuilder()..replace(this);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    return other is User && username == other.username;
-  }
-
-  @override
-  int get hashCode {
-    return $jf($jc(0, username.hashCode));
-  }
-
-  @override
-  String toString() {
-    return (newBuiltValueToStringHelper('User')..add('username', username))
-        .toString();
-  }
-}
-
-class UserBuilder implements Builder<User, UserBuilder> {
-  _$User _$v;
-
-  String _username;
-  String get username => _$this._username;
-  set username(String username) => _$this._username = username;
-
-  UserBuilder();
-
-  UserBuilder get _$this {
-    if (_$v != null) {
-      _username = _$v.username;
-      _$v = null;
-    }
-    return this;
-  }
-
-  @override
-  void replace(User other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
-    _$v = other as _$User;
-  }
-
-  @override
-  void update(void Function(UserBuilder) updates) {
-    if (updates != null) updates(this);
-  }
-
-  @override
-  _$User build() {
-    final _$result = _$v ?? new _$User._(username: username);
-    replace(_$result);
-    return _$result;
   }
 }
 
@@ -299,11 +215,22 @@ class _$Storage extends Storage {
   final Storage parent;
   @override
   final String description;
+  @override
+  final BuiltList<Storage> children;
+  @override
+  final BuiltList<Item> items;
 
   factory _$Storage([void Function(StorageBuilder) updates]) =>
       (new StorageBuilder()..update(updates)).build();
 
-  _$Storage._({this.id, this.name, this.parent, this.description}) : super._() {
+  _$Storage._(
+      {this.id,
+      this.name,
+      this.parent,
+      this.description,
+      this.children,
+      this.items})
+      : super._() {
     if (id == null) {
       throw new BuiltValueNullFieldError('Storage', 'id');
     }
@@ -326,14 +253,19 @@ class _$Storage extends Storage {
         id == other.id &&
         name == other.name &&
         parent == other.parent &&
-        description == other.description;
+        description == other.description &&
+        children == other.children &&
+        items == other.items;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, id.hashCode), name.hashCode), parent.hashCode),
-        description.hashCode));
+        $jc(
+            $jc($jc($jc($jc(0, id.hashCode), name.hashCode), parent.hashCode),
+                description.hashCode),
+            children.hashCode),
+        items.hashCode));
   }
 
   @override
@@ -342,7 +274,9 @@ class _$Storage extends Storage {
           ..add('id', id)
           ..add('name', name)
           ..add('parent', parent)
-          ..add('description', description))
+          ..add('description', description)
+          ..add('children', children)
+          ..add('items', items))
         .toString();
   }
 }
@@ -366,6 +300,15 @@ class StorageBuilder implements Builder<Storage, StorageBuilder> {
   String get description => _$this._description;
   set description(String description) => _$this._description = description;
 
+  ListBuilder<Storage> _children;
+  ListBuilder<Storage> get children =>
+      _$this._children ??= new ListBuilder<Storage>();
+  set children(ListBuilder<Storage> children) => _$this._children = children;
+
+  ListBuilder<Item> _items;
+  ListBuilder<Item> get items => _$this._items ??= new ListBuilder<Item>();
+  set items(ListBuilder<Item> items) => _$this._items = items;
+
   StorageBuilder();
 
   StorageBuilder get _$this {
@@ -374,6 +317,8 @@ class StorageBuilder implements Builder<Storage, StorageBuilder> {
       _name = _$v.name;
       _parent = _$v.parent?.toBuilder();
       _description = _$v.description;
+      _children = _$v.children?.toBuilder();
+      _items = _$v.items?.toBuilder();
       _$v = null;
     }
     return this;
@@ -401,12 +346,19 @@ class StorageBuilder implements Builder<Storage, StorageBuilder> {
               id: id,
               name: name,
               parent: _parent?.build(),
-              description: description);
+              description: description,
+              children: _children?.build(),
+              items: _items?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'parent';
         _parent?.build();
+
+        _$failedField = 'children';
+        _children?.build();
+        _$failedField = 'items';
+        _items?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'Storage', _$failedField, e.toString());
@@ -428,13 +380,13 @@ class _$Item extends Item {
   @override
   final Storage storage;
   @override
-  final User editor;
-  @override
   final String description;
   @override
   final double price;
   @override
   final DateTime expirationDate;
+  @override
+  final User editor;
   @override
   final DateTime updateDate;
 
@@ -446,10 +398,10 @@ class _$Item extends Item {
       this.name,
       this.number,
       this.storage,
-      this.editor,
       this.description,
       this.price,
       this.expirationDate,
+      this.editor,
       this.updateDate})
       : super._() {
     if (id == null) {
@@ -463,12 +415,6 @@ class _$Item extends Item {
     }
     if (storage == null) {
       throw new BuiltValueNullFieldError('Item', 'storage');
-    }
-    if (editor == null) {
-      throw new BuiltValueNullFieldError('Item', 'editor');
-    }
-    if (updateDate == null) {
-      throw new BuiltValueNullFieldError('Item', 'updateDate');
     }
   }
 
@@ -487,10 +433,10 @@ class _$Item extends Item {
         name == other.name &&
         number == other.number &&
         storage == other.storage &&
-        editor == other.editor &&
         description == other.description &&
         price == other.price &&
         expirationDate == other.expirationDate &&
+        editor == other.editor &&
         updateDate == other.updateDate;
   }
 
@@ -505,10 +451,10 @@ class _$Item extends Item {
                             $jc($jc($jc(0, id.hashCode), name.hashCode),
                                 number.hashCode),
                             storage.hashCode),
-                        editor.hashCode),
-                    description.hashCode),
-                price.hashCode),
-            expirationDate.hashCode),
+                        description.hashCode),
+                    price.hashCode),
+                expirationDate.hashCode),
+            editor.hashCode),
         updateDate.hashCode));
   }
 
@@ -519,10 +465,10 @@ class _$Item extends Item {
           ..add('name', name)
           ..add('number', number)
           ..add('storage', storage)
-          ..add('editor', editor)
           ..add('description', description)
           ..add('price', price)
           ..add('expirationDate', expirationDate)
+          ..add('editor', editor)
           ..add('updateDate', updateDate))
         .toString();
   }
@@ -547,10 +493,6 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
   StorageBuilder get storage => _$this._storage ??= new StorageBuilder();
   set storage(StorageBuilder storage) => _$this._storage = storage;
 
-  UserBuilder _editor;
-  UserBuilder get editor => _$this._editor ??= new UserBuilder();
-  set editor(UserBuilder editor) => _$this._editor = editor;
-
   String _description;
   String get description => _$this._description;
   set description(String description) => _$this._description = description;
@@ -564,6 +506,10 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
   set expirationDate(DateTime expirationDate) =>
       _$this._expirationDate = expirationDate;
 
+  UserBuilder _editor;
+  UserBuilder get editor => _$this._editor ??= new UserBuilder();
+  set editor(UserBuilder editor) => _$this._editor = editor;
+
   DateTime _updateDate;
   DateTime get updateDate => _$this._updateDate;
   set updateDate(DateTime updateDate) => _$this._updateDate = updateDate;
@@ -576,10 +522,10 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
       _name = _$v.name;
       _number = _$v.number;
       _storage = _$v.storage?.toBuilder();
-      _editor = _$v.editor?.toBuilder();
       _description = _$v.description;
       _price = _$v.price;
       _expirationDate = _$v.expirationDate;
+      _editor = _$v.editor?.toBuilder();
       _updateDate = _$v.updateDate;
       _$v = null;
     }
@@ -609,18 +555,19 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
               name: name,
               number: number,
               storage: storage.build(),
-              editor: editor.build(),
               description: description,
               price: price,
               expirationDate: expirationDate,
+              editor: _editor?.build(),
               updateDate: updateDate);
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'storage';
         storage.build();
+
         _$failedField = 'editor';
-        editor.build();
+        _editor?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'Item', _$failedField, e.toString());

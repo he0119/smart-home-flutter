@@ -1,4 +1,4 @@
-const String search = r"""
+const String searchQuery = r"""
 query search($key: String!) {
   search(key: $key) {
     items {
