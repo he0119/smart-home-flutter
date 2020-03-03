@@ -15,4 +15,13 @@ jobs:
     - run: flutter pub get
     - run: flutter test
     - run: flutter build apk --debug --split-per-abi
+    - uses: actions/upload-artifact@v1
+      with:
+        name: apk
+        path: "build/app/outputs/apk/debug/*.apk"
+    - run: flutter config --enable-web
     - run: flutter build web
+    - uses: actions/upload-artifact@v1
+      with:
+        name: web
+        path: "build/web/*"
