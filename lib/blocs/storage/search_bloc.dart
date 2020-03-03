@@ -3,20 +3,20 @@ import 'package:equatable/equatable.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
-part 'storage_events.dart';
-part 'storage_states.dart';
+part 'search_events.dart';
+part 'search_states.dart';
 
-class StorageBloc extends Bloc<StorageEvent, StorageState> {
+class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
   @override
-  StorageState get initialState => StorageInitial();
+  StorageSearchState get initialState => StorageSearchResults([], []);
 
   @override
-  Stream<StorageState> mapEventToState(StorageEvent event) async* {
+  Stream<StorageSearchState> mapEventToState(StorageSearchEvent event) async* {
     if (event is StorageSearchChanged) {
       yield StorageLoading();
       try {
         List<dynamic> results = await storageRepository.search(event.key);
-        if (results == null){
+        if (results == null) {
           yield StorageSearchResults([], []);
           return;
         }

@@ -14,8 +14,8 @@ void main() {
           create: (BuildContext context) =>
               AuthenticationBloc()..add(AppStarted()),
         ),
-        BlocProvider<StorageBloc>(
-          create: (BuildContext context) => StorageBloc(),
+        BlocProvider<StorageSearchBloc>(
+          create: (BuildContext context) => StorageSearchBloc(),
         ),
       ],
       child: MyApp(),
@@ -30,9 +30,9 @@ class MyApp extends StatelessWidget {
       title: '智慧家庭',
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
-            if (state is Authenticated) {
-              return HomePage() ;
-            }
+        if (state is Authenticated) {
+          return HomePage();
+        }
         return LoginPage();
       }),
     );

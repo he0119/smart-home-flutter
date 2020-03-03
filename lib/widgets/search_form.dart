@@ -19,12 +19,12 @@ class _SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<_SearchBar> {
   final _textController = TextEditingController();
-  StorageBloc _storageBloc;
+  StorageSearchBloc _storageBloc;
 
   @override
   void initState() {
     super.initState();
-    _storageBloc = BlocProvider.of<StorageBloc>(context);
+    _storageBloc = BlocProvider.of<StorageSearchBloc>(context);
   }
 
   @override
@@ -64,9 +64,8 @@ class _SearchBarState extends State<_SearchBar> {
 class _SearchBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StorageBloc, StorageState>(
-      bloc: BlocProvider.of<StorageBloc>(context),
-      builder: (BuildContext context, StorageState state) {
+    return BlocBuilder<StorageSearchBloc, StorageSearchState>(
+      builder: (BuildContext context, StorageSearchState state) {
         if (state is StorageLoading) {
           return CircularProgressIndicator();
         }

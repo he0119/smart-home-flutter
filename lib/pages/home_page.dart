@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
             FlatButton(
               child: Text('搜索'),
               onPressed: () {
-                BlocProvider.of<StorageBloc>(context)
+                BlocProvider.of<StorageSearchBloc>(context)
                     .add(StorageSearchStarted());
                 Navigator.push(
                   context,

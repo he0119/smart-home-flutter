@@ -1,17 +1,15 @@
-part of 'storage_bloc.dart';
+part of 'search_bloc.dart';
 
-abstract class StorageState extends Equatable {
-  const StorageState();
+abstract class StorageSearchState extends Equatable {
+  const StorageSearchState();
 
   @override
   List<Object> get props => [];
 }
 
-class StorageInitial extends StorageState {}
+class StorageLoading extends StorageSearchState {}
 
-class StorageLoading extends StorageState {}
-
-class StorageError extends StorageState {
+class StorageError extends StorageSearchState {
   final String message;
 
   const StorageError(this.message);
@@ -20,7 +18,7 @@ class StorageError extends StorageState {
   List<Object> get props => [message];
 }
 
-class StorageSearchResults extends StorageState {
+class StorageSearchResults extends StorageSearchState {
   final List<Item> items;
   final List<Storage> storages;
 
