@@ -1,4 +1,5 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:smart_home/graphql/mutations/mutations.dart';
 import 'package:smart_home/graphql/queries/queries.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/serializers.dart';
@@ -75,5 +76,59 @@ class StorageRepository {
     final dynamic json = result.data['item'];
     final Item itemObject = serializers.deserializeWith(Item.serializer, json);
     return itemObject;
+  }
+
+  Future<Item> updateItem(Item item) async {
+    Map<String, dynamic> variables =
+        serializers.serializeWith(Item.serializer, item);
+    final MutationOptions options = MutationOptions(
+      documentNode: gql(updateItemMutation),
+      variables: {'input': variables},
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> json = result.data['updateItem'];
+    final Item itemObject = serializers.deserializeWith(Item.serializer, json);
+    return itemObject;
+  }
+
+  Future<Item> addItem(Item item) async {
+    Map<String, dynamic> variables =
+        serializers.serializeWith(Item.serializer, item);
+    final MutationOptions options = MutationOptions(
+      documentNode: gql(addItemMutation),
+      variables: {'input': variables},
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> json = result.data['addItem'];
+    final Item itemObject = serializers.deserializeWith(Item.serializer, json);
+    return itemObject;
+  }
+
+  Future<Storage> updateStorage(Storage storage) async {
+    Map<String, dynamic> variables =
+        serializers.serializeWith(Storage.serializer, storage);
+    final MutationOptions options = MutationOptions(
+      documentNode: gql(updateStorageMutation),
+      variables: {'input': variables},
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> json = result.data['updateStorage'];
+    final Storage storageObject =
+        serializers.deserializeWith(Storage.serializer, json);
+    return storageObject;
+  }
+
+  Future<Storage> addStorage(Storage storage) async {
+    Map<String, dynamic> variables =
+        serializers.serializeWith(Storage.serializer, storage);
+    final MutationOptions options = MutationOptions(
+      documentNode: gql(addStorageMutation),
+      variables: {'input': variables},
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> json = result.data['addStorage'];
+    final Storage storageObject =
+        serializers.deserializeWith(Storage.serializer, json);
+    return storageObject;
   }
 }

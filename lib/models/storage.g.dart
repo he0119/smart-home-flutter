@@ -19,11 +19,15 @@ class _$StorageSerializer implements StructuredSerializer<Storage> {
   Iterable<Object> serialize(Serializers serializers, Storage object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'id',
-      serializers.serialize(object.id, specifiedType: const FullType(String)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
     ];
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(String)));
+    }
     if (object.parent != null) {
       result
         ..add('parent')
@@ -109,8 +113,6 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
   Iterable<Object> serialize(Serializers serializers, Item object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'id',
-      serializers.serialize(object.id, specifiedType: const FullType(String)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'number',
@@ -119,6 +121,12 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
       serializers.serialize(object.storage,
           specifiedType: const FullType(Storage)),
     ];
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(String)));
+    }
     if (object.description != null) {
       result
         ..add('description')
@@ -231,9 +239,6 @@ class _$Storage extends Storage {
       this.children,
       this.items})
       : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('Storage', 'id');
-    }
     if (name == null) {
       throw new BuiltValueNullFieldError('Storage', 'name');
     }
@@ -404,9 +409,6 @@ class _$Item extends Item {
       this.editor,
       this.updateDate})
       : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('Item', 'id');
-    }
     if (name == null) {
       throw new BuiltValueNullFieldError('Item', 'name');
     }

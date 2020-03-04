@@ -1,6 +1,6 @@
-const String updateStorage = r"""
-mutation updateStorage($id: ID!, $name: String, $description: String, $parent: ID) {
-  updateStorage(input: {id: $id, name: $name, description: $description, parent: $parent}) {
+const String updateStorageMutation = r"""
+mutation updateStorage($input: UpdateStorageInput!) {
+  updateStorage(input: $input) {
     storage {
       id
       name

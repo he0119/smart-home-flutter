@@ -1,6 +1,6 @@
-const String updateItem = r"""
-mutation updateItem($id: ID!, $name: String, $number: Int, $storage: ID, $description: String, $price: String, $expirationDate: DateTime) {
-  updateItem(input: {id: $id, name: $name, number: $number, storage: $storage, description: $description, price: $price, expirationDate: $expirationDate}) {
+const String updateItemMutation = r"""
+mutation updateItem($input: UpdateItemInput!) {
+  updateItem(input: $input) {
     item {
       id
       name

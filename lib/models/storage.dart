@@ -11,6 +11,7 @@ part 'storage.g.dart';
 abstract class Storage implements Built<Storage, StorageBuilder> {
   static Serializer<Storage> get serializer => _$storageSerializer;
 
+  @nullable
   String get id;
   String get name;
   @nullable
@@ -29,6 +30,7 @@ abstract class Storage implements Built<Storage, StorageBuilder> {
 abstract class Item implements Built<Item, ItemBuilder> {
   static Serializer<Item> get serializer => _$itemSerializer;
 
+  @nullable
   String get id;
   String get name;
   int get number;
