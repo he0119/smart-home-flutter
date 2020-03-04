@@ -102,7 +102,7 @@ class UserRepository {
 
   Future<bool> isTokenValid() async {
     Map<String, dynamic> result = parseJwt(await token);
-    int now = new DateTime.now().microsecondsSinceEpoch;
+    int now = new DateTime.now().millisecondsSinceEpoch ~/ 1000;
     // 本地时间可能与服务器不相等
     int exp = result['exp'] - 30;
     return exp > now;
