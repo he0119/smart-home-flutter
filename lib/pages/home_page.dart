@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
         onTap: (int index) {
           setState(() {
             if (index == 1) {
-              BlocProvider.of<StorageBloc>(_buildContext).add(StorageRoot());
+              BlocProvider.of<StorageBloc>(_buildContext).add(StorageStarted());
             }
             _selectedIndex = index;
           });

@@ -7,7 +7,7 @@ abstract class StorageState extends Equatable {
   List<Object> get props => [];
 }
 
-class StorageLoading extends StorageState {}
+class StorageInProgress extends StorageState {}
 
 class StorageError extends StorageState {
   final String message;
@@ -40,6 +40,42 @@ class StorageItemDetailResults extends StorageState {
   final Item item;
 
   StorageItemDetailResults(this.item);
+
+  @override
+  List<Object> get props => [item];
+}
+
+class StorageUpdateStorageSuccess extends StorageState {
+  final Storage storage;
+
+  StorageUpdateStorageSuccess(this.storage);
+
+  @override
+  List<Object> get props => [storage];
+}
+
+class StorageUpdateItemSuccess extends StorageState {
+  final Item item;
+
+  StorageUpdateItemSuccess(this.item);
+
+  @override
+  List<Object> get props => [item];
+}
+
+class StorageAddStorageSuccess extends StorageState {
+  final Storage storage;
+
+  StorageAddStorageSuccess(this.storage);
+
+  @override
+  List<Object> get props => [storage];
+}
+
+class StorageAddItemSuccess extends StorageState {
+  final Item item;
+
+  StorageAddItemSuccess(this.item);
 
   @override
   List<Object> get props => [item];

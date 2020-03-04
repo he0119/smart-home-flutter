@@ -8,12 +8,12 @@ part 'storage_states.dart';
 
 class StorageBloc extends Bloc<StorageEvent, StorageState> {
   @override
-  StorageState get initialState => StorageLoading();
+  StorageState get initialState => StorageInProgress();
 
   @override
   Stream<StorageState> mapEventToState(StorageEvent event) async* {
-    if (event is StorageRoot) {
-      yield StorageLoading();
+    if (event is StorageStarted) {
+      yield StorageInProgress();
       try {
         List<Storage> results = await storageRepository.rootStorage();
         yield StorageRootResults(results);
@@ -23,15 +23,41 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
         yield StorageError('错误：$e');
       }
     }
+
     if (event is StorageStorageDetail) {
-      yield StorageLoading();
+      yield StorageInProgress();
       Storage results = await storageRepository.storage(event.id);
       yield StorageStorageDetailResults(results);
     }
+
     if (event is StorageItemDetail) {
-      yield StorageLoading();
+      yield StorageInProgress();
       Item results = await storageRepository.item(event.id);
       yield StorageItemDetailResults(results);
+    }
+
+    if (event is StorageAddItem) {
+      yield StorageInProgress();
+      Item results = await storageRepository.addItem(event.item);
+      yield StorageAddItemSuccess(results);
+    }
+
+    if (event is StorageUpdateItem) {
+      yield StorageInProgress();
+      Item results = await storageRepository.updateItem(event.item);
+      yield StorageUpdateItemSuccess(results);
+    }
+
+    if (event is StorageAddStorage) {
+      yield StorageInProgress();
+      Storage results = await storageRepository.addStorage(event.storage);
+      yield StorageAddStorageSuccess(results);
+    }
+
+    if (event is StorageUpdateStorage) {
+      yield StorageInProgress();
+      Storage results = await storageRepository.updateStorage(event.storage);
+      yield StorageUpdateStorageSuccess(results);
     }
   }
 }
