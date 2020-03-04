@@ -5,6 +5,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/simple_bloc_delegate.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
+import 'package:smart_home/pages/splash_page.dart';
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
@@ -43,6 +44,9 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
         if (state is Authenticated) {
           return HomePage();
+        }
+        if (state is AppUninitialized) {
+          return SplashPage();
         }
         return LoginPage();
       }),
