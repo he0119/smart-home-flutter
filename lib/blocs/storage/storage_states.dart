@@ -16,6 +16,9 @@ class StorageError extends StorageState {
 
   @override
   List<Object> get props => [message];
+
+  @override
+  String toString() => 'StorageError { message: $message}';
 }
 
 class StorageRootResults extends StorageState {

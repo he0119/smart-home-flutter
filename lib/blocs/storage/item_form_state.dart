@@ -5,14 +5,15 @@ class ItemFormState extends Equatable {
   final bool isNameValid;
   final String number;
   final bool isNumberValid;
-  final String storage;
+  final Storage storage;
   final bool isStorageValid;
   final String description;
   final bool isDescriptionValid;
   final String price;
   final bool isPriceValid;
-  final String expirationDate;
+  final DateTime expirationDate;
   final bool isExpirationDateValid;
+  final List<Storage> listofStorages;
   final bool formSubmittedSuccessfully;
 
   bool get isFormValid =>
@@ -36,6 +37,7 @@ class ItemFormState extends Equatable {
     @required this.isPriceValid,
     @required this.expirationDate,
     @required this.isExpirationDateValid,
+    @required this.listofStorages,
     @required this.formSubmittedSuccessfully,
   });
 
@@ -48,11 +50,12 @@ class ItemFormState extends Equatable {
       storage: null,
       isStorageValid: false,
       description: null,
-      isDescriptionValid: false,
+      isDescriptionValid: true,
       price: null,
-      isPriceValid: false,
+      isPriceValid: true,
       expirationDate: null,
-      isExpirationDateValid: false,
+      isExpirationDateValid: true,
+      listofStorages: null,
       formSubmittedSuccessfully: false,
     );
   }
@@ -62,14 +65,15 @@ class ItemFormState extends Equatable {
     bool isNameValid,
     String number,
     bool isNumberValid,
-    String storage,
+    Storage storage,
     bool isStorageValid,
     String description,
     bool isDescriptionValid,
     String price,
     bool isPriceValid,
-    String expirationDate,
+    DateTime expirationDate,
     bool isExpirationDateValid,
+    List<Storage> listofStorages,
     bool formSubmittedSuccessfully,
   }) {
     return ItemFormState(
@@ -86,6 +90,7 @@ class ItemFormState extends Equatable {
       expirationDate: expirationDate ?? this.expirationDate,
       isExpirationDateValid:
           isExpirationDateValid ?? this.isExpirationDateValid,
+      listofStorages: listofStorages ?? this.listofStorages,
       formSubmittedSuccessfully:
           formSubmittedSuccessfully ?? this.formSubmittedSuccessfully,
     );
@@ -105,6 +110,7 @@ class ItemFormState extends Equatable {
         isPriceValid,
         expirationDate,
         isExpirationDateValid,
+        listofStorages,
         formSubmittedSuccessfully,
       ];
 }

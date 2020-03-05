@@ -59,10 +59,22 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.query(options);
-    final dynamic json = result.data['storage'];
+    final Map<String, dynamic> json = result.data['storage'];
     final Storage storageObject =
         serializers.deserializeWith(Storage.serializer, json);
     return storageObject;
+  }
+
+  Future<List<Storage>> storages() async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(storagesQuery),
+    );
+    final result = await graphqlApiClient.query(options);
+    final List<dynamic> storages = result.data['storages'];
+    final List<Storage> listofStorage = storages
+        .map((dynamic e) => serializers.deserializeWith(Storage.serializer, e))
+        .toList();
+    return listofStorage;
   }
 
   Future<Item> item(String id) async {
@@ -73,7 +85,7 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.query(options);
-    final dynamic json = result.data['item'];
+    final Map<String, dynamic> json = result.data['item'];
     final Item itemObject = serializers.deserializeWith(Item.serializer, json);
     return itemObject;
   }
@@ -86,7 +98,7 @@ class StorageRepository {
       variables: {'input': variables},
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data['updateItem'];
+    final Map<String, dynamic> json = result.data['updateItem']['item'];
     final Item itemObject = serializers.deserializeWith(Item.serializer, json);
     return itemObject;
   }
@@ -99,7 +111,7 @@ class StorageRepository {
       variables: {'input': variables},
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data['addItem'];
+    final Map<String, dynamic> json = result.data['addItem']['item'];
     final Item itemObject = serializers.deserializeWith(Item.serializer, json);
     return itemObject;
   }
@@ -112,7 +124,7 @@ class StorageRepository {
       variables: {'input': variables},
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data['updateStorage'];
+    final Map<String, dynamic> json = result.data['updateStorage']['storage'];
     final Storage storageObject =
         serializers.deserializeWith(Storage.serializer, json);
     return storageObject;
@@ -126,7 +138,7 @@ class StorageRepository {
       variables: {'input': variables},
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data['addStorage'];
+    final Map<String, dynamic> json = result.data['addStorage']['storage'];
     final Storage storageObject =
         serializers.deserializeWith(Storage.serializer, json);
     return storageObject;

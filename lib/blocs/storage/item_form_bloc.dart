@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_home/blocs/storage/storage_bloc.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/models/serializers.dart';
+import 'package:smart_home/repositories/storage_repository.dart';
 
 part 'item_form_event.dart';
 part 'item_form_state.dart';
@@ -14,6 +19,12 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
   Stream<ItemFormState> mapEventToState(
     ItemFormEvent event,
   ) async* {
+    if (event is ItemFormStarted) {
+      yield state.copyWith(
+        listofStorages: await storageRepository.storages()
+      );
+    }
+
     if (event is NameChanged) {
       yield state.copyWith(
         name: event.name,
@@ -32,18 +43,55 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
         isPriceValid: _isPriceValid(event.price),
       );
     }
+    if (event is DescriptionChanged) {
+      yield state.copyWith(
+        description: event.description,
+        isDescriptionValid: true,
+      );
+    }
+    if (event is StorageChanged) {
+      yield state.copyWith(
+        storage: event.storage,
+        isStorageValid: _isStorageValid(event.storage),
+      );
+    }
+    if (event is ExpirationDateChanged) {
+      yield state.copyWith(
+        expirationDate: event.expirationDate,
+        isStorageValid: true,
+      );
+    }
+    if (event is FormSubmitted) {
+      double price;
+      if (state.price != null && state.price.isNotEmpty) {
+        price = double.parse(state.price);
+      } else {
+        price = null;
+      }
+      Item item = serializers.deserializeWith(Item.serializer, {
+        'id': event.id,
+        'name': state.name,
+        'number': int.parse(state.number),
+        'storage': serializers.serializeWith(Storage.serializer, state.storage),
+        'description': state.description,
+        'price': price,
+        'expirationDate': state.expirationDate?.toIso8601String(),
+      });
+      await storageRepository.updateItem(item);
+      yield state.copyWith(formSubmittedSuccessfully: true);
+    }
   }
 
   bool _isNameValid(String name) {
-    return name != '';
+    return name.isNotEmpty;
   }
 
   bool _isNumberValid(String number) {
-    return number != '';
+    return number.isNotEmpty;
   }
 
   bool _isPriceValid(String price) {
-    if (price == '') return true;
+    if (price.isEmpty) return true;
     final parts = price.split('.');
     if (parts.length > 2) {
       return false;
@@ -54,6 +102,10 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
     if (parts.length == 2 && parts[1].length > 2) {
       return false;
     }
+    return true;
+  }
+
+  bool _isStorageValid(Storage storage) {
     return true;
   }
 }

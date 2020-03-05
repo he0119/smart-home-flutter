@@ -7,6 +7,8 @@ abstract class ItemFormEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class ItemFormStarted extends ItemFormEvent {}
+
 class NameChanged extends ItemFormEvent {
   final String name;
 
@@ -40,7 +42,7 @@ class StorageChanged extends ItemFormEvent {
   List<Object> get props => [storage];
 
   @override
-  String toString() => 'StorageChanged { storage: $storage }';
+  String toString() => 'StorageChanged { storage: ${storage.name} }';
 }
 
 class DescriptionChanged extends ItemFormEvent {
@@ -80,6 +82,16 @@ class ExpirationDateChanged extends ItemFormEvent {
       'ExpirationDateChanged { expirationDate: $expirationDate }';
 }
 
-class FormSubmitted extends ItemFormEvent {}
+class FormSubmitted extends ItemFormEvent {
+  final String id;
+
+  const FormSubmitted({@required this.id});
+
+  @override
+  List<Object> get props => [id];
+
+  @override
+  String toString() => 'FormSubmitted { item id: $id }';
+}
 
 class FormReset extends ItemFormEvent {}

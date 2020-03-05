@@ -14,7 +14,7 @@ class StorageItemEditPage extends StatelessWidget {
         title: Text('编辑物品'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.only(left: 15, right: 15),
         child: BlocProvider(
           create: (context) => ItemFormBloc(),
           child: ItemForm(item: item),
