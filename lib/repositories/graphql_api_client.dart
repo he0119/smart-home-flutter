@@ -15,20 +15,22 @@ class GraphQLApiClient {
 
   static final Link _link = _authLink.concat(_httpLink);
 
-  static final _prefix = 'home';
-
   GraphQLClient get client => _client;
 
   bool initailize() {
-    _client = GraphQLClient(
-      cache: InMemoryCache(storagePrefix: _prefix),
-      link: _link,
-    );
-    return true;
+    try {
+      _client = GraphQLClient(
+        cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject),
+        link: _link,
+      );
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   Future<QueryResult> mutate(MutationOptions options) async {
-    // FIXME: 修改之后需要更新缓存
     if (!await userRepository.isTokenValid()) {
       await userRepository.refreshToken();
     }

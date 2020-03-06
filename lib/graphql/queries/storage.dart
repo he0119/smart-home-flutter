@@ -1,6 +1,7 @@
 const String storagesQuery = r"""
 query storages {
   storages {
+    __typename
     id
     name
     description
@@ -11,6 +12,7 @@ query storages {
 const String storageQuery = r"""
 query storage($id: ID!) {
   storage(id: $id) {
+    __typename
     id
     name
     description

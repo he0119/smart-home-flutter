@@ -22,7 +22,7 @@ class _LoginFormState extends State<LoginForm> {
       );
     }
 
-    return BlocListener<AuthenticationBloc, AuthenticationState>(
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state is AuthenticationFailure) {
           Scaffold.of(context).showSnackBar(
@@ -33,38 +33,36 @@ class _LoginFormState extends State<LoginForm> {
           );
         }
       },
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: InputDecoration(labelText: '用户名'),
-                    controller: _usernameController,
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(labelText: '密码'),
-                    controller: _passwordController,
-                    obscureText: true,
-                  ),
-                  RaisedButton(
-                    onPressed:
-                        state is! Authenticating ? _onLoginButtonPressed : null,
-                    child: Text('登录'),
-                  ),
-                  Container(
-                    child: state is Authenticating
-                        ? CircularProgressIndicator()
-                        : null,
-                  ),
-                ],
-              ),
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: '用户名'),
+                  controller: _usernameController,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: '密码'),
+                  controller: _passwordController,
+                  obscureText: true,
+                ),
+                RaisedButton(
+                  onPressed:
+                      state is! Authenticating ? _onLoginButtonPressed : null,
+                  child: Text('登录'),
+                ),
+                Container(
+                  child: state is Authenticating
+                      ? CircularProgressIndicator()
+                      : null,
+                ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
