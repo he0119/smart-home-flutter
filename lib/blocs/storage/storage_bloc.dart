@@ -42,12 +42,6 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       yield StorageAddItemSuccess(results);
     }
 
-    if (event is StorageUpdateItem) {
-      yield StorageInProgress();
-      Item results = await storageRepository.updateItem(event.item);
-      yield StorageUpdateItemSuccess(results);
-    }
-
     if (event is StorageAddStorage) {
       yield StorageInProgress();
       Storage results = await storageRepository.addStorage(event.storage);

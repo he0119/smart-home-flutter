@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home/graphql/mutations/mutations.dart';
 import 'package:smart_home/graphql/queries/queries.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/models/serializers.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 
 UserRepository userRepository = UserRepository();
@@ -78,8 +77,7 @@ class UserRepository {
       documentNode: gql(me),
     );
     QueryResult results = await graphqlApiClient.query(_options);
-    User user =
-        serializers.deserializeWith(User.serializer, results.data['me']);
+    User user = User.fromJson(results.data['me']);
     return user;
   }
 

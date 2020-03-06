@@ -34,7 +34,7 @@ class NumberChanged extends ItemFormEvent {
 }
 
 class StorageChanged extends ItemFormEvent {
-  final Storage storage;
+  final String storage;
 
   const StorageChanged({@required this.storage});
 
@@ -42,7 +42,7 @@ class StorageChanged extends ItemFormEvent {
   List<Object> get props => [storage];
 
   @override
-  String toString() => 'StorageChanged { storage: ${storage.name} }';
+  String toString() => 'StorageChanged { storage_id: $storage }';
 }
 
 class DescriptionChanged extends ItemFormEvent {

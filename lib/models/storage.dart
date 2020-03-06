@@ -1,51 +1,44 @@
 library storage;
 
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-
-import 'user.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:smart_home/models/user.dart';
 
 part 'storage.g.dart';
 
-abstract class Storage implements Built<Storage, StorageBuilder> {
-  static Serializer<Storage> get serializer => _$storageSerializer;
+@JsonSerializable()
+class Storage {
+  Storage(this.id, this.name, this.parent, this.description, this.children,
+      this.items);
 
-  @nullable
-  String get id;
-  String get name;
-  @nullable
-  Storage get parent;
-  @nullable
-  String get description;
-  @nullable
-  BuiltList<Storage> get children;
-  @nullable
-  BuiltList<Item> get items;
+  final String id;
+  final String name;
+  final Storage parent;
+  final String description;
+  final List<Storage> children;
+  final List<Item> items;
 
-  Storage._();
-  factory Storage([void Function(StorageBuilder) updates]) = _$Storage;
+  factory Storage.fromJson(Map<String, dynamic> json) =>
+      _$StorageFromJson(json);
+
+  Map<String, dynamic> toJson() => _$StorageToJson(this);
 }
 
-abstract class Item implements Built<Item, ItemBuilder> {
-  static Serializer<Item> get serializer => _$itemSerializer;
+@JsonSerializable()
+class Item {
+  Item(this.id, this.name, this.number, this.storage, this.description,
+      this.price, this.expirationDate, this.editor, this.updateDate);
 
-  @nullable
-  String get id;
-  String get name;
-  int get number;
-  Storage get storage;
-  @nullable
-  String get description;
-  @nullable
-  double get price;
-  @nullable
-  DateTime get expirationDate;
-  @nullable
-  User get editor;
-  @nullable
-  DateTime get updateDate;
+  final String id;
+  final String name;
+  final int number;
+  final Storage storage;
+  final String description;
+  final double price;
+  final DateTime expirationDate;
+  final User editor;
+  final DateTime updateDate;
 
-  Item._();
-  factory Item([void Function(ItemBuilder) updates]) = _$Item;
+  factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ItemToJson(this);
 }

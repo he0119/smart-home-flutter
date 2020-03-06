@@ -31,7 +31,7 @@ class _ItemFormState extends State<ItemForm> {
     _itemFormBloc.add(ItemFormStarted());
     _itemFormBloc.add(NameChanged(name: widget.item.name));
     _itemFormBloc.add(NumberChanged(number: widget.item.number.toString()));
-    _itemFormBloc.add(StorageChanged(storage: widget.item.storage));
+    _itemFormBloc.add(StorageChanged(storage: widget.item.storage.id));
     _itemFormBloc.add(PriceChanged(price: widget.item.price?.toString()));
     _itemFormBloc.add(DescriptionChanged(description: widget.item.description));
     _itemFormBloc.add(
@@ -133,14 +133,14 @@ class _ItemFormState extends State<ItemForm> {
                       context, _numberFocusNode, _descriptionFocusNode);
                 },
               ),
-              DropdownButtonFormField<Storage>(
+              DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   labelText: '属于',
                 ),
                 value: state.storage,
                 items: state.listofStorages
                     .map((e) => DropdownMenuItem(
-                          value: e,
+                          value: e.id,
                           child: Text(e.name),
                         ))
                     .toList(),

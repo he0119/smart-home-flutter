@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/models/serializers.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
 part 'item_form_event.dart';
@@ -63,16 +62,15 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
       } else {
         price = null;
       }
-      Item item = serializers.deserializeWith(Item.serializer, {
-        'id': event.id,
-        'name': state.name,
-        'number': int.parse(state.number),
-        'storage': serializers.serializeWith(Storage.serializer, state.storage),
-        'description': state.description,
-        'price': price,
-        'expirationDate': state.expirationDate?.toIso8601String(),
-      });
-      item = await storageRepository.updateItem(item);
+      Item item = await storageRepository.updateItem(
+        id: event.id,
+        name: state.name,
+        number: int.parse(state.number),
+        storageId: state.storage,
+        description: state.description,
+        price: price,
+        expirationDate: state.expirationDate,
+      );
       yield state.copyWith(
         formSubmittedSuccessfully: true,
         editedItem: item,
@@ -103,7 +101,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
     return true;
   }
 
-  bool _isStorageValid(Storage storage) {
+  bool _isStorageValid(String storage) {
     return true;
   }
 }
