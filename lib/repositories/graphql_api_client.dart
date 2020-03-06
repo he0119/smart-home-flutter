@@ -28,6 +28,7 @@ class GraphQLApiClient {
   }
 
   Future<QueryResult> mutate(MutationOptions options) async {
+    // FIXME: 修改之后需要更新缓存
     if (!await userRepository.isTokenValid()) {
       await userRepository.refreshToken();
     }

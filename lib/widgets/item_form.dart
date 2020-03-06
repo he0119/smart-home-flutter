@@ -86,8 +86,7 @@ class _ItemFormState extends State<ItemForm> {
     return BlocConsumer<ItemFormBloc, ItemFormState>(
       listener: (context, state) {
         if (state.formSubmittedSuccessfully) {
-          Navigator.of(context).pop();
-          // FIX: 提交修改后回到的之前页面的数据没有更新
+          Navigator.of(context).pop<Item>(state.editedItem);
         }
       },
       builder: (context, state) {

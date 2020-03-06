@@ -17,13 +17,23 @@ class StorageItemPage extends StatelessWidget {
         title: Text(item.name),
         actions: <Widget>[
           PopupMenuButton<Menu>(
-            onSelected: (value) {
+            onSelected: (value) async {
               if (value == Menu.edit) {
-                Navigator.push(
+                Item editedItem = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => StorageItemEditPage(item: item)),
                 );
+                if (editedItem != null) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => StorageItemPage(
+                        item: editedItem,
+                      ),
+                    ),
+                  );
+                }
               }
             },
             itemBuilder: (context) => [

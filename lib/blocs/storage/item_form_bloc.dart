@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_home/blocs/storage/storage_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/serializers.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
@@ -20,9 +17,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
     ItemFormEvent event,
   ) async* {
     if (event is ItemFormStarted) {
-      yield state.copyWith(
-        listofStorages: await storageRepository.storages()
-      );
+      yield state.copyWith(listofStorages: await storageRepository.storages());
     }
 
     if (event is NameChanged) {
@@ -77,8 +72,11 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
         'price': price,
         'expirationDate': state.expirationDate?.toIso8601String(),
       });
-      await storageRepository.updateItem(item);
-      yield state.copyWith(formSubmittedSuccessfully: true);
+      item = await storageRepository.updateItem(item);
+      yield state.copyWith(
+        formSubmittedSuccessfully: true,
+        editedItem: item,
+      );
     }
   }
 
