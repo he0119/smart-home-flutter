@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/models/serializers.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
 part 'item_form_event.dart';
@@ -63,11 +62,11 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
       } else {
         price = null;
       }
-      Item item = serializers.deserializeWith(Item.serializer, {
+      Item item = Item.fromJson({
         'id': event.id,
         'name': state.name,
         'number': int.parse(state.number),
-        'storage': serializers.serializeWith(Storage.serializer, state.storage),
+        'storage': state.storage.toJson(),
         'description': state.description,
         'price': price,
         'expirationDate': state.expirationDate?.toIso8601String(),
