@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:smart_home/graphql/mutations/mutations.dart';
 import 'package:smart_home/graphql/queries/queries.dart';
@@ -84,10 +85,28 @@ class StorageRepository {
     return itemObject;
   }
 
-  Future<Item> updateItem(Item item) async {
+  Future<Item> updateItem({
+    @required String id,
+    String name,
+    int number,
+    String storageId,
+    String description,
+    double price,
+    DateTime expirationDate,
+  }) async {
     final MutationOptions options = MutationOptions(
       documentNode: gql(updateItemMutation),
-      variables: {'input': item.toJson()},
+      variables: {
+        'input': {
+          'id': id,
+          'name': name,
+          'number': number,
+          'storage': {'id': storageId},
+          'description': description,
+          'price': price,
+          'expirationDate': expirationDate?.toIso8601String(),
+        }
+      },
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> json = result.data['updateItem']['item'];

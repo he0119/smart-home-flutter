@@ -5,7 +5,7 @@ class ItemFormState extends Equatable {
   final bool isNameValid;
   final String number;
   final bool isNumberValid;
-  final Storage storage;
+  final String storage;
   final bool isStorageValid;
   final String description;
   final bool isDescriptionValid;
@@ -68,7 +68,7 @@ class ItemFormState extends Equatable {
     bool isNameValid,
     String number,
     bool isNumberValid,
-    Storage storage,
+    String storage,
     bool isStorageValid,
     String description,
     bool isDescriptionValid,

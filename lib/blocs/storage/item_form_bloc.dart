@@ -62,16 +62,15 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
       } else {
         price = null;
       }
-      Item item = Item.fromJson({
-        'id': event.id,
-        'name': state.name,
-        'number': int.parse(state.number),
-        'storage': state.storage.toJson(),
-        'description': state.description,
-        'price': price,
-        'expirationDate': state.expirationDate?.toIso8601String(),
-      });
-      item = await storageRepository.updateItem(item);
+      Item item = await storageRepository.updateItem(
+        id: event.id,
+        name: state.name,
+        number: int.parse(state.number),
+        storageId: state.storage,
+        description: state.description,
+        price: price,
+        expirationDate: state.expirationDate,
+      );
       yield state.copyWith(
         formSubmittedSuccessfully: true,
         editedItem: item,
@@ -102,7 +101,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
     return true;
   }
 
-  bool _isStorageValid(Storage storage) {
+  bool _isStorageValid(String storage) {
     return true;
   }
 }
