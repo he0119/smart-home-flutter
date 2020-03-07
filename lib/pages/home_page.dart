@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/pages/storage/storage_add_edit_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -33,6 +34,19 @@ class _HomePageState extends State<HomePage> {
     AppBar(
       title: Text('物品管理'),
       actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              _buildContext,
+              MaterialPageRoute(
+                builder: (_) => StorageAddEditStoagePage(
+                  isEditing: false,
+                ),
+              ),
+            );
+          },
+        ),
         IconButton(
           icon: Icon(Icons.search),
           onPressed: () {

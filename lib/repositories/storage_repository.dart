@@ -32,9 +32,10 @@ class StorageRepository {
     return [listofItem, listofStorage];
   }
 
-  Future<List<Storage>> rootStorage() async {
+  Future<List<Storage>> rootStorage({bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(rootStorageQuery),
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
     final List<dynamic> storages = results.data['rootStorage'];
@@ -138,10 +139,22 @@ class StorageRepository {
     return itemObject;
   }
 
-  Future<Storage> updateStorage(Storage storage) async {
+  Future<Storage> updateStorage({
+    @required String id,
+    String name,
+    String parentId,
+    String description,
+  }) async {
     final MutationOptions options = MutationOptions(
       documentNode: gql(updateStorageMutation),
-      variables: {'input': storage.toJson()},
+      variables: {
+        'input': {
+          'id': id,
+          'name': name,
+          'parent': parentId != null ? {'id': parentId} : null,
+          'description': description,
+        }
+      },
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> json = result.data['updateStorage']['storage'];
@@ -149,10 +162,20 @@ class StorageRepository {
     return storageObject;
   }
 
-  Future<Storage> addStorage(Storage storage) async {
+  Future<Storage> addStorage({
+    @required String name,
+    String parentId,
+    String description,
+  }) async {
     final MutationOptions options = MutationOptions(
       documentNode: gql(addStorageMutation),
-      variables: {'input': storage.toJson()},
+      variables: {
+        'input': {
+          'name': name,
+          'parent': parentId != null ? {'id': parentId} : null,
+          'description': description,
+        }
+      },
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> json = result.data['addStorage']['storage'];

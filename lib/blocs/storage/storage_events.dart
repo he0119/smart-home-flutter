@@ -9,6 +9,8 @@ abstract class StorageEvent extends Equatable {
 
 class StorageStarted extends StorageEvent {}
 
+class StorageRefreshRoot extends StorageEvent {}
+
 class StorageItemDetail extends StorageEvent {
   final String id;
 
@@ -55,40 +57,4 @@ class StorageRefreshStorageDetail extends StorageEvent {
 
   @override
   String toString() => 'RefreshStorageDetail $id';
-}
-
-class StorageAddStorage extends StorageEvent {
-  final Storage storage;
-
-  const StorageAddStorage(this.storage);
-
-  @override
-  List<Object> get props => [storage];
-}
-
-class StorageAddItem extends StorageEvent {
-  final Item item;
-
-  const StorageAddItem(this.item);
-
-  @override
-  List<Object> get props => [item];
-}
-
-class StorageUpdateStorage extends StorageEvent {
-  final Storage storage;
-
-  const StorageUpdateStorage(this.storage);
-
-  @override
-  List<Object> get props => [storage];
-}
-
-class StorageUpdateItem extends StorageEvent {
-  final Item item;
-
-  const StorageUpdateItem(this.item);
-
-  @override
-  List<Object> get props => [item];
 }

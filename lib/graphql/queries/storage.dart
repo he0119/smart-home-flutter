@@ -22,6 +22,7 @@ query storage($id: ID!) {
       description
     }
     items {
+      __typename
       id
       name
       number
@@ -30,6 +31,11 @@ query storage($id: ID!) {
         id
         name
       }
+    }
+    parent {
+      __typename
+      id
+      name
     }
   }
 }
