@@ -14,7 +14,6 @@ class ItemFormState extends Equatable {
   final DateTime expirationDate;
   final bool isExpirationDateValid;
   final List<Storage> listofStorages;
-  final Item editedItem;
   final bool formSubmittedSuccessfully;
 
   bool get isFormValid =>
@@ -39,7 +38,6 @@ class ItemFormState extends Equatable {
     @required this.expirationDate,
     @required this.isExpirationDateValid,
     @required this.listofStorages,
-    @required this.editedItem,
     @required this.formSubmittedSuccessfully,
   });
 
@@ -58,7 +56,6 @@ class ItemFormState extends Equatable {
       expirationDate: null,
       isExpirationDateValid: true,
       listofStorages: [],
-      editedItem: null,
       formSubmittedSuccessfully: false,
     );
   }
@@ -77,7 +74,6 @@ class ItemFormState extends Equatable {
     DateTime expirationDate,
     bool isExpirationDateValid,
     List<Storage> listofStorages,
-    Item editedItem,
     bool formSubmittedSuccessfully,
   }) {
     return ItemFormState(
@@ -95,7 +91,6 @@ class ItemFormState extends Equatable {
       isExpirationDateValid:
           isExpirationDateValid ?? this.isExpirationDateValid,
       listofStorages: listofStorages ?? this.listofStorages,
-      editedItem: editedItem ?? this.editedItem,
       formSubmittedSuccessfully:
           formSubmittedSuccessfully ?? this.formSubmittedSuccessfully,
     );

@@ -62,18 +62,28 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
       } else {
         price = null;
       }
-      Item item = await storageRepository.updateItem(
-        id: event.id,
-        name: state.name,
-        number: int.parse(state.number),
-        storageId: state.storage,
-        description: state.description,
-        price: price,
-        expirationDate: state.expirationDate,
-      );
+      if (event.isEditing) {
+        await storageRepository.updateItem(
+          id: event.id,
+          name: state.name,
+          number: int.parse(state.number),
+          storageId: state.storage,
+          description: state.description,
+          price: price,
+          expirationDate: state.expirationDate,
+        );
+      } else {
+        await storageRepository.addItem(
+          name: state.name,
+          number: int.parse(state.number),
+          storageId: state.storage,
+          description: state.description,
+          price: price,
+          expirationDate: state.expirationDate,
+        );
+      }
       yield state.copyWith(
         formSubmittedSuccessfully: true,
-        editedItem: item,
       );
     }
   }

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/pages/storage/item_edit_page.dart';
+import 'package:smart_home/pages/storage/item_add_edit_page.dart';
 
 enum Menu { edit }
 
@@ -33,8 +33,11 @@ class StorageItemPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) =>
-                                StorageItemEditPage(item: state.item)),
+                          builder: (_) => StorageAddItemEditPage(
+                            isEditing: true,
+                            item: state.item,
+                          ),
+                        ),
                       );
                     }
                   },

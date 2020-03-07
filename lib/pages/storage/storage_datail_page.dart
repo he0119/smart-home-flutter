@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/pages/storage/item_add_edit_page.dart';
 import 'package:smart_home/widgets/storage_item_list.dart';
 
 class StorageStoragePage extends StatelessWidget {
@@ -34,6 +35,21 @@ class StorageStoragePage extends StatelessWidget {
                 items: state.storage.items.toList(),
                 storages: state.storage.children.toList(),
               ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return StorageAddItemEditPage(
+                        isEditing: false,
+                        storageId: storageId,
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           );
         }

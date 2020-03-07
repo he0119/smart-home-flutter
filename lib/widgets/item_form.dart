@@ -3,12 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/blocs/blocs.dart';
-import 'package:smart_home/blocs/storage/item_form_bloc.dart';
 import 'package:smart_home/models/models.dart';
 
 class ItemForm extends StatefulWidget {
+  final bool isEditing;
+  final String storageId;
   final Item item;
-  ItemForm({@required this.item});
+
+  ItemForm({
+    @required this.isEditing,
+    this.item,
+    this.storageId,
+  });
 
   @override
   State<ItemForm> createState() => _ItemFormState();
@@ -30,18 +36,24 @@ class _ItemFormState extends State<ItemForm> {
     super.initState();
     _itemFormBloc = BlocProvider.of<ItemFormBloc>(context);
     _itemFormBloc.add(ItemFormStarted());
-    _itemFormBloc.add(NameChanged(name: widget.item.name));
-    _itemFormBloc.add(NumberChanged(number: widget.item.number.toString()));
-    _itemFormBloc.add(StorageChanged(storage: widget.item.storage.id));
-    _itemFormBloc.add(PriceChanged(price: widget.item.price?.toString()));
-    _itemFormBloc.add(DescriptionChanged(description: widget.item.description));
-    _itemFormBloc.add(
-      ExpirationDateChanged(expirationDate: widget.item.expirationDate),
-    );
-
-    if (widget.item.expirationDate != null)
-      _expirationDateController.text =
-          DateFormat.yMMMd('zh').format(widget.item.expirationDate.toLocal());
+    if (widget.isEditing) {
+      _itemFormBloc.add(NameChanged(name: widget.item.name));
+      _itemFormBloc.add(NumberChanged(number: widget.item.number.toString()));
+      _itemFormBloc.add(StorageChanged(storage: widget.item.storage.id));
+      _itemFormBloc.add(PriceChanged(price: widget.item.price?.toString()));
+      _itemFormBloc
+          .add(DescriptionChanged(description: widget.item.description));
+      _itemFormBloc.add(
+        ExpirationDateChanged(expirationDate: widget.item.expirationDate),
+      );
+      if (widget.item.expirationDate != null)
+        _expirationDateController.text =
+            DateFormat.yMMMd('zh').format(widget.item.expirationDate.toLocal());
+    } else {
+      _itemFormBloc.add(NameChanged(name: ''));
+      _itemFormBloc.add(StorageChanged(storage: widget.storageId));
+      _itemFormBloc.add(NumberChanged(number: '1'));
+    }
 
     _nameFocusNode = FocusNode();
     _numberFocusNode = FocusNode();
@@ -79,7 +91,11 @@ class _ItemFormState extends State<ItemForm> {
   }
 
   void _onSubmitPressed() {
-    _itemFormBloc.add(FormSubmitted(id: widget.item.id));
+    if (widget.isEditing) {
+      _itemFormBloc.add(FormSubmitted(isEditing: true, id: widget.item.id));
+    } else {
+      _itemFormBloc.add(FormSubmitted(isEditing: false));
+    }
   }
 
   @override
@@ -87,8 +103,13 @@ class _ItemFormState extends State<ItemForm> {
     return BlocConsumer<ItemFormBloc, ItemFormState>(
       listener: (context, state) {
         if (state.formSubmittedSuccessfully) {
-          BlocProvider.of<StorageBloc>(context)
-              .add(StorageItemDetail(widget.item.id));
+          if (widget.isEditing) {
+            BlocProvider.of<StorageBloc>(context)
+                .add(StorageItemDetail(widget.item.id));
+          } else {
+            BlocProvider.of<StorageBloc>(context)
+                .add(StorageRefreshStorageDetail(widget.storageId));
+          }
           Navigator.of(context).pop();
         }
       },
@@ -97,7 +118,7 @@ class _ItemFormState extends State<ItemForm> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                initialValue: widget.item.name,
+                initialValue: widget.isEditing ? widget.item.name : '',
                 onChanged: (value) =>
                     _itemFormBloc.add(NameChanged(name: value)),
                 decoration: InputDecoration(
@@ -117,7 +138,8 @@ class _ItemFormState extends State<ItemForm> {
                 },
               ),
               TextFormField(
-                initialValue: widget.item.number.toString(),
+                initialValue:
+                    widget.isEditing ? widget.item.number.toString() : '1',
                 onChanged: (value) =>
                     _itemFormBloc.add(NumberChanged(number: value)),
                 decoration: InputDecoration(
@@ -140,7 +162,7 @@ class _ItemFormState extends State<ItemForm> {
                 decoration: InputDecoration(
                   labelText: '属于',
                 ),
-                value: state.storage,
+                value: widget.isEditing ? state.storage : widget.storageId,
                 items: state.listofStorages
                     .map((e) => DropdownMenuItem(
                           value: e.id,
@@ -156,7 +178,7 @@ class _ItemFormState extends State<ItemForm> {
                 },
               ),
               TextFormField(
-                initialValue: widget.item.description,
+                initialValue: widget.isEditing ? widget.item.description : '',
                 onChanged: (value) =>
                     _itemFormBloc.add(DescriptionChanged(description: value)),
                 decoration: InputDecoration(
@@ -173,7 +195,8 @@ class _ItemFormState extends State<ItemForm> {
                 },
               ),
               TextFormField(
-                initialValue: widget.item.price?.toString(),
+                initialValue:
+                    widget.isEditing ? widget.item.price?.toString() : '',
                 onChanged: (value) =>
                     _itemFormBloc.add(PriceChanged(price: value)),
                 decoration: InputDecoration(

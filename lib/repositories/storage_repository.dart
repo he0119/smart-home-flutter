@@ -111,10 +111,26 @@ class StorageRepository {
     return itemObject;
   }
 
-  Future<Item> addItem(Item item) async {
+  Future<Item> addItem({
+    @required String name,
+    @required int number,
+    @required String storageId,
+    String description,
+    double price,
+    DateTime expirationDate,
+  }) async {
     final MutationOptions options = MutationOptions(
       documentNode: gql(addItemMutation),
-      variables: {'input': item.toJson()},
+      variables: {
+        'input': {
+          'name': name,
+          'number': number,
+          'storage': {'id': storageId},
+          'description': description,
+          'price': price,
+          'expirationDate': expirationDate?.toIso8601String(),
+        }
+      },
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> json = result.data['addItem']['item'];
