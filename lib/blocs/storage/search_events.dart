@@ -7,8 +7,6 @@ abstract class StorageSearchEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class StorageSearchStarted extends StorageSearchEvent {}
-
 class StorageSearchChanged extends StorageSearchEvent {
   final String key;
 

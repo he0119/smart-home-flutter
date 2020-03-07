@@ -16,9 +16,6 @@ void main() {
           create: (BuildContext context) =>
               AuthenticationBloc()..add(AppStarted()),
         ),
-        BlocProvider<StorageSearchBloc>(
-          create: (BuildContext context) => StorageSearchBloc(),
-        ),
         BlocProvider<StorageBloc>(
           create: (BuildContext context) => StorageBloc(),
         ),

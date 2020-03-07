@@ -4,18 +4,7 @@ query search($key: String!) {
     items {
       id
       name
-      number
-      storage {
-        id
-        name
-      }
-      editor {
-        username
-      }
       description
-      expirationDate
-      price
-      updateDate
     }
     storages {
       id

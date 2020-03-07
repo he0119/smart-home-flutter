@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/widgets/search_form.dart';
 
 class SearchPage extends StatelessWidget {
@@ -8,7 +10,10 @@ class SearchPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('物品搜索'),
       ),
-      body: SearchForm(),
+      body: BlocProvider(
+        create: (context) => StorageSearchBloc(),
+        child: SearchForm(),
+      ),
     );
   }
 }

@@ -14,15 +14,10 @@ class StorageException implements Exception {
 
 class StorageRepository {
   Future<List<dynamic>> search(String key) async {
-    if (key == '') {
-      return null;
-    }
     final QueryOptions options = QueryOptions(
-      documentNode:
-          gql(searchQuery), // this is the query string you just created
-      variables: {
-        'key': key,
-      },
+      documentNode: gql(searchQuery),
+      variables: {'key': key},
+      fetchPolicy: FetchPolicy.noCache,
     );
     final results = await graphqlApiClient.query(options);
     if (results.hasException) {
@@ -31,9 +26,9 @@ class StorageRepository {
     final List<dynamic> storages = results.data['search']['storages'];
     final List<dynamic> items = results.data['search']['items'];
     final List<Storage> listofStorage =
-        storages.map((dynamic e) => Storage.fromJson(e)).toList();
+        storages.map((dynamic json) => Storage.fromJson(json)).toList();
     final List<Item> listofItem =
-        items.map((dynamic e) => Item.fromJson(e)).toList();
+        items.map((dynamic json) => Item.fromJson(json)).toList();
     return [listofItem, listofStorage];
   }
 
