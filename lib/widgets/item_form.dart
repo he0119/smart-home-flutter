@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/item_form_bloc.dart';
 import 'package:smart_home/models/models.dart';
 
@@ -86,7 +87,9 @@ class _ItemFormState extends State<ItemForm> {
     return BlocConsumer<ItemFormBloc, ItemFormState>(
       listener: (context, state) {
         if (state.formSubmittedSuccessfully) {
-          Navigator.of(context).pop<Item>(state.editedItem);
+          BlocProvider.of<StorageBloc>(context)
+              .add(StorageItemDetail(widget.item.id));
+          Navigator.of(context).pop();
         }
       },
       builder: (context, state) {

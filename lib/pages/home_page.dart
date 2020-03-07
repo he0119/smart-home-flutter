@@ -36,8 +36,6 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           icon: Icon(Icons.search),
           onPressed: () {
-            BlocProvider.of<StorageSearchBloc>(_buildContext)
-                .add(StorageSearchStarted());
             Navigator.push(
               _buildContext,
               MaterialPageRoute(builder: (_) => SearchPage()),

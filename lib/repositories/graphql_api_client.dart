@@ -30,6 +30,11 @@ class GraphQLApiClient {
     }
   }
 
+  Future clearCache() async {
+    client.cache.reset(); // empty the hash map
+    await client.cache.save(); // persist empty map to storage
+  }
+
   Future<QueryResult> mutate(MutationOptions options) async {
     if (!await userRepository.isTokenValid()) {
       await userRepository.refreshToken();

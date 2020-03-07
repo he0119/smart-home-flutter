@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/pages/storage/item_datail_page.dart';
+import 'package:smart_home/pages/storage/storage_datail_page.dart';
 
 class StorageItemList extends StatelessWidget {
   final List<Item> items;
@@ -39,6 +41,10 @@ class _StorageItemListItem extends StatelessWidget {
         subtitle: Text(item.description ?? ''),
         onTap: () {
           BlocProvider.of<StorageBloc>(context).add(StorageItemDetail(item.id));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => StorageItemPage(itemId: item.id)),
+          );
         },
       );
     } else {
@@ -52,6 +58,11 @@ class _StorageItemListItem extends StatelessWidget {
         onTap: () {
           BlocProvider.of<StorageBloc>(context)
               .add(StorageStorageDetail(item.id));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => StorageStoragePage(storageId: item.id)),
+          );
         },
       );
     }
