@@ -112,6 +112,18 @@ class StorageRepository {
     return itemObject;
   }
 
+  Future<String> deleteItem({String id}) async {
+    final MutationOptions options = MutationOptions(
+      documentNode: gql(deleteItemMutation),
+      variables: {
+        'id': id,
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final String deletedId = result.data['deletedId'];
+    return deletedId;
+  }
+
   Future<Item> addItem({
     @required String name,
     @required int number,
@@ -181,5 +193,17 @@ class StorageRepository {
     final Map<String, dynamic> json = result.data['addStorage']['storage'];
     final Storage storageObject = Storage.fromJson(json);
     return storageObject;
+  }
+
+  Future<String> deleteStorage({String id}) async {
+    final MutationOptions options = MutationOptions(
+      documentNode: gql(deleteStorageMutation),
+      variables: {
+        'id': id,
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final String deletedId = result.data['deletedId'];
+    return deletedId;
   }
 }

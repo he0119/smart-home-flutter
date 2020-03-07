@@ -5,7 +5,7 @@ import 'package:smart_home/pages/storage/item_add_edit_page.dart';
 import 'package:smart_home/pages/storage/storage_add_edit_page.dart';
 import 'package:smart_home/widgets/storage_item_list.dart';
 
-enum Menu { edit }
+enum Menu { edit, delete }
 
 class StorageStoragePage extends StatelessWidget {
   final String storageId;
@@ -56,12 +56,52 @@ class StorageStoragePage extends StatelessWidget {
                         ),
                       );
                     }
+                    if (value == Menu.delete) {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: Text('删除 ${state.storage.name}'),
+                          content: Text('你确认要删除该位置么？'),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('否'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text('是'),
+                              onPressed: () {
+                                BlocProvider.of<StorageBloc>(context)
+                                    .add(StorageDeleteStorage(storageId));
+                                if (state.storage.parent != null) {
+                                  BlocProvider.of<StorageBloc>(context).add(
+                                      StorageRefreshStorageDetail(
+                                          state.storage.parent.id));
+                                } else {
+                                  BlocProvider.of<StorageBloc>(context)
+                                      .add(StorageRefreshRoot());
+                                }
+                                int count = 0;
+                                Navigator.popUntil(context, (route) {
+                                  return count++ == 2;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   },
                   itemBuilder: (context) => [
                     PopupMenuItem(
                       value: Menu.edit,
                       child: Text('编辑'),
-                    )
+                    ),
+                    PopupMenuItem(
+                      value: Menu.delete,
+                      child: Text('删除'),
+                    ),
                   ],
                 )
               ],

@@ -36,6 +36,18 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       yield StorageItemDetailResults(results);
     }
 
+    if (event is StorageDeleteItem) {
+      yield StorageInProgress();
+      String id = await storageRepository.deleteItem(id: event.id);
+      yield StorageItemDeleted(id);
+    }
+
+    if (event is StorageDeleteStorage) {
+      yield StorageInProgress();
+      String id = await storageRepository.deleteStorage(id: event.id);
+      yield StorageStorageDeleted(id);
+    }
+
     if (event is StorageRefreshStorageDetail) {
       yield StorageInProgress();
       Storage results = await storageRepository.storage(event.id, cache: false);

@@ -48,6 +48,24 @@ class StorageItemDetailResults extends StorageState {
   List<Object> get props => [item];
 }
 
+class StorageItemDeleted extends StorageState {
+  final String id;
+
+  StorageItemDeleted(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
+class StorageStorageDeleted extends StorageState {
+  final String id;
+
+  StorageStorageDeleted(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
 class StorageUpdateStorageSuccess extends StorageState {
   final Storage storage;
 

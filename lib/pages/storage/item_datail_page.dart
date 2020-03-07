@@ -5,7 +5,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_add_edit_page.dart';
 
-enum Menu { edit }
+enum Menu { edit, delete }
 
 class StorageItemPage extends StatelessWidget {
   final String itemId;
@@ -40,12 +40,46 @@ class StorageItemPage extends StatelessWidget {
                         ),
                       );
                     }
+                    if (value == Menu.delete) {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: Text('删除 ${state.item.name}'),
+                          content: Text('你确认要删除该物品么？'),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('否'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text('是'),
+                              onPressed: () {
+                                BlocProvider.of<StorageBloc>(context)
+                                  ..add(StorageDeleteItem(itemId))
+                                  ..add(StorageRefreshStorageDetail(
+                                      state.item.storage.id));
+                                int count = 0;
+                                Navigator.popUntil(context, (route) {
+                                  return count++ == 2;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   },
                   itemBuilder: (context) => [
                     PopupMenuItem(
                       value: Menu.edit,
                       child: Text('编辑'),
-                    )
+                    ),
+                    PopupMenuItem(
+                      value: Menu.delete,
+                      child: Text('删除'),
+                    ),
                   ],
                 )
               ],
