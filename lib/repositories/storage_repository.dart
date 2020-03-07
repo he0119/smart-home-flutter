@@ -43,12 +43,13 @@ class StorageRepository {
     return listofStorage;
   }
 
-  Future<Storage> storage(String id) async {
+  Future<Storage> storage(String id, {bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(storageQuery),
       variables: {
         'id': id,
       },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final result = await graphqlApiClient.query(options);
     final Map<String, dynamic> json = result.data['storage'];
@@ -67,12 +68,13 @@ class StorageRepository {
     return listofStorage;
   }
 
-  Future<Item> item(String id) async {
+  Future<Item> item(String id, {bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(itemQuery),
       variables: {
         'id': id,
       },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final result = await graphqlApiClient.query(options);
     final Map<String, dynamic> json = result.data['item'];
