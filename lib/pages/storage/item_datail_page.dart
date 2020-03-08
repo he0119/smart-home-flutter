@@ -56,10 +56,9 @@ class StorageItemPage extends StatelessWidget {
                             FlatButton(
                               child: Text('是'),
                               onPressed: () {
-                                BlocProvider.of<StorageBloc>(context)
-                                  ..add(StorageDeleteItem(itemId))
-                                  ..add(StorageRefreshStorageDetail(
-                                      id: state.item.storage.id));
+                                BlocProvider.of<StorageBloc>(context).add(
+                                  StorageDeleteItem(item: state.item),
+                                );
                                 int count = 0;
                                 Navigator.popUntil(context, (route) {
                                   return count++ == 2;

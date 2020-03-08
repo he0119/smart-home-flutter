@@ -22,27 +22,27 @@ class StorageItemDetail extends StorageEvent {
 }
 
 class StorageDeleteItem extends StorageEvent {
-  final String id;
+  final Item item;
 
-  const StorageDeleteItem(this.id);
-
-  @override
-  List<Object> get props => [id];
+  const StorageDeleteItem({@required this.item});
 
   @override
-  String toString() => 'DeleteItem $id';
+  List<Object> get props => [item];
+
+  @override
+  String toString() => 'DeleteItem { name: ${item.name} }';
 }
 
 class StorageDeleteStorage extends StorageEvent {
-  final String id;
+  final Storage storage;
 
-  const StorageDeleteStorage(this.id);
-
-  @override
-  List<Object> get props => [id];
+  const StorageDeleteStorage({@required this.storage});
 
   @override
-  String toString() => 'DeleteStorage $id';
+  List<Object> get props => [storage];
+
+  @override
+  String toString() => 'DeleteStorage { name: ${storage.name} }';
 }
 
 class StorageStorageDetail extends StorageEvent {

@@ -39,14 +39,23 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
 
     if (event is StorageDeleteItem) {
       yield StorageInProgress();
-      String id = await storageRepository.deleteItem(id: event.id);
+      String id = await storageRepository.deleteItem(id: event.item.id);
       yield StorageItemDeleted(id);
+      // 刷新受到影响的数据
+      add(StorageRefreshStorageDetail(id: event.item.storage.id));
     }
 
     if (event is StorageDeleteStorage) {
       yield StorageInProgress();
-      String id = await storageRepository.deleteStorage(id: event.id);
+      String id = await storageRepository.deleteStorage(id: event.storage.id);
       yield StorageStorageDeleted(id);
+      // 刷新受到影响的数据
+      if (event.storage.parent != null) {
+        StorageRefreshStorageDetail(id: event.storage.parent.id);
+      } else {
+        add(StorageRefreshRoot());
+      }
+      add(StorageRefreshStorages());
     }
 
     if (event is StorageRefreshStorageDetail) {
