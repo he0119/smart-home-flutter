@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/pages/storage/item_add_edit_page.dart';
+import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_add_edit_page.dart';
 import 'package:smart_home/widgets/storage_item_list.dart';
 
@@ -40,6 +41,15 @@ class StorageStoragePage extends StatelessWidget {
                           storageId: state.storage.id,
                         ),
                       ),
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => SearchPage()),
                     );
                   },
                 ),
