@@ -20,6 +20,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<StorageBloc>(
           create: (BuildContext context) => StorageBloc(),
         ),
+        BlocProvider<TabBloc>(
+          create: (BuildContext context) => TabBloc(),
+        ),
       ],
       child: MaterialApp(
         theme: ThemeData(
