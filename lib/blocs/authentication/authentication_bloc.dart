@@ -7,10 +7,10 @@ import 'package:smart_home/repositories/user_repository.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
-Stream<AuthenticationState> _mapAppStartedToState() async* {
+Stream<AuthenticationState> _mapAppStartedToState(AppStarted event) async* {
   try {
     await userRepository.initailize();
-    graphqlApiClient.initailize();
+    graphqlApiClient.initailize(event.url);
     if (await userRepository.hasToken()) {
       yield Authenticated(await userRepository.currentUser());
     } else {
@@ -47,7 +47,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {
     if (event is AppStarted) {
-      yield* _mapAppStartedToState();
+      yield* _mapAppStartedToState(event);
     } else if (event is AuthenticationLogin) {
       yield* _mapLoginToState(event);
     } else if (event is AuthenticationLogout) {
