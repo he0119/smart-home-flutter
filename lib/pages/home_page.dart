@@ -6,6 +6,7 @@ import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_add_edit_page.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
@@ -70,6 +71,11 @@ class _AppBar extends StatelessWidget with PreferredSizeWidget {
             ],
           );
         }
+        if (activeTab == AppTab.blog) {
+          return AppBar(
+            title: Text('博客'),
+          );
+        }
         return AppBar(title: Text('留言板'));
       },
     );
@@ -87,14 +93,36 @@ class _HomePageBody extends StatelessWidget {
       builder: (context, activeTab) {
         if (activeTab == AppTab.iot) {
           return Center(
-            child: Text(
-              'Index 0: IOT',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            child: RaisedButton(
+              onPressed: () async {
+                const url = 'https://iot.hehome.xyz';
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  throw 'Could not launch $url';
+                }
+              },
+              child: Text('IOT'),
             ),
           );
         }
         if (activeTab == AppTab.storage) {
           return StorageHomePage();
+        }
+        if (activeTab == AppTab.blog) {
+          return Center(
+            child: RaisedButton(
+              onPressed: () async {
+                const url = 'https://hehome.xyz';
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  throw 'Could not launch $url';
+                }
+              },
+              child: Text('博客'),
+            ),
+          );
         }
         return Center(
           child: Text(

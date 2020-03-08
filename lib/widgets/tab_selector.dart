@@ -16,6 +16,7 @@ class TabSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       currentIndex: AppTab.values.indexOf(activeTab),
       onTap: (index) => onTabSelected(AppTab.values[index]),
       items: AppTab.values.map((tab) => navigationBarItem(tab)).toList(),
@@ -30,6 +31,9 @@ class TabSelector extends StatelessWidget {
     if (appTab == AppTab.storage) {
       return BottomNavigationBarItem(
           icon: Icon(Icons.storage), title: Text('物品'));
+    }
+    if (appTab == AppTab.blog) {
+      return BottomNavigationBarItem(icon: Icon(Icons.web), title: Text('博客'));
     }
     return BottomNavigationBarItem(icon: Icon(Icons.chat), title: Text('留言板'));
   }
