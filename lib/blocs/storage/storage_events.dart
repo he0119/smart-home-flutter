@@ -60,7 +60,7 @@ class StorageStorageDetail extends StorageEvent {
 class StorageRefreshItemDetail extends StorageEvent {
   final String id;
 
-  const StorageRefreshItemDetail(this.id);
+  const StorageRefreshItemDetail({@required this.id});
 
   @override
   List<Object> get props => [id];
@@ -121,4 +121,56 @@ class StorageAddStorage extends StorageEvent {
 
   @override
   String toString() => 'AddStorage { name: $name }';
+}
+
+class StorageUpdateItem extends StorageEvent {
+  final String id;
+  final String name;
+  final int number;
+  final String storageId;
+  final String description;
+  final double price;
+  final DateTime expirationDate;
+
+  const StorageUpdateItem({
+    @required this.id,
+    this.name,
+    this.number,
+    this.storageId,
+    this.description,
+    this.price,
+    this.expirationDate,
+  });
+
+  @override
+  List<Object> get props =>
+      [id, name, number, storageId, description, price, expirationDate];
+
+  @override
+  String toString() => 'UpdateItem { name: $name }';
+}
+
+class StorageAddItem extends StorageEvent {
+  final String name;
+  final int number;
+  final String storageId;
+  final String description;
+  final double price;
+  final DateTime expirationDate;
+
+  const StorageAddItem({
+    @required this.name,
+    @required this.number,
+    @required this.storageId,
+    this.description,
+    this.price,
+    this.expirationDate,
+  });
+
+  @override
+  List<Object> get props =>
+      [name, number, storageId, description, price, expirationDate];
+
+  @override
+  String toString() => 'AddItem { name: $name }';
 }

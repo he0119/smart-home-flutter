@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_home/blocs/storage/storage_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
@@ -8,6 +9,10 @@ part 'item_form_event.dart';
 part 'item_form_state.dart';
 
 class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
+  final StorageBloc storageBloc;
+
+  ItemFormBloc({@required this.storageBloc});
+
   @override
   ItemFormState get initialState => ItemFormState.initial();
 
@@ -64,7 +69,6 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
         storage: state.storage,
         isStorageValid: state.isStorageValid,
         listofStorages: state.listofStorages,
-        formSubmittedSuccessfully: state.formSubmittedSuccessfully,
       );
     }
     if (event is FormSubmitted) {
@@ -75,7 +79,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
         price = null;
       }
       if (event.isEditing) {
-        await storageRepository.updateItem(
+        storageBloc.add(StorageUpdateItem(
           id: event.id,
           name: state.name,
           number: int.parse(state.number),
@@ -83,20 +87,17 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
           description: state.description,
           price: price,
           expirationDate: state.expirationDate,
-        );
+        ));
       } else {
-        await storageRepository.addItem(
+        storageBloc.add(StorageAddItem(
           name: state.name,
           number: int.parse(state.number),
           storageId: state.storage,
           description: state.description,
           price: price,
           expirationDate: state.expirationDate,
-        );
+        ));
       }
-      yield state.copyWith(
-        formSubmittedSuccessfully: true,
-      );
     }
   }
 

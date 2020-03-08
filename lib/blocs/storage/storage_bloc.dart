@@ -81,6 +81,7 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       );
       yield StorageUpdateStorageSuccess();
       // 刷新受到影响的存储的位置
+      // FIXME: 如果修改到其他位置，之前位置下的数据并没有刷新
       add(StorageRefreshStorageDetail(id: event.id));
       if (event.parentId != null) {
         add(StorageRefreshStorageDetail(id: event.parentId));
@@ -103,6 +104,37 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
         add(StorageRefreshRoot());
       }
       add(StorageRefreshStorages());
+    }
+
+    if (event is StorageUpdateItem) {
+      await storageRepository.updateItem(
+        id: event.id,
+        name: event.name,
+        number: event.number,
+        storageId: event.storageId,
+        description: event.description,
+        price: event.price,
+        expirationDate: event.expirationDate,
+      );
+      yield StorageUpdateItemSuccess();
+      // 刷新受到影响的存储的位置
+      // FIXME: 如果修改到其他位置，之前位置下的数据并没有刷新
+      add(StorageRefreshItemDetail(id: event.id));
+      add(StorageRefreshStorageDetail(id: event.storageId));
+    }
+
+    if (event is StorageAddItem) {
+      await storageRepository.addItem(
+        name: event.name,
+        number: event.number,
+        storageId: event.storageId,
+        description: event.description,
+        price: event.price,
+        expirationDate: event.expirationDate,
+      );
+      yield StorageAddItemSuccess();
+      // 刷新受到影响的存储的位置
+      add(StorageRefreshStorageDetail(id: event.storageId));
     }
   }
 }
