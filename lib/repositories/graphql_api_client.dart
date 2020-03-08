@@ -11,6 +11,20 @@ class GraphQLApiClient {
 
   GraphQLClient get client => _client;
 
+  void _handleErrors(OperationException errors) {
+    if (errors.clientException != null) {
+      throw Exception('网络连接出错，请稍后再试');
+    }
+    for (GraphQLError error in errors.graphqlErrors) {
+      String message = error.message.toLowerCase();
+      // Token 格式出错，直接清除 Token
+      if (message.contains('error decoding signature')) {
+        userRepository.clearToken();
+        throw Exception('认证出错，请稍后再试');
+      }
+    }
+  }
+
   bool initailize(String url) {
     final HttpLink _httpLink = HttpLink(
       uri: url,
@@ -38,6 +52,9 @@ class GraphQLApiClient {
       await userRepository.refreshToken();
     }
     final results = await _client.mutate(options);
+    if (results.hasException) {
+      _handleErrors(results.exception);
+    }
     return results;
   }
 
@@ -46,6 +63,9 @@ class GraphQLApiClient {
       await userRepository.refreshToken();
     }
     final results = await _client.query(options);
+    if (results.hasException) {
+      _handleErrors(results.exception);
+    }
     return results;
   }
 }

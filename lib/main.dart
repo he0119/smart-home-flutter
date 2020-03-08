@@ -47,6 +47,23 @@ class MyApp extends StatelessWidget {
           if (state is AppUninitialized) {
             return SplashPage();
           }
+          if (state is AuthenticationError) {
+            return Scaffold(
+              body: AlertDialog(
+                content: Text(state.error),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('确认'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      BlocProvider.of<AuthenticationBloc>(context)
+                          .add(AppStarted(_config.apiUrl));
+                    },
+                  )
+                ],
+              ),
+            );
+          }
           return LoginPage();
         }),
       ),

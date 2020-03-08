@@ -58,6 +58,9 @@ class UserRepository {
     );
     QueryResult results = await graphqlApiClient.client.mutate(loginOptions);
     if (results.hasException) {
+      if (results.exception.clientException != null) {
+        throw Exception('网络异常，请稍后再试');
+      }
       return false;
     } else {
       String token = results.data['tokenAuth']['token'];
@@ -68,8 +71,12 @@ class UserRepository {
     }
   }
 
-  Future clearToken() async {
+  Future clearRefreshToken() async {
     await _prefs.clear();
+  }
+
+  Future clearToken() async {
+    await _prefs.remove('token');
   }
 
   Future<User> currentUser() async {
@@ -82,7 +89,7 @@ class UserRepository {
   }
 
   Future<bool> hasToken() async {
-    String token = await userRepository.token;
+    String token = _prefs.getString('refreshToken');
     if (token == null || token == "") {
       return false;
     } else {
@@ -99,15 +106,20 @@ class UserRepository {
   }
 
   Future<bool> isTokenValid() async {
-    Map<String, dynamic> result = parseJwt(await token);
-    int now = new DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    // 本地时间可能与服务器不相等
-    int exp = result['exp'] - 30;
-    return exp > now;
+    try {
+      Map<String, dynamic> result = parseJwt(await token);
+      int now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      // 本地时间可能与服务器不相等
+      int exp = result['exp'] - 30;
+      return exp > now;
+    } catch (e) {
+      return false;
+    }
   }
 
-  Future<bool> refreshToken() async {
+  Future refreshToken() async {
     String refreshToken = _prefs.getString('refreshToken');
+    print('refresh token');
     MutationOptions options = MutationOptions(
       documentNode: gql(refreshTokenMutation),
       variables: {
@@ -116,11 +128,17 @@ class UserRepository {
     );
     QueryResult results = await graphqlApiClient.client.mutate(options);
     if (results.hasException) {
-      return false;
+      for (GraphQLError error in results.exception.graphqlErrors) {
+        // 如果 Refresh Token 无效或过期则清除
+        String message = error.message.toLowerCase();
+        if (message.contains('invalid') || message.contains('expired')) {
+          clearRefreshToken();
+        }
+      }
+      throw Exception('登录验证失败，请重新登录');
     } else {
       String token = results.data['refreshToken']['token'];
       await setToken(token);
-      return true;
     }
   }
 
