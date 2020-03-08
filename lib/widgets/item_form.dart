@@ -42,7 +42,7 @@ class _ItemFormState extends State<ItemForm> {
                 .add(StorageItemDetail(widget.item.id));
           } else {
             BlocProvider.of<StorageBloc>(context)
-                .add(StorageRefreshStorageDetail(widget.storageId));
+                .add(StorageRefreshStorageDetail(id: widget.storageId));
           }
           Navigator.of(context).pop();
         }

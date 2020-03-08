@@ -77,13 +77,13 @@ class StorageStoragePage extends StatelessWidget {
                                 if (state.storage.parent != null) {
                                   BlocProvider.of<StorageBloc>(context).add(
                                       StorageRefreshStorageDetail(
-                                          state.storage.parent.id));
+                                          id: state.storage.parent.id));
                                 } else {
                                   BlocProvider.of<StorageBloc>(context)
                                       .add(StorageRefreshRoot());
                                 }
                                 BlocProvider.of<StorageBloc>(context)
-                                      .add(StorageRefreshStorages());
+                                    .add(StorageRefreshStorages());
                                 int count = 0;
                                 Navigator.popUntil(context, (route) {
                                   return count++ == 2;
@@ -111,7 +111,7 @@ class StorageStoragePage extends StatelessWidget {
             body: RefreshIndicator(
               onRefresh: () async {
                 BlocProvider.of<StorageBloc>(context)
-                    .add(StorageRefreshStorageDetail(storageId));
+                    .add(StorageRefreshStorageDetail(id: storageId));
               },
               child: StorageItemList(
                 items: state.storage.items.toList(),

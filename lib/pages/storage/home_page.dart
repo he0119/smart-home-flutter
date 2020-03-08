@@ -21,9 +21,14 @@ class _StorageHomePage extends StatelessWidget {
     return BlocBuilder<StorageBloc, StorageState>(
       builder: (context, state) {
         if (state is StorageRootResults) {
-          return StorageItemList(items: [], storages: state.storages);
+          return RefreshIndicator(
+            onRefresh: () async {
+              BlocProvider.of<StorageBloc>(context).add(StorageRefreshRoot());
+            },
+            child: StorageItemList(items: [], storages: state.storages),
+          );
         }
-        return CircularProgressIndicator();
+        return Center(child: CircularProgressIndicator());
       },
       condition: (previous, current) {
         if (current is StorageRootResults) {

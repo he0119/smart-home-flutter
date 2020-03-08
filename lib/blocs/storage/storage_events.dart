@@ -72,15 +72,53 @@ class StorageRefreshItemDetail extends StorageEvent {
 class StorageRefreshStorageDetail extends StorageEvent {
   final String id;
 
-  const StorageRefreshStorageDetail(this.id);
+  const StorageRefreshStorageDetail({@required this.id});
 
   @override
   List<Object> get props => [id];
 
   @override
-  String toString() => 'RefreshStorageDetail $id';
+  String toString() => 'RefreshStorageDetail { id: $id }';
 }
 
 class StorageRefreshRoot extends StorageEvent {}
 
 class StorageRefreshStorages extends StorageEvent {}
+
+class StorageUpdateStorage extends StorageEvent {
+  final String id;
+  final String name;
+  final String parentId;
+  final String description;
+
+  const StorageUpdateStorage({
+    @required this.id,
+    this.name,
+    this.parentId,
+    this.description,
+  });
+
+  @override
+  List<Object> get props => [id, name, parentId, description];
+
+  @override
+  String toString() => 'UpdateStorage { id: $id }';
+}
+
+class StorageAddStorage extends StorageEvent {
+  final String name;
+  final String parentId;
+  final String description;
+
+  const StorageAddStorage({
+    @required this.name,
+    this.parentId,
+    this.description,
+  });
+
+  @override
+  List<Object> get props => [name, parentId, description];
+
+  @override
+  String toString() => 'AddStorage { name: $name }';
+}

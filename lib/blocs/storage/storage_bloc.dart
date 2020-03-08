@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
@@ -59,6 +60,7 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       Item results = await storageRepository.item(event.id, cache: false);
       yield StorageItemDetailResults(results);
     }
+
     if (event is StorageRefreshRoot) {
       yield StorageInProgress();
       List<Storage> results = await storageRepository.rootStorage(cache: false);
@@ -68,6 +70,39 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
     if (event is StorageRefreshStorages) {
       yield StorageInProgress();
       await storageRepository.storages(cache: false);
+    }
+
+    if (event is StorageUpdateStorage) {
+      await storageRepository.updateStorage(
+        id: event.id,
+        name: event.name,
+        parentId: event.parentId,
+        description: event.description,
+      );
+      yield StorageUpdateStorageSuccess();
+      // 刷新受到影响的存储的位置
+      add(StorageRefreshStorageDetail(id: event.id));
+      if (event.parentId != null) {
+        add(StorageRefreshStorageDetail(id: event.parentId));
+      } else {
+        add(StorageRefreshRoot());
+      }
+    }
+
+    if (event is StorageAddStorage) {
+      await storageRepository.addStorage(
+        name: event.name,
+        parentId: event.parentId,
+        description: event.description,
+      );
+      yield StorageAddStorageSuccess();
+      // 刷新受到影响的存储的位置
+      if (event.parentId != null) {
+        add(StorageRefreshStorageDetail(id: event.parentId));
+      } else {
+        add(StorageRefreshRoot());
+      }
+      add(StorageRefreshStorages());
     }
   }
 }

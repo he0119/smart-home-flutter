@@ -59,7 +59,7 @@ class StorageItemPage extends StatelessWidget {
                                 BlocProvider.of<StorageBloc>(context)
                                   ..add(StorageDeleteItem(itemId))
                                   ..add(StorageRefreshStorageDetail(
-                                      state.item.storage.id));
+                                      id: state.item.storage.id));
                                 int count = 0;
                                 Navigator.popUntil(context, (route) {
                                   return count++ == 2;

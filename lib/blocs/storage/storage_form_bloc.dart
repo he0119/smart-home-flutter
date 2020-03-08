@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_home/blocs/storage/storage_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
@@ -8,6 +11,10 @@ part 'storage_form_event.dart';
 part 'storage_form_state.dart';
 
 class StorageFormBloc extends Bloc<StorageFormEvent, StorageFormState> {
+  final StorageBloc storageBloc;
+
+  StorageFormBloc({@required this.storageBloc});
+
   @override
   StorageFormState get initialState => StorageFormState.initial();
 
@@ -39,22 +46,23 @@ class StorageFormBloc extends Bloc<StorageFormEvent, StorageFormState> {
     }
     if (event is FormSubmitted) {
       if (event.isEditing) {
-        await storageRepository.updateStorage(
-          id: event.id,
-          name: state.name,
-          parentId: state.parent,
-          description: state.description,
+        storageBloc.add(
+          StorageUpdateStorage(
+            id: event.id,
+            name: state.name,
+            parentId: state.parent,
+            description: state.description,
+          ),
         );
       } else {
-        await storageRepository.addStorage(
-          name: state.name,
-          parentId: state.parent,
-          description: state.description,
+        storageBloc.add(
+          StorageAddStorage(
+            name: state.name,
+            parentId: state.parent,
+            description: state.description,
+          ),
         );
       }
-      yield state.copyWith(
-        formSubmittedSuccessfully: true,
-      );
     }
   }
 
