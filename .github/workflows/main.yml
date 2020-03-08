@@ -1,8 +1,8 @@
 on: push
-name: Test, Build and Upload
+name: Test
 jobs:
   build:
-    name: Flutter
+    name: Flutter Test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -14,14 +14,3 @@ jobs:
         channel: 'beta'
     - run: flutter pub get
     - run: flutter test
-    - run: flutter build apk --debug --split-per-abi
-    - uses: actions/upload-artifact@v1
-      with:
-        name: apk
-        path: "build/app/outputs/apk/debug"
-    - run: flutter config --enable-web
-    - run: flutter build web
-    - uses: actions/upload-artifact@v1
-      with:
-        name: web
-        path: "build/web"
