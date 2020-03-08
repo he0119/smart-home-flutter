@@ -14,18 +14,17 @@ jobs:
           channel: 'beta'
       - run: flutter pub get
       - run: flutter test
-      - run: flutter build apk --split-per-abi -t .\lib\main_prod.dart
+      - run: flutter build apk --split-per-abi -t lib/main_dev.dart
       - run: flutter config --enable-web
-      - run: flutter build web -t .\lib\main_prod.dart
+      - run: flutter build web -t lib/main_dev.dart
       - name: Zip web
         run: |
           zip -r web.zip build/web/*
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          draft: true
           files: |
             web.zip
-            "build/app/outputs/apk/release/*.apk"
+            "build/app/outputs/apk/debug/*.apk"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
