@@ -50,9 +50,21 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
       );
     }
     if (event is ExpirationDateChanged) {
-      yield state.copyWith(
+      yield ItemFormState(
+        name: state.name,
+        isNameValid: state.isNameValid,
+        number: state.number,
+        isNumberValid: state.isNumberValid,
+        description: state.description,
+        isDescriptionValid: state.isDescriptionValid,
         expirationDate: event.expirationDate,
-        isStorageValid: true,
+        isExpirationDateValid: true,
+        price: state.price,
+        isPriceValid: state.isPriceValid,
+        storage: state.storage,
+        isStorageValid: state.isStorageValid,
+        listofStorages: state.listofStorages,
+        formSubmittedSuccessfully: state.formSubmittedSuccessfully,
       );
     }
     if (event is FormSubmitted) {

@@ -1,3 +1,4 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,80 +25,12 @@ class ItemForm extends StatefulWidget {
 class _ItemFormState extends State<ItemForm> {
   ItemFormBloc _itemFormBloc;
 
-  final TextEditingController _expirationDateController =
-      TextEditingController();
+  final format = DateFormat.yMMMd('zh').add_jm();
 
   FocusNode _nameFocusNode;
   FocusNode _numberFocusNode;
   FocusNode _descriptionFocusNode;
   FocusNode _priceFocusNode;
-
-  @override
-  void initState() {
-    super.initState();
-    _itemFormBloc = BlocProvider.of<ItemFormBloc>(context);
-    _itemFormBloc.add(ItemFormStarted());
-    if (widget.isEditing) {
-      _itemFormBloc.add(NameChanged(name: widget.item.name));
-      _itemFormBloc.add(NumberChanged(number: widget.item.number.toString()));
-      _itemFormBloc.add(StorageChanged(storage: widget.item.storage.id));
-      _itemFormBloc.add(PriceChanged(price: widget.item.price?.toString()));
-      _itemFormBloc
-          .add(DescriptionChanged(description: widget.item.description));
-      _itemFormBloc.add(
-        ExpirationDateChanged(expirationDate: widget.item.expirationDate),
-      );
-      if (widget.item.expirationDate != null)
-        _expirationDateController.text =
-            DateFormat.yMMMd('zh').format(widget.item.expirationDate.toLocal());
-    } else {
-      _itemFormBloc.add(NameChanged(name: ''));
-      _itemFormBloc.add(StorageChanged(storage: widget.storageId));
-      _itemFormBloc.add(NumberChanged(number: '1'));
-    }
-
-    _nameFocusNode = FocusNode();
-    _numberFocusNode = FocusNode();
-    _descriptionFocusNode = FocusNode();
-    _priceFocusNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    // Clean up the focus node when the Form is disposed.
-    _nameFocusNode.dispose();
-    _numberFocusNode.dispose();
-    _descriptionFocusNode.dispose();
-    _priceFocusNode.dispose();
-
-    super.dispose();
-  }
-
-  void _fieldFocusChange(
-      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
-    currentFocus.unfocus();
-    FocusScope.of(context).requestFocus(nextFocus);
-  }
-
-  Future _selectDate() async {
-    DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(1970),
-        lastDate: DateTime(2050));
-    if (picked != null) {
-      _itemFormBloc.add(ExpirationDateChanged(expirationDate: picked));
-      _expirationDateController.text = DateFormat.yMMMd('zh').format(picked);
-    }
-  }
-
-  void _onSubmitPressed() {
-    if (widget.isEditing) {
-      _itemFormBloc.add(FormSubmitted(isEditing: true, id: widget.item.id));
-    } else {
-      _itemFormBloc.add(FormSubmitted(isEditing: false));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -213,15 +146,35 @@ class _ItemFormState extends State<ItemForm> {
                 },
                 focusNode: _priceFocusNode,
               ),
-              TextFormField(
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  _selectDate();
+              DateTimeField(
+                format: format,
+                onShowPicker: (context, currentValue) async {
+                  final date = await showDatePicker(
+                      context: context,
+                      firstDate: DateTime(1900),
+                      initialDate: currentValue ?? DateTime.now(),
+                      lastDate: DateTime(2100));
+                  if (date != null) {
+                    final time = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.fromDateTime(
+                          currentValue ?? DateTime.now()),
+                    );
+                    return DateTimeField.combine(date, time);
+                  } else {
+                    return currentValue;
+                  }
                 },
-                controller: _expirationDateController,
+                initialValue: widget.isEditing
+                    ? widget.item.expirationDate?.toLocal()
+                    : null,
                 decoration: InputDecoration(
                   labelText: '有效期至',
                 ),
+                onChanged: (value) {
+                  _itemFormBloc
+                      .add(ExpirationDateChanged(expirationDate: value));
+                },
               ),
               RaisedButton(
                 onPressed: state.isFormValid ? _onSubmitPressed : null,
@@ -232,5 +185,58 @@ class _ItemFormState extends State<ItemForm> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    _nameFocusNode.dispose();
+    _numberFocusNode.dispose();
+    _descriptionFocusNode.dispose();
+    _priceFocusNode.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _itemFormBloc = BlocProvider.of<ItemFormBloc>(context);
+    _itemFormBloc.add(ItemFormStarted());
+    if (widget.isEditing) {
+      _itemFormBloc.add(NameChanged(name: widget.item.name));
+      _itemFormBloc.add(NumberChanged(number: widget.item.number.toString()));
+      _itemFormBloc.add(StorageChanged(storage: widget.item.storage.id));
+      _itemFormBloc
+          .add(PriceChanged(price: widget.item.price?.toString() ?? ''));
+      _itemFormBloc
+          .add(DescriptionChanged(description: widget.item.description));
+      _itemFormBloc.add(
+        ExpirationDateChanged(expirationDate: widget.item.expirationDate),
+      );
+    } else {
+      _itemFormBloc.add(NameChanged(name: ''));
+      _itemFormBloc.add(StorageChanged(storage: widget.storageId));
+      _itemFormBloc.add(NumberChanged(number: '1'));
+    }
+
+    _nameFocusNode = FocusNode();
+    _numberFocusNode = FocusNode();
+    _descriptionFocusNode = FocusNode();
+    _priceFocusNode = FocusNode();
+  }
+
+  void _fieldFocusChange(
+      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  void _onSubmitPressed() {
+    if (widget.isEditing) {
+      _itemFormBloc.add(FormSubmitted(isEditing: true, id: widget.item.id));
+    } else {
+      _itemFormBloc.add(FormSubmitted(isEditing: false));
+    }
   }
 }
