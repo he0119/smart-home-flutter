@@ -58,9 +58,10 @@ class StorageRepository {
     return storageObject;
   }
 
-  Future<List<Storage>> storages() async {
+  Future<List<Storage>> storages({bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(storagesQuery),
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final result = await graphqlApiClient.query(options);
     final List<dynamic> storages = result.data['storages'];

@@ -89,6 +89,7 @@ class _StorageFormFormState extends State<StorageForm> {
               BlocProvider.of<StorageBloc>(context).add(StorageRefreshRoot());
             }
           }
+          BlocProvider.of<StorageBloc>(context).add(StorageRefreshStorages());
           Navigator.of(context).pop();
         }
       },

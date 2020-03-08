@@ -82,6 +82,8 @@ class StorageStoragePage extends StatelessWidget {
                                   BlocProvider.of<StorageBloc>(context)
                                       .add(StorageRefreshRoot());
                                 }
+                                BlocProvider.of<StorageBloc>(context)
+                                      .add(StorageRefreshStorages());
                                 int count = 0;
                                 Navigator.popUntil(context, (route) {
                                   return count++ == 2;

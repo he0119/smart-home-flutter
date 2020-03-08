@@ -9,8 +9,6 @@ abstract class StorageEvent extends Equatable {
 
 class StorageStarted extends StorageEvent {}
 
-class StorageRefreshRoot extends StorageEvent {}
-
 class StorageItemDetail extends StorageEvent {
   final String id;
 
@@ -82,3 +80,7 @@ class StorageRefreshStorageDetail extends StorageEvent {
   @override
   String toString() => 'RefreshStorageDetail $id';
 }
+
+class StorageRefreshRoot extends StorageEvent {}
+
+class StorageRefreshStorages extends StorageEvent {}
