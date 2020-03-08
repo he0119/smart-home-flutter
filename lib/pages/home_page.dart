@@ -80,9 +80,6 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: Colors.blueAccent,
         onTap: (int index) {
           setState(() {
-            if (index == 1) {
-              BlocProvider.of<StorageBloc>(_buildContext).add(StorageStarted());
-            }
             _selectedIndex = index;
           });
         },

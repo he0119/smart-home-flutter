@@ -6,6 +6,18 @@ import 'package:smart_home/widgets/storage_item_list.dart';
 class StorageHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<StorageBloc>(context).add(StorageStarted());
+    return _StorageHomePage();
+  }
+}
+
+class _StorageHomePage extends StatelessWidget {
+  const _StorageHomePage({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<StorageBloc, StorageState>(
       builder: (context, state) {
         if (state is StorageRootResults) {
