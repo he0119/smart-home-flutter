@@ -1,6 +1,6 @@
 {
-    "name": "home",
-    "short_name": "home",
+    "name": "智慧家庭",
+    "short_name": "智慧家庭",
     "start_url": ".",
     "display": "minimal-ui",
     "background_color": "#0175C2",
