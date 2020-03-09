@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_add_edit_page.dart';
+import 'package:smart_home/pages/storage/search_page.dart';
 
 enum Menu { edit, delete }
 
@@ -27,6 +28,15 @@ class StorageItemPage extends StatelessWidget {
             appBar: AppBar(
               title: Text(state.item.name),
               actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => SearchPage()),
+                    );
+                  },
+                ),
                 PopupMenuButton<Menu>(
                   onSelected: (value) async {
                     if (value == Menu.edit) {
@@ -56,10 +66,9 @@ class StorageItemPage extends StatelessWidget {
                             FlatButton(
                               child: Text('是'),
                               onPressed: () {
-                                BlocProvider.of<StorageBloc>(context)
-                                  ..add(StorageDeleteItem(itemId))
-                                  ..add(StorageRefreshStorageDetail(
-                                      state.item.storage.id));
+                                BlocProvider.of<StorageBloc>(context).add(
+                                  StorageDeleteItem(item: state.item),
+                                );
                                 int count = 0;
                                 Navigator.popUntil(context, (route) {
                                   return count++ == 2;

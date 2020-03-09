@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/storage_form_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/widgets/storage_form.dart';
@@ -24,7 +25,9 @@ class StorageAddEditStoagePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(left: 15, right: 15),
         child: BlocProvider(
-          create: (context) => StorageFormBloc(),
+          create: (context) => StorageFormBloc(
+            storageBloc: BlocProvider.of<StorageBloc>(context),
+          ),
           child: StorageForm(
             isEditing: isEditing,
             storage: storage,

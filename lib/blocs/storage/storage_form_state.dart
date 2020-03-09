@@ -8,7 +8,6 @@ class StorageFormState extends Equatable {
   final String description;
   final bool isDescriptionValid;
   final List<Storage> listofStorages;
-  final bool formSubmittedSuccessfully;
 
   bool get isFormValid => isNameValid && isParentValid && isDescriptionValid;
 
@@ -20,7 +19,6 @@ class StorageFormState extends Equatable {
     @required this.description,
     @required this.isDescriptionValid,
     @required this.listofStorages,
-    @required this.formSubmittedSuccessfully,
   });
 
   factory StorageFormState.initial() {
@@ -32,7 +30,6 @@ class StorageFormState extends Equatable {
       description: null,
       isDescriptionValid: true,
       listofStorages: [],
-      formSubmittedSuccessfully: false,
     );
   }
 
@@ -54,8 +51,6 @@ class StorageFormState extends Equatable {
       description: description ?? this.description,
       isDescriptionValid: isDescriptionValid ?? this.isDescriptionValid,
       listofStorages: listofStorages ?? this.listofStorages,
-      formSubmittedSuccessfully:
-          formSubmittedSuccessfully ?? this.formSubmittedSuccessfully,
     );
   }
 
@@ -68,6 +63,5 @@ class StorageFormState extends Equatable {
         description,
         isDescriptionValid,
         listofStorages,
-        formSubmittedSuccessfully,
       ];
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/pages/storage/item_add_edit_page.dart';
+import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_add_edit_page.dart';
 import 'package:smart_home/widgets/storage_item_list.dart';
 
@@ -43,6 +44,15 @@ class StorageStoragePage extends StatelessWidget {
                     );
                   },
                 ),
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => SearchPage()),
+                    );
+                  },
+                ),
                 PopupMenuButton<Menu>(
                   onSelected: (value) async {
                     if (value == Menu.edit) {
@@ -72,18 +82,9 @@ class StorageStoragePage extends StatelessWidget {
                             FlatButton(
                               child: Text('是'),
                               onPressed: () {
-                                BlocProvider.of<StorageBloc>(context)
-                                    .add(StorageDeleteStorage(storageId));
-                                if (state.storage.parent != null) {
-                                  BlocProvider.of<StorageBloc>(context).add(
-                                      StorageRefreshStorageDetail(
-                                          state.storage.parent.id));
-                                } else {
-                                  BlocProvider.of<StorageBloc>(context)
-                                      .add(StorageRefreshRoot());
-                                }
-                                BlocProvider.of<StorageBloc>(context)
-                                      .add(StorageRefreshStorages());
+                                BlocProvider.of<StorageBloc>(context).add(
+                                  StorageDeleteStorage(storage: state.storage),
+                                );
                                 int count = 0;
                                 Navigator.popUntil(context, (route) {
                                   return count++ == 2;
@@ -111,7 +112,7 @@ class StorageStoragePage extends StatelessWidget {
             body: RefreshIndicator(
               onRefresh: () async {
                 BlocProvider.of<StorageBloc>(context)
-                    .add(StorageRefreshStorageDetail(storageId));
+                    .add(StorageRefreshStorageDetail(id: storageId));
               },
               child: StorageItemList(
                 items: state.storage.items.toList(),

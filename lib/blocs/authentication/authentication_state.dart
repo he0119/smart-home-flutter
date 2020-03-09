@@ -25,6 +25,7 @@ class Authenticated extends AuthenticationState {
 
 class Unauthenticated extends AuthenticationState {}
 
+/// 网络错误或者用户名密码错误
 class AuthenticationFailure extends AuthenticationState {
   final String error;
 
@@ -34,4 +35,22 @@ class AuthenticationFailure extends AuthenticationState {
 
   @override
   List<Object> get props => [error];
+
+  @override
+  String toString() => 'AuthenticationFailure { error: $error }';
+}
+
+/// 更严重的错误，需要有时需要重启软件（只发生在软件启动阶段）
+class AuthenticationError extends AuthenticationState {
+  final String error;
+
+  const AuthenticationError(
+    this.error,
+  );
+
+  @override
+  List<Object> get props => [error];
+
+  @override
+  String toString() => 'AuthenticationError { error: $error }';
 }

@@ -85,11 +85,12 @@ class ExpirationDateChanged extends ItemFormEvent {
 class FormSubmitted extends ItemFormEvent {
   final bool isEditing;
   final String id;
+  final String oldStorageId;
 
-  const FormSubmitted({@required this.isEditing, this.id});
+  const FormSubmitted({@required this.isEditing, this.id, this.oldStorageId});
 
   @override
-  List<Object> get props => [isEditing, id];
+  List<Object> get props => [isEditing, id, oldStorageId];
 
   @override
   String toString() => 'FormSubmitted { item id: $id }';

@@ -66,38 +66,10 @@ class StorageStorageDeleted extends StorageState {
   List<Object> get props => [id];
 }
 
-class StorageUpdateStorageSuccess extends StorageState {
-  final Storage storage;
+class StorageUpdateStorageSuccess extends StorageState {}
 
-  StorageUpdateStorageSuccess(this.storage);
+class StorageUpdateItemSuccess extends StorageState {}
 
-  @override
-  List<Object> get props => [storage];
-}
+class StorageAddStorageSuccess extends StorageState {}
 
-class StorageUpdateItemSuccess extends StorageState {
-  final Item item;
-
-  StorageUpdateItemSuccess(this.item);
-
-  @override
-  List<Object> get props => [item];
-}
-
-class StorageAddStorageSuccess extends StorageState {
-  final Storage storage;
-
-  StorageAddStorageSuccess(this.storage);
-
-  @override
-  List<Object> get props => [storage];
-}
-
-class StorageAddItemSuccess extends StorageState {
-  final Item item;
-
-  StorageAddItemSuccess(this.item);
-
-  @override
-  List<Object> get props => [item];
-}
+class StorageAddItemSuccess extends StorageState {}

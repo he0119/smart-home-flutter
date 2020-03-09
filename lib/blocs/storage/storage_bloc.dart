@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
@@ -38,14 +39,23 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
 
     if (event is StorageDeleteItem) {
       yield StorageInProgress();
-      String id = await storageRepository.deleteItem(id: event.id);
+      String id = await storageRepository.deleteItem(id: event.item.id);
       yield StorageItemDeleted(id);
+      // 刷新受到影响的数据
+      add(StorageRefreshStorageDetail(id: event.item.storage.id));
     }
 
     if (event is StorageDeleteStorage) {
       yield StorageInProgress();
-      String id = await storageRepository.deleteStorage(id: event.id);
+      String id = await storageRepository.deleteStorage(id: event.storage.id);
       yield StorageStorageDeleted(id);
+      // 刷新受到影响的数据
+      if (event.storage.parent != null) {
+        add(StorageRefreshStorageDetail(id: event.storage.parent.id));
+      } else {
+        add(StorageRefreshRoot());
+      }
+      add(StorageRefreshStorages());
     }
 
     if (event is StorageRefreshStorageDetail) {
@@ -59,6 +69,7 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       Item results = await storageRepository.item(event.id, cache: false);
       yield StorageItemDetailResults(results);
     }
+
     if (event is StorageRefreshRoot) {
       yield StorageInProgress();
       List<Storage> results = await storageRepository.rootStorage(cache: false);
@@ -68,6 +79,75 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
     if (event is StorageRefreshStorages) {
       yield StorageInProgress();
       await storageRepository.storages(cache: false);
+    }
+
+    if (event is StorageUpdateStorage) {
+      await storageRepository.updateStorage(
+        id: event.id,
+        name: event.name,
+        parentId: event.parentId,
+        description: event.description,
+      );
+      yield StorageUpdateStorageSuccess();
+      // 刷新受到影响的存储的位置
+      add(StorageRefreshStorageDetail(id: event.id));
+      if (event.oldParentId != null) {
+        add(StorageRefreshStorageDetail(id: event.oldParentId));
+      } else {
+        add(StorageRefreshRoot());
+      }
+      if (event.parentId != null) {
+        add(StorageRefreshStorageDetail(id: event.parentId));
+      } else {
+        add(StorageRefreshRoot());
+      }
+    }
+
+    if (event is StorageAddStorage) {
+      await storageRepository.addStorage(
+        name: event.name,
+        parentId: event.parentId,
+        description: event.description,
+      );
+      yield StorageAddStorageSuccess();
+      // 刷新受到影响的存储的位置
+      if (event.parentId != null) {
+        add(StorageRefreshStorageDetail(id: event.parentId));
+      } else {
+        add(StorageRefreshRoot());
+      }
+      add(StorageRefreshStorages());
+    }
+
+    if (event is StorageUpdateItem) {
+      await storageRepository.updateItem(
+        id: event.id,
+        name: event.name,
+        number: event.number,
+        storageId: event.storageId,
+        description: event.description,
+        price: event.price,
+        expirationDate: event.expirationDate,
+      );
+      yield StorageUpdateItemSuccess();
+      // 刷新受到影响的存储的位置
+      add(StorageRefreshItemDetail(id: event.id));
+      add(StorageRefreshStorageDetail(id: event.storageId));
+      add(StorageRefreshStorageDetail(id: event.oldStorageId));
+    }
+
+    if (event is StorageAddItem) {
+      await storageRepository.addItem(
+        name: event.name,
+        number: event.number,
+        storageId: event.storageId,
+        description: event.description,
+        price: event.price,
+        expirationDate: event.expirationDate,
+      );
+      yield StorageAddItemSuccess();
+      // 刷新受到影响的存储的位置
+      add(StorageRefreshStorageDetail(id: event.storageId));
     }
   }
 }
