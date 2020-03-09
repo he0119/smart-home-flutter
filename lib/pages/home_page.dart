@@ -122,22 +122,21 @@ class _HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TabBloc, AppTab>(
+    return BlocConsumer<TabBloc, AppTab>(
+      listener: (context, activeTab) async {
+        if (activeTab == AppTab.iot) {
+          _openIot(context);
+        }
+        if (activeTab == AppTab.blog) {
+          await _openBlog();
+        }
+      },
       builder: (context, activeTab) {
         if (activeTab == AppTab.iot) {
           return Center(
             child: RaisedButton(
               onPressed: () async {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return WebView(
-                        initialUrl: 'https://iot.hehome.xyz',
-                        javascriptMode: JavascriptMode.unrestricted,
-                      );
-                    },
-                  ),
-                );
+                _openIot(context);
               },
               child: Text('IOT'),
             ),
@@ -150,12 +149,7 @@ class _HomePageBody extends StatelessWidget {
           return Center(
             child: RaisedButton(
               onPressed: () async {
-                const url = 'https://hehome.xyz';
-                if (await canLaunch(url)) {
-                  await launch(url);
-                } else {
-                  throw 'Could not launch $url';
-                }
+                await _openBlog();
               },
               child: Text('博客'),
             ),
@@ -168,6 +162,28 @@ class _HomePageBody extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Future _openBlog() async {
+    const url = 'https://hehome.xyz';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  void _openIot(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return WebView(
+            initialUrl: 'https://iot.hehome.xyz',
+            javascriptMode: JavascriptMode.unrestricted,
+          );
+        },
+      ),
     );
   }
 }
