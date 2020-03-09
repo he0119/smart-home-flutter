@@ -40,35 +40,37 @@ class MyApp extends StatelessWidget {
         ],
         title: '智慧家庭',
         home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-            listener: (context, state) {
-          if (state is AuthenticationError) {
-            showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                title: Text('错误'),
-                content: Text(state.error),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('确认'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      BlocProvider.of<AuthenticationBloc>(context)
-                          .add(AppStarted(_config.apiUrl));
-                    },
-                  )
-                ],
-              ),
-            );
-          }
-        }, builder: (context, state) {
-          if (state is Authenticated) {
-            return HomePage();
-          }
-          if (state is AppUninitialized) {
-            return SplashPage();
-          }
-          return LoginPage();
-        }),
+          listener: (context, state) {
+            if (state is AuthenticationError) {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Text('错误'),
+                  content: Text(state.error),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('确认'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        BlocProvider.of<AuthenticationBloc>(context)
+                            .add(AppStarted(_config.apiUrl));
+                      },
+                    )
+                  ],
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is Authenticated) {
+              return HomePage();
+            }
+            if (state is AppUninitialized) {
+              return SplashPage();
+            }
+            return LoginPage();
+          },
+        ),
       ),
     );
   }

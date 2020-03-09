@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
@@ -13,6 +14,23 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final QuickActions quickActions = QuickActions();
+    quickActions.initialize((String shortcutType) {
+      if (shortcutType == 'action_iot') {
+        BlocProvider.of<TabBloc>(context).add(UpdateTab(AppTab.iot));
+      } else {
+        BlocProvider.of<TabBloc>(context).add(UpdateTab(AppTab.blog));
+      }
+    });
+    quickActions.setShortcutItems(
+      <ShortcutItem>[
+        // TODO: 给快捷方式添加图标
+        const ShortcutItem(
+            type: 'action_iot', localizedTitle: 'IOT'),
+        const ShortcutItem(
+            type: 'action_blog', localizedTitle: '博客'),
+      ],
+    );
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         return Scaffold(
