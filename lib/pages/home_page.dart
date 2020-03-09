@@ -7,6 +7,7 @@ import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_add_edit_page.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class HomePage extends StatelessWidget {
@@ -15,20 +16,34 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final QuickActions quickActions = QuickActions();
-    quickActions.initialize((String shortcutType) {
+    quickActions.initialize((String shortcutType) async {
       if (shortcutType == 'action_iot') {
         BlocProvider.of<TabBloc>(context).add(UpdateTab(AppTab.iot));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return WebView(
+                initialUrl: 'https://iot.hehome.xyz',
+                javascriptMode: JavascriptMode.unrestricted,
+              );
+            },
+          ),
+        );
       } else {
         BlocProvider.of<TabBloc>(context).add(UpdateTab(AppTab.blog));
+        const url = 'https://hehome.xyz';
+        if (await canLaunch(url)) {
+          await launch(url);
+        } else {
+          throw 'Could not launch $url';
+        }
       }
     });
     quickActions.setShortcutItems(
       <ShortcutItem>[
         // TODO: 给快捷方式添加图标
-        const ShortcutItem(
-            type: 'action_iot', localizedTitle: 'IOT'),
-        const ShortcutItem(
-            type: 'action_blog', localizedTitle: '博客'),
+        const ShortcutItem(type: 'action_iot', localizedTitle: 'IOT'),
+        const ShortcutItem(type: 'action_blog', localizedTitle: '博客'),
       ],
     );
     return BlocBuilder<TabBloc, AppTab>(
@@ -135,16 +150,12 @@ class _HomePageBody extends StatelessWidget {
           return Center(
             child: RaisedButton(
               onPressed: () async {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return WebView(
-                        initialUrl: 'https://hehome.xyz',
-                        javascriptMode: JavascriptMode.unrestricted,
-                      );
-                    },
-                  ),
-                );
+                const url = 'https://hehome.xyz';
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  throw 'Could not launch $url';
+                }
               },
               child: Text('博客'),
             ),
