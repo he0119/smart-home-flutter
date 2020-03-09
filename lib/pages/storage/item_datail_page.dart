@@ -123,7 +123,14 @@ class StorageItemPage extends StatelessWidget {
             ),
           );
         }
-        return Container();
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('加载中'),
+          ),
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
       },
     );
   }
