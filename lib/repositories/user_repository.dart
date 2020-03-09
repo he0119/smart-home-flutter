@@ -88,7 +88,7 @@ class UserRepository {
     return user;
   }
 
-  Future<bool> hasToken() async {
+  bool hasToken() {
     String token = _prefs.getString('refreshToken');
     if (token == null || token == "") {
       return false;
@@ -134,8 +134,8 @@ class UserRepository {
         if (message.contains('invalid') || message.contains('expired')) {
           clearRefreshToken();
         }
+        throw Exception('登录验证失败，请重新登录');
       }
-      throw Exception('登录验证失败，请重新登录');
     } else {
       String token = results.data['refreshToken']['token'];
       await setToken(token);

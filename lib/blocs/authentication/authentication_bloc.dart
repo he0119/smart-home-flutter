@@ -17,7 +17,8 @@ Stream<AuthenticationState> _mapAppStartedToState(AppStarted event) async* {
       yield AuthenticationError('客户端启动失败，请重试');
     }
     // 检查是否登录
-    if (await userRepository.hasToken()) {
+    yield Authenticating();
+    if (userRepository.hasToken()) {
       yield Authenticated(await userRepository.currentUser());
     } else {
       yield Unauthenticated();

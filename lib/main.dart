@@ -39,23 +39,19 @@ class MyApp extends StatelessWidget {
           const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
         ],
         title: '智慧家庭',
-        home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (context, state) {
-          if (state is Authenticated) {
-            return HomePage();
-          }
-          if (state is AppUninitialized) {
-            return SplashPage();
-          }
+        home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+            listener: (context, state) {
           if (state is AuthenticationError) {
-            return Scaffold(
-              body: AlertDialog(
+            showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: Text('错误'),
                 content: Text(state.error),
                 actions: <Widget>[
                   FlatButton(
                     child: Text('确认'),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.pop(context);
                       BlocProvider.of<AuthenticationBloc>(context)
                           .add(AppStarted(_config.apiUrl));
                     },
@@ -63,6 +59,13 @@ class MyApp extends StatelessWidget {
                 ],
               ),
             );
+          }
+        }, builder: (context, state) {
+          if (state is Authenticated) {
+            return HomePage();
+          }
+          if (state is AppUninitialized) {
+            return SplashPage();
           }
           return LoginPage();
         }),
