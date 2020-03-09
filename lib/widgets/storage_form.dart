@@ -92,70 +92,72 @@ class _StorageFormFormState extends State<StorageForm> {
       child: BlocBuilder<StorageFormBloc, StorageFormState>(
         builder: (context, state) {
           return Form(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  initialValue: widget.isEditing ? widget.storage.name : '',
-                  onChanged: (value) =>
-                      _storageFormBloc.add(NameChanged(name: value)),
-                  decoration: InputDecoration(
-                    labelText: '名称',
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    initialValue: widget.isEditing ? widget.storage.name : '',
+                    onChanged: (value) =>
+                        _storageFormBloc.add(NameChanged(name: value)),
+                    decoration: InputDecoration(
+                      labelText: '名称',
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(200),
+                    ],
+                    autovalidate: true,
+                    validator: (_) {
+                      return state.isNameValid ? null : '名称不能为空';
+                    },
+                    textInputAction: TextInputAction.next,
+                    focusNode: _nameFocusNode,
+                    onFieldSubmitted: (_) {
+                      _fieldFocusChange(
+                          context, _nameFocusNode, _descriptionFocusNode);
+                    },
                   ),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(200),
-                  ],
-                  autovalidate: true,
-                  validator: (_) {
-                    return state.isNameValid ? null : '名称不能为空';
-                  },
-                  textInputAction: TextInputAction.next,
-                  focusNode: _nameFocusNode,
-                  onFieldSubmitted: (_) {
-                    _fieldFocusChange(
-                        context, _nameFocusNode, _descriptionFocusNode);
-                  },
-                ),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: '属于',
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: '属于',
+                    ),
+                    value: widget.isEditing ? state.parent : widget.storageId,
+                    items: state.listofStorages
+                        .map((e) => DropdownMenuItem(
+                              value: e.id,
+                              child: Text(e.name),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      _storageFormBloc.add(ParentChanged(parent: value));
+                    },
                   ),
-                  value: widget.isEditing ? state.parent : widget.storageId,
-                  items: state.listofStorages
-                      .map((e) => DropdownMenuItem(
-                            value: e.id,
-                            child: Text(e.name),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    _storageFormBloc.add(ParentChanged(parent: value));
-                  },
-                ),
-                TextFormField(
-                  initialValue:
-                      widget.isEditing ? widget.storage.description : '',
-                  onChanged: (value) => _storageFormBloc
-                      .add(DescriptionChanged(description: value)),
-                  decoration: InputDecoration(
-                    labelText: '备注',
+                  TextFormField(
+                    initialValue:
+                        widget.isEditing ? widget.storage.description : '',
+                    onChanged: (value) => _storageFormBloc
+                        .add(DescriptionChanged(description: value)),
+                    decoration: InputDecoration(
+                      labelText: '备注',
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(200),
+                    ],
+                    focusNode: _descriptionFocusNode,
                   ),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(200),
-                  ],
-                  focusNode: _descriptionFocusNode,
-                ),
-                RaisedButton(
-                  onPressed: state.isFormValid ? _onSubmitPressed : null,
-                  child: Text('提交'),
-                ),
-                BlocBuilder<StorageBloc, StorageState>(
-                  builder: (context, state) {
-                    if (state is StorageInProgress) {
-                      return CircularProgressIndicator();
-                    }
-                    return Container();
-                  },
-                ),
-              ],
+                  RaisedButton(
+                    onPressed: state.isFormValid ? _onSubmitPressed : null,
+                    child: Text('提交'),
+                  ),
+                  BlocBuilder<StorageBloc, StorageState>(
+                    builder: (context, state) {
+                      if (state is StorageInProgress) {
+                        return CircularProgressIndicator();
+                      }
+                      return Container();
+                    },
+                  ),
+                ],
+              ),
             ),
           );
         },
