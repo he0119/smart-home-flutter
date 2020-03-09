@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2020-03-09
+
 ### Added
 
 - 通过调用 WebView 在软件中展示 IOT 和博客网站
@@ -23,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.1.1...HEAD
 
+[0.1.1]: https://github.com/he0119/smart-home-flutter/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/he0119/smart-home-flutter/releases/tag/v0.1.0

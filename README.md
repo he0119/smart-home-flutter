@@ -1,6 +1,6 @@
-# home
+# Smart Home Flutter
 
-A new Flutter project.
+[智慧家庭](https://github.com/he0119/smart-home) 客户端
 
 ## Getting Started
 
