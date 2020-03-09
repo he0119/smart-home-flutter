@@ -18,6 +18,30 @@ class StorageHomePage extends StatelessWidget {
             ),
           );
         }
+        if (state is StorageAddStorageSuccess && state.parentId == '0') {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('位置添加成功'),
+              backgroundColor: Colors.blue,
+            ),
+          );
+        }
+        if (state is StorageStorageDeleted && state.parentId == '0') {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('位置删除成功'),
+              backgroundColor: Colors.blue,
+            ),
+          );
+        }
+        if (state is StorageStorageError && state.parentId == '0') {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('位置删除失败，${state.message}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       },
       child: _StorageHomePage(),
     );
