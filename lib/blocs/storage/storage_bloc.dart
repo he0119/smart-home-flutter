@@ -13,72 +13,48 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
 
   @override
   Stream<StorageState> mapEventToState(StorageEvent event) async* {
+    // 根位置
     if (event is StorageStarted) {
       yield StorageInProgress();
       try {
         List<Storage> results = await storageRepository.rootStorage();
         yield StorageRootResults(results);
-      } on StorageException catch (e) {
-        yield StorageError(e.message);
       } catch (e) {
-        yield StorageError('错误：$e');
+        yield StorageError(id: '0', message: e.message);
       }
-    }
-
-    if (event is StorageStorageDetail) {
-      yield StorageInProgress();
-      Storage results = await storageRepository.storage(event.id);
-      yield StorageStorageDetailResults(results);
-    }
-
-    if (event is StorageItemDetail) {
-      yield StorageInProgress();
-      Item results = await storageRepository.item(event.id);
-      yield StorageItemDetailResults(results);
-    }
-
-    if (event is StorageDeleteItem) {
-      yield StorageInProgress();
-      String id = await storageRepository.deleteItem(id: event.item.id);
-      yield StorageItemDeleted(id);
-      // 刷新受到影响的数据
-      add(StorageRefreshStorageDetail(id: event.item.storage.id));
-    }
-
-    if (event is StorageDeleteStorage) {
-      yield StorageInProgress();
-      String id = await storageRepository.deleteStorage(id: event.storage.id);
-      yield StorageStorageDeleted(id);
-      // 刷新受到影响的数据
-      if (event.storage.parent != null) {
-        add(StorageRefreshStorageDetail(id: event.storage.parent.id));
-      } else {
-        add(StorageRefreshRoot());
-      }
-      add(StorageRefreshStorages());
-    }
-
-    if (event is StorageRefreshStorageDetail) {
-      yield StorageInProgress();
-      Storage results = await storageRepository.storage(event.id, cache: false);
-      yield StorageStorageDetailResults(results);
-    }
-
-    if (event is StorageRefreshItemDetail) {
-      yield StorageInProgress();
-      Item results = await storageRepository.item(event.id, cache: false);
-      yield StorageItemDetailResults(results);
     }
 
     if (event is StorageRefreshRoot) {
       yield StorageInProgress();
-      List<Storage> results = await storageRepository.rootStorage(cache: false);
-      yield StorageRootResults(results);
+      try {
+        List<Storage> results =
+            await storageRepository.rootStorage(cache: false);
+        yield StorageRootResults(results);
+      } catch (e) {
+        yield StorageError(id: '0', message: e.message);
+      }
     }
 
-    if (event is StorageRefreshStorages) {
+    // 位置相关
+    if (event is StorageStorageDetail) {
       yield StorageInProgress();
-      await storageRepository.storages(cache: false);
+      try {
+        Storage results = await storageRepository.storage(event.id);
+        yield StorageStorageDetailResults(results);
+      } catch (e) {
+        yield StorageError(id: event.id, message: e.message);
+      }
+    }
+
+    if (event is StorageRefreshStorageDetail) {
+      yield StorageInProgress();
+      try {
+        Storage results =
+            await storageRepository.storage(event.id, cache: false);
+        yield StorageStorageDetailResults(results);
+      } catch (e) {
+        yield StorageError(id: event.id, message: e.message);
+      }
     }
 
     if (event is StorageUpdateStorage) {
@@ -119,6 +95,32 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       add(StorageRefreshStorages());
     }
 
+    if (event is StorageDeleteStorage) {
+      yield StorageInProgress();
+      String id = await storageRepository.deleteStorage(id: event.storage.id);
+      yield StorageStorageDeleted(id);
+      // 刷新受到影响的数据
+      if (event.storage.parent != null) {
+        add(StorageRefreshStorageDetail(id: event.storage.parent.id));
+      } else {
+        add(StorageRefreshRoot());
+      }
+      add(StorageRefreshStorages());
+    }
+
+    // 物品相关
+    if (event is StorageItemDetail) {
+      yield StorageInProgress();
+      Item results = await storageRepository.item(event.id);
+      yield StorageItemDetailResults(results);
+    }
+
+    if (event is StorageRefreshItemDetail) {
+      yield StorageInProgress();
+      Item results = await storageRepository.item(event.id, cache: false);
+      yield StorageItemDetailResults(results);
+    }
+
     if (event is StorageUpdateItem) {
       await storageRepository.updateItem(
         id: event.id,
@@ -148,6 +150,20 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       yield StorageAddItemSuccess();
       // 刷新受到影响的存储的位置
       add(StorageRefreshStorageDetail(id: event.storageId));
+    }
+
+    if (event is StorageDeleteItem) {
+      yield StorageInProgress();
+      String id = await storageRepository.deleteItem(id: event.item.id);
+      yield StorageItemDeleted(id);
+      // 刷新受到影响的数据
+      add(StorageRefreshStorageDetail(id: event.item.storage.id));
+    }
+
+    // 刷新所有位置的数据
+    if (event is StorageRefreshStorages) {
+      yield StorageInProgress();
+      await storageRepository.storages(cache: false);
     }
   }
 }

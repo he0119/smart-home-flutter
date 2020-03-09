@@ -10,15 +10,16 @@ abstract class StorageState extends Equatable {
 class StorageInProgress extends StorageState {}
 
 class StorageError extends StorageState {
+  final String id;
   final String message;
 
-  const StorageError(this.message);
+  const StorageError({this.id, this.message});
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [id, message];
 
   @override
-  String toString() => 'StorageError { message: $message}';
+  String toString() => 'StorageError($id) { message: $message }';
 }
 
 class StorageRootResults extends StorageState {
