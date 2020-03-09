@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 通过调用 WebView 在软件中展示 IOT 和博客网站
 - 在物品和位置详情页添加搜索按钮
+- 添加 App Shortcuts
 
 ### Changed
 
