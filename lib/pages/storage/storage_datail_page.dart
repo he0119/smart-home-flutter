@@ -22,6 +22,9 @@ class StorageStoragePage extends StatelessWidget {
             current.storage.id == storageId) {
           return true;
         }
+        if (current is StorageStorageError && current.id == storageId) {
+          return true;
+        }
         return false;
       },
       builder: (context, state) {
@@ -109,14 +112,80 @@ class StorageStoragePage extends StatelessWidget {
                 )
               ],
             ),
-            body: RefreshIndicator(
-              onRefresh: () async {
-                BlocProvider.of<StorageBloc>(context)
-                    .add(StorageRefreshStorageDetail(id: storageId));
+            body: BlocListener<StorageBloc, StorageState>(
+              listener: (context, state) {
+                if (state is StorageAddItemSuccess &&
+                    state.storageId == storageId) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('物品添加成功'),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                }
+                if (state is StorageItemDeleted &&
+                    state.storageId == storageId) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('物品删除成功'),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                }
+                if (state is StorageItemError && state.storageId == storageId) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('物品删除失败，${state.message}'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+                if (state is StorageUpdateStorageSuccess &&
+                    state.id == storageId) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('位置修改成功'),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                }
+                if (state is StorageAddStorageSuccess &&
+                    state.parentId == storageId) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('位置添加成功'),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                }
+                if (state is StorageStorageDeleted &&
+                    state.parentId == storageId) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('位置删除成功'),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                }
+                if (state is StorageStorageError &&
+                    state.parentId == storageId) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('位置删除失败，${state.message}'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
-              child: StorageItemList(
-                items: state.storage.items.toList(),
-                storages: state.storage.children.toList(),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  BlocProvider.of<StorageBloc>(context)
+                      .add(StorageRefreshStorageDetail(id: storageId));
+                },
+                child: StorageItemList(
+                  items: state.storage.items.toList(),
+                  storages: state.storage.children.toList(),
+                ),
               ),
             ),
             floatingActionButton: FloatingActionButton(
@@ -133,6 +202,16 @@ class StorageStoragePage extends StatelessWidget {
                   ),
                 );
               },
+            ),
+          );
+        }
+        if (state is StorageStorageError) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('错误'),
+            ),
+            body: Center(
+              child: Text(state.message),
             ),
           );
         }

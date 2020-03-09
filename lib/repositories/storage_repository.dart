@@ -7,11 +7,6 @@ import 'package:smart_home/repositories/graphql_api_client.dart';
 
 StorageRepository storageRepository = StorageRepository();
 
-class StorageException implements Exception {
-  final String message;
-  StorageException(this.message);
-}
-
 class StorageRepository {
   Future<List<dynamic>> search(String key) async {
     final QueryOptions options = QueryOptions(
@@ -21,7 +16,7 @@ class StorageRepository {
     );
     final results = await graphqlApiClient.query(options);
     if (results.hasException) {
-      throw StorageException('搜索出错');
+      throw Exception('搜索出错');
     }
     final List<dynamic> storages = results.data['search']['storages'];
     final List<dynamic> items = results.data['search']['items'];
@@ -170,6 +165,12 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
+    if (result.hasException) {
+      for (GraphQLError error in result.exception.graphqlErrors) {
+        String message = error.message.toLowerCase();
+        throw Exception(message);
+      }
+    }
     final Map<String, dynamic> json = result.data['updateStorage']['storage'];
     final Storage storageObject = Storage.fromJson(json);
     return storageObject;

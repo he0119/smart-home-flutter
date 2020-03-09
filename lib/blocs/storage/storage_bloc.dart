@@ -13,141 +13,215 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
 
   @override
   Stream<StorageState> mapEventToState(StorageEvent event) async* {
+    // 根位置
+    // ID 为 0 代表根目录
     if (event is StorageStarted) {
       yield StorageInProgress();
       try {
         List<Storage> results = await storageRepository.rootStorage();
-        yield StorageRootResults(results);
-      } on StorageException catch (e) {
-        yield StorageError(e.message);
+        yield StorageRootResults(storages: results);
       } catch (e) {
-        yield StorageError('错误：$e');
+        yield StorageStorageError(id: '0', message: e.message);
       }
-    }
-
-    if (event is StorageStorageDetail) {
-      yield StorageInProgress();
-      Storage results = await storageRepository.storage(event.id);
-      yield StorageStorageDetailResults(results);
-    }
-
-    if (event is StorageItemDetail) {
-      yield StorageInProgress();
-      Item results = await storageRepository.item(event.id);
-      yield StorageItemDetailResults(results);
-    }
-
-    if (event is StorageDeleteItem) {
-      yield StorageInProgress();
-      String id = await storageRepository.deleteItem(id: event.item.id);
-      yield StorageItemDeleted(id);
-      // 刷新受到影响的数据
-      add(StorageRefreshStorageDetail(id: event.item.storage.id));
-    }
-
-    if (event is StorageDeleteStorage) {
-      yield StorageInProgress();
-      String id = await storageRepository.deleteStorage(id: event.storage.id);
-      yield StorageStorageDeleted(id);
-      // 刷新受到影响的数据
-      if (event.storage.parent != null) {
-        add(StorageRefreshStorageDetail(id: event.storage.parent.id));
-      } else {
-        add(StorageRefreshRoot());
-      }
-      add(StorageRefreshStorages());
-    }
-
-    if (event is StorageRefreshStorageDetail) {
-      yield StorageInProgress();
-      Storage results = await storageRepository.storage(event.id, cache: false);
-      yield StorageStorageDetailResults(results);
-    }
-
-    if (event is StorageRefreshItemDetail) {
-      yield StorageInProgress();
-      Item results = await storageRepository.item(event.id, cache: false);
-      yield StorageItemDetailResults(results);
     }
 
     if (event is StorageRefreshRoot) {
       yield StorageInProgress();
-      List<Storage> results = await storageRepository.rootStorage(cache: false);
-      yield StorageRootResults(results);
+      try {
+        List<Storage> results =
+            await storageRepository.rootStorage(cache: false);
+        yield StorageRootResults(storages: results);
+      } catch (e) {
+        yield StorageStorageError(id: '0', message: e.message);
+      }
     }
 
-    if (event is StorageRefreshStorages) {
+    // 位置相关
+    if (event is StorageStorageDetail) {
       yield StorageInProgress();
-      await storageRepository.storages(cache: false);
+      try {
+        Storage results = await storageRepository.storage(event.id);
+        yield StorageStorageDetailResults(storage: results);
+      } catch (e) {
+        yield StorageStorageError(id: event.id, message: e.message);
+      }
+    }
+
+    if (event is StorageRefreshStorageDetail) {
+      yield StorageInProgress();
+      try {
+        Storage results =
+            await storageRepository.storage(event.id, cache: false);
+        yield StorageStorageDetailResults(storage: results);
+      } catch (e) {
+        yield StorageStorageError(id: event.id, message: e.message);
+      }
     }
 
     if (event is StorageUpdateStorage) {
-      await storageRepository.updateStorage(
-        id: event.id,
-        name: event.name,
-        parentId: event.parentId,
-        description: event.description,
-      );
-      yield StorageUpdateStorageSuccess();
-      // 刷新受到影响的存储的位置
-      add(StorageRefreshStorageDetail(id: event.id));
-      if (event.oldParentId != null) {
-        add(StorageRefreshStorageDetail(id: event.oldParentId));
-      } else {
-        add(StorageRefreshRoot());
-      }
-      if (event.parentId != null) {
-        add(StorageRefreshStorageDetail(id: event.parentId));
-      } else {
-        add(StorageRefreshRoot());
+      yield StorageInProgress();
+      try {
+        await storageRepository.updateStorage(
+          id: event.id,
+          name: event.name,
+          parentId: event.parentId,
+          description: event.description,
+        );
+        yield StorageUpdateStorageSuccess(id: event.id);
+        // 刷新受到影响的存储的位置
+        add(StorageRefreshStorageDetail(id: event.id));
+        if (event.oldParentId != null) {
+          add(StorageRefreshStorageDetail(id: event.oldParentId));
+        } else {
+          add(StorageRefreshRoot());
+        }
+        if (event.parentId != null) {
+          add(StorageRefreshStorageDetail(id: event.parentId));
+        } else {
+          add(StorageRefreshRoot());
+        }
+      } catch (e) {
+        yield StorageStorageError(message: e.message);
       }
     }
 
     if (event is StorageAddStorage) {
-      await storageRepository.addStorage(
-        name: event.name,
-        parentId: event.parentId,
-        description: event.description,
-      );
-      yield StorageAddStorageSuccess();
-      // 刷新受到影响的存储的位置
-      if (event.parentId != null) {
-        add(StorageRefreshStorageDetail(id: event.parentId));
-      } else {
-        add(StorageRefreshRoot());
+      try {
+        await storageRepository.addStorage(
+          name: event.name,
+          parentId: event.parentId,
+          description: event.description,
+        );
+        if (event.parentId != null) {
+          yield StorageAddStorageSuccess(parentId: event.parentId);
+        } else {
+          yield StorageAddStorageSuccess(parentId: '0');
+        }
+        // 刷新受到影响的存储的位置
+        if (event.parentId != null) {
+          add(StorageRefreshStorageDetail(id: event.parentId));
+        } else {
+          add(StorageRefreshRoot());
+        }
+        add(StorageRefreshStorages());
+      } catch (e) {
+        yield StorageStorageError(message: e.message);
       }
-      add(StorageRefreshStorages());
+    }
+
+    if (event is StorageDeleteStorage) {
+      yield StorageInProgress();
+      try {
+        await storageRepository.deleteStorage(id: event.storage.id);
+        if (event.storage.parent != null) {
+          yield StorageStorageDeleted(parentId: event.storage.parent.id);
+        } else {
+          yield StorageStorageDeleted(parentId: '0');
+        }
+        // 刷新受到影响的数据
+        if (event.storage.parent != null) {
+          add(StorageRefreshStorageDetail(id: event.storage.parent.id));
+        } else {
+          add(StorageRefreshRoot());
+        }
+        add(StorageRefreshStorages());
+      } catch (e) {
+        if (event.storage.parent != null) {
+          yield StorageStorageError(
+            parentId: event.storage.parent.id,
+            message: e.message,
+          );
+        } else {
+          yield StorageStorageError(
+            parentId: '0',
+            message: e.message,
+          );
+        }
+      }
+    }
+
+    // 物品相关
+    if (event is StorageItemDetail) {
+      yield StorageInProgress();
+      try {
+        Item results = await storageRepository.item(event.id);
+        yield StorageItemDetailResults(item: results);
+      } catch (e) {
+        yield StorageItemError(id: event.id, message: e.message);
+      }
+    }
+
+    if (event is StorageRefreshItemDetail) {
+      yield StorageInProgress();
+      try {
+        Item results = await storageRepository.item(event.id, cache: false);
+        yield StorageItemDetailResults(item: results);
+      } catch (e) {
+        yield StorageItemError(id: event.id, message: e.message);
+      }
     }
 
     if (event is StorageUpdateItem) {
-      await storageRepository.updateItem(
-        id: event.id,
-        name: event.name,
-        number: event.number,
-        storageId: event.storageId,
-        description: event.description,
-        price: event.price,
-        expirationDate: event.expirationDate,
-      );
-      yield StorageUpdateItemSuccess();
-      // 刷新受到影响的存储的位置
-      add(StorageRefreshItemDetail(id: event.id));
-      add(StorageRefreshStorageDetail(id: event.storageId));
-      add(StorageRefreshStorageDetail(id: event.oldStorageId));
+      try {
+        await storageRepository.updateItem(
+          id: event.id,
+          name: event.name,
+          number: event.number,
+          storageId: event.storageId,
+          description: event.description,
+          price: event.price,
+          expirationDate: event.expirationDate,
+        );
+        yield StorageUpdateItemSuccess(id: event.id);
+        // 刷新受到影响的存储的位置
+        add(StorageRefreshItemDetail(id: event.id));
+        add(StorageRefreshStorageDetail(id: event.storageId));
+        add(StorageRefreshStorageDetail(id: event.oldStorageId));
+      } catch (e) {
+        yield StorageItemError(message: e.message);
+      }
     }
 
     if (event is StorageAddItem) {
-      await storageRepository.addItem(
-        name: event.name,
-        number: event.number,
-        storageId: event.storageId,
-        description: event.description,
-        price: event.price,
-        expirationDate: event.expirationDate,
-      );
-      yield StorageAddItemSuccess();
-      // 刷新受到影响的存储的位置
-      add(StorageRefreshStorageDetail(id: event.storageId));
+      try {
+        await storageRepository.addItem(
+          name: event.name,
+          number: event.number,
+          storageId: event.storageId,
+          description: event.description,
+          price: event.price,
+          expirationDate: event.expirationDate,
+        );
+        yield StorageAddItemSuccess(storageId: event.storageId);
+        // 刷新受到影响的存储的位置
+        add(StorageRefreshStorageDetail(id: event.storageId));
+      } catch (e) {
+        yield StorageItemError(message: e.message);
+      }
+    }
+
+    if (event is StorageDeleteItem) {
+      yield StorageInProgress();
+      try {
+        await storageRepository.deleteItem(id: event.item.id);
+        yield StorageItemDeleted(storageId: event.item.storage.id);
+        // 刷新受到影响的数据
+        add(StorageRefreshStorageDetail(id: event.item.storage.id));
+      } catch (e) {
+        yield StorageItemError(
+          storageId: event.item.storage.id,
+          message: e.message,
+        );
+      }
+    }
+
+    // 刷新所有位置的数据
+    if (event is StorageRefreshStorages) {
+      try {
+        await storageRepository.storages(cache: false);
+      } catch (e) {
+        yield StorageStorageError(message: e.message);
+      }
     }
   }
 }

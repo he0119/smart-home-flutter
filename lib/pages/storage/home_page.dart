@@ -7,7 +7,44 @@ class StorageHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<StorageBloc>(context).add(StorageStarted());
-    return _StorageHomePage();
+    return BlocListener<StorageBloc, StorageState>(
+      listener: (context, state) {
+        // 物品管理的错误提示
+        if (state is StorageStorageError && state.id == '0') {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${state.message}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        if (state is StorageAddStorageSuccess && state.parentId == '0') {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('位置添加成功'),
+              backgroundColor: Colors.blue,
+            ),
+          );
+        }
+        if (state is StorageStorageDeleted && state.parentId == '0') {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('位置删除成功'),
+              backgroundColor: Colors.blue,
+            ),
+          );
+        }
+        if (state is StorageStorageError && state.parentId == '0') {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('位置删除失败，${state.message}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: _StorageHomePage(),
+    );
   }
 }
 
@@ -19,6 +56,12 @@ class _StorageHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StorageBloc, StorageState>(
+      condition: (previous, current) {
+        if (current is StorageRootResults) {
+          return true;
+        }
+        return false;
+      },
       builder: (context, state) {
         if (state is StorageRootResults) {
           return RefreshIndicator(
@@ -29,12 +72,6 @@ class _StorageHomePage extends StatelessWidget {
           );
         }
         return Center(child: CircularProgressIndicator());
-      },
-      condition: (previous, current) {
-        if (current is StorageRootResults) {
-          return true;
-        }
-        return false;
       },
     );
   }

@@ -20,6 +20,9 @@ class StorageItemPage extends StatelessWidget {
         if (current is StorageItemDetailResults && current.item.id == itemId) {
           return true;
         }
+        if (current is StorageItemError && current.id == itemId) {
+          return true;
+        }
         return false;
       },
       builder: (context, state) {
@@ -93,12 +96,34 @@ class StorageItemPage extends StatelessWidget {
                 )
               ],
             ),
-            body: RefreshIndicator(
-              onRefresh: () async {
-                BlocProvider.of<StorageBloc>(context)
-                    .add(StorageItemDetail(itemId));
+            body: BlocListener<StorageBloc, StorageState>(
+              listener: (context, state) {
+                if (state is StorageUpdateItemSuccess && state.id == itemId) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('物品修改成功'),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                }
               },
-              child: _ItemDetail(item: state.item),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  BlocProvider.of<StorageBloc>(context)
+                      .add(StorageItemDetail(itemId));
+                },
+                child: _ItemDetail(item: state.item),
+              ),
+            ),
+          );
+        }
+        if (state is StorageItemError) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('错误'),
+            ),
+            body: Center(
+              child: Text(state.message),
             ),
           );
         }

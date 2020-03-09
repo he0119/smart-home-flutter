@@ -9,22 +9,10 @@ abstract class StorageState extends Equatable {
 
 class StorageInProgress extends StorageState {}
 
-class StorageError extends StorageState {
-  final String message;
-
-  const StorageError(this.message);
-
-  @override
-  List<Object> get props => [message];
-
-  @override
-  String toString() => 'StorageError { message: $message}';
-}
-
 class StorageRootResults extends StorageState {
   final List<Storage> storages;
 
-  StorageRootResults(this.storages);
+  StorageRootResults({this.storages});
 
   @override
   List<Object> get props => [storages];
@@ -33,7 +21,7 @@ class StorageRootResults extends StorageState {
 class StorageStorageDetailResults extends StorageState {
   final Storage storage;
 
-  StorageStorageDetailResults(this.storage);
+  StorageStorageDetailResults({this.storage});
 
   @override
   List<Object> get props => [storage];
@@ -42,34 +30,99 @@ class StorageStorageDetailResults extends StorageState {
 class StorageItemDetailResults extends StorageState {
   final Item item;
 
-  StorageItemDetailResults(this.item);
+  StorageItemDetailResults({this.item});
 
   @override
   List<Object> get props => [item];
 }
 
-class StorageItemDeleted extends StorageState {
+/// 位置相关错误
+/// 如果是详情页面请求出错，则附带上 ID，以确认是哪个界面需要显示错误信息
+/// 如果是在修改界面时则不需要附带 ID
+/// 删除时如果出错则带上上一级 ID
+class StorageStorageError extends StorageState {
   final String id;
+  final String parentId;
+  final String message;
 
-  StorageItemDeleted(this.id);
+  const StorageStorageError({this.id, this.parentId, this.message});
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [id, parentId, message];
+
+  @override
+  String toString() => 'StorageError($id or $parentId) { message: $message }';
+}
+
+/// 物品相关错误
+/// 如果详情页面请求出错，则附带上 ID，以确认是哪个界面需要显示错误信息
+/// 如果是在修改界面则不需要附带 ID
+/// 删除时如果出错则带上 StorageId
+class StorageItemError extends StorageState {
+  final String id;
+  final String storageId;
+  final String message;
+
+  const StorageItemError({this.id, this.storageId, this.message});
+
+  @override
+  List<Object> get props => [id, storageId, message];
+
+  @override
+  String toString() =>
+      'StorageItemError($id or $storageId) { message: $message }';
 }
 
 class StorageStorageDeleted extends StorageState {
+  final String parentId;
+
+  StorageStorageDeleted({this.parentId});
+
+  @override
+  List<Object> get props => [parentId];
+}
+
+class StorageItemDeleted extends StorageState {
+  final String storageId;
+
+  StorageItemDeleted({this.storageId});
+
+  @override
+  List<Object> get props => [storageId];
+}
+
+class StorageUpdateStorageSuccess extends StorageState {
   final String id;
 
-  StorageStorageDeleted(this.id);
+  StorageUpdateStorageSuccess({this.id});
 
   @override
   List<Object> get props => [id];
 }
 
-class StorageUpdateStorageSuccess extends StorageState {}
+class StorageUpdateItemSuccess extends StorageState {
+  final String id;
 
-class StorageUpdateItemSuccess extends StorageState {}
+  StorageUpdateItemSuccess({this.id});
 
-class StorageAddStorageSuccess extends StorageState {}
+  @override
+  List<Object> get props => [id];
+}
 
-class StorageAddItemSuccess extends StorageState {}
+class StorageAddStorageSuccess extends StorageState {
+  final String parentId;
+
+  StorageAddStorageSuccess({this.parentId});
+
+  @override
+  List<Object> get props => [parentId];
+}
+
+class StorageAddItemSuccess extends StorageState {
+  final String storageId;
+
+  StorageAddItemSuccess({this.storageId});
+
+  @override
+  List<Object> get props => [storageId];
+}
