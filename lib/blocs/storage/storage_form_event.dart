@@ -48,11 +48,12 @@ class DescriptionChanged extends StorageFormEvent {
 class FormSubmitted extends StorageFormEvent {
   final bool isEditing;
   final String id;
+  final String oldParentId;
 
-  const FormSubmitted({@required this.isEditing, this.id});
+  const FormSubmitted({@required this.isEditing, this.id, this.oldParentId});
 
   @override
-  List<Object> get props => [isEditing, id];
+  List<Object> get props => [isEditing, id, oldParentId];
 
   @override
   String toString() => 'FormSubmitted { item id: $id }';

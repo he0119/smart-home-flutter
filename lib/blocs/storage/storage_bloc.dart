@@ -51,7 +51,7 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       yield StorageStorageDeleted(id);
       // 刷新受到影响的数据
       if (event.storage.parent != null) {
-        StorageRefreshStorageDetail(id: event.storage.parent.id);
+        add(StorageRefreshStorageDetail(id: event.storage.parent.id));
       } else {
         add(StorageRefreshRoot());
       }
@@ -90,8 +90,12 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       );
       yield StorageUpdateStorageSuccess();
       // 刷新受到影响的存储的位置
-      // FIXME: 如果修改到其他位置，之前位置下的数据并没有刷新
       add(StorageRefreshStorageDetail(id: event.id));
+      if (event.oldParentId != null) {
+        add(StorageRefreshStorageDetail(id: event.oldParentId));
+      } else {
+        add(StorageRefreshRoot());
+      }
       if (event.parentId != null) {
         add(StorageRefreshStorageDetail(id: event.parentId));
       } else {
@@ -127,9 +131,9 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       );
       yield StorageUpdateItemSuccess();
       // 刷新受到影响的存储的位置
-      // FIXME: 如果修改到其他位置，之前位置下的数据并没有刷新
       add(StorageRefreshItemDetail(id: event.id));
       add(StorageRefreshStorageDetail(id: event.storageId));
+      add(StorageRefreshStorageDetail(id: event.oldStorageId));
     }
 
     if (event is StorageAddItem) {

@@ -231,7 +231,11 @@ class _ItemFormState extends State<ItemForm> {
 
   void _onSubmitPressed() {
     if (widget.isEditing) {
-      _itemFormBloc.add(FormSubmitted(isEditing: true, id: widget.item.id));
+      _itemFormBloc.add(FormSubmitted(
+        isEditing: true,
+        id: widget.item.id,
+        oldStorageId: widget.item.storage.id,
+      ));
     } else {
       _itemFormBloc.add(FormSubmitted(isEditing: false));
     }

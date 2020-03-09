@@ -62,8 +62,11 @@ class _StorageFormFormState extends State<StorageForm> {
 
   void _onSubmitPressed() {
     if (widget.isEditing) {
-      _storageFormBloc
-          .add(FormSubmitted(isEditing: true, id: widget.storage.id));
+      _storageFormBloc.add(FormSubmitted(
+        isEditing: true,
+        id: widget.storage.id,
+        oldParentId: widget.storage.parent?.id,
+      ));
     } else {
       _storageFormBloc.add(FormSubmitted(isEditing: false));
     }

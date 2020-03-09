@@ -84,6 +84,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
           name: state.name,
           number: int.parse(state.number),
           storageId: state.storage,
+          oldStorageId: event.oldStorageId,
           description: state.description,
           price: price,
           expirationDate: state.expirationDate,

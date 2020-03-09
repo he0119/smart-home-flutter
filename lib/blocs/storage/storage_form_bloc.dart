@@ -51,6 +51,7 @@ class StorageFormBloc extends Bloc<StorageFormEvent, StorageFormState> {
             id: event.id,
             name: state.name,
             parentId: state.parent,
+            oldParentId: event.oldParentId,
             description: state.description,
           ),
         );
