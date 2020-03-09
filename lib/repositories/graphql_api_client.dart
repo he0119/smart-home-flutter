@@ -22,6 +22,7 @@ class GraphQLApiClient {
         userRepository.clearToken();
         throw Exception('认证出错，请稍后再试');
       }
+      throw Exception(errors.graphqlErrors[0].message);
     }
   }
 
