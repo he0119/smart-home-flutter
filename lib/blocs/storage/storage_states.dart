@@ -9,17 +9,36 @@ abstract class StorageState extends Equatable {
 
 class StorageInProgress extends StorageState {}
 
-class StorageError extends StorageState {
+/// 位置相关错误
+/// 如果是详情页面请求出错，则附带上 ID，以确认是哪个界面需要显示错误信息
+/// 如果是在修改界面或者删除时则不需要附带 ID。
+class StorageStorageError extends StorageState {
   final String id;
   final String message;
 
-  const StorageError({this.id, this.message});
+  const StorageStorageError({this.id, this.message});
 
   @override
   List<Object> get props => [id, message];
 
   @override
   String toString() => 'StorageError($id) { message: $message }';
+}
+
+/// 物品相关错误
+/// 如果详情页面请求出错，则附带上 ID，以确认是哪个界面需要显示错误信息
+/// 如果是在修改界面或者删除时则不需要附带 ID。
+class StorageItemError extends StorageState {
+  final String id;
+  final String message;
+
+  const StorageItemError({this.id, this.message});
+
+  @override
+  List<Object> get props => [id, message];
+
+  @override
+  String toString() => 'StorageItemError($id) { message: $message }';
 }
 
 class StorageRootResults extends StorageState {

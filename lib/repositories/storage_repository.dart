@@ -170,6 +170,12 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
+    if (result.hasException) {
+      for (GraphQLError error in result.exception.graphqlErrors) {
+        String message = error.message.toLowerCase();
+        throw Exception(message);
+      }
+    }
     final Map<String, dynamic> json = result.data['updateStorage']['storage'];
     final Storage storageObject = Storage.fromJson(json);
     return storageObject;

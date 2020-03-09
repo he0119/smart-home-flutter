@@ -10,7 +10,7 @@ class StorageHomePage extends StatelessWidget {
     return BlocListener<StorageBloc, StorageState>(
       listener: (context, state) {
         // 物品管理的错误提示
-        if (state is StorageError && state.id == '0') {
+        if (state is StorageStorageError && state.id == '0') {
           Scaffold.of(context).showSnackBar(
             SnackBar(
               content: Text('${state.message}'),

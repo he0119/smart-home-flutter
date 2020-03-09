@@ -80,6 +80,14 @@ class _StorageFormFormState extends State<StorageForm> {
             state is StorageUpdateStorageSuccess) {
           Navigator.of(context).pop();
         }
+        if (state is StorageStorageError) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${state.message}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       },
       child: BlocBuilder<StorageFormBloc, StorageFormState>(
         builder: (context, state) {
@@ -139,6 +147,14 @@ class _StorageFormFormState extends State<StorageForm> {
                   onPressed: state.isFormValid ? _onSubmitPressed : null,
                   child: Text('提交'),
                 ),
+                BlocBuilder<StorageBloc, StorageState>(
+                  builder: (context, state) {
+                    if (state is StorageInProgress) {
+                      return CircularProgressIndicator();
+                    }
+                    return Container();
+                  },
+                )
               ],
             ),
           );

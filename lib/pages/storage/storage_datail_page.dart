@@ -22,7 +22,7 @@ class StorageStoragePage extends StatelessWidget {
             current.storage.id == storageId) {
           return true;
         }
-        if (current is StorageError && current.id == storageId) {
+        if (current is StorageStorageError && current.id == storageId) {
           return true;
         }
         return false;
@@ -139,7 +139,7 @@ class StorageStoragePage extends StatelessWidget {
             ),
           );
         }
-        if (state is StorageError) {
+        if (state is StorageStorageError) {
           return Scaffold(
             appBar: AppBar(
               title: Text('错误'),
