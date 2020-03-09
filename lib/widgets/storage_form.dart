@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/storage/storage_bloc.dart';
 import 'package:smart_home/blocs/storage/storage_form_bloc.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class StorageForm extends StatefulWidget {
   final bool isEditing;
@@ -81,12 +82,7 @@ class _StorageFormFormState extends State<StorageForm> {
           Navigator.of(context).pop();
         }
         if (state is StorageStorageError) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${state.message}'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, state.message);
         }
       },
       child: BlocBuilder<StorageFormBloc, StorageFormState>(

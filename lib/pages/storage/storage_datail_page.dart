@@ -4,6 +4,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/pages/storage/item_add_edit_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_add_edit_page.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/widgets/storage_item_list.dart';
 
 enum Menu { edit, delete }
@@ -116,65 +117,30 @@ class StorageStoragePage extends StatelessWidget {
               listener: (context, state) {
                 if (state is StorageAddItemSuccess &&
                     state.storageId == storageId) {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('物品添加成功'),
-                      backgroundColor: Colors.blue,
-                    ),
-                  );
+                  showInfoSnackBar(context, '物品添加成功');
                 }
                 if (state is StorageItemDeleted &&
                     state.storageId == storageId) {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('物品删除成功'),
-                      backgroundColor: Colors.blue,
-                    ),
-                  );
+                  showInfoSnackBar(context, '物品删除成功');
                 }
                 if (state is StorageItemError && state.storageId == storageId) {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('物品删除失败，${state.message}'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  showErrorSnackBar(context, '物品删除失败，${state.message}');
                 }
                 if (state is StorageUpdateStorageSuccess &&
                     state.id == storageId) {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('位置修改成功'),
-                      backgroundColor: Colors.blue,
-                    ),
-                  );
+                  showInfoSnackBar(context, '位置修改成功');
                 }
                 if (state is StorageAddStorageSuccess &&
                     state.parentId == storageId) {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('位置添加成功'),
-                      backgroundColor: Colors.blue,
-                    ),
-                  );
+                  showInfoSnackBar(context, '位置添加成功');
                 }
                 if (state is StorageStorageDeleted &&
                     state.parentId == storageId) {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('位置删除成功'),
-                      backgroundColor: Colors.blue,
-                    ),
-                  );
+                  showInfoSnackBar(context, '位置删除成功');
                 }
                 if (state is StorageStorageError &&
                     state.parentId == storageId) {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('位置删除失败，${state.message}'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  showErrorSnackBar(context, '位置删除失败，${state.message}');
                 }
               },
               child: RefreshIndicator(

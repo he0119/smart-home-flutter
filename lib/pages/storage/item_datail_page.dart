@@ -5,6 +5,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_add_edit_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 enum Menu { edit, delete }
 
@@ -99,12 +100,7 @@ class StorageItemPage extends StatelessWidget {
             body: BlocListener<StorageBloc, StorageState>(
               listener: (context, state) {
                 if (state is StorageUpdateItemSuccess && state.id == itemId) {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('物品修改成功'),
-                      backgroundColor: Colors.blue,
-                    ),
-                  );
+                  showInfoSnackBar(context, '物品修改成功');
                 }
               },
               child: RefreshIndicator(

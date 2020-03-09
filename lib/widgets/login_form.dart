@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -25,12 +26,7 @@ class _LoginFormState extends State<LoginForm> {
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state is AuthenticationFailure) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${state.error}'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, state.error);
         }
       },
       builder: (context, state) {

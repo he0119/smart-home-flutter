@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/widgets/storage_item_list.dart';
 
 class StorageHomePage extends StatelessWidget {
@@ -11,36 +12,16 @@ class StorageHomePage extends StatelessWidget {
       listener: (context, state) {
         // 物品管理的错误提示
         if (state is StorageStorageError && state.id == '0') {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${state.message}'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, state.message);
         }
         if (state is StorageAddStorageSuccess && state.parentId == '0') {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text('位置添加成功'),
-              backgroundColor: Colors.blue,
-            ),
-          );
+          showInfoSnackBar(context, '位置添加成功');
         }
         if (state is StorageStorageDeleted && state.parentId == '0') {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text('位置删除成功'),
-              backgroundColor: Colors.blue,
-            ),
-          );
+          showInfoSnackBar(context, '位置删除成功');
         }
         if (state is StorageStorageError && state.parentId == '0') {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text('位置删除失败，${state.message}'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, '位置删除失败，${state.message}');
         }
       },
       child: _StorageHomePage(),

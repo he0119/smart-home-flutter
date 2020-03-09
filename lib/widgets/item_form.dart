@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/item_form_bloc.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class ItemForm extends StatefulWidget {
   final bool isEditing;
@@ -41,12 +42,7 @@ class _ItemFormState extends State<ItemForm> {
           Navigator.of(context).pop();
         }
         if (state is StorageItemError) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${state.message}'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, state.message);
         }
       },
       child: BlocBuilder<ItemFormBloc, ItemFormState>(
