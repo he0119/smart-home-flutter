@@ -20,6 +20,9 @@ class StorageItemPage extends StatelessWidget {
         if (current is StorageItemDetailResults && current.item.id == itemId) {
           return true;
         }
+        if (current is StorageItemError && current.id == itemId) {
+          return true;
+        }
         return false;
       },
       builder: (context, state) {
@@ -99,6 +102,16 @@ class StorageItemPage extends StatelessWidget {
                     .add(StorageItemDetail(itemId));
               },
               child: _ItemDetail(item: state.item),
+            ),
+          );
+        }
+        if (state is StorageItemError) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('错误'),
+            ),
+            body: Center(
+              child: Text(state.message),
             ),
           );
         }

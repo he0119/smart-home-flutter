@@ -125,59 +125,82 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
     // 物品相关
     if (event is StorageItemDetail) {
       yield StorageInProgress();
-      Item results = await storageRepository.item(event.id);
-      yield StorageItemDetailResults(results);
+      try {
+        Item results = await storageRepository.item(event.id);
+        yield StorageItemDetailResults(results);
+      } catch (e) {
+        yield StorageItemError(id: event.id, message: e.message);
+      }
     }
 
     if (event is StorageRefreshItemDetail) {
       yield StorageInProgress();
-      Item results = await storageRepository.item(event.id, cache: false);
-      yield StorageItemDetailResults(results);
+      try {
+        Item results = await storageRepository.item(event.id, cache: false);
+        yield StorageItemDetailResults(results);
+      } catch (e) {
+        yield StorageItemError(id: event.id, message: e.message);
+      }
     }
 
     if (event is StorageUpdateItem) {
-      await storageRepository.updateItem(
-        id: event.id,
-        name: event.name,
-        number: event.number,
-        storageId: event.storageId,
-        description: event.description,
-        price: event.price,
-        expirationDate: event.expirationDate,
-      );
-      yield StorageUpdateItemSuccess();
-      // 刷新受到影响的存储的位置
-      add(StorageRefreshItemDetail(id: event.id));
-      add(StorageRefreshStorageDetail(id: event.storageId));
-      add(StorageRefreshStorageDetail(id: event.oldStorageId));
+      try {
+        await storageRepository.updateItem(
+          id: event.id,
+          name: event.name,
+          number: event.number,
+          storageId: event.storageId,
+          description: event.description,
+          price: event.price,
+          expirationDate: event.expirationDate,
+        );
+        yield StorageUpdateItemSuccess();
+        // 刷新受到影响的存储的位置
+        add(StorageRefreshItemDetail(id: event.id));
+        add(StorageRefreshStorageDetail(id: event.storageId));
+        add(StorageRefreshStorageDetail(id: event.oldStorageId));
+      } catch (e) {
+        yield StorageItemError(message: e.message);
+      }
     }
 
     if (event is StorageAddItem) {
-      await storageRepository.addItem(
-        name: event.name,
-        number: event.number,
-        storageId: event.storageId,
-        description: event.description,
-        price: event.price,
-        expirationDate: event.expirationDate,
-      );
-      yield StorageAddItemSuccess();
-      // 刷新受到影响的存储的位置
-      add(StorageRefreshStorageDetail(id: event.storageId));
+      try {
+        await storageRepository.addItem(
+          name: event.name,
+          number: event.number,
+          storageId: event.storageId,
+          description: event.description,
+          price: event.price,
+          expirationDate: event.expirationDate,
+        );
+        yield StorageAddItemSuccess();
+        // 刷新受到影响的存储的位置
+        add(StorageRefreshStorageDetail(id: event.storageId));
+      } catch (e) {
+        yield StorageItemError(message: e.message);
+      }
     }
 
     if (event is StorageDeleteItem) {
       yield StorageInProgress();
-      String id = await storageRepository.deleteItem(id: event.item.id);
-      yield StorageItemDeleted(id);
-      // 刷新受到影响的数据
-      add(StorageRefreshStorageDetail(id: event.item.storage.id));
+      try {
+        String id = await storageRepository.deleteItem(id: event.item.id);
+        yield StorageItemDeleted(id);
+        // 刷新受到影响的数据
+        add(StorageRefreshStorageDetail(id: event.item.storage.id));
+      } catch (e) {
+        yield StorageItemError(message: e.message);
+      }
     }
 
     // 刷新所有位置的数据
     if (event is StorageRefreshStorages) {
-      yield StorageInProgress();
-      await storageRepository.storages(cache: false);
+      try {
+        await storageRepository.storages(cache: false);
+      } catch (e) {
+        yield StorageStorageError(message: e.message);
+      }
     }
   }
 }

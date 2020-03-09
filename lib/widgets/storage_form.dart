@@ -154,7 +154,7 @@ class _StorageFormFormState extends State<StorageForm> {
                     }
                     return Container();
                   },
-                )
+                ),
               ],
             ),
           );

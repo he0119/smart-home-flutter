@@ -40,6 +40,14 @@ class _ItemFormState extends State<ItemForm> {
             state is StorageUpdateItemSuccess) {
           Navigator.of(context).pop();
         }
+        if (state is StorageItemError) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${state.message}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       },
       child: BlocBuilder<ItemFormBloc, ItemFormState>(
         builder: (context, state) {
@@ -175,6 +183,14 @@ class _ItemFormState extends State<ItemForm> {
                 RaisedButton(
                   onPressed: state.isFormValid ? _onSubmitPressed : null,
                   child: Text('提交'),
+                ),
+                BlocBuilder<StorageBloc, StorageState>(
+                  builder: (context, state) {
+                    if (state is StorageInProgress) {
+                      return CircularProgressIndicator();
+                    }
+                    return Container();
+                  },
                 ),
               ],
             ),
