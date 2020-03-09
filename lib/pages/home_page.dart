@@ -6,7 +6,7 @@ import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_add_edit_page.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
@@ -95,12 +95,16 @@ class _HomePageBody extends StatelessWidget {
           return Center(
             child: RaisedButton(
               onPressed: () async {
-                const url = 'https://iot.hehome.xyz';
-                if (await canLaunch(url)) {
-                  await launch(url);
-                } else {
-                  throw 'Could not launch $url';
-                }
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return WebView(
+                        initialUrl: 'https://iot.hehome.xyz',
+                        javascriptMode: JavascriptMode.unrestricted,
+                      );
+                    },
+                  ),
+                );
               },
               child: Text('IOT'),
             ),
@@ -113,12 +117,16 @@ class _HomePageBody extends StatelessWidget {
           return Center(
             child: RaisedButton(
               onPressed: () async {
-                const url = 'https://hehome.xyz';
-                if (await canLaunch(url)) {
-                  await launch(url);
-                } else {
-                  throw 'Could not launch $url';
-                }
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return WebView(
+                        initialUrl: 'https://hehome.xyz',
+                        javascriptMode: JavascriptMode.unrestricted,
+                      );
+                    },
+                  ),
+                );
               },
               child: Text('博客'),
             ),
