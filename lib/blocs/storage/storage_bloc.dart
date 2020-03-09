@@ -172,7 +172,7 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
           price: event.price,
           expirationDate: event.expirationDate,
         );
-        yield StorageUpdateItemSuccess();
+        yield StorageUpdateItemSuccess(id: event.id);
         // 刷新受到影响的存储的位置
         add(StorageRefreshItemDetail(id: event.id));
         add(StorageRefreshStorageDetail(id: event.storageId));
@@ -192,7 +192,7 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
           price: event.price,
           expirationDate: event.expirationDate,
         );
-        yield StorageAddItemSuccess();
+        yield StorageAddItemSuccess(storageId: event.storageId);
         // 刷新受到影响的存储的位置
         add(StorageRefreshStorageDetail(id: event.storageId));
       } catch (e) {
@@ -203,8 +203,8 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
     if (event is StorageDeleteItem) {
       yield StorageInProgress();
       try {
-        String id = await storageRepository.deleteItem(id: event.item.id);
-        yield StorageItemDeleted(id: id, storageId: event.item.storage.id);
+        await storageRepository.deleteItem(id: event.item.id);
+        yield StorageItemDeleted(storageId: event.item.storage.id);
         // 刷新受到影响的数据
         add(StorageRefreshStorageDetail(id: event.item.storage.id));
       } catch (e) {

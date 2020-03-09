@@ -83,13 +83,12 @@ class StorageStorageDeleted extends StorageState {
 }
 
 class StorageItemDeleted extends StorageState {
-  final String id;
   final String storageId;
 
-  StorageItemDeleted({this.id, this.storageId});
+  StorageItemDeleted({this.storageId});
 
   @override
-  List<Object> get props => [id, storageId];
+  List<Object> get props => [storageId];
 }
 
 class StorageUpdateStorageSuccess extends StorageState {
@@ -120,11 +119,10 @@ class StorageAddStorageSuccess extends StorageState {
 }
 
 class StorageAddItemSuccess extends StorageState {
-  final String id;
   final String storageId;
 
-  StorageAddItemSuccess({this.id, this.storageId});
+  StorageAddItemSuccess({this.storageId});
 
   @override
-  List<Object> get props => [id, storageId];
+  List<Object> get props => [storageId];
 }

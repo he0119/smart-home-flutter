@@ -96,12 +96,24 @@ class StorageItemPage extends StatelessWidget {
                 )
               ],
             ),
-            body: RefreshIndicator(
-              onRefresh: () async {
-                BlocProvider.of<StorageBloc>(context)
-                    .add(StorageItemDetail(itemId));
+            body: BlocListener<StorageBloc, StorageState>(
+              listener: (context, state) {
+                if (state is StorageUpdateItemSuccess && state.id == itemId) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('物品修改成功'),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                }
               },
-              child: _ItemDetail(item: state.item),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  BlocProvider.of<StorageBloc>(context)
+                      .add(StorageItemDetail(itemId));
+                },
+                child: _ItemDetail(item: state.item),
+              ),
             ),
           );
         }

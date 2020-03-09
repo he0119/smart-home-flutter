@@ -114,6 +114,15 @@ class StorageStoragePage extends StatelessWidget {
             ),
             body: BlocListener<StorageBloc, StorageState>(
               listener: (context, state) {
+                if (state is StorageAddItemSuccess &&
+                    state.storageId == storageId) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('物品添加成功'),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                }
                 if (state is StorageItemDeleted &&
                     state.storageId == storageId) {
                   Scaffold.of(context).showSnackBar(
