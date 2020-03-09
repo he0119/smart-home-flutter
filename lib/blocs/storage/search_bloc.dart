@@ -21,10 +21,8 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
       try {
         List<dynamic> results = await storageRepository.search(event.key);
         yield StorageSearchResults(results[0], results[1]);
-      } on StorageException catch (e) {
-        yield StorageSearchError(e.message);
       } catch (e) {
-        yield StorageSearchError('错误：$e');
+        yield StorageSearchError(e.message);
       }
     }
   }
