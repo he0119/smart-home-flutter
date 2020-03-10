@@ -79,6 +79,8 @@ class _SearchBody extends StatelessWidget {
                   child: StorageItemList(
                     items: state.items,
                     storages: state.storages,
+                    isHighlight: true,
+                    term: state.term,
                   ),
                 );
         }

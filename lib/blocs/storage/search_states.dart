@@ -21,9 +21,14 @@ class StorageSearchError extends StorageSearchState {
 class StorageSearchResults extends StorageSearchState {
   final List<Item> items;
   final List<Storage> storages;
+  final String term;
 
-  StorageSearchResults(this.items, this.storages);
+  StorageSearchResults({
+    @required this.items,
+    @required this.storages,
+    @required this.term,
+  });
 
   @override
-  List<Object> get props => [items, storages];
+  List<Object> get props => [items, storages, term];
 }
