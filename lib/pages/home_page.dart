@@ -19,24 +19,8 @@ class HomePage extends StatelessWidget {
     quickActions.initialize((String shortcutType) async {
       if (shortcutType == 'action_iot') {
         BlocProvider.of<TabBloc>(context).add(UpdateTab(AppTab.iot));
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) {
-              return WebView(
-                initialUrl: 'https://iot.hehome.xyz',
-                javascriptMode: JavascriptMode.unrestricted,
-              );
-            },
-          ),
-        );
       } else {
         BlocProvider.of<TabBloc>(context).add(UpdateTab(AppTab.blog));
-        const url = 'https://hehome.xyz';
-        if (await canLaunch(url)) {
-          await launch(url);
-        } else {
-          throw 'Could not launch $url';
-        }
       }
     });
     quickActions.setShortcutItems(
@@ -49,13 +33,25 @@ class HomePage extends StatelessWidget {
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         return Scaffold(
-          appBar: _AppBar(),
+          appBar: activeTab == AppTab.iot ? null : _AppBar(),
           body: _HomePageBody(),
           bottomNavigationBar: TabSelector(
             activeTab: activeTab,
             onTabSelected: (tab) =>
                 BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
           ),
+          floatingActionButton: activeTab == AppTab.blog
+              ? FloatingActionButton(
+                  child: Icon(Icons.open_in_new),
+                  onPressed: () async {
+                    const url = 'https://hehome.xyz';
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  })
+              : null,
         );
       },
     );
@@ -70,11 +66,6 @@ class _AppBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
-        if (activeTab == AppTab.iot) {
-          return AppBar(
-            title: Text('IOT'),
-          );
-        }
         if (activeTab == AppTab.storage) {
           return AppBar(
             title: Text('物品管理'),
@@ -122,37 +113,21 @@ class _HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<TabBloc, AppTab>(
-      listener: (context, activeTab) async {
-        if (activeTab == AppTab.iot) {
-          _openIot(context);
-        }
-        if (activeTab == AppTab.blog) {
-          await _openBlog();
-        }
-      },
+    return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         if (activeTab == AppTab.iot) {
-          return Center(
-            child: RaisedButton(
-              onPressed: () async {
-                _openIot(context);
-              },
-              child: Text('IOT'),
-            ),
+          return WebView(
+            initialUrl: 'https://iot.hehome.xyz',
+            javascriptMode: JavascriptMode.unrestricted,
           );
         }
         if (activeTab == AppTab.storage) {
           return StorageHomePage();
         }
         if (activeTab == AppTab.blog) {
-          return Center(
-            child: RaisedButton(
-              onPressed: () async {
-                await _openBlog();
-              },
-              child: Text('博客'),
-            ),
+          return WebView(
+            initialUrl: 'https://hehome.xyz',
+            javascriptMode: JavascriptMode.unrestricted,
           );
         }
         return Center(
@@ -162,28 +137,6 @@ class _HomePageBody extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Future _openBlog() async {
-    const url = 'https://hehome.xyz';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  void _openIot(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return WebView(
-            initialUrl: 'https://iot.hehome.xyz',
-            javascriptMode: JavascriptMode.unrestricted,
-          );
-        },
-      ),
     );
   }
 }
