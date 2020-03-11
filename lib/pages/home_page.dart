@@ -117,6 +117,7 @@ class _HomePageBody extends StatelessWidget {
       builder: (context, activeTab) {
         if (activeTab == AppTab.iot) {
           return WebView(
+            key: UniqueKey(),
             initialUrl: 'https://iot.hehome.xyz',
             javascriptMode: JavascriptMode.unrestricted,
           );
@@ -126,6 +127,7 @@ class _HomePageBody extends StatelessWidget {
         }
         if (activeTab == AppTab.blog) {
           return WebView(
+            key: UniqueKey(),
             initialUrl: 'https://hehome.xyz',
             javascriptMode: JavascriptMode.unrestricted,
           );
