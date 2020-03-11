@@ -87,7 +87,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
           oldStorageId: event.oldStorageId,
           description: state.description,
           price: price,
-          expirationDate: state.expirationDate,
+          expirationDate: state.expirationDate?.toUtc(),
         ));
       } else {
         storageBloc.add(StorageAddItem(
@@ -96,7 +96,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
           storageId: state.storage,
           description: state.description,
           price: price,
-          expirationDate: state.expirationDate,
+          expirationDate: state.expirationDate?.toUtc(),
         ));
       }
     }
