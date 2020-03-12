@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home/graphql/mutations/mutations.dart';
-import 'package:smart_home/graphql/queries/queries.dart';
+import 'package:smart_home/graphql/queries/me.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 

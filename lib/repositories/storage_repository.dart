@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:smart_home/graphql/mutations/mutations.dart';
-import 'package:smart_home/graphql/queries/queries.dart';
+import 'package:smart_home/graphql/queries/storage/queries.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 
@@ -25,6 +25,40 @@ class StorageRepository {
     final List<Item> listofItem =
         items.map((dynamic json) => Item.fromJson(json)).toList();
     return [listofItem, listofStorage];
+  }
+
+  /// 存储管理主页所需要的数据
+  /// 过期，即将过期和最近添加，更新的物品
+  Future<Map<String, List<Item>>> homePage({bool cache = true}) async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(homepageQuery),
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final results = await graphqlApiClient.query(options);
+
+    final List<dynamic> recentlyAddedItems = results.data['recentlyAddedItems'];
+    final List<Item> listofRecentlyAddedItems =
+        recentlyAddedItems.map((dynamic e) => Item.fromJson(e)).toList();
+
+    final List<dynamic> recentlyUpdatedItems =
+        results.data['recentlyUpdatedItems'];
+    final List<Item> listofRecentlyUpdatedItems =
+        recentlyUpdatedItems.map((dynamic e) => Item.fromJson(e)).toList();
+
+    final List<dynamic> expiredItems = results.data['expiredItems'];
+    final List<Item> listofExpiredItems =
+        expiredItems.map((dynamic e) => Item.fromJson(e)).toList();
+
+    final List<dynamic> nearExpiredItems = results.data['nearExpiredItems'];
+    final List<Item> listofNearExpiredItems =
+        nearExpiredItems.map((dynamic e) => Item.fromJson(e)).toList();
+
+    return {
+      'recentlyAddedItems': listofRecentlyAddedItems,
+      'recentlyUpdatedItems': listofRecentlyUpdatedItems,
+      'expiredItems': listofExpiredItems,
+      'nearExpiredItems': listofNearExpiredItems,
+    };
   }
 
   Future<List<Storage>> rootStorage({bool cache = true}) async {
