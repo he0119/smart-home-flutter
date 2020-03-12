@@ -7,8 +7,6 @@ abstract class StorageHomeState extends Equatable {
   List<Object> get props => [];
 }
 
-class StorageHomeInitial extends StorageHomeState {}
-
 class StorageHomeInProgress extends StorageHomeState {}
 
 class StorageHomeError extends StorageHomeState {
@@ -25,12 +23,14 @@ class StorageHomeSuccess extends StorageHomeState {
   final List<Item> recentlyUpdatedItems;
   final List<Item> expiredItems;
   final List<Item> nearExpiredItems;
+  final ItemType itemType;
 
   const StorageHomeSuccess({
     this.recentlyAddedItems,
     this.recentlyUpdatedItems,
     this.expiredItems,
     this.nearExpiredItems,
+    @required this.itemType
   });
 
   @override
@@ -43,5 +43,5 @@ class StorageHomeSuccess extends StorageHomeState {
 
   @override
   String toString() =>
-      'StorageHomeSuccess { recentlyAddedItems ${recentlyAddedItems.length}, recentlyUpdatedItems ${recentlyUpdatedItems.length}, expiredItems ${expiredItems.length}, nearExpiredItems ${nearExpiredItems.length}, }';
+      'StorageHomeSuccess { recentlyAddedItems ${recentlyAddedItems?.length ?? 0}, recentlyUpdatedItems ${recentlyUpdatedItems?.length ?? 0}, expiredItems ${expiredItems?.length ?? 0}, nearExpiredItems ${nearExpiredItems?.length ?? 0}, }';
 }

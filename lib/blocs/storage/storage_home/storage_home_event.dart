@@ -9,4 +9,26 @@ abstract class StorageHomeEvent extends Equatable {
 
 class StorageHomeStarted extends StorageHomeEvent {}
 
-class StorageHomeRefreshed extends StorageHomeEvent {}
+class StorageHomeRefreshed extends StorageHomeEvent {
+  final ItemType itemType;
+
+  const StorageHomeRefreshed({@required this.itemType});
+
+  @override
+  List<Object> get props => [itemType];
+
+  @override
+  String toString() => 'StorageHomeRefreshed { itemType: $itemType }';
+}
+
+class StorageHomeChanged extends StorageHomeEvent {
+  final ItemType itemType;
+
+  const StorageHomeChanged({@required this.itemType});
+
+  @override
+  List<Object> get props => [itemType];
+
+  @override
+  String toString() => 'StorageHomeChanged { itemType: $itemType }';
+}

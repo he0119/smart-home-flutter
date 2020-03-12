@@ -61,6 +61,83 @@ class StorageRepository {
     };
   }
 
+  Future<List<Item>> recentlyAddedItems(
+      {@required int number, bool cache = true}) async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(recentlyAddedItemsQuery),
+      variables: {
+        'number': number,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final results = await graphqlApiClient.query(options);
+
+    final List<dynamic> recentlyAddedItems = results.data['recentlyAddedItems'];
+    assert(recentlyAddedItems != null);
+    final List<Item> listofRecentlyAddedItems =
+        recentlyAddedItems.map((dynamic e) => Item.fromJson(e)).toList();
+
+    return listofRecentlyAddedItems;
+  }
+
+  Future<List<Item>> recentlyUpdatedItems(
+      {@required int number, bool cache = true}) async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(recentlyUpdatedItemsQuery),
+      variables: {
+        'number': number,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final results = await graphqlApiClient.query(options);
+
+    final List<dynamic> recentlyUpdatedItems =
+        results.data['recentlyUpdatedItems'];
+    assert(recentlyUpdatedItems != null);
+    final List<Item> listofRecentlyUpdatedItems =
+        recentlyUpdatedItems.map((dynamic e) => Item.fromJson(e)).toList();
+
+    return listofRecentlyUpdatedItems;
+  }
+
+  Future<List<Item>> expiredItems({int number, bool cache = true}) async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(expiredItemsQuery),
+      variables: {
+        'number': number,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final results = await graphqlApiClient.query(options);
+
+    final List<dynamic> expiredItems = results.data['expiredItems'];
+    assert(expiredItems != null);
+    final List<Item> listofExpiredItems =
+        expiredItems.map((dynamic e) => Item.fromJson(e)).toList();
+
+    return listofExpiredItems;
+  }
+
+  Future<List<Item>> nearExpiredItems(
+      {@required int within, int number, bool cache = true}) async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(nearExpiredItemsQuery),
+      variables: {
+        'within': within,
+        'number': number,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final results = await graphqlApiClient.query(options);
+
+    final List<dynamic> nearExpiredItems = results.data['nearExpiredItems'];
+    assert(nearExpiredItems != null);
+    final List<Item> listofNearExpiredItems =
+        nearExpiredItems.map((dynamic e) => Item.fromJson(e)).toList();
+
+    return listofNearExpiredItems;
+  }
+
   Future<List<Storage>> rootStorage({bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(rootStorageQuery),
@@ -99,7 +176,7 @@ class StorageRepository {
     return listofStorage;
   }
 
-  Future<Item> item(String id, {bool cache = true}) async {
+  Future<Item> item({@required String id, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(itemQuery),
       variables: {
