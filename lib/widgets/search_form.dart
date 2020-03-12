@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/storage/search_bloc.dart';
 import 'package:smart_home/widgets/storage_item_list.dart';
 
 class SearchForm extends StatelessWidget {
@@ -22,18 +22,6 @@ class _SearchBarState extends State<_SearchBar> {
   StorageSearchBloc _storageBloc;
 
   @override
-  void initState() {
-    super.initState();
-    _storageBloc = BlocProvider.of<StorageSearchBloc>(context);
-  }
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return TextField(
       controller: _textController,
@@ -53,6 +41,18 @@ class _SearchBarState extends State<_SearchBar> {
         hintText: '请输入',
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _storageBloc = BlocProvider.of<StorageSearchBloc>(context);
   }
 
   void _onClearTapped() {
