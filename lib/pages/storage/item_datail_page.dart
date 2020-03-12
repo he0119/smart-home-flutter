@@ -169,7 +169,11 @@ class _ItemDetail extends StatelessWidget {
               : ''),
         ),
         ListTile(
-          title: Text('更新日期'),
+          title: Text('录入者'),
+          trailing: Text(item.editor.username),
+        ),
+        ListTile(
+          title: Text('更新时间'),
           trailing: Text(item.updateDate != null
               ? DateFormat.yMMMd('zh')
                   .add_jm()
@@ -177,8 +181,10 @@ class _ItemDetail extends StatelessWidget {
               : ''),
         ),
         ListTile(
-          title: Text('录入者'),
-          trailing: Text(item.editor.username),
+          title: Text('添加时间'),
+          trailing: Text(item.dateAdded != null
+              ? DateFormat.yMMMd('zh').add_jm().format(item.dateAdded.toLocal())
+              : ''),
         ),
       ],
     );

@@ -7,15 +7,21 @@ part 'storage.g.dart';
 
 @JsonSerializable()
 class Storage {
-  Storage(this.id, this.name, this.parent, this.description, this.children,
-      this.items);
-
   final String id;
   final String name;
   final Storage parent;
   final String description;
   final List<Storage> children;
   final List<Item> items;
+
+  Storage({
+    this.id,
+    this.name,
+    this.parent,
+    this.description,
+    this.children,
+    this.items,
+  });
 
   factory Storage.fromJson(Map<String, dynamic> json) =>
       _$StorageFromJson(json);
@@ -25,9 +31,6 @@ class Storage {
 
 @JsonSerializable()
 class Item {
-  Item(this.id, this.name, this.number, this.storage, this.description,
-      this.price, this.expirationDate, this.editor, this.updateDate);
-
   final String id;
   final String name;
   final int number;
@@ -37,6 +40,20 @@ class Item {
   final DateTime expirationDate;
   final User editor;
   final DateTime updateDate;
+  final DateTime dateAdded;
+
+  Item({
+    this.id,
+    this.name,
+    this.number,
+    this.storage,
+    this.description,
+    this.price,
+    this.expirationDate,
+    this.editor,
+    this.updateDate,
+    this.dateAdded,
+  });
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 
