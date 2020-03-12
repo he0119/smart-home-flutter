@@ -6,7 +6,6 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
-import 'package:smart_home/pages/storage/storage_add_edit_page.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -38,112 +37,90 @@ class HomePage extends StatelessWidget {
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         return Scaffold(
-          appBar: activeTab == AppTab.iot ? null : _AppBar(),
-          body: _HomePageBody(),
+          appBar: _buildAppBar(context, activeTab),
+          body: _buildBody(context, activeTab),
           bottomNavigationBar: TabSelector(
             activeTab: activeTab,
             onTabSelected: (tab) =>
                 BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
           ),
-          floatingActionButton: activeTab == AppTab.blog
-              ? FloatingActionButton(
-                  child: Icon(Icons.open_in_new),
-                  onPressed: () async {
-                    const url = 'https://hehome.xyz';
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                  })
-              : null,
+          floatingActionButton: _buildFloatingActionButton(context, activeTab),
         );
       },
     );
   }
-}
 
-class _AppBar extends StatelessWidget with PreferredSizeWidget {
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<TabBloc, AppTab>(
-      builder: (context, activeTab) {
-        if (activeTab == AppTab.storage) {
-          return AppBar(
-            title: Text('物品管理'),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => StorageAddEditStoagePage(
-                        isEditing: false,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => SearchPage()),
-                  );
-                },
-              ),
-            ],
-          );
-        }
-        if (activeTab == AppTab.blog) {
-          return AppBar(
-            title: Text('博客'),
-          );
-        }
-        return AppBar(title: Text('留言板'));
-      },
-    );
-  }
-}
-
-class _HomePageBody extends StatelessWidget {
-  const _HomePageBody({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<TabBloc, AppTab>(
-      builder: (context, activeTab) {
-        if (activeTab == AppTab.iot) {
-          return WebView(
-            key: UniqueKey(),
-            initialUrl: 'https://iot.hehome.xyz',
-            javascriptMode: JavascriptMode.unrestricted,
-          );
-        }
-        if (activeTab == AppTab.storage) {
-          return StorageHomePage();
-        }
-        if (activeTab == AppTab.blog) {
-          return WebView(
-            key: UniqueKey(),
-            initialUrl: 'https://hehome.xyz',
-            javascriptMode: JavascriptMode.unrestricted,
-          );
-        }
-        return Center(
-          child: Text(
-            'Index 2: 留言板',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+  AppBar _buildAppBar(BuildContext context, AppTab activeTab) {
+    if (activeTab == AppTab.storage) {
+      return AppBar(
+        title: Text('物品管理'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => SearchPage()),
+              );
+            },
           ),
-        );
-      },
+        ],
+      );
+    }
+    if (activeTab == AppTab.blog) {
+      return AppBar(
+        title: Text('博客'),
+      );
+    }
+    if (activeTab == AppTab.board) {
+      return AppBar(
+        title: Text('留言板'),
+      );
+    }
+    return null;
+  }
+
+  Widget _buildBody(BuildContext context, AppTab activeTab) {
+    if (activeTab == AppTab.storage) {
+      return StorageHomePage();
+    }
+    if (activeTab == AppTab.iot) {
+      return WebView(
+        key: UniqueKey(),
+        initialUrl: 'https://iot.hehome.xyz',
+        javascriptMode: JavascriptMode.unrestricted,
+      );
+    }
+    if (activeTab == AppTab.blog) {
+      return WebView(
+        key: UniqueKey(),
+        initialUrl: 'https://hehome.xyz',
+        javascriptMode: JavascriptMode.unrestricted,
+      );
+    }
+    return Center(
+      child: Text(
+        'Index 2: 留言板',
+        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      ),
     );
+  }
+
+  FloatingActionButton _buildFloatingActionButton(
+      BuildContext context, AppTab activeTab) {
+    if (activeTab == AppTab.blog) {
+      return FloatingActionButton(
+        child: Icon(Icons.open_in_new),
+        onPressed: () async {
+          const url = 'https://hehome.xyz';
+          if (await canLaunch(url)) {
+            await launch(url);
+          } else {
+            throw 'Could not launch $url';
+          }
+        },
+      );
+    }
+    return null;
   }
 }
