@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:smart_home/blocs/storage/storage_home_bloc.dart';
+import 'package:smart_home/blocs/storage/storage_home/storage_home_bloc.dart';
 import 'package:smart_home/models/models.dart';
 
 class StorageHomePage extends StatelessWidget {
@@ -52,96 +52,6 @@ class _StorageHomePage extends StatelessWidget {
         }
         return Container();
       },
-    );
-  }
-
-  SliverStickyHeader buildRecentlyAddedItems(
-      BuildContext context, List<Item> items) {
-    return SliverStickyHeader(
-      header: Container(
-        height: 60.0,
-        color: Colors.lightBlue,
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        alignment: Alignment.centerLeft,
-        child: Text(
-          '最近添加',
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            final difference =
-                DateTime.now().difference(items[index].dateAdded).inDays;
-            final text = RichText(
-              text: TextSpan(
-                style: DefaultTextStyle.of(context).style,
-                children: <TextSpan>[
-                  TextSpan(
-                    text: items[index].name,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text: difference == 0
-                        ? '（今天）'
-                        : '（${difference.toString()}天前）',
-                  ),
-                ],
-              ),
-            );
-            return ListTile(
-              title: text,
-              subtitle: Text(items[index].description ?? ''),
-            );
-          },
-          childCount: items.length,
-        ),
-      ),
-    );
-  }
-
-  SliverStickyHeader buildRecentlyUpdatedItems(
-      BuildContext context, List<Item> items) {
-    return SliverStickyHeader(
-      header: Container(
-        height: 60.0,
-        color: Colors.lightBlue,
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        alignment: Alignment.centerLeft,
-        child: Text(
-          '最近更新',
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            final difference =
-                DateTime.now().difference(items[index].updateDate).inDays;
-            final text = RichText(
-              text: TextSpan(
-                style: DefaultTextStyle.of(context).style,
-                children: <TextSpan>[
-                  TextSpan(
-                    text: items[index].name,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text: difference == 0
-                        ? '（今天）'
-                        : '（${difference.toString()}天前）',
-                  ),
-                ],
-              ),
-            );
-            return ListTile(
-              title: text,
-              subtitle: Text(items[index].description ?? ''),
-            );
-          },
-          childCount: items.length,
-        ),
-      ),
     );
   }
 
@@ -228,6 +138,96 @@ class _StorageHomePage extends StatelessWidget {
             return ListTile(
               title: text,
               subtitle: Text(''),
+            );
+          },
+          childCount: items.length,
+        ),
+      ),
+    );
+  }
+
+  SliverStickyHeader buildRecentlyAddedItems(
+      BuildContext context, List<Item> items) {
+    return SliverStickyHeader(
+      header: Container(
+        height: 60.0,
+        color: Colors.lightBlue,
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        alignment: Alignment.centerLeft,
+        child: Text(
+          '最近添加',
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            final difference =
+                DateTime.now().difference(items[index].dateAdded).inDays;
+            final text = RichText(
+              text: TextSpan(
+                style: DefaultTextStyle.of(context).style,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: items[index].name,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: difference == 0
+                        ? '（今天）'
+                        : '（${difference.toString()}天前）',
+                  ),
+                ],
+              ),
+            );
+            return ListTile(
+              title: text,
+              subtitle: Text(items[index].description ?? ''),
+            );
+          },
+          childCount: items.length,
+        ),
+      ),
+    );
+  }
+
+  SliverStickyHeader buildRecentlyUpdatedItems(
+      BuildContext context, List<Item> items) {
+    return SliverStickyHeader(
+      header: Container(
+        height: 60.0,
+        color: Colors.lightBlue,
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        alignment: Alignment.centerLeft,
+        child: Text(
+          '最近更新',
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            final difference =
+                DateTime.now().difference(items[index].updateDate).inDays;
+            final text = RichText(
+              text: TextSpan(
+                style: DefaultTextStyle.of(context).style,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: items[index].name,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: difference == 0
+                        ? '（今天）'
+                        : '（${difference.toString()}天前）',
+                  ),
+                ],
+              ),
+            );
+            return ListTile(
+              title: text,
+              subtitle: Text(items[index].description ?? ''),
             );
           },
           childCount: items.length,

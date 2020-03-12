@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/storage/search_bloc.dart';
+import 'package:smart_home/blocs/storage/search/search_bloc.dart';
 import 'package:smart_home/widgets/storage_item_list.dart';
 
 class SearchForm extends StatelessWidget {
