@@ -97,9 +97,17 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           ),
         );
         // 刷新受到影响的存储位置
-        // 上一级页面会受到影响
-        // FIXME: 如果调整了上一级位置，则会影响两个地方
-        await storageRepository.storage(id: event.parentId, cache: false);
+        // 上一级页面和以前的上一级页面会受到影响。
+        if (event.parentId != null) {
+          await storageRepository.storage(id: event.parentId, cache: false);
+        } else {
+          await storageRepository.rootStorage(cache: false);
+        }
+        if (event.oldParentId != null && event.oldParentId != event.parentId) {
+          await storageRepository.storage(id: event.oldParentId, cache: false);
+        } else {
+          await storageRepository.rootStorage(cache: false);
+        }
       } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
@@ -149,8 +157,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         await storageRepository.deleteStorage(id: event.storage.id);
         if (event.storage.parent != null) {
           add(StorageDetailRefreshed(id: event.storage.parent.id));
-        }
-        else {
+        } else {
           add(StorageDetailRootRefreshed());
         }
         snackBarBloc.add(
@@ -160,6 +167,8 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             type: MessageType.info,
           ),
         );
+        // 修改新位置之后，位置列表需要更新
+        await storageRepository.storages(cache: false);
       } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(

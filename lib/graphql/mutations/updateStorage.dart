@@ -6,6 +6,10 @@ mutation updateStorage($input: UpdateStorageInput!) {
       id
       name
       description
+      parent {
+        __typename
+        id
+      }
     }
   }
 }
