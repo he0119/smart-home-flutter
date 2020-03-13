@@ -14,7 +14,7 @@ query homepage {
     description
     updateDate
   }
-  nearExpiredItems(within: 30, number: 10) {
+  nearExpiredItems(within: 365, number: 10) {
     __typename
     id
     name

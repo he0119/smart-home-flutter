@@ -44,7 +44,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             break;
           case ItemType.nearExpired:
             List<Item> nearExpiredItems = await storageRepository
-                .nearExpiredItems(within: 360, number: 50);
+                .nearExpiredItems(within: 365, number: 50);
             yield StorageHomeSuccess(
               nearExpiredItems: nearExpiredItems,
               itemType: ItemType.nearExpired,
