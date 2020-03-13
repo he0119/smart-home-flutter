@@ -150,7 +150,8 @@ class StorageRepository {
     return listofStorage;
   }
 
-  Future<Storage> storage({@required String id, bool cache = true}) async {
+  Future<Map<String, dynamic>> storage(
+      {@required String id, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(storageQuery),
       variables: {
@@ -161,7 +162,13 @@ class StorageRepository {
     final result = await graphqlApiClient.query(options);
     final Map<String, dynamic> json = result.data['storage'];
     final Storage storageObject = Storage.fromJson(json);
-    return storageObject;
+    final List<dynamic> ancestors = result.data['storageAncestors'];
+    final List<Storage> listofAncestors =
+        ancestors.map((dynamic e) => Storage.fromJson(e)).toList();
+    return {
+      'storage': storageObject,
+      'ancestors': listofAncestors,
+    };
   }
 
   Future<List<Storage>> storages({bool cache = true}) async {

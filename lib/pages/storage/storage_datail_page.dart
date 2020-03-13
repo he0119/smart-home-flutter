@@ -147,6 +147,7 @@ class _StorageDetailPage extends StatelessWidget {
       );
     }
     if (state is StorageDetailSuccess) {
+      List<Storage> paths = state.ancestors.toList();
       return AppBar(
         title: Text(state.storage.name),
         actions: <Widget>[
@@ -212,6 +213,60 @@ class _StorageDetailPage extends StatelessWidget {
             ],
           )
         ],
+        bottom: PathBar(
+          child: Container(
+            height: 40,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: paths.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  return index == 0
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.home,
+                            color: Colors.white70,
+                          ),
+                          onPressed: () {
+                            BlocProvider.of<StorageDetailBloc>(context)
+                                .add(StorageDetailRoot());
+                          },
+                        )
+                      : InkWell(
+                          onTap: () {
+                            BlocProvider.of<StorageDetailBloc>(context)
+                                .add(StorageDetailChanged(id: paths[index - 1].id));
+                          },
+                          child: Container(
+                            height: 40,
+                            child: Center(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                child: Text(
+                                  paths[index - 1].name,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return Icon(
+                    Icons.arrow_forward_ios,
+                    size: 12,
+                    color: Colors.white70,
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
       );
     }
     if (state is StorageEditInitial) {
@@ -221,7 +276,7 @@ class _StorageDetailPage extends StatelessWidget {
     }
     if (state is StorageAddInitial) {
       return AppBar(
-        title: Text('添加物品'),
+        title: Text('添加位置'),
       );
     }
     return null;
@@ -298,4 +353,21 @@ class _StorageDetailPage extends StatelessWidget {
     }
     return null;
   }
+}
+
+class PathBar extends StatelessWidget implements PreferredSizeWidget {
+  final Widget child;
+
+  PathBar({
+    Key key,
+    @required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return child;
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(40.0);
 }

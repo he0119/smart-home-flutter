@@ -38,6 +38,11 @@ query storage($id: ID!) {
       name
     }
   }
+  storageAncestors(id: $id) {
+    __typename
+    id
+    name
+  }
 }
 """;
 

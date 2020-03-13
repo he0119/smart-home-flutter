@@ -42,8 +42,10 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     if (event is StorageDetailChanged) {
       yield StorageDetailInProgress();
       try {
-        Storage results = await storageRepository.storage(id: event.id);
-        yield StorageDetailSuccess(storage: results);
+        Map<String, dynamic> results =
+            await storageRepository.storage(id: event.id);
+        yield StorageDetailSuccess(
+            storage: results['storage'], ancestors: results['ancestors']);
       } catch (e) {
         yield StorageDetailError(message: e.message);
       }
@@ -51,11 +53,12 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     if (event is StorageDetailRefreshed) {
       yield StorageDetailInProgress();
       try {
-        Storage results = await storageRepository.storage(
+        Map<String, dynamic> results = await storageRepository.storage(
           id: event.id,
           cache: false,
         );
-        yield StorageDetailSuccess(storage: results);
+        yield StorageDetailSuccess(
+            storage: results['storage'], ancestors: results['ancestors']);
       } catch (e) {
         yield StorageDetailError(message: e.message);
       }
@@ -64,8 +67,9 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     if (event is StorageEditStarted) {
       yield StorageDetailInProgress();
       try {
-        Storage results = await storageRepository.storage(id: event.id);
-        yield StorageEditInitial(storage: results);
+        Map<String, dynamic> results =
+            await storageRepository.storage(id: event.id);
+        yield StorageEditInitial(storage: results['storage']);
       } catch (e) {
         yield StorageDetailError(message: e.message);
       }
@@ -82,13 +86,16 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
 
     if (event is StorageUpdated) {
       try {
-        Storage storage = await storageRepository.updateStorage(
+        await storageRepository.updateStorage(
           id: event.id,
           name: event.name,
           parentId: event.parentId,
           description: event.description,
         );
-        yield StorageDetailSuccess(storage: storage);
+        Map<String, dynamic> results =
+            await storageRepository.storage(id: event.id, cache: false);
+        yield StorageDetailSuccess(
+            storage: results['storage'], ancestors: results['ancestors']);
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.storage,
