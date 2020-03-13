@@ -79,10 +79,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
             type: MessageType.info,
           ),
         );
-        // 刷新受到影响的存储的位置
-        // add(StorageRefreshItemDetail(id: event.id));
-        // add(StorageRefreshStorageDetail(id: event.storageId));
-        // add(StorageRefreshStorageDetail(id: event.oldStorageId));
+        await storageRepository.storage(id: event.oldStorageId, cache: false);
       } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(

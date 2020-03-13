@@ -9,6 +9,11 @@ mutation updateItem($input: UpdateItemInput!) {
       storage {
         id
         name
+        items {
+          __typename
+          id
+          name
+          description
       }
       description
       price
