@@ -79,6 +79,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
             type: MessageType.info,
           ),
         );
+        await storageRepository.storage(id: event.storageId, cache: false);
         await storageRepository.storage(id: event.oldStorageId, cache: false);
       } catch (e) {
         snackBarBloc.add(
