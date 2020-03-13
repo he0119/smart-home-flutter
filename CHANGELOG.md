@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2020-03-13
+
+### Added
+
+- 搜索结果添加关键字高亮
+- 位置详情界面添加位置指示
+
+### Changed
+
+- 物品管理主界面将展示过期物品，即将过期，最近添加和最近更新的物品
+- 调整 `Webview` 将 `IOT` 和博客内嵌至软件
+
 ## [0.1.2] - 2020-03-09
 
 ### Added
@@ -35,8 +47,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.2.0...HEAD
 
+[0.2.0]: https://github.com/he0119/smart-home-flutter/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/he0119/smart-home-flutter/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/he0119/smart-home-flutter/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/he0119/smart-home-flutter/releases/tag/v0.1.0
