@@ -41,13 +41,18 @@ class HomePage extends StatelessWidget {
         return Scaffold(
           appBar: _buildAppBar(context, activeTab),
           body: BlocListener<SnackBarBloc, SnackBarState>(
+            condition: (previous, current) {
+              if (current is SnackBarSuccess &&
+                  current.position == SnackBarPosition.home) {
+                return true;
+              }
+              return false;
+            },
             listener: (context, state) {
-              if (state is SnackBarSuccess &&
-                  state.messageType == MessageType.error) {
+              if (state is SnackBarSuccess && state.type == MessageType.error) {
                 showErrorSnackBar(context, state.message);
               }
-              if (state is SnackBarSuccess &&
-                  state.messageType == MessageType.info) {
+              if (state is SnackBarSuccess && state.type == MessageType.info) {
                 showInfoSnackBar(context, state.message);
               }
             },

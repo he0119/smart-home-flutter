@@ -66,8 +66,9 @@ class MyApp extends StatelessWidget {
             if (state is Authenticated) {
               BlocProvider.of<SnackBarBloc>(context).add(
                 SnackBarChanged(
+                    position: SnackBarPosition.home,
                     message: '登陆成功，欢迎 ${state.currentUser.username}',
-                    messageType: MessageType.info),
+                    type: MessageType.info),
               );
               return HomePage();
             }

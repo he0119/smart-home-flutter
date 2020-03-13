@@ -4,14 +4,17 @@ part of 'snack_bar_bloc.dart';
 abstract class SnackBarEvent {}
 
 class SnackBarChanged extends SnackBarEvent {
+  final SnackBarPosition position;
   final String message;
-  final MessageType messageType;
+  final MessageType type;
 
   SnackBarChanged({
+    @required this.position,
     @required this.message,
-    @required this.messageType,
+    @required this.type,
   });
 
   @override
-  String toString() => 'SnackBarChanged { message: $message }';
+  String toString() =>
+      'SnackBarChanged { message: $message }';
 }

@@ -6,14 +6,17 @@ abstract class SnackBarState {}
 class SnackBarInitial extends SnackBarState {}
 
 class SnackBarSuccess extends SnackBarState {
+  final SnackBarPosition position;
   final String message;
-  final MessageType messageType;
+  final MessageType type;
 
   SnackBarSuccess({
+    @required this.position,
     @required this.message,
-    @required this.messageType,
+    @required this.type,
   });
 
   @override
-  String toString() => 'SnackBarSuccess { messageType: $messageType }';
+  String toString() =>
+      'SnackBarSuccess { position: $position, messageType: $type }';
 }

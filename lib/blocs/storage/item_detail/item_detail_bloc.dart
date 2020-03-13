@@ -73,7 +73,11 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         );
         yield ItemDetailSuccess(item: item);
         snackBarBloc.add(
-          SnackBarChanged(message: '修改成功', messageType: MessageType.info),
+          SnackBarChanged(
+            position: SnackBarPosition.item,
+            message: '修改成功',
+            type: MessageType.info,
+          ),
         );
         // 刷新受到影响的存储的位置
         // add(StorageRefreshItemDetail(id: event.id));
@@ -81,7 +85,11 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         // add(StorageRefreshStorageDetail(id: event.oldStorageId));
       } catch (e) {
         snackBarBloc.add(
-          SnackBarChanged(message: e.message, messageType: MessageType.error),
+          SnackBarChanged(
+            position: SnackBarPosition.item,
+            message: e.message,
+            type: MessageType.error,
+          ),
         );
       }
     }
@@ -99,11 +107,18 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         yield ItemAddSuccess(item: item);
         snackBarBloc.add(
           SnackBarChanged(
-              message: '${item.name} 添加成功', messageType: MessageType.info),
+            position: SnackBarPosition.storage,
+            message: '${item.name} 添加成功',
+            type: MessageType.info,
+          ),
         );
       } catch (e) {
         snackBarBloc.add(
-          SnackBarChanged(message: e.message, messageType: MessageType.error),
+          SnackBarChanged(
+            position: SnackBarPosition.item,
+            message: e.message,
+            type: MessageType.error,
+          ),
         );
       }
     }
@@ -114,12 +129,18 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         yield ItemDeleteSuccess(item: event.item);
         snackBarBloc.add(
           SnackBarChanged(
-              message: '${event.item.name} 删除成功',
-              messageType: MessageType.info),
+            position: SnackBarPosition.storage,
+            message: '${event.item.name} 删除成功',
+            type: MessageType.info,
+          ),
         );
       } catch (e) {
         snackBarBloc.add(
-          SnackBarChanged(message: e.message, messageType: MessageType.error),
+          SnackBarChanged(
+            position: SnackBarPosition.item,
+            message: e.message,
+            type: MessageType.error,
+          ),
         );
       }
     }

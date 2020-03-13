@@ -73,13 +73,20 @@ class _ItemDetailPage extends StatelessWidget {
                 );
               },
               child: BlocListener<SnackBarBloc, SnackBarState>(
+                  condition: (previous, current) {
+                    if (current is SnackBarSuccess &&
+                        current.position == SnackBarPosition.item) {
+                      return true;
+                    }
+                    return false;
+                  },
                   listener: (context, state) {
                     if (state is SnackBarSuccess &&
-                        state.messageType == MessageType.error) {
+                        state.type == MessageType.error) {
                       showErrorSnackBar(context, state.message);
                     }
                     if (state is SnackBarSuccess &&
-                        state.messageType == MessageType.info) {
+                        state.type == MessageType.info) {
                       showInfoSnackBar(context, state.message);
                     }
                   },
