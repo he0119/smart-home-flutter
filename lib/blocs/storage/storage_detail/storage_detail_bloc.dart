@@ -120,8 +120,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         );
         if (event.parentId != null) {
           add(StorageDetailRefreshed(id: event.parentId));
-        }
-        else {
+        } else {
           add(StorageDetailRootRefreshed());
         }
         snackBarBloc.add(
@@ -148,7 +147,12 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     if (event is StorageDeleted) {
       try {
         await storageRepository.deleteStorage(id: event.storage.id);
-        add(StorageDetailRefreshed(id: event.storage.parent.id));
+        if (event.storage.parent != null) {
+          add(StorageDetailRefreshed(id: event.storage.parent.id));
+        }
+        else {
+          add(StorageDetailRootRefreshed());
+        }
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.storage,
