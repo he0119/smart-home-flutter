@@ -80,7 +80,9 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         // add(StorageRefreshStorageDetail(id: event.storageId));
         // add(StorageRefreshStorageDetail(id: event.oldStorageId));
       } catch (e) {
-        yield ItemDetailError(message: e.message);
+        snackBarBloc.add(
+          SnackBarChanged(message: e.message, messageType: MessageType.error),
+        );
       }
     }
 
@@ -94,22 +96,31 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
           price: event.price,
           expirationDate: event.expirationDate,
         );
-        yield ItemDetailSuccess(item: item);
-        // 刷新受到影响的存储的位置
-        // add(StorageRefreshStorageDetail(id: event.storageId));
+        yield ItemAddSuccess(item: item);
+        snackBarBloc.add(
+          SnackBarChanged(
+              message: '${item.name} 添加成功', messageType: MessageType.info),
+        );
       } catch (e) {
-        yield ItemDetailError(message: e.message);
+        snackBarBloc.add(
+          SnackBarChanged(message: e.message, messageType: MessageType.error),
+        );
       }
     }
 
     if (event is ItemDeleted) {
       try {
         await storageRepository.deleteItem(id: event.item.id);
-        yield ItemDeleteSuccess();
-        // 刷新受到影响的数据
-        // add(StorageRefreshStorageDetail(id: event.item.storage.id));
+        yield ItemDeleteSuccess(storageId: event.item.storage.id);
+        snackBarBloc.add(
+          SnackBarChanged(
+              message: '${event.item.name} 删除成功',
+              messageType: MessageType.info),
+        );
       } catch (e) {
-        yield ItemDetailError(message: e.message);
+        snackBarBloc.add(
+          SnackBarChanged(message: e.message, messageType: MessageType.error),
+        );
       }
     }
   }

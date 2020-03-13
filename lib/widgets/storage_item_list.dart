@@ -40,6 +40,7 @@ class StorageItemList extends StatelessWidget {
   }
 }
 
+/// 物品详情界面使用的列表
 class _StorageItemListItem extends StatelessWidget {
   final dynamic item;
 
@@ -55,13 +56,17 @@ class _StorageItemListItem extends StatelessWidget {
         ),
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          String storageId = await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (_) =>
                     ItemDetailPage(isAdding: false, itemId: item.id)),
           );
+          if (storageId != null) {
+            BlocProvider.of<StorageDetailBloc>(context)
+                .add(StorageDetailRefreshed(id: storageId));
+          }
         },
       );
     } else {
@@ -81,6 +86,7 @@ class _StorageItemListItem extends StatelessWidget {
   }
 }
 
+/// 搜索界面使用的列表
 class _HighlightStorageItemListItem extends StatelessWidget {
   final dynamic item;
   final String term;

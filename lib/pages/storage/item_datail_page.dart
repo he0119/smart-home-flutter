@@ -44,7 +44,15 @@ class _ItemDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ItemDetailBloc, ItemDetailState>(
+    return BlocConsumer<ItemDetailBloc, ItemDetailState>(
+      listener: (context, state) {
+        if (state is ItemAddSuccess) {
+          Navigator.pop(context, state.item);
+        }
+        if (state is ItemDeleteSuccess) {
+          Navigator.pop(context, state.storageId);
+        }
+      },
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () async {
@@ -132,10 +140,7 @@ class _ItemDetailPage extends StatelessWidget {
                           BlocProvider.of<ItemDetailBloc>(context).add(
                             ItemDeleted(item: state.item),
                           );
-                          int count = 0;
-                          Navigator.popUntil(context, (route) {
-                            return count++ == 2;
-                          });
+                          Navigator.pop(context);
                         },
                       ),
                     ],
