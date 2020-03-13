@@ -50,7 +50,7 @@ class StorageEditStarted extends StorageDetailEvent {
 class StorageAddStarted extends StorageDetailEvent {
   final String parentId;
 
-  const StorageAddStarted({@required this.parentId});
+  const StorageAddStarted({this.parentId});
 
   @override
   List<Object> get props => [parentId];

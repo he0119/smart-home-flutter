@@ -118,7 +118,12 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           parentId: event.parentId,
           description: event.description,
         );
-        add(StorageDetailRefreshed(id: event.parentId));
+        if (event.parentId != null) {
+          add(StorageDetailRefreshed(id: event.parentId));
+        }
+        else {
+          add(StorageDetailRootRefreshed());
+        }
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.storage,

@@ -126,6 +126,13 @@ class _StorageDetailPage extends StatelessWidget {
         title: Text('家'),
         actions: <Widget>[
           IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              BlocProvider.of<StorageDetailBloc>(context)
+                  .add(StorageAddStarted());
+            },
+          ),
+          IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
               Navigator.push(
