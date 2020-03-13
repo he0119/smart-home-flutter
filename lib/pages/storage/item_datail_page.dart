@@ -47,10 +47,10 @@ class _ItemDetailPage extends StatelessWidget {
     return BlocConsumer<ItemDetailBloc, ItemDetailState>(
       listener: (context, state) {
         if (state is ItemAddSuccess) {
-          Navigator.pop(context, state.item);
+          Navigator.pop(context, state.item.storage.id);
         }
         if (state is ItemDeleteSuccess) {
-          Navigator.pop(context, state.storageId);
+          Navigator.pop(context, state.item.storage.id);
         }
       },
       builder: (context, state) {

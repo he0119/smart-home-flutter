@@ -111,7 +111,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
     if (event is ItemDeleted) {
       try {
         await storageRepository.deleteItem(id: event.item.id);
-        yield ItemDeleteSuccess(storageId: event.item.storage.id);
+        yield ItemDeleteSuccess(item: event.item);
         snackBarBloc.add(
           SnackBarChanged(
               message: '${event.item.name} 删除成功',

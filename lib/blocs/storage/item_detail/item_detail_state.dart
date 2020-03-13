@@ -67,13 +67,13 @@ class ItemAddSuccess extends ItemDetailState {
 }
 
 class ItemDeleteSuccess extends ItemDetailState {
-  final String storageId;
+  final Item item;
 
-  const ItemDeleteSuccess({@required this.storageId});
-
-  @override
-  List<Object> get props => [storageId];
+  const ItemDeleteSuccess({@required this.item});
 
   @override
-  String toString() => 'ItemDeleteSuccess { storageId: $storageId }';
+  List<Object> get props => [item];
+
+  @override
+  String toString() => 'ItemDeleteSuccess { item: ${item.name} }';
 }

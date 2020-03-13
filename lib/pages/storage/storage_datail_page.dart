@@ -258,8 +258,8 @@ class _StorageDetailPage extends StatelessWidget {
     if (state is StorageDetailSuccess) {
       return FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).push(
+        onPressed: () async {
+          String storageId = await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => ItemDetailPage(
                 isAdding: true,
@@ -267,6 +267,10 @@ class _StorageDetailPage extends StatelessWidget {
               ),
             ),
           );
+          if (storageId != null) {
+            BlocProvider.of<StorageDetailBloc>(context)
+                .add(StorageDetailRefreshed(id: storageId));
+          }
         },
       );
     }
