@@ -49,6 +49,12 @@ class _StorageDetailPage extends StatelessWidget {
               );
               return false;
             }
+            if (state is StorageAddInitial) {
+              BlocProvider.of<StorageDetailBloc>(context).add(
+                StorageDetailChanged(id: state.parentId),
+              );
+              return false;
+            }
             if (state is StorageDetailSuccess && state.storage.parent != null) {
               BlocProvider.of<StorageDetailBloc>(context).add(
                 StorageDetailChanged(id: state.storage.parent.id),
