@@ -13,6 +13,7 @@ query items {
     price
     expirationDate
     updateDate
+    dateAdded
     editor {
       username
     }
@@ -35,6 +36,7 @@ query item($id: ID!) {
     price
     expirationDate
     updateDate
+    dateAdded
     editor {
       username
     }

@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_home/blocs/blocs.dart';
-import 'package:smart_home/blocs/storage/item_form_bloc.dart';
+import 'package:smart_home/blocs/storage/item_detail/item_detail_bloc.dart';
+import 'package:smart_home/blocs/storage/item_form/item_form_bloc.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class ItemForm extends StatefulWidget {
   final bool isEditing;
@@ -35,19 +34,11 @@ class _ItemFormState extends State<ItemForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<StorageBloc, StorageState>(
-      listener: (context, state) {
-        if (state is StorageAddItemSuccess ||
-            state is StorageUpdateItemSuccess) {
-          Navigator.of(context).pop();
-        }
-        if (state is StorageItemError) {
-          showErrorSnackBar(context, state.message);
-        }
-      },
-      child: BlocBuilder<ItemFormBloc, ItemFormState>(
-        builder: (context, state) {
-          return Form(
+    return BlocBuilder<ItemFormBloc, ItemFormState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Form(
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
@@ -81,9 +72,7 @@ class _ItemFormState extends State<ItemForm> {
                       labelText: '数量',
                     ),
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                     autovalidate: true,
                     validator: (_) {
                       return state.isNumberValid ? null : '数量不能为空';
@@ -115,10 +104,9 @@ class _ItemFormState extends State<ItemForm> {
                     },
                   ),
                   TextFormField(
-                    initialValue:
-                        widget.isEditing ? widget.item.description : '',
-                    onChanged: (value) => _itemFormBloc
-                        .add(DescriptionChanged(description: value)),
+                    initialValue: widget.isEditing ? widget.item.description : '',
+                    onChanged: (value) =>
+                        _itemFormBloc.add(DescriptionChanged(description: value)),
                     decoration: InputDecoration(
                       labelText: '备注',
                     ),
@@ -184,9 +172,9 @@ class _ItemFormState extends State<ItemForm> {
                     onPressed: state.isFormValid ? _onSubmitPressed : null,
                     child: Text('提交'),
                   ),
-                  BlocBuilder<StorageBloc, StorageState>(
+                  BlocBuilder<ItemDetailBloc, ItemDetailState>(
                     builder: (context, state) {
-                      if (state is StorageInProgress) {
+                      if (state is ItemDetailInProgress) {
                         return CircularProgressIndicator();
                       }
                       return Container();
@@ -195,9 +183,9 @@ class _ItemFormState extends State<ItemForm> {
                 ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 

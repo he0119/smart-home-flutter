@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/storage/storage_detail/storage_detail_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
@@ -40,6 +40,7 @@ class StorageItemList extends StatelessWidget {
   }
 }
 
+/// 物品详情界面使用的列表
 class _StorageItemListItem extends StatelessWidget {
   final dynamic item;
 
@@ -55,12 +56,17 @@ class _StorageItemListItem extends StatelessWidget {
         ),
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
-        onTap: () {
-          BlocProvider.of<StorageBloc>(context).add(StorageItemDetail(item.id));
-          Navigator.push(
+        onTap: () async {
+          String storageId = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => StorageItemPage(itemId: item.id)),
+            MaterialPageRoute(
+                builder: (_) =>
+                    ItemDetailPage(isAdding: false, itemId: item.id)),
           );
+          if (storageId != null) {
+            BlocProvider.of<StorageDetailBloc>(context)
+                .add(StorageDetailRefreshed(id: storageId));
+          }
         },
       );
     } else {
@@ -72,19 +78,15 @@ class _StorageItemListItem extends StatelessWidget {
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
         onTap: () {
-          BlocProvider.of<StorageBloc>(context)
-              .add(StorageStorageDetail(item.id));
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => StorageStoragePage(storageId: item.id)),
-          );
+          BlocProvider.of<StorageDetailBloc>(context)
+              .add(StorageDetailChanged(id: item.id));
         },
       );
     }
   }
 }
 
+/// 搜索界面使用的列表
 class _HighlightStorageItemListItem extends StatelessWidget {
   final dynamic item;
   final String term;
@@ -118,10 +120,11 @@ class _HighlightStorageItemListItem extends StatelessWidget {
           textStyleHighlight: highlightStyle,
         ),
         onTap: () {
-          BlocProvider.of<StorageBloc>(context).add(StorageItemDetail(item.id));
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => StorageItemPage(itemId: item.id)),
+            MaterialPageRoute(
+                builder: (_) =>
+                    ItemDetailPage(isAdding: false, itemId: item.id)),
           );
         },
       );
@@ -144,13 +147,70 @@ class _HighlightStorageItemListItem extends StatelessWidget {
           textStyleHighlight: highlightStyle,
         ),
         onTap: () {
-          BlocProvider.of<StorageBloc>(context)
-              .add(StorageStorageDetail(item.id));
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) => StorageStoragePage(storageId: item.id)),
+                builder: (_) => StorageDetailPage(storageId: item.id)),
           );
+        },
+      );
+    }
+  }
+}
+
+class SliverStorageItemList extends StatelessWidget {
+  final List<Item> items;
+  final List<Storage> storages;
+
+  const SliverStorageItemList({Key key, this.items, this.storages})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List<dynamic> merged = List.from(items)..addAll(storages);
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return _buildListTile(context, merged[index]);
+        },
+        childCount: merged.length,
+      ),
+    );
+  }
+
+  ListTile _buildListTile(BuildContext context, dynamic item) {
+    if (item is Item) {
+      return ListTile(
+        leading: const Icon(
+          Icons.insert_drive_file,
+          size: 34.0,
+        ),
+        title: Text(item.name),
+        subtitle: Text(item.description ?? ''),
+        onTap: () async {
+          String storageId = await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) =>
+                    ItemDetailPage(isAdding: false, itemId: item.id)),
+          );
+          if (storageId != null) {
+            BlocProvider.of<StorageDetailBloc>(context)
+                .add(StorageDetailRefreshed(id: storageId));
+          }
+        },
+      );
+    } else {
+      return ListTile(
+        leading: const Icon(
+          Icons.storage,
+          size: 34.0,
+        ),
+        title: Text(item.name),
+        subtitle: Text(item.description ?? ''),
+        onTap: () {
+          BlocProvider.of<StorageDetailBloc>(context)
+              .add(StorageDetailChanged(id: item.id));
         },
       );
     }
