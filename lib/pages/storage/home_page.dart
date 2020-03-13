@@ -24,10 +24,7 @@ class _StorageHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<StorageHomeBloc, StorageHomeState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
+    return BlocBuilder<StorageHomeBloc, StorageHomeState>(
       builder: (context, state) {
         if (state is StorageHomeInProgress) {
           return Center(child: CircularProgressIndicator());

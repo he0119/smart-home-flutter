@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
-import 'package:smart_home/pages/storage/item_add_edit_page.dart';
+import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_add_edit_page.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/widgets/storage_item_list.dart';
-
-enum Menu { edit, delete }
 
 class StorageStoragePage extends StatelessWidget {
   final String storageId;
@@ -160,7 +158,7 @@ class StorageStoragePage extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
-                      return StorageAddItemEditPage(
+                      return StorageAddEditStoagePage(
                         isEditing: false,
                         storageId: storageId,
                       );

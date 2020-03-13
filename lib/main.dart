@@ -17,8 +17,8 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) =>
               AuthenticationBloc()..add(AppStarted(_config.apiUrl)),
         ),
-        BlocProvider<StorageBloc>(
-          create: (BuildContext context) => StorageBloc(),
+        BlocProvider<SnackBarBloc>(
+          create: (BuildContext context) => SnackBarBloc(),
         ),
         BlocProvider<TabBloc>(
           create: (BuildContext context) => TabBloc(),

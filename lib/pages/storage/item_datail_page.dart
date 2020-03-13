@@ -2,143 +2,191 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/storage/item_detail/item_detail_bloc.dart';
+import 'package:smart_home/blocs/storage/item_form/item_form_bloc.dart';
+import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/pages/storage/item_add_edit_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/widgets/item_form.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
-enum Menu { edit, delete }
-
-class StorageItemPage extends StatelessWidget {
+class ItemDetailPage extends StatelessWidget {
   final String itemId;
 
-  const StorageItemPage({Key key, @required this.itemId}) : super(key: key);
+  const ItemDetailPage({Key key, @required this.itemId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StorageBloc, StorageState>(
-      condition: (previous, current) {
-        if (current is StorageItemDetailResults && current.item.id == itemId) {
-          return true;
-        }
-        if (current is StorageItemError && current.id == itemId) {
-          return true;
-        }
-        return false;
-      },
+    return BlocProvider(
+      create: (context) => ItemDetailBloc(
+        snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
+      )..add(ItemDetailChanged(itemId: itemId)),
+      child: _ItemDetailPage(itemId: itemId),
+    );
+  }
+}
+
+class _ItemDetailPage extends StatelessWidget {
+  final String itemId;
+
+  const _ItemDetailPage({Key key, @required this.itemId}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ItemDetailBloc, ItemDetailState>(
       builder: (context, state) {
-        if (state is StorageItemDetailResults) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(state.item.name),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => SearchPage()),
-                    );
-                  },
-                ),
-                PopupMenuButton<Menu>(
-                  onSelected: (value) async {
-                    if (value == Menu.edit) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => StorageAddItemEditPage(
-                            isEditing: true,
-                            item: state.item,
-                          ),
-                        ),
-                      );
-                    }
-                    if (value == Menu.delete) {
-                      showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: Text('删除 ${state.item.name}'),
-                          content: Text('你确认要删除该物品么？'),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text('否'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            FlatButton(
-                              child: Text('是'),
-                              onPressed: () {
-                                BlocProvider.of<StorageBloc>(context).add(
-                                  StorageDeleteItem(item: state.item),
-                                );
-                                int count = 0;
-                                Navigator.popUntil(context, (route) {
-                                  return count++ == 2;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: Menu.edit,
-                      child: Text('编辑'),
-                    ),
-                    PopupMenuItem(
-                      value: Menu.delete,
-                      child: Text('删除'),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            body: BlocListener<StorageBloc, StorageState>(
-              listener: (context, state) {
-                if (state is StorageUpdateItemSuccess && state.id == itemId) {
-                  showInfoSnackBar(context, '物品修改成功');
-                }
+        return WillPopScope(
+          onWillPop: () async {
+            if (state is ItemEditInitial) {
+              BlocProvider.of<ItemDetailBloc>(context).add(
+                ItemDetailChanged(itemId: itemId),
+              );
+              return false;
+            }
+            return true;
+          },
+          child: Scaffold(
+            appBar: _buildAppBar(context, state),
+            body: RefreshIndicator(
+              onRefresh: () async {
+                BlocProvider.of<ItemDetailBloc>(context).add(
+                  ItemDetailRefreshed(itemId: itemId),
+                );
               },
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  BlocProvider.of<StorageBloc>(context)
-                      .add(StorageItemDetail(itemId));
-                },
-                child: _ItemDetail(item: state.item),
-              ),
+              child: BlocListener<SnackBarBloc, SnackBarState>(
+                  listener: (context, state) {
+                    if (state is SnackBarSuccess &&
+                        state.messageType == MessageType.error) {
+                      showErrorSnackBar(context, state.message);
+                    }
+                    if (state is SnackBarSuccess &&
+                        state.messageType == MessageType.info) {
+                      showInfoSnackBar(context, state.message);
+                    }
+                  },
+                  child: _buildBody(context, state)),
             ),
-          );
-        }
-        if (state is StorageItemError) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('错误'),
-            ),
-            body: Center(
-              child: Text(state.message),
-            ),
-          );
-        }
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('加载中'),
-          ),
-          body: Center(
-            child: CircularProgressIndicator(),
           ),
         );
       },
     );
   }
+
+  AppBar _buildAppBar(BuildContext context, ItemDetailState state) {
+    if (state is ItemDetailInProgress) {
+      return AppBar(
+        title: Text('加载中'),
+      );
+    }
+    if (state is ItemDetailError) {
+      return AppBar(
+        title: Text('错误'),
+      );
+    }
+    if (state is ItemDetailSuccess) {
+      return AppBar(
+        title: Text(state.item.name),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => SearchPage()),
+              );
+            },
+          ),
+          PopupMenuButton<Menu>(
+            onSelected: (value) async {
+              if (value == Menu.edit) {
+                BlocProvider.of<ItemDetailBloc>(context)
+                    .add(ItemEditStarted(itemId: itemId));
+              }
+              if (value == Menu.delete) {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text('删除 ${state.item.name}'),
+                    content: Text('你确认要删除该物品么？'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('否'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('是'),
+                        onPressed: () {
+                          BlocProvider.of<ItemDetailBloc>(context).add(
+                            ItemDeleted(item: state.item),
+                          );
+                          int count = 0;
+                          Navigator.popUntil(context, (route) {
+                            return count++ == 2;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: Menu.edit,
+                child: Text('编辑'),
+              ),
+              PopupMenuItem(
+                value: Menu.delete,
+                child: Text('删除'),
+              ),
+            ],
+          )
+        ],
+      );
+    }
+    if (state is ItemEditInitial) {
+      return AppBar(
+        title: Text('编辑 ${state.item.name}'),
+      );
+    }
+    return null;
+  }
+
+  Widget _buildBody(BuildContext context, ItemDetailState state) {
+    if (state is ItemDetailInProgress) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    if (state is ItemDetailError) {
+      return Center(
+        child: Text(state.message),
+      );
+    }
+    if (state is ItemDetailSuccess) {
+      return _ItemDetailList(item: state.item);
+    }
+    if (state is ItemEditInitial) {
+      return BlocProvider(
+        create: (context) => ItemFormBloc(
+          itemDetailBloc: BlocProvider.of<ItemDetailBloc>(context),
+        ),
+        child: ItemForm(
+          isEditing: true,
+          item: state.item,
+        ),
+      );
+    }
+    return Container();
+  }
 }
 
-class _ItemDetail extends StatelessWidget {
+class _ItemDetailList extends StatelessWidget {
   final Item item;
-  const _ItemDetail({Key key, @required this.item}) : super(key: key);
+
+  const _ItemDetailList({Key key, @required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

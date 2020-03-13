@@ -59,7 +59,7 @@ class _StorageItemListItem extends StatelessWidget {
           BlocProvider.of<StorageBloc>(context).add(StorageItemDetail(item.id));
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => StorageItemPage(itemId: item.id)),
+            MaterialPageRoute(builder: (_) => ItemDetailPage(itemId: item.id)),
           );
         },
       );
@@ -121,7 +121,7 @@ class _HighlightStorageItemListItem extends StatelessWidget {
           BlocProvider.of<StorageBloc>(context).add(StorageItemDetail(item.id));
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => StorageItemPage(itemId: item.id)),
+            MaterialPageRoute(builder: (_) => ItemDetailPage(itemId: item.id)),
           );
         },
       );
