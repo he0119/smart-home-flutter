@@ -36,149 +36,152 @@ class _ItemFormState extends State<ItemForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<ItemFormBloc, ItemFormState>(
       builder: (context, state) {
-        return Form(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  initialValue: widget.isEditing ? widget.item.name : '',
-                  onChanged: (value) =>
-                      _itemFormBloc.add(NameChanged(name: value)),
-                  decoration: InputDecoration(
-                    labelText: '名称',
+        return Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Form(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    initialValue: widget.isEditing ? widget.item.name : '',
+                    onChanged: (value) =>
+                        _itemFormBloc.add(NameChanged(name: value)),
+                    decoration: InputDecoration(
+                      labelText: '名称',
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(200),
+                    ],
+                    autovalidate: true,
+                    validator: (_) {
+                      return state.isNameValid ? null : '名称不能为空';
+                    },
+                    textInputAction: TextInputAction.next,
+                    focusNode: _nameFocusNode,
+                    onFieldSubmitted: (_) {
+                      _fieldFocusChange(
+                          context, _nameFocusNode, _numberFocusNode);
+                    },
                   ),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(200),
-                  ],
-                  autovalidate: true,
-                  validator: (_) {
-                    return state.isNameValid ? null : '名称不能为空';
-                  },
-                  textInputAction: TextInputAction.next,
-                  focusNode: _nameFocusNode,
-                  onFieldSubmitted: (_) {
-                    _fieldFocusChange(
-                        context, _nameFocusNode, _numberFocusNode);
-                  },
-                ),
-                TextFormField(
-                  initialValue:
-                      widget.isEditing ? widget.item.number.toString() : '1',
-                  onChanged: (value) =>
-                      _itemFormBloc.add(NumberChanged(number: value)),
-                  decoration: InputDecoration(
-                    labelText: '数量',
+                  TextFormField(
+                    initialValue:
+                        widget.isEditing ? widget.item.number.toString() : '1',
+                    onChanged: (value) =>
+                        _itemFormBloc.add(NumberChanged(number: value)),
+                    decoration: InputDecoration(
+                      labelText: '数量',
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                    autovalidate: true,
+                    validator: (_) {
+                      return state.isNumberValid ? null : '数量不能为空';
+                    },
+                    textInputAction: TextInputAction.next,
+                    focusNode: _numberFocusNode,
+                    onFieldSubmitted: (_) {
+                      _fieldFocusChange(
+                          context, _numberFocusNode, _descriptionFocusNode);
+                    },
                   ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-                  autovalidate: true,
-                  validator: (_) {
-                    return state.isNumberValid ? null : '数量不能为空';
-                  },
-                  textInputAction: TextInputAction.next,
-                  focusNode: _numberFocusNode,
-                  onFieldSubmitted: (_) {
-                    _fieldFocusChange(
-                        context, _numberFocusNode, _descriptionFocusNode);
-                  },
-                ),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: '属于',
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: '属于',
+                    ),
+                    value: widget.isEditing ? state.storage : widget.storageId,
+                    items: state.listofStorages
+                        .map((e) => DropdownMenuItem(
+                              value: e.id,
+                              child: Text(e.name),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      _itemFormBloc.add(StorageChanged(storage: value));
+                    },
+                    autovalidate: true,
+                    validator: (_) {
+                      return state.isStorageValid ? null : '名称不能为空';
+                    },
                   ),
-                  value: widget.isEditing ? state.storage : widget.storageId,
-                  items: state.listofStorages
-                      .map((e) => DropdownMenuItem(
-                            value: e.id,
-                            child: Text(e.name),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    _itemFormBloc.add(StorageChanged(storage: value));
-                  },
-                  autovalidate: true,
-                  validator: (_) {
-                    return state.isStorageValid ? null : '名称不能为空';
-                  },
-                ),
-                TextFormField(
-                  initialValue: widget.isEditing ? widget.item.description : '',
-                  onChanged: (value) =>
-                      _itemFormBloc.add(DescriptionChanged(description: value)),
-                  decoration: InputDecoration(
-                    labelText: '备注',
+                  TextFormField(
+                    initialValue: widget.isEditing ? widget.item.description : '',
+                    onChanged: (value) =>
+                        _itemFormBloc.add(DescriptionChanged(description: value)),
+                    decoration: InputDecoration(
+                      labelText: '备注',
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(200),
+                    ],
+                    textInputAction: TextInputAction.next,
+                    focusNode: _descriptionFocusNode,
+                    onFieldSubmitted: (_) {
+                      _fieldFocusChange(
+                          context, _descriptionFocusNode, _priceFocusNode);
+                    },
                   ),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(200),
-                  ],
-                  textInputAction: TextInputAction.next,
-                  focusNode: _descriptionFocusNode,
-                  onFieldSubmitted: (_) {
-                    _fieldFocusChange(
-                        context, _descriptionFocusNode, _priceFocusNode);
-                  },
-                ),
-                TextFormField(
-                  initialValue:
-                      widget.isEditing ? widget.item.price?.toString() : '',
-                  onChanged: (value) =>
-                      _itemFormBloc.add(PriceChanged(price: value)),
-                  decoration: InputDecoration(
-                    labelText: '价格',
+                  TextFormField(
+                    initialValue:
+                        widget.isEditing ? widget.item.price?.toString() : '',
+                    onChanged: (value) =>
+                        _itemFormBloc.add(PriceChanged(price: value)),
+                    decoration: InputDecoration(
+                      labelText: '价格',
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter(RegExp('[0-9\.]'))
+                    ],
+                    autovalidate: true,
+                    validator: (_) {
+                      return state.isPriceValid ? null : '价格最多只能有两位小数且不超过一亿';
+                    },
+                    focusNode: _priceFocusNode,
                   ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    WhitelistingTextInputFormatter(RegExp('[0-9\.]'))
-                  ],
-                  autovalidate: true,
-                  validator: (_) {
-                    return state.isPriceValid ? null : '价格最多只能有两位小数且不超过一亿';
-                  },
-                  focusNode: _priceFocusNode,
-                ),
-                DateTimeField(
-                  format: format,
-                  onShowPicker: (context, currentValue) async {
-                    final date = await showDatePicker(
-                        context: context,
-                        firstDate: DateTime(1900),
-                        initialDate: currentValue ?? DateTime.now(),
-                        lastDate: DateTime(2100));
-                    if (date != null) {
-                      final time = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.fromDateTime(
-                            currentValue ?? DateTime.now()),
-                      );
-                      return DateTimeField.combine(date, time);
-                    } else {
-                      return currentValue;
-                    }
-                  },
-                  initialValue: widget.isEditing
-                      ? widget.item.expirationDate?.toLocal()
-                      : null,
-                  decoration: InputDecoration(
-                    labelText: '有效期至',
+                  DateTimeField(
+                    format: format,
+                    onShowPicker: (context, currentValue) async {
+                      final date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1900),
+                          initialDate: currentValue ?? DateTime.now(),
+                          lastDate: DateTime(2100));
+                      if (date != null) {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                              currentValue ?? DateTime.now()),
+                        );
+                        return DateTimeField.combine(date, time);
+                      } else {
+                        return currentValue;
+                      }
+                    },
+                    initialValue: widget.isEditing
+                        ? widget.item.expirationDate?.toLocal()
+                        : null,
+                    decoration: InputDecoration(
+                      labelText: '有效期至',
+                    ),
+                    onChanged: (value) {
+                      _itemFormBloc
+                          .add(ExpirationDateChanged(expirationDate: value));
+                    },
                   ),
-                  onChanged: (value) {
-                    _itemFormBloc
-                        .add(ExpirationDateChanged(expirationDate: value));
-                  },
-                ),
-                RaisedButton(
-                  onPressed: state.isFormValid ? _onSubmitPressed : null,
-                  child: Text('提交'),
-                ),
-                BlocBuilder<ItemDetailBloc, ItemDetailState>(
-                  builder: (context, state) {
-                    if (state is ItemDetailInProgress) {
-                      return CircularProgressIndicator();
-                    }
-                    return Container();
-                  },
-                ),
-              ],
+                  RaisedButton(
+                    onPressed: state.isFormValid ? _onSubmitPressed : null,
+                    child: Text('提交'),
+                  ),
+                  BlocBuilder<ItemDetailBloc, ItemDetailState>(
+                    builder: (context, state) {
+                      if (state is ItemDetailInProgress) {
+                        return CircularProgressIndicator();
+                      }
+                      return Container();
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );
