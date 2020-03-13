@@ -6,6 +6,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -38,7 +39,19 @@ class HomePage extends StatelessWidget {
       builder: (context, activeTab) {
         return Scaffold(
           appBar: _buildAppBar(context, activeTab),
-          body: _buildBody(context, activeTab),
+          body: BlocListener<SnackBarBloc, SnackBarState>(
+            listener: (context, state) {
+              if (state is SnackBarSuccess &&
+                  state.messageType == MessageType.error) {
+                showErrorSnackBar(context, state.message);
+              }
+              if (state is SnackBarSuccess &&
+                  state.messageType == MessageType.info) {
+                showInfoSnackBar(context, state.message);
+              }
+            },
+            child: _buildBody(context, activeTab),
+          ),
           bottomNavigationBar: TabSelector(
             activeTab: activeTab,
             onTabSelected: (tab) =>

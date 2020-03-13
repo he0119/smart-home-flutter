@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
@@ -63,6 +64,11 @@ class MyApp extends StatelessWidget {
           },
           builder: (context, state) {
             if (state is Authenticated) {
+              BlocProvider.of<SnackBarBloc>(context).add(
+                SnackBarChanged(
+                    message: '登陆成功，欢迎 ${state.currentUser.username}',
+                    messageType: MessageType.info),
+              );
               return HomePage();
             }
             if (state is AppUninitialized) {
