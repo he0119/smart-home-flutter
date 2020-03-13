@@ -44,21 +44,23 @@ class _StorageDetailPage extends StatelessWidget {
         return WillPopScope(
           onWillPop: () async {
             if (state is StorageEditInitial) {
-              BlocProvider.of<StorageDetailBloc>(context).add(
-                StorageDetailChanged(id: state.storage.id),
-              );
+              BlocProvider.of<StorageDetailBloc>(context)
+                  .add(StorageDetailChanged(id: state.storage.id));
               return false;
             }
             if (state is StorageAddInitial) {
-              BlocProvider.of<StorageDetailBloc>(context).add(
-                StorageDetailChanged(id: state.parentId),
-              );
+              if (state.parentId != null) {
+                BlocProvider.of<StorageDetailBloc>(context)
+                    .add(StorageDetailChanged(id: state.parentId));
+              } else {
+                BlocProvider.of<StorageDetailBloc>(context)
+                    .add(StorageDetailRoot());
+              }
               return false;
             }
             if (state is StorageDetailSuccess && state.storage.parent != null) {
-              BlocProvider.of<StorageDetailBloc>(context).add(
-                StorageDetailChanged(id: state.storage.parent.id),
-              );
+              BlocProvider.of<StorageDetailBloc>(context)
+                  .add(StorageDetailChanged(id: state.storage.parent.id));
               return false;
             }
             if (state is StorageDetailSuccess && state.storage.parent == null) {
