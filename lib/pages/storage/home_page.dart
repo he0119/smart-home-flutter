@@ -191,6 +191,7 @@ class _StorageHomePage extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => ItemDetailPage(
+              isAdding: false,
               itemId: item.id,
             ),
           ),

@@ -6,6 +6,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -131,6 +132,19 @@ class HomePage extends StatelessWidget {
           } else {
             throw 'Could not launch $url';
           }
+        },
+      );
+    }
+    if (activeTab == AppTab.storage) {
+      return FloatingActionButton(
+        child: Icon(Icons.storage),
+        onPressed: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => StorageDetailPage(),
+            ),
+          );
         },
       );
     }

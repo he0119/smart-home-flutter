@@ -51,6 +51,14 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         yield ItemDetailError(message: e.message);
       }
     }
+    if (event is ItemAddStarted) {
+      yield ItemDetailInProgress();
+      try {
+        yield ItemAddInitial(storageId: event.storageId);
+      } catch (e) {
+        yield ItemDetailError(message: e.message);
+      }
+    }
 
     if (event is ItemUpdated) {
       try {

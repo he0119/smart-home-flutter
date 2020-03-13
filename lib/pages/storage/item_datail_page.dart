@@ -12,15 +12,26 @@ import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class ItemDetailPage extends StatelessWidget {
   final String itemId;
+  final bool isAdding;
+  final String storageId;
 
-  const ItemDetailPage({Key key, @required this.itemId}) : super(key: key);
+  const ItemDetailPage({
+    Key key,
+    @required this.isAdding,
+    this.itemId,
+    this.storageId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ItemDetailBloc(
         snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
-      )..add(ItemDetailChanged(itemId: itemId)),
+      )..add(
+          isAdding
+              ? ItemAddStarted(storageId: storageId)
+              : ItemDetailChanged(itemId: itemId),
+        ),
       child: _ItemDetailPage(itemId: itemId),
     );
   }
@@ -151,6 +162,11 @@ class _ItemDetailPage extends StatelessWidget {
         title: Text('编辑 ${state.item.name}'),
       );
     }
+    if (state is ItemAddInitial) {
+      return AppBar(
+        title: Text('添加物品'),
+      );
+    }
     return null;
   }
 
@@ -176,6 +192,17 @@ class _ItemDetailPage extends StatelessWidget {
         child: ItemForm(
           isEditing: true,
           item: state.item,
+        ),
+      );
+    }
+    if (state is ItemAddInitial) {
+      return BlocProvider(
+        create: (context) => ItemFormBloc(
+          itemDetailBloc: BlocProvider.of<ItemDetailBloc>(context),
+        ),
+        child: ItemForm(
+          isEditing: false,
+          storageId: state.storageId,
         ),
       );
     }

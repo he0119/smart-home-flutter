@@ -43,6 +43,18 @@ class ItemEditStarted extends ItemDetailEvent {
   String toString() => 'ItemEditStarted { itemId: $itemId }';
 }
 
+class ItemAddStarted extends ItemDetailEvent {
+  final String storageId;
+
+  const ItemAddStarted({@required this.storageId});
+
+  @override
+  List<Object> get props => [storageId];
+
+  @override
+  String toString() => 'ItemAddStarted { storageId: $storageId }';
+}
+
 class ItemUpdated extends ItemDetailEvent {
   final String id;
   final String name;

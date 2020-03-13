@@ -150,7 +150,7 @@ class StorageRepository {
     return listofStorage;
   }
 
-  Future<Storage> storage(String id, {bool cache = true}) async {
+  Future<Storage> storage({@required String id, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(storageQuery),
       variables: {

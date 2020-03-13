@@ -42,4 +42,16 @@ class ItemEditInitial extends ItemDetailState {
   String toString() => 'ItemEditInitial { item: ${item.name} }';
 }
 
+class ItemAddInitial extends ItemDetailState {
+  final String storageId;
+
+  const ItemAddInitial({@required this.storageId});
+
+  @override
+  List<Object> get props => [storageId];
+
+  @override
+  String toString() => 'ItemAddInitial { storageId: $storageId }';
+}
+
 class ItemDeleteSuccess extends ItemDetailState {}
