@@ -4,10 +4,11 @@ trigger:
     - master
     - refs/tags/*
 
+pool:
+  vmImage: 'macOS-latest'
+
 jobs:
   - job: Android
-    pool:
-      vmImage: 'ubuntu-latest'
     steps:
     - task: FlutterInstall@0
       inputs:
