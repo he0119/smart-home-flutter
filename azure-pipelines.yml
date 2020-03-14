@@ -11,12 +11,6 @@ jobs:
   - job: Android
     condition: eq(variables['Build.Reason'], 'PullRequest')
     steps:
-    - task: FlutterInstall@0
-      inputs:
-        channel: beta
-    - task: FlutterTest@0
-      inputs:
-        projectDirectory: $(Build.SourcesDirectory)
     - task: DownloadSecureFile@1
       name: androidKey
       inputs:
@@ -29,8 +23,14 @@ jobs:
         echo Installing android key
         sudo cp $(androidKey.secureFilePath) $(Build.SourcesDirectory)
         sudo cp $(androidKeySettings.secureFilePath) $(Build.SourcesDirectory)/android
-        sed -i "s/storeFile=\(.*\)/storeFile=$(Build.SourcesDirectory)\/key.jks/g" $(Build.SourcesDirectory)/key.jks
+        sed -i "" "s/storeFile=\(.*\)/storeFile=$(Build.SourcesDirectory)\/key.jks/g" $(Build.SourcesDirectory)/key.jks
       displayName: 'InstallingKey'
+    - task: FlutterInstall@0
+      inputs:
+        channel: beta
+    - task: FlutterTest@0
+      inputs:
+        projectDirectory: $(Build.SourcesDirectory)
     - script: $(FlutterToolPath)/flutter build apk --split-per-abi -t .\lib\main_prod.dart
       displayName: 'FlutterBuild'
     - task: CopyFiles@2
