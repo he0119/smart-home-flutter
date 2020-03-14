@@ -4,11 +4,12 @@ trigger:
     - master
     - refs/tags/*
 
+pool:
+  vmImage: 'macOS-latest'
+
 jobs:
   - job: Android
     condition: eq(variables['Build.Reason'], 'PullRequest')
-    pool:
-      vmImage: 'ubuntu-18.04'
     steps:
     - task: DownloadSecureFile@1
       name: androidKey
@@ -24,17 +25,14 @@ jobs:
         echo "s#storeFile=\(.*\)#storeFile=$(Build.SourcesDirectory)/key.jks#g"
         sudo sed "s#storeFile=\(.*\)#storeFile=$(Build.SourcesDirectory)/key.jks#g" $(androidKeySettings.secureFilePath) > $(Build.SourcesDirectory)/android/key.properties
       displayName: 'InstallingKey'
-    - script: |
-        git clone -b dev https://github.com/flutter/flutter.git
-        export FLUTTER_ROOT=`pwd`/flutter/bin
-        export PATH=$FLUTTER_ROOT:$PATH
-        flutter channel beta
-        flutter doctor
-      displayName: 'Flutter Install'
-    - script: flutter test
-      displayName: 'Flutter Test'
-    - script: $(FLUTTER_ROOT)/flutter build apk --split-per-abi -t .\lib\main_prod.dart
-      displayName: 'Flutter Build'
+    - task: FlutterInstall@0
+      inputs:
+        channel: beta
+    - task: FlutterTest@0
+      inputs:
+        projectDirectory: $(Build.SourcesDirectory)
+    - script: $(FlutterToolPath)/flutter build apk --split-per-abi -t .\lib\main_prod.dart
+      displayName: 'FlutterBuild'
     - task: CopyFiles@2
       inputs:
         contents: '**/*.apk'
