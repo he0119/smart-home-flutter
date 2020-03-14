@@ -15,14 +15,14 @@ jobs:
         channel: beta
     - task: FlutterTest@0
       inputs:
-        projectDirectory: $(Agent.BuildDirectory)
+        projectDirectory: $(Build.SourcesDirectory)
     - task: FlutterBuild@0
       inputs:
         debugMode: true
         entryPoint: lib/main_dev.dart
         target: apk
         platform: android-arm64
-        projectDirectory: $(Agent.BuildDirectory)
+        projectDirectory: $(Build.SourcesDirectory)
     - task: CopyFiles@2
       inputs:
         contents: '**/*.apk'
