@@ -1,0 +1,40 @@
+trigger:
+  branches:
+    include:
+    - master
+    - refs/tags/*
+
+pool:
+  vmImage: 'macOS-latest'
+
+jobs:
+  - job: Android
+    condition: contains(variables['Build.SourceBranch'], 'master')
+    steps:
+    - task: DownloadSecureFile@1
+      name: androidKey
+      inputs:
+        secureFile: 'key.jks'
+    - task: DownloadSecureFile@1
+      name: androidKeySettings
+      inputs:
+        secureFile: 'key.properties'
+    - script: |
+        echo Installing android key
+        sudo cp $(androidKey.secureFilePath) $(Build.SourcesDirectory)
+        echo "s#storeFile=\(.*\)#storeFile=$(Build.SourcesDirectory)/key.jks#g"
+        sudo sed "s#storeFile=\(.*\)#storeFile=$(Build.SourcesDirectory)/key.jks#g" $(androidKeySettings.secureFilePath) > $(Build.SourcesDirectory)/android/key.properties
+      displayName: 'InstallingKey'
+    - task: FlutterInstall@0
+      inputs:
+        channel: beta
+    - task: FlutterTest@0
+      inputs:
+        projectDirectory: $(Build.SourcesDirectory)
+    - script: $(FlutterToolPath)/flutter build apk --split-per-abi -t ./lib/main_prod.dart
+      displayName: 'FlutterBuild'
+    - task: CopyFiles@2
+      inputs:
+        contents: '**/*.apk'
+        targetFolder: '$(build.artifactStagingDirectory)'
+    - task: PublishBuildArtifacts@1
