@@ -9,6 +9,7 @@ pool:
 
 jobs:
   - job: Android
+    condition: eq(variables['Build.Reason'], 'PullRequest')
     steps:
     - task: FlutterInstall@0
       inputs:
@@ -16,13 +17,8 @@ jobs:
     - task: FlutterTest@0
       inputs:
         projectDirectory: $(Build.SourcesDirectory)
-    - task: FlutterBuild@0
-      inputs:
-        debugMode: true
-        entryPoint: lib/main_dev.dart
-        target: apk
-        platform: android-arm64
-        projectDirectory: $(Build.SourcesDirectory)
+    - bash: $(FlutterToolPath)/bin/flutter build apk --split-per-abi -t .\lib\main_prod.dart
+      displayName: 'FlutterBuild'
     - task: CopyFiles@2
       inputs:
         contents: '**/*.apk'
