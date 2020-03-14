@@ -21,8 +21,8 @@ jobs:
     - script: |
         echo Installing android key
         sudo cp $(androidKey.secureFilePath) $(Build.SourcesDirectory)
-        echo "s/storeFile=\(.*\)/storeFile=$(Build.SourcesDirectory)\/key.jks/g"
-        sudo sed "s/storeFile=\(.*\)/storeFile=$(Build.SourcesDirectory)\/key.jks/g" $(androidKeySettings.secureFilePath) > $(Build.SourcesDirectory)/android/key.properties
+        echo "s#storeFile=\(.*\)#storeFile=$(Build.SourcesDirectory)/key.jks#g"
+        sudo sed "s#storeFile=\(.*\)#storeFile=$(Build.SourcesDirectory)/key.jks#g" $(androidKeySettings.secureFilePath) > $(Build.SourcesDirectory)/android/key.properties
       displayName: 'InstallingKey'
     - script: |
         git clone -b dev https://github.com/flutter/flutter.git
