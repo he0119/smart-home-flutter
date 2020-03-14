@@ -31,7 +31,7 @@ jobs:
     - task: FlutterTest@0
       inputs:
         projectDirectory: $(Build.SourcesDirectory)
-    - script: $(FlutterToolPath)/flutter build apk --split-per-abi -t .\lib\main_prod.dart
+    - script: $(FlutterToolPath)/flutter build apk --split-per-abi -t ./lib/main_prod.dart
       displayName: 'FlutterBuild'
     - task: CopyFiles@2
       inputs:
