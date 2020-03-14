@@ -17,7 +17,21 @@ jobs:
     - task: FlutterTest@0
       inputs:
         projectDirectory: $(Build.SourcesDirectory)
-    - bash: $(FlutterToolPath)/bin/flutter build apk --split-per-abi -t .\lib\main_prod.dart
+    - task: DownloadSecureFile@1
+      name: androidKey
+      inputs:
+        secureFile: 'key.jks'
+    - task: DownloadSecureFile@1
+      name: androidKeySettings
+      inputs:
+        secureFile: 'key.properties'
+    - script: |
+        echo Installing android key
+        sudo cp $(androidKey.secureFilePath) $(Build.SourcesDirectory)
+        sudo cp $(androidKeySettings.secureFilePath) $(Build.SourcesDirectory)/android
+        sed -i "s/storeFile=\(.*\)/storeFile=$(Build.SourcesDirectory)\/key.jks/g" $(Build.SourcesDirectory)/key.jks
+      displayName: 'InstallingKey'
+    - script: $(FlutterToolPath)/flutter build apk --split-per-abi -t .\lib\main_prod.dart
       displayName: 'FlutterBuild'
     - task: CopyFiles@2
       inputs:
