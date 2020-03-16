@@ -19,7 +19,7 @@ class _SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<_SearchBar> {
   final _textController = TextEditingController();
-  StorageSearchBloc _storageBloc;
+  StorageSearchBloc _storageSearchBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +27,8 @@ class _SearchBarState extends State<_SearchBar> {
       controller: _textController,
       autocorrect: false,
       onChanged: (text) {
-        _storageBloc.add(
-          StorageSearchChanged(text),
+        _storageSearchBloc.add(
+          StorageSearchChanged(key: text),
         );
       },
       decoration: InputDecoration(
@@ -52,12 +52,12 @@ class _SearchBarState extends State<_SearchBar> {
   @override
   void initState() {
     super.initState();
-    _storageBloc = BlocProvider.of<StorageSearchBloc>(context);
+    _storageSearchBloc = BlocProvider.of<StorageSearchBloc>(context);
   }
 
   void _onClearTapped() {
     _textController.text = '';
-    _storageBloc.add(StorageSearchChanged(''));
+    _storageSearchBloc.add(StorageSearchChanged(key: ''));
   }
 }
 

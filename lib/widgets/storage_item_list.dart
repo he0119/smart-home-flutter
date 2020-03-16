@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/blocs/storage/storage_detail/storage_detail_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
@@ -57,16 +58,12 @@ class _StorageItemListItem extends StatelessWidget {
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
         onTap: () async {
-          String storageId = await Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) =>
-                    ItemDetailPage(isAdding: false, itemId: item.id)),
+              builder: (_) => ItemDetailPage(isAdding: false, itemId: item.id),
+            ),
           );
-          if (storageId != null) {
-            BlocProvider.of<StorageDetailBloc>(context)
-                .add(StorageDetailRefreshed(id: storageId));
-          }
         },
       );
     } else {
@@ -123,8 +120,13 @@ class _HighlightStorageItemListItem extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) =>
-                    ItemDetailPage(isAdding: false, itemId: item.id)),
+              builder: (_) => ItemDetailPage(
+                isAdding: false,
+                itemId: item.id,
+                searchKeyword: term,
+                storageSearchBloc: BlocProvider.of<StorageSearchBloc>(context),
+              ),
+            ),
           );
         },
       );

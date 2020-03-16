@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
@@ -10,8 +10,22 @@ part 'item_detail_state.dart';
 
 class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
   final SnackBarBloc snackBarBloc;
+  final StorageHomeBloc storageHomeBloc;
+  final StorageDetailBloc storageDetailBloc;
+  final StorageSearchBloc storageSearchBloc;
+  final String searchKeyword;
 
-  ItemDetailBloc({@required this.snackBarBloc});
+  ItemDetailBloc({
+    @required this.snackBarBloc,
+    this.storageHomeBloc,
+    this.storageDetailBloc,
+    this.storageSearchBloc,
+    this.searchKeyword,
+  }) {
+    if (storageSearchBloc != null) {
+      assert(searchKeyword != null, '请提供搜索关键词');
+    }
+  }
 
   @override
   ItemDetailState get initialState => ItemDetailInProgress();
@@ -79,8 +93,17 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
             type: MessageType.info,
           ),
         );
-        await storageRepository.storage(id: event.storageId, cache: false);
+        // 受影响的页面
+        if (storageDetailBloc != null) {
+          storageDetailBloc.add(StorageDetailChanged(id: event.storageId));
+        }
         await storageRepository.storage(id: event.oldStorageId, cache: false);
+        if (storageHomeBloc != null) {
+          storageHomeBloc.add(StorageHomeChanged(itemType: ItemType.all));
+        }
+        if (storageSearchBloc != null) {
+          storageSearchBloc.add(StorageSearchChanged(key: searchKeyword));
+        }
       } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
