@@ -134,15 +134,19 @@ class _StorageHomePage extends StatelessWidget {
       ),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) =>
-              _buildItemListItem(context, items[index], listType),
+          (BuildContext context, int index) => _buildItemListItem(
+              context,
+              items[index],
+              listType,
+              BlocProvider.of<StorageHomeBloc>(context)),
           childCount: items.length,
         ),
       ),
     );
   }
 
-  ListTile _buildItemListItem(BuildContext context, Item item, ItemType type) {
+  ListTile _buildItemListItem(BuildContext context, Item item, ItemType type,
+      StorageHomeBloc storageHomeBloc) {
     String differenceText;
     switch (type) {
       case ItemType.expired:
@@ -193,6 +197,7 @@ class _StorageHomePage extends StatelessWidget {
             builder: (context) => ItemDetailPage(
               isAdding: false,
               itemId: item.id,
+              storageHomeBloc: storageHomeBloc,
             ),
           ),
         );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/blocs/blocs.dart';
-import 'package:smart_home/blocs/storage/item_detail/item_detail_bloc.dart';
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/blocs/storage/item_form/item_form_bloc.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
@@ -14,19 +14,37 @@ class ItemDetailPage extends StatelessWidget {
   final String itemId;
   final bool isAdding;
   final String storageId;
+  final StorageHomeBloc storageHomeBloc;
+  final StorageDetailBloc storageDetailBloc;
+  final StorageSearchBloc storageSearchBloc;
+  final String searchKeyword;
 
   const ItemDetailPage({
     Key key,
     @required this.isAdding,
     this.itemId,
     this.storageId,
-  }) : super(key: key);
+    this.storageHomeBloc,
+    this.storageDetailBloc,
+    this.storageSearchBloc,
+    this.searchKeyword,
+  })  : assert(isAdding ? storageId != null : itemId != null),
+        assert(
+            storageDetailBloc != null ||
+                storageHomeBloc != null ||
+                storageSearchBloc != null,
+            '必须至少提供一个 BLoC'),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ItemDetailBloc(
         snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
+        storageDetailBloc: storageDetailBloc,
+        storageHomeBloc: storageHomeBloc,
+        storageSearchBloc: storageSearchBloc,
+        searchKeyword: searchKeyword,
       )..add(
           isAdding
               ? ItemAddStarted(storageId: storageId)
