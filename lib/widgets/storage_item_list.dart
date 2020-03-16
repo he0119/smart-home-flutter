@@ -61,7 +61,11 @@ class _StorageItemListItem extends StatelessWidget {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => ItemDetailPage(isAdding: false, itemId: item.id),
+              builder: (_) => ItemDetailPage(
+                isAdding: false,
+                itemId: item.id,
+                storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
+              ),
             ),
           );
         },

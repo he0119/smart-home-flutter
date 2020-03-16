@@ -95,9 +95,16 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         );
         // 受影响的页面
         if (storageDetailBloc != null) {
-          storageDetailBloc.add(StorageDetailChanged(id: event.storageId));
+          if (event.storageId == event.oldStorageId) {
+            storageDetailBloc.add(StorageDetailChanged(id: event.storageId));
+          } else {
+            storageDetailBloc.add(StorageDetailRefreshed(id: event.storageId));
+            await storageRepository.storage(
+              id: event.oldStorageId,
+              cache: false,
+            );
+          }
         }
-        await storageRepository.storage(id: event.oldStorageId, cache: false);
         if (storageHomeBloc != null) {
           storageHomeBloc.add(StorageHomeChanged(itemType: ItemType.all));
         }
