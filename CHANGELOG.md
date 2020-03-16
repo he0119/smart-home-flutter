@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2020-03-16
+
+### Changed
+
+- 调整 SnackBar 的颜色
+
+### Fixed
+
+- 修复上一级界面的物品数据没有自动更新的问题
+
 ## [0.2.0] - 2020-03-13
 
 ### Added
