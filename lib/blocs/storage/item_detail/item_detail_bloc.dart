@@ -132,6 +132,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
           price: event.price,
           expirationDate: event.expirationDate,
         );
+
         yield ItemAddSuccess(item: item);
         snackBarBloc.add(
           SnackBarChanged(
@@ -140,6 +141,9 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
             type: MessageType.info,
           ),
         );
+        // 更新位置详情界面
+        assert(storageDetailBloc != null);
+        storageDetailBloc.add(StorageDetailRefreshed(id: event.storageId));
       } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
@@ -155,6 +159,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
       try {
         await storageRepository.deleteItem(id: event.item.id);
         yield ItemDeleteSuccess(item: event.item);
+
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.storage,
@@ -162,6 +167,16 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
             type: MessageType.info,
           ),
         );
+        if (storageHomeBloc != null) {
+          storageHomeBloc.add(StorageHomeRefreshed(itemType: ItemType.all));
+        }
+        if (storageDetailBloc != null) {
+          storageDetailBloc
+              .add(StorageDetailRefreshed(id: event.item.storage.id));
+        }
+        if (storageSearchBloc != null) {
+          storageSearchBloc.add(StorageSearchChanged(key: searchKeyword));
+        }
       } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(

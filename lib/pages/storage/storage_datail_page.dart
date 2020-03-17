@@ -105,7 +105,8 @@ class _StorageDetailPage extends StatelessWidget {
                   },
                   child: _buildBody(context, state)),
             ),
-            floatingActionButton: _buildFloatingActionButton(context, state),
+            floatingActionButton: _buildFloatingActionButton(
+                context, state, BlocProvider.of<StorageDetailBloc>(context)),
           ),
         );
       },
@@ -236,8 +237,8 @@ class _StorageDetailPage extends StatelessWidget {
                         )
                       : InkWell(
                           onTap: () {
-                            BlocProvider.of<StorageDetailBloc>(context)
-                                .add(StorageDetailChanged(id: paths[index - 1].id));
+                            BlocProvider.of<StorageDetailBloc>(context).add(
+                                StorageDetailChanged(id: paths[index - 1].id));
                           },
                           child: Container(
                             height: 40,
@@ -330,24 +331,21 @@ class _StorageDetailPage extends StatelessWidget {
     return Container();
   }
 
-  Widget _buildFloatingActionButton(
-      BuildContext context, StorageDetailState state) {
+  Widget _buildFloatingActionButton(BuildContext context,
+      StorageDetailState state, StorageDetailBloc storageDetailBloc) {
     if (state is StorageDetailSuccess) {
       return FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
-          String storageId = await Navigator.of(context).push(
+          Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => ItemDetailPage(
                 isAdding: true,
                 storageId: state.storage.id,
+                storageDetailBloc: storageDetailBloc,
               ),
             ),
           );
-          if (storageId != null) {
-            BlocProvider.of<StorageDetailBloc>(context)
-                .add(StorageDetailRefreshed(id: storageId));
-          }
         },
       );
     }
