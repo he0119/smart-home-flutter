@@ -236,8 +236,8 @@ class _StorageDetailPage extends StatelessWidget {
                         )
                       : InkWell(
                           onTap: () {
-                            BlocProvider.of<StorageDetailBloc>(context)
-                                .add(StorageDetailChanged(id: paths[index - 1].id));
+                            BlocProvider.of<StorageDetailBloc>(context).add(
+                                StorageDetailChanged(id: paths[index - 1].id));
                           },
                           child: Container(
                             height: 40,
@@ -333,21 +333,21 @@ class _StorageDetailPage extends StatelessWidget {
   Widget _buildFloatingActionButton(
       BuildContext context, StorageDetailState state) {
     if (state is StorageDetailSuccess) {
+      //ignore: close_sinks
+      final StorageDetailBloc storageDetailBloc =
+          BlocProvider.of<StorageDetailBloc>(context);
       return FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
-          String storageId = await Navigator.of(context).push(
+          Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => ItemDetailPage(
                 isAdding: true,
                 storageId: state.storage.id,
+                storageDetailBloc: storageDetailBloc,
               ),
             ),
           );
-          if (storageId != null) {
-            BlocProvider.of<StorageDetailBloc>(context)
-                .add(StorageDetailRefreshed(id: storageId));
-          }
         },
       );
     }
