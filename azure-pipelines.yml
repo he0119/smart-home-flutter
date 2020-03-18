@@ -8,8 +8,18 @@ pool:
   vmImage: 'macOS-latest'
 
 jobs:
+  - job: Test
+    steps:
+    - task: FlutterInstall@0
+      inputs:
+        channel: beta
+    - task: FlutterTest@0
+      inputs:
+        projectDirectory: $(Build.SourcesDirectory)
+
   - job: Android
-    condition: contains(variables['Build.SourceBranch'], 'master')
+    dependsOn: Test
+    condition: contains(variables['Build.SourceBranch'], 'tags')
     steps:
     - task: DownloadSecureFile@1
       name: androidKey
@@ -28,13 +38,27 @@ jobs:
     - task: FlutterInstall@0
       inputs:
         channel: beta
-    - task: FlutterTest@0
-      inputs:
-        projectDirectory: $(Build.SourcesDirectory)
     - script: $(FlutterToolPath)/flutter build apk --split-per-abi -t ./lib/main_prod.dart
-      displayName: 'FlutterBuild'
-    - task: CopyFiles@2
-      inputs:
-        contents: '**/*.apk'
-        targetFolder: '$(build.artifactStagingDirectory)'
+      displayName: 'FlutterBuild APK'
     - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(System.DefaultWorkingDirectory)/build/app/outputs/apk/release'
+        artifactName: apk
+      displayName: 'Publish APK'
+
+  - job: Web
+    dependsOn: Test
+    condition: or(contains(variables['Build.SourceBranch'], 'master'), contains(variables['Build.SourceBranch'], 'tags'))
+    steps:
+    - task: FlutterInstall@0
+      inputs:
+        channel: beta
+    - script: $(FlutterToolPath)/flutter config --enable-web
+      displayName: 'EnableWeb'
+    - script: $(FlutterToolPath)/flutter build web -t ./lib/main_prod.dart
+      displayName: 'FlutterBuild Web'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(System.DefaultWorkingDirectory)/build/web'
+        artifactName: web
+      displayName: 'Publish Web'
