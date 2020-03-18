@@ -19,6 +19,7 @@ jobs:
 
   - job: Android
     dependsOn: Test
+    condition: contains(variables['Build.SourceBranch'], 'tags')
     steps:
     - task: DownloadSecureFile@1
       name: androidKey
@@ -47,6 +48,7 @@ jobs:
 
   - job: Web
     dependsOn: Test
+    condition: or(contains(variables['Build.SourceBranch'], 'master'), contains(variables['Build.SourceBranch'], 'tags'))
     steps:
     - task: FlutterInstall@0
       inputs:
