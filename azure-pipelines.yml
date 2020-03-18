@@ -9,7 +9,6 @@ pool:
 
 jobs:
   - job: Android
-    condition: contains(variables['Build.SourceBranch'], 'master')
     steps:
     - task: DownloadSecureFile@1
       name: androidKey
