@@ -32,9 +32,16 @@ jobs:
       inputs:
         projectDirectory: $(Build.SourcesDirectory)
     - script: $(FlutterToolPath)/flutter build apk --split-per-abi -t ./lib/main_prod.dart
-      displayName: 'FlutterBuild'
-    - task: CopyFiles@2
-      inputs:
-        contents: '**/*.apk'
-        targetFolder: '$(build.artifactStagingDirectory)'
+      displayName: 'FlutterBuild APK'
     - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(System.DefaultWorkingDirectory)/build/app/outputs/apk/release'
+        artifactName: apk
+      displayName: 'Publish APK'
+    - script: $(FlutterToolPath)/flutter build web -t ./lib/main_prod.dart
+      displayName: 'FlutterBuild Web'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(System.DefaultWorkingDirectory)/build/web'
+        artifactName: web
+      displayName: 'Publish Web'
