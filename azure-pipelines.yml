@@ -8,7 +8,17 @@ pool:
   vmImage: 'macOS-latest'
 
 jobs:
+  - job: Test
+    steps:
+    - task: FlutterInstall@0
+      inputs:
+        channel: beta
+    - task: FlutterTest@0
+      inputs:
+        projectDirectory: $(Build.SourcesDirectory)
+
   - job: Android
+    dependsOn: Test
     steps:
     - task: DownloadSecureFile@1
       name: androidKey
@@ -24,12 +34,6 @@ jobs:
         echo "s#storeFile=\(.*\)#storeFile=$(Build.SourcesDirectory)/key.jks#g"
         sudo sed "s#storeFile=\(.*\)#storeFile=$(Build.SourcesDirectory)/key.jks#g" $(androidKeySettings.secureFilePath) > $(Build.SourcesDirectory)/android/key.properties
       displayName: 'InstallingKey'
-    - task: FlutterInstall@0
-      inputs:
-        channel: beta
-    - task: FlutterTest@0
-      inputs:
-        projectDirectory: $(Build.SourcesDirectory)
     - script: $(FlutterToolPath)/flutter build apk --split-per-abi -t ./lib/main_prod.dart
       displayName: 'FlutterBuild APK'
     - task: PublishBuildArtifacts@1
@@ -37,6 +41,12 @@ jobs:
         PathtoPublish: '$(System.DefaultWorkingDirectory)/build/app/outputs/apk/release'
         artifactName: apk
       displayName: 'Publish APK'
+
+  - job: Web
+    dependsOn: Test
+    steps:
+    - script: $(FlutterToolPath)/flutter config --enable-web
+      displayName: 'EnableWeb'
     - script: $(FlutterToolPath)/flutter build web -t ./lib/main_prod.dart
       displayName: 'FlutterBuild Web'
     - task: PublishBuildArtifacts@1
