@@ -5,7 +5,7 @@ trigger:
     - refs/tags/*
 
 variables:
-  flutter_version: '1.15.17'
+  flutter_version: '1.14.6'
 
 pool:
   vmImage: 'macOS-latest'
