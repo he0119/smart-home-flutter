@@ -105,8 +105,7 @@ class _StorageDetailPage extends StatelessWidget {
                   },
                   child: _buildBody(context, state)),
             ),
-            floatingActionButton: _buildFloatingActionButton(
-                context, state, BlocProvider.of<StorageDetailBloc>(context)),
+            floatingActionButton: _buildFloatingActionButton(context, state),
           ),
         );
       },
@@ -331,9 +330,12 @@ class _StorageDetailPage extends StatelessWidget {
     return Container();
   }
 
-  Widget _buildFloatingActionButton(BuildContext context,
-      StorageDetailState state, StorageDetailBloc storageDetailBloc) {
+  Widget _buildFloatingActionButton(
+      BuildContext context, StorageDetailState state) {
     if (state is StorageDetailSuccess) {
+      //ignore: close_sinks
+      final StorageDetailBloc storageDetailBloc =
+          BlocProvider.of<StorageDetailBloc>(context);
       return FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
