@@ -4,6 +4,9 @@ trigger:
     - master
     - refs/tags/*
 
+variables:
+  flutter_version: '1.15.17'
+
 pool:
   vmImage: 'macOS-latest'
 
@@ -13,6 +16,8 @@ jobs:
     - task: FlutterInstall@0
       inputs:
         channel: beta
+        version: custom
+        customVersion: $(flutter_version)
     - task: FlutterTest@0
       inputs:
         projectDirectory: $(Build.SourcesDirectory)
@@ -38,6 +43,8 @@ jobs:
     - task: FlutterInstall@0
       inputs:
         channel: beta
+        version: custom
+        customVersion: $(flutter_version)
     - script: $(FlutterToolPath)/flutter build apk --split-per-abi -t ./lib/main_prod.dart
       displayName: 'FlutterBuild APK'
     - task: PublishBuildArtifacts@1
@@ -53,6 +60,8 @@ jobs:
     - task: FlutterInstall@0
       inputs:
         channel: beta
+        version: custom
+        customVersion: $(flutter_version)
     - script: $(FlutterToolPath)/flutter config --enable-web
       displayName: 'EnableWeb'
     - script: $(FlutterToolPath)/flutter build web -t ./lib/main_prod.dart
