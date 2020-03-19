@@ -24,7 +24,7 @@ jobs:
 
   - job: Android
     dependsOn: Test
-    condition: contains(variables['Build.SourceBranch'], 'tags')
+    condition: or(contains(variables['Build.SourceBranch'], 'master'), contains(variables['Build.SourceBranch'], 'tags'))
     steps:
     - task: DownloadSecureFile@1
       name: androidKey
