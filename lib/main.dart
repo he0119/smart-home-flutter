@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
@@ -11,12 +12,13 @@ import 'package:smart_home/pages/splash_page.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AppConfig _config = AppConfig.of(context);
+    Intl.defaultLocale = 'zh';
+    AppConfig config = AppConfig.of(context);
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthenticationBloc>(
           create: (BuildContext context) =>
-              AuthenticationBloc()..add(AppStarted(_config.apiUrl)),
+              AuthenticationBloc()..add(AppStarted(config.apiUrl)),
         ),
         BlocProvider<SnackBarBloc>(
           create: (BuildContext context) => SnackBarBloc(),
@@ -54,7 +56,7 @@ class MyApp extends StatelessWidget {
                       onPressed: () {
                         Navigator.pop(context);
                         BlocProvider.of<AuthenticationBloc>(context)
-                            .add(AppStarted(_config.apiUrl));
+                            .add(AppStarted(config.apiUrl));
                       },
                     )
                   ],

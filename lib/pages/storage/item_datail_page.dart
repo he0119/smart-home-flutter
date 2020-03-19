@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/blocs/storage/item_form/item_form_bloc.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/item_form.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
@@ -268,9 +268,7 @@ class _ItemDetailList extends StatelessWidget {
         ListTile(
           title: Text('有效期至'),
           trailing: Text(item.expirationDate != null
-              ? DateFormat.yMMMd('zh')
-                  .add_jm()
-                  .format(item.expirationDate.toLocal())
+              ? item.expirationDate.toLocalStr()
               : ''),
         ),
         ListTile(
@@ -280,15 +278,13 @@ class _ItemDetailList extends StatelessWidget {
         ListTile(
           title: Text('更新时间'),
           trailing: Text(item.updateDate != null
-              ? DateFormat.yMMMd('zh')
-                  .add_jm()
-                  .format(item.updateDate.toLocal())
+              ? item.updateDate.toLocalStr()
               : ''),
         ),
         ListTile(
           title: Text('添加时间'),
           trailing: Text(item.dateAdded != null
-              ? DateFormat.yMMMd('zh').add_jm().format(item.dateAdded.toLocal())
+              ? item.dateAdded.toLocalStr()
               : ''),
         ),
       ],
