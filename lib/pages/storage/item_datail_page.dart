@@ -267,9 +267,7 @@ class _ItemDetailList extends StatelessWidget {
         ),
         ListTile(
           title: Text('有效期至'),
-          trailing: Text(item.expirationDate != null
-              ? item.expirationDate.toLocalStr()
-              : ''),
+          trailing: Text(item.expirationDate?.toLocalStr() ?? ''),
         ),
         ListTile(
           title: Text('录入者'),
@@ -277,15 +275,11 @@ class _ItemDetailList extends StatelessWidget {
         ),
         ListTile(
           title: Text('更新时间'),
-          trailing: Text(item.updateDate != null
-              ? item.updateDate.toLocalStr()
-              : ''),
+          trailing: Text(item.updateDate?.toLocalStr() ?? ''),
         ),
         ListTile(
           title: Text('添加时间'),
-          trailing: Text(item.dateAdded != null
-              ? item.dateAdded.toLocalStr()
-              : ''),
+          trailing: Text(item.dateAdded?.toLocalStr() ?? ''),
         ),
       ],
     );
