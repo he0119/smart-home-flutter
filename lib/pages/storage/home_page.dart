@@ -148,13 +148,13 @@ class _StorageHomePage extends StatelessWidget {
     switch (type) {
       case ItemType.expired:
       case ItemType.nearExpired:
-        differenceText = '（${DateTime.now().differenceStr(item.expirationDate)}）';
+        differenceText = '（${item.expirationDate.differenceFromNowStr()}）';
         break;
       case ItemType.recentlyAdded:
-        differenceText = '（${DateTime.now().differenceStr(item.dateAdded)}）';
+        differenceText = '（${item.dateAdded.differenceFromNowStr()}）';
         break;
       case ItemType.recentlyUpdated:
-        differenceText = '（${DateTime.now().differenceStr(item.updateDate)}）';
+        differenceText = '（${item.updateDate.differenceFromNowStr()}）';
         break;
       case ItemType.all:
         break;

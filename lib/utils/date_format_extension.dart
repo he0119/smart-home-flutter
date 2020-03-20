@@ -6,6 +6,7 @@ extension LocalDatetime on DateTime {
     return DateFormat.yMMMd().add_jm().format(this.toLocal());
   }
 
+  /// 获得本地习惯的时间差距表示
   String differenceStr(DateTime other) {
     DateTime localNow = this.toLocal();
     DateTime localOther = other.toLocal();
@@ -31,7 +32,7 @@ extension LocalDatetime on DateTime {
         return '${difference.inHours.abs()} 小时后';
       }
     }
-    // 不在一天
+    // 不在同一天
     DateTime nowDay = DateTime(localNow.year, localNow.month, localNow.day);
     DateTime otherDay =
         DateTime(localOther.year, localOther.month, localOther.day);
@@ -50,5 +51,10 @@ extension LocalDatetime on DateTime {
       return '${differenceDay.abs()} 天后';
     }
     return '';
+  }
+
+  /// 时间与现在的差距
+  String differenceFromNowStr() {
+    return DateTime.now().differenceStr(this);
   }
 }
