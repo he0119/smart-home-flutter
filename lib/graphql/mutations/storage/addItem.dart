@@ -7,7 +7,6 @@ mutation addItem($input: AddItemInput!) {
       name
       number
       storage {
-        __typename
         id
         name
       }

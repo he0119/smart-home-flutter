@@ -4,6 +4,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:smart_home/blocs/storage/storage_home/storage_home_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
+import 'package:smart_home/utils/date_format_extension.dart';
 
 class StorageHomePage extends StatelessWidget {
   const StorageHomePage({Key key}) : super(key: key);
@@ -146,26 +147,14 @@ class _StorageHomePage extends StatelessWidget {
     String differenceText;
     switch (type) {
       case ItemType.expired:
-        final difference =
-            DateTime.now().difference(item.expirationDate).inDays;
-        differenceText =
-            difference == 0 ? '（刚过期）' : '（过期${difference.toString()}天）';
-        break;
       case ItemType.nearExpired:
-        final difference =
-            item.expirationDate.difference(DateTime.now()).inDays;
-        differenceText =
-            difference == 0 ? '（不到1天）' : '（还有${difference.toString()}天）';
+        differenceText = '（${item.expirationDate.differenceFromNowStr()}）';
         break;
       case ItemType.recentlyAdded:
-        final difference = DateTime.now().difference(item.dateAdded).inDays;
-        differenceText =
-            difference == 0 ? '（今天）' : '（${difference.toString()}天前）';
+        differenceText = '（${item.dateAdded.differenceFromNowStr()}）';
         break;
       case ItemType.recentlyUpdated:
-        final difference = DateTime.now().difference(item.updateDate).inDays;
-        differenceText =
-            difference == 0 ? '（今天）' : '（${difference.toString()}天前）';
+        differenceText = '（${item.updateDate.differenceFromNowStr()}）';
         break;
       case ItemType.all:
         break;

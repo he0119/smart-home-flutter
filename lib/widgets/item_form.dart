@@ -25,7 +25,7 @@ class ItemForm extends StatefulWidget {
 class _ItemFormState extends State<ItemForm> {
   ItemFormBloc _itemFormBloc;
 
-  final format = DateFormat.yMMMd('zh').add_jm();
+  final format = DateFormat.yMMMd().add_jm();
 
   FocusNode _nameFocusNode;
   FocusNode _numberFocusNode;
