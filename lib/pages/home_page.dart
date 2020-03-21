@@ -40,22 +40,34 @@ class HomePage extends StatelessWidget {
       builder: (context, activeTab) {
         return Scaffold(
           appBar: _buildAppBar(context, activeTab),
-          body: BlocListener<SnackBarBloc, SnackBarState>(
-            condition: (previous, current) {
-              if (current is SnackBarSuccess &&
-                  current.position == SnackBarPosition.home) {
-                return true;
-              }
-              return false;
-            },
-            listener: (context, state) {
-              if (state is SnackBarSuccess && state.type == MessageType.error) {
-                showErrorSnackBar(context, state.message);
-              }
-              if (state is SnackBarSuccess && state.type == MessageType.info) {
-                showInfoSnackBar(context, state.message);
-              }
-            },
+          body: MultiBlocListener(
+            listeners: [
+              BlocListener<SnackBarBloc, SnackBarState>(
+                condition: (previous, current) {
+                  if (current is SnackBarSuccess &&
+                      current.position == SnackBarPosition.home) {
+                    return true;
+                  }
+                  return false;
+                },
+                listener: (context, state) {
+                  if (state is SnackBarSuccess &&
+                      state.type == MessageType.error) {
+                    showErrorSnackBar(context, state.message);
+                  }
+                  if (state is SnackBarSuccess &&
+                      state.type == MessageType.info) {
+                    showInfoSnackBar(context, state.message);
+                  }
+                },
+              ),
+              BlocListener<UpdateBloc, UpdateState>(
+                listener: (context, state) {
+                  if (state is UpdateSuccess)
+                    showInfoSnackBar(context, state.needUpdate.toString());
+                },
+              ),
+            ],
             child: _buildBody(context, activeTab),
           ),
           bottomNavigationBar: TabSelector(
