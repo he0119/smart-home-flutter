@@ -20,6 +20,9 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) =>
               AuthenticationBloc()..add(AppStarted(config.apiUrl)),
         ),
+        BlocProvider<UpdateBloc>(
+          create: (BuildContext context) => UpdateBloc()..add(UpdateStarted()),
+        ),
         BlocProvider<SnackBarBloc>(
           create: (BuildContext context) => SnackBarBloc(),
         ),
