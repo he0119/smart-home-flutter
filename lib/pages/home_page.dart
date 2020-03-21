@@ -63,8 +63,34 @@ class HomePage extends StatelessWidget {
               ),
               BlocListener<UpdateBloc, UpdateState>(
                 listener: (context, state) {
-                  if (state is UpdateSuccess)
-                    showInfoSnackBar(context, state.needUpdate.toString());
+                  if (state is UpdateSuccess && state.needUpdate) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text('更新'),
+                        content: Text('发现新版本（${state.version}）'),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text('稍后'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          FlatButton(
+                            child: Text('下载'),
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              if (await canLaunch(state.url)) {
+                                await launch(state.url);
+                              } else {
+                                throw 'Could not launch ${state.url}';
+                              }
+                            },
+                          )
+                        ],
+                      ),
+                    );
+                  }
                 },
               ),
             ],

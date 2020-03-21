@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:smart_home/repositories/version_repository.dart';
+import 'package:version/version.dart';
 
 part 'update_event.dart';
 part 'update_state.dart';
@@ -19,9 +20,11 @@ class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
       bool needUpdate = await versionRepository.needUpdate();
       if (needUpdate) {
         String url = await versionRepository.updateUrl();
-        yield UpdateSuccess(needUpdate: needUpdate, url: url);
+        Version version = await versionRepository.onlineVersion;
+        yield UpdateSuccess(needUpdate: needUpdate, url: url, version: version);
+      } else {
+        yield UpdateSuccess(needUpdate: needUpdate);
       }
-      yield UpdateSuccess(needUpdate: needUpdate);
     }
   }
 }
