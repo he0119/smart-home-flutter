@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -16,7 +16,8 @@ class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
   Stream<UpdateState> mapEventToState(
     UpdateEvent event,
   ) async* {
-    if (event is UpdateStarted) {
+    // 暂时只支持 Android
+    if (event is UpdateStarted && Platform.isAndroid) {
       bool needUpdate = await versionRepository.needUpdate();
       if (needUpdate) {
         String url = await versionRepository.updateUrl();
