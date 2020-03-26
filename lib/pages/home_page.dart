@@ -93,6 +93,23 @@ class HomePage extends StatelessWidget {
                   }
                 },
               ),
+              BlocListener<TabBloc, AppTab>(
+                condition: (previous, current) {
+                  // 仅在 Web 上自动转跳到对应网页
+                  if (!kIsWeb) {
+                    return false;
+                  }
+                  return true;
+                },
+                listener: (context, activeTab) async {
+                  if (activeTab == AppTab.blog) {
+                    await _launchUrl('https://hehome.xyz');
+                  }
+                  if (activeTab == AppTab.iot) {
+                    await _launchUrl('https://iot.hehome.xyz');
+                  }
+                },
+              )
             ],
             child: _buildBody(context, activeTab),
           ),
@@ -142,18 +159,34 @@ class HomePage extends StatelessWidget {
       return StorageHomePage();
     }
     if (activeTab == AppTab.iot) {
-      return WebView(
-        key: UniqueKey(),
-        initialUrl: 'https://iot.hehome.xyz',
-        javascriptMode: JavascriptMode.unrestricted,
-      );
+      const String url = 'https://iot.hehome.xyz';
+      return !kIsWeb
+          ? WebView(
+              key: UniqueKey(),
+              initialUrl: url,
+              javascriptMode: JavascriptMode.unrestricted,
+            )
+          : Center(
+              child: RaisedButton(
+                onPressed: () => _launchUrl(url),
+                child: Text('IOT'),
+              ),
+            );
     }
     if (activeTab == AppTab.blog) {
-      return WebView(
-        key: UniqueKey(),
-        initialUrl: 'https://hehome.xyz',
-        javascriptMode: JavascriptMode.unrestricted,
-      );
+      const String url = 'https://hehome.xyz';
+      return !kIsWeb
+          ? WebView(
+              key: UniqueKey(),
+              initialUrl: url,
+              javascriptMode: JavascriptMode.unrestricted,
+            )
+          : Center(
+              child: RaisedButton(
+                onPressed: () => _launchUrl(url),
+                child: Text('博客'),
+              ),
+            );
     }
     return Center(
       child: Text(
@@ -170,11 +203,7 @@ class HomePage extends StatelessWidget {
         child: Icon(Icons.open_in_new),
         onPressed: () async {
           const url = 'https://hehome.xyz';
-          if (await canLaunch(url)) {
-            await launch(url);
-          } else {
-            throw 'Could not launch $url';
-          }
+          await _launchUrl(url);
         },
       );
     }
@@ -192,5 +221,13 @@ class HomePage extends StatelessWidget {
       );
     }
     return null;
+  }
+
+  Future _launchUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
