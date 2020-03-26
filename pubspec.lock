@@ -286,14 +286,14 @@ packages:
       name: graphql
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.1-beta.2"
+    version: "3.0.1-beta.3"
   graphql_flutter:
     dependency: "direct main"
     description:
       name: graphql_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.1-beta.2"
+    version: "3.0.1-beta.3"
   graphs:
     dependency: transitive
     description:
