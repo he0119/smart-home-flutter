@@ -3,6 +3,12 @@ import 'package:smart_home/repositories/user_repository.dart';
 
 GraphQLApiClient graphqlApiClient = GraphQLApiClient();
 
+class GraphQLApiException implements Exception {
+  final String message;
+
+  GraphQLApiException({this.message});
+}
+
 class GraphQLApiClient {
   static GraphQLClient _client;
 
@@ -13,17 +19,17 @@ class GraphQLApiClient {
 
   void _handleErrors(OperationException errors) {
     if (errors.clientException != null) {
-      throw Exception('网络连接出错，请稍后再试');
+      throw GraphQLApiException(message: '网络连接出错，请稍后再试');
     }
     for (GraphQLError error in errors.graphqlErrors) {
       String message = error.message.toLowerCase();
       // Token 格式出错，直接清除 Token
       if (message.contains('error decoding signature')) {
         userRepository.clearToken();
-        throw Exception('认证出错，请稍后再试');
+        throw GraphQLApiException(message: '认证出错，请稍后再试');
       }
-      throw Exception(errors.graphqlErrors[0].message);
     }
+    throw GraphQLApiException(message: errors.graphqlErrors[0].message);
   }
 
   bool initailize(String url) {

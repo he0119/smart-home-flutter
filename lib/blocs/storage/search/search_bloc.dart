@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
 part 'search_events.dart';
@@ -27,7 +28,7 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
           storages: results[1],
           term: event.key,
         );
-      } catch (e) {
+      } on GraphQLApiException catch (e) {
         yield StorageSearchError(e.message);
       }
     }
