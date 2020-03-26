@@ -6,11 +6,6 @@ mutation updateTopic($input: UpdateTopicInput!) {
       id
       title
       description
-      isOpen
-      user {
-        username
-      }
-      dateCreated
       dateModified
     }
   }

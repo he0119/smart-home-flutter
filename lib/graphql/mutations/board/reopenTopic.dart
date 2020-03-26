@@ -4,13 +4,7 @@ mutation reopenTopic($input: ReopenTopicInput!) {
     topic {
       __typename
       id
-      title
-      description
       isOpen
-      user {
-        username
-      }
-      dateCreated
       dateModified
     }
   }

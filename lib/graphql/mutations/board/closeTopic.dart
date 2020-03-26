@@ -4,13 +4,7 @@ mutation closeTopic($input: CloseTopicInput!) {
     topic {
       __typename
       id
-      title
-      description
       isOpen
-      user {
-        username
-      }
-      dateCreated
       dateModified
     }
   }

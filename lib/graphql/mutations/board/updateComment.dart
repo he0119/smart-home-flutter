@@ -5,17 +5,7 @@ mutation updateComment($input: UpdateCommentInput!) {
       __typename
       id
       body
-      user {
-        username
-      }
-      dateCreated
       dateModified
-      parent {
-        id
-      }
-      replyTo {
-        username
-      }
     }
   }
 }
