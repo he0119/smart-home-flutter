@@ -76,7 +76,7 @@ class VersionRepository {
         'https://api.github.com/repos/he0119/smart-home-flutter/releases/latest';
     var response = await http.get(url);
     Map<String, dynamic> json = jsonDecode(response.body);
-    String versionName = json['name'];
+    String versionName = json['tag_name'];
     return Version.parse(versionName.replaceAll('v', ''));
   }
 }
