@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/pages/board/home_page.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
@@ -155,12 +156,7 @@ class HomePage extends StatelessWidget {
         javascriptMode: JavascriptMode.unrestricted,
       );
     }
-    return Center(
-      child: Text(
-        'Index 2: 留言板',
-        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-      ),
-    );
+    return BoardHomePage();
   }
 
   FloatingActionButton _buildFloatingActionButton(
