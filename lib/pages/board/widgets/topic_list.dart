@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_home/models/board.dart';
+import 'package:smart_home/pages/board/topic_detail_page.dart';
 
 class TopicList extends StatelessWidget {
   final List<Topic> topics;
@@ -23,7 +24,11 @@ class TopicList extends StatelessWidget {
         child: ListTile(
           title: Text(topic.title),
           subtitle: Text(topic.description),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => TopicDetailPage(topicId: topic.id),
+            ));
+          },
         ),
       ),
     );

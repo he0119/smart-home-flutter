@@ -1,5 +1,5 @@
 const String commentsQuery = r"""
-query comments($topicId: Int!, $number: Int) {
+query comments($topicId: ID!, $number: Int) {
   comments(topicId: $topicId, number: $number) {
     __typename
     id

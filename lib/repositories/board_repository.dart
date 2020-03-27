@@ -8,6 +8,28 @@ import 'package:smart_home/repositories/graphql_api_client.dart';
 BoardRepository boardRepository = BoardRepository();
 
 class BoardRepository {
+  Future<List<dynamic>> topicDetail({
+    @required String topicId,
+    int number,
+    bool cache = true,
+  }) async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(topicDetailQuery),
+      variables: {
+        'topicId': topicId,
+        'number': number,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final results = await graphqlApiClient.query(options);
+    final dynamic topic = results.data['topic'];
+    final Topic topicObject = Topic.fromJson(topic);
+    final List<dynamic> comments = results.data['comments'];
+    final List<Comment> listofComments =
+        comments.map((dynamic e) => Comment.fromJson(e)).toList();
+    return [topicObject, listofComments];
+  }
+
   Future<List<Topic>> topics({int number, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(topicsQuery),
