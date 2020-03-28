@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2020-03-26
+
+### Fixed
+
+- 网页版无法使用 `WebView`
+- 网页版不需要检查应用更新
+
 ## [0.3.0] - 2020-03-21
 
 ### Added
@@ -69,8 +76,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.3.1...HEAD
 
+[0.3.1]: https://github.com/he0119/smart-home-flutter/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/he0119/smart-home-flutter/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/he0119/smart-home-flutter/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/he0119/smart-home-flutter/compare/v0.2.0...v0.2.1
