@@ -179,7 +179,7 @@ class _StorageDetailPage extends StatelessWidget {
                   context: context,
                   builder: (_) => AlertDialog(
                     title: Text('删除 ${state.storage.name}'),
-                    content: Text('你确认要删除该物品么？'),
+                    content: Text('你确认要删除该位置么？'),
                     actions: <Widget>[
                       FlatButton(
                         child: Text('否'),
