@@ -4,6 +4,8 @@ import 'package:smart_home/blocs/board/topic_detail/topic_detail_bloc.dart';
 import 'package:smart_home/pages/board/widgets/comment_list.dart';
 
 class TopicDetailPage extends StatelessWidget {
+  static const routeName = '/topic';
+
   final String topicId;
 
   const TopicDetailPage({Key key, @required this.topicId}) : super(key: key);

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/pages/board/topic_detail_page.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
@@ -44,7 +45,8 @@ class MyApp extends StatelessWidget {
         supportedLocales: [
           const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
         ],
-        title: '智慧家庭',
+        title: config.appName,
+        onGenerateRoute: _generateRoute,
         home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
             if (state is AuthenticationError) {
@@ -86,4 +88,15 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+Route<dynamic> _generateRoute(RouteSettings settings) {
+  if (settings.name == TopicDetailPage.routeName) {
+    return MaterialPageRoute(
+      builder: (context) {
+        return TopicDetailPage(topicId: settings.arguments);
+      },
+    );
+  }
+  return null;
 }

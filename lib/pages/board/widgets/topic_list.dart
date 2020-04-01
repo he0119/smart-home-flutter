@@ -25,9 +25,10 @@ class TopicList extends StatelessWidget {
           title: Text(topic.title),
           subtitle: Text(topic.description),
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => TopicDetailPage(topicId: topic.id),
-            ));
+            Navigator.of(context).pushNamed(
+              TopicDetailPage.routeName,
+              arguments: topic.id,
+            );
           },
         ),
       ),
