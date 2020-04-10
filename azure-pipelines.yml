@@ -5,7 +5,7 @@ trigger:
     - refs/tags/*
 
 variables:
-  flutter_version: '1.14.6'
+  flutter_version: '1.17.0-dev.3.1'
 
 pool:
   vmImage: 'macOS-latest'
@@ -13,14 +13,13 @@ pool:
 jobs:
   - job: Test
     steps:
-    - task: FlutterInstall@0
+    - task: Install-Flutter@0
       inputs:
         channel: beta
         version: custom
         customVersion: $(flutter_version)
-    - task: FlutterTest@0
-      inputs:
-        projectDirectory: $(Build.SourcesDirectory)
+    - script: flutter test
+      displayName: 'Flutter Test'
 
   - job: Android
     dependsOn: Test
@@ -40,12 +39,12 @@ jobs:
         echo "s#storeFile=\(.*\)#storeFile=$(Build.SourcesDirectory)/key.jks#g"
         sudo sed "s#storeFile=\(.*\)#storeFile=$(Build.SourcesDirectory)/key.jks#g" $(androidKeySettings.secureFilePath) > $(Build.SourcesDirectory)/android/key.properties
       displayName: 'InstallingKey'
-    - task: FlutterInstall@0
+    - task: Install-Flutter@0
       inputs:
         channel: beta
         version: custom
         customVersion: $(flutter_version)
-    - script: $(FlutterToolPath)/flutter build apk --split-per-abi -t ./lib/main_prod.dart
+    - script: flutter build apk --split-per-abi -t ./lib/main_prod.dart
       displayName: 'FlutterBuild APK'
     - task: PublishBuildArtifacts@1
       inputs:
@@ -57,14 +56,14 @@ jobs:
     dependsOn: Test
     condition: or(contains(variables['Build.SourceBranch'], 'master'), contains(variables['Build.SourceBranch'], 'tags'))
     steps:
-    - task: FlutterInstall@0
+    - task: Install-Flutter@0
       inputs:
         channel: beta
         version: custom
         customVersion: $(flutter_version)
-    - script: $(FlutterToolPath)/flutter config --enable-web
+    - script: flutter config --enable-web
       displayName: 'EnableWeb'
-    - script: $(FlutterToolPath)/flutter build web -t ./lib/main_prod.dart
+    - script: flutter build web -t ./lib/main_prod.dart
       displayName: 'FlutterBuild Web'
     - task: PublishBuildArtifacts@1
       inputs:
