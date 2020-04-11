@@ -20,9 +20,9 @@ jobs:
         customVersion: $(flutter_version)
     - script: |
         flutter pub get
-        flutter test --machine > $(Build.SourcesDirectory)/example.jsonl
+        flutter test --machine > example.jsonl
         flutter pub global activate junitreport
-        flutter pub global run junitreport:tojunit --input $(Build.SourcesDirectory)/example.jsonl --output $(Build.SourcesDirectory)/TEST-report.xml
+        flutter pub global run junitreport:tojunit --input example.jsonl --output TEST-report.xml
       displayName: 'Flutter Test'
     - task: PublishTestResults@2
       inputs:
