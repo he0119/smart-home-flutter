@@ -27,5 +27,16 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
         yield TopicDetailFailure(message: e.message);
       }
     }
+    if (event is TopicDetailRefreshed) {
+      try {
+        yield TopicDetailInProgress();
+        List<dynamic> topicDetail =
+            await boardRepository.topicDetail(topicId: event.topicId, cache: false);
+        yield TopicDetailSuccess(
+            topic: topicDetail[0], comments: topicDetail[1]);
+      } on GraphQLApiException catch (e) {
+        yield TopicDetailFailure(message: e.message);
+      }
+    }
   }
 }
