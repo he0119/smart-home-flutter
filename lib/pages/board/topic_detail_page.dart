@@ -43,7 +43,6 @@ class _TopicDetailPage extends StatelessWidget {
           );
         }
         if (state is TopicDetailSuccess) {
-          // 从各种类型详情页返回
           return Scaffold(
             appBar: AppBar(
               title: Text(state.topic.title),

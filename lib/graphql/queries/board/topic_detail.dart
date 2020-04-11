@@ -8,6 +8,7 @@ query topicDetail($topicId: ID!, $number: Int) {
     isOpen
     user {
       username
+      email
     }
     dateCreated
     dateModified
@@ -18,6 +19,7 @@ query topicDetail($topicId: ID!, $number: Int) {
     body
     user {
       username
+      email
     }
     dateCreated
     dateModified

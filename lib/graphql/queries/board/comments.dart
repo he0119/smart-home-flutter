@@ -6,6 +6,7 @@ query comments($topicId: ID!, $number: Int) {
     body
     user {
       username
+      email
     }
     dateCreated
     dateModified

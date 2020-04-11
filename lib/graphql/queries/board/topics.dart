@@ -8,6 +8,7 @@ query topics($number: Int) {
     isOpen
     user {
       username
+      email
     }
     dateCreated
     dateModified

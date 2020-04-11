@@ -8,6 +8,7 @@ query topic($id: ID!) {
     isOpen
     user {
       username
+      email
     }
     dateCreated
     dateModified
