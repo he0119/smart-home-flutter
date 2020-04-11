@@ -18,8 +18,14 @@ jobs:
         channel: beta
         version: custom
         customVersion: $(flutter_version)
-    - script: flutter test
+    - script: |
+        flutter test --machine > example.jsonl
+        flutter pub global run junitreport:tojunit --input example.jsonl --output TEST-report.xml
       displayName: 'Flutter Test'
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFiles: "**/TEST-*.xml"
+      condition: succeededOrFailed()
 
   - job: Android
     dependsOn: Test
