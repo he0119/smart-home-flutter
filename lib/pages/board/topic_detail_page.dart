@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/board/topic_detail/topic_detail_bloc.dart';
 import 'package:smart_home/pages/board/widgets/comment_list.dart';
+import 'package:smart_home/pages/board/widgets/topic_item.dart';
 
 class TopicDetailPage extends StatelessWidget {
   static const routeName = '/topic';
@@ -44,15 +46,40 @@ class _TopicDetailPage extends StatelessWidget {
         }
         if (state is TopicDetailSuccess) {
           return Scaffold(
-            appBar: AppBar(
-              title: Text(state.topic.title),
-            ),
+            appBar: AppBar(),
             body: RefreshIndicator(
               onRefresh: () async {
                 BlocProvider.of<TopicDetailBloc>(context)
                     .add(TopicDetailRefreshed(topicId: state.topic.id));
               },
-              child: CommentList(comments: state.comments),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                    child: Text(
+                      state.topic.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      ),
+                    ),
+                  ),
+                  TopicItem(
+                    topic: state.topic,
+                    showBody: true,
+                  ),
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                    child: Text('全部评论', style: TextStyle(fontSize: 20)),
+                  ),
+                  Expanded(
+                    child: CommentList(comments: state.comments),
+                  ),
+                ],
+              ),
             ),
           );
         }

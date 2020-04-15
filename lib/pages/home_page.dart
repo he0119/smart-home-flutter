@@ -81,11 +81,7 @@ class HomePage extends StatelessWidget {
                             child: Text('下载'),
                             onPressed: () async {
                               Navigator.pop(context);
-                              if (await canLaunch(state.url)) {
-                                await launch(state.url);
-                              } else {
-                                throw 'Could not launch ${state.url}';
-                              }
+                              await _launchUrl(state.url);
                             },
                           )
                         ],
@@ -213,6 +209,14 @@ class HomePage extends StatelessWidget {
               builder: (context) => StorageDetailPage(),
             ),
           );
+        },
+      );
+    }
+    if (activeTab == AppTab.board) {
+      return FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () async {
+          // TODO: 添加页面转跳逻辑
         },
       );
     }
