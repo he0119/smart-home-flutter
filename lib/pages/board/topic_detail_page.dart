@@ -52,32 +52,21 @@ class _TopicDetailPage extends StatelessWidget {
                 BlocProvider.of<TopicDetailBloc>(context)
                     .add(TopicDetailRefreshed(topicId: state.topic.id));
               },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                    child: Text(
-                      state.topic.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                      ),
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverToBoxAdapter(
+                    child: TopicItem(
+                      topic: state.topic,
+                      showBody: true,
                     ),
                   ),
-                  TopicItem(
-                    topic: state.topic,
-                    showBody: true,
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      child: Text('全部评论', style: TextStyle(fontSize: 20)),
+                    ),
                   ),
-                  Divider(),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                    child: Text('全部评论', style: TextStyle(fontSize: 20)),
-                  ),
-                  Expanded(
-                    child: CommentList(comments: state.comments),
-                  ),
+                  SliverCommentList(comments: state.comments),
                 ],
               ),
             ),

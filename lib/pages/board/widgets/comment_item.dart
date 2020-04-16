@@ -23,6 +23,7 @@ class CommentItem extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
             child: MarkdownBody(data: comment.body),
           ),
+          Divider(),
         ],
       ),
     );

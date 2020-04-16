@@ -19,6 +19,16 @@ class TopicItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Text(
+                topic.title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                ),
+              ),
+            ),
             ItemTitle(
               user: topic.user,
               dateModified: topic.dateModified,
@@ -27,6 +37,7 @@ class TopicItem extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
               child: MarkdownBody(data: topic.description),
             ),
+            Divider(),
           ],
         ),
       );
