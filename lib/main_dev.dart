@@ -10,7 +10,7 @@ void main() {
   var configuredApp = AppConfig(
     appName: '智慧家庭 DEV',
     flavorName: 'development',
-    apiUrl: 'http://118.24.9.142:8000/graphql',
+    apiUrl: 'http://192.168.31.12:8000/graphql',
     child: MyApp(),
   );
   runApp(configuredApp);

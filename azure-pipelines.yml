@@ -5,7 +5,8 @@ trigger:
     - refs/tags/*
 
 variables:
-  flutter_version: '1.17.0-dev.3.1'
+  flutter_channel: 'beta'
+  flutter_version: '1.18.0-11.1.pre'
 
 pool:
   vmImage: 'macOS-latest'
@@ -15,7 +16,7 @@ jobs:
     steps:
     - task: Install-Flutter@0
       inputs:
-        channel: beta
+        channel: $(flutter_channel)
         version: custom
         customVersion: $(flutter_version)
     - script: |
@@ -49,7 +50,7 @@ jobs:
       displayName: 'InstallingKey'
     - task: Install-Flutter@0
       inputs:
-        channel: beta
+        channel: $(flutter_channel)
         version: custom
         customVersion: $(flutter_version)
     - script: flutter build apk --split-per-abi -t ./lib/main_prod.dart
@@ -66,7 +67,7 @@ jobs:
     steps:
     - task: Install-Flutter@0
       inputs:
-        channel: beta
+        channel: $(flutter_channel)
         version: custom
         customVersion: $(flutter_version)
     - script: flutter config --enable-web
