@@ -23,7 +23,6 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
     if (event is ItemFormStarted) {
       yield state.copyWith(listofStorages: await storageRepository.storages());
     }
-
     if (event is NameChanged) {
       yield state.copyWith(
         name: event.name,

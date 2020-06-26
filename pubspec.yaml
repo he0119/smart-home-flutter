@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
   intl: ^0.16.1
 
-  graphql_flutter: ^3.1.0-beta.4
+  graphql_flutter: ^3.1.0-beta.7
   http: ^0.12.0+4
 
   bloc: ^4.0.0
@@ -34,7 +34,7 @@ dependencies:
   datetime_picker_formfield: ^1.0.0
   substring_highlight: ^0.1.2
   flutter_sticky_header: ^0.4.2
-  flutter_markdown: ^0.3.4
+  flutter_markdown: ^0.4.2
   cached_network_image: ^2.1.0+1
 
   # The following adds the Cupertino Icons font to your application.
