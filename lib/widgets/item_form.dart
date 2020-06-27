@@ -72,7 +72,9 @@ class _ItemFormState extends State<ItemForm> {
                       labelText: '数量',
                     ),
                     keyboardType: TextInputType.number,
-                    inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
                     autovalidate: true,
                     validator: (_) {
                       return state.isNumberValid ? null : '数量不能为空';
@@ -104,9 +106,10 @@ class _ItemFormState extends State<ItemForm> {
                     },
                   ),
                   TextFormField(
-                    initialValue: widget.isEditing ? widget.item.description : '',
-                    onChanged: (value) =>
-                        _itemFormBloc.add(DescriptionChanged(description: value)),
+                    initialValue:
+                        widget.isEditing ? widget.item.description : '',
+                    onChanged: (value) => _itemFormBloc
+                        .add(DescriptionChanged(description: value)),
                     decoration: InputDecoration(
                       labelText: '备注',
                     ),
@@ -130,7 +133,7 @@ class _ItemFormState extends State<ItemForm> {
                     ),
                     keyboardType: TextInputType.number,
                     inputFormatters: [
-                      WhitelistingTextInputFormatter(RegExp('[0-9\.]'))
+                      FilteringTextInputFormatter.allow(RegExp('[0-9\.]'))
                     ],
                     autovalidate: true,
                     validator: (_) {

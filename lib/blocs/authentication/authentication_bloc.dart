@@ -39,7 +39,7 @@ Stream<AuthenticationState> _mapLoginToState(AuthenticationLogin event) async* {
     } else {
       yield AuthenticationFailure('用户名或密码错误');
     }
-  } on GraphQLApiException catch (e) {
+  } catch(e) {
     yield AuthenticationFailure(e.message);
   }
 }
