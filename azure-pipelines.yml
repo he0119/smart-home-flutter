@@ -5,7 +5,8 @@ trigger:
     - refs/tags/*
 
 variables:
-  flutter_version: '1.17.0-dev.3.1'
+  flutter_channel: 'dev'
+  flutter_version: '1.20.0-2.0.pre'
 
 pool:
   vmImage: 'macOS-latest'
@@ -15,11 +16,19 @@ jobs:
     steps:
     - task: Install-Flutter@0
       inputs:
-        channel: beta
+        channel: $(flutter_channel)
         version: custom
         customVersion: $(flutter_version)
-    - script: flutter test
+    - script: |
+        flutter pub get
+        flutter test --machine > example.jsonl
+        flutter pub global activate junitreport
+        flutter pub global run junitreport:tojunit --input example.jsonl --output TEST-report.xml
       displayName: 'Flutter Test'
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFiles: "**/TEST-*.xml"
+      condition: succeededOrFailed()
 
   - job: Android
     dependsOn: Test
@@ -41,7 +50,7 @@ jobs:
       displayName: 'InstallingKey'
     - task: Install-Flutter@0
       inputs:
-        channel: beta
+        channel: $(flutter_channel)
         version: custom
         customVersion: $(flutter_version)
     - script: flutter build apk --split-per-abi -t ./lib/main_prod.dart
@@ -58,7 +67,7 @@ jobs:
     steps:
     - task: Install-Flutter@0
       inputs:
-        channel: beta
+        channel: $(flutter_channel)
         version: custom
         customVersion: $(flutter_version)
     - script: flutter config --enable-web

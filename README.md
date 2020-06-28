@@ -4,14 +4,14 @@
 
 ## Requirements
 
-- Flutter (Channel beta, v1.14.6)
+- Flutter (Channel dev, 1.20.0-2.0.pre)
 
 ## Setup
 
 启用 Web 功能
 
 ```shell
-flutter channel beta
+flutter channel dev
 flutter upgrade
 flutter config --enable-web
 ```

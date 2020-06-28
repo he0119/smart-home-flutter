@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2] - 2020-06-28
+
+### Added
+
+- 登陆时可自动填写用户名密码
+
 ## [0.3.1] - 2020-03-26
 
 ### Fixed
@@ -76,8 +82,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.3.2...HEAD
 
+[0.3.2]: https://github.com/he0119/smart-home-flutter/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/he0119/smart-home-flutter/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/he0119/smart-home-flutter/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/he0119/smart-home-flutter/compare/v0.2.1...v0.2.2
