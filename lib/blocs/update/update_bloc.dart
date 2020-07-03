@@ -10,8 +10,7 @@ part 'update_event.dart';
 part 'update_state.dart';
 
 class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
-  @override
-  UpdateState get initialState => UpdateInitial();
+  UpdateBloc() : super(UpdateInitial());
 
   @override
   Stream<UpdateState> mapEventToState(

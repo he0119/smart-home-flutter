@@ -3,7 +3,7 @@ import 'package:logging/logging.dart';
 
 Logger blocLogger = Logger('bloc');
 
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     super.onEvent(bloc, event);

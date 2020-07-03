@@ -86,7 +86,7 @@ class _StorageDetailPage extends StatelessWidget {
                 }
               },
               child: BlocListener<SnackBarBloc, SnackBarState>(
-                  condition: (previous, current) {
+                  listenWhen: (previous, current) {
                     if (current is SnackBarSuccess &&
                         current.position == SnackBarPosition.storage) {
                       return true;

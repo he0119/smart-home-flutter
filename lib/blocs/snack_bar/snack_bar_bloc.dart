@@ -8,8 +8,7 @@ part 'snack_bar_event.dart';
 part 'snack_bar_state.dart';
 
 class SnackBarBloc extends Bloc<SnackBarEvent, SnackBarState> {
-  @override
-  SnackBarState get initialState => SnackBarInitial();
+  SnackBarBloc() : super(SnackBarInitial());
 
   @override
   Stream<SnackBarState> mapEventToState(

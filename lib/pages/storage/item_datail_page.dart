@@ -91,7 +91,7 @@ class _ItemDetailPage extends StatelessWidget {
                 );
               },
               child: BlocListener<SnackBarBloc, SnackBarState>(
-                  condition: (previous, current) {
+                  listenWhen: (previous, current) {
                     if (current is SnackBarSuccess &&
                         current.position == SnackBarPosition.item) {
                       return true;

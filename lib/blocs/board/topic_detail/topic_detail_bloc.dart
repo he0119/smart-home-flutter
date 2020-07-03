@@ -9,8 +9,7 @@ part 'topic_detail_event.dart';
 part 'topic_detail_state.dart';
 
 class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
-  @override
-  TopicDetailState get initialState => TopicDetailInitial();
+  TopicDetailBloc() : super(TopicDetailInitial());
 
   @override
   Stream<TopicDetailState> mapEventToState(
@@ -30,8 +29,8 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
     if (event is TopicDetailRefreshed) {
       try {
         yield TopicDetailInProgress();
-        List<dynamic> topicDetail =
-            await boardRepository.topicDetail(topicId: event.topicId, cache: false);
+        List<dynamic> topicDetail = await boardRepository.topicDetail(
+            topicId: event.topicId, cache: false);
         yield TopicDetailSuccess(
             topic: topicDetail[0], comments: topicDetail[1]);
       } on GraphQLApiException catch (e) {

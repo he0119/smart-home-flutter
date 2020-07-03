@@ -12,10 +12,8 @@ part 'storage_detail_state.dart';
 class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
   final SnackBarBloc snackBarBloc;
 
-  StorageDetailBloc({@required this.snackBarBloc});
-
-  @override
-  StorageDetailState get initialState => StorageDetailInProgress();
+  StorageDetailBloc({@required this.snackBarBloc})
+      : super(StorageDetailInProgress());
 
   @override
   Stream<StorageDetailState> mapEventToState(

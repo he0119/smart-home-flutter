@@ -11,10 +11,8 @@ part 'storage_form_state.dart';
 class StorageFormBloc extends Bloc<StorageFormEvent, StorageFormState> {
   final StorageDetailBloc storageDetailBloc;
 
-  StorageFormBloc({@required this.storageDetailBloc});
-
-  @override
-  StorageFormState get initialState => StorageFormState.initial();
+  StorageFormBloc({@required this.storageDetailBloc})
+      : super(StorageFormState.initial());
 
   @override
   Stream<StorageFormState> mapEventToState(

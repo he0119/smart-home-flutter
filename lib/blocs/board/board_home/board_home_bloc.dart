@@ -9,8 +9,7 @@ part 'board_home_event.dart';
 part 'board_home_state.dart';
 
 class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
-  @override
-  BoardHomeState get initialState => BoardHomeInitial();
+  BoardHomeBloc() : super(BoardHomeInitial());
 
   @override
   Stream<BoardHomeState> mapEventToState(

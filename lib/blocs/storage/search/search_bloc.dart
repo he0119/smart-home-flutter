@@ -9,9 +9,8 @@ part 'search_events.dart';
 part 'search_states.dart';
 
 class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
-  @override
-  StorageSearchState get initialState =>
-      StorageSearchResults(items: [], storages: [], term: '');
+  StorageSearchBloc()
+      : super(StorageSearchResults(items: [], storages: [], term: ''));
 
   @override
   Stream<StorageSearchState> mapEventToState(StorageSearchEvent event) async* {

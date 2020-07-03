@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
           body: MultiBlocListener(
             listeners: [
               BlocListener<SnackBarBloc, SnackBarState>(
-                condition: (previous, current) {
+                listenWhen: (previous, current) {
                   if (current is SnackBarSuccess &&
                       current.position == SnackBarPosition.home) {
                     return true;
@@ -91,7 +91,7 @@ class HomePage extends StatelessWidget {
                 },
               ),
               BlocListener<TabBloc, AppTab>(
-                condition: (previous, current) {
+                listenWhen: (previous, current) {
                   // 仅在 Web 上自动转跳到对应网页
                   if (!kIsWeb) {
                     return false;

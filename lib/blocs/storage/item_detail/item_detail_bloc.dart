@@ -22,14 +22,11 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
     this.storageDetailBloc,
     this.storageSearchBloc,
     this.searchKeyword,
-  }) {
+  }) : super(ItemDetailInProgress()) {
     if (storageSearchBloc != null) {
       assert(searchKeyword != null, '请提供搜索关键词');
     }
   }
-
-  @override
-  ItemDetailState get initialState => ItemDetailInProgress();
 
   @override
   Stream<ItemDetailState> mapEventToState(

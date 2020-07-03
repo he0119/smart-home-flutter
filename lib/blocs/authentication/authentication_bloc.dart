@@ -39,7 +39,7 @@ Stream<AuthenticationState> _mapLoginToState(AuthenticationLogin event) async* {
     } else {
       yield AuthenticationFailure('用户名或密码错误');
     }
-  } catch(e) {
+  } catch (e) {
     yield AuthenticationFailure(e.message);
   }
 }
@@ -51,8 +51,7 @@ Stream<AuthenticationState> _mapLogoutToState() async* {
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  @override
-  AuthenticationState get initialState => AppUninitialized();
+  AuthenticationBloc() : super(AppUninitialized());
 
   @override
   Stream<AuthenticationState> mapEventToState(
