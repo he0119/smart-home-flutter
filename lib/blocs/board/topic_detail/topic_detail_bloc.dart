@@ -9,7 +9,10 @@ part 'topic_detail_event.dart';
 part 'topic_detail_state.dart';
 
 class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
-  TopicDetailBloc() : super(TopicDetailInitial());
+  final BoardRepository boardRepository;
+
+  TopicDetailBloc({@required this.boardRepository})
+      : super(TopicDetailInitial());
 
   @override
   Stream<TopicDetailState> mapEventToState(

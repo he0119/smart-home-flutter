@@ -1,27 +1,103 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:smart_home/graphql/mutations/storage/mutations.dart';
 import 'package:smart_home/graphql/queries/storage/queries.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 
-StorageRepository storageRepository = StorageRepository();
-
 class StorageRepository {
-  Future<List<dynamic>> search(String key) async {
+  final GraphQLApiClient graphqlApiClient;
+
+  StorageRepository({@required this.graphqlApiClient});
+
+  Future<Item> addItem({
+    @required String name,
+    @required int number,
+    @required String storageId,
+    String description,
+    double price,
+    DateTime expirationDate,
+  }) async {
+    final MutationOptions options = MutationOptions(
+      documentNode: gql(addItemMutation),
+      variables: {
+        'input': {
+          'name': name,
+          'number': number,
+          'storage': {'id': storageId},
+          'description': description,
+          'price': price,
+          'expirationDate': expirationDate?.toIso8601String(),
+        }
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> json = result.data['addItem']['item'];
+    final Item itemObject = Item.fromJson(json);
+    return itemObject;
+  }
+
+  Future<Storage> addStorage({
+    @required String name,
+    String parentId,
+    String description,
+  }) async {
+    final MutationOptions options = MutationOptions(
+      documentNode: gql(addStorageMutation),
+      variables: {
+        'input': {
+          'name': name,
+          'parent': parentId != null ? {'id': parentId} : null,
+          'description': description,
+        }
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> json = result.data['addStorage']['storage'];
+    final Storage storageObject = Storage.fromJson(json);
+    return storageObject;
+  }
+
+  Future<String> deleteItem({String id}) async {
+    final MutationOptions options = MutationOptions(
+      documentNode: gql(deleteItemMutation),
+      variables: {
+        'id': id,
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final String deletedId = result.data['deletedId'];
+    return deletedId;
+  }
+
+  Future<String> deleteStorage({String id}) async {
+    final MutationOptions options = MutationOptions(
+      documentNode: gql(deleteStorageMutation),
+      variables: {
+        'id': id,
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final String deletedId = result.data['deletedId'];
+    return deletedId;
+  }
+
+  Future<List<Item>> expiredItems({int number, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(searchQuery),
-      variables: {'key': key},
-      fetchPolicy: FetchPolicy.noCache,
+      documentNode: gql(expiredItemsQuery),
+      variables: {
+        'number': number,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
-    final List<dynamic> storages = results.data['search']['storages'];
-    final List<dynamic> items = results.data['search']['items'];
-    final List<Storage> listofStorage =
-        storages.map((dynamic json) => Storage.fromJson(json)).toList();
-    final List<Item> listofItem =
-        items.map((dynamic json) => Item.fromJson(json)).toList();
-    return [listofItem, listofStorage];
+
+    final List<dynamic> expiredItems = results.data['expiredItems'];
+    assert(expiredItems != null);
+    final List<Item> listofExpiredItems =
+        expiredItems.map((dynamic e) => Item.fromJson(e)).toList();
+
+    return listofExpiredItems;
   }
 
   /// 存储管理主页所需要的数据
@@ -56,6 +132,40 @@ class StorageRepository {
       'expiredItems': listofExpiredItems,
       'nearExpiredItems': listofNearExpiredItems,
     };
+  }
+
+  Future<Item> item({@required String id, bool cache = true}) async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(itemQuery),
+      variables: {
+        'id': id,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final result = await graphqlApiClient.query(options);
+    final Map<String, dynamic> json = result.data['item'];
+    final Item itemObject = Item.fromJson(json);
+    return itemObject;
+  }
+
+  Future<List<Item>> nearExpiredItems(
+      {@required int within, int number, bool cache = true}) async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(nearExpiredItemsQuery),
+      variables: {
+        'within': within,
+        'number': number,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final results = await graphqlApiClient.query(options);
+
+    final List<dynamic> nearExpiredItems = results.data['nearExpiredItems'];
+    assert(nearExpiredItems != null);
+    final List<Item> listofNearExpiredItems =
+        nearExpiredItems.map((dynamic e) => Item.fromJson(e)).toList();
+
+    return listofNearExpiredItems;
   }
 
   Future<List<Item>> recentlyAddedItems(
@@ -97,44 +207,6 @@ class StorageRepository {
     return listofRecentlyUpdatedItems;
   }
 
-  Future<List<Item>> expiredItems({int number, bool cache = true}) async {
-    final QueryOptions options = QueryOptions(
-      documentNode: gql(expiredItemsQuery),
-      variables: {
-        'number': number,
-      },
-      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
-    );
-    final results = await graphqlApiClient.query(options);
-
-    final List<dynamic> expiredItems = results.data['expiredItems'];
-    assert(expiredItems != null);
-    final List<Item> listofExpiredItems =
-        expiredItems.map((dynamic e) => Item.fromJson(e)).toList();
-
-    return listofExpiredItems;
-  }
-
-  Future<List<Item>> nearExpiredItems(
-      {@required int within, int number, bool cache = true}) async {
-    final QueryOptions options = QueryOptions(
-      documentNode: gql(nearExpiredItemsQuery),
-      variables: {
-        'within': within,
-        'number': number,
-      },
-      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
-    );
-    final results = await graphqlApiClient.query(options);
-
-    final List<dynamic> nearExpiredItems = results.data['nearExpiredItems'];
-    assert(nearExpiredItems != null);
-    final List<Item> listofNearExpiredItems =
-        nearExpiredItems.map((dynamic e) => Item.fromJson(e)).toList();
-
-    return listofNearExpiredItems;
-  }
-
   Future<List<Storage>> rootStorage({bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(rootStorageQuery),
@@ -145,6 +217,22 @@ class StorageRepository {
     final List<Storage> listofStorage =
         storages.map((dynamic e) => Storage.fromJson(e)).toList();
     return listofStorage;
+  }
+
+  Future<List<dynamic>> search(String key) async {
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(searchQuery),
+      variables: {'key': key},
+      fetchPolicy: FetchPolicy.noCache,
+    );
+    final results = await graphqlApiClient.query(options);
+    final List<dynamic> storages = results.data['search']['storages'];
+    final List<dynamic> items = results.data['search']['items'];
+    final List<Storage> listofStorage =
+        storages.map((dynamic json) => Storage.fromJson(json)).toList();
+    final List<Item> listofItem =
+        items.map((dynamic json) => Item.fromJson(json)).toList();
+    return [listofItem, listofStorage];
   }
 
   Future<Map<String, dynamic>> storage(
@@ -180,20 +268,6 @@ class StorageRepository {
     return listofStorage;
   }
 
-  Future<Item> item({@required String id, bool cache = true}) async {
-    final QueryOptions options = QueryOptions(
-      documentNode: gql(itemQuery),
-      variables: {
-        'id': id,
-      },
-      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
-    );
-    final result = await graphqlApiClient.query(options);
-    final Map<String, dynamic> json = result.data['item'];
-    final Item itemObject = Item.fromJson(json);
-    return itemObject;
-  }
-
   Future<Item> updateItem({
     @required String id,
     String name,
@@ -223,45 +297,6 @@ class StorageRepository {
     return itemObject;
   }
 
-  Future<String> deleteItem({String id}) async {
-    final MutationOptions options = MutationOptions(
-      documentNode: gql(deleteItemMutation),
-      variables: {
-        'id': id,
-      },
-    );
-    final result = await graphqlApiClient.mutate(options);
-    final String deletedId = result.data['deletedId'];
-    return deletedId;
-  }
-
-  Future<Item> addItem({
-    @required String name,
-    @required int number,
-    @required String storageId,
-    String description,
-    double price,
-    DateTime expirationDate,
-  }) async {
-    final MutationOptions options = MutationOptions(
-      documentNode: gql(addItemMutation),
-      variables: {
-        'input': {
-          'name': name,
-          'number': number,
-          'storage': {'id': storageId},
-          'description': description,
-          'price': price,
-          'expirationDate': expirationDate?.toIso8601String(),
-        }
-      },
-    );
-    final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data['addItem']['item'];
-    final Item itemObject = Item.fromJson(json);
-    return itemObject;
-  }
-
   Future<Storage> updateStorage({
     @required String id,
     String name,
@@ -283,38 +318,5 @@ class StorageRepository {
     final Map<String, dynamic> json = result.data['updateStorage']['storage'];
     final Storage storageObject = Storage.fromJson(json);
     return storageObject;
-  }
-
-  Future<Storage> addStorage({
-    @required String name,
-    String parentId,
-    String description,
-  }) async {
-    final MutationOptions options = MutationOptions(
-      documentNode: gql(addStorageMutation),
-      variables: {
-        'input': {
-          'name': name,
-          'parent': parentId != null ? {'id': parentId} : null,
-          'description': description,
-        }
-      },
-    );
-    final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data['addStorage']['storage'];
-    final Storage storageObject = Storage.fromJson(json);
-    return storageObject;
-  }
-
-  Future<String> deleteStorage({String id}) async {
-    final MutationOptions options = MutationOptions(
-      documentNode: gql(deleteStorageMutation),
-      variables: {
-        'id': id,
-      },
-    );
-    final result = await graphqlApiClient.mutate(options);
-    final String deletedId = result.data['deletedId'];
-    return deletedId;
   }
 }

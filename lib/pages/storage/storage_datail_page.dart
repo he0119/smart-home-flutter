@@ -7,6 +7,7 @@ import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/widgets/storage_form.dart';
 import 'package:smart_home/widgets/storage_item_list.dart';
@@ -20,6 +21,7 @@ class StorageDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => StorageDetailBloc(
+        storageRepository: RepositoryProvider.of<StorageRepository>(context),
         snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
       )..add(
           storageId != null
@@ -308,6 +310,7 @@ class _StorageDetailPage extends StatelessWidget {
     if (state is StorageEditInitial) {
       return BlocProvider(
         create: (context) => StorageFormBloc(
+          storageRepository: RepositoryProvider.of<StorageRepository>(context),
           storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
         ),
         child: StorageForm(
@@ -319,6 +322,7 @@ class _StorageDetailPage extends StatelessWidget {
     if (state is StorageAddInitial) {
       return BlocProvider(
         create: (context) => StorageFormBloc(
+          storageRepository: RepositoryProvider.of<StorageRepository>(context),
           storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
         ),
         child: StorageForm(

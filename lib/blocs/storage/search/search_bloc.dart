@@ -9,7 +9,8 @@ part 'search_events.dart';
 part 'search_states.dart';
 
 class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
-  StorageSearchBloc()
+  final StorageRepository storageRepository;
+  StorageSearchBloc({@required this.storageRepository})
       : super(StorageSearchResults(items: [], storages: [], term: ''));
 
   @override

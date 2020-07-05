@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/pages/board/widgets/topic_list.dart';
+import 'package:smart_home/repositories/board_repository.dart';
 
 class BoardHomePage extends StatelessWidget {
   const BoardHomePage({Key key}) : super(key: key);
@@ -9,7 +10,9 @@ class BoardHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BoardHomeBloc()..add(BoardHomeStarted()),
+      create: (context) => BoardHomeBloc(
+        boardRepository: RepositoryProvider.of<BoardRepository>(context),
+      )..add(BoardHomeStarted()),
       child: _BoardHomePage(),
     );
   }

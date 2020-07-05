@@ -4,6 +4,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:smart_home/blocs/storage/storage_home/storage_home_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
+import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 
 class StorageHomePage extends StatelessWidget {
@@ -12,7 +13,9 @@ class StorageHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => StorageHomeBloc()..add(StorageHomeStarted()),
+      create: (context) => StorageHomeBloc(
+        storageRepository: RepositoryProvider.of<StorageRepository>(context),
+      )..add(StorageHomeStarted()),
       child: _StorageHomePage(),
     );
   }

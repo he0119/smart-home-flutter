@@ -5,8 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 import 'package:version/version.dart';
 
-VersionRepository versionRepository = VersionRepository();
-
 class VersionRepository {
   Version _currentVersion;
   Version _onlineVersion;

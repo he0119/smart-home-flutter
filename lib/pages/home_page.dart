@@ -5,9 +5,16 @@ import 'package:quick_actions/quick_actions.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/board/home_page.dart';
+import 'package:smart_home/pages/login_page.dart';
+import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
+import 'package:smart_home/repositories/board_repository.dart';
+import 'package:smart_home/repositories/graphql_api_client.dart';
+import 'package:smart_home/repositories/storage_repository.dart';
+import 'package:smart_home/repositories/user_repository.dart';
+import 'package:smart_home/repositories/version_repository.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,6 +22,59 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<UserRepository>(
+          create: (context) => UserRepository(
+            graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(context),
+          ),
+        ),
+        RepositoryProvider<VersionRepository>(
+          create: (context) => VersionRepository(),
+        ),
+      ],
+      child: BlocProvider(
+        create: (context) => AuthenticationBloc(
+          userRepository: RepositoryProvider.of<UserRepository>(context),
+          graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(context),
+        )..add(AuthenticationStarted()),
+        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            if (state is Unauthenticated) {
+              return LoginPage();
+            }
+            if (state is Authenticated) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<TabBloc>(
+                    create: (context) => TabBloc(),
+                  ),
+                  BlocProvider<SnackBarBloc>(
+                    create: (context) => SnackBarBloc(),
+                  ),
+                  BlocProvider<UpdateBloc>(
+                    create: (context) => UpdateBloc(
+                      versionRepository:
+                          RepositoryProvider.of<VersionRepository>(context),
+                    ),
+                  ),
+                ],
+                child: _HomePage(),
+              );
+            }
+            return SplashPage();
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _HomePage extends StatelessWidget {
+  const _HomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +213,12 @@ class HomePage extends StatelessWidget {
 
   Widget _buildBody(BuildContext context, AppTab activeTab) {
     if (activeTab == AppTab.storage) {
-      return StorageHomePage();
+      return RepositoryProvider(
+          create: (context) => StorageRepository(
+                graphqlApiClient:
+                    RepositoryProvider.of<GraphQLApiClient>(context),
+              ),
+          child: StorageHomePage());
     }
     if (activeTab == AppTab.iot) {
       const String url = 'https://iot.hehome.xyz';
@@ -185,7 +250,12 @@ class HomePage extends StatelessWidget {
               ),
             );
     }
-    return BoardHomePage();
+    return RepositoryProvider(
+      create: (context) => BoardRepository(
+        graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(context),
+      ),
+      child: BoardHomePage(),
+    );
   }
 
   FloatingActionButton _buildFloatingActionButton(

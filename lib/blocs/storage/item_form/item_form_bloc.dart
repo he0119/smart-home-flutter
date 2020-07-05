@@ -9,10 +9,13 @@ part 'item_form_event.dart';
 part 'item_form_state.dart';
 
 class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
+  final StorageRepository storageRepository;
   final ItemDetailBloc itemDetailBloc;
 
-  ItemFormBloc({@required this.itemDetailBloc})
-      : super(ItemFormState.initial());
+  ItemFormBloc({
+    @required this.storageRepository,
+    @required this.itemDetailBloc,
+  }) : super(ItemFormState.initial());
 
   @override
   Stream<ItemFormState> mapEventToState(

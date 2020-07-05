@@ -11,7 +11,10 @@ part 'storage_home_state.dart';
 enum ItemType { expired, nearExpired, recentlyAdded, recentlyUpdated, all }
 
 class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
-  StorageHomeBloc() : super(StorageHomeInProgress());
+  final StorageRepository storageRepository;
+
+  StorageHomeBloc({@required this.storageRepository})
+      : super(StorageHomeInProgress());
 
   @override
   Stream<StorageHomeState> mapEventToState(

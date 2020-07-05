@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/board/topic_detail/topic_detail_bloc.dart';
 import 'package:smart_home/pages/board/widgets/comment_list.dart';
 import 'package:smart_home/pages/board/widgets/topic_item.dart';
+import 'package:smart_home/repositories/board_repository.dart';
 
 class TopicDetailPage extends StatelessWidget {
   static const routeName = '/topic';
@@ -15,8 +16,9 @@ class TopicDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          TopicDetailBloc()..add(TopicDetailChanged(topicId: topicId)),
+      create: (context) => TopicDetailBloc(
+        boardRepository: RepositoryProvider.of<BoardRepository>(context),
+      )..add(TopicDetailChanged(topicId: topicId)),
       child: _TopicDetailPage(),
     );
   }

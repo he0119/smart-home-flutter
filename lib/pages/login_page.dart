@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_home/widgets/login_form.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -7,6 +9,70 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("登录")),
       body: LoginForm(),
+    );
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    _onLoginButtonPressed() {
+      BlocProvider.of<AuthenticationBloc>(context).add(
+        AuthenticationLogin(
+          _usernameController.text,
+          _passwordController.text,
+        ),
+      );
+    }
+
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state is AuthenticationFailure) {
+          showErrorSnackBar(context, state.error);
+        }
+      },
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            child: AutofillGroup(
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: InputDecoration(labelText: '用户名'),
+                    controller: _usernameController,
+                    autofillHints: <String>[AutofillHints.username],
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: '密码'),
+                    controller: _passwordController,
+                    obscureText: true,
+                    autofillHints: <String>[AutofillHints.password],
+                  ),
+                  RaisedButton(
+                    onPressed:
+                        state is! Authenticating ? _onLoginButtonPressed : null,
+                    child: Text('登录'),
+                  ),
+                  Container(
+                    child: state is Authenticating
+                        ? CircularProgressIndicator()
+                        : null,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

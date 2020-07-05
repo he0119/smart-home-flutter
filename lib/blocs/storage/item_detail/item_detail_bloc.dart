@@ -10,6 +10,7 @@ part 'item_detail_event.dart';
 part 'item_detail_state.dart';
 
 class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
+  final StorageRepository storageRepository;
   final SnackBarBloc snackBarBloc;
   final StorageHomeBloc storageHomeBloc;
   final StorageDetailBloc storageDetailBloc;
@@ -17,6 +18,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
   final String searchKeyword;
 
   ItemDetailBloc({
+    @required this.storageRepository,
     @required this.snackBarBloc,
     this.storageHomeBloc,
     this.storageDetailBloc,
