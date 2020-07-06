@@ -14,7 +14,7 @@ class AppPreferencesBloc
   static final Logger _log = Logger('AppPreferencesBloc');
   SharedPreferences _prefs;
 
-  AppPreferencesBloc() : super(AppUninitialized());
+  AppPreferencesBloc() : super(AppPreferencesState.initial());
 
   SharedPreferences get prefs => _prefs;
 
@@ -28,16 +28,11 @@ class AppPreferencesBloc
         _log.severe('shared prefrences error : $e');
         throw Exception('shared prefrences error');
       });
-      AppPreferencesChanged current = await _loadAppPreference();
-      yield current;
-    } else if (event is ApiUrlChanged) {
+      String apiUrl = _prefs.getString('apiUrl');
+      yield state.copyWith(initialized: true, apiUrl: apiUrl);
+    } else if (event is AppApiUrlChanged) {
       _prefs.setString('apiUrl', event.apiUrl);
-      yield AppPreferencesChanged(apiUrl: event.apiUrl);
+      yield state.copyWith(apiUrl: event.apiUrl);
     }
-  }
-
-  Future<AppPreferencesState> _loadAppPreference() async {
-    String apiUrl = _prefs.getString('apiUrl');
-    return AppPreferencesChanged(apiUrl: apiUrl);
   }
 }

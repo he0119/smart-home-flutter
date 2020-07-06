@@ -35,7 +35,7 @@ class AuthenticationBloc
     try {
       // 检查是否登录
       yield Authenticating();
-      if (graphqlApiClient.isLogin) {
+      if (await userRepository.isLogin) {
         yield Authenticated(await userRepository.currentUser());
       } else {
         yield Unauthenticated();
@@ -50,7 +50,7 @@ class AuthenticationBloc
     yield Authenticating();
     try {
       bool result =
-          await graphqlApiClient.authenticate(event.username, event.password);
+          await userRepository.authenticate(event.username, event.password);
       if (result) {
         User user = await userRepository.currentUser();
         yield Authenticated(user);
@@ -63,7 +63,7 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapLogoutToState() async* {
-    await graphqlApiClient.logout();
+    await userRepository.logout();
     yield Unauthenticated();
   }
 }

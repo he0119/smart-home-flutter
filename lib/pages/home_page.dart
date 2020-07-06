@@ -27,11 +27,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<UserRepository>(
-          create: (context) => UserRepository(
-            graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(context),
-          ),
-        ),
         RepositoryProvider<VersionRepository>(
           create: (context) => VersionRepository(),
         ),
@@ -43,9 +38,6 @@ class HomePage extends StatelessWidget {
         )..add(AuthenticationStarted()),
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
-            if (state is Unauthenticated) {
-              return LoginPage();
-            }
             if (state is Authenticated) {
               return MultiBlocProvider(
                 providers: [
@@ -65,7 +57,7 @@ class HomePage extends StatelessWidget {
                 child: _HomePage(),
               );
             }
-            return SplashPage();
+            return LoginPage();
           },
         ),
       ),

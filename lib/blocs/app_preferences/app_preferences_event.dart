@@ -9,11 +9,14 @@ abstract class AppPreferencesEvent extends Equatable {
 
 class AppStarted extends AppPreferencesEvent {}
 
-class ApiUrlChanged extends AppPreferencesEvent {
+class AppApiUrlChanged extends AppPreferencesEvent {
   final String apiUrl;
 
-  ApiUrlChanged({@required this.apiUrl});
+  AppApiUrlChanged({@required this.apiUrl});
 
   @override
   List<Object> get props => [apiUrl];
+
+  @override
+  String toString() => 'AppApiUrlChanged { apiUrl: $apiUrl }';
 }

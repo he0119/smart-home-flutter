@@ -8,12 +8,27 @@ import 'package:smart_home/pages/board/topic_detail_page.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
+import 'package:smart_home/repositories/user_repository.dart';
+
+Route<dynamic> _generateRoute(RouteSettings settings) {
+  if (settings.name == TopicDetailPage.routeName) {
+    return MaterialPageRoute(
+      builder: (context) {
+        return TopicDetailPage(topicId: settings.arguments);
+      },
+    );
+  }
+  return null;
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Intl.defaultLocale = 'zh';
     AppConfig config = AppConfig.of(context);
+    GraphQLApiClient graphQLApiClient = GraphQLApiClient();
+    UserRepository userRepository =
+        UserRepository(graphqlApiClient: graphQLApiClient);
     return BlocProvider<AppPreferencesBloc>(
       create: (BuildContext context) => AppPreferencesBloc()..add(AppStarted()),
       child: MaterialApp(
@@ -32,37 +47,36 @@ class MyApp extends StatelessWidget {
         ],
         title: config.appName,
         onGenerateRoute: _generateRoute,
-        home: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-          builder: (context, state) {
-            if (state is AppPreferencesChanged) {
-              if (state.apiUrl != null) {
-                GraphQLApiClient graphqlApiClient = GraphQLApiClient(
-                    prefs: BlocProvider.of<AppPreferencesBloc>(context).prefs);
-                graphqlApiClient.initailize(state.apiUrl);
-                return RepositoryProvider<GraphQLApiClient>(
-                  create: (context) => graphqlApiClient,
-                  child: HomePage(),
-                );
-              }
-              // TODO: 添加设置服务器地址的功能
-              BlocProvider.of<AppPreferencesBloc>(context)
-                  .add(ApiUrlChanged(apiUrl: config.apiUrl));
+        home: BlocConsumer<AppPreferencesBloc, AppPreferencesState>(
+          listenWhen: (previous, current) {
+            if (previous.apiUrl != current.apiUrl) {
+              return true;
+            } else {
+              return false;
             }
-            return SplashPage();
+          },
+          listener: (context, state) {
+            graphQLApiClient.initailize(
+                url: state.apiUrl, userRepository: userRepository);
+          },
+          builder: (context, state) {
+            if (!state.initialized) {
+              return SplashPage();
+            }
+            return MultiRepositoryProvider(
+              providers: [
+                RepositoryProvider<GraphQLApiClient>(
+                  create: (context) => graphQLApiClient,
+                ),
+                RepositoryProvider<UserRepository>(
+                  create: (context) => userRepository,
+                )
+              ],
+              child: HomePage(),
+            );
           },
         ),
       ),
     );
   }
-}
-
-Route<dynamic> _generateRoute(RouteSettings settings) {
-  if (settings.name == TopicDetailPage.routeName) {
-    return MaterialPageRoute(
-      builder: (context) {
-        return TopicDetailPage(topicId: settings.arguments);
-      },
-    );
-  }
-  return null;
 }
