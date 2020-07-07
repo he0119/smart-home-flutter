@@ -117,7 +117,7 @@ class _StorageHomePage extends StatelessWidget {
           children: <Widget>[
             Text(
               headerText,
-              style: TextStyle(color: Colors.white),
+              style: DefaultTextStyle.of(context).style,
             ),
             Spacer(),
             IconButton(

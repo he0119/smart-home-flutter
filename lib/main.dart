@@ -34,9 +34,17 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,
+          primaryColor: Colors.white,
+          accentColor: Color(0xFF56CCF2),
+          iconTheme: IconThemeData(color: Color(0xFF255261)),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              selectedItemColor: Color(0xFF2D9CDB)),
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
+          accentColor: Color(0xFF2F80ED),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              selectedItemColor: Color(0xFF2D9CDB)),
         ),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

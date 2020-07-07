@@ -9,8 +9,8 @@ import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
-import 'package:smart_home/widgets/storage_form.dart';
-import 'package:smart_home/widgets/storage_item_list.dart';
+import 'package:smart_home/pages/storage/widgets/storage_form.dart';
+import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
 
 class StorageDetailPage extends StatelessWidget {
   final String storageId;
