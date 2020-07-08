@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -41,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
+/// 选择 APIURL 的界面
 class ApiUrlForm extends StatefulWidget {
   final String apiUrl;
   final Function onTapNext;
@@ -85,7 +87,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
             semanticLabel: 'icon',
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(20.0),
             child: TextFormField(
               decoration: InputDecoration(
                 labelText: '服务器网址',
@@ -125,6 +127,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
   }
 }
 
+/// 输入用户名密码的登录界面
 class LoginForm extends StatefulWidget {
   final Function onTapBack;
 

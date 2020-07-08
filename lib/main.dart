@@ -9,6 +9,7 @@ import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/repositories/user_repository.dart';
+import 'package:smart_home/repositories/version_repository.dart';
 
 Route<dynamic> _generateRoute(RouteSettings settings) {
   if (settings.name == TopicDetailPage.routeName) {
@@ -55,34 +56,41 @@ class MyApp extends StatelessWidget {
         ],
         title: config.appName,
         onGenerateRoute: _generateRoute,
-        home: BlocConsumer<AppPreferencesBloc, AppPreferencesState>(
-          listenWhen: (previous, current) {
-            if (previous.apiUrl != current.apiUrl) {
-              return true;
-            } else {
-              return false;
-            }
-          },
-          listener: (context, state) {
-            graphQLApiClient.initailize(
-                url: state.apiUrl, userRepository: userRepository);
-          },
-          builder: (context, state) {
-            if (!state.initialized) {
-              return SplashPage();
-            }
-            return MultiRepositoryProvider(
-              providers: [
-                RepositoryProvider<GraphQLApiClient>(
-                  create: (context) => graphQLApiClient,
-                ),
-                RepositoryProvider<UserRepository>(
-                  create: (context) => userRepository,
-                )
-              ],
-              child: HomePage(),
-            );
-          },
+        home: MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider<GraphQLApiClient>(
+              create: (context) => graphQLApiClient,
+            ),
+            RepositoryProvider<UserRepository>(
+              create: (context) => userRepository,
+            ),
+            RepositoryProvider<VersionRepository>(
+              create: (context) => VersionRepository(),
+            ),
+          ],
+          child: BlocConsumer<AppPreferencesBloc, AppPreferencesState>(
+            listenWhen: (previous, current) {
+              if (previous.apiUrl != current.apiUrl) {
+                return true;
+              } else if (graphQLApiClient.client == null) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+            listener: (context, state) {
+              graphQLApiClient.initailize(
+                url: state.apiUrl ?? config.apiUrl,
+                userRepository: userRepository,
+              );
+            },
+            builder: (context, state) {
+              if (!state.initialized) {
+                return SplashPage();
+              }
+              return HomePage();
+            },
+          ),
         ),
       ),
     );

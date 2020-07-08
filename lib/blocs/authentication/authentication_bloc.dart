@@ -34,7 +34,6 @@ class AuthenticationBloc
       AuthenticationStarted event) async* {
     try {
       // 检查是否登录
-      yield Authenticating();
       if (await userRepository.isLogin) {
         yield Authenticated(await userRepository.currentUser());
       } else {

@@ -1,28 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:smart_home/blocs/authentication/authentication_bloc.dart';
 import 'package:smart_home/blocs/storage/storage_home/storage_home_bloc.dart';
+import 'package:smart_home/blocs/tab/tab_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
+import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/pages/storage/storage_datail_page.dart';
+import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
+import 'package:smart_home/widgets/gravatar.dart';
+import 'package:smart_home/widgets/tab_selector.dart';
 
 class StorageHomePage extends StatelessWidget {
   const StorageHomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => StorageHomeBloc(
-        storageRepository: RepositoryProvider.of<StorageRepository>(context),
-      )..add(StorageHomeStarted()),
-      child: _StorageHomePage(),
+    return RepositoryProvider(
+      create: (context) => StorageRepository(
+        graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(context),
+      ),
+      child: BlocProvider(
+        create: (context) => StorageHomeBloc(
+          storageRepository: RepositoryProvider.of<StorageRepository>(context),
+        )..add(StorageHomeStarted()),
+        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) => Scaffold(
+            appBar: AppBar(
+              leading: state is Authenticated
+                  ? IconButton(
+                      icon: CircleGravatar(email: state.currentUser.email),
+                      onPressed: null,
+                    )
+                  : null,
+              title: Text('物品管理'),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => SearchPage()),
+                    );
+                  },
+                ),
+              ],
+            ),
+            body: _StorageHomeBody(),
+            bottomNavigationBar: TabSelector(
+              activeTab: AppTab.storage,
+              onTabSelected: (tab) =>
+                  BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+            ),
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.storage),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StorageDetailPage(),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
-class _StorageHomePage extends StatelessWidget {
-  const _StorageHomePage({
+class _StorageHomeBody extends StatelessWidget {
+  const _StorageHomeBody({
     Key key,
   }) : super(key: key);
 
