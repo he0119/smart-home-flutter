@@ -4,23 +4,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
-import 'package:smart_home/pages/board/topic_detail_page.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/repositories/user_repository.dart';
 import 'package:smart_home/repositories/version_repository.dart';
-
-Route<dynamic> _generateRoute(RouteSettings settings) {
-  if (settings.name == TopicDetailPage.routeName) {
-    return MaterialPageRoute(
-      builder: (context) {
-        return TopicDetailPage(topicId: settings.arguments);
-      },
-    );
-  }
-  return null;
-}
 
 class MyApp extends StatelessWidget {
   @override
@@ -55,7 +43,6 @@ class MyApp extends StatelessWidget {
           const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
         ],
         title: config.appName,
-        onGenerateRoute: _generateRoute,
         home: MultiRepositoryProvider(
           providers: [
             RepositoryProvider<GraphQLApiClient>(

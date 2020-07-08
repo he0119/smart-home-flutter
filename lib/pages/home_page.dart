@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/board/blocs.dart';
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/blog/home_page.dart';
 import 'package:smart_home/pages/board/home_page.dart';
 import 'package:smart_home/pages/iot/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
+import 'package:smart_home/repositories/board_repository.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
+import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/repositories/user_repository.dart';
 import 'package:smart_home/repositories/version_repository.dart';
 
@@ -76,8 +80,20 @@ class _HomePage extends StatelessWidget {
     }
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
-        if (activeTab == AppTab.board) {
-          return BoardHomePage();
+        if (activeTab == AppTab.storage) {
+          return RepositoryProvider(
+            create: (context) => StorageRepository(
+              graphqlApiClient:
+                  RepositoryProvider.of<GraphQLApiClient>(context),
+            ),
+            child: BlocProvider<StorageHomeBloc>(
+              create: (context) => StorageHomeBloc(
+                storageRepository:
+                    RepositoryProvider.of<StorageRepository>(context),
+              )..add(StorageHomeStarted()),
+              child: Navigator(onGenerateRoute: (_) => StorageHomePage.route()),
+            ),
+          );
         }
         if (activeTab == AppTab.blog) {
           return BlogHomePage();
@@ -85,7 +101,17 @@ class _HomePage extends StatelessWidget {
         if (activeTab == AppTab.iot) {
           return IotHomePage();
         }
-        return StorageHomePage();
+        return RepositoryProvider(
+          create: (context) => BoardRepository(
+            graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(context),
+          ),
+          child: BlocProvider<BoardHomeBloc>(
+            create: (context) => BoardHomeBloc(
+              boardRepository: RepositoryProvider.of<BoardRepository>(context),
+            )..add(BoardHomeStarted()),
+            child: Navigator(onGenerateRoute: (_) => BoardHomePage.route()),
+          ),
+        );
       },
     );
   }

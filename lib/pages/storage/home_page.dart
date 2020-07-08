@@ -8,65 +8,57 @@ import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
-import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/gravatar.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 
 class StorageHomePage extends StatelessWidget {
+  static Route route() {
+    return MaterialPageRoute(builder: (_) => StorageHomePage());
+  }
+
   const StorageHomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => StorageRepository(
-        graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(context),
-      ),
-      child: BlocProvider(
-        create: (context) => StorageHomeBloc(
-          storageRepository: RepositoryProvider.of<StorageRepository>(context),
-        )..add(StorageHomeStarted()),
-        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) => Scaffold(
-            appBar: AppBar(
-              leading: state is Authenticated
-                  ? IconButton(
-                      icon: CircleGravatar(email: state.currentUser.email),
-                      onPressed: null,
-                    )
-                  : null,
-              title: Text('物品管理'),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => SearchPage()),
-                    );
-                  },
-                ),
-              ],
-            ),
-            body: _StorageHomeBody(),
-            bottomNavigationBar: TabSelector(
-              activeTab: AppTab.storage,
-              onTabSelected: (tab) =>
-                  BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
-            ),
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.storage),
-              onPressed: () async {
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) => Scaffold(
+        appBar: AppBar(
+          leading: state is Authenticated
+              ? IconButton(
+                  icon: CircleGravatar(email: state.currentUser.email),
+                  onPressed: null,
+                )
+              : null,
+          title: Text('物品管理'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => StorageDetailPage(),
-                  ),
+                  MaterialPageRoute(builder: (_) => SearchPage()),
                 );
               },
             ),
-          ),
+          ],
+        ),
+        body: _StorageHomeBody(),
+        bottomNavigationBar: TabSelector(
+          activeTab: AppTab.storage,
+          onTabSelected: (tab) =>
+              BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.storage),
+          onPressed: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StorageDetailPage(),
+              ),
+            );
+          },
         ),
       ),
     );

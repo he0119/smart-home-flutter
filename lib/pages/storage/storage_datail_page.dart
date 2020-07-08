@@ -227,10 +227,7 @@ class _StorageDetailPage extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return index == 0
                       ? IconButton(
-                          icon: Icon(
-                            Icons.home,
-                            color: Colors.white70,
-                          ),
+                          icon: Icon(Icons.home),
                           onPressed: () {
                             BlocProvider.of<StorageDetailBloc>(context)
                                 .add(StorageDetailRoot());
@@ -248,10 +245,7 @@ class _StorageDetailPage extends StatelessWidget {
                                 padding: EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
                                   paths[index - 1].name,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white70,
-                                  ),
+                                  style: TextStyle(fontSize: 16),
                                 ),
                               ),
                             ),
@@ -262,7 +256,6 @@ class _StorageDetailPage extends StatelessWidget {
                   return Icon(
                     Icons.arrow_forward_ios,
                     size: 12,
-                    color: Colors.white70,
                   );
                 },
               ),

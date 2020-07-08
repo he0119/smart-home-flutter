@@ -57,10 +57,8 @@ class TopicItem extends StatelessWidget {
           ),
         ),
         onTap: () {
-          Navigator.of(context).pushNamed(
-            TopicDetailPage.routeName,
-            arguments: topic.id,
-          );
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => TopicDetailPage(topicId: topic.id)));
         },
       );
     }
