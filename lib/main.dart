@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/models/navigator_keys.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
@@ -75,7 +76,22 @@ class MyApp extends StatelessWidget {
               if (!state.initialized) {
                 return SplashPage();
               }
-              return HomePage();
+              return WillPopScope(
+                  onWillPop: () async {
+                    // Check a Lower Navigator First
+                    if (storageNavigatorKey.currentState != null &&
+                        storageNavigatorKey.currentState.canPop()) {
+                      storageNavigatorKey.currentState.maybePop();
+                      return false;
+                    }
+                    if (boardNavigatorKey.currentState != null &&
+                        boardNavigatorKey.currentState.canPop()) {
+                      boardNavigatorKey.currentState.maybePop();
+                      return false;
+                    }
+                    return true;
+                  },
+                  child: HomePage());
             },
           ),
         ),

@@ -6,6 +6,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/models/navigator_keys.dart';
 import 'package:smart_home/pages/blog/home_page.dart';
 import 'package:smart_home/pages/board/home_page.dart';
 import 'package:smart_home/pages/iot/home_page.dart';
@@ -91,7 +92,10 @@ class _HomePage extends StatelessWidget {
                 storageRepository:
                     RepositoryProvider.of<StorageRepository>(context),
               )..add(StorageHomeStarted()),
-              child: Navigator(onGenerateRoute: (_) => StorageHomePage.route()),
+              child: Navigator(
+                key: storageNavigatorKey,
+                onGenerateRoute: (_) => StorageHomePage.route(),
+              ),
             ),
           );
         }
@@ -109,7 +113,9 @@ class _HomePage extends StatelessWidget {
             create: (context) => BoardHomeBloc(
               boardRepository: RepositoryProvider.of<BoardRepository>(context),
             )..add(BoardHomeStarted()),
-            child: Navigator(onGenerateRoute: (_) => BoardHomePage.route()),
+            child: Navigator(
+                key: boardNavigatorKey,
+                onGenerateRoute: (_) => BoardHomePage.route()),
           ),
         );
       },
