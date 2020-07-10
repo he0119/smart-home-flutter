@@ -24,6 +24,8 @@ class _SearchBarState extends State<_SearchBar> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      key: UniqueKey(),
+      autofocus: true,
       controller: _textController,
       autocorrect: false,
       onChanged: (text) {
