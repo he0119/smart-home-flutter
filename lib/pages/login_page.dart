@@ -152,8 +152,8 @@ class _LoginFormState extends State<LoginForm> {
     _onLoginButtonPressed() {
       BlocProvider.of<AuthenticationBloc>(context).add(
         AuthenticationLogin(
-          _usernameController.text,
-          _passwordController.text,
+          username: _usernameController.text,
+          password: _passwordController.text,
         ),
       );
     }
@@ -161,7 +161,7 @@ class _LoginFormState extends State<LoginForm> {
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state is AuthenticationFailure) {
-          showErrorSnackBar(context, state.error);
+          showErrorSnackBar(context, state.message);
         }
       },
       builder: (context, state) {

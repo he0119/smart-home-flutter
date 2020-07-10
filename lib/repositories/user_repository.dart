@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_home/blocs/authentication/authentication_bloc.dart';
 import 'package:smart_home/graphql/mutations/mutations.dart';
 import 'package:smart_home/graphql/queries/me.dart';
 import 'package:smart_home/models/models.dart';
@@ -11,6 +12,7 @@ class UserRepository {
   static final Logger _log = Logger('UserRepository');
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final GraphQLApiClient graphqlApiClient;
+  AuthenticationBloc authenticationBloc;
 
   UserRepository({@required this.graphqlApiClient});
 
@@ -78,13 +80,13 @@ class UserRepository {
     QueryResult results = await graphqlApiClient.client.mutate(options);
     if (results.hasException) {
       for (GraphQLError error in results.exception.graphqlErrors) {
-        // 如果 Refresh Token 无效或过期则清除
+        // 如果 Refresh Token 无效或过期则登出
         String message = error.message.toLowerCase();
         if (message.contains('invalid') || message.contains('expired')) {
-          _clearRefreshToken();
+          authenticationBloc.add(AuthenticationLogout());
         }
         _log.warning('refresh token expired/invalid');
-        throw Exception('登录验证失败，请重新登录');
+        throw AuthenticationException('登录验证失败，请重新登录');
       }
     } else {
       String token = results.data['refreshToken']['token'];
@@ -96,7 +98,7 @@ class UserRepository {
   /// 清除 Refresh Token
   Future _clearRefreshToken() async {
     final SharedPreferences prefs = await _prefs;
-    await prefs.clear();
+    await prefs.remove('refreshToken');
     _log.fine('clear refresh token');
   }
 
@@ -109,4 +111,11 @@ class UserRepository {
     final SharedPreferences prefs = await _prefs;
     await prefs.setString('token', token);
   }
+}
+
+/// 访问 API 出错
+class AuthenticationException implements Exception {
+  final String message;
+
+  const AuthenticationException(this.message);
 }

@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/blocs/snack_bar/snack_bar_bloc.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
 part 'storage_detail_event.dart';
@@ -27,7 +26,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       try {
         List<Storage> results = await storageRepository.rootStorage();
         yield StorageDetailRootSuccess(storages: results);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield StorageDetailError(message: e.message);
       }
     }
@@ -37,7 +36,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         List<Storage> results =
             await storageRepository.rootStorage(cache: false);
         yield StorageDetailRootSuccess(storages: results);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield StorageDetailError(message: e.message);
       }
     }
@@ -48,7 +47,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             await storageRepository.storage(id: event.id);
         yield StorageDetailSuccess(
             storage: results['storage'], ancestors: results['ancestors']);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield StorageDetailError(message: e.message);
       }
     }
@@ -61,7 +60,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         );
         yield StorageDetailSuccess(
             storage: results['storage'], ancestors: results['ancestors']);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield StorageDetailError(message: e.message);
       }
     }
@@ -72,7 +71,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         Map<String, dynamic> results =
             await storageRepository.storage(id: event.id);
         yield StorageEditInitial(storage: results['storage']);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield StorageDetailError(message: e.message);
       }
     }
@@ -81,7 +80,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       yield StorageDetailInProgress();
       try {
         yield StorageAddInitial(parentId: event.parentId);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield StorageDetailError(message: e.message);
       }
     }
@@ -117,7 +116,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         } else {
           await storageRepository.rootStorage(cache: false);
         }
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.storage,
@@ -150,7 +149,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         // 刷新受到影响的存储位置
         // 添加新位置之后，位置列表需要更新
         await storageRepository.storages(cache: false);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.storage,
@@ -178,7 +177,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         );
         // 修改新位置之后，位置列表需要更新
         await storageRepository.storages(cache: false);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.storage,

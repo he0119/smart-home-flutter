@@ -23,34 +23,31 @@ class Authenticated extends AuthenticationState {
   String toString() => 'Authenticated { username: ${currentUser.username} }';
 }
 
+/// 未登录
 class Unauthenticated extends AuthenticationState {}
 
-/// 网络错误或者用户名密码错误
+/// 用户名密码错误
 class AuthenticationFailure extends AuthenticationState {
-  final String error;
+  final String message;
 
-  const AuthenticationFailure(
-    this.error,
-  );
+  const AuthenticationFailure(this.message);
 
   @override
-  List<Object> get props => [error];
+  List<Object> get props => [message];
 
   @override
-  String toString() => 'AuthenticationFailure { error: $error }';
+  String toString() => 'AuthenticationFailure { error: $message }';
 }
 
-/// 更严重的错误，需要有时需要重启软件（只发生在软件启动阶段）
+/// 网络错误
 class AuthenticationError extends AuthenticationState {
-  final String error;
+  final String message;
 
-  const AuthenticationError(
-    this.error,
-  );
+  const AuthenticationError(this.message);
 
   @override
-  List<Object> get props => [error];
+  List<Object> get props => [message];
 
   @override
-  String toString() => 'AuthenticationError { error: $error }';
+  String toString() => 'AuthenticationError { error: $message }';
 }
