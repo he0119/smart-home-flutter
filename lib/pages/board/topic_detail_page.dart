@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/board/topic_detail/topic_detail_bloc.dart';
+import 'package:smart_home/pages/board/widgets/add_comment_bar.dart';
 import 'package:smart_home/pages/board/widgets/comment_list.dart';
 import 'package:smart_home/pages/board/widgets/topic_item.dart';
 import 'package:smart_home/repositories/board_repository.dart';
@@ -33,9 +34,7 @@ class _TopicDetailPage extends StatelessWidget {
       builder: (context, state) {
         if (state is TopicDetailInProgress) {
           return Scaffold(
-              appBar: AppBar(
-                title: Text('加载中'),
-              ),
+              appBar: AppBar(),
               body: Center(child: CircularProgressIndicator()));
         }
         if (state is TopicDetailFailure) {
@@ -54,22 +53,42 @@ class _TopicDetailPage extends StatelessWidget {
                 BlocProvider.of<TopicDetailBloc>(context)
                     .add(TopicDetailRefreshed(topicId: state.topic.id));
               },
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverToBoxAdapter(
-                    child: TopicItem(
-                      topic: state.topic,
-                      showBody: true,
+              child: GestureDetector(
+                onTap: () {
+                  // Dismiss the keyboard
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
+                },
+                child: Stack(
+                  children: <Widget>[
+                    CustomScrollView(
+                      slivers: <Widget>[
+                        SliverToBoxAdapter(
+                          child: TopicItem(
+                            topic: state.topic,
+                            showBody: true,
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                            child: Text('全部评论', style: TextStyle(fontSize: 20)),
+                          ),
+                        ),
+                        SliverCommentList(comments: state.comments),
+                      ],
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                      child: Text('全部评论', style: TextStyle(fontSize: 20)),
+                    Positioned(
+                      bottom: 0.0,
+                      left: 0.0,
+                      right: 0.0,
+                      child: AddCommentButtonBar(),
                     ),
-                  ),
-                  SliverCommentList(comments: state.comments),
-                ],
+                  ],
+                ),
               ),
             ),
           );

@@ -34,7 +34,7 @@ class BoardHomePage extends StatelessWidget {
               BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
         ),
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+          child: Icon(Icons.create),
           onPressed: () async {
             // TODO: 添加页面转跳逻辑
           },
@@ -53,9 +53,6 @@ class _BoardHomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<BoardHomeBloc, BoardHomeState>(
       builder: (context, state) {
-        if (state is BoardHomeInProgress) {
-          return Center(child: CircularProgressIndicator());
-        }
         if (state is BoardHomeError) {
           return Center(child: Text(state.message));
         }
@@ -68,7 +65,7 @@ class _BoardHomeBody extends StatelessWidget {
             child: TopicList(topics: state.topics),
           );
         }
-        return Container();
+        return Center(child: CircularProgressIndicator());
       },
     );
   }
