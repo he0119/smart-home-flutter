@@ -6,6 +6,7 @@ import 'package:smart_home/blocs/storage/item_form/item_form_bloc.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/pages/storage/widgets/item_form.dart';
@@ -255,35 +256,50 @@ class _ItemDetailList extends StatelessWidget {
       children: <Widget>[
         ListTile(
           title: Text('数量'),
-          trailing: Text(item.number.toString()),
+          trailing: SelectableText(item.number.toString()),
         ),
         ListTile(
           title: Text('备注'),
-          trailing: Text(item.description ?? ''),
+          trailing: SelectableText(item.description ?? ''),
         ),
         ListTile(
           title: Text('属于'),
-          trailing: Text(item.storage.name),
+          trailing: SelectableText(
+            item.storage.name,
+            onTap: () {
+              // TODO: 转跳后如果不进行操作直接单击返回，应该回到当前界面
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      StorageDetailPage(storageId: item.storage.id),
+                ),
+              );
+            },
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
         ),
         ListTile(
           title: Text('价格'),
-          trailing: Text(item.price?.toString() ?? ''),
+          trailing: SelectableText(item.price?.toString() ?? ''),
         ),
         ListTile(
           title: Text('有效期至'),
-          trailing: Text(item.expirationDate?.toLocalStr() ?? ''),
+          trailing: SelectableText(item.expirationDate?.toLocalStr() ?? ''),
         ),
         ListTile(
           title: Text('录入者'),
-          trailing: Text(item.editor.username),
+          trailing: SelectableText(item.editor.username),
         ),
         ListTile(
           title: Text('更新时间'),
-          trailing: Text(item.updateDate?.toLocalStr() ?? ''),
+          trailing: SelectableText(item.updateDate?.toLocalStr() ?? ''),
         ),
         ListTile(
           title: Text('添加时间'),
-          trailing: Text(item.dateAdded?.toLocalStr() ?? ''),
+          trailing: SelectableText(item.dateAdded?.toLocalStr() ?? ''),
         ),
       ],
     );
