@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
 part 'item_detail_event.dart';
@@ -39,7 +38,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
       try {
         Item results = await storageRepository.item(id: event.itemId);
         yield ItemDetailSuccess(item: results);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield ItemDetailError(message: e.message);
       }
     }
@@ -51,7 +50,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
           cache: false,
         );
         yield ItemDetailSuccess(item: results);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield ItemDetailError(message: e.message);
       }
     }
@@ -61,7 +60,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
       try {
         Item results = await storageRepository.item(id: event.itemId);
         yield ItemEditInitial(item: results);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield ItemDetailError(message: e.message);
       }
     }
@@ -69,7 +68,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
       yield ItemDetailInProgress();
       try {
         yield ItemAddInitial(storageId: event.storageId);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield ItemDetailError(message: e.message);
       }
     }
@@ -111,7 +110,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         if (storageSearchBloc != null) {
           storageSearchBloc.add(StorageSearchChanged(key: searchKeyword));
         }
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.item,
@@ -144,7 +143,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         // 更新位置详情界面
         assert(storageDetailBloc != null);
         storageDetailBloc.add(StorageDetailRefreshed(id: event.storageId));
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.item,
@@ -177,7 +176,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         if (storageSearchBloc != null) {
           storageSearchBloc.add(StorageSearchChanged(key: searchKeyword));
         }
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.item,

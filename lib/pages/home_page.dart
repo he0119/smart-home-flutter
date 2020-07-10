@@ -11,6 +11,7 @@ import 'package:smart_home/pages/blog/home_page.dart';
 import 'package:smart_home/pages/board/home_page.dart';
 import 'package:smart_home/pages/iot/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
+import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/repositories/board_repository.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
@@ -26,30 +27,37 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => AuthenticationBloc(
         userRepository: RepositoryProvider.of<UserRepository>(context),
-        graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(context),
       )..add(AuthenticationStarted()),
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          if (state is Authenticated || state is AuthenticationUninitialized) {
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider<TabBloc>(
-                  create: (context) => TabBloc(),
-                ),
-                BlocProvider<SnackBarBloc>(
-                  create: (context) => SnackBarBloc(),
-                ),
-                BlocProvider<UpdateBloc>(
-                  create: (context) => UpdateBloc(
-                    versionRepository:
-                        RepositoryProvider.of<VersionRepository>(context),
-                  ),
-                ),
-              ],
-              child: _HomePage(),
-            );
+          if (state is AuthenticationUninitialized) {
+            RepositoryProvider.of<UserRepository>(context).authenticationBloc =
+                BlocProvider.of<AuthenticationBloc>(context);
+            return SplashPage();
           }
-          return LoginPage();
+          // 仅在未登录或登陆失败时进入登陆界面
+          if (state is Unauthenticated ||
+              state is Authenticating ||
+              state is AuthenticationFailure) {
+            return LoginPage();
+          }
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<TabBloc>(
+                create: (context) => TabBloc(),
+              ),
+              BlocProvider<SnackBarBloc>(
+                create: (context) => SnackBarBloc(),
+              ),
+              BlocProvider<UpdateBloc>(
+                create: (context) => UpdateBloc(
+                  versionRepository:
+                      RepositoryProvider.of<VersionRepository>(context),
+                ),
+              ),
+            ],
+            child: _HomePage(),
+          );
         },
       ),
     );

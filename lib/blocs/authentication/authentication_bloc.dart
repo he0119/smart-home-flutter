@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/repositories/user_repository.dart';
 
 part 'authentication_event.dart';
@@ -11,11 +10,9 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final UserRepository userRepository;
-  final GraphQLApiClient graphqlApiClient;
 
   AuthenticationBloc({
     @required this.userRepository,
-    @required this.graphqlApiClient,
   }) : super(AuthenticationUninitialized());
 
   @override
@@ -39,6 +36,8 @@ class AuthenticationBloc
       } else {
         yield Unauthenticated();
       }
+    } on AuthenticationException catch (_) {
+      yield Unauthenticated();
     } catch (e) {
       yield AuthenticationError(e.message);
     }
@@ -57,7 +56,7 @@ class AuthenticationBloc
         yield AuthenticationFailure('用户名或密码错误');
       }
     } catch (e) {
-      yield AuthenticationFailure(e.message);
+      yield AuthenticationError(e.message);
     }
   }
 

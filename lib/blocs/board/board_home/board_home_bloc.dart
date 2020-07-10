@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/models/board.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/repositories/board_repository.dart';
 
 part 'board_home_event.dart';
@@ -22,7 +21,7 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
         yield BoardHomeInProgress();
         List<Topic> topics = await boardRepository.topics();
         yield BoardHomeSuccess(topics: topics);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield BoardHomeError(message: e.message);
       }
     }
@@ -31,7 +30,7 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
         yield BoardHomeInProgress();
         List<Topic> topics = await boardRepository.topics(cache: false);
         yield BoardHomeSuccess(topics: topics);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield BoardHomeError(message: e.message);
       }
     }

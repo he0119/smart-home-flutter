@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/repositories/board_repository.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
 
 part 'comment_event.dart';
 part 'comment_state.dart';
@@ -27,7 +26,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
           body: event.body,
         );
         yield CommentAddSuccess(comment: comment);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield CommentError(message: e.message);
       }
     }
@@ -39,7 +38,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
           body: event.body,
         );
         yield CommentUpdateSuccess(comment: comment);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield CommentError(message: e.message);
       }
     }
@@ -48,7 +47,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       try {
         await boardRepository.deleteComment(commentId: event.comment.id);
         yield CommentDeleteSuccess(comment: event.comment);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield CommentError(message: e.message);
       }
     }

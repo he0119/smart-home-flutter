@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
 part 'storage_home_event.dart';
@@ -30,7 +29,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
           nearExpiredItems: homepage['nearExpiredItems'],
           itemType: ItemType.all,
         );
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield StorageHomeError(message: e.message);
       }
     }
@@ -81,7 +80,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             );
             break;
         }
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield StorageHomeError(message: e.message);
       }
     }
@@ -140,7 +139,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             );
             break;
         }
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield StorageHomeError(message: e.message);
       }
     }

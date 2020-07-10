@@ -20,7 +20,7 @@ dependencies:
 
   bloc: ^5.0.0
   flutter_bloc: ^5.0.0
-  equatable: ^1.1.0
+  equatable: ^1.2.0
   json_annotation: ^3.0.0
 
   shared_preferences: '>=0.5.7+3 <2.0.0'

@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/repositories/board_repository.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
 
 part 'topic_event.dart';
 part 'topic_state.dart';
@@ -27,7 +26,7 @@ class TopicBloc extends Bloc<TopicEvent, TopicState> {
           description: event.description,
         );
         yield TopicAddSuccess(topic: topic);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield TopicError(message: e.message);
       }
     }
@@ -40,7 +39,7 @@ class TopicBloc extends Bloc<TopicEvent, TopicState> {
           description: event.description,
         );
         yield TopicUpdateSuccess(topic: topic);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield TopicError(message: e.message);
       }
     }
@@ -49,7 +48,7 @@ class TopicBloc extends Bloc<TopicEvent, TopicState> {
       try {
         await boardRepository.deleteTopic(topicId: event.topic.id);
         yield TopicDeleteSuccess(topic: event.topic);
-      } on GraphQLApiException catch (e) {
+      } catch (e) {
         yield TopicError(message: e.message);
       }
     }
