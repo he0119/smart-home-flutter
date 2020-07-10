@@ -155,7 +155,7 @@ class BoardRepository {
 
   Future<Comment> updateComment({
     @required String id,
-    String body,
+    @required String body,
   }) async {
     final MutationOptions options = MutationOptions(
       documentNode: gql(updateCommentMutation),
