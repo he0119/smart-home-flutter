@@ -4,38 +4,37 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
-import 'package:smart_home/models/models.dart';
+import 'package:smart_home/models/navigator_keys.dart';
 import 'package:smart_home/pages/home_page.dart';
-import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
+import 'package:smart_home/repositories/graphql_api_client.dart';
+import 'package:smart_home/repositories/user_repository.dart';
+import 'package:smart_home/repositories/version_repository.dart';
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Intl.defaultLocale = 'zh';
     AppConfig config = AppConfig.of(context);
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthenticationBloc>(
-          create: (BuildContext context) =>
-              AuthenticationBloc()..add(AppStarted(config.apiUrl)),
-        ),
-        BlocProvider<UpdateBloc>(
-          create: (BuildContext context) => UpdateBloc()..add(UpdateStarted()),
-        ),
-        BlocProvider<SnackBarBloc>(
-          create: (BuildContext context) => SnackBarBloc(),
-        ),
-        BlocProvider<TabBloc>(
-          create: (BuildContext context) => TabBloc(),
-        ),
-      ],
+    GraphQLApiClient graphQLApiClient = GraphQLApiClient();
+    UserRepository userRepository =
+        UserRepository(graphqlApiClient: graphQLApiClient);
+    return BlocProvider<AppPreferencesBloc>(
+      create: (BuildContext context) => AppPreferencesBloc()..add(AppStarted()),
       child: MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,
+          primaryColor: Colors.white,
+          accentColor: Color(0xFF56CCF2),
+          iconTheme: IconThemeData(color: Color(0xFF255261)),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              selectedItemColor: Color(0xFF2D9CDB)),
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
+          accentColor: Color(0xFF2F80ED),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              selectedItemColor: Color(0xFF2D9CDB)),
         ),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
@@ -44,44 +43,57 @@ class MyApp extends StatelessWidget {
         supportedLocales: [
           const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
         ],
-        title: '智慧家庭',
-        home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {
-            if (state is AuthenticationError) {
-              showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: Text('错误'),
-                  content: Text(state.error),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('确认'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        BlocProvider.of<AuthenticationBloc>(context)
-                            .add(AppStarted(config.apiUrl));
-                      },
-                    )
-                  ],
-                ),
+        title: config.appName,
+        home: MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider<GraphQLApiClient>(
+              create: (context) => graphQLApiClient,
+            ),
+            RepositoryProvider<UserRepository>(
+              create: (context) => userRepository,
+            ),
+            RepositoryProvider<VersionRepository>(
+              create: (context) => VersionRepository(),
+            ),
+          ],
+          child: BlocConsumer<AppPreferencesBloc, AppPreferencesState>(
+            listenWhen: (previous, current) {
+              if (previous.apiUrl != current.apiUrl) {
+                return true;
+              } else if (graphQLApiClient.client == null) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+            listener: (context, state) {
+              graphQLApiClient.initailize(
+                url: state.apiUrl ?? config.apiUrl,
+                userRepository: userRepository,
               );
-            }
-          },
-          builder: (context, state) {
-            if (state is Authenticated) {
-              BlocProvider.of<SnackBarBloc>(context).add(
-                SnackBarChanged(
-                    position: SnackBarPosition.home,
-                    message: '登陆成功，欢迎 ${state.currentUser.username}',
-                    type: MessageType.info),
-              );
-              return HomePage();
-            }
-            if (state is AppUninitialized) {
-              return SplashPage();
-            }
-            return LoginPage();
-          },
+            },
+            builder: (context, state) {
+              if (!state.initialized) {
+                return SplashPage();
+              }
+              return WillPopScope(
+                  onWillPop: () async {
+                    // Check a Lower Navigator First
+                    if (storageNavigatorKey.currentState != null &&
+                        storageNavigatorKey.currentState.canPop()) {
+                      storageNavigatorKey.currentState.maybePop();
+                      return false;
+                    }
+                    if (boardNavigatorKey.currentState != null &&
+                        boardNavigatorKey.currentState.canPop()) {
+                      boardNavigatorKey.currentState.maybePop();
+                      return false;
+                    }
+                    return true;
+                  },
+                  child: HomePage());
+            },
+          ),
         ),
       ),
     );

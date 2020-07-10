@@ -5,8 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 import 'package:version/version.dart';
 
-VersionRepository versionRepository = VersionRepository();
-
 class VersionRepository {
   Version _currentVersion;
   Version _onlineVersion;
@@ -74,9 +72,15 @@ class VersionRepository {
   Future<Version> _getOnlineVersion() async {
     var url =
         'https://api.github.com/repos/he0119/smart-home-flutter/releases/latest';
-    var response = await http.get(url);
-    Map<String, dynamic> json = jsonDecode(response.body);
-    String versionName = json['tag_name'];
-    return Version.parse(versionName.replaceAll('v', ''));
+    try {
+      var response = await http.get(url);
+      Map<String, dynamic> json = jsonDecode(response.body);
+      String versionName = json['tag_name'];
+      return Version.parse(versionName.replaceAll('v', ''));
+    } catch (e) {
+      // 如果检查更新失败则直接返回 0.0.0
+      // TODO: 处理异常，增加失败提示
+      return Version(0, 0, 0);
+    }
   }
 }

@@ -5,8 +5,7 @@ import 'package:smart_home/models/models.dart';
 part 'tab_event.dart';
 
 class TabBloc extends Bloc<TabEvent, AppTab> {
-  @override
-  AppTab get initialState => AppTab.storage;
+  TabBloc() : super(AppTab.storage);
 
   @override
   Stream<AppTab> mapEventToState(TabEvent event) async* {

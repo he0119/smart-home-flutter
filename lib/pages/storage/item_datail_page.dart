@@ -6,8 +6,9 @@ import 'package:smart_home/blocs/storage/item_form/item_form_bloc.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
-import 'package:smart_home/widgets/item_form.dart';
+import 'package:smart_home/pages/storage/widgets/item_form.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class ItemDetailPage extends StatelessWidget {
@@ -40,6 +41,7 @@ class ItemDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ItemDetailBloc(
+        storageRepository: RepositoryProvider.of<StorageRepository>(context),
         snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
         storageDetailBloc: storageDetailBloc,
         storageHomeBloc: storageHomeBloc,
@@ -91,7 +93,7 @@ class _ItemDetailPage extends StatelessWidget {
                 );
               },
               child: BlocListener<SnackBarBloc, SnackBarState>(
-                  condition: (previous, current) {
+                  listenWhen: (previous, current) {
                     if (current is SnackBarSuccess &&
                         current.position == SnackBarPosition.item) {
                       return true;
@@ -217,6 +219,7 @@ class _ItemDetailPage extends StatelessWidget {
     if (state is ItemEditInitial) {
       return BlocProvider(
         create: (context) => ItemFormBloc(
+          storageRepository: RepositoryProvider.of<StorageRepository>(context),
           itemDetailBloc: BlocProvider.of<ItemDetailBloc>(context),
         ),
         child: ItemForm(
@@ -228,6 +231,7 @@ class _ItemDetailPage extends StatelessWidget {
     if (state is ItemAddInitial) {
       return BlocProvider(
         create: (context) => ItemFormBloc(
+          storageRepository: RepositoryProvider.of<StorageRepository>(context),
           itemDetailBloc: BlocProvider.of<ItemDetailBloc>(context),
         ),
         child: ItemForm(

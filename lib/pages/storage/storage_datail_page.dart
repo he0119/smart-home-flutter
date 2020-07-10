@@ -7,9 +7,10 @@ import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
-import 'package:smart_home/widgets/storage_form.dart';
-import 'package:smart_home/widgets/storage_item_list.dart';
+import 'package:smart_home/pages/storage/widgets/storage_form.dart';
+import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
 
 class StorageDetailPage extends StatelessWidget {
   final String storageId;
@@ -20,6 +21,7 @@ class StorageDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => StorageDetailBloc(
+        storageRepository: RepositoryProvider.of<StorageRepository>(context),
         snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
       )..add(
           storageId != null
@@ -86,7 +88,7 @@ class _StorageDetailPage extends StatelessWidget {
                 }
               },
               child: BlocListener<SnackBarBloc, SnackBarState>(
-                  condition: (previous, current) {
+                  listenWhen: (previous, current) {
                     if (current is SnackBarSuccess &&
                         current.position == SnackBarPosition.storage) {
                       return true;
@@ -179,7 +181,7 @@ class _StorageDetailPage extends StatelessWidget {
                   context: context,
                   builder: (_) => AlertDialog(
                     title: Text('删除 ${state.storage.name}'),
-                    content: Text('你确认要删除该物品么？'),
+                    content: Text('你确认要删除该位置么？'),
                     actions: <Widget>[
                       FlatButton(
                         child: Text('否'),
@@ -225,10 +227,7 @@ class _StorageDetailPage extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return index == 0
                       ? IconButton(
-                          icon: Icon(
-                            Icons.home,
-                            color: Colors.white70,
-                          ),
+                          icon: Icon(Icons.home),
                           onPressed: () {
                             BlocProvider.of<StorageDetailBloc>(context)
                                 .add(StorageDetailRoot());
@@ -246,10 +245,7 @@ class _StorageDetailPage extends StatelessWidget {
                                 padding: EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
                                   paths[index - 1].name,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white70,
-                                  ),
+                                  style: TextStyle(fontSize: 16),
                                 ),
                               ),
                             ),
@@ -260,7 +256,6 @@ class _StorageDetailPage extends StatelessWidget {
                   return Icon(
                     Icons.arrow_forward_ios,
                     size: 12,
-                    color: Colors.white70,
                   );
                 },
               ),
@@ -308,6 +303,7 @@ class _StorageDetailPage extends StatelessWidget {
     if (state is StorageEditInitial) {
       return BlocProvider(
         create: (context) => StorageFormBloc(
+          storageRepository: RepositoryProvider.of<StorageRepository>(context),
           storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
         ),
         child: StorageForm(
@@ -319,6 +315,7 @@ class _StorageDetailPage extends StatelessWidget {
     if (state is StorageAddInitial) {
       return BlocProvider(
         create: (context) => StorageFormBloc(
+          storageRepository: RepositoryProvider.of<StorageRepository>(context),
           storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
         ),
         child: StorageForm(

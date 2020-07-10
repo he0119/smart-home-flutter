@@ -9,12 +9,13 @@ part 'item_form_event.dart';
 part 'item_form_state.dart';
 
 class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
+  final StorageRepository storageRepository;
   final ItemDetailBloc itemDetailBloc;
 
-  ItemFormBloc({@required this.itemDetailBloc});
-
-  @override
-  ItemFormState get initialState => ItemFormState.initial();
+  ItemFormBloc({
+    @required this.storageRepository,
+    @required this.itemDetailBloc,
+  }) : super(ItemFormState.initial());
 
   @override
   Stream<ItemFormState> mapEventToState(
@@ -23,7 +24,6 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
     if (event is ItemFormStarted) {
       yield state.copyWith(listofStorages: await storageRepository.storages());
     }
-
     if (event is NameChanged) {
       yield state.copyWith(
         name: event.name,

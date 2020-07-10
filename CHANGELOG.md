@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 登陆时可自动填写用户名密码（仅支持 `web`）
+- 登陆时可自动填写用户名密码（暂时只支持在 `web` 上保存用户名密码） [flutter#55613](https://github.com/flutter/flutter/issues/55613)
 
 ## [0.3.1] - 2020-03-26
 

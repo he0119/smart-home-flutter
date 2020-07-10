@@ -1,53 +1,32 @@
-import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home/graphql/mutations/mutations.dart';
 import 'package:smart_home/graphql/queries/me.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 
-UserRepository userRepository = UserRepository();
-
-Map<String, dynamic> parseJwt(String token) {
-  final parts = token.split('.');
-  if (parts.length != 3) {
-    throw Exception('invalid token');
-  }
-
-  final payload = _decodeBase64(parts[1]);
-  final payloadMap = json.decode(payload);
-  if (payloadMap is! Map<String, dynamic>) {
-    throw Exception('invalid payload');
-  }
-
-  return payloadMap;
-}
-
-String _decodeBase64(String str) {
-  String output = str.replaceAll('-', '+').replaceAll('_', '/');
-
-  switch (output.length % 4) {
-    case 0:
-      break;
-    case 2:
-      output += '==';
-      break;
-    case 3:
-      output += '=';
-      break;
-    default:
-      throw Exception('Illegal base64url string!"');
-  }
-
-  return utf8.decode(base64Url.decode(output));
-}
-
 class UserRepository {
-  SharedPreferences _prefs;
+  static final Logger _log = Logger('UserRepository');
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final GraphQLApiClient graphqlApiClient;
 
-  Future<String> get token async => _prefs.getString('token');
+  UserRepository({@required this.graphqlApiClient});
 
+  /// 是否登录
+  /// 通过判断是否拥有 Refresh Token
+  Future<bool> get isLogin async {
+    final SharedPreferences prefs = await _prefs;
+    String token = prefs.getString('refreshToken');
+    if (token == null || token == '') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /// 登录
   Future<bool> authenticate(String username, String password) async {
     MutationOptions loginOptions = MutationOptions(
       documentNode: gql(tokenAuth),
@@ -65,18 +44,10 @@ class UserRepository {
     } else {
       String token = results.data['tokenAuth']['token'];
       String refreshToken = results.data['tokenAuth']['refreshToken'];
-      await setToken(token);
-      await setRefreshToken(refreshToken);
+      await _setToken(token);
+      await _setRefreshToken(refreshToken);
       return true;
     }
-  }
-
-  Future clearRefreshToken() async {
-    await _prefs.clear();
-  }
-
-  Future clearToken() async {
-    await _prefs.remove('token');
   }
 
   Future<User> currentUser() async {
@@ -88,38 +59,16 @@ class UserRepository {
     return user;
   }
 
-  bool hasToken() {
-    String token = _prefs.getString('refreshToken');
-    if (token == null || token == "") {
-      return false;
-    } else {
-      return true;
-    }
+  /// 登出
+  Future logout() async {
+    await _clearRefreshToken();
   }
 
-  Future<bool> initailize() async {
-    _prefs = await SharedPreferences.getInstance().catchError((e) {
-      print("shared prefrences error : $e");
-      return false;
-    });
-    return true;
-  }
-
-  Future<bool> isTokenValid() async {
-    try {
-      Map<String, dynamic> result = parseJwt(await token);
-      int now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      // 本地时间可能与服务器不相等
-      int exp = result['exp'] - 30;
-      return exp > now;
-    } catch (e) {
-      return false;
-    }
-  }
-
+  /// 刷新 Token
   Future refreshToken() async {
-    String refreshToken = _prefs.getString('refreshToken');
-    print('refresh token');
+    final SharedPreferences prefs = await _prefs;
+    _log.fine('refreshing token');
+    String refreshToken = prefs.getString('refreshToken');
     MutationOptions options = MutationOptions(
       documentNode: gql(refreshTokenMutation),
       variables: {
@@ -132,21 +81,32 @@ class UserRepository {
         // 如果 Refresh Token 无效或过期则清除
         String message = error.message.toLowerCase();
         if (message.contains('invalid') || message.contains('expired')) {
-          clearRefreshToken();
+          _clearRefreshToken();
         }
+        _log.warning('refresh token expired/invalid');
         throw Exception('登录验证失败，请重新登录');
       }
     } else {
       String token = results.data['refreshToken']['token'];
-      await setToken(token);
+      await _setToken(token);
+      _log.fine('token refreshed');
     }
   }
 
-  Future setRefreshToken(String refreshToken) async {
-    await _prefs.setString('refreshToken', refreshToken);
+  /// 清除 Refresh Token
+  Future _clearRefreshToken() async {
+    final SharedPreferences prefs = await _prefs;
+    await prefs.clear();
+    _log.fine('clear refresh token');
   }
 
-  Future setToken(String token) async {
-    await _prefs.setString('token', token);
+  Future _setRefreshToken(String refreshToken) async {
+    final SharedPreferences prefs = await _prefs;
+    await prefs.setString('refreshToken', refreshToken);
+  }
+
+  Future _setToken(String token) async {
+    final SharedPreferences prefs = await _prefs;
+    await prefs.setString('token', token);
   }
 }
