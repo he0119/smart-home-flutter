@@ -6,6 +6,7 @@ import 'package:smart_home/blocs/storage/item_form/item_form_bloc.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/pages/storage/widgets/item_form.dart';
@@ -263,7 +264,22 @@ class _ItemDetailList extends StatelessWidget {
         ),
         ListTile(
           title: Text('属于'),
-          trailing: SelectableText(item.storage.name),
+          trailing: SelectableText(
+            item.storage.name,
+            onTap: () {
+              // TODO: 转跳后如果不进行操作直接单击返回，应该回到当前界面
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      StorageDetailPage(storageId: item.storage.id),
+                ),
+              );
+            },
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
         ),
         ListTile(
           title: Text('价格'),
