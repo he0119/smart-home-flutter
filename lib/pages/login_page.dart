@@ -181,11 +181,13 @@ class _LoginFormState extends State<LoginForm> {
                   child: Column(
                     children: [
                       TextFormField(
+                        enableSuggestions: false,
                         decoration: InputDecoration(labelText: '用户名'),
                         controller: _usernameController,
                         autofillHints: <String>[AutofillHints.username],
                       ),
                       TextFormField(
+                        enableSuggestions: false,
                         decoration: InputDecoration(labelText: '密码'),
                         controller: _passwordController,
                         obscureText: true,
