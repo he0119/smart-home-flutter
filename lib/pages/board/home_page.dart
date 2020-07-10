@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
+import 'package:smart_home/pages/board/topic_edit_page.dart';
 import 'package:smart_home/pages/board/widgets/topic_list.dart';
 import 'package:smart_home/widgets/gravatar.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
@@ -36,7 +37,11 @@ class BoardHomePage extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.create),
           onPressed: () async {
-            // TODO: 添加页面转跳逻辑
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => TopicEditPage(
+                isEditing: false,
+              ),
+            ));
           },
         ),
       ),

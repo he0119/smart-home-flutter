@@ -174,8 +174,8 @@ class BoardRepository {
 
   Future<Topic> updateTopic({
     @required String id,
-    String title,
-    String description,
+    @required String title,
+    @required String description,
   }) async {
     final MutationOptions options = MutationOptions(
       documentNode: gql(updateTopicMutation),
