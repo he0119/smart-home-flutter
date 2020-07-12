@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
+import 'package:smart_home/utils/launch_url.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BlogHomePage extends StatelessWidget {
@@ -26,7 +26,7 @@ class BlogHomePage extends StatelessWidget {
         child: Icon(Icons.open_in_new),
         onPressed: () async {
           const url = 'https://hehome.xyz';
-          await _launchUrl(url);
+          await launchUrl(url);
         },
       ),
     );
@@ -47,17 +47,9 @@ class _BlogHomeBody extends StatelessWidget {
           )
         : Center(
             child: RaisedButton(
-              onPressed: () => _launchUrl(url),
+              onPressed: () => launchUrl(url),
               child: Text('博客'),
             ),
           );
-  }
-}
-
-Future _launchUrl(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
   }
 }

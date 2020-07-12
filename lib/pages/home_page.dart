@@ -13,11 +13,8 @@ import 'package:smart_home/pages/iot/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
-import 'package:smart_home/repositories/board_repository.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
-import 'package:smart_home/repositories/storage_repository.dart';
-import 'package:smart_home/repositories/user_repository.dart';
-import 'package:smart_home/repositories/version_repository.dart';
+import 'package:smart_home/repositories/repositories.dart';
+import 'package:smart_home/utils/launch_url.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
@@ -53,10 +50,63 @@ class HomePage extends StatelessWidget {
                 create: (context) => UpdateBloc(
                   versionRepository:
                       RepositoryProvider.of<VersionRepository>(context),
-                ),
+                )..add(UpdateStarted()),
               ),
             ],
-            child: _HomePage(),
+            child: BlocListener<UpdateBloc, UpdateState>(
+              listener: (context, state) {
+                if (state is UpdateSuccess && state.needUpdate) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text('更新'),
+                      content: Text('发现新版本（${state.version}）'),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('稍后'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        FlatButton(
+                          child: Text('下载'),
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            launchUrl(state.url);
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                }
+                if (state is UpdateFailure) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text('更新'),
+                      content: Text(state.message),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('放弃'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        FlatButton(
+                          child: Text('重试'),
+                          onPressed: () async {
+                            BlocProvider.of<UpdateBloc>(context)
+                                .add(UpdateStarted());
+                            Navigator.pop(context);
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                }
+              },
+              child: _HomePage(),
+            ),
           );
         },
       ),
