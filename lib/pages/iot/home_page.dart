@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
+import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -13,6 +14,7 @@ class IotHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       body: _IotHomeBody(),
       bottomNavigationBar: TabSelector(
         activeTab: AppTab.iot,

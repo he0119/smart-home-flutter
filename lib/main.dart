@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
-import 'package:smart_home/models/navigator_keys.dart';
+import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';

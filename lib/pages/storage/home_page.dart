@@ -4,6 +4,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:smart_home/blocs/authentication/authentication_bloc.dart';
 import 'package:smart_home/blocs/storage/storage_home/storage_home_bloc.dart';
 import 'package:smart_home/blocs/tab/tab_bloc.dart';
+import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
@@ -23,6 +24,7 @@ class StorageHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) => Scaffold(
+        key: scaffoldKey,
         appBar: AppBar(
           leading: state is Authenticated
               ? IconButton(

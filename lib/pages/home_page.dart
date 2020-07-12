@@ -6,7 +6,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/models/navigator_keys.dart';
+import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/pages/blog/home_page.dart';
 import 'package:smart_home/pages/board/home_page.dart';
 import 'package:smart_home/pages/iot/home_page.dart';
@@ -80,27 +80,16 @@ class HomePage extends StatelessWidget {
                   );
                 }
                 if (state is UpdateFailure) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text('更新'),
+                  scaffoldKey.currentState.showSnackBar(
+                    SnackBar(
                       content: Text(state.message),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('放弃'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        FlatButton(
-                          child: Text('重试'),
-                          onPressed: () async {
-                            BlocProvider.of<UpdateBloc>(context)
-                                .add(UpdateStarted());
-                            Navigator.pop(context);
-                          },
-                        )
-                      ],
+                      action: SnackBarAction(
+                        label: '重试',
+                        onPressed: () {
+                          BlocProvider.of<UpdateBloc>(context)
+                              .add(UpdateStarted());
+                        },
+                      ),
                     ),
                   );
                 }
