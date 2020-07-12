@@ -19,3 +19,12 @@ class UpdateSuccess extends UpdateState {
   String toString() =>
       'UpdateSuccess { needUpdate: $needUpdate, version: $version }';
 }
+
+class UpdateFailure extends UpdateState {
+  final String message;
+
+  UpdateFailure(this.message);
+
+  @override
+  String toString() => 'UpdateError { message: $message }';
+}

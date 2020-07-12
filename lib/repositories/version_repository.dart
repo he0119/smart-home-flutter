@@ -78,9 +78,7 @@ class VersionRepository {
       String versionName = json['tag_name'];
       return Version.parse(versionName.replaceAll('v', ''));
     } catch (e) {
-      // 如果检查更新失败则直接返回 0.0.0
-      // TODO: 处理异常，增加失败提示
-      return Version(0, 0, 0);
+      throw Exception('检查更新失败，请重试');
     }
   }
 }

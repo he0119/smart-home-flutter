@@ -79,6 +79,31 @@ class HomePage extends StatelessWidget {
                     ),
                   );
                 }
+                if (state is UpdateFailure) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text('更新'),
+                      content: Text(state.message),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('放弃'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        FlatButton(
+                          child: Text('重试'),
+                          onPressed: () async {
+                            BlocProvider.of<UpdateBloc>(context)
+                                .add(UpdateStarted());
+                            Navigator.pop(context);
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                }
               },
               child: _HomePage(),
             ),
