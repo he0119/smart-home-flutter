@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
 
-Logger blocLogger = Logger('bloc');
+Logger blocLogger = Logger('BLoC');
 
 class SimpleBlocObserver extends BlocObserver {
   @override

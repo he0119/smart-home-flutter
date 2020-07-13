@@ -27,8 +27,8 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
     StorageEditEvent event,
   ) async* {
     if (event is StorageUpdated) {
+      yield StorageEditInProgress();
       try {
-        yield StorageEditInProgress();
         await storageRepository.updateStorage(
           id: event.id,
           name: event.name,
@@ -68,13 +68,14 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
       }
     }
     if (event is StorageAdded) {
+      yield StorageEditInProgress();
       try {
-        yield StorageEditInProgress();
         await storageRepository.addStorage(
           name: event.name,
           parentId: event.parentId,
           description: event.description,
         );
+        // 刷新受影响的界面
         if (event.parentId != null) {
           storageDetailBloc.add(StorageDetailRefreshed(id: event.parentId));
         } else {
@@ -88,7 +89,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
             type: MessageType.info,
           ),
         );
-        // 刷新受到影响的存储位置
+        // 刷新受到影响的界面
         // 添加新位置之后，位置列表需要更新
         await storageRepository.storages(cache: false);
       } catch (e) {
@@ -103,8 +104,15 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
       }
     }
     if (event is StorageDeleted) {
+      yield StorageEditInProgress();
+      snackBarBloc.add(
+        SnackBarChanged(
+          position: SnackBarPosition.storageDetail,
+          message: '正在删除',
+          type: MessageType.info,
+        ),
+      );
       try {
-        yield StorageEditInProgress();
         await storageRepository.deleteStorage(id: event.storage.id);
         if (event.storage.parent != null) {
           storageDetailBloc
@@ -120,7 +128,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
             type: MessageType.info,
           ),
         );
-        // 修改新位置之后，位置列表需要更新
+        // 删除位置之后，位置列表需要更新
         await storageRepository.storages(cache: false);
       } catch (e) {
         yield StorageEditFailure(e.message);

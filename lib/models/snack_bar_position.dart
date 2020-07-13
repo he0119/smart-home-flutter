@@ -1,1 +1,1 @@
-enum SnackBarPosition { home, itemDetail, itemEdit, storageDetail, storageEdit }
+enum SnackBarPosition { itemDetail, itemEdit, storageDetail, storageEdit }

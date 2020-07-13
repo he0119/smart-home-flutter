@@ -4,7 +4,10 @@ abstract class ItemDetailState {
   const ItemDetailState();
 }
 
-class ItemDetailInProgress extends ItemDetailState {}
+class ItemDetailInProgress extends ItemDetailState {
+  @override
+  String toString() => 'ItemDetailInProgress';
+}
 
 class ItemDetailError extends ItemDetailState {
   final String message;
