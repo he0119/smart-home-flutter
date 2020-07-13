@@ -62,7 +62,6 @@ class _StorageItemListItem extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => ItemDetailPage(
-                isAdding: false,
                 itemId: item.id,
                 storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
               ),
@@ -125,10 +124,9 @@ class _HighlightStorageItemListItem extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => ItemDetailPage(
-                isAdding: false,
                 itemId: item.id,
-                searchKeyword: term,
                 storageSearchBloc: BlocProvider.of<StorageSearchBloc>(context),
+                searchKeyword: term,
               ),
             ),
           );

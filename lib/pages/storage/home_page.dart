@@ -218,19 +218,15 @@ class _StorageHomeBody extends StatelessWidget {
         ],
       ),
     );
-    //ignore: close_sinks
-    final StorageHomeBloc storageHomeBloc =
-        BlocProvider.of<StorageHomeBloc>(context);
     return ListTile(
       title: text,
       subtitle: Text(item.description ?? ''),
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ItemDetailPage(
-              isAdding: false,
+            builder: (_) => ItemDetailPage(
               itemId: item.id,
-              storageHomeBloc: storageHomeBloc,
+              storageHomeBloc: BlocProvider.of<StorageHomeBloc>(context),
             ),
           ),
         );

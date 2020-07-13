@@ -39,7 +39,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         yield StorageUpdateSuccess();
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storage,
+            position: SnackBarPosition.storageDetail,
             message: '修改成功',
             type: MessageType.info,
           ),
@@ -59,7 +59,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
       } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storage,
+            position: SnackBarPosition.storageEdit,
             message: e.message,
             type: MessageType.error,
           ),
@@ -82,7 +82,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         yield StorageAddSuccess();
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storage,
+            position: SnackBarPosition.storageDetail,
             message: '${event.name} 添加成功',
             type: MessageType.info,
           ),
@@ -93,7 +93,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
       } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storage,
+            position: SnackBarPosition.storageEdit,
             message: e.message,
             type: MessageType.error,
           ),
@@ -113,7 +113,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         yield StorageDeleteSuccess();
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storage,
+            position: SnackBarPosition.storageDetail,
             message: '${event.storage.name} 删除成功',
             type: MessageType.info,
           ),
@@ -123,7 +123,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
       } catch (e) {
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storage,
+            position: SnackBarPosition.storageDetail,
             message: e.message,
             type: MessageType.error,
           ),

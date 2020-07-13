@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/blocs/storage/item_detail/item_detail_bloc.dart';
 import 'package:smart_home/blocs/storage/item_form/item_form_bloc.dart';
 import 'package:smart_home/models/models.dart';
@@ -175,9 +176,9 @@ class _ItemFormState extends State<ItemForm> {
                     onPressed: state.isFormValid ? _onSubmitPressed : null,
                     child: Text('提交'),
                   ),
-                  BlocBuilder<ItemDetailBloc, ItemDetailState>(
+                  BlocBuilder<ItemEditBloc, ItemEditState>(
                     builder: (context, state) {
-                      if (state is ItemDetailInProgress) {
+                      if (state is ItemEditInProgress) {
                         return CircularProgressIndicator();
                       }
                       return Container();

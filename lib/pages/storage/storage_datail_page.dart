@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/blocs/storage/storage_detail/storage_detail_bloc.dart';
 import 'package:smart_home/blocs/storage/storage_edit/storage_edit_bloc.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/pages/storage/item_datail_page.dart';
+import 'package:smart_home/pages/storage/item_edit_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_edit_page.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
@@ -91,7 +92,7 @@ class _StorageDetailPage extends StatelessWidget {
               child: BlocListener<SnackBarBloc, SnackBarState>(
                   listenWhen: (previous, current) {
                     if (current is SnackBarSuccess &&
-                        current.position == SnackBarPosition.storage) {
+                        current.position == SnackBarPosition.storageDetail) {
                       return true;
                     }
                     return false;
@@ -309,18 +310,23 @@ class _StorageDetailPage extends StatelessWidget {
   Widget _buildFloatingActionButton(
       BuildContext context, StorageDetailState state) {
     if (state is StorageDetailSuccess) {
-      //ignore: close_sinks
-      final StorageDetailBloc storageDetailBloc =
-          BlocProvider.of<StorageDetailBloc>(context);
       return FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => ItemDetailPage(
-                isAdding: true,
-                storageId: state.storage.id,
-                storageDetailBloc: storageDetailBloc,
+              builder: (_) => BlocProvider<ItemEditBloc>(
+                create: (_) => ItemEditBloc(
+                  storageRepository:
+                      RepositoryProvider.of<StorageRepository>(context),
+                  snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
+                  storageDetailBloc:
+                      BlocProvider.of<StorageDetailBloc>(context),
+                ),
+                child: ItemEditPage(
+                  isEditing: false,
+                  storageId: state.storage.id,
+                ),
               ),
             ),
           );
