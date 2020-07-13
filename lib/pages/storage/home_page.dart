@@ -14,10 +14,6 @@ import 'package:smart_home/widgets/gravatar.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 
 class StorageHomePage extends StatelessWidget {
-  static Route route() {
-    return MaterialPageRoute(builder: (_) => StorageHomePage());
-  }
-
   const StorageHomePage({Key key}) : super(key: key);
 
   @override

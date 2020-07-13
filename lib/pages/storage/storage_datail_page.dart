@@ -21,7 +21,7 @@ class StorageDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
+        BlocProvider<StorageDetailBloc>(
           create: (context) => StorageDetailBloc(
             storageRepository:
                 RepositoryProvider.of<StorageRepository>(context),
@@ -32,7 +32,7 @@ class StorageDetailPage extends StatelessWidget {
                   : StorageDetailRoot(),
             ),
         ),
-        BlocProvider(
+        BlocProvider<StorageEditBloc>(
           create: (context) => StorageEditBloc(
             storageRepository:
                 RepositoryProvider.of<StorageRepository>(context),
