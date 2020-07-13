@@ -156,19 +156,12 @@ packages:
     source: hosted
     version: "1.14.13"
   connectivity:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: connectivity
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.9"
-  connectivity_for_web:
-    dependency: transitive
-    description:
-      name: connectivity_for_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.3.0"
+    version: "0.4.8"
   connectivity_macos:
     dependency: transitive
     description:
