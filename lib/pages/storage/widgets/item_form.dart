@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
-import 'package:smart_home/blocs/storage/item_detail/item_detail_bloc.dart';
 import 'package:smart_home/blocs/storage/item_form/item_form_bloc.dart';
 import 'package:smart_home/models/models.dart';
 

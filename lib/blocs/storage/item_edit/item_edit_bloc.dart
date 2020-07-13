@@ -74,6 +74,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
           storageSearchBloc.add(StorageSearchChanged(key: searchKeyword));
         }
       } catch (e) {
+        yield ItemEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.itemEdit,
@@ -107,6 +108,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         assert(storageDetailBloc != null);
         storageDetailBloc.add(StorageDetailRefreshed(id: event.storageId));
       } catch (e) {
+        yield ItemEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.itemEdit,
@@ -139,6 +141,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
           storageSearchBloc.add(StorageSearchChanged(key: searchKeyword));
         }
       } catch (e) {
+        yield ItemEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.itemDetail,
