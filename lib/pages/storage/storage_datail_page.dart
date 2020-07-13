@@ -165,7 +165,10 @@ class _StorageDetailPage extends StatelessWidget {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => BlocProvider.value(
                   value: storageEditBloc,
-                  child: StorageEditPage(isEditing: false),
+                  child: StorageEditPage(
+                    isEditing: false,
+                    storageId: state.storage.id,
+                  ),
                 ),
               ));
             },
