@@ -35,8 +35,8 @@ class ItemEditPage extends StatelessWidget {
               Navigator.of(context).pop();
             }
           }),
-          // 仅在物品修改页面显示特定消息提示
           BlocListener<SnackBarBloc, SnackBarState>(
+            // 仅在物品修改页面显示特定消息提示
             listenWhen: (previous, current) {
               if (current is SnackBarSuccess &&
                   current.position == SnackBarPosition.itemEdit) {

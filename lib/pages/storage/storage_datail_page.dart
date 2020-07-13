@@ -90,6 +90,7 @@ class _StorageDetailPage extends StatelessWidget {
                 }
               },
               child: BlocListener<SnackBarBloc, SnackBarState>(
+                  // 仅在位置详情页面显示特定消息提示
                   listenWhen: (previous, current) {
                     if (current is SnackBarSuccess &&
                         current.position == SnackBarPosition.storageDetail) {

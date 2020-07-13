@@ -11,7 +11,11 @@ class StorageEditInitial extends StorageEditState {}
 
 class StorageEditInProgress extends StorageEditState {}
 
-class StorageEditFailure extends StorageEditState {}
+class StorageEditFailure extends StorageEditState {
+  final String message;
+
+  const StorageEditFailure(this.message);
+}
 
 class StorageAddSuccess extends StorageEditState {}
 

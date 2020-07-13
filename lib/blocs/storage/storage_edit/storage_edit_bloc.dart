@@ -57,6 +57,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
           await storageRepository.rootStorage(cache: false);
         }
       } catch (e) {
+        yield StorageEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.storageEdit,
@@ -91,6 +92,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         // 添加新位置之后，位置列表需要更新
         await storageRepository.storages(cache: false);
       } catch (e) {
+        yield StorageEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.storageEdit,
@@ -121,6 +123,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         // 修改新位置之后，位置列表需要更新
         await storageRepository.storages(cache: false);
       } catch (e) {
+        yield StorageEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.storageDetail,
