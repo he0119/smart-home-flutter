@@ -6,6 +6,8 @@ import 'package:smart_home/blocs/storage/storage_detail/storage_detail_bloc.dart
 import 'package:smart_home/blocs/storage/storage_edit/storage_edit_bloc.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/pages/error_page.dart';
+import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/pages/storage/item_edit_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_edit_page.dart';
@@ -118,15 +120,8 @@ class _StorageDetailPage extends StatelessWidget {
   }
 
   AppBar _buildAppBar(BuildContext context, StorageDetailState state) {
-    if (state is StorageDetailInProgress) {
-      return AppBar(
-        title: Text('加载中'),
-      );
-    }
     if (state is StorageDetailFailure) {
-      return AppBar(
-        title: Text('错误'),
-      );
+      return AppBar();
     }
     if (state is StorageDetailRootSuccess) {
       return AppBar(
@@ -284,13 +279,24 @@ class _StorageDetailPage extends StatelessWidget {
         ),
       );
     }
-    return null;
+    return AppBar();
   }
 
   Widget _buildBody(BuildContext context, StorageDetailState state) {
     if (state is StorageDetailFailure) {
-      return Center(
-        child: Text(state.message),
+      return ErrorPage(
+        onPressed: () {
+          if (state.storageId != null) {
+            BlocProvider.of<StorageDetailBloc>(context).add(
+              StorageDetailChanged(id: state.storageId),
+            );
+          } else {
+            BlocProvider.of<StorageDetailBloc>(context).add(
+              StorageDetailRoot(),
+            );
+          }
+        },
+        message: state.message,
       );
     }
     if (state is StorageDetailRootSuccess) {
@@ -305,7 +311,7 @@ class _StorageDetailPage extends StatelessWidget {
         storages: state.storage.children.toList(),
       );
     }
-    return Center(child: CircularProgressIndicator());
+    return LoadingPage();
   }
 
   Widget _buildFloatingActionButton(

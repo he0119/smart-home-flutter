@@ -28,7 +28,10 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         List<Storage> results = await storageRepository.rootStorage();
         yield StorageDetailRootSuccess(storages: results);
       } catch (e) {
-        yield StorageDetailFailure(message: e.message);
+        yield StorageDetailFailure(
+          message: e.message,
+          storageId: null,
+        );
       }
     }
     if (event is StorageDetailRootRefreshed) {
@@ -39,7 +42,10 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             await storageRepository.rootStorage(cache: false);
         yield StorageDetailRootSuccess(storages: results);
       } catch (e) {
-        yield StorageDetailFailure(message: e.message);
+        yield StorageDetailFailure(
+          message: e.message,
+          storageId: null,
+        );
       }
     }
     if (event is StorageDetailChanged) {
@@ -59,7 +65,10 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           backImmediately: backImmediately,
         );
       } catch (e) {
-        yield StorageDetailFailure(message: e.message);
+        yield StorageDetailFailure(
+          message: e.message,
+          storageId: event.id,
+        );
       }
     }
     if (event is StorageDetailRefreshed) {
@@ -75,7 +84,10 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           backImmediately: backImmediately,
         );
       } catch (e) {
-        yield StorageDetailFailure(message: e.message);
+        yield StorageDetailFailure(
+          message: e.message,
+          storageId: event.id,
+        );
       }
     }
   }

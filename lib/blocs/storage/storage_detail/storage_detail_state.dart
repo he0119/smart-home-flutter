@@ -11,8 +11,14 @@ class StorageDetailInProgress extends StorageDetailState {
 
 class StorageDetailFailure extends StorageDetailState {
   final String message;
+  final String storageId;
 
-  const StorageDetailFailure({@required this.message});
+  const StorageDetailFailure({
+    @required this.message,
+    @required this.storageId,
+  });
+  @override
+  String toString() => 'StorageDetailFailure { message: $message }';
 }
 
 class StorageDetailRootSuccess extends StorageDetailState {
