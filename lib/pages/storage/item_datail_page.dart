@@ -4,6 +4,8 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/pages/error_page.dart';
+import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/pages/storage/item_edit_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
@@ -182,15 +184,20 @@ class _ItemDetailPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context, ItemDetailState state) {
-    if (state is ItemDetailError) {
-      return Center(
-        child: Text(state.message),
+    if (state is ItemDetailFailure) {
+      return ErrorPage(
+        onPressed: () {
+          BlocProvider.of<ItemDetailBloc>(context).add(
+            ItemDetailChanged(itemId: state.itemId),
+          );
+        },
+        message: state.message,
       );
     }
     if (state is ItemDetailSuccess) {
       return _ItemDetailList(item: state.item);
     }
-    return Center(child: CircularProgressIndicator());
+    return LoadingPage();
   }
 }
 
