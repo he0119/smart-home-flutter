@@ -2,9 +2,6 @@ part of 'storage_detail_bloc.dart';
 
 abstract class StorageDetailEvent {
   const StorageDetailEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
 class StorageDetailRoot extends StorageDetailEvent {}

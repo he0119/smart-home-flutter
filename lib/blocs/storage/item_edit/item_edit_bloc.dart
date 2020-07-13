@@ -74,7 +74,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
           storageHomeBloc.add(StorageHomeChanged(itemType: ItemType.all));
         }
         // 从搜索界面进入
-
         if (storageSearchBloc != null) {
           storageSearchBloc.add(StorageSearchChanged(key: searchKeyword));
         }

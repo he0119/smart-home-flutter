@@ -11,6 +11,13 @@
             "program": "lib/main_dev.dart",
         },
         {
+            "name": "Flutter Release",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "program": "lib/main_dev.dart",
+        }
+        {
             "name": "Flutter Profile",
             "request": "launch",
             "type": "dart",
