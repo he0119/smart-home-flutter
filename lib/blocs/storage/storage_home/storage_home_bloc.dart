@@ -30,7 +30,10 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
           itemType: ItemType.all,
         );
       } catch (e) {
-        yield StorageHomeError(message: e.message);
+        yield StorageHomeError(
+          message: e.message,
+          itemType: ItemType.all,
+        );
       }
     }
     if (event is StorageHomeChanged) {
@@ -81,10 +84,12 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             break;
         }
       } catch (e) {
-        yield StorageHomeError(message: e.message);
+        yield StorageHomeError(
+          message: e.message,
+          itemType: event.itemType,
+        );
       }
     }
-
     if (event is StorageHomeRefreshed) {
       yield StorageHomeInProgress();
       try {
@@ -140,7 +145,10 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             break;
         }
       } catch (e) {
-        yield StorageHomeError(message: e.message);
+        yield StorageHomeError(
+          message: e.message,
+          itemType: event.itemType,
+        );
       }
     }
   }

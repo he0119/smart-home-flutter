@@ -11,11 +11,15 @@ class StorageHomeInProgress extends StorageHomeState {}
 
 class StorageHomeError extends StorageHomeState {
   final String message;
+  final ItemType itemType;
 
-  const StorageHomeError({@required this.message});
+  const StorageHomeError({
+    @required this.message,
+    @required this.itemType,
+  });
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [message, itemType];
 }
 
 class StorageHomeSuccess extends StorageHomeState {
@@ -25,13 +29,12 @@ class StorageHomeSuccess extends StorageHomeState {
   final List<Item> nearExpiredItems;
   final ItemType itemType;
 
-  const StorageHomeSuccess({
-    this.recentlyAddedItems,
-    this.recentlyUpdatedItems,
-    this.expiredItems,
-    this.nearExpiredItems,
-    @required this.itemType
-  });
+  const StorageHomeSuccess(
+      {this.recentlyAddedItems,
+      this.recentlyUpdatedItems,
+      this.expiredItems,
+      this.nearExpiredItems,
+      @required this.itemType});
 
   @override
   List<Object> get props => [
