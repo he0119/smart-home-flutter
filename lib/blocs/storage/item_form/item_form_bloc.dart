@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_home/blocs/storage/item_detail/item_detail_bloc.dart';
+import 'package:smart_home/blocs/storage/item_edit/item_edit_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
@@ -10,11 +10,11 @@ part 'item_form_state.dart';
 
 class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
   final StorageRepository storageRepository;
-  final ItemDetailBloc itemDetailBloc;
+  final ItemEditBloc itemEditBloc;
 
   ItemFormBloc({
     @required this.storageRepository,
-    @required this.itemDetailBloc,
+    @required this.itemEditBloc,
   }) : super(ItemFormState.initial());
 
   @override
@@ -79,7 +79,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
         price = null;
       }
       if (event.isEditing) {
-        itemDetailBloc.add(ItemUpdated(
+        itemEditBloc.add(ItemUpdated(
           id: event.id,
           name: state.name,
           number: int.parse(state.number),
@@ -90,7 +90,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
           expirationDate: state.expirationDate?.toUtc(),
         ));
       } else {
-        itemDetailBloc.add(ItemAdded(
+        itemEditBloc.add(ItemAdded(
           name: state.name,
           number: int.parse(state.number),
           storageId: state.storage,

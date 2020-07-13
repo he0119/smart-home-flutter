@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/storage/storage_detail/storage_detail_bloc.dart';
+import 'package:smart_home/blocs/storage/storage_edit/storage_edit_bloc.dart';
 import 'package:smart_home/blocs/storage/storage_form/storage_form_bloc.dart';
 import 'package:smart_home/models/models.dart';
 
@@ -135,9 +135,9 @@ class _StorageFormFormState extends State<StorageForm> {
                     onPressed: state.isFormValid ? _onSubmitPressed : null,
                     child: Text('提交'),
                   ),
-                  BlocBuilder<StorageDetailBloc, StorageDetailState>(
+                  BlocBuilder<StorageEditBloc, StorageEditState>(
                     builder: (context, state) {
-                      if (state is StorageDetailInProgress) {
+                      if (state is StorageEditInProgress) {
                         return CircularProgressIndicator();
                       }
                       return Container();

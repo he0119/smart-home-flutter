@@ -4,12 +4,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
-import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
-import 'package:smart_home/repositories/user_repository.dart';
-import 'package:smart_home/repositories/version_repository.dart';
+import 'package:smart_home/repositories/repositories.dart';
+
+import 'blocs/board/blocs.dart';
+import 'blocs/storage/blocs.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -19,44 +19,80 @@ class MyApp extends StatelessWidget {
     GraphQLApiClient graphQLApiClient = GraphQLApiClient();
     UserRepository userRepository =
         UserRepository(graphqlApiClient: graphQLApiClient);
-    return BlocProvider<AppPreferencesBloc>(
-      create: (BuildContext context) => AppPreferencesBloc()..add(AppStarted()),
-      child: MaterialApp(
-        theme: ThemeData(
-          brightness: Brightness.light,
-          primaryColor: Colors.white,
-          accentColor: Color(0xFF56CCF2),
-          iconTheme: IconThemeData(color: Color(0xFF255261)),
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(
-              selectedItemColor: Color(0xFF2D9CDB)),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<GraphQLApiClient>(
+          create: (context) => graphQLApiClient,
         ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          accentColor: Color(0xFF2F80ED),
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(
-              selectedItemColor: Color(0xFF2D9CDB)),
+        RepositoryProvider<UserRepository>(
+          create: (context) => userRepository,
         ),
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
+        RepositoryProvider<VersionRepository>(
+          create: (context) => VersionRepository(),
+        ),
+        RepositoryProvider<StorageRepository>(
+          create: (context) =>
+              StorageRepository(graphqlApiClient: graphQLApiClient),
+        ),
+        RepositoryProvider<BoardRepository>(
+          create: (context) =>
+              BoardRepository(graphqlApiClient: graphQLApiClient),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AppPreferencesBloc>(
+            create: (BuildContext context) =>
+                AppPreferencesBloc()..add(AppStarted()),
+          ),
+          BlocProvider<TabBloc>(
+            create: (context) => TabBloc(),
+          ),
+          BlocProvider<SnackBarBloc>(
+            create: (context) => SnackBarBloc(),
+          ),
+          BlocProvider<UpdateBloc>(
+            create: (context) => UpdateBloc(
+              versionRepository:
+                  RepositoryProvider.of<VersionRepository>(context),
+            )..add(UpdateStarted()),
+          ),
+          BlocProvider<StorageHomeBloc>(
+            create: (context) => StorageHomeBloc(
+              storageRepository:
+                  RepositoryProvider.of<StorageRepository>(context),
+            ),
+          ),
+          BlocProvider<BoardHomeBloc>(
+            create: (context) => BoardHomeBloc(
+              boardRepository: RepositoryProvider.of<BoardRepository>(context),
+            ),
+          ),
         ],
-        supportedLocales: [
-          const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
-        ],
-        title: config.appName,
-        home: MultiRepositoryProvider(
-          providers: [
-            RepositoryProvider<GraphQLApiClient>(
-              create: (context) => graphQLApiClient,
-            ),
-            RepositoryProvider<UserRepository>(
-              create: (context) => userRepository,
-            ),
-            RepositoryProvider<VersionRepository>(
-              create: (context) => VersionRepository(),
-            ),
+        child: MaterialApp(
+          theme: ThemeData(
+            brightness: Brightness.light,
+            primaryColor: Colors.white,
+            accentColor: Color(0xFF56CCF2),
+            iconTheme: IconThemeData(color: Color(0xFF255261)),
+            bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                selectedItemColor: Color(0xFF2D9CDB)),
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            accentColor: Color(0xFF2F80ED),
+            bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                selectedItemColor: Color(0xFF2D9CDB)),
+          ),
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
           ],
-          child: BlocConsumer<AppPreferencesBloc, AppPreferencesState>(
+          supportedLocales: [
+            const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
+          ],
+          title: config.appName,
+          home: BlocConsumer<AppPreferencesBloc, AppPreferencesState>(
             listenWhen: (previous, current) {
               if (previous.apiUrl != current.apiUrl) {
                 return true;
@@ -76,22 +112,7 @@ class MyApp extends StatelessWidget {
               if (!state.initialized) {
                 return SplashPage();
               }
-              return WillPopScope(
-                  onWillPop: () async {
-                    // Check a Lower Navigator First
-                    if (storageNavigatorKey.currentState != null &&
-                        storageNavigatorKey.currentState.canPop()) {
-                      storageNavigatorKey.currentState.maybePop();
-                      return false;
-                    }
-                    if (boardNavigatorKey.currentState != null &&
-                        boardNavigatorKey.currentState.canPop()) {
-                      boardNavigatorKey.currentState.maybePop();
-                      return false;
-                    }
-                    return true;
-                  },
-                  child: HomePage());
+              return HomePage();
             },
           ),
         ),

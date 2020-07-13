@@ -10,10 +10,6 @@ import 'package:smart_home/widgets/gravatar.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 
 class BoardHomePage extends StatelessWidget {
-  static Route route() {
-    return MaterialPageRoute(builder: (_) => BoardHomePage());
-  }
-
   const BoardHomePage({Key key}) : super(key: key);
 
   @override

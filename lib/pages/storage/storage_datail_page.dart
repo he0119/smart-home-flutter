@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/blocs/storage/storage_detail/storage_detail_bloc.dart';
-import 'package:smart_home/blocs/storage/storage_form/storage_form_bloc.dart';
+import 'package:smart_home/blocs/storage/storage_edit/storage_edit_bloc.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/pages/storage/item_datail_page.dart';
+import 'package:smart_home/pages/storage/item_edit_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/pages/storage/storage_edit_page.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
-import 'package:smart_home/pages/storage/widgets/storage_form.dart';
 import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
 
 class StorageDetailPage extends StatelessWidget {
@@ -19,15 +20,28 @@ class StorageDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => StorageDetailBloc(
-        storageRepository: RepositoryProvider.of<StorageRepository>(context),
-        snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
-      )..add(
-          storageId != null
-              ? StorageDetailChanged(id: storageId)
-              : StorageDetailRoot(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<StorageDetailBloc>(
+          create: (context) => StorageDetailBloc(
+            storageRepository:
+                RepositoryProvider.of<StorageRepository>(context),
+            snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
+          )..add(
+              storageId != null
+                  ? StorageDetailChanged(id: storageId)
+                  : StorageDetailRoot(),
+            ),
         ),
+        BlocProvider<StorageEditBloc>(
+          create: (context) => StorageEditBloc(
+            storageRepository:
+                RepositoryProvider.of<StorageRepository>(context),
+            storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
+            snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
+          ),
+        )
+      ],
       child: _StorageDetailPage(storageId: storageId),
     );
   }
@@ -45,20 +59,8 @@ class _StorageDetailPage extends StatelessWidget {
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () async {
-            if (state is StorageEditInitial) {
-              BlocProvider.of<StorageDetailBloc>(context)
-                  .add(StorageDetailChanged(id: state.storage.id));
-              return false;
-            }
-            if (state is StorageAddInitial) {
-              if (state.parentId != null) {
-                BlocProvider.of<StorageDetailBloc>(context)
-                    .add(StorageDetailChanged(id: state.parentId));
-              } else {
-                BlocProvider.of<StorageDetailBloc>(context)
-                    .add(StorageDetailRoot());
-              }
-              return false;
+            if (state is StorageDetailSuccess && state.backImmediately) {
+              return true;
             }
             if (state is StorageDetailSuccess && state.storage.parent != null) {
               BlocProvider.of<StorageDetailBloc>(context)
@@ -90,7 +92,7 @@ class _StorageDetailPage extends StatelessWidget {
               child: BlocListener<SnackBarBloc, SnackBarState>(
                   listenWhen: (previous, current) {
                     if (current is SnackBarSuccess &&
-                        current.position == SnackBarPosition.storage) {
+                        current.position == SnackBarPosition.storageDetail) {
                       return true;
                     }
                     return false;
@@ -132,8 +134,12 @@ class _StorageDetailPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              BlocProvider.of<StorageDetailBloc>(context)
-                  .add(StorageAddStarted());
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                  value: BlocProvider.of<StorageEditBloc>(context),
+                  child: StorageEditPage(isEditing: false),
+                ),
+              ));
             },
           ),
           IconButton(
@@ -156,9 +162,15 @@ class _StorageDetailPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              BlocProvider.of<StorageDetailBloc>(context).add(
-                StorageAddStarted(parentId: state.storage.id),
-              );
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                  value: BlocProvider.of<StorageEditBloc>(context),
+                  child: StorageEditPage(
+                    isEditing: false,
+                    storageId: state.storage.id,
+                  ),
+                ),
+              ));
             },
           ),
           IconButton(
@@ -173,8 +185,15 @@ class _StorageDetailPage extends StatelessWidget {
           PopupMenuButton<Menu>(
             onSelected: (value) async {
               if (value == Menu.edit) {
-                BlocProvider.of<StorageDetailBloc>(context)
-                    .add(StorageEditStarted(id: state.storage.id));
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                    value: BlocProvider.of<StorageEditBloc>(context),
+                    child: StorageEditPage(
+                      isEditing: true,
+                      storage: state.storage,
+                    ),
+                  ),
+                ));
               }
               if (value == Menu.delete) {
                 showDialog(
@@ -192,7 +211,7 @@ class _StorageDetailPage extends StatelessWidget {
                       FlatButton(
                         child: Text('是'),
                         onPressed: () {
-                          BlocProvider.of<StorageDetailBloc>(context).add(
+                          BlocProvider.of<StorageEditBloc>(context).add(
                             StorageDeleted(storage: state.storage),
                           );
                           Navigator.pop(context);
@@ -264,25 +283,10 @@ class _StorageDetailPage extends StatelessWidget {
         ),
       );
     }
-    if (state is StorageEditInitial) {
-      return AppBar(
-        title: Text('编辑 ${state.storage.name}'),
-      );
-    }
-    if (state is StorageAddInitial) {
-      return AppBar(
-        title: Text('添加位置'),
-      );
-    }
     return null;
   }
 
   Widget _buildBody(BuildContext context, StorageDetailState state) {
-    if (state is StorageDetailInProgress) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
     if (state is StorageDetailError) {
       return Center(
         child: Text(state.message),
@@ -300,48 +304,29 @@ class _StorageDetailPage extends StatelessWidget {
         storages: state.storage.children.toList(),
       );
     }
-    if (state is StorageEditInitial) {
-      return BlocProvider(
-        create: (context) => StorageFormBloc(
-          storageRepository: RepositoryProvider.of<StorageRepository>(context),
-          storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
-        ),
-        child: StorageForm(
-          isEditing: true,
-          storage: state.storage,
-        ),
-      );
-    }
-    if (state is StorageAddInitial) {
-      return BlocProvider(
-        create: (context) => StorageFormBloc(
-          storageRepository: RepositoryProvider.of<StorageRepository>(context),
-          storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
-        ),
-        child: StorageForm(
-          isEditing: false,
-          storageId: state.parentId,
-        ),
-      );
-    }
-    return Container();
+    return Center(child: CircularProgressIndicator());
   }
 
   Widget _buildFloatingActionButton(
       BuildContext context, StorageDetailState state) {
     if (state is StorageDetailSuccess) {
-      //ignore: close_sinks
-      final StorageDetailBloc storageDetailBloc =
-          BlocProvider.of<StorageDetailBloc>(context);
       return FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => ItemDetailPage(
-                isAdding: true,
-                storageId: state.storage.id,
-                storageDetailBloc: storageDetailBloc,
+              builder: (_) => BlocProvider<ItemEditBloc>(
+                create: (_) => ItemEditBloc(
+                  storageRepository:
+                      RepositoryProvider.of<StorageRepository>(context),
+                  snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
+                  storageDetailBloc:
+                      BlocProvider.of<StorageDetailBloc>(context),
+                ),
+                child: ItemEditPage(
+                  isEditing: false,
+                  storageId: state.storage.id,
+                ),
               ),
             ),
           );

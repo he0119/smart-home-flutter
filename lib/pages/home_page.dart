@@ -38,64 +38,48 @@ class HomePage extends StatelessWidget {
               state is AuthenticationFailure) {
             return LoginPage();
           }
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider<TabBloc>(
-                create: (context) => TabBloc(),
-              ),
-              BlocProvider<SnackBarBloc>(
-                create: (context) => SnackBarBloc(),
-              ),
-              BlocProvider<UpdateBloc>(
-                create: (context) => UpdateBloc(
-                  versionRepository:
-                      RepositoryProvider.of<VersionRepository>(context),
-                )..add(UpdateStarted()),
-              ),
-            ],
-            child: BlocListener<UpdateBloc, UpdateState>(
-              listener: (context, state) {
-                if (state is UpdateSuccess && state.needUpdate) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text('更新'),
-                      content: Text('发现新版本（${state.version}）'),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('稍后'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        FlatButton(
-                          child: Text('下载'),
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            launchUrl(state.url);
-                          },
-                        )
-                      ],
-                    ),
-                  );
-                }
-                if (state is UpdateFailure) {
-                  scaffoldKey.currentState.showSnackBar(
-                    SnackBar(
-                      content: Text(state.message),
-                      action: SnackBarAction(
-                        label: '重试',
+          return BlocListener<UpdateBloc, UpdateState>(
+            listener: (context, state) {
+              if (state is UpdateSuccess && state.needUpdate) {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text('更新'),
+                    content: Text('发现新版本（${state.version}）'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('稍后'),
                         onPressed: () {
-                          BlocProvider.of<UpdateBloc>(context)
-                              .add(UpdateStarted());
+                          Navigator.pop(context);
                         },
                       ),
+                      FlatButton(
+                        child: Text('下载'),
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          launchUrl(state.url);
+                        },
+                      )
+                    ],
+                  ),
+                );
+              }
+              if (state is UpdateFailure) {
+                scaffoldKey.currentState.showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                    action: SnackBarAction(
+                      label: '重试',
+                      onPressed: () {
+                        BlocProvider.of<UpdateBloc>(context)
+                            .add(UpdateStarted());
+                      },
                     ),
-                  );
-                }
-              },
-              child: _HomePage(),
-            ),
+                  ),
+                );
+              }
+            },
+            child: _HomePage(),
           );
         },
       ),
@@ -129,22 +113,8 @@ class _HomePage extends StatelessWidget {
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         if (activeTab == AppTab.storage) {
-          return RepositoryProvider(
-            create: (context) => StorageRepository(
-              graphqlApiClient:
-                  RepositoryProvider.of<GraphQLApiClient>(context),
-            ),
-            child: BlocProvider<StorageHomeBloc>(
-              create: (context) => StorageHomeBloc(
-                storageRepository:
-                    RepositoryProvider.of<StorageRepository>(context),
-              )..add(StorageHomeStarted()),
-              child: Navigator(
-                key: storageNavigatorKey,
-                onGenerateRoute: (_) => StorageHomePage.route(),
-              ),
-            ),
-          );
+          BlocProvider.of<StorageHomeBloc>(context).add(StorageHomeStarted());
+          return StorageHomePage();
         }
         if (activeTab == AppTab.blog) {
           return BlogHomePage();
@@ -152,19 +122,8 @@ class _HomePage extends StatelessWidget {
         if (activeTab == AppTab.iot) {
           return IotHomePage();
         }
-        return RepositoryProvider(
-          create: (context) => BoardRepository(
-            graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(context),
-          ),
-          child: BlocProvider<BoardHomeBloc>(
-            create: (context) => BoardHomeBloc(
-              boardRepository: RepositoryProvider.of<BoardRepository>(context),
-            )..add(BoardHomeStarted()),
-            child: Navigator(
-                key: boardNavigatorKey,
-                onGenerateRoute: (_) => BoardHomePage.route()),
-          ),
-        );
+        BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeStarted());
+        return BoardHomePage();
       },
     );
   }
