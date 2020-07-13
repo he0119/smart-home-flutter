@@ -7,14 +7,19 @@ abstract class TopicDetailState extends Equatable {
   List<Object> get props => [];
 }
 
-class TopicDetailInitial extends TopicDetailState {}
-
 class TopicDetailInProgress extends TopicDetailState {}
 
 class TopicDetailFailure extends TopicDetailState {
   final String message;
+  final String topicId;
 
-  const TopicDetailFailure({@required this.message});
+  const TopicDetailFailure({
+    @required this.message,
+    @required this.topicId,
+  });
+
+  @override
+  String toString() => 'TopicDetailFailure { message: $message }';
 }
 
 class TopicDetailSuccess extends TopicDetailState {

@@ -28,4 +28,4 @@ flutter run -t ./lib/main_dev.dart
 ## Android
 
 编译正式版 `Android` 软件需要先根据 [文档](https://flutter.dev/docs/deployment/android) 创建签名。
-接着运行 `flutter build apk -t ./lib/main_prod.dart` 完成编译。
+接着运行 `flutter build apk --split-per-abi -t ./lib/main_prod.dart` 完成编译。

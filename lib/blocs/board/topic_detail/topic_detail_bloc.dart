@@ -11,7 +11,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
   final BoardRepository boardRepository;
 
   TopicDetailBloc({@required this.boardRepository})
-      : super(TopicDetailInitial());
+      : super(TopicDetailInProgress());
 
   @override
   Stream<TopicDetailState> mapEventToState(
@@ -25,7 +25,10 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
         yield TopicDetailSuccess(
             topic: topicDetail[0], comments: topicDetail[1]);
       } catch (e) {
-        yield TopicDetailFailure(message: e.message);
+        yield TopicDetailFailure(
+          message: e.message,
+          topicId: event.topicId,
+        );
       }
     }
     if (event is TopicDetailRefreshed) {
@@ -36,7 +39,10 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
         yield TopicDetailSuccess(
             topic: topicDetail[0], comments: topicDetail[1]);
       } catch (e) {
-        yield TopicDetailFailure(message: e.message);
+        yield TopicDetailFailure(
+          message: e.message,
+          topicId: event.topicId,
+        );
       }
     }
   }

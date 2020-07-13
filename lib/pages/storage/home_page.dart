@@ -10,7 +10,9 @@ import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
+import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/widgets/gravatar.dart';
+import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 
 class StorageHomePage extends StatelessWidget {
@@ -64,19 +66,21 @@ class StorageHomePage extends StatelessWidget {
 }
 
 class _StorageHomeBody extends StatelessWidget {
-  const _StorageHomeBody({
-    Key key,
-  }) : super(key: key);
+  const _StorageHomeBody({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StorageHomeBloc, StorageHomeState>(
       builder: (context, state) {
-        if (state is StorageHomeInProgress) {
-          return Center(child: CircularProgressIndicator());
-        }
         if (state is StorageHomeError) {
-          return Center(child: Text(state.message));
+          return ErrorPage(
+            onPressed: () {
+              BlocProvider.of<StorageHomeBloc>(context).add(
+                StorageHomeRefreshed(itemType: state.itemType),
+              );
+            },
+            message: state.message,
+          );
         }
         if (state is StorageHomeSuccess) {
           // 从各种类型详情页返回
@@ -101,7 +105,7 @@ class _StorageHomeBody extends StatelessWidget {
             ),
           );
         }
-        return Container();
+        return LoadingPage();
       },
     );
   }

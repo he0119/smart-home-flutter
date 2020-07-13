@@ -22,7 +22,10 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         Item results = await storageRepository.item(id: event.itemId);
         yield ItemDetailSuccess(item: results);
       } catch (e) {
-        yield ItemDetailError(message: e.message);
+        yield ItemDetailFailure(
+          message: e.message,
+          itemId: event.itemId,
+        );
       }
     }
     if (event is ItemDetailRefreshed) {
@@ -34,7 +37,10 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         );
         yield ItemDetailSuccess(item: results);
       } catch (e) {
-        yield ItemDetailError(message: e.message);
+        yield ItemDetailFailure(
+          message: e.message,
+          itemId: event.itemId,
+        );
       }
     }
   }

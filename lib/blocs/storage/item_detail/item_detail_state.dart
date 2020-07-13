@@ -9,10 +9,17 @@ class ItemDetailInProgress extends ItemDetailState {
   String toString() => 'ItemDetailInProgress';
 }
 
-class ItemDetailError extends ItemDetailState {
+class ItemDetailFailure extends ItemDetailState {
   final String message;
+  final String itemId;
 
-  const ItemDetailError({@required this.message});
+  const ItemDetailFailure({
+    @required this.message,
+    @required this.itemId,
+  });
+
+  @override
+  String toString() => 'ItemDetailFailure { message: $message }';
 }
 
 class ItemDetailSuccess extends ItemDetailState {
