@@ -6,17 +6,17 @@ import 'package:meta/meta.dart';
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/repositories/board_repository.dart';
 
-part 'comment_event.dart';
-part 'comment_state.dart';
+part 'comment_edit_event.dart';
+part 'comment_edit_state.dart';
 
-class CommentBloc extends Bloc<CommentEvent, CommentState> {
+class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
   final BoardRepository boardRepository;
 
-  CommentBloc({@required this.boardRepository}) : super(CommentInitial());
+  CommentEditBloc({@required this.boardRepository}) : super(CommentInitial());
 
   @override
-  Stream<CommentState> mapEventToState(
-    CommentEvent event,
+  Stream<CommentEditState> mapEventToState(
+    CommentEditEvent event,
   ) async* {
     if (event is CommentAdded) {
       yield CommentInProgress();

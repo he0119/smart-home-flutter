@@ -1,13 +1,13 @@
-part of 'topic_bloc.dart';
+part of 'topic_edit_bloc.dart';
 
-abstract class TopicEvent extends Equatable {
-  const TopicEvent();
+abstract class TopicEditEvent extends Equatable {
+  const TopicEditEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class TopicAdded extends TopicEvent {
+class TopicAdded extends TopicEditEvent {
   final String title;
   final String description;
 
@@ -23,7 +23,7 @@ class TopicAdded extends TopicEvent {
   String toString() => 'TopicAdded { title: $title }';
 }
 
-class TopicUpdated extends TopicEvent {
+class TopicUpdated extends TopicEditEvent {
   final String id;
   final String title;
   final String description;
@@ -41,7 +41,7 @@ class TopicUpdated extends TopicEvent {
   String toString() => 'TopicUpdated { id: $id }';
 }
 
-class TopicDeleted extends TopicEvent {
+class TopicDeleted extends TopicEditEvent {
   final Topic topic;
 
   const TopicDeleted({@required this.topic});

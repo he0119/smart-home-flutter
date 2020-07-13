@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/models/board.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class AddCommentButtonBar extends StatefulWidget {
   final Topic topic;
@@ -15,6 +16,8 @@ class AddCommentButtonBar extends StatefulWidget {
 class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
   final _controller = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     _controller.dispose();
@@ -23,7 +26,7 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CommentBloc, CommentState>(
+    return BlocListener<CommentEditBloc, CommentEditState>(
       listener: (context, state) {
         // TODO: 更自然的刷新方法
         if (state is CommentAddSuccess) {
@@ -33,18 +36,29 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
       },
       child: Material(
         child: ListTile(
-          title: TextField(
-            controller: _controller,
-            maxLines: null,
-            decoration: InputDecoration(labelText: '添加评论'),
+          title: Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: _controller,
+              maxLines: null,
+              decoration: InputDecoration(labelText: '添加评论'),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return '评论不能为空';
+                }
+                return null;
+              },
+            ),
           ),
           trailing: OutlineButton(
             onPressed: () {
-              // TODO: 单击发送之后添加提示正在发送
-              BlocProvider.of<CommentBloc>(context).add(CommentAdded(
-                topicId: widget.topic.id,
-                body: _controller.text,
-              ));
+              if (_formKey.currentState.validate()) {
+                showInfoSnackBar(context, '正在发送');
+                BlocProvider.of<CommentEditBloc>(context).add(CommentAdded(
+                  topicId: widget.topic.id,
+                  body: _controller.text,
+                ));
+              }
             },
             borderSide: BorderSide.none,
             child: Text('发送'),
