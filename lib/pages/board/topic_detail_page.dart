@@ -69,36 +69,32 @@ class _TopicDetailPage extends StatelessWidget {
                       currentFocus.unfocus();
                     }
                   },
-                  child: Stack(
-                    children: <Widget>[
-                      CustomScrollView(
-                        slivers: <Widget>[
-                          SliverToBoxAdapter(
-                            child: TopicItem(
-                              topic: state.topic,
-                              showBody: true,
-                            ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                              child:
-                                  Text('全部评论', style: TextStyle(fontSize: 20)),
-                            ),
-                          ),
-                          SliverCommentList(comments: state.comments),
-                        ],
-                      ),
-                      Positioned(
-                        bottom: 0.0,
-                        left: 0.0,
-                        right: 0.0,
-                        child: AddCommentButtonBar(
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverToBoxAdapter(
+                        child: TopicItem(
                           topic: state.topic,
+                          showBody: true,
                         ),
                       ),
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          child: Text('全部评论', style: TextStyle(fontSize: 20)),
+                        ),
+                      ),
+                      SliverCommentList(comments: state.comments),
                     ],
                   ),
+                ),
+              ),
+              bottomNavigationBar: Transform.translate(
+                offset: MediaQuery.of(context).viewInsets.bottom == 0
+                    ? Offset(0.0, 0.0)
+                    : Offset(
+                        0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+                child: AddCommentButtonBar(
+                  topic: state.topic,
                 ),
               ),
             ),
