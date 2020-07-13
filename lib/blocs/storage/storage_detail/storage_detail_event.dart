@@ -1,6 +1,6 @@
 part of 'storage_detail_bloc.dart';
 
-abstract class StorageDetailEvent extends Equatable {
+abstract class StorageDetailEvent {
   const StorageDetailEvent();
 
   @override
@@ -17,9 +17,6 @@ class StorageDetailChanged extends StorageDetailEvent {
   const StorageDetailChanged({@required this.id});
 
   @override
-  List<Object> get props => [id];
-
-  @override
   String toString() => 'StorageDetailChanged { id: $id }';
 }
 
@@ -27,9 +24,6 @@ class StorageDetailRefreshed extends StorageDetailEvent {
   final String id;
 
   const StorageDetailRefreshed({@required this.id});
-
-  @override
-  List<Object> get props => [id];
 
   @override
   String toString() => 'StorageDetailRefreshed { id: $id }';

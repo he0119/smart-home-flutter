@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/blocs/snack_bar/snack_bar_bloc.dart';
 import 'package:smart_home/models/models.dart';
@@ -29,7 +28,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         List<Storage> results = await storageRepository.rootStorage();
         yield StorageDetailRootSuccess(storages: results);
       } catch (e) {
-        yield StorageDetailError(message: e.message);
+        yield StorageDetailFailure(message: e.message);
       }
     }
     if (event is StorageDetailRootRefreshed) {
@@ -40,7 +39,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             await storageRepository.rootStorage(cache: false);
         yield StorageDetailRootSuccess(storages: results);
       } catch (e) {
-        yield StorageDetailError(message: e.message);
+        yield StorageDetailFailure(message: e.message);
       }
     }
     if (event is StorageDetailChanged) {
@@ -60,7 +59,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           backImmediately: backImmediately,
         );
       } catch (e) {
-        yield StorageDetailError(message: e.message);
+        yield StorageDetailFailure(message: e.message);
       }
     }
     if (event is StorageDetailRefreshed) {
@@ -76,7 +75,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           backImmediately: backImmediately,
         );
       } catch (e) {
-        yield StorageDetailError(message: e.message);
+        yield StorageDetailFailure(message: e.message);
       }
     }
   }

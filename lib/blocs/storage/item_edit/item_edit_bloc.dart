@@ -55,7 +55,9 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
             type: MessageType.info,
           ),
         );
-        // 受影响的页面
+        // 刷新受影响的页面
+        // 从位置详情界面进入，修改后会影响物品详情界面的显示
+        // 调整了物品位置后，需要重新刷新位置详情界面
         if (storageDetailBloc != null) {
           if (event.storageId == event.oldStorageId) {
             storageDetailBloc.add(StorageDetailChanged(id: event.storageId));
@@ -67,13 +69,17 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
             );
           }
         }
+        // 从物品管理主页进入
         if (storageHomeBloc != null) {
           storageHomeBloc.add(StorageHomeChanged(itemType: ItemType.all));
         }
+        // 从搜索界面进入
+
         if (storageSearchBloc != null) {
           storageSearchBloc.add(StorageSearchChanged(key: searchKeyword));
         }
       } catch (e) {
+        yield ItemEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.itemEdit,
@@ -103,10 +109,11 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
             type: MessageType.info,
           ),
         );
-        // 更新位置详情界面
+        // 刷新位置详情界面
         assert(storageDetailBloc != null);
         storageDetailBloc.add(StorageDetailRefreshed(id: event.storageId));
       } catch (e) {
+        yield ItemEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.itemEdit,
@@ -118,6 +125,13 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
     }
     if (event is ItemDeleted) {
       yield ItemEditInProgress();
+      snackBarBloc.add(
+        SnackBarChanged(
+          position: SnackBarPosition.itemDetail,
+          message: '正在删除',
+          type: MessageType.info,
+        ),
+      );
       try {
         await storageRepository.deleteItem(id: event.item.id);
         yield ItemDeleteSuccess(item: event.item);
@@ -128,6 +142,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
             type: MessageType.info,
           ),
         );
+        // 刷新受影响的页面
         if (storageHomeBloc != null) {
           storageHomeBloc.add(StorageHomeRefreshed(itemType: ItemType.all));
         }
@@ -139,6 +154,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
           storageSearchBloc.add(StorageSearchChanged(key: searchKeyword));
         }
       } catch (e) {
+        yield ItemEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
             position: SnackBarPosition.itemDetail,

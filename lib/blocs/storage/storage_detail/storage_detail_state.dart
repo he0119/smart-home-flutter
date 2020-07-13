@@ -1,30 +1,24 @@
 part of 'storage_detail_bloc.dart';
 
-abstract class StorageDetailState extends Equatable {
+abstract class StorageDetailState {
   const StorageDetailState();
-
-  @override
-  List<Object> get props => [];
 }
 
-class StorageDetailInProgress extends StorageDetailState {}
+class StorageDetailInProgress extends StorageDetailState {
+  @override
+  String toString() => 'StorageDetailInProgress';
+}
 
-class StorageDetailError extends StorageDetailState {
+class StorageDetailFailure extends StorageDetailState {
   final String message;
 
-  const StorageDetailError({@required this.message});
-
-  @override
-  List<Object> get props => [message];
+  const StorageDetailFailure({@required this.message});
 }
 
 class StorageDetailRootSuccess extends StorageDetailState {
   final List<Storage> storages;
 
   const StorageDetailRootSuccess({@required this.storages});
-
-  @override
-  List<Object> get props => [storages];
 
   @override
   String toString() =>
@@ -41,9 +35,6 @@ class StorageDetailSuccess extends StorageDetailState {
     @required this.ancestors,
     @required this.backImmediately,
   });
-
-  @override
-  List<Object> get props => [storage, ancestors, backImmediately];
 
   @override
   String toString() => 'StorageDetailSuccess { storage: ${storage.name} }';

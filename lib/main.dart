@@ -94,6 +94,8 @@ class MyApp extends StatelessWidget {
           title: config.appName,
           home: BlocConsumer<AppPreferencesBloc, AppPreferencesState>(
             listenWhen: (previous, current) {
+              // 如果 APIURL 发生变化则初始化 GraphQL 客户端
+              // 如果客户端还未初始化，也自动初始化
               if (previous.apiUrl != current.apiUrl) {
                 return true;
               } else if (graphQLApiClient.client == null) {
@@ -103,6 +105,7 @@ class MyApp extends StatelessWidget {
               }
             },
             listener: (context, state) {
+              // 如果软件配置中没有设置过 APIURL，则使用默认的 URL
               graphQLApiClient.initailize(
                 url: state.apiUrl ?? config.apiUrl,
                 userRepository: userRepository,

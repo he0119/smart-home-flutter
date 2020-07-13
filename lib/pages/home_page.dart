@@ -27,12 +27,14 @@ class HomePage extends StatelessWidget {
       )..add(AuthenticationStarted()),
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
+          // 用户仓库同时也需要认证 BLoC 来处理认证相关逻辑
+          // 在首次启动的时候将认证 BLoC 提供给用户仓库
           if (state is AuthenticationUninitialized) {
             RepositoryProvider.of<UserRepository>(context).authenticationBloc =
                 BlocProvider.of<AuthenticationBloc>(context);
             return SplashPage();
           }
-          // 仅在未登录或登陆失败时进入登陆界面
+          // 仅在未登录，登陆失败和登陆中进入登陆界面
           if (state is Unauthenticated ||
               state is Authenticating ||
               state is AuthenticationFailure) {

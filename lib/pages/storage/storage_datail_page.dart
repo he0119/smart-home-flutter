@@ -90,6 +90,7 @@ class _StorageDetailPage extends StatelessWidget {
                 }
               },
               child: BlocListener<SnackBarBloc, SnackBarState>(
+                  // 仅在位置详情页面显示特定消息提示
                   listenWhen: (previous, current) {
                     if (current is SnackBarSuccess &&
                         current.position == SnackBarPosition.storageDetail) {
@@ -122,7 +123,7 @@ class _StorageDetailPage extends StatelessWidget {
         title: Text('加载中'),
       );
     }
-    if (state is StorageDetailError) {
+    if (state is StorageDetailFailure) {
       return AppBar(
         title: Text('错误'),
       );
@@ -287,7 +288,7 @@ class _StorageDetailPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context, StorageDetailState state) {
-    if (state is StorageDetailError) {
+    if (state is StorageDetailFailure) {
       return Center(
         child: Text(state.message),
       );

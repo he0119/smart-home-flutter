@@ -75,6 +75,7 @@ class _ItemDetailPage extends StatelessWidget {
             child: MultiBlocListener(
               listeners: [
                 BlocListener<SnackBarBloc, SnackBarState>(
+                  // 仅在物品详情页面显示特定消息提示
                   listenWhen: (previous, current) {
                     if (current is SnackBarSuccess &&
                         current.position == SnackBarPosition.itemDetail) {
