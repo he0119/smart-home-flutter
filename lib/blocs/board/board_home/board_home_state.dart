@@ -7,8 +7,6 @@ abstract class BoardHomeState extends Equatable {
   List<Object> get props => [];
 }
 
-class BoardHomeInitial extends BoardHomeState {}
-
 class BoardHomeInProgress extends BoardHomeState {}
 
 class BoardHomeError extends BoardHomeState {

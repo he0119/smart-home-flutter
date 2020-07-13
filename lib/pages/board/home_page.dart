@@ -6,6 +6,8 @@ import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/pages/board/topic_edit_page.dart';
 import 'package:smart_home/pages/board/widgets/topic_list.dart';
+import 'package:smart_home/pages/error_page.dart';
+import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/widgets/gravatar.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 
@@ -57,7 +59,12 @@ class _BoardHomeBody extends StatelessWidget {
     return BlocBuilder<BoardHomeBloc, BoardHomeState>(
       builder: (context, state) {
         if (state is BoardHomeError) {
-          return Center(child: Text(state.message));
+          return ErrorPage(
+            onPressed: () {
+              BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
+            },
+            message: state.message,
+          );
         }
         if (state is BoardHomeSuccess) {
           // 从各种类型详情页返回
@@ -68,7 +75,7 @@ class _BoardHomeBody extends StatelessWidget {
             child: TopicList(topics: state.topics),
           );
         }
-        return Center(child: CircularProgressIndicator());
+        return LoadingPage();
       },
     );
   }

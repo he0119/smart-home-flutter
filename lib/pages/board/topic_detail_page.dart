@@ -6,6 +6,8 @@ import 'package:smart_home/blocs/board/topic_detail/topic_detail_bloc.dart';
 import 'package:smart_home/pages/board/widgets/add_comment_bar.dart';
 import 'package:smart_home/pages/board/widgets/comment_list.dart';
 import 'package:smart_home/pages/board/widgets/topic_item.dart';
+import 'package:smart_home/pages/error_page.dart';
+import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/repositories/board_repository.dart';
 
 class TopicDetailPage extends StatelessWidget {
@@ -33,17 +35,17 @@ class _TopicDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TopicDetailBloc, TopicDetailState>(
       builder: (context, state) {
-        if (state is TopicDetailInProgress) {
-          return Scaffold(
-              appBar: AppBar(),
-              body: Center(child: CircularProgressIndicator()));
-        }
         if (state is TopicDetailFailure) {
           return Scaffold(
-            appBar: AppBar(
-              title: Text('错误'),
+            appBar: AppBar(),
+            body: ErrorPage(
+              onPressed: () {
+                BlocProvider.of<TopicDetailBloc>(context).add(
+                  TopicDetailChanged(topicId: state.topicId),
+                );
+              },
+              message: state.message,
             ),
-            body: Center(child: Text(state.message)),
           );
         }
         if (state is TopicDetailSuccess) {
@@ -102,7 +104,10 @@ class _TopicDetailPage extends StatelessWidget {
             ),
           );
         }
-        return Scaffold();
+        return Scaffold(
+          appBar: AppBar(),
+          body: LoadingPage(),
+        );
       },
     );
   }

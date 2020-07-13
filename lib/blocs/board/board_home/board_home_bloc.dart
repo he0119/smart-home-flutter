@@ -10,7 +10,8 @@ part 'board_home_state.dart';
 class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
   final BoardRepository boardRepository;
 
-  BoardHomeBloc({@required this.boardRepository}) : super(BoardHomeInitial());
+  BoardHomeBloc({@required this.boardRepository})
+      : super(BoardHomeInProgress());
 
   @override
   Stream<BoardHomeState> mapEventToState(
