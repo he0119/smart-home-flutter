@@ -34,12 +34,16 @@ class StorageDetailRootSuccess extends StorageDetailState {
 class StorageDetailSuccess extends StorageDetailState {
   final Storage storage;
   final List<Storage> ancestors;
+  final bool backImmediately;
 
-  const StorageDetailSuccess(
-      {@required this.storage, @required this.ancestors});
+  const StorageDetailSuccess({
+    @required this.storage,
+    @required this.ancestors,
+    @required this.backImmediately,
+  });
 
   @override
-  List<Object> get props => [storage, ancestors];
+  List<Object> get props => [storage, ancestors, backImmediately];
 
   @override
   String toString() => 'StorageDetailSuccess { storage: ${storage.name} }';

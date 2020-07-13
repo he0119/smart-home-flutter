@@ -58,6 +58,9 @@ class _StorageDetailPage extends StatelessWidget {
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () async {
+            if (state is StorageDetailSuccess && state.backImmediately) {
+              return true;
+            }
             if (state is StorageDetailSuccess && state.storage.parent != null) {
               BlocProvider.of<StorageDetailBloc>(context)
                   .add(StorageDetailChanged(id: state.storage.parent.id));
@@ -124,8 +127,6 @@ class _StorageDetailPage extends StatelessWidget {
       );
     }
     if (state is StorageDetailRootSuccess) {
-      final StorageEditBloc storageEditBloc =
-          BlocProvider.of<StorageEditBloc>(context);
       return AppBar(
         title: Text('家'),
         actions: <Widget>[
@@ -133,8 +134,8 @@ class _StorageDetailPage extends StatelessWidget {
             icon: Icon(Icons.add),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BlocProvider.value(
-                  value: storageEditBloc,
+                builder: (_) => BlocProvider.value(
+                  value: BlocProvider.of<StorageEditBloc>(context),
                   child: StorageEditPage(isEditing: false),
                 ),
               ));
@@ -153,8 +154,6 @@ class _StorageDetailPage extends StatelessWidget {
       );
     }
     if (state is StorageDetailSuccess) {
-      final StorageEditBloc storageEditBloc =
-          BlocProvider.of<StorageEditBloc>(context);
       List<Storage> paths = state.ancestors.toList();
       return AppBar(
         title: Text(state.storage.name),
@@ -163,8 +162,8 @@ class _StorageDetailPage extends StatelessWidget {
             icon: Icon(Icons.add),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BlocProvider.value(
-                  value: storageEditBloc,
+                builder: (_) => BlocProvider.value(
+                  value: BlocProvider.of<StorageEditBloc>(context),
                   child: StorageEditPage(
                     isEditing: false,
                     storageId: state.storage.id,
@@ -186,8 +185,8 @@ class _StorageDetailPage extends StatelessWidget {
             onSelected: (value) async {
               if (value == Menu.edit) {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => BlocProvider.value(
-                    value: storageEditBloc,
+                  builder: (_) => BlocProvider.value(
+                    value: BlocProvider.of<StorageEditBloc>(context),
                     child: StorageEditPage(
                       isEditing: true,
                       storage: state.storage,
@@ -287,11 +286,6 @@ class _StorageDetailPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context, StorageDetailState state) {
-    if (state is StorageDetailInProgress) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
     if (state is StorageDetailError) {
       return Center(
         child: Text(state.message),
@@ -309,7 +303,7 @@ class _StorageDetailPage extends StatelessWidget {
         storages: state.storage.children.toList(),
       );
     }
-    return Container();
+    return Center(child: CircularProgressIndicator());
   }
 
   Widget _buildFloatingActionButton(

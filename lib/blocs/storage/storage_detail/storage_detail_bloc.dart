@@ -11,6 +11,7 @@ part 'storage_detail_state.dart';
 class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
   final StorageRepository storageRepository;
   final SnackBarBloc snackBarBloc;
+  bool backImmediately;
 
   StorageDetailBloc({
     @required this.storageRepository,
@@ -22,6 +23,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     StorageDetailEvent event,
   ) async* {
     if (event is StorageDetailRoot) {
+      backImmediately = false;
       yield StorageDetailInProgress();
       try {
         List<Storage> results = await storageRepository.rootStorage();
@@ -31,6 +33,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       }
     }
     if (event is StorageDetailRootRefreshed) {
+      backImmediately = false;
       yield StorageDetailInProgress();
       try {
         List<Storage> results =
@@ -41,12 +44,21 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       }
     }
     if (event is StorageDetailChanged) {
+      // 是否马上返回上级界面
+      if (backImmediately == null) {
+        backImmediately = true;
+      } else {
+        backImmediately = false;
+      }
       yield StorageDetailInProgress();
       try {
         Map<String, dynamic> results =
             await storageRepository.storage(id: event.id);
         yield StorageDetailSuccess(
-            storage: results['storage'], ancestors: results['ancestors']);
+          storage: results['storage'],
+          ancestors: results['ancestors'],
+          backImmediately: backImmediately,
+        );
       } catch (e) {
         yield StorageDetailError(message: e.message);
       }
@@ -59,7 +71,10 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           cache: false,
         );
         yield StorageDetailSuccess(
-            storage: results['storage'], ancestors: results['ancestors']);
+          storage: results['storage'],
+          ancestors: results['ancestors'],
+          backImmediately: backImmediately,
+        );
       } catch (e) {
         yield StorageDetailError(message: e.message);
       }
