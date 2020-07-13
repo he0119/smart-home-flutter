@@ -44,29 +44,3 @@ class StorageDetailSuccess extends StorageDetailState {
   @override
   String toString() => 'StorageDetailSuccess { storage: ${storage.name} }';
 }
-
-class StorageEditInitial extends StorageDetailState {
-  final Storage storage;
-
-  const StorageEditInitial({@required this.storage});
-
-  @override
-  List<Object> get props => [storage];
-
-  @override
-  String toString() => 'StorageEditInitial { storage: ${storage.name} }';
-}
-
-class StorageAddInitial extends StorageDetailState {
-  final String parentId;
-
-  const StorageAddInitial({@required this.parentId});
-
-  @override
-  List<Object> get props => [parentId];
-
-  @override
-  String toString() => 'StorageAddInitial { parentId: $parentId }';
-}
-
-class StorageDeleteSuccess extends StorageDetailState {}

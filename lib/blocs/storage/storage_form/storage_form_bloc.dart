@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_home/blocs/storage/storage_detail/storage_detail_bloc.dart';
+import 'package:smart_home/blocs/storage/storage_edit/storage_edit_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
@@ -10,11 +10,11 @@ part 'storage_form_state.dart';
 
 class StorageFormBloc extends Bloc<StorageFormEvent, StorageFormState> {
   final StorageRepository storageRepository;
-  final StorageDetailBloc storageDetailBloc;
+  final StorageEditBloc storageEditBloc;
 
   StorageFormBloc({
     @required this.storageRepository,
-    @required this.storageDetailBloc,
+    @required this.storageEditBloc,
   }) : super(StorageFormState.initial());
 
   @override
@@ -24,7 +24,6 @@ class StorageFormBloc extends Bloc<StorageFormEvent, StorageFormState> {
     if (event is StorageFormStarted) {
       yield state.copyWith(listofStorages: await storageRepository.storages());
     }
-
     if (event is NameChanged) {
       yield state.copyWith(
         name: event.name,
@@ -45,7 +44,7 @@ class StorageFormBloc extends Bloc<StorageFormEvent, StorageFormState> {
     }
     if (event is FormSubmitted) {
       if (event.isEditing) {
-        storageDetailBloc.add(
+        storageEditBloc.add(
           StorageUpdated(
             id: event.id,
             name: state.name,
@@ -55,7 +54,7 @@ class StorageFormBloc extends Bloc<StorageFormEvent, StorageFormState> {
           ),
         );
       } else {
-        storageDetailBloc.add(
+        storageEditBloc.add(
           StorageAdded(
             name: state.name,
             parentId: state.parent,
