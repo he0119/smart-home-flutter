@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- 留言板（仅有添加话题和留言的功能）
+- 设置服务器地址的功能
+
+### Changed
+
+- 优化页面导航逻辑
+- 完善登录逻辑
+
+### Fixed
+
+- 修复物品详情无法选中复制的问题
+- 修复进入搜索界面无法自动选中搜索框的问题
+
 ## [0.3.2] - 2020-06-28
 
 ### Added
