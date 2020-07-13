@@ -216,7 +216,6 @@ class _ItemDetailList extends StatelessWidget {
           trailing: SelectableText(
             item.storage.name,
             onTap: () {
-              // TODO: 转跳后如果不进行操作直接单击返回，应该回到当前界面
               Navigator.push(
                 context,
                 MaterialPageRoute(
