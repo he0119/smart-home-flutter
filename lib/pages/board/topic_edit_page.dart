@@ -22,6 +22,8 @@ class _TopicEditPageState extends State<TopicEditPage> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -32,12 +34,13 @@ class _TopicEditPageState extends State<TopicEditPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => TopicBloc(
+        create: (context) => TopicEditBloc(
             boardRepository: RepositoryProvider.of<BoardRepository>(context)),
-        child: BlocConsumer<TopicBloc, TopicState>(
+        child: BlocConsumer<TopicEditBloc, TopicEditState>(
           listener: (context, state) {
             if (state is TopicAddSuccess || state is TopicUpdateSuccess) {
               Navigator.of(context).pop();
+              BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
             }
           },
           builder: (context, state) => Scaffold(
@@ -47,17 +50,20 @@ class _TopicEditPageState extends State<TopicEditPage> {
                 IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () {
-                    if (widget.isEditing) {
-                      BlocProvider.of<TopicBloc>(context).add(TopicUpdated(
-                        id: widget.topic.id,
-                        title: _titleController.text,
-                        description: _descriptionController.text,
-                      ));
-                    } else {
-                      BlocProvider.of<TopicBloc>(context).add(TopicAdded(
-                        title: _titleController.text,
-                        description: _descriptionController.text,
-                      ));
+                    if (_formKey.currentState.validate()) {
+                      if (widget.isEditing) {
+                        BlocProvider.of<TopicEditBloc>(context)
+                            .add(TopicUpdated(
+                          id: widget.topic.id,
+                          title: _titleController.text,
+                          description: _descriptionController.text,
+                        ));
+                      } else {
+                        BlocProvider.of<TopicEditBloc>(context).add(TopicAdded(
+                          title: _titleController.text,
+                          description: _descriptionController.text,
+                        ));
+                      }
                     }
                   },
                 )
@@ -66,17 +72,24 @@ class _TopicEditPageState extends State<TopicEditPage> {
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
+                key: _formKey,
                 child: Column(
                   children: [
-                    TextField(
+                    TextFormField(
                       controller: _titleController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: '添加标题',
                         hintStyle: TextStyle(fontSize: 18),
                       ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return '请填写标题';
+                        }
+                        return null;
+                      },
                     ),
-                    TextField(
+                    TextFormField(
                       controller: _descriptionController,
                       maxLines: null,
                       decoration: InputDecoration(

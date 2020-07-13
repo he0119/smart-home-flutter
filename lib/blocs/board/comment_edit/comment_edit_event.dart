@@ -1,13 +1,13 @@
-part of 'comment_bloc.dart';
+part of 'comment_edit_bloc.dart';
 
-abstract class CommentEvent extends Equatable {
-  const CommentEvent();
+abstract class CommentEditEvent extends Equatable {
+  const CommentEditEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class CommentAdded extends CommentEvent {
+class CommentAdded extends CommentEditEvent {
   final String topicId;
   final String body;
 
@@ -23,7 +23,7 @@ class CommentAdded extends CommentEvent {
   String toString() => 'CommentAdded { body: $body }';
 }
 
-class CommentUpdated extends CommentEvent {
+class CommentUpdated extends CommentEditEvent {
   final String id;
   final String body;
 
@@ -39,7 +39,7 @@ class CommentUpdated extends CommentEvent {
   String toString() => 'CommentUpdated { id: $id }';
 }
 
-class CommentDeleted extends CommentEvent {
+class CommentDeleted extends CommentEditEvent {
   final Comment comment;
 
   const CommentDeleted({@required this.comment});

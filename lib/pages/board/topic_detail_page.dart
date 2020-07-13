@@ -48,7 +48,7 @@ class _TopicDetailPage extends StatelessWidget {
         }
         if (state is TopicDetailSuccess) {
           return BlocProvider(
-            create: (context) => CommentBloc(
+            create: (context) => CommentEditBloc(
               boardRepository: RepositoryProvider.of<BoardRepository>(context),
             ),
             child: Scaffold(

@@ -1,17 +1,17 @@
-part of 'comment_bloc.dart';
+part of 'comment_edit_bloc.dart';
 
-abstract class CommentState extends Equatable {
-  const CommentState();
+abstract class CommentEditState extends Equatable {
+  const CommentEditState();
 
   @override
   List<Object> get props => [];
 }
 
-class CommentInitial extends CommentState {}
+class CommentInitial extends CommentEditState {}
 
-class CommentInProgress extends CommentState {}
+class CommentInProgress extends CommentEditState {}
 
-class CommentAddSuccess extends CommentState {
+class CommentAddSuccess extends CommentEditState {
   final Comment comment;
 
   const CommentAddSuccess({@required this.comment});
@@ -20,7 +20,7 @@ class CommentAddSuccess extends CommentState {
   List<Object> get props => [comment];
 }
 
-class CommentUpdateSuccess extends CommentState {
+class CommentUpdateSuccess extends CommentEditState {
   final Comment comment;
 
   const CommentUpdateSuccess({@required this.comment});
@@ -29,7 +29,7 @@ class CommentUpdateSuccess extends CommentState {
   List<Object> get props => [comment];
 }
 
-class CommentDeleteSuccess extends CommentState {
+class CommentDeleteSuccess extends CommentEditState {
   final Comment comment;
 
   const CommentDeleteSuccess({@required this.comment});
@@ -38,7 +38,7 @@ class CommentDeleteSuccess extends CommentState {
   List<Object> get props => [comment];
 }
 
-class CommentError extends CommentState {
+class CommentError extends CommentEditState {
   final String message;
 
   const CommentError({@required this.message});

@@ -6,17 +6,17 @@ import 'package:meta/meta.dart';
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/repositories/board_repository.dart';
 
-part 'topic_event.dart';
-part 'topic_state.dart';
+part 'topic_edit_event.dart';
+part 'topic_edit_state.dart';
 
-class TopicBloc extends Bloc<TopicEvent, TopicState> {
+class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   final BoardRepository boardRepository;
 
-  TopicBloc({@required this.boardRepository}) : super(TopicInitial());
+  TopicEditBloc({@required this.boardRepository}) : super(TopicInitial());
 
   @override
-  Stream<TopicState> mapEventToState(
-    TopicEvent event,
+  Stream<TopicEditState> mapEventToState(
+    TopicEditEvent event,
   ) async* {
     if (event is TopicAdded) {
       yield TopicInProgress();
