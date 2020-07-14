@@ -43,26 +43,15 @@ class HomePage extends StatelessWidget {
           return BlocListener<UpdateBloc, UpdateState>(
             listener: (context, state) {
               if (state is UpdateSuccess && state.needUpdate) {
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text('更新'),
+                scaffoldKey.currentState.showSnackBar(
+                  SnackBar(
                     content: Text('发现新版本（${state.version}）'),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('稍后'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      FlatButton(
-                        child: Text('下载'),
-                        onPressed: () async {
-                          Navigator.pop(context);
-                          launchUrl(state.url);
-                        },
-                      )
-                    ],
+                    action: SnackBarAction(
+                      label: '更新',
+                      onPressed: () {
+                        launchUrl(state.url);
+                      },
+                    ),
                   ),
                 );
               }
