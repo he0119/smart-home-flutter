@@ -92,9 +92,9 @@ class _HomePage extends StatelessWidget {
       final QuickActions quickActions = QuickActions();
       quickActions.initialize((String shortcutType) async {
         if (shortcutType == 'action_iot') {
-          BlocProvider.of<TabBloc>(context).add(UpdateTab(AppTab.iot));
+          BlocProvider.of<TabBloc>(context).add(TabChanged(AppTab.iot));
         } else {
-          BlocProvider.of<TabBloc>(context).add(UpdateTab(AppTab.blog));
+          BlocProvider.of<TabBloc>(context).add(TabChanged(AppTab.blog));
         }
       });
       quickActions.setShortcutItems(

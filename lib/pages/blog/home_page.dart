@@ -22,7 +22,7 @@ class BlogHomePage extends StatelessWidget {
       bottomNavigationBar: TabSelector(
         activeTab: AppTab.blog,
         onTabSelected: (tab) =>
-            BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+            BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.open_in_new),

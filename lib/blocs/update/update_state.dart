@@ -8,6 +8,15 @@ class UpdateInitial extends UpdateState {
   String toString() => 'UpdateInitial';
 }
 
+class UpdateFailure extends UpdateState {
+  final String message;
+
+  UpdateFailure(this.message);
+
+  @override
+  String toString() => 'UpdateFailure { message: $message }';
+}
+
 class UpdateSuccess extends UpdateState {
   final bool needUpdate;
   final String url;
@@ -18,13 +27,4 @@ class UpdateSuccess extends UpdateState {
   @override
   String toString() =>
       'UpdateSuccess { needUpdate: $needUpdate, version: $version }';
-}
-
-class UpdateFailure extends UpdateState {
-  final String message;
-
-  UpdateFailure(this.message);
-
-  @override
-  String toString() => 'UpdateError { message: $message }';
 }

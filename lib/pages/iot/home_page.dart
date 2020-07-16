@@ -19,7 +19,7 @@ class IotHomePage extends StatelessWidget {
       bottomNavigationBar: TabSelector(
         activeTab: AppTab.iot,
         onTabSelected: (tab) =>
-            BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+            BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
       ),
     );
   }
