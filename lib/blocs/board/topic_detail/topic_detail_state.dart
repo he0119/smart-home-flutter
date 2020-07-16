@@ -13,8 +13,8 @@ class TopicDetailFailure extends TopicDetailState {
   final String message;
   final String topicId;
 
-  const TopicDetailFailure({
-    @required this.message,
+  const TopicDetailFailure(
+    this.message, {
     @required this.topicId,
   });
 

@@ -27,7 +27,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
         );
         yield TopicAddSuccess(topic: topic);
       } catch (e) {
-        yield TopicError(message: e.message);
+        yield TopicFailure(e.message);
       }
     }
     if (event is TopicUpdated) {
@@ -40,7 +40,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
         );
         yield TopicUpdateSuccess(topic: topic);
       } catch (e) {
-        yield TopicError(message: e.message);
+        yield TopicFailure(e.message);
       }
     }
     if (event is TopicDeleted) {
@@ -49,7 +49,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
         await boardRepository.deleteTopic(topicId: event.topic.id);
         yield TopicDeleteSuccess(topic: event.topic);
       } catch (e) {
-        yield TopicError(message: e.message);
+        yield TopicFailure(e.message);
       }
     }
   }

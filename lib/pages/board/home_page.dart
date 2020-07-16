@@ -58,7 +58,7 @@ class _BoardHomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<BoardHomeBloc, BoardHomeState>(
       builder: (context, state) {
-        if (state is BoardHomeError) {
+        if (state is BoardHomeFailure) {
           return ErrorPage(
             onPressed: () {
               BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());

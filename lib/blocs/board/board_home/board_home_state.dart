@@ -9,10 +9,10 @@ abstract class BoardHomeState extends Equatable {
 
 class BoardHomeInProgress extends BoardHomeState {}
 
-class BoardHomeError extends BoardHomeState {
+class BoardHomeFailure extends BoardHomeState {
   final String message;
 
-  const BoardHomeError({@required this.message});
+  const BoardHomeFailure(this.message);
 
   @override
   List<Object> get props => [message];
