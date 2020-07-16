@@ -10,25 +10,25 @@ part 'search_states.dart';
 class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
   final StorageRepository storageRepository;
   StorageSearchBloc({@required this.storageRepository})
-      : super(StorageSearchResults(items: [], storages: [], term: ''));
+      : super(StorageSearchSuccess(items: [], storages: [], term: ''));
 
   @override
   Stream<StorageSearchState> mapEventToState(StorageSearchEvent event) async* {
     if (event is StorageSearchChanged) {
       if (event.key.isEmpty) {
-        yield StorageSearchResults(items: [], storages: [], term: '');
+        yield StorageSearchSuccess(items: [], storages: [], term: '');
         return;
       }
-      yield StorageSearchLoading();
+      yield StorageSearchInProgress();
       try {
         List<dynamic> results = await storageRepository.search(event.key);
-        yield StorageSearchResults(
+        yield StorageSearchSuccess(
           items: results[0],
           storages: results[1],
           term: event.key,
         );
       } catch (e) {
-        yield StorageSearchError(e.message);
+        yield StorageSearchFailure(e.message);
       }
     }
   }

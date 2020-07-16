@@ -29,7 +29,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         yield StorageDetailRootSuccess(storages: results);
       } catch (e) {
         yield StorageDetailFailure(
-          message: e.message,
+          e.message,
           storageId: null,
         );
       }
@@ -43,7 +43,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         yield StorageDetailRootSuccess(storages: results);
       } catch (e) {
         yield StorageDetailFailure(
-          message: e.message,
+          e.message,
           storageId: null,
         );
       }
@@ -66,7 +66,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         );
       } catch (e) {
         yield StorageDetailFailure(
-          message: e.message,
+          e.message,
           storageId: event.id,
         );
       }
@@ -85,7 +85,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         );
       } catch (e) {
         yield StorageDetailFailure(
-          message: e.message,
+          e.message,
           storageId: event.id,
         );
       }

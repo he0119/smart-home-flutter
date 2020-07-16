@@ -24,37 +24,37 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
     if (event is ItemFormStarted) {
       yield state.copyWith(listofStorages: await storageRepository.storages());
     }
-    if (event is NameChanged) {
+    if (event is ItemNameChanged) {
       yield state.copyWith(
         name: event.name,
         isNameValid: _isNameValid(event.name),
       );
     }
-    if (event is NumberChanged) {
+    if (event is ItemNumberChanged) {
       yield state.copyWith(
         number: event.number,
         isNumberValid: _isNumberValid(event.number),
       );
     }
-    if (event is PriceChanged) {
+    if (event is ItemPriceChanged) {
       yield state.copyWith(
         price: event.price,
         isPriceValid: _isPriceValid(event.price),
       );
     }
-    if (event is DescriptionChanged) {
+    if (event is ItemDescriptionChanged) {
       yield state.copyWith(
         description: event.description,
         isDescriptionValid: true,
       );
     }
-    if (event is StorageChanged) {
+    if (event is ItemStorageChanged) {
       yield state.copyWith(
         storage: event.storage,
         isStorageValid: _isStorageValid(event.storage),
       );
     }
-    if (event is ExpirationDateChanged) {
+    if (event is ItemExpirationDateChanged) {
       yield ItemFormState(
         name: state.name,
         isNameValid: state.isNameValid,
@@ -71,7 +71,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
         listofStorages: state.listofStorages,
       );
     }
-    if (event is FormSubmitted) {
+    if (event is ItemFormSubmitted) {
       double price;
       if (state.price != null && state.price.isNotEmpty) {
         price = double.parse(state.price);

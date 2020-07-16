@@ -15,6 +15,9 @@ class ItemEditFailure extends ItemEditState {
   final String message;
 
   const ItemEditFailure(this.message);
+
+  @override
+  String toString() => 'ItemEditFailure { message: $message }';
 }
 
 class ItemAddSuccess extends ItemEditState {

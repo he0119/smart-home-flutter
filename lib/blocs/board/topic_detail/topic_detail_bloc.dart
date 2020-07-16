@@ -26,7 +26,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
             topic: topicDetail[0], comments: topicDetail[1]);
       } catch (e) {
         yield TopicDetailFailure(
-          message: e.message,
+          e.message,
           topicId: event.topicId,
         );
       }
@@ -40,7 +40,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
             topic: topicDetail[0], comments: topicDetail[1]);
       } catch (e) {
         yield TopicDetailFailure(
-          message: e.message,
+          e.message,
           topicId: event.topicId,
         );
       }

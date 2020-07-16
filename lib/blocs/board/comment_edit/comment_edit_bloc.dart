@@ -27,7 +27,7 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
         );
         yield CommentAddSuccess(comment: comment);
       } catch (e) {
-        yield CommentError(message: e.message);
+        yield CommentFailure(e.message);
       }
     }
     if (event is CommentUpdated) {
@@ -39,7 +39,7 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
         );
         yield CommentUpdateSuccess(comment: comment);
       } catch (e) {
-        yield CommentError(message: e.message);
+        yield CommentFailure(e.message);
       }
     }
     if (event is CommentDeleted) {
@@ -48,7 +48,7 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
         await boardRepository.deleteComment(commentId: event.comment.id);
         yield CommentDeleteSuccess(comment: event.comment);
       } catch (e) {
-        yield CommentError(message: e.message);
+        yield CommentFailure(e.message);
       }
     }
   }

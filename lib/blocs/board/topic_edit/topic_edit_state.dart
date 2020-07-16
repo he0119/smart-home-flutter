@@ -11,17 +11,17 @@ class TopicInitial extends TopicEditState {}
 
 class TopicInProgress extends TopicEditState {}
 
-class TopicError extends TopicEditState {
+class TopicFailure extends TopicEditState {
   final String message;
 
-  const TopicError({@required this.message});
+  const TopicFailure(this.message);
 
   @override
   List<Object> get props => [message];
 
   @override
   String toString() {
-    return 'TopicError { $message }';
+    return 'TopicFailure { $message }';
   }
 }
 

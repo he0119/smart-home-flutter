@@ -11,6 +11,20 @@ class CommentInitial extends CommentEditState {}
 
 class CommentInProgress extends CommentEditState {}
 
+class CommentFailure extends CommentEditState {
+  final String message;
+
+  const CommentFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+
+  @override
+  String toString() {
+    return 'CommentFailure { $message }';
+  }
+}
+
 class CommentAddSuccess extends CommentEditState {
   final Comment comment;
 
@@ -36,18 +50,4 @@ class CommentDeleteSuccess extends CommentEditState {
 
   @override
   List<Object> get props => [comment];
-}
-
-class CommentError extends CommentEditState {
-  final String message;
-
-  const CommentError({@required this.message});
-
-  @override
-  List<Object> get props => [message];
-
-  @override
-  String toString() {
-    return 'TopicError { $message }';
-  }
 }

@@ -12,27 +12,31 @@ part 'app_preferences_state.dart';
 class AppPreferencesBloc
     extends Bloc<AppPreferencesEvent, AppPreferencesState> {
   static final Logger _log = Logger('AppPreferencesBloc');
-  SharedPreferences _prefs;
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   AppPreferencesBloc() : super(AppPreferencesState.initial());
-
-  SharedPreferences get prefs => _prefs;
 
   @override
   Stream<AppPreferencesState> mapEventToState(
     AppPreferencesEvent event,
   ) async* {
     if (event is AppStarted) {
-      // 初始化 SharedPreferences
-      _prefs = await SharedPreferences.getInstance().catchError((e) {
-        _log.severe('shared prefrences error : $e');
-        throw Exception('shared prefrences error');
-      });
-      String apiUrl = _prefs.getString('apiUrl');
-      yield state.copyWith(initialized: true, apiUrl: apiUrl);
-    } else if (event is AppApiUrlChanged) {
-      _prefs.setString('apiUrl', event.apiUrl);
-      yield state.copyWith(apiUrl: event.apiUrl);
+      try {
+        final SharedPreferences prefs = await _prefs;
+        String apiUrl = prefs.getString('apiUrl');
+        yield state.copyWith(initialized: true, apiUrl: apiUrl);
+      } catch (e) {
+        _log.severe('启动失败，无法获取配置');
+      }
+    }
+    if (event is AppApiUrlChanged) {
+      try {
+        final SharedPreferences prefs = await _prefs;
+        prefs.setString('apiUrl', event.apiUrl);
+        yield state.copyWith(apiUrl: event.apiUrl);
+      } catch (e) {
+        _log.severe('设置服务器网址失败');
+      }
     }
   }
 }

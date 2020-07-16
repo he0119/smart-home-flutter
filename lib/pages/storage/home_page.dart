@@ -24,7 +24,7 @@ class StorageHomePage extends StatelessWidget {
       builder: (context, state) => Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          leading: state is Authenticated
+          leading: state is AuthenticationSuccess
               ? IconButton(
                   icon: CircleGravatar(email: state.currentUser.email),
                   onPressed: null,
@@ -47,7 +47,7 @@ class StorageHomePage extends StatelessWidget {
         bottomNavigationBar: TabSelector(
           activeTab: AppTab.storage,
           onTabSelected: (tab) =>
-              BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+              BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.storage),
@@ -72,7 +72,7 @@ class _StorageHomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<StorageHomeBloc, StorageHomeState>(
       builder: (context, state) {
-        if (state is StorageHomeError) {
+        if (state is StorageHomeFailure) {
           return ErrorPage(
             onPressed: () {
               BlocProvider.of<StorageHomeBloc>(context).add(
@@ -90,7 +90,7 @@ class _StorageHomeBody extends StatelessWidget {
                 return true;
               }
               BlocProvider.of<StorageHomeBloc>(context)
-                  .add(StorageHomeRefreshed(itemType: ItemType.all));
+                  .add(StorageHomeChanged(itemType: ItemType.all));
               return false;
             },
             child: RefreshIndicator(

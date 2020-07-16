@@ -11,12 +11,11 @@ part 'update_state.dart';
 
 class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
   VersionRepository versionRepository;
+
   UpdateBloc({@required this.versionRepository}) : super(UpdateInitial());
 
   @override
-  Stream<UpdateState> mapEventToState(
-    UpdateEvent event,
-  ) async* {
+  Stream<UpdateState> mapEventToState(UpdateEvent event) async* {
     // 暂时只支持 Android
     if (event is UpdateStarted && !kIsWeb && Platform.isAndroid) {
       try {

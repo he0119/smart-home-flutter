@@ -20,8 +20,10 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
     StorageHomeEvent event,
   ) async* {
     if (event is StorageHomeStarted) {
+      yield StorageHomeInProgress();
       try {
-        Map<String, List<Item>> homepage = await storageRepository.homePage();
+        Map<String, List<Item>> homepage =
+            await storageRepository.homePage(cache: false);
         yield StorageHomeSuccess(
           recentlyAddedItems: homepage['recentlyAddedItems'],
           recentlyUpdatedItems: homepage['recentlyUpdatedItems'],
@@ -30,8 +32,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
           itemType: ItemType.all,
         );
       } catch (e) {
-        yield StorageHomeError(
-          message: e.message,
+        yield StorageHomeFailure(
+          e.message,
           itemType: ItemType.all,
         );
       }
@@ -84,8 +86,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             break;
         }
       } catch (e) {
-        yield StorageHomeError(
-          message: e.message,
+        yield StorageHomeFailure(
+          e.message,
           itemType: event.itemType,
         );
       }
@@ -145,8 +147,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             break;
         }
       } catch (e) {
-        yield StorageHomeError(
-          message: e.message,
+        yield StorageHomeFailure(
+          e.message,
           itemType: event.itemType,
         );
       }

@@ -9,17 +9,20 @@ abstract class StorageHomeState extends Equatable {
 
 class StorageHomeInProgress extends StorageHomeState {}
 
-class StorageHomeError extends StorageHomeState {
+class StorageHomeFailure extends StorageHomeState {
   final String message;
   final ItemType itemType;
 
-  const StorageHomeError({
-    @required this.message,
+  const StorageHomeFailure(
+    this.message, {
     @required this.itemType,
   });
 
   @override
   List<Object> get props => [message, itemType];
+
+  @override
+  String toString() => 'StorageHomeFailure { message: $message }';
 }
 
 class StorageHomeSuccess extends StorageHomeState {

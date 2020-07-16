@@ -19,7 +19,6 @@ class AppPreferencesState extends Equatable {
   AppPreferencesState copyWith({
     bool initialized,
     String apiUrl,
-    String refreshToken,
   }) {
     return AppPreferencesState(
       initialized: initialized ?? this.initialized,

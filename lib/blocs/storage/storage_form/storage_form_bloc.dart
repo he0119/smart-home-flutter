@@ -24,25 +24,25 @@ class StorageFormBloc extends Bloc<StorageFormEvent, StorageFormState> {
     if (event is StorageFormStarted) {
       yield state.copyWith(listofStorages: await storageRepository.storages());
     }
-    if (event is NameChanged) {
+    if (event is StorageNameChanged) {
       yield state.copyWith(
         name: event.name,
         isNameValid: _isNameValid(event.name),
       );
     }
-    if (event is DescriptionChanged) {
+    if (event is StorageDescriptionChanged) {
       yield state.copyWith(
         description: event.description,
         isDescriptionValid: true,
       );
     }
-    if (event is ParentChanged) {
+    if (event is StorageParentChanged) {
       yield state.copyWith(
         parent: event.parent,
         isParentValid: _isStorageValid(event.parent),
       );
     }
-    if (event is FormSubmitted) {
+    if (event is StorageFormSubmitted) {
       if (event.isEditing) {
         storageEditBloc.add(
           StorageUpdated(

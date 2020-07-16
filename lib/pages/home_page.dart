@@ -25,18 +25,22 @@ class HomePage extends StatelessWidget {
       create: (context) => AuthenticationBloc(
         userRepository: RepositoryProvider.of<UserRepository>(context),
       )..add(AuthenticationStarted()),
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          if (state is AuthenticationFailure) {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          }
+        },
         builder: (context, state) {
           // 用户仓库同时也需要认证 BLoC 来处理认证相关逻辑
           // 在首次启动的时候将认证 BLoC 提供给用户仓库
-          if (state is AuthenticationUninitialized) {
+          if (state is AuthenticationInitial) {
             RepositoryProvider.of<UserRepository>(context).authenticationBloc =
                 BlocProvider.of<AuthenticationBloc>(context);
             return SplashPage();
           }
-          // 仅在未登录，登陆失败和登陆中进入登陆界面
-          if (state is Unauthenticated ||
-              state is Authenticating ||
+          // 仅在登陆失败和登陆中进入登陆界面
+          if (state is AuthenticationInProgress ||
               state is AuthenticationFailure) {
             return LoginPage();
           }
@@ -88,9 +92,9 @@ class _HomePage extends StatelessWidget {
       final QuickActions quickActions = QuickActions();
       quickActions.initialize((String shortcutType) async {
         if (shortcutType == 'action_iot') {
-          BlocProvider.of<TabBloc>(context).add(UpdateTab(AppTab.iot));
+          BlocProvider.of<TabBloc>(context).add(TabChanged(AppTab.iot));
         } else {
-          BlocProvider.of<TabBloc>(context).add(UpdateTab(AppTab.blog));
+          BlocProvider.of<TabBloc>(context).add(TabChanged(AppTab.blog));
         }
       });
       quickActions.setShortcutItems(

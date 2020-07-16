@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
-import 'package:smart_home/blocs/storage/storage_edit/storage_edit_bloc.dart';
-import 'package:smart_home/blocs/storage/storage_form/storage_form_bloc.dart';
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/storage.dart';
 import 'package:smart_home/pages/storage/widgets/storage_form.dart';

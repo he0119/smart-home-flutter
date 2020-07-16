@@ -15,6 +15,9 @@ class StorageEditFailure extends StorageEditState {
   final String message;
 
   const StorageEditFailure(this.message);
+
+  @override
+  String toString() => 'StorageEditFailure { message: $message }';
 }
 
 class StorageAddSuccess extends StorageEditState {}

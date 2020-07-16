@@ -20,7 +20,7 @@ class BoardHomePage extends StatelessWidget {
       builder: (context, state) => Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          leading: state is Authenticated
+          leading: state is AuthenticationSuccess
               ? IconButton(
                   icon: CircleGravatar(email: state.currentUser.email),
                   onPressed: null,
@@ -32,7 +32,7 @@ class BoardHomePage extends StatelessWidget {
         bottomNavigationBar: TabSelector(
           activeTab: AppTab.board,
           onTabSelected: (tab) =>
-              BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+              BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.create),
@@ -58,7 +58,7 @@ class _BoardHomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<BoardHomeBloc, BoardHomeState>(
       builder: (context, state) {
-        if (state is BoardHomeError) {
+        if (state is BoardHomeFailure) {
           return ErrorPage(
             onPressed: () {
               BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());

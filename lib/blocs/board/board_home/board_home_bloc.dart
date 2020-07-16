@@ -20,10 +20,10 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
     if (event is BoardHomeStarted) {
       try {
         yield BoardHomeInProgress();
-        List<Topic> topics = await boardRepository.topics();
+        List<Topic> topics = await boardRepository.topics(cache: false);
         yield BoardHomeSuccess(topics: topics);
       } catch (e) {
-        yield BoardHomeError(message: e.message);
+        yield BoardHomeFailure(e.message);
       }
     }
     if (event is BoardHomeRefreshed) {
@@ -32,7 +32,7 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
         List<Topic> topics = await boardRepository.topics(cache: false);
         yield BoardHomeSuccess(topics: topics);
       } catch (e) {
-        yield BoardHomeError(message: e.message);
+        yield BoardHomeFailure(e.message);
       }
     }
   }
