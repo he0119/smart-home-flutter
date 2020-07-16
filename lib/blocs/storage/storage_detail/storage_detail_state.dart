@@ -13,10 +13,11 @@ class StorageDetailFailure extends StorageDetailState {
   final String message;
   final String storageId;
 
-  const StorageDetailFailure({
-    @required this.message,
+  const StorageDetailFailure(
+    this.message, {
     @required this.storageId,
   });
+
   @override
   String toString() => 'StorageDetailFailure { message: $message }';
 }

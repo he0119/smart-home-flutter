@@ -30,8 +30,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
           itemType: ItemType.all,
         );
       } catch (e) {
-        yield StorageHomeError(
-          message: e.message,
+        yield StorageHomeFailure(
+          e.message,
           itemType: ItemType.all,
         );
       }
@@ -84,8 +84,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             break;
         }
       } catch (e) {
-        yield StorageHomeError(
-          message: e.message,
+        yield StorageHomeFailure(
+          e.message,
           itemType: event.itemType,
         );
       }
@@ -145,8 +145,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             break;
         }
       } catch (e) {
-        yield StorageHomeError(
-          message: e.message,
+        yield StorageHomeFailure(
+          e.message,
           itemType: event.itemType,
         );
       }

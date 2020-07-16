@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/storage/storage_edit/storage_edit_bloc.dart';
-import 'package:smart_home/blocs/storage/storage_form/storage_form_bloc.dart';
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 
 class StorageForm extends StatefulWidget {
@@ -32,13 +31,14 @@ class _StorageFormFormState extends State<StorageForm> {
     _storageFormBloc = BlocProvider.of<StorageFormBloc>(context);
     _storageFormBloc.add(StorageFormStarted());
     if (widget.isEditing) {
-      _storageFormBloc.add(NameChanged(name: widget.storage.name));
-      _storageFormBloc.add(ParentChanged(parent: widget.storage.parent?.id));
+      _storageFormBloc.add(StorageNameChanged(name: widget.storage.name));
       _storageFormBloc
-          .add(DescriptionChanged(description: widget.storage.description));
+          .add(StorageParentChanged(parent: widget.storage.parent?.id));
+      _storageFormBloc.add(
+          StorageDescriptionChanged(description: widget.storage.description));
     } else {
-      _storageFormBloc.add(NameChanged(name: ''));
-      _storageFormBloc.add(ParentChanged(parent: widget.storageId));
+      _storageFormBloc.add(StorageNameChanged(name: ''));
+      _storageFormBloc.add(StorageParentChanged(parent: widget.storageId));
     }
 
     _nameFocusNode = FocusNode();
@@ -62,13 +62,13 @@ class _StorageFormFormState extends State<StorageForm> {
 
   void _onSubmitPressed() {
     if (widget.isEditing) {
-      _storageFormBloc.add(FormSubmitted(
+      _storageFormBloc.add(StorageFormSubmitted(
         isEditing: true,
         id: widget.storage.id,
         oldParentId: widget.storage.parent?.id,
       ));
     } else {
-      _storageFormBloc.add(FormSubmitted(isEditing: false));
+      _storageFormBloc.add(StorageFormSubmitted(isEditing: false));
     }
   }
 
@@ -85,7 +85,7 @@ class _StorageFormFormState extends State<StorageForm> {
                   TextFormField(
                     initialValue: widget.isEditing ? widget.storage.name : '',
                     onChanged: (value) =>
-                        _storageFormBloc.add(NameChanged(name: value)),
+                        _storageFormBloc.add(StorageNameChanged(name: value)),
                     decoration: InputDecoration(
                       labelText: '名称',
                     ),
@@ -115,14 +115,14 @@ class _StorageFormFormState extends State<StorageForm> {
                             ))
                         .toList(),
                     onChanged: (value) {
-                      _storageFormBloc.add(ParentChanged(parent: value));
+                      _storageFormBloc.add(StorageParentChanged(parent: value));
                     },
                   ),
                   TextFormField(
                     initialValue:
                         widget.isEditing ? widget.storage.description : '',
                     onChanged: (value) => _storageFormBloc
-                        .add(DescriptionChanged(description: value)),
+                        .add(StorageDescriptionChanged(description: value)),
                     decoration: InputDecoration(
                       labelText: '备注',
                     ),

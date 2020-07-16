@@ -72,7 +72,7 @@ class _StorageHomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<StorageHomeBloc, StorageHomeState>(
       builder: (context, state) {
-        if (state is StorageHomeError) {
+        if (state is StorageHomeFailure) {
           return ErrorPage(
             onPressed: () {
               BlocProvider.of<StorageHomeBloc>(context).add(

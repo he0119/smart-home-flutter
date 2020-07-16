@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
-import 'package:smart_home/blocs/storage/item_form/item_form_bloc.dart';
 import 'package:smart_home/models/models.dart';
 
 class ItemForm extends StatefulWidget {
@@ -45,7 +44,7 @@ class _ItemFormState extends State<ItemForm> {
                   TextFormField(
                     initialValue: widget.isEditing ? widget.item.name : '',
                     onChanged: (value) =>
-                        _itemFormBloc.add(NameChanged(name: value)),
+                        _itemFormBloc.add(ItemNameChanged(name: value)),
                     decoration: InputDecoration(
                       labelText: '名称',
                     ),
@@ -67,7 +66,7 @@ class _ItemFormState extends State<ItemForm> {
                     initialValue:
                         widget.isEditing ? widget.item.number.toString() : '1',
                     onChanged: (value) =>
-                        _itemFormBloc.add(NumberChanged(number: value)),
+                        _itemFormBloc.add(ItemNumberChanged(number: value)),
                     decoration: InputDecoration(
                       labelText: '数量',
                     ),
@@ -98,7 +97,7 @@ class _ItemFormState extends State<ItemForm> {
                             ))
                         .toList(),
                     onChanged: (value) {
-                      _itemFormBloc.add(StorageChanged(storage: value));
+                      _itemFormBloc.add(ItemStorageChanged(storage: value));
                     },
                     autovalidate: true,
                     validator: (_) {
@@ -109,7 +108,7 @@ class _ItemFormState extends State<ItemForm> {
                     initialValue:
                         widget.isEditing ? widget.item.description : '',
                     onChanged: (value) => _itemFormBloc
-                        .add(DescriptionChanged(description: value)),
+                        .add(ItemDescriptionChanged(description: value)),
                     decoration: InputDecoration(
                       labelText: '备注',
                     ),
@@ -127,7 +126,7 @@ class _ItemFormState extends State<ItemForm> {
                     initialValue:
                         widget.isEditing ? widget.item.price?.toString() : '',
                     onChanged: (value) =>
-                        _itemFormBloc.add(PriceChanged(price: value)),
+                        _itemFormBloc.add(ItemPriceChanged(price: value)),
                     decoration: InputDecoration(
                       labelText: '价格',
                     ),
@@ -167,8 +166,8 @@ class _ItemFormState extends State<ItemForm> {
                       labelText: '有效期至',
                     ),
                     onChanged: (value) {
-                      _itemFormBloc
-                          .add(ExpirationDateChanged(expirationDate: value));
+                      _itemFormBloc.add(
+                          ItemExpirationDateChanged(expirationDate: value));
                     },
                   ),
                   RaisedButton(
@@ -209,20 +208,21 @@ class _ItemFormState extends State<ItemForm> {
     _itemFormBloc = BlocProvider.of<ItemFormBloc>(context);
     _itemFormBloc.add(ItemFormStarted());
     if (widget.isEditing) {
-      _itemFormBloc.add(NameChanged(name: widget.item.name));
-      _itemFormBloc.add(NumberChanged(number: widget.item.number.toString()));
-      _itemFormBloc.add(StorageChanged(storage: widget.item.storage.id));
+      _itemFormBloc.add(ItemNameChanged(name: widget.item.name));
       _itemFormBloc
-          .add(PriceChanged(price: widget.item.price?.toString() ?? ''));
+          .add(ItemNumberChanged(number: widget.item.number.toString()));
+      _itemFormBloc.add(ItemStorageChanged(storage: widget.item.storage.id));
       _itemFormBloc
-          .add(DescriptionChanged(description: widget.item.description));
+          .add(ItemPriceChanged(price: widget.item.price?.toString() ?? ''));
+      _itemFormBloc
+          .add(ItemDescriptionChanged(description: widget.item.description));
       _itemFormBloc.add(
-        ExpirationDateChanged(expirationDate: widget.item.expirationDate),
+        ItemExpirationDateChanged(expirationDate: widget.item.expirationDate),
       );
     } else {
-      _itemFormBloc.add(NameChanged(name: ''));
-      _itemFormBloc.add(StorageChanged(storage: widget.storageId));
-      _itemFormBloc.add(NumberChanged(number: '1'));
+      _itemFormBloc.add(ItemNameChanged(name: ''));
+      _itemFormBloc.add(ItemStorageChanged(storage: widget.storageId));
+      _itemFormBloc.add(ItemNumberChanged(number: '1'));
     }
 
     _nameFocusNode = FocusNode();
@@ -239,13 +239,13 @@ class _ItemFormState extends State<ItemForm> {
 
   void _onSubmitPressed() {
     if (widget.isEditing) {
-      _itemFormBloc.add(FormSubmitted(
+      _itemFormBloc.add(ItemFormSubmitted(
         isEditing: true,
         id: widget.item.id,
         oldStorageId: widget.item.storage.id,
       ));
     } else {
-      _itemFormBloc.add(FormSubmitted(isEditing: false));
+      _itemFormBloc.add(ItemFormSubmitted(isEditing: false));
     }
   }
 }

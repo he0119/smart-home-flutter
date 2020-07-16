@@ -13,8 +13,8 @@ class ItemDetailFailure extends ItemDetailState {
   final String message;
   final String itemId;
 
-  const ItemDetailFailure({
-    @required this.message,
+  const ItemDetailFailure(
+    this.message, {
     @required this.itemId,
   });
 

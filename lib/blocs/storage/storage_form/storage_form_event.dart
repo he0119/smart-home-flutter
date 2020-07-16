@@ -9,52 +9,54 @@ abstract class StorageFormEvent extends Equatable {
 
 class StorageFormStarted extends StorageFormEvent {}
 
-class NameChanged extends StorageFormEvent {
+class StorageNameChanged extends StorageFormEvent {
   final String name;
 
-  const NameChanged({@required this.name});
+  const StorageNameChanged({@required this.name});
 
   @override
   List<Object> get props => [name];
 
   @override
-  String toString() => 'NameChanged { name: $name }';
+  String toString() => 'StorageNameChanged { name: $name }';
 }
 
-class ParentChanged extends StorageFormEvent {
+class StorageParentChanged extends StorageFormEvent {
   final String parent;
 
-  const ParentChanged({@required this.parent});
+  const StorageParentChanged({@required this.parent});
 
   @override
   List<Object> get props => [parent];
 
   @override
-  String toString() => 'ParentChanged { parent_id: $parent }';
+  String toString() => 'StorageParentChanged { parent_id: $parent }';
 }
 
-class DescriptionChanged extends StorageFormEvent {
+class StorageDescriptionChanged extends StorageFormEvent {
   final String description;
 
-  const DescriptionChanged({@required this.description});
+  const StorageDescriptionChanged({@required this.description});
 
   @override
   List<Object> get props => [description];
 
   @override
-  String toString() => 'DescriptionChanged { description: $description }';
+  String toString() =>
+      'StorageDescriptionChanged { description: $description }';
 }
 
-class FormSubmitted extends StorageFormEvent {
+class StorageFormSubmitted extends StorageFormEvent {
   final bool isEditing;
   final String id;
   final String oldParentId;
 
-  const FormSubmitted({@required this.isEditing, this.id, this.oldParentId});
+  const StorageFormSubmitted(
+      {@required this.isEditing, this.id, this.oldParentId});
 
   @override
   List<Object> get props => [isEditing, id, oldParentId];
 
   @override
-  String toString() => 'FormSubmitted { item id: $id }';
+  String toString() => 'StorageFormSubmitted { item id: $id }';
 }

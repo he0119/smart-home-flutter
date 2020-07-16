@@ -7,23 +7,26 @@ abstract class StorageSearchState extends Equatable {
   List<Object> get props => [];
 }
 
-class StorageSearchLoading extends StorageSearchState {}
+class StorageSearchInProgress extends StorageSearchState {}
 
-class StorageSearchError extends StorageSearchState {
+class StorageSearchFailure extends StorageSearchState {
   final String message;
 
-  const StorageSearchError(this.message);
+  const StorageSearchFailure(this.message);
 
   @override
   List<Object> get props => [message];
+
+  @override
+  String toString() => 'StorageSearchFailure { message: $message }';
 }
 
-class StorageSearchResults extends StorageSearchState {
+class StorageSearchSuccess extends StorageSearchState {
   final List<Item> items;
   final List<Storage> storages;
   final String term;
 
-  StorageSearchResults({
+  StorageSearchSuccess({
     @required this.items,
     @required this.storages,
     @required this.term,
