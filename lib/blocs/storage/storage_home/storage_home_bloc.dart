@@ -20,8 +20,10 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
     StorageHomeEvent event,
   ) async* {
     if (event is StorageHomeStarted) {
+      yield StorageHomeInProgress();
       try {
-        Map<String, List<Item>> homepage = await storageRepository.homePage();
+        Map<String, List<Item>> homepage =
+            await storageRepository.homePage(cache: false);
         yield StorageHomeSuccess(
           recentlyAddedItems: homepage['recentlyAddedItems'],
           recentlyUpdatedItems: homepage['recentlyUpdatedItems'],

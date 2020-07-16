@@ -20,7 +20,7 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
     if (event is BoardHomeStarted) {
       try {
         yield BoardHomeInProgress();
-        List<Topic> topics = await boardRepository.topics();
+        List<Topic> topics = await boardRepository.topics(cache: false);
         yield BoardHomeSuccess(topics: topics);
       } catch (e) {
         yield BoardHomeFailure(e.message);

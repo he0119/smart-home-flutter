@@ -90,7 +90,7 @@ class _StorageHomeBody extends StatelessWidget {
                 return true;
               }
               BlocProvider.of<StorageHomeBloc>(context)
-                  .add(StorageHomeRefreshed(itemType: ItemType.all));
+                  .add(StorageHomeChanged(itemType: ItemType.all));
               return false;
             },
             child: RefreshIndicator(
