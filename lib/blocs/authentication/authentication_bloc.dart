@@ -13,7 +13,7 @@ class AuthenticationBloc
 
   AuthenticationBloc({
     @required this.userRepository,
-  }) : super(AuthenticationUninitialized());
+  }) : super(AuthenticationInitial());
 
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -32,12 +32,10 @@ class AuthenticationBloc
     try {
       // 检查是否登录
       if (await userRepository.isLogin) {
-        yield Authenticated(await userRepository.currentUser());
+        yield AuthenticationSuccess(await userRepository.currentUser());
       } else {
-        yield Unauthenticated();
+        yield AuthenticationFailure('未登录，请登录账户');
       }
-    } on AuthenticationException catch (_) {
-      yield Unauthenticated();
     } catch (e) {
       yield AuthenticationError(e.message);
     }
@@ -45,23 +43,23 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapLoginToState(
       AuthenticationLogin event) async* {
-    yield Authenticating();
+    yield AuthenticationInProgress();
     try {
       bool result =
           await userRepository.authenticate(event.username, event.password);
       if (result) {
         User user = await userRepository.currentUser();
-        yield Authenticated(user);
+        yield AuthenticationSuccess(user);
       } else {
         yield AuthenticationFailure('用户名或密码错误');
       }
     } catch (e) {
-      yield AuthenticationError(e.message);
+      yield AuthenticationFailure(e.message);
     }
   }
 
   Stream<AuthenticationState> _mapLogoutToState() async* {
+    yield AuthenticationFailure('已登出');
     await userRepository.logout();
-    yield Unauthenticated();
   }
 }

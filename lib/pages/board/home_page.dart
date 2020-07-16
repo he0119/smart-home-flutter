@@ -20,7 +20,7 @@ class BoardHomePage extends StatelessWidget {
       builder: (context, state) => Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          leading: state is Authenticated
+          leading: state is AuthenticationSuccess
               ? IconButton(
                   icon: CircleGravatar(email: state.currentUser.email),
                   onPressed: null,

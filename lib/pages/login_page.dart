@@ -16,32 +16,39 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     AppConfig appConfig = AppConfig.of(context);
     return Scaffold(
-      body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-        builder: (context, state) {
-          if (state.apiUrl == null) {
-            canLogin = false;
+      body: BlocListener<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          if (state is AuthenticationFailure) {
+            showErrorSnackBar(context, state.message);
           }
-          return canLogin
-              ? LoginForm(onTapBack: () {
-                  setState(() {
-                    canLogin = false;
-                  });
-                })
-              : ApiUrlForm(
-                  apiUrl: state.apiUrl ?? appConfig.apiUrl,
-                  onTapNext: () {
-                    setState(() {
-                      canLogin = true;
-                    });
-                  },
-                );
         },
+        child: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
+          builder: (context, state) {
+            if (state.apiUrl == null) {
+              canLogin = false;
+            }
+            return canLogin
+                ? LoginForm(onTapBack: () {
+                    setState(() {
+                      canLogin = false;
+                    });
+                  })
+                : ApiUrlForm(
+                    apiUrl: state.apiUrl ?? appConfig.apiUrl,
+                    onTapNext: () {
+                      setState(() {
+                        canLogin = true;
+                      });
+                    },
+                  );
+          },
+        ),
       ),
     );
   }
 }
 
-/// 选择 APIURL 的界面
+/// 选择服务器网址的界面
 class ApiUrlForm extends StatefulWidget {
   final String apiUrl;
   final Function onTapNext;
@@ -158,12 +165,7 @@ class _LoginFormState extends State<LoginForm> {
       );
     }
 
-    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
-        if (state is AuthenticationFailure) {
-          showErrorSnackBar(context, state.message);
-        }
-      },
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -202,8 +204,9 @@ class _LoginFormState extends State<LoginForm> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
               ),
-              onPressed:
-                  state is! Authenticating ? _onLoginButtonPressed : null,
+              onPressed: state is! AuthenticationInProgress
+                  ? _onLoginButtonPressed
+                  : null,
               child: Text('登录'),
             ),
             FlatButton(
@@ -211,8 +214,9 @@ class _LoginFormState extends State<LoginForm> {
               child: Text('返回'),
             ),
             Container(
-              child:
-                  state is Authenticating ? CircularProgressIndicator() : null,
+              child: state is AuthenticationInProgress
+                  ? CircularProgressIndicator()
+                  : null,
             ),
           ],
         );
