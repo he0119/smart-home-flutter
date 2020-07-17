@@ -21,14 +21,20 @@ jobs:
         customVersion: $(flutter_version)
     - script: |
         flutter pub get
-        flutter test --machine > example.jsonl
+        flutter test --coverage --machine > example.jsonl
         flutter pub global activate junitreport
         flutter pub global run junitreport:tojunit --input example.jsonl --output TEST-report.xml
+        pip install lcov_cobertura
+        lcov_cobertura coverage/lcov.info
       displayName: 'Flutter Test'
     - task: PublishTestResults@2
       inputs:
         testResultsFiles: "**/TEST-*.xml"
       condition: succeededOrFailed()
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '**/coverage.xml'
 
   - job: Android
     dependsOn: Test
