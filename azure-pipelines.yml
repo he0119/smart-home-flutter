@@ -14,6 +14,7 @@ pool:
 jobs:
   - job: Test
     steps:
+    - script: pip install lcov_cobertura
     - task: Install-Flutter@0
       inputs:
         channel: $(flutter_channel)
@@ -24,7 +25,6 @@ jobs:
         flutter test --coverage --machine > example.jsonl
         flutter pub global activate junitreport
         flutter pub global run junitreport:tojunit --input example.jsonl --output TEST-report.xml
-        pip install lcov_cobertura
         lcov_cobertura coverage/lcov.info
       displayName: 'Flutter Test'
     - task: PublishTestResults@2
