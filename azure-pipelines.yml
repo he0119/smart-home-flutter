@@ -14,7 +14,8 @@ pool:
 jobs:
   - job: Test
     steps:
-    - script: pip install lcov_cobertura
+    - script: pip3 install git+https://github.com/eriwen/lcov-to-cobertura-xml.git
+      displayName: 'Install lcov-to-cobertura'
     - task: Install-Flutter@0
       inputs:
         channel: $(flutter_channel)
