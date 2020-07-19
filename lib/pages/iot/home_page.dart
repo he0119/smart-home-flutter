@@ -81,7 +81,7 @@ class _IotHomeBody extends StatelessWidget {
                     BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
                       deviceId: device.id,
                       key: 'valve1',
-                      value: value.toString(),
+                      value: value ? '1' : '',
                       valueType: 'bool',
                     ));
                     showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
@@ -94,7 +94,7 @@ class _IotHomeBody extends StatelessWidget {
                     BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
                       deviceId: device.id,
                       key: 'valve2',
-                      value: value.toString(),
+                      value: value ? '1' : '',
                       valueType: 'bool',
                     ));
                     showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
@@ -107,7 +107,7 @@ class _IotHomeBody extends StatelessWidget {
                     BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
                       deviceId: device.id,
                       key: 'valve3',
-                      value: value.toString(),
+                      value: value ? '1' : '',
                       valueType: 'bool',
                     ));
                     showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
@@ -120,7 +120,7 @@ class _IotHomeBody extends StatelessWidget {
                     BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
                       deviceId: device.id,
                       key: 'pump',
-                      value: value.toString(),
+                      value: value ? '1' : '',
                       valueType: 'bool',
                     ));
                     showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
