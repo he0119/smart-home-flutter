@@ -7,7 +7,14 @@ abstract class DeviceDataEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class DeviceDataStarted extends DeviceDataEvent {}
+class DeviceDataStarted extends DeviceDataEvent {
+  final int refreshInterval;
+
+  const DeviceDataStarted(this.refreshInterval);
+
+  @override
+  String toString() => 'DeviceDataStarted { refreshInterval $refreshInterval }';
+}
 
 class DeviceDataStoped extends DeviceDataEvent {}
 

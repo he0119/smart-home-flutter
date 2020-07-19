@@ -16,20 +16,22 @@ class IotHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<DeviceDataBloc>(
-      create: (context) => DeviceDataBloc(
-        iotRepository: RepositoryProvider.of<IotRepository>(context),
-      )..add(DeviceDataStarted()),
-      child: Scaffold(
-        key: scaffoldKey,
-        appBar: AppBar(
-          title: Text('IOT'),
-        ),
-        body: _IotHomeBody(),
-        bottomNavigationBar: TabSelector(
-          activeTab: AppTab.iot,
-          onTabSelected: (tab) =>
-              BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
+    return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
+      builder: (context, state) => BlocProvider<DeviceDataBloc>(
+        create: (context) => DeviceDataBloc(
+          iotRepository: RepositoryProvider.of<IotRepository>(context),
+        )..add(DeviceDataStarted(state.refreshInterval)),
+        child: Scaffold(
+          key: scaffoldKey,
+          appBar: AppBar(
+            title: Text('IOT'),
+          ),
+          body: _IotHomeBody(),
+          bottomNavigationBar: TabSelector(
+            activeTab: AppTab.iot,
+            onTabSelected: (tab) =>
+                BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
+          ),
         ),
       ),
     );

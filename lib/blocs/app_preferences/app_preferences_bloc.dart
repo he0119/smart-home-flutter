@@ -24,7 +24,12 @@ class AppPreferencesBloc
       try {
         final SharedPreferences prefs = await _prefs;
         String apiUrl = prefs.getString('apiUrl');
-        yield state.copyWith(initialized: true, apiUrl: apiUrl);
+        int refreshInterval = prefs.getInt('refreshInterval');
+        yield state.copyWith(
+          initialized: true,
+          apiUrl: apiUrl,
+          refreshInterval: refreshInterval,
+        );
       } catch (e) {
         _log.severe('启动失败，无法获取配置');
       }
@@ -34,6 +39,15 @@ class AppPreferencesBloc
         final SharedPreferences prefs = await _prefs;
         prefs.setString('apiUrl', event.apiUrl);
         yield state.copyWith(apiUrl: event.apiUrl);
+      } catch (e) {
+        _log.severe('设置服务器网址失败');
+      }
+    }
+    if (event is AppIotRefreshIntervalChanged) {
+      try {
+        final SharedPreferences prefs = await _prefs;
+        prefs.setInt('refreshInterval', event.interval);
+        yield state.copyWith(refreshInterval: event.interval);
       } catch (e) {
         _log.severe('设置服务器网址失败');
       }

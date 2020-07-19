@@ -20,3 +20,15 @@ class AppApiUrlChanged extends AppPreferencesEvent {
   @override
   String toString() => 'AppApiUrlChanged { apiUrl: $apiUrl }';
 }
+
+class AppIotRefreshIntervalChanged extends AppPreferencesEvent {
+  final int interval;
+
+  AppIotRefreshIntervalChanged({@required this.interval});
+
+  @override
+  List<Object> get props => [interval];
+
+  @override
+  String toString() => 'AppIotRefreshIntervalChanged { apiUrl: $interval }';
+}
