@@ -4,12 +4,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/board/blocs.dart';
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
+import 'package:smart_home/repositories/iot_repository.dart';
 import 'package:smart_home/repositories/repositories.dart';
-
-import 'blocs/board/blocs.dart';
-import 'blocs/storage/blocs.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
     GraphQLApiClient graphQLApiClient = GraphQLApiClient();
     UserRepository userRepository =
         UserRepository(graphqlApiClient: graphQLApiClient);
+    graphQLApiClient.userRepository = userRepository;
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<GraphQLApiClient>(
@@ -37,6 +38,10 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<BoardRepository>(
           create: (context) =>
               BoardRepository(graphqlApiClient: graphQLApiClient),
+        ),
+        RepositoryProvider<IotRepository>(
+          create: (context) =>
+              IotRepository(graphqlApiClient: graphQLApiClient),
         ),
       ],
       child: MultiBlocProvider(
@@ -106,10 +111,7 @@ class MyApp extends StatelessWidget {
             },
             listener: (context, state) {
               // 如果软件配置中没有设置过 APIURL，则使用默认的 URL
-              graphQLApiClient.initailize(
-                url: state.apiUrl ?? config.apiUrl,
-                userRepository: userRepository,
-              );
+              graphQLApiClient.initailize(state.apiUrl ?? config.apiUrl);
             },
             builder: (context, state) {
               if (!state.initialized) {
