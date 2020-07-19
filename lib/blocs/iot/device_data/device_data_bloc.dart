@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:smart_home/models/iot.dart';
 import 'package:smart_home/repositories/iot_repository.dart';
 
@@ -16,11 +17,15 @@ class Ticker {
 
 class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
   final IotRepository iotRepository;
+  final String deviceId;
 
   final Ticker _ticker = Ticker();
   StreamSubscription<int> _dataSubscription;
 
-  DeviceDataBloc({this.iotRepository}) : super(DeviceDataInitial());
+  DeviceDataBloc({
+    @required this.iotRepository,
+    @required this.deviceId,
+  }) : super(DeviceDataInitial());
 
   @override
   Future<void> close() {
@@ -57,7 +62,7 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
     _dataSubscription?.cancel();
     _dataSubscription = _ticker.tick(event.refreshInterval).listen((x) async {
       List<AutowateringData> data =
-          await iotRepository.deviceData(deviceId: '1', number: 1);
+          await iotRepository.deviceData(deviceId: deviceId, number: 1);
       add(DeviceDataupdated(data[0]));
     });
   }

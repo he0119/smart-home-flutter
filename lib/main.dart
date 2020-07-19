@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
-import 'package:smart_home/blocs/iot/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
