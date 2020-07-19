@@ -2,24 +2,35 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/iot/device_data/device_data_bloc.dart';
 import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/models/grobal_keys.dart';
+import 'package:smart_home/models/iot.dart';
+import 'package:smart_home/pages/loading_page.dart';
+import 'package:smart_home/repositories/iot_repository.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:smart_home/utils/date_format_extension.dart';
 
 class IotHomePage extends StatelessWidget {
   const IotHomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      body: _IotHomeBody(),
-      bottomNavigationBar: TabSelector(
-        activeTab: AppTab.iot,
-        onTabSelected: (tab) =>
-            BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
+    return BlocProvider<DeviceDataBloc>(
+      create: (context) => DeviceDataBloc(
+        iotRepository: RepositoryProvider.of<IotRepository>(context),
+      )..add(DeviceDataStarted()),
+      child: Scaffold(
+        key: scaffoldKey,
+        appBar: AppBar(
+          title: Text('IOT'),
+        ),
+        body: _IotHomeBody(),
+        bottomNavigationBar: TabSelector(
+          activeTab: AppTab.iot,
+          onTabSelected: (tab) =>
+              BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
+        ),
       ),
     );
   }
@@ -30,26 +41,21 @@ class _IotHomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String url = 'https://iot.hehome.xyz';
-    return !kIsWeb
-        ? WebView(
-            key: UniqueKey(),
-            initialUrl: url,
-            javascriptMode: JavascriptMode.unrestricted,
-          )
-        : Center(
-            child: RaisedButton(
-              onPressed: () => _launchUrl(url),
-              child: Text('IOT'),
-            ),
+    return BlocBuilder<DeviceDataBloc, DeviceDataState>(
+      builder: (context, state) {
+        if (state is DeviceDataSuccess) {
+          Device device = state.autowateringData.device;
+          AutowateringData data = state.autowateringData;
+          return Column(
+            children: [
+              Text(device.name),
+              Text(device.isOnline ? '在线' : '离线'),
+              Text(data.time.toLocaljmsStr()),
+            ],
           );
-  }
-}
-
-Future _launchUrl(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
+        }
+        return LoadingPage();
+      },
+    );
   }
 }

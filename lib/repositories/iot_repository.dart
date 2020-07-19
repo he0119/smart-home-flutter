@@ -10,7 +10,10 @@ class IotRepository {
 
   IotRepository({@required this.graphqlApiClient});
 
-  Future<AutowateringData> deviceData({
+  /// 设备数据
+  ///
+  /// 永远不缓存
+  Future<List<AutowateringData>> deviceData({
     @required String deviceId,
     int number,
   }) async {
@@ -20,11 +23,13 @@ class IotRepository {
         'deviceId': deviceId,
         'number': number,
       },
+      fetchPolicy: FetchPolicy.networkOnly,
     );
     QueryResult results = await graphqlApiClient.query(_options);
-    AutowateringData data =
-        AutowateringData.fromJson(results.data['deviceData']);
-    return data;
+    final List<dynamic> deviceData = results.data['deviceData'];
+    final List<AutowateringData> listofAutowateringData =
+        deviceData.map((dynamic e) => AutowateringData.fromJson(e)).toList();
+    return listofAutowateringData;
   }
 
   Future<Device> addDevice({

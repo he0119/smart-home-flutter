@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,11 +28,7 @@ class GraphQLApiClient {
   }
 
   /// 初始化 GraphQL 客户端
-  bool initailize({
-    @required String url,
-    @required UserRepository userRepository,
-  }) {
-    this.userRepository ??= userRepository;
+  bool initailize(String url) {
     final AuthLink _authLink =
         AuthLink(getToken: () async => 'JWT ${await token}');
     final HttpLink _httpLink = HttpLink(

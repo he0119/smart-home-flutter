@@ -6,6 +6,11 @@ extension LocalDatetime on DateTime {
     return DateFormat.yMMMd().add_jm().format(this.toLocal());
   }
 
+  /// 转换成本地时间，包含时分秒
+  String toLocaljmsStr() {
+    return DateFormat.yMMMd().add_jms().format(this.toLocal());
+  }
+
   /// 获得本地习惯的时间差距表示
   String differenceStr(DateTime other) {
     DateTime localNow = this.toLocal();

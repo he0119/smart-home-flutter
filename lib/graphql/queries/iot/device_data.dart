@@ -4,7 +4,6 @@ query deviceData($deviceId: ID!, $number: Int) {
     __typename
     id
     device {
-      __typename
       id
       name
       dateUpdated
