@@ -50,9 +50,34 @@ class _IotHomeBody extends StatelessWidget {
           AutowateringData data = state.autowateringData;
           return Column(
             children: [
-              Text(device.name),
-              Text(device.isOnline ? '在线' : '离线'),
-              Text(data.time.toLocaljmsStr()),
+              ListTile(
+                title: Text(device.name),
+                subtitle: Text(data.time.toLocaljmsStr()),
+                trailing: Text(device.isOnline ? '在线' : '离线'),
+              ),
+              ListTile(title: Text('温度：' + data.temperature.toString())),
+              ListTile(title: Text('湿度：' + data.humidity.toString())),
+              SwitchListTile(
+                title: Text('树木'),
+                onChanged: (value) {},
+                value: data.valve1,
+              ),
+              SwitchListTile(
+                title: Text('菜地'),
+                onChanged: (value) {},
+                value: data.valve2,
+              ),
+              SwitchListTile(
+                title: Text('后花园'),
+                onChanged: (value) {},
+                value: data.valve3,
+              ),
+              SwitchListTile(
+                title: Text('水泵'),
+                onChanged: (value) {},
+                value: data.pump,
+              ),
+              ListTile(title: Text('无线信号强度：' + data.wifiSignal.toString())),
             ],
           );
         }
