@@ -24,7 +24,7 @@ class DeviceDataupdated extends DeviceDataEvent {
   const DeviceDataupdated(this.autowateringData);
 
   @override
-  List<Object> get props => [autowateringData.time];
+  List<Object> get props => [autowateringData];
 
   @override
   String toString() => 'DeviceDataupdated { time ${autowateringData.time} }';

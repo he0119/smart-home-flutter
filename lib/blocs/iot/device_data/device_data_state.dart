@@ -17,7 +17,10 @@ class DeviceDataSuccess extends DeviceDataState {
   const DeviceDataSuccess(this.autowateringData);
 
   @override
-  List<Object> get props => [autowateringData.time];
+  List<Object> get props => [
+        autowateringData.time,
+        autowateringData.device.isOnline,
+      ];
 
   @override
   String toString() => 'DeviceDataSuccess { time ${autowateringData.time} }';
