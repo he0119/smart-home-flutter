@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/iot/blocs.dart';
@@ -38,6 +39,7 @@ class IotHomePage extends StatelessWidget {
             key: scaffoldKey,
             appBar: AppBar(
               title: Text('IOT'),
+              actions: [],
             ),
             body: _IotHomeBody(),
             bottomNavigationBar: TabSelector(
@@ -62,69 +64,193 @@ class _IotHomeBody extends StatelessWidget {
         if (state is DeviceDataSuccess) {
           Device device = state.autowateringData.device;
           AutowateringData data = state.autowateringData;
-          return Column(
-            children: [
-              ListTile(
-                title: Text(device.name),
-                subtitle: Text(data.time.toLocaljmsStr()),
-                trailing: Text(device.isOnline ? '在线' : '离线'),
-              ),
-              ListTile(title: Text('温度：' + data.temperature.toString())),
-              ListTile(title: Text('湿度：' + data.humidity.toString())),
-              SwitchListTile(
-                title: Text('树木'),
-                value: data.valve1,
-                onChanged: (value) {
-                  BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
-                    deviceId: device.id,
-                    key: 'valve1',
-                    value: value.toString(),
-                    valueType: 'bool',
-                  ));
-                  showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
-                },
-              ),
-              SwitchListTile(
-                title: Text('菜地'),
-                value: data.valve2,
-                onChanged: (value) {
-                  BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
-                    deviceId: device.id,
-                    key: 'valve2',
-                    value: value.toString(),
-                    valueType: 'bool',
-                  ));
-                  showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
-                },
-              ),
-              SwitchListTile(
-                title: Text('后花园'),
-                value: data.valve3,
-                onChanged: (value) {
-                  BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
-                    deviceId: device.id,
-                    key: 'valve3',
-                    value: value.toString(),
-                    valueType: 'bool',
-                  ));
-                  showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
-                },
-              ),
-              SwitchListTile(
-                title: Text('水泵'),
-                value: data.pump,
-                onChanged: (value) {
-                  BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
-                    deviceId: device.id,
-                    key: 'pump',
-                    value: value.toString(),
-                    valueType: 'bool',
-                  ));
-                  showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
-                },
-              ),
-              ListTile(title: Text('无线信号强度：' + data.wifiSignal.toString())),
-            ],
+          return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
+            builder: (context, state) => ListView(
+              children: [
+                ListTile(
+                  title: Text(device.name),
+                  subtitle: Text(data.time.toLocaljmsStr()),
+                  trailing: Text(device.isOnline ? '在线' : '离线'),
+                ),
+                ListTile(title: Text('温度：' + data.temperature.toString())),
+                ListTile(title: Text('湿度：' + data.humidity.toString())),
+                SwitchListTile(
+                  title: Text('树木'),
+                  value: data.valve1,
+                  onChanged: (value) {
+                    BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
+                      deviceId: device.id,
+                      key: 'valve1',
+                      value: value.toString(),
+                      valueType: 'bool',
+                    ));
+                    showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
+                  },
+                ),
+                SwitchListTile(
+                  title: Text('菜地'),
+                  value: data.valve2,
+                  onChanged: (value) {
+                    BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
+                      deviceId: device.id,
+                      key: 'valve2',
+                      value: value.toString(),
+                      valueType: 'bool',
+                    ));
+                    showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
+                  },
+                ),
+                SwitchListTile(
+                  title: Text('后花园'),
+                  value: data.valve3,
+                  onChanged: (value) {
+                    BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
+                      deviceId: device.id,
+                      key: 'valve3',
+                      value: value.toString(),
+                      valueType: 'bool',
+                    ));
+                    showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
+                  },
+                ),
+                SwitchListTile(
+                  title: Text('水泵'),
+                  value: data.pump,
+                  onChanged: (value) {
+                    BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
+                      deviceId: device.id,
+                      key: 'pump',
+                      value: value.toString(),
+                      valueType: 'bool',
+                    ));
+                    showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
+                  },
+                ),
+                ListTile(title: Text('无线信号强度：' + data.wifiSignal.toString())),
+                ExpansionTile(
+                  title: Text('树木阀门延迟：' + data.valve1Delay.toString()),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      child: TextFormField(
+                        initialValue: data.valve1Delay.toString(),
+                        onFieldSubmitted: (value) {
+                          BlocProvider.of<DeviceEditBloc>(context).add(
+                            DeviceSeted(
+                              deviceId: device.id,
+                              key: 'valve1_delay',
+                              value: value,
+                              valueType: 'int',
+                            ),
+                          );
+                        },
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                ExpansionTile(
+                  title: Text('菜地阀门延迟：' + data.valve2Delay.toString()),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      child: TextFormField(
+                        initialValue: data.valve2Delay.toString(),
+                        onFieldSubmitted: (value) {
+                          BlocProvider.of<DeviceEditBloc>(context).add(
+                            DeviceSeted(
+                              deviceId: device.id,
+                              key: 'valve2_delay',
+                              value: value,
+                              valueType: 'int',
+                            ),
+                          );
+                        },
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                ExpansionTile(
+                  title: Text('后花园阀门延迟：' + data.valve3Delay.toString()),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      child: TextFormField(
+                        initialValue: data.valve3Delay.toString(),
+                        onFieldSubmitted: (value) {
+                          BlocProvider.of<DeviceEditBloc>(context).add(
+                            DeviceSeted(
+                              deviceId: device.id,
+                              key: 'valve3_delay',
+                              value: value,
+                              valueType: 'int',
+                            ),
+                          );
+                        },
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                ExpansionTile(
+                  title: Text('泵延迟：' + data.pumpDelay.toString()),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      child: TextFormField(
+                        initialValue: data.pumpDelay.toString(),
+                        onFieldSubmitted: (value) {
+                          BlocProvider.of<DeviceEditBloc>(context).add(
+                            DeviceSeted(
+                              deviceId: device.id,
+                              key: 'pump_delay',
+                              value: value,
+                              valueType: 'int',
+                            ),
+                          );
+                        },
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                ExpansionTile(
+                  title: Text('刷新间隔：' + state.refreshInterval.toString()),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      child: TextFormField(
+                        initialValue: state.refreshInterval.toString(),
+                        onFieldSubmitted: (value) {
+                          BlocProvider.of<AppPreferencesBloc>(context).add(
+                            AppIotRefreshIntervalChanged(
+                              interval: int.parse(value),
+                            ),
+                          );
+                        },
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           );
         }
         return LoadingPage();

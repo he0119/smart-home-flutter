@@ -30,5 +30,6 @@ class AppIotRefreshIntervalChanged extends AppPreferencesEvent {
   List<Object> get props => [interval];
 
   @override
-  String toString() => 'AppIotRefreshIntervalChanged { apiUrl: $interval }';
+  String toString() =>
+      'AppIotRefreshIntervalChanged { refreshInterval: $interval }';
 }
