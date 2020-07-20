@@ -6,7 +6,7 @@ trigger:
 
 variables:
   flutter_channel: 'dev'
-  flutter_version: '1.20.0-7.1.pre'
+  flutter_version: '1.21.0-1.0.pre'
 
 pool:
   vmImage: 'macOS-latest'
