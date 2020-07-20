@@ -143,6 +143,7 @@ class _IotHomeBody extends StatelessWidget {
                               valueType: 'int',
                             ),
                           );
+                          showInfoSnackBar(context, '正在设置...');
                         },
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -168,6 +169,7 @@ class _IotHomeBody extends StatelessWidget {
                               valueType: 'int',
                             ),
                           );
+                          showInfoSnackBar(context, '正在设置...');
                         },
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -193,6 +195,7 @@ class _IotHomeBody extends StatelessWidget {
                               valueType: 'int',
                             ),
                           );
+                          showInfoSnackBar(context, '正在设置...');
                         },
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -218,6 +221,7 @@ class _IotHomeBody extends StatelessWidget {
                               valueType: 'int',
                             ),
                           );
+                          showInfoSnackBar(context, '正在设置...');
                         },
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -240,6 +244,7 @@ class _IotHomeBody extends StatelessWidget {
                               interval: int.parse(value),
                             ),
                           );
+                          showInfoSnackBar(context, '正在设置...');
                         },
                         keyboardType: TextInputType.number,
                         inputFormatters: [
