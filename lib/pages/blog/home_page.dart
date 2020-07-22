@@ -27,74 +27,82 @@ class _BlogHomePageState extends State<BlogHomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-      builder: (context, state) => Scaffold(
-        key: scaffoldKey,
-        appBar: AppBar(
-          title: Text('博客'),
-          actions: [
-            FutureBuilder(
-              future: _controller.future,
-              builder: (BuildContext context,
-                  AsyncSnapshot<WebViewController> controller) {
-                if (controller.hasData) {
-                  return PopupMenuButton(
-                    onSelected: (value) {
-                      if (value == BlogMenu.admin &&
-                          state.blogAdminUrl != null) {
-                        controller.data.loadUrl(state.blogAdminUrl);
-                      } else {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => BlogSettingPage(
-                            blogUrl: state.blogUrl,
-                            blogAdminUrl: state.blogAdminUrl,
-                          ),
-                        ));
-                      }
+      builder: (context, state) => FutureBuilder(
+        future: _controller.future,
+        builder: (BuildContext context,
+                AsyncSnapshot<WebViewController> controller) =>
+            Scaffold(
+          key: scaffoldKey,
+          appBar: AppBar(
+            title: Text('博客'),
+            actions: [
+              controller.hasData
+                  ? PopupMenuButton(
+                      onSelected: (value) {
+                        if (value == BlogMenu.admin &&
+                            state.blogAdminUrl != null) {
+                          controller.data.loadUrl(state.blogAdminUrl);
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => BlogSettingPage(
+                              blogUrl: state.blogUrl,
+                              blogAdminUrl: state.blogAdminUrl,
+                            ),
+                          ));
+                        }
+                      },
+                      itemBuilder: (context) => <PopupMenuItem<BlogMenu>>[
+                        PopupMenuItem(
+                          value: BlogMenu.admin,
+                          child: Text('进入后台'),
+                        ),
+                        PopupMenuItem(
+                          value: BlogMenu.setting,
+                          child: Text('设置网址'),
+                        ),
+                      ],
+                    )
+                  : Container()
+            ],
+          ),
+          body: !kIsWeb
+              ? WillPopScope(
+                  onWillPop: () async {
+                    if (controller.hasData &&
+                        await controller.data.canGoBack()) {
+                      controller.data.goBack();
+                      return false;
+                    }
+                    return true;
+                  },
+                  child: WebView(
+                    initialUrl: state.blogUrl,
+                    javascriptMode: JavascriptMode.unrestricted,
+                    onWebViewCreated: (controller) {
+                      _controller.complete((controller));
                     },
-                    itemBuilder: (context) => <PopupMenuItem<BlogMenu>>[
-                      PopupMenuItem(
-                        value: BlogMenu.admin,
-                        child: Text('进入后台'),
-                      ),
-                      PopupMenuItem(
-                        value: BlogMenu.setting,
-                        child: Text('设置网址'),
-                      ),
-                    ],
-                  );
-                }
-                return Container();
-              },
-            )
-          ],
-        ),
-        body: !kIsWeb
-            ? WebView(
-                initialUrl: state.blogUrl,
-                javascriptMode: JavascriptMode.unrestricted,
-                onWebViewCreated: (controller) {
-                  _controller.complete((controller));
-                },
-              )
-            : Center(
-                child: RaisedButton(
-                  onPressed: () => launchUrl(state.blogUrl),
-                  child: Text('博客'),
+                  ),
+                )
+              : Center(
+                  child: RaisedButton(
+                    onPressed: () => launchUrl(state.blogUrl),
+                    child: Text('博客'),
+                  ),
                 ),
-              ),
-        bottomNavigationBar: TabSelector(
-          activeTab: AppTab.blog,
-          onTabSelected: (tab) =>
-              BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
+          bottomNavigationBar: TabSelector(
+            activeTab: AppTab.blog,
+            onTabSelected: (tab) =>
+                BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
+          ),
+          floatingActionButton: controller.hasData
+              ? FloatingActionButton(
+                  child: Icon(Icons.open_in_new),
+                  onPressed: () async {
+                    await launchUrl(await controller.data.currentUrl());
+                  },
+                )
+              : null,
         ),
-        floatingActionButton: state.blogUrl != null
-            ? FloatingActionButton(
-                child: Icon(Icons.open_in_new),
-                onPressed: () async {
-                  await launchUrl(state.blogUrl);
-                },
-              )
-            : null,
       ),
     );
   }
