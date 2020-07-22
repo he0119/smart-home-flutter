@@ -66,7 +66,7 @@ class AppPreferencesBloc
           blogAdminUrl: event.blogAdminUrl,
         );
       } catch (e) {
-        _log.severe('设置物联网更新间隔失败');
+        _log.severe('设置博客网址失败');
       }
     }
   }
