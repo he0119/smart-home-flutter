@@ -25,10 +25,14 @@ class AppPreferencesBloc
         final SharedPreferences prefs = await _prefs;
         String apiUrl = prefs.getString('apiUrl');
         int refreshInterval = prefs.getInt('refreshInterval');
+        String blogUrl = prefs.getString('blogUrl');
+        String blogAdminUrl = prefs.getString('blogAdminUrl');
         yield state.copyWith(
           initialized: true,
           apiUrl: apiUrl,
           refreshInterval: refreshInterval,
+          blogUrl: blogUrl,
+          blogAdminUrl: blogAdminUrl,
         );
       } catch (e) {
         _log.severe('启动失败，无法获取配置');
@@ -49,7 +53,20 @@ class AppPreferencesBloc
         prefs.setInt('refreshInterval', event.interval);
         yield state.copyWith(refreshInterval: event.interval);
       } catch (e) {
-        _log.severe('设置服务器网址失败');
+        _log.severe('设置物联网更新间隔失败');
+      }
+    }
+    if (event is AppBlogUrlChanged) {
+      try {
+        final SharedPreferences prefs = await _prefs;
+        prefs.setString('blogUrl', event.blogUrl);
+        prefs.setString('blogAdminUrl', event.blogAdminUrl);
+        yield state.copyWith(
+          blogUrl: event.blogUrl,
+          blogAdminUrl: event.blogAdminUrl,
+        );
+      } catch (e) {
+        _log.severe('设置博客网址失败');
       }
     }
   }

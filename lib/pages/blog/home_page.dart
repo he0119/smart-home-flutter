@@ -1,57 +1,109 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/models/grobal_keys.dart';
+import 'package:smart_home/pages/blog/setting_page.dart';
 import 'package:smart_home/utils/launch_url.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class BlogHomePage extends StatelessWidget {
+enum BlogMenu { admin, setting }
+
+/// 利用 WebView 实现的博客页面
+class BlogHomePage extends StatefulWidget {
   const BlogHomePage({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: AppBar(
-        title: Text('博客'),
-      ),
-      body: _BlogHomeBody(),
-      bottomNavigationBar: TabSelector(
-        activeTab: AppTab.blog,
-        onTabSelected: (tab) =>
-            BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.open_in_new),
-        onPressed: () async {
-          const url = 'https://hehome.xyz';
-          await launchUrl(url);
-        },
-      ),
-    );
-  }
+  _BlogHomePageState createState() => _BlogHomePageState();
 }
 
-class _BlogHomeBody extends StatelessWidget {
-  const _BlogHomeBody({Key key}) : super(key: key);
+class _BlogHomePageState extends State<BlogHomePage> {
+  Completer<WebViewController> _controller = Completer<WebViewController>();
 
   @override
   Widget build(BuildContext context) {
-    const String url = 'https://hehome.xyz';
-    return !kIsWeb
-        ? WebView(
-            key: UniqueKey(),
-            initialUrl: url,
-            javascriptMode: JavascriptMode.unrestricted,
-          )
-        : Center(
-            child: RaisedButton(
-              onPressed: () => launchUrl(url),
-              child: Text('博客'),
-            ),
-          );
+    return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
+      builder: (context, state) => FutureBuilder(
+        future: _controller.future,
+        builder: (BuildContext context,
+                AsyncSnapshot<WebViewController> controller) =>
+            Scaffold(
+          key: scaffoldKey,
+          appBar: AppBar(
+            title: Text('博客'),
+            actions: [
+              controller.hasData
+                  ? PopupMenuButton(
+                      onSelected: (value) {
+                        if (value == BlogMenu.admin &&
+                            state.blogAdminUrl != null) {
+                          controller.data.loadUrl(state.blogAdminUrl);
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => BlogSettingPage(
+                              blogUrl: state.blogUrl,
+                              blogAdminUrl: state.blogAdminUrl,
+                            ),
+                          ));
+                        }
+                      },
+                      itemBuilder: (context) => <PopupMenuItem<BlogMenu>>[
+                        PopupMenuItem(
+                          value: BlogMenu.admin,
+                          child: Text('进入后台'),
+                        ),
+                        PopupMenuItem(
+                          value: BlogMenu.setting,
+                          child: Text('设置网址'),
+                        ),
+                      ],
+                    )
+                  : Container()
+            ],
+          ),
+          body: !kIsWeb
+              ? WillPopScope(
+                  onWillPop: () async {
+                    if (controller.hasData &&
+                        await controller.data.canGoBack()) {
+                      controller.data.goBack();
+                      return false;
+                    }
+                    return true;
+                  },
+                  child: WebView(
+                    initialUrl: state.blogUrl,
+                    javascriptMode: JavascriptMode.unrestricted,
+                    onWebViewCreated: (controller) {
+                      _controller.complete((controller));
+                    },
+                  ),
+                )
+              : Center(
+                  child: RaisedButton(
+                    onPressed: () => launchUrl(state.blogUrl),
+                    child: Text('博客'),
+                  ),
+                ),
+          bottomNavigationBar: TabSelector(
+            activeTab: AppTab.blog,
+            onTabSelected: (tab) =>
+                BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
+          ),
+          floatingActionButton: controller.hasData
+              ? FloatingActionButton(
+                  child: Icon(Icons.open_in_new),
+                  onPressed: () async {
+                    await launchUrl(await controller.data.currentUrl());
+                  },
+                )
+              : null,
+        ),
+      ),
+    );
   }
 }
