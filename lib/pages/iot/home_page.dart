@@ -21,6 +21,7 @@ class IotHomePage extends StatelessWidget {
     return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
       builder: (context, state) {
         return MultiBlocProvider(
+          key: ValueKey(state.refreshInterval),
           providers: [
             BlocProvider<DeviceDataBloc>(
               // 因为只有一个设备就先写死
