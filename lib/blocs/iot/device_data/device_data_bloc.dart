@@ -9,9 +9,11 @@ import 'package:smart_home/repositories/iot_repository.dart';
 part 'device_data_event.dart';
 part 'device_data_state.dart';
 
-class Ticker {
-  Stream<int> tick(int deration) {
-    return Stream.periodic(Duration(seconds: deration), (x) => x);
+Stream<int> timedCounter(int interval) async* {
+  int i = 0;
+  while (true) {
+    yield i++;
+    await Future.delayed(Duration(seconds: interval));
   }
 }
 
@@ -19,7 +21,6 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
   final IotRepository iotRepository;
   final String deviceId;
 
-  final Ticker _ticker = Ticker();
   StreamSubscription<int> _dataSubscription;
 
   DeviceDataBloc({
@@ -60,8 +61,9 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
       DeviceDataStarted event) async* {
     yield DeviceDataInProgress();
     _dataSubscription?.cancel();
-    _dataSubscription = _ticker.tick(event.refreshInterval).listen((x) async {
+    _dataSubscription = timedCounter(event.refreshInterval).listen((x) async {
       try {
+        print(x);
         List<AutowateringData> data =
             await iotRepository.deviceData(deviceId: deviceId, number: 1);
         add(DeviceDataupdated(data[0]));
