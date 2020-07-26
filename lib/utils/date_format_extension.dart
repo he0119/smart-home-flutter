@@ -1,14 +1,9 @@
 import 'package:intl/intl.dart';
 
 extension LocalDatetime on DateTime {
-  /// 转换成本地时间
+  /// 转换成本地时间，包含时分秒（24小时制）
   String toLocalStr() {
-    return DateFormat.yMMMd().add_jm().format(this.toLocal());
-  }
-
-  /// 转换成本地时间，包含时分秒
-  String toLocaljmsStr() {
-    return DateFormat.yMMMd().add_jms().format(this.toLocal());
+    return DateFormat.yMMMd().add_Hms().format(this.toLocal());
   }
 
   /// 获得本地习惯的时间差距表示
