@@ -1,6 +1,6 @@
 name: smart_home
 description: 智慧家庭
-version: 0.5.1+3
+version: 0.5.2+3
 homepage: https://github.com/he0119/smart-home-flutter
 
 environment:

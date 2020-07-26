@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.5.2] - 2020-07-26
+
+### Changed
+
+- 日期文字使用 24 小时制
+
+### Fixed
+
+- 修复无法立即获取数据的问题
+- 修复修改刷新间隔之后，页面的刷新间隔并没有改变的问题
+
 ## [0.5.1] - 2020-07-22
 
 ### Changed
@@ -111,8 +122,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.2...HEAD
 
+[0.5.2]: https://github.com/he0119/smart-home-flutter/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/he0119/smart-home-flutter/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/he0119/smart-home-flutter/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/he0119/smart-home-flutter/compare/v0.3.2...v0.4.0
