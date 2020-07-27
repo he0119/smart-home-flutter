@@ -41,7 +41,7 @@ class VersionRepository {
 
   /// 更新文件的下载地址
   Future<String> updateUrl() async {
-    return 'https://github.com/he0119/smart-home-flutter/releases/download/v${await onlineVersion}/app-${await deviceAbi}-release.apk';
+    return 'https://hub.fastgit.org/he0119/smart-home-flutter/releases/download/v${await onlineVersion}/app-${await deviceAbi}-release.apk';
   }
 
   /// 当前版本
