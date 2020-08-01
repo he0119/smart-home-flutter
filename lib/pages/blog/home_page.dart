@@ -36,33 +36,34 @@ class _BlogHomePageState extends State<BlogHomePage> {
           appBar: AppBar(
             title: Text('博客'),
             actions: [
-              controller.hasData
-                  ? PopupMenuButton(
-                      onSelected: (value) {
-                        if (value == BlogMenu.admin &&
-                            state.blogAdminUrl != null) {
-                          controller.data.loadUrl(state.blogAdminUrl);
-                        } else {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => BlogSettingPage(
-                              blogUrl: state.blogUrl,
-                              blogAdminUrl: state.blogAdminUrl,
-                            ),
-                          ));
-                        }
-                      },
-                      itemBuilder: (context) => <PopupMenuItem<BlogMenu>>[
-                        PopupMenuItem(
-                          value: BlogMenu.admin,
-                          child: Text('进入后台'),
-                        ),
-                        PopupMenuItem(
-                          value: BlogMenu.setting,
-                          child: Text('设置网址'),
-                        ),
-                      ],
-                    )
-                  : Container()
+              PopupMenuButton(
+                onSelected: (value) async {
+                  if (value == BlogMenu.admin && state.blogAdminUrl != null) {
+                    if (kIsWeb) {
+                      await launchUrl(state.blogAdminUrl);
+                    } else if (controller.hasData) {
+                      controller.data.loadUrl(state.blogAdminUrl);
+                    }
+                  } else {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => BlogSettingPage(
+                        blogUrl: state.blogUrl,
+                        blogAdminUrl: state.blogAdminUrl,
+                      ),
+                    ));
+                  }
+                },
+                itemBuilder: (context) => <PopupMenuItem<BlogMenu>>[
+                  PopupMenuItem(
+                    value: BlogMenu.admin,
+                    child: Text('进入后台'),
+                  ),
+                  PopupMenuItem(
+                    value: BlogMenu.setting,
+                    child: Text('设置网址'),
+                  ),
+                ],
+              )
             ],
           ),
           body: !kIsWeb
@@ -75,20 +76,24 @@ class _BlogHomePageState extends State<BlogHomePage> {
                     }
                     return true;
                   },
-                  child: WebView(
-                    initialUrl: state.blogUrl,
-                    javascriptMode: JavascriptMode.unrestricted,
-                    onWebViewCreated: (controller) {
-                      _controller.complete((controller));
-                    },
-                  ),
+                  child: state.blogUrl != null
+                      ? WebView(
+                          initialUrl: state.blogUrl,
+                          javascriptMode: JavascriptMode.unrestricted,
+                          onWebViewCreated: (controller) {
+                            _controller.complete((controller));
+                          },
+                        )
+                      : SettingButton(),
                 )
-              : Center(
-                  child: RaisedButton(
-                    onPressed: () => launchUrl(state.blogUrl),
-                    child: Text('博客'),
-                  ),
-                ),
+              : state.blogUrl != null
+                  ? Center(
+                      child: RaisedButton(
+                        onPressed: () => launchUrl(state.blogUrl),
+                        child: Text('博客'),
+                      ),
+                    )
+                  : SettingButton(),
           bottomNavigationBar: TabSelector(
             activeTab: AppTab.blog,
             onTabSelected: (tab) =>
@@ -103,6 +108,27 @@ class _BlogHomePageState extends State<BlogHomePage> {
                 )
               : null,
         ),
+      ),
+    );
+  }
+}
+
+class SettingButton extends StatelessWidget {
+  const SettingButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: RaisedButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => BlogSettingPage(
+              blogUrl: null,
+              blogAdminUrl: null,
+            ),
+          ));
+        },
+        child: Text('设置博客网址'),
       ),
     );
   }
