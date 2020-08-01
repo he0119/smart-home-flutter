@@ -76,20 +76,24 @@ class _BlogHomePageState extends State<BlogHomePage> {
                     }
                     return true;
                   },
-                  child: WebView(
-                    initialUrl: state.blogUrl,
-                    javascriptMode: JavascriptMode.unrestricted,
-                    onWebViewCreated: (controller) {
-                      _controller.complete((controller));
-                    },
-                  ),
+                  child: state.blogUrl != null
+                      ? WebView(
+                          initialUrl: state.blogUrl,
+                          javascriptMode: JavascriptMode.unrestricted,
+                          onWebViewCreated: (controller) {
+                            _controller.complete((controller));
+                          },
+                        )
+                      : SettingButton(),
                 )
-              : Center(
-                  child: RaisedButton(
-                    onPressed: () => launchUrl(state.blogUrl),
-                    child: Text('博客'),
-                  ),
-                ),
+              : state.blogUrl != null
+                  ? Center(
+                      child: RaisedButton(
+                        onPressed: () => launchUrl(state.blogUrl),
+                        child: Text('博客'),
+                      ),
+                    )
+                  : SettingButton(),
           bottomNavigationBar: TabSelector(
             activeTab: AppTab.blog,
             onTabSelected: (tab) =>
@@ -104,6 +108,27 @@ class _BlogHomePageState extends State<BlogHomePage> {
                 )
               : null,
         ),
+      ),
+    );
+  }
+}
+
+class SettingButton extends StatelessWidget {
+  const SettingButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: RaisedButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => BlogSettingPage(
+              blogUrl: null,
+              blogAdminUrl: null,
+            ),
+          ));
+        },
+        child: Text('设置博客网址'),
       ),
     );
   }
