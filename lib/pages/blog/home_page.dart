@@ -36,33 +36,34 @@ class _BlogHomePageState extends State<BlogHomePage> {
           appBar: AppBar(
             title: Text('博客'),
             actions: [
-              controller.hasData
-                  ? PopupMenuButton(
-                      onSelected: (value) {
-                        if (value == BlogMenu.admin &&
-                            state.blogAdminUrl != null) {
-                          controller.data.loadUrl(state.blogAdminUrl);
-                        } else {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => BlogSettingPage(
-                              blogUrl: state.blogUrl,
-                              blogAdminUrl: state.blogAdminUrl,
-                            ),
-                          ));
-                        }
-                      },
-                      itemBuilder: (context) => <PopupMenuItem<BlogMenu>>[
-                        PopupMenuItem(
-                          value: BlogMenu.admin,
-                          child: Text('进入后台'),
-                        ),
-                        PopupMenuItem(
-                          value: BlogMenu.setting,
-                          child: Text('设置网址'),
-                        ),
-                      ],
-                    )
-                  : Container()
+              PopupMenuButton(
+                onSelected: (value) async {
+                  if (value == BlogMenu.admin && state.blogAdminUrl != null) {
+                    if (kIsWeb) {
+                      await launchUrl(state.blogAdminUrl);
+                    } else if (controller.hasData) {
+                      controller.data.loadUrl(state.blogAdminUrl);
+                    }
+                  } else {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => BlogSettingPage(
+                        blogUrl: state.blogUrl,
+                        blogAdminUrl: state.blogAdminUrl,
+                      ),
+                    ));
+                  }
+                },
+                itemBuilder: (context) => <PopupMenuItem<BlogMenu>>[
+                  PopupMenuItem(
+                    value: BlogMenu.admin,
+                    child: Text('进入后台'),
+                  ),
+                  PopupMenuItem(
+                    value: BlogMenu.setting,
+                    child: Text('设置网址'),
+                  ),
+                ],
+              )
             ],
           ),
           body: !kIsWeb
