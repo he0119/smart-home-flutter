@@ -87,7 +87,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            'images/Icon-512.png',
+            'assets/icon/icon.png',
             width: 100.0,
             height: 100.0,
             semanticLabel: 'icon',
@@ -171,7 +171,7 @@ class _LoginFormState extends State<LoginForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'images/Icon-512.png',
+              'assets/icon/icon.png',
               width: 100.0,
               height: 100.0,
               semanticLabel: 'icon',
