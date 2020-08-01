@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.5.3] - 2020-08-01
+
+### Changed
+
+- 更新下载地址使用 FastGit 加速服务器
+- 应用图标使用知行何家的图标
+
+### Fixed
+
+- 修复网页版博客页面无法转跳的问题
+
 ## [0.5.2] - 2020-07-26
 
 ### Changed
@@ -122,8 +133,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.2...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.3...HEAD
 
+[0.5.3]: https://github.com/he0119/smart-home-flutter/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/he0119/smart-home-flutter/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/he0119/smart-home-flutter/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/he0119/smart-home-flutter/compare/v0.4.0...v0.5.0
