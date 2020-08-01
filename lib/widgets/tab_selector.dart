@@ -34,6 +34,6 @@ class TabSelector extends StatelessWidget {
     if (appTab == AppTab.blog) {
       return BottomNavigationBarItem(icon: Icon(Icons.web), title: Text('博客'));
     }
-    return BottomNavigationBarItem(icon: Icon(Icons.chat), title: Text('留言板'));
+    return BottomNavigationBarItem(icon: Icon(Icons.chat), title: Text('留言'));
   }
 }
