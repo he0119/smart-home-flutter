@@ -11,6 +11,7 @@ import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/pages/error_page.dart';
+import 'package:smart_home/widgets/drawer.dart';
 import 'package:smart_home/widgets/gravatar.dart';
 import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
@@ -23,11 +24,14 @@ class StorageHomePage extends StatelessWidget {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) => Scaffold(
         key: scaffoldKey,
+        drawer: AppDrawer(),
         appBar: AppBar(
           leading: state is AuthenticationSuccess
               ? IconButton(
                   icon: CircleGravatar(email: state.currentUser.email),
-                  onPressed: null,
+                  onPressed: () {
+                    scaffoldKey.currentState.openDrawer();
+                  },
                 )
               : null,
           title: Text('物品管理'),
