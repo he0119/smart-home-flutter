@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/authentication/authentication_bloc.dart';
+import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/widgets/gravatar.dart';
+import 'package:version/version.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key key}) : super(key: key);
@@ -24,6 +26,24 @@ class AppDrawer extends StatelessWidget {
                   ListTile(
                     title: Text('设置'),
                     onTap: () {},
+                  ),
+                  ListTile(
+                    title: Text('关于'),
+                    onTap: () async {
+                      Version currentVersion =
+                          await RepositoryProvider.of<VersionRepository>(
+                                  context)
+                              .currentVersion;
+                      showAboutDialog(
+                        context: context,
+                        applicationVersion: currentVersion.toString(),
+                        applicationIcon: ImageIcon(
+                          AssetImage('assets/icon/icon.png'),
+                          color: Color(0xFFF15713),
+                        ),
+                        applicationLegalese: '智慧家庭的客户端',
+                      );
+                    },
                   ),
                 ],
               );
