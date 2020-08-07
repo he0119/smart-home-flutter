@@ -38,7 +38,8 @@ dependencies:
   flutter_sticky_header: ^0.4.2
   flutter_markdown: ^0.4.2
   cached_network_image: ^2.1.0+1
-  settings_ui: ^0.3.0
+  settings_ui:
+    git: https://github.com/he0119/flutter-settings-ui.git
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
