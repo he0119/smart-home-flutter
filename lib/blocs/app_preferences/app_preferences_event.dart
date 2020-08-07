@@ -53,3 +53,19 @@ class AppBlogUrlChanged extends AppPreferencesEvent {
   String toString() =>
       'AppBlogUrlChanged { blogUrl: $blogUrl, blogAdminUrl: $blogAdminUrl }';
 }
+
+/// 更改默认主页
+class DefaultPageChanged extends AppPreferencesEvent {
+  final AppTab defaultPage;
+
+  DefaultPageChanged({
+    @required this.defaultPage,
+  });
+
+  @override
+  List<Object> get props => [defaultPage];
+
+  @override
+  String toString() =>
+      'DefaultPageChanged { defaultPage: ${defaultPage.name} }';
+}

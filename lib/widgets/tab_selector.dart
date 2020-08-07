@@ -25,15 +25,17 @@ class TabSelector extends StatelessWidget {
   static BottomNavigationBarItem navigationBarItem(AppTab appTab) {
     if (appTab == AppTab.iot) {
       return BottomNavigationBarItem(
-          icon: Icon(Icons.cloud), title: Text('IOT'));
+          icon: Icon(Icons.cloud), title: Text(appTab.name));
     }
     if (appTab == AppTab.storage) {
       return BottomNavigationBarItem(
-          icon: Icon(Icons.storage), title: Text('物品'));
+          icon: Icon(Icons.storage), title: Text(appTab.name));
     }
     if (appTab == AppTab.blog) {
-      return BottomNavigationBarItem(icon: Icon(Icons.web), title: Text('博客'));
+      return BottomNavigationBarItem(
+          icon: Icon(Icons.web), title: Text(appTab.name));
     }
-    return BottomNavigationBarItem(icon: Icon(Icons.chat), title: Text('留言'));
+    return BottomNavigationBarItem(
+        icon: Icon(Icons.chat), title: Text(appTab.name));
   }
 }

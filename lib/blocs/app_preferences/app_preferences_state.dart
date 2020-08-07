@@ -6,6 +6,7 @@ class AppPreferencesState extends Equatable {
   final int refreshInterval;
   final String blogUrl;
   final String blogAdminUrl;
+  final AppTab defaultPage;
 
   const AppPreferencesState({
     @required this.initialized,
@@ -13,6 +14,7 @@ class AppPreferencesState extends Equatable {
     @required this.refreshInterval,
     @required this.blogUrl,
     @required this.blogAdminUrl,
+    @required this.defaultPage,
   });
 
   factory AppPreferencesState.initial() {
@@ -22,6 +24,7 @@ class AppPreferencesState extends Equatable {
       refreshInterval: 10,
       blogUrl: null,
       blogAdminUrl: null,
+      defaultPage: AppTab.storage,
     );
   }
 
@@ -31,6 +34,7 @@ class AppPreferencesState extends Equatable {
     int refreshInterval,
     String blogUrl,
     String blogAdminUrl,
+    AppTab defaultPage,
   }) {
     return AppPreferencesState(
       initialized: initialized ?? this.initialized,
@@ -38,6 +42,7 @@ class AppPreferencesState extends Equatable {
       refreshInterval: refreshInterval ?? this.refreshInterval,
       blogUrl: blogUrl ?? this.blogUrl,
       blogAdminUrl: blogAdminUrl ?? this.blogAdminUrl,
+      defaultPage: defaultPage ?? this.defaultPage,
     );
   }
 
@@ -48,5 +53,6 @@ class AppPreferencesState extends Equatable {
         refreshInterval,
         blogUrl,
         blogAdminUrl,
+        defaultPage,
       ];
 }
