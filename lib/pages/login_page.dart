@@ -100,11 +100,12 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
               ),
               controller: _controller,
               validator: (value) {
-                if (value.isEmpty) {
-                  return '请输入网址';
+                if (value.startsWith(RegExp(r'^https?://'))) {
+                  return null;
                 }
-                return null;
+                return '网址必须为 http:// 或 https:// 开头，请输入正确的网址';
               },
+              autovalidate: true,
             ),
           ),
           RaisedButton(
