@@ -50,9 +50,6 @@ class MyApp extends StatelessWidget {
             create: (BuildContext context) =>
                 AppPreferencesBloc()..add(AppStarted()),
           ),
-          BlocProvider<TabBloc>(
-            create: (context) => TabBloc(),
-          ),
           BlocProvider<SnackBarBloc>(
             create: (context) => SnackBarBloc(),
           ),
@@ -117,7 +114,10 @@ class MyApp extends StatelessWidget {
               if (!state.initialized) {
                 return SplashPage();
               }
-              return HomePage();
+              return BlocProvider<TabBloc>(
+                create: (context) => TabBloc(defaultTab: state.defaultPage),
+                child: HomePage(),
+              );
             },
           ),
         ),

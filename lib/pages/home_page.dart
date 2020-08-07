@@ -93,15 +93,21 @@ class _HomePage extends StatelessWidget {
       quickActions.initialize((String shortcutType) async {
         if (shortcutType == 'action_iot') {
           BlocProvider.of<TabBloc>(context).add(TabChanged(AppTab.iot));
-        } else {
+        } else if (shortcutType == 'action_storage') {
+          BlocProvider.of<TabBloc>(context).add(TabChanged(AppTab.storage));
+        } else if (shortcutType == 'action_blog') {
           BlocProvider.of<TabBloc>(context).add(TabChanged(AppTab.blog));
+        } else {
+          BlocProvider.of<TabBloc>(context).add(TabChanged(AppTab.board));
         }
       });
       quickActions.setShortcutItems(
         <ShortcutItem>[
           // TODO: 给快捷方式添加图标
           const ShortcutItem(type: 'action_iot', localizedTitle: 'IOT'),
+          const ShortcutItem(type: 'action_storage', localizedTitle: '物品'),
           const ShortcutItem(type: 'action_blog', localizedTitle: '博客'),
+          const ShortcutItem(type: 'action_board', localizedTitle: '留言'),
         ],
       );
     }
