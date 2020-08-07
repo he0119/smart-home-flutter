@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/authentication/authentication_bloc.dart';
+import 'package:smart_home/pages/settings/home_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/widgets/gravatar.dart';
 import 'package:version/version.dart';
@@ -25,7 +26,11 @@ class AppDrawer extends StatelessWidget {
                   ),
                   ListTile(
                     title: Text('设置'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SettingsPage(),
+                      ));
+                    },
                   ),
                   ListTile(
                     title: Text('关于'),
