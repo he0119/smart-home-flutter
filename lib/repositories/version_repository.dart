@@ -1,11 +1,11 @@
-import 'dart:convert';
-
 import 'package:device_info/device_info.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:package_info/package_info.dart';
 import 'package:version/version.dart';
 
 class VersionRepository {
+  static final Logger _log = Logger('VersionRepository');
   Version _currentVersion;
   Version _onlineVersion;
   String _deviceAbi;
@@ -69,15 +69,24 @@ class VersionRepository {
   }
 
   /// 网上的版本
+  /// 通过 GitHub Releases 页面获取最新的版本号
   Future<Version> _getOnlineVersion() async {
-    var url =
-        'https://api.github.com/repos/he0119/smart-home-flutter/releases/latest';
+    final RegExp _versionRegex = RegExp(
+        r'releases/tag/v([\d.]+)(-([0-9A-Za-z\-.]+))?(\+([0-9A-Za-z\-.]+))?');
+    final String url =
+        'https://hub.fastgit.org/he0119/smart-home-flutter/releases/latest';
     try {
       var response = await http.get(url);
-      Map<String, dynamic> json = jsonDecode(response.body);
-      String versionName = json['tag_name'];
-      return Version.parse(versionName.replaceAll('v', ''));
+      final Match match = _versionRegex.firstMatch(response.body);
+      if (match == null) {
+        throw Exception('检查更新失败，请重试');
+      } else {
+        String versionName = match.group(1);
+        _log.fine('最新的版本号字符 { $versionName }');
+        return Version.parse(versionName);
+      }
     } catch (e) {
+      _log.warning(e);
       throw Exception('检查更新失败，请重试');
     }
   }
