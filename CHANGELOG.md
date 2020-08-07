@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.5.4] - 2020-08-07
+
+### Added
+
+- 添加设置界面
+
+### Changed
+
+- 检查更新通过 GitHub Releases 页面获取最新版本号
+
 ## [0.5.3] - 2020-08-01
 
 ### Changed
@@ -133,8 +143,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.3...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.4...HEAD
 
+[0.5.4]: https://github.com/he0119/smart-home-flutter/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/he0119/smart-home-flutter/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/he0119/smart-home-flutter/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/he0119/smart-home-flutter/compare/v0.5.0...v0.5.1
