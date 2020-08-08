@@ -49,6 +49,34 @@ class MyDrawer extends StatelessWidget {
                   );
                 },
               ),
+              ListTile(
+                title: Text('登出'),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text('登出'),
+                      content: Text('确认登出账户？'),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('否'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                          child: Text('是'),
+                          onPressed: () {
+                            BlocProvider.of<AuthenticationBloc>(context)
+                                .add(AuthenticationLogout());
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
           );
         },
