@@ -24,6 +24,7 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => AuthenticationBloc(
         userRepository: RepositoryProvider.of<UserRepository>(context),
+        appPreferencesBloc: RepositoryProvider.of<AppPreferencesBloc>(context),
       )..add(AuthenticationStarted()),
       child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {

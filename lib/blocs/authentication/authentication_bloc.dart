@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:smart_home/blocs/app_preferences/app_preferences_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/user_repository.dart';
 
@@ -10,9 +11,11 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final UserRepository userRepository;
+  final AppPreferencesBloc appPreferencesBloc;
 
   AuthenticationBloc({
     @required this.userRepository,
+    @required this.appPreferencesBloc,
   }) : super(AuthenticationInitial());
 
   @override
@@ -32,7 +35,13 @@ class AuthenticationBloc
     try {
       // 检查是否登录
       if (await userRepository.isLogin) {
-        yield AuthenticationSuccess(await userRepository.currentUser());
+        if (appPreferencesBloc.state.loginUser != null) {
+          yield AuthenticationSuccess(appPreferencesBloc.state.loginUser);
+        } else {
+          User user = await userRepository.currentUser();
+          appPreferencesBloc.add(LoginUserChanged(loginUser: user));
+          yield AuthenticationSuccess(user);
+        }
       } else {
         yield AuthenticationFailure('未登录，请登录账户');
       }
@@ -49,6 +58,7 @@ class AuthenticationBloc
           await userRepository.authenticate(event.username, event.password);
       if (result) {
         User user = await userRepository.currentUser();
+        appPreferencesBloc.add(LoginUserChanged(loginUser: user));
         yield AuthenticationSuccess(user);
       } else {
         yield AuthenticationFailure('用户名或密码错误');

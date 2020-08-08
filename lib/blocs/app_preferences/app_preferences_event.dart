@@ -69,3 +69,18 @@ class DefaultPageChanged extends AppPreferencesEvent {
   String toString() =>
       'DefaultPageChanged { defaultPage: ${defaultPage.name} }';
 }
+
+/// 更改登录用户
+class LoginUserChanged extends AppPreferencesEvent {
+  final User loginUser;
+
+  LoginUserChanged({
+    @required this.loginUser,
+  });
+
+  @override
+  List<Object> get props => [loginUser];
+
+  @override
+  String toString() => 'LoginUserChanged { loginUser: ${loginUser.username} }';
+}

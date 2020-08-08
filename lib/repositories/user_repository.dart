@@ -63,7 +63,10 @@ class UserRepository {
 
   /// 登出
   Future logout() async {
-    await _clearRefreshToken();
+    final SharedPreferences prefs = await _prefs;
+    await prefs.remove('refreshToken');
+    await prefs.remove('loginUser');
+    _log.fine('clear refresh token');
   }
 
   /// 刷新 Token
@@ -93,13 +96,6 @@ class UserRepository {
       await _setToken(token);
       _log.fine('token refreshed');
     }
-  }
-
-  /// 清除 Refresh Token
-  Future _clearRefreshToken() async {
-    final SharedPreferences prefs = await _prefs;
-    await prefs.remove('refreshToken');
-    _log.fine('clear refresh token');
   }
 
   Future _setRefreshToken(String refreshToken) async {

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Changed
+
+- 优化表单验证
+- 完善主页面的显示
+
 ## [0.5.4] - 2020-08-07
 
 ### Added

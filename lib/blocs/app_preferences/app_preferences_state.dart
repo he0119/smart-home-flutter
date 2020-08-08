@@ -7,6 +7,7 @@ class AppPreferencesState extends Equatable {
   final String blogUrl;
   final String blogAdminUrl;
   final AppTab defaultPage;
+  final User loginUser;
 
   const AppPreferencesState({
     @required this.initialized,
@@ -15,6 +16,7 @@ class AppPreferencesState extends Equatable {
     @required this.blogUrl,
     @required this.blogAdminUrl,
     @required this.defaultPage,
+    @required this.loginUser,
   });
 
   factory AppPreferencesState.initial() {
@@ -25,6 +27,7 @@ class AppPreferencesState extends Equatable {
       blogUrl: null,
       blogAdminUrl: null,
       defaultPage: AppTab.storage,
+      loginUser: null,
     );
   }
 
@@ -35,6 +38,7 @@ class AppPreferencesState extends Equatable {
     String blogUrl,
     String blogAdminUrl,
     AppTab defaultPage,
+    User loginUser,
   }) {
     return AppPreferencesState(
       initialized: initialized ?? this.initialized,
@@ -43,6 +47,7 @@ class AppPreferencesState extends Equatable {
       blogUrl: blogUrl ?? this.blogUrl,
       blogAdminUrl: blogAdminUrl ?? this.blogAdminUrl,
       defaultPage: defaultPage ?? this.defaultPage,
+      loginUser: loginUser ?? this.loginUser,
     );
   }
 
@@ -54,5 +59,6 @@ class AppPreferencesState extends Equatable {
         blogUrl,
         blogAdminUrl,
         defaultPage,
+        loginUser,
       ];
 }

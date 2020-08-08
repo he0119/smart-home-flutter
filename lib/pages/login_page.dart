@@ -168,58 +168,62 @@ class _LoginFormState extends State<LoginForm> {
 
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/icon/icon.png',
-              width: 100.0,
-              height: 100.0,
-              semanticLabel: 'icon',
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                child: AutofillGroup(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        enableSuggestions: false,
-                        decoration: InputDecoration(labelText: '用户名'),
-                        controller: _usernameController,
-                        autofillHints: <String>[AutofillHints.username],
+        return Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/icon/icon.png',
+                  width: 100.0,
+                  height: 100.0,
+                  semanticLabel: 'icon',
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Form(
+                    child: AutofillGroup(
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            enableSuggestions: false,
+                            decoration: InputDecoration(labelText: '用户名'),
+                            controller: _usernameController,
+                            autofillHints: <String>[AutofillHints.username],
+                          ),
+                          TextFormField(
+                            enableSuggestions: false,
+                            decoration: InputDecoration(labelText: '密码'),
+                            controller: _passwordController,
+                            obscureText: true,
+                            autofillHints: <String>[AutofillHints.password],
+                          ),
+                        ],
                       ),
-                      TextFormField(
-                        enableSuggestions: false,
-                        decoration: InputDecoration(labelText: '密码'),
-                        controller: _passwordController,
-                        obscureText: true,
-                        autofillHints: <String>[AutofillHints.password],
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+                RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  onPressed: state is! AuthenticationInProgress
+                      ? _onLoginButtonPressed
+                      : null,
+                  child: Text('登录'),
+                ),
+                FlatButton(
+                  onPressed: widget.onTapBack,
+                  child: Text('返回'),
+                ),
+                Container(
+                  child: state is AuthenticationInProgress
+                      ? CircularProgressIndicator()
+                      : null,
+                ),
+              ],
             ),
-            RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-              ),
-              onPressed: state is! AuthenticationInProgress
-                  ? _onLoginButtonPressed
-                  : null,
-              child: Text('登录'),
-            ),
-            FlatButton(
-              onPressed: widget.onTapBack,
-              child: Text('返回'),
-            ),
-            Container(
-              child: state is AuthenticationInProgress
-                  ? CircularProgressIndicator()
-                  : null,
-            ),
-          ],
+          ),
         );
       },
     );
