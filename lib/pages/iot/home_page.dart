@@ -5,12 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/iot/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/models/iot.dart';
 import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/repositories/iot_repository.dart';
+import 'package:smart_home/widgets/home_page.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
-import 'package:smart_home/widgets/tab_selector.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 
 class IotHomePage extends StatelessWidget {
@@ -36,18 +35,10 @@ class IotHomePage extends StatelessWidget {
               ),
             ),
           ],
-          child: Scaffold(
-            key: scaffoldKey,
-            appBar: AppBar(
-              title: Text('IOT'),
-              actions: [],
-            ),
+          child: MyHomePage(
+            title: 'IOT',
+            activeTab: AppTab.iot,
             body: _IotHomeBody(),
-            bottomNavigationBar: TabSelector(
-              activeTab: AppTab.iot,
-              onTabSelected: (tab) =>
-                  BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
-            ),
           ),
         );
       },

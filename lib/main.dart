@@ -115,8 +115,8 @@ class MyApp extends StatelessWidget {
                 return SplashPage();
               }
               return BlocProvider<TabBloc>(
-                create: (context) =>
-                    TabBloc()..add(TabChanged(state.defaultPage)),
+                create: (context) => TabBloc(defaultTab: state.defaultPage)
+                  ..add(TabChanged(state.defaultPage)),
                 child: HomePage(),
               );
             },

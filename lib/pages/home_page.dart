@@ -112,8 +112,8 @@ class _HomePage extends StatelessWidget {
       );
     }
     return BlocConsumer<TabBloc, AppTab>(
-      listener: (context, state) {
-        switch (state) {
+      listener: (context, activeTab) {
+        switch (activeTab) {
           case AppTab.storage:
             BlocProvider.of<StorageHomeBloc>(context).add(StorageHomeStarted());
             break;

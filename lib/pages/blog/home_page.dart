@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/pages/blog/setting_page.dart';
 import 'package:smart_home/utils/launch_url.dart';
-import 'package:smart_home/widgets/tab_selector.dart';
+import 'package:smart_home/widgets/home_page.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 enum BlogMenu { admin, setting }
@@ -31,41 +30,39 @@ class _BlogHomePageState extends State<BlogHomePage> {
         future: _controller.future,
         builder: (BuildContext context,
                 AsyncSnapshot<WebViewController> controller) =>
-            Scaffold(
-          key: scaffoldKey,
-          appBar: AppBar(
-            title: Text('博客'),
-            actions: [
-              PopupMenuButton(
-                onSelected: (value) async {
-                  if (value == BlogMenu.admin && state.blogAdminUrl != null) {
-                    if (kIsWeb) {
-                      await launchUrl(state.blogAdminUrl);
-                    } else if (controller.hasData) {
-                      controller.data.loadUrl(state.blogAdminUrl);
-                    }
-                  } else {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BlogSettingPage(
-                        blogUrl: state.blogUrl,
-                        blogAdminUrl: state.blogAdminUrl,
-                      ),
-                    ));
+            MyHomePage(
+          title: '博客',
+          activeTab: AppTab.blog,
+          actions: [
+            PopupMenuButton(
+              onSelected: (value) async {
+                if (value == BlogMenu.admin && state.blogAdminUrl != null) {
+                  if (kIsWeb) {
+                    await launchUrl(state.blogAdminUrl);
+                  } else if (controller.hasData) {
+                    controller.data.loadUrl(state.blogAdminUrl);
                   }
-                },
-                itemBuilder: (context) => <PopupMenuItem<BlogMenu>>[
-                  PopupMenuItem(
-                    value: BlogMenu.admin,
-                    child: Text('进入后台'),
-                  ),
-                  PopupMenuItem(
-                    value: BlogMenu.setting,
-                    child: Text('设置网址'),
-                  ),
-                ],
-              )
-            ],
-          ),
+                } else {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => BlogSettingPage(
+                      blogUrl: state.blogUrl,
+                      blogAdminUrl: state.blogAdminUrl,
+                    ),
+                  ));
+                }
+              },
+              itemBuilder: (context) => <PopupMenuItem<BlogMenu>>[
+                PopupMenuItem(
+                  value: BlogMenu.admin,
+                  child: Text('进入后台'),
+                ),
+                PopupMenuItem(
+                  value: BlogMenu.setting,
+                  child: Text('设置网址'),
+                ),
+              ],
+            )
+          ],
           body: !kIsWeb
               ? WillPopScope(
                   onWillPop: () async {
@@ -94,11 +91,6 @@ class _BlogHomePageState extends State<BlogHomePage> {
                       ),
                     )
                   : SettingButton(),
-          bottomNavigationBar: TabSelector(
-            activeTab: AppTab.blog,
-            onTabSelected: (tab) =>
-                BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
-          ),
           floatingActionButton: controller.hasData
               ? FloatingActionButton(
                   child: Icon(Icons.open_in_new),
