@@ -2,9 +2,9 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/utils/date_format_extension.dart';
 
 class ItemForm extends StatefulWidget {
   final bool isEditing;
@@ -23,8 +23,6 @@ class ItemForm extends StatefulWidget {
 
 class _ItemFormState extends State<ItemForm> {
   ItemFormBloc _itemFormBloc;
-
-  final format = DateFormat.yMMMd().add_jm();
 
   FocusNode _nameFocusNode;
   FocusNode _numberFocusNode;
@@ -139,7 +137,7 @@ class _ItemFormState extends State<ItemForm> {
                     focusNode: _priceFocusNode,
                   ),
                   DateTimeField(
-                    format: format,
+                    format: DateTime.now().localFormat,
                     onShowPicker: (context, currentValue) async {
                       final date = await showDatePicker(
                           context: context,
