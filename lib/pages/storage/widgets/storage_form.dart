@@ -92,7 +92,7 @@ class _StorageFormFormState extends State<StorageForm> {
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(200),
                     ],
-                    autovalidate: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (_) {
                       return state.isNameValid ? null : '名称不能为空';
                     },

@@ -75,7 +75,7 @@ class _TextEditPageState extends State<TextEditPage> {
                   }
                   return null;
                 },
-                autovalidate: true,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 inputFormatters: widget.inputFormatters,
                 keyboardType: widget.keyboardType,
               ),

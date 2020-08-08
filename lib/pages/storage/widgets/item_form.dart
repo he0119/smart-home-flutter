@@ -51,7 +51,7 @@ class _ItemFormState extends State<ItemForm> {
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(200),
                     ],
-                    autovalidate: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (_) {
                       return state.isNameValid ? null : '名称不能为空';
                     },
@@ -74,7 +74,7 @@ class _ItemFormState extends State<ItemForm> {
                     inputFormatters: [
                       WhitelistingTextInputFormatter.digitsOnly
                     ],
-                    autovalidate: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (_) {
                       return state.isNumberValid ? null : '数量不能为空';
                     },
@@ -99,7 +99,7 @@ class _ItemFormState extends State<ItemForm> {
                     onChanged: (value) {
                       _itemFormBloc.add(ItemStorageChanged(storage: value));
                     },
-                    autovalidate: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (_) {
                       return state.isStorageValid ? null : '名称不能为空';
                     },
@@ -134,7 +134,7 @@ class _ItemFormState extends State<ItemForm> {
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp('[0-9\.]'))
                     ],
-                    autovalidate: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (_) {
                       return state.isPriceValid ? null : '价格最多只能有两位小数且不超过一亿';
                     },

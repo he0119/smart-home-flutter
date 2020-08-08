@@ -88,6 +88,7 @@ class _TopicEditPageState extends State<TopicEditPage> {
                         }
                         return null;
                       },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
                     TextFormField(
                       controller: _descriptionController,

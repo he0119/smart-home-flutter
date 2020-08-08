@@ -105,7 +105,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
                 }
                 return '网址必须为 http:// 或 https:// 开头，请输入正确的网址';
               },
-              autovalidate: true,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
           RaisedButton(
