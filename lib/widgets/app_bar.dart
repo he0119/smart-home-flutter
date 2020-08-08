@@ -8,19 +8,26 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget> actions;
 
-  const MyAppBar({Key key, this.title, this.actions}) : super(key: key);
+  const MyAppBar({
+    Key key,
+    @required this.title,
+    this.actions,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) => AppBar(
-        title: title != null ? Text(title) : null,
+        title: Text(title),
         leading: state is AuthenticationSuccess
-            ? IconButton(
-                icon: CircleGravatar(email: state.currentUser.email),
-                onPressed: () {
-                  scaffoldKey.currentState.openDrawer();
-                },
+            ? Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: IconButton(
+                  icon: CircleGravatar(email: state.currentUser.email),
+                  onPressed: () {
+                    scaffoldKey.currentState.openDrawer();
+                  },
+                ),
               )
             : null,
         actions: actions,
