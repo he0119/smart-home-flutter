@@ -35,7 +35,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
           parentId: event.parentId,
           description: event.description,
         );
-        storageDetailBloc.add(StorageDetailChanged(id: event.id));
+        storageDetailBloc.add(StorageDetailRefreshed(id: event.id));
         yield StorageUpdateSuccess();
         snackBarBloc.add(
           SnackBarChanged(

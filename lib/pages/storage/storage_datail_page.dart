@@ -127,11 +127,17 @@ class _StorageDetailPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {
+            onPressed: () async {
+              List<Storage> listofStorages =
+                  await RepositoryProvider.of<StorageRepository>(context)
+                      .storages();
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                   value: BlocProvider.of<StorageEditBloc>(context),
-                  child: StorageEditPage(isEditing: false),
+                  child: StorageEditPage(
+                    isEditing: false,
+                    listofStorages: listofStorages,
+                  ),
                 ),
               ));
             },
@@ -155,12 +161,16 @@ class _StorageDetailPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {
+            onPressed: () async {
+              List<Storage> listofStorages =
+                  await RepositoryProvider.of<StorageRepository>(context)
+                      .storages();
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                   value: BlocProvider.of<StorageEditBloc>(context),
                   child: StorageEditPage(
                     isEditing: false,
+                    listofStorages: listofStorages,
                     storageId: state.storage.id,
                   ),
                 ),
@@ -179,11 +189,15 @@ class _StorageDetailPage extends StatelessWidget {
           PopupMenuButton<Menu>(
             onSelected: (value) async {
               if (value == Menu.edit) {
+                List<Storage> listofStorages =
+                    await RepositoryProvider.of<StorageRepository>(context)
+                        .storages();
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider.value(
                     value: BlocProvider.of<StorageEditBloc>(context),
                     child: StorageEditPage(
                       isEditing: true,
+                      listofStorages: listofStorages,
                       storage: state.storage,
                     ),
                   ),
@@ -318,6 +332,9 @@ class _StorageDetailPage extends StatelessWidget {
       return FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
+          List<Storage> listofStorages =
+              await RepositoryProvider.of<StorageRepository>(context)
+                  .storages();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => BlocProvider<ItemEditBloc>(
@@ -330,6 +347,7 @@ class _StorageDetailPage extends StatelessWidget {
                 ),
                 child: ItemEditPage(
                   isEditing: false,
+                  listofStorages: listofStorages,
                   storageId: state.storage.id,
                 ),
               ),

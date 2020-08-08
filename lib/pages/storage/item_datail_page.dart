@@ -129,11 +129,15 @@ class _ItemDetailPage extends StatelessWidget {
           PopupMenuButton<Menu>(
             onSelected: (value) async {
               if (value == Menu.edit) {
+                List<Storage> listofStorages =
+                    await RepositoryProvider.of<StorageRepository>(context)
+                        .storages();
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider.value(
                     value: BlocProvider.of<ItemEditBloc>(context),
                     child: ItemEditPage(
                       isEditing: true,
+                      listofStorages: listofStorages,
                       item: state.item,
                     ),
                   ),

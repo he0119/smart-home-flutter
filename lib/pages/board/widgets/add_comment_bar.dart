@@ -48,6 +48,7 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
                 }
                 return null;
               },
+              autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
           trailing: OutlineButton(
