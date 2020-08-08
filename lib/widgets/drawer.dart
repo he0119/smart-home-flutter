@@ -6,8 +6,8 @@ import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/widgets/gravatar.dart';
 import 'package:version/version.dart';
 
-class MyAppDrawer extends StatelessWidget {
-  const MyAppDrawer({Key key}) : super(key: key);
+class MyDrawer extends StatelessWidget {
+  const MyDrawer({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

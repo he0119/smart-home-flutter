@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/models/grobal_keys.dart';
-import 'package:smart_home/widgets/appbar.dart';
+import 'package:smart_home/widgets/app_bar.dart';
 import 'package:smart_home/widgets/drawer.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 
@@ -26,7 +26,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      drawer: MyAppDrawer(),
+      drawer: MyDrawer(),
       appBar: MyAppBar(
         title: title,
         actions: actions,
