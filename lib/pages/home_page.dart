@@ -111,10 +111,21 @@ class _HomePage extends StatelessWidget {
         ],
       );
     }
-    return BlocBuilder<TabBloc, AppTab>(
+    return BlocConsumer<TabBloc, AppTab>(
+      listener: (context, state) {
+        switch (state) {
+          case AppTab.storage:
+            BlocProvider.of<StorageHomeBloc>(context).add(StorageHomeStarted());
+            break;
+          case AppTab.board:
+            BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeStarted());
+            break;
+          case AppTab.blog:
+          case AppTab.iot:
+        }
+      },
       builder: (context, activeTab) {
         if (activeTab == AppTab.storage) {
-          BlocProvider.of<StorageHomeBloc>(context).add(StorageHomeStarted());
           return StorageHomePage();
         }
         if (activeTab == AppTab.blog) {
@@ -123,7 +134,6 @@ class _HomePage extends StatelessWidget {
         if (activeTab == AppTab.iot) {
           return IotHomePage();
         }
-        BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeStarted());
         return BoardHomePage();
       },
     );
