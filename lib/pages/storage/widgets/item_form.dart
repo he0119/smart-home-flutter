@@ -71,9 +71,7 @@ class _ItemFormState extends State<ItemForm> {
                       labelText: '数量',
                     ),
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (_) {
                       return state.isNumberValid ? null : '数量不能为空';
