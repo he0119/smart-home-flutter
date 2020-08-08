@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home/models/app_tab.dart';
+import 'package:smart_home/models/user.dart';
 
 part 'app_preferences_event.dart';
 part 'app_preferences_state.dart';
@@ -31,6 +33,10 @@ class AppPreferencesBloc
         String blogAdminUrl = prefs.getString('blogAdminUrl');
         AppTab defaultPage = EnumToString.fromString(
             AppTab.values, prefs.getString('defaultPage'));
+        String loginUserJsonString = prefs.getString('loginUser');
+        User loginUser = loginUserJsonString != null
+            ? User.fromJson(jsonDecode(loginUserJsonString))
+            : null;
         yield state.copyWith(
           initialized: true,
           apiUrl: apiUrl,
@@ -38,6 +44,7 @@ class AppPreferencesBloc
           blogUrl: blogUrl,
           blogAdminUrl: blogAdminUrl,
           defaultPage: defaultPage,
+          loginUser: loginUser,
         );
       } catch (e) {
         _log.severe('启动失败，无法获取配置');
@@ -83,6 +90,17 @@ class AppPreferencesBloc
         );
       } catch (e) {
         _log.severe('设置默认主页失败');
+      }
+    }
+    if (event is LoginUserChanged) {
+      try {
+        final SharedPreferences prefs = await _prefs;
+        prefs.setString('loginUser', jsonEncode(event.loginUser.toJson()));
+        yield state.copyWith(
+          loginUser: event.loginUser,
+        );
+      } catch (e) {
+        _log.severe('设置登录用户失败');
       }
     }
   }
