@@ -5,15 +5,20 @@ import 'package:smart_home/utils/gravatar_url.dart';
 
 class CircleGravatar extends StatelessWidget {
   final String email;
+  final int size;
 
-  const CircleGravatar({Key key, @required this.email}) : super(key: key);
+  const CircleGravatar({
+    Key key,
+    @required this.email,
+    this.size,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // CachedNetworkImage 暂时不支持 web
     if (!kIsWeb) {
       return CachedNetworkImage(
-        imageUrl: getGravatarUrl(email: email),
+        imageUrl: getGravatarUrl(email: email, size: size),
         imageBuilder: (context, imageProvider) => CircleAvatar(
           backgroundImage: imageProvider,
         ),
@@ -22,7 +27,7 @@ class CircleGravatar extends StatelessWidget {
       );
     } else {
       return CircleAvatar(
-        backgroundImage: NetworkImage(getGravatarUrl(email: email)),
+        backgroundImage: NetworkImage(getGravatarUrl(email: email, size: size)),
       );
     }
   }

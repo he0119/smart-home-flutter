@@ -20,8 +20,10 @@ class MyDrawer extends StatelessWidget {
                   ? UserAccountsDrawerHeader(
                       accountName: Text(state.currentUser.username),
                       accountEmail: Text(state.currentUser.email),
-                      currentAccountPicture:
-                          CircleGravatar(email: state.currentUser.email),
+                      currentAccountPicture: CircleGravatar(
+                        email: state.currentUser.email,
+                        size: 512,
+                      ),
                     )
                   : Container(),
               ListTile(
