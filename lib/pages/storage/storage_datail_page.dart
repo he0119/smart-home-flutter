@@ -332,6 +332,9 @@ class _StorageDetailPage extends StatelessWidget {
       return FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
+          List<Storage> listofStorages =
+              await RepositoryProvider.of<StorageRepository>(context)
+                  .storages();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => BlocProvider<ItemEditBloc>(
@@ -344,6 +347,7 @@ class _StorageDetailPage extends StatelessWidget {
                 ),
                 child: ItemEditPage(
                   isEditing: false,
+                  listofStorages: listofStorages,
                   storageId: state.storage.id,
                 ),
               ),
