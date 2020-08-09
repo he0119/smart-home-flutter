@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/pages/blog/setting_page.dart';
+import 'package:smart_home/pages/settings/blog/settings._page.dart';
 import 'package:smart_home/utils/launch_url.dart';
 import 'package:smart_home/widgets/home_page.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -33,9 +33,10 @@ class _BlogHomePageState extends State<BlogHomePage> {
             MyHomePage(
           activeTab: AppTab.blog,
           actions: [
-            PopupMenuButton(
-              onSelected: (value) async {
-                if (value == BlogMenu.admin && state.blogAdminUrl != null) {
+            IconButton(
+              icon: Icon(Icons.dvr),
+              onPressed: () async {
+                if (state.blogAdminUrl != null) {
                   if (kIsWeb) {
                     await launchUrl(state.blogAdminUrl);
                   } else if (controller.hasData) {
@@ -43,24 +44,20 @@ class _BlogHomePageState extends State<BlogHomePage> {
                   }
                 } else {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => BlogSettingPage(
-                      blogUrl: state.blogUrl,
-                      blogAdminUrl: state.blogAdminUrl,
-                    ),
+                    builder: (context) => BlogSettingsPage(),
                   ));
                 }
               },
-              itemBuilder: (context) => <PopupMenuItem<BlogMenu>>[
-                PopupMenuItem(
-                  value: BlogMenu.admin,
-                  child: Text('进入后台'),
-                ),
-                PopupMenuItem(
-                  value: BlogMenu.setting,
-                  child: Text('设置网址'),
-                ),
-              ],
-            )
+            ),
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => BlogSettingsPage()),
+                );
+              },
+            ),
           ],
           body: !kIsWeb
               ? WillPopScope(
@@ -113,10 +110,7 @@ class SettingButton extends StatelessWidget {
       child: RaisedButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BlogSettingPage(
-              blogUrl: null,
-              blogAdminUrl: null,
-            ),
+            builder: (context) => BlogSettingsPage(),
           ));
         },
         child: Text('设置博客网址'),
