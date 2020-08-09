@@ -31,7 +31,6 @@ class _BlogHomePageState extends State<BlogHomePage> {
         builder: (BuildContext context,
                 AsyncSnapshot<WebViewController> controller) =>
             MyHomePage(
-          title: '博客',
           activeTab: AppTab.blog,
           actions: [
             PopupMenuButton(

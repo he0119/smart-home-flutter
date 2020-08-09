@@ -36,7 +36,6 @@ class IotHomePage extends StatelessWidget {
             ),
           ],
           child: MyHomePage(
-            title: 'IOT',
             activeTab: AppTab.iot,
             body: _IotHomeBody(),
           ),

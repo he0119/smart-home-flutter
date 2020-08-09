@@ -17,7 +17,6 @@ class StorageHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyHomePage(
-      title: '物品管理',
       activeTab: AppTab.storage,
       actions: <Widget>[
         IconButton(

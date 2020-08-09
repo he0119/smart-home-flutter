@@ -16,7 +16,6 @@ class BoardHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) => MyHomePage(
-        title: '留言板',
         activeTab: AppTab.board,
         body: _BoardHomeBody(),
         floatingActionButton: FloatingActionButton(
