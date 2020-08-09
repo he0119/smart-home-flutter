@@ -33,30 +33,36 @@ class _BlogHomePageState extends State<BlogHomePage> {
             MyHomePage(
           activeTab: AppTab.blog,
           actions: [
-            IconButton(
-              icon: Icon(Icons.dvr),
-              onPressed: () async {
-                if (state.blogAdminUrl != null) {
-                  if (kIsWeb) {
-                    await launchUrl(state.blogAdminUrl);
-                  } else if (controller.hasData) {
-                    controller.data.loadUrl(state.blogAdminUrl);
+            Tooltip(
+              message: '进入管理页面',
+              child: IconButton(
+                icon: Icon(Icons.dvr),
+                onPressed: () async {
+                  if (state.blogAdminUrl != null) {
+                    if (kIsWeb) {
+                      await launchUrl(state.blogAdminUrl);
+                    } else if (controller.hasData) {
+                      controller.data.loadUrl(state.blogAdminUrl);
+                    }
+                  } else {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => BlogSettingsPage(),
+                    ));
                   }
-                } else {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => BlogSettingsPage(),
-                  ));
-                }
-              },
+                },
+              ),
             ),
-            IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => BlogSettingsPage()),
-                );
-              },
+            Tooltip(
+              message: '设置',
+              child: IconButton(
+                icon: Icon(Icons.settings),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => BlogSettingsPage()),
+                  );
+                },
+              ),
             ),
           ],
           body: !kIsWeb

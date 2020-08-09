@@ -19,6 +19,7 @@ class BoardHomePage extends StatelessWidget {
         activeTab: AppTab.board,
         body: _BoardHomeBody(),
         floatingActionButton: FloatingActionButton(
+          tooltip: '添加话题',
           child: Icon(Icons.create),
           onPressed: () async {
             Navigator.of(context).push(MaterialPageRoute(

@@ -7,8 +7,9 @@ import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/pages/storage/item_edit_page.dart';
-import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_edit_page.dart';
+import 'package:smart_home/pages/storage/widgets/add_storage_icon_button.dart';
+import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
@@ -125,32 +126,8 @@ class _StorageDetailPage extends StatelessWidget {
       return AppBar(
         title: Text('家'),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () async {
-              List<Storage> listofStorages =
-                  await RepositoryProvider.of<StorageRepository>(context)
-                      .storages();
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => BlocProvider.value(
-                  value: BlocProvider.of<StorageEditBloc>(context),
-                  child: StorageEditPage(
-                    isEditing: false,
-                    listofStorages: listofStorages,
-                  ),
-                ),
-              ));
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => SearchPage()),
-              );
-            },
-          ),
+          AddStorageIconButton(),
+          SearchIconButton(),
         ],
       );
     }
@@ -159,33 +136,8 @@ class _StorageDetailPage extends StatelessWidget {
       return AppBar(
         title: Text(state.storage.name),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () async {
-              List<Storage> listofStorages =
-                  await RepositoryProvider.of<StorageRepository>(context)
-                      .storages();
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => BlocProvider.value(
-                  value: BlocProvider.of<StorageEditBloc>(context),
-                  child: StorageEditPage(
-                    isEditing: false,
-                    listofStorages: listofStorages,
-                    storageId: state.storage.id,
-                  ),
-                ),
-              ));
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => SearchPage()),
-              );
-            },
-          ),
+          AddStorageIconButton(),
+          SearchIconButton(),
           PopupMenuButton<Menu>(
             onSelected: (value) async {
               if (value == Menu.edit) {
@@ -330,6 +282,7 @@ class _StorageDetailPage extends StatelessWidget {
       BuildContext context, StorageDetailState state) {
     if (state is StorageDetailSuccess) {
       return FloatingActionButton(
+        tooltip: '添加物品',
         child: Icon(Icons.add),
         onPressed: () async {
           List<Storage> listofStorages =

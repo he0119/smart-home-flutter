@@ -40,14 +40,17 @@ class IotHomePage extends StatelessWidget {
             activeTab: AppTab.iot,
             body: _IotHomeBody(),
             actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => IotSettingsPage()),
-                  );
-                },
+              Tooltip(
+                message: '设置',
+                child: IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => IotSettingsPage()),
+                    );
+                  },
+                ),
               ),
             ],
           ),
