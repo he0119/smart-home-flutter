@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-extension LocalDatetime on DateTime {
+extension LocalDatetimeExtension on DateTime {
   /// 时间格式
   /// 时分秒（24小时制）
   DateFormat get localFormat {

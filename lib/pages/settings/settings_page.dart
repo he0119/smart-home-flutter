@@ -45,7 +45,7 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
             SettingsSection(
-              title: 'IOT',
+              title: '物联网',
               tiles: [
                 SettingsTile(
                   title: '刷新间隔',

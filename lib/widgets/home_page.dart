@@ -7,14 +7,12 @@ import 'package:smart_home/widgets/drawer.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 
 class MyHomePage extends StatelessWidget {
-  final String title;
   final List<Widget> actions;
   final Widget body;
   final Widget floatingActionButton;
   final AppTab activeTab;
 
   const MyHomePage({
-    @required this.title,
     @required this.activeTab,
     @required this.body,
     this.actions,
@@ -27,7 +25,7 @@ class MyHomePage extends StatelessWidget {
       key: scaffoldKey,
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: Text(title),
+        title: Text(activeTab.title),
         actions: actions,
       ),
       body: body,

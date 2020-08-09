@@ -47,25 +47,29 @@ class _TopicEditPageState extends State<TopicEditPage> {
             appBar: AppBar(
               title: widget.isEditing ? Text('修改话题') : Text('新话题'),
               actions: [
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    if (_formKey.currentState.validate()) {
-                      if (widget.isEditing) {
-                        BlocProvider.of<TopicEditBloc>(context)
-                            .add(TopicUpdated(
-                          id: widget.topic.id,
-                          title: _titleController.text,
-                          description: _descriptionController.text,
-                        ));
-                      } else {
-                        BlocProvider.of<TopicEditBloc>(context).add(TopicAdded(
-                          title: _titleController.text,
-                          description: _descriptionController.text,
-                        ));
+                Tooltip(
+                  message: '提交',
+                  child: IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        if (widget.isEditing) {
+                          BlocProvider.of<TopicEditBloc>(context)
+                              .add(TopicUpdated(
+                            id: widget.topic.id,
+                            title: _titleController.text,
+                            description: _descriptionController.text,
+                          ));
+                        } else {
+                          BlocProvider.of<TopicEditBloc>(context)
+                              .add(TopicAdded(
+                            title: _titleController.text,
+                            description: _descriptionController.text,
+                          ));
+                        }
                       }
-                    }
-                  },
+                    },
+                  ),
                 )
               ],
             ),

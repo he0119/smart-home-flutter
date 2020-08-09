@@ -16,10 +16,10 @@ class BoardHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) => MyHomePage(
-        title: '留言板',
         activeTab: AppTab.board,
         body: _BoardHomeBody(),
         floatingActionButton: FloatingActionButton(
+          tooltip: '添加话题',
           child: Icon(Icons.create),
           onPressed: () async {
             Navigator.of(context).push(MaterialPageRoute(

@@ -4,8 +4,8 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:smart_home/blocs/storage/storage_home/storage_home_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
-import 'package:smart_home/pages/storage/search_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
+import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
@@ -17,21 +17,13 @@ class StorageHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyHomePage(
-      title: '物品管理',
       activeTab: AppTab.storage,
       actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.search),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => SearchPage()),
-            );
-          },
-        ),
+        SearchIconButton(),
       ],
       body: _StorageHomeBody(),
       floatingActionButton: FloatingActionButton(
+        tooltip: '所有位置',
         child: Icon(Icons.storage),
         onPressed: () async {
           Navigator.push(
