@@ -7,6 +7,7 @@ import 'package:smart_home/blocs/iot/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/models/iot.dart';
 import 'package:smart_home/pages/loading_page.dart';
+import 'package:smart_home/pages/settings/iot/settings_page.dart';
 import 'package:smart_home/repositories/iot_repository.dart';
 import 'package:smart_home/widgets/home_page.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
@@ -38,6 +39,17 @@ class IotHomePage extends StatelessWidget {
           child: MyHomePage(
             activeTab: AppTab.iot,
             body: _IotHomeBody(),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.settings),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => IotSettingsPage()),
+                  );
+                },
+              ),
+            ],
           ),
         );
       },
@@ -210,29 +222,6 @@ class _IotHomeBody extends StatelessWidget {
                               key: 'pump_delay',
                               value: value,
                               valueType: 'int',
-                            ),
-                          );
-                          showInfoSnackBar(context, '正在设置...');
-                        },
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                ExpansionTile(
-                  title: Text('刷新间隔：' + state.refreshInterval.toString()),
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                      child: TextFormField(
-                        initialValue: state.refreshInterval.toString(),
-                        onFieldSubmitted: (value) {
-                          BlocProvider.of<AppPreferencesBloc>(context).add(
-                            AppIotRefreshIntervalChanged(
-                              interval: int.parse(value),
                             ),
                           );
                           showInfoSnackBar(context, '正在设置...');
