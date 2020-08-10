@@ -95,6 +95,7 @@ class _BlogHomePageState extends State<BlogHomePage> {
                   : SettingButton(),
           floatingActionButton: controller.hasData
               ? FloatingActionButton(
+                  tooltip: '使用浏览器打开',
                   child: Icon(Icons.open_in_new),
                   onPressed: () async {
                     await launchUrl(await controller.data.currentUrl());
