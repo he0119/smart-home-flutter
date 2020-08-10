@@ -5,6 +5,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/storage.dart';
+import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class StorageEditPage extends StatefulWidget {
@@ -192,7 +193,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
                         ],
                         focusNode: _descriptionFocusNode,
                       ),
-                      RaisedButton(
+                      RoundedRaisedButton(
                         onPressed: (state is! StorageEditInProgress)
                             ? () {
                                 if (_formKey.currentState.validate()) {

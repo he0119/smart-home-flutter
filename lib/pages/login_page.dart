@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -108,10 +109,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
-          RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
-            ),
+          RoundedRaisedButton(
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 BlocProvider.of<AppPreferencesBloc>(context).add(
@@ -206,10 +204,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ),
             ),
-            RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-              ),
+            RoundedRaisedButton(
               onPressed: state is! AuthenticationInProgress
                   ? _onLoginButtonPressed
                   : null,

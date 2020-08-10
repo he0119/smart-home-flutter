@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_home/widgets/rounded_raised_button.dart';
 
 class ErrorPage extends StatelessWidget {
   final Function onPressed;
@@ -17,11 +18,8 @@ class ErrorPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(message),
-          RaisedButton(
+          RoundedRaisedButton(
             child: Text('重试'),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
-            ),
             onPressed: onPressed,
           ),
         ],

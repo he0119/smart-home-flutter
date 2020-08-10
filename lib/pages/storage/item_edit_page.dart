@@ -6,6 +6,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/storage.dart';
+import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 
@@ -227,7 +228,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                         expirationDate = value;
                       },
                     ),
-                    RaisedButton(
+                    RoundedRaisedButton(
                       onPressed: (state is! ItemEditInProgress)
                           ? () {
                               if (_formKey.currentState.validate()) {
