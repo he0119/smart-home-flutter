@@ -5,6 +5,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/storage.dart';
+import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class StorageEditPage extends StatefulWidget {
@@ -116,85 +117,94 @@ class _StorageEditPageState extends State<StorageEditPage> {
           },
           listener: (context, state) {
             if (state is SnackBarSuccess && state.type == MessageType.error) {
-              showErrorSnackBar(context, state.message);
+              showErrorSnackBar(
+                context,
+                state.message,
+                duration: state.duration,
+              );
             }
             if (state is SnackBarSuccess && state.type == MessageType.info) {
-              showInfoSnackBar(context, state.message);
+              showInfoSnackBar(
+                context,
+                state.message,
+                duration: state.duration,
+              );
             }
           },
           child: Padding(
             padding: const EdgeInsets.only(left: 16, right: 16),
-            child: Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        labelText: '名称',
+            child: BlocConsumer<StorageEditBloc, StorageEditState>(
+              listener: (context, state) {
+                if (state is StorageEditInProgress) {
+                  showInfoSnackBar(context, '正在提交...', duration: 1);
+                }
+              },
+              builder: (context, state) => Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          labelText: '名称',
+                        ),
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(200),
+                        ],
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return '名称不能为空';
+                          }
+                          return null;
+                        },
+                        textInputAction: TextInputAction.next,
+                        focusNode: _nameFocusNode,
+                        onFieldSubmitted: (_) {
+                          _fieldFocusChange(
+                              context, _nameFocusNode, _descriptionFocusNode);
+                        },
                       ),
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(200),
-                      ],
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return '名称不能为空';
-                        }
-                        return null;
-                      },
-                      textInputAction: TextInputAction.next,
-                      focusNode: _nameFocusNode,
-                      onFieldSubmitted: (_) {
-                        _fieldFocusChange(
-                            context, _nameFocusNode, _descriptionFocusNode);
-                      },
-                    ),
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: '属于',
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: '属于',
+                        ),
+                        value: widget.isEditing
+                            ? widget.storage.parent?.id
+                            : widget.storageId,
+                        items: widget.listofStorages
+                            .map((e) => DropdownMenuItem(
+                                  value: e.id,
+                                  child: Text(e.name),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          parentId = value;
+                        },
                       ),
-                      value: widget.isEditing
-                          ? widget.storage.parent?.id
-                          : widget.storageId,
-                      items: widget.listofStorages
-                          .map((e) => DropdownMenuItem(
-                                value: e.id,
-                                child: Text(e.name),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        parentId = value;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _descriptionController,
-                      decoration: InputDecoration(
-                        labelText: '备注',
+                      TextFormField(
+                        controller: _descriptionController,
+                        decoration: InputDecoration(
+                          labelText: '备注',
+                        ),
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(200),
+                        ],
+                        focusNode: _descriptionFocusNode,
                       ),
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(200),
-                      ],
-                      focusNode: _descriptionFocusNode,
-                    ),
-                    RaisedButton(
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          _onSubmitPressed();
-                        }
-                      },
-                      child: Text('提交'),
-                    ),
-                    BlocBuilder<StorageEditBloc, StorageEditState>(
-                      builder: (context, state) {
-                        if (state is StorageEditInProgress) {
-                          return CircularProgressIndicator();
-                        }
-                        return Container();
-                      },
-                    ),
-                  ],
+                      RoundedRaisedButton(
+                        onPressed: (state is! StorageEditInProgress)
+                            ? () {
+                                if (_formKey.currentState.validate()) {
+                                  _onSubmitPressed();
+                                }
+                              }
+                            : null,
+                        child: Text('提交'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

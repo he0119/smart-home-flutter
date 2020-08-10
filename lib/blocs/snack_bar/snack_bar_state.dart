@@ -9,11 +9,13 @@ class SnackBarSuccess extends SnackBarState {
   final SnackBarPosition position;
   final String message;
   final MessageType type;
+  final int duration;
 
   SnackBarSuccess({
     @required this.position,
     @required this.message,
     @required this.type,
+    @required this.duration,
   });
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -108,10 +109,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
-          RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
-            ),
+          RoundedRaisedButton(
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 BlocProvider.of<AppPreferencesBloc>(context).add(
@@ -166,64 +164,57 @@ class _LoginFormState extends State<LoginForm> {
       );
     }
 
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state is AuthenticationInProgress) {
+          showInfoSnackBar(context, '正在登录...', duration: 1);
+        }
+      },
       builder: (context, state) {
-        return Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/icon/icon.png',
-                  width: 100.0,
-                  height: 100.0,
-                  semanticLabel: 'icon',
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Form(
-                    child: AutofillGroup(
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            enableSuggestions: false,
-                            decoration: InputDecoration(labelText: '用户名'),
-                            controller: _usernameController,
-                            autofillHints: <String>[AutofillHints.username],
-                          ),
-                          TextFormField(
-                            enableSuggestions: false,
-                            decoration: InputDecoration(labelText: '密码'),
-                            controller: _passwordController,
-                            obscureText: true,
-                            autofillHints: <String>[AutofillHints.password],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                  onPressed: state is! AuthenticationInProgress
-                      ? _onLoginButtonPressed
-                      : null,
-                  child: Text('登录'),
-                ),
-                FlatButton(
-                  onPressed: widget.onTapBack,
-                  child: Text('返回'),
-                ),
-                Container(
-                  child: state is AuthenticationInProgress
-                      ? CircularProgressIndicator()
-                      : null,
-                ),
-              ],
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/icon/icon.png',
+              width: 100.0,
+              height: 100.0,
+              semanticLabel: 'icon',
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Form(
+                child: AutofillGroup(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        enableSuggestions: false,
+                        decoration: InputDecoration(labelText: '用户名'),
+                        controller: _usernameController,
+                        autofillHints: <String>[AutofillHints.username],
+                      ),
+                      TextFormField(
+                        enableSuggestions: false,
+                        decoration: InputDecoration(labelText: '密码'),
+                        controller: _passwordController,
+                        obscureText: true,
+                        autofillHints: <String>[AutofillHints.password],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            RoundedRaisedButton(
+              onPressed: state is! AuthenticationInProgress
+                  ? _onLoginButtonPressed
+                  : null,
+              child: Text('登录'),
+            ),
+            FlatButton(
+              onPressed: widget.onTapBack,
+              child: Text('返回'),
+            ),
+          ],
         );
       },
     );

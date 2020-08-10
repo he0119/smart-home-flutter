@@ -8,6 +8,7 @@ import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/pages/settings/blog/settings._page.dart';
 import 'package:smart_home/utils/launch_url.dart';
 import 'package:smart_home/widgets/home_page.dart';
+import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 enum BlogMenu { admin, setting }
@@ -87,7 +88,7 @@ class _BlogHomePageState extends State<BlogHomePage> {
                 )
               : state.blogUrl != null
                   ? Center(
-                      child: RaisedButton(
+                      child: RoundedRaisedButton(
                         onPressed: () => launchUrl(state.blogUrl),
                         child: Text('博客'),
                       ),
@@ -114,7 +115,7 @@ class SettingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: RaisedButton(
+      child: RoundedRaisedButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => BlogSettingsPage(),

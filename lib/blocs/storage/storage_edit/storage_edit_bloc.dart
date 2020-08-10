@@ -108,8 +108,9 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
       snackBarBloc.add(
         SnackBarChanged(
           position: SnackBarPosition.storageDetail,
-          message: '正在删除',
+          message: '正在删除...',
           type: MessageType.info,
+          duration: 1,
         ),
       );
       try {
