@@ -19,6 +19,7 @@ class SnackBarBloc extends Bloc<SnackBarEvent, SnackBarState> {
         position: event.position,
         message: event.message,
         type: event.type,
+        duration: event.duration,
       );
     }
   }

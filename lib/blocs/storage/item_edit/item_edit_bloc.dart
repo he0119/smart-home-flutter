@@ -127,8 +127,9 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
       snackBarBloc.add(
         SnackBarChanged(
           position: SnackBarPosition.itemDetail,
-          message: '正在删除',
+          message: '正在删除...',
           type: MessageType.info,
+          duration: 1,
         ),
       );
       try {

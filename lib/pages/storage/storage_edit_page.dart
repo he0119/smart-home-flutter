@@ -116,21 +116,29 @@ class _StorageEditPageState extends State<StorageEditPage> {
           },
           listener: (context, state) {
             if (state is SnackBarSuccess && state.type == MessageType.error) {
-              showErrorSnackBar(context, state.message);
+              showErrorSnackBar(
+                context,
+                state.message,
+                duration: state.duration,
+              );
             }
             if (state is SnackBarSuccess && state.type == MessageType.info) {
-              showInfoSnackBar(context, state.message);
+              showInfoSnackBar(
+                context,
+                state.message,
+                duration: state.duration,
+              );
             }
           },
           child: Padding(
             padding: const EdgeInsets.only(left: 16, right: 16),
-            child: BlocListener<StorageEditBloc, StorageEditState>(
+            child: BlocConsumer<StorageEditBloc, StorageEditState>(
               listener: (context, state) {
                 if (state is StorageEditInProgress) {
                   showInfoSnackBar(context, '正在提交...', duration: 1);
                 }
               },
-              child: Form(
+              builder: (context, state) => Form(
                 key: _formKey,
                 child: SingleChildScrollView(
                   child: Column(
@@ -185,11 +193,13 @@ class _StorageEditPageState extends State<StorageEditPage> {
                         focusNode: _descriptionFocusNode,
                       ),
                       RaisedButton(
-                        onPressed: () {
-                          if (_formKey.currentState.validate()) {
-                            _onSubmitPressed();
-                          }
-                        },
+                        onPressed: (state is! StorageEditInProgress)
+                            ? () {
+                                if (_formKey.currentState.validate()) {
+                                  _onSubmitPressed();
+                                }
+                              }
+                            : null,
                         child: Text('提交'),
                       ),
                     ],

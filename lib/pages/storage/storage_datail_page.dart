@@ -102,11 +102,19 @@ class _StorageDetailPage extends StatelessWidget {
                   listener: (context, state) {
                     if (state is SnackBarSuccess &&
                         state.type == MessageType.error) {
-                      showErrorSnackBar(context, state.message);
+                      showErrorSnackBar(
+                        context,
+                        state.message,
+                        duration: state.duration,
+                      );
                     }
                     if (state is SnackBarSuccess &&
                         state.type == MessageType.info) {
-                      showInfoSnackBar(context, state.message);
+                      showInfoSnackBar(
+                        context,
+                        state.message,
+                        duration: state.duration,
+                      );
                     }
                   },
                   child: _buildBody(context, state)),

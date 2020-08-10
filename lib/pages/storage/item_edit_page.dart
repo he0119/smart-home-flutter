@@ -49,12 +49,14 @@ class _ItemEditPageState extends State<ItemEditPage> {
       ),
       body: MultiBlocListener(
         listeners: [
-          BlocListener<ItemEditBloc, ItemEditState>(listener: (context, state) {
-            // 物品添加和修改成功过后自动返回物品详情界面
-            if (state is ItemAddSuccess || state is ItemUpdateSuccess) {
-              Navigator.of(context).pop();
-            }
-          }),
+          BlocListener<ItemEditBloc, ItemEditState>(
+            listener: (context, state) {
+              // 物品添加和修改成功过后自动返回物品详情界面
+              if (state is ItemAddSuccess || state is ItemUpdateSuccess) {
+                Navigator.of(context).pop();
+              }
+            },
+          ),
           BlocListener<SnackBarBloc, SnackBarState>(
             // 仅在物品修改页面显示特定消息提示
             listenWhen: (previous, current) {
@@ -66,23 +68,31 @@ class _ItemEditPageState extends State<ItemEditPage> {
             },
             listener: (context, state) {
               if (state is SnackBarSuccess && state.type == MessageType.error) {
-                showErrorSnackBar(context, state.message);
+                showErrorSnackBar(
+                  context,
+                  state.message,
+                  duration: state.duration,
+                );
               }
               if (state is SnackBarSuccess && state.type == MessageType.info) {
-                showInfoSnackBar(context, state.message);
+                showInfoSnackBar(
+                  context,
+                  state.message,
+                  duration: state.duration,
+                );
               }
             },
           )
         ],
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
-          child: BlocListener<ItemEditBloc, ItemEditState>(
+          child: BlocConsumer<ItemEditBloc, ItemEditState>(
             listener: (context, state) {
               if (state is ItemEditInProgress) {
                 showInfoSnackBar(context, '正在提交...', duration: 1);
               }
             },
-            child: Form(
+            builder: (context, state) => Form(
               key: _formKey,
               child: SingleChildScrollView(
                 child: Column(
@@ -218,11 +228,13 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       },
                     ),
                     RaisedButton(
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          _onSubmitPressed();
-                        }
-                      },
+                      onPressed: (state is! ItemEditInProgress)
+                          ? () {
+                              if (_formKey.currentState.validate()) {
+                                _onSubmitPressed();
+                              }
+                            }
+                          : null,
                       child: Text('提交'),
                     ),
                   ],
