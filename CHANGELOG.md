@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.5.6] - 2020-08-17
+
+### Added
+
+- 添加独立设置界面和工具提示消息
+
+### Changed
+
+- 在更多页面使用消息栏提示
+- 统一按钮样式
+- 图片使用 webp 格式
+- 提高 Drawer 中头像的分辨率至 512px
+
 ## [0.5.5] - 2020-08-08
 
 ### Added
@@ -155,8 +168,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.5...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.6...HEAD
 
+[0.5.6]: https://github.com/he0119/smart-home-flutter/compare/v0.5.5...v0.5.6
 [0.5.5]: https://github.com/he0119/smart-home-flutter/compare/v0.5.4...v0.5.5
 [0.5.4]: https://github.com/he0119/smart-home-flutter/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/he0119/smart-home-flutter/compare/v0.5.2...v0.5.3
