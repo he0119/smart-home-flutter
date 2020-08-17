@@ -58,7 +58,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/icon/icon.png
+    - assets/icon/icon.webp
 
 flutter_icons:
   android: true

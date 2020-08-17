@@ -44,7 +44,7 @@ class MyDrawer extends StatelessWidget {
                     context: context,
                     applicationVersion: currentVersion.toString(),
                     applicationIcon: ImageIcon(
-                      AssetImage('assets/icon/icon.png'),
+                      AssetImage('assets/icon/icon.webp'),
                       color: Color(0xFFF15713),
                     ),
                     applicationLegalese: '智慧家庭的客户端',
