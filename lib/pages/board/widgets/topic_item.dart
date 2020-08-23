@@ -21,7 +21,7 @@ class TopicItem extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: Text(
+              child: SelectableText(
                 topic.title,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -35,7 +35,10 @@ class TopicItem extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-              child: MarkdownBody(data: topic.description),
+              child: MarkdownBody(
+                data: topic.description,
+                selectable: true,
+              ),
             ),
             Divider(),
           ],
