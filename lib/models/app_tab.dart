@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// IOT，存储管理，博客，留言板
 enum AppTab { iot, storage, blog, board }
 
@@ -13,6 +15,20 @@ extension AppTabExtension on AppTab {
         return '博客';
       default:
         return '留言';
+    }
+  }
+
+  /// 底部导航栏显示的图标
+  Icon get icon {
+    switch (this) {
+      case AppTab.iot:
+        return Icon(Icons.cloud);
+      case AppTab.storage:
+        return Icon(Icons.storage);
+      case AppTab.blog:
+        return Icon(Icons.web);
+      default:
+        return Icon(Icons.chat);
     }
   }
 

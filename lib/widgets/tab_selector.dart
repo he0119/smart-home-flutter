@@ -18,24 +18,14 @@ class TabSelector extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       currentIndex: AppTab.values.indexOf(activeTab),
       onTap: (index) => onTabSelected(AppTab.values[index]),
-      items: AppTab.values.map((tab) => navigationBarItem(tab)).toList(),
+      items: AppTab.values
+          .map(
+            (tab) => BottomNavigationBarItem(
+              icon: tab.icon,
+              label: tab.name,
+            ),
+          )
+          .toList(),
     );
-  }
-
-  static BottomNavigationBarItem navigationBarItem(AppTab appTab) {
-    if (appTab == AppTab.iot) {
-      return BottomNavigationBarItem(
-          icon: Icon(Icons.cloud), title: Text(appTab.name));
-    }
-    if (appTab == AppTab.storage) {
-      return BottomNavigationBarItem(
-          icon: Icon(Icons.storage), title: Text(appTab.name));
-    }
-    if (appTab == AppTab.blog) {
-      return BottomNavigationBarItem(
-          icon: Icon(Icons.web), title: Text(appTab.name));
-    }
-    return BottomNavigationBarItem(
-        icon: Icon(Icons.chat), title: Text(appTab.name));
   }
 }
