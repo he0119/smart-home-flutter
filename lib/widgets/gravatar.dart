@@ -17,8 +17,8 @@ class CircleGravatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // CachedNetworkImage 暂时不支持 web, windows
-    if (!kIsWeb && !Platform.isWindows) {
+    // CachedNetworkImage 暂时不支持 Windows
+    if (kIsWeb || !Platform.isWindows) {
       return CachedNetworkImage(
         imageUrl: getGravatarUrl(email: email, size: size),
         imageBuilder: (context, imageProvider) => CircleAvatar(
