@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Added
+
+- 添加 Windows 支持
+
 ## [0.5.6] - 2020-08-17
 
 ### Added

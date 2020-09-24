@@ -4,16 +4,17 @@
 
 ## Requirements
 
-- Flutter (Channel dev, 1.22.0-1.0.pre)
+- Flutter (Channel dev, 1.23.0-4.0.pre)
 
 ## Setup
 
-启用 Web 功能
+启用 Web 和 Windows 功能
 
 ```shell
-flutter channel beta
+flutter channel dev
 flutter upgrade
 flutter config --enable-web
+flutter config --enable-windows-desktop
 ```
 
 ## Run
@@ -29,6 +30,14 @@ flutter run -t ./lib/main_dev.dart
 
 编译正式版 `Android` 软件需要先根据 [文档](https://flutter.dev/docs/deployment/android) 创建签名。
 接着运行 `flutter build apk --split-per-abi -t ./lib/main_prod.dart` 完成编译。
+
+## Web
+
+使用 `flutter build web -t ./lib/main_prod.dart` 编译网页版。
+
+## Windows
+
+使用 `flutter build windows -t ./lib/main_prod.dart` 编译 Windows 版。
 
 ## Tags
 
