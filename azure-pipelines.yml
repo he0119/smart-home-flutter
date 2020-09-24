@@ -86,3 +86,23 @@ jobs:
         PathtoPublish: '$(System.DefaultWorkingDirectory)/build/web'
         artifactName: web
       displayName: 'Publish Web'
+
+  - job: Windows
+    pool:
+      vmImage: 'windows-latest'
+    dependsOn: Test
+    steps:
+    - task: Install-Flutter@0
+      inputs:
+        channel: $(flutter_channel)
+        version: custom
+        customVersion: $(flutter_version)
+    - script: flutter config --enable-windows-desktop
+      displayName: 'EnableWindows'
+    - script: flutter build windows -t ./lib/main_prod.dart
+      displayName: 'FlutterBuild Windows'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(System.DefaultWorkingDirectory)/build/windows/runner/Release'
+        artifactName: windows
+      displayName: 'Publish Windows'
