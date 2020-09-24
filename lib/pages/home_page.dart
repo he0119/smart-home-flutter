@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,7 +91,7 @@ class _HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 仅在客户端上注册 Shortcut
-    if (!kIsWeb) {
+    if (!kIsWeb && !Platform.isWindows) {
       final QuickActions quickActions = QuickActions();
       quickActions.initialize((String shortcutType) async {
         if (shortcutType == 'action_iot') {
