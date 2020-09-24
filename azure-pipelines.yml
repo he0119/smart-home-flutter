@@ -91,6 +91,7 @@ jobs:
     pool:
       vmImage: 'windows-latest'
     dependsOn: Test
+    condition: or(contains(variables['Build.SourceBranch'], 'master'), contains(variables['Build.SourceBranch'], 'tags'))
     steps:
     - task: Install-Flutter@0
       inputs:
