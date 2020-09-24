@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +67,7 @@ class _BlogHomePageState extends State<BlogHomePage> {
               ),
             ),
           ],
-          body: !kIsWeb
+          body: (!kIsWeb && !Platform.isWindows)
               ? WillPopScope(
                   onWillPop: () async {
                     if (controller.hasData &&

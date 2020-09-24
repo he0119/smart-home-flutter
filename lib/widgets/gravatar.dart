@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +17,8 @@ class CircleGravatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // CachedNetworkImage 暂时不支持 web
-    if (!kIsWeb) {
+    // CachedNetworkImage 暂时不支持 web, windows
+    if (!kIsWeb && !Platform.isWindows) {
       return CachedNetworkImage(
         imageUrl: getGravatarUrl(email: email, size: size),
         imageBuilder: (context, imageProvider) => CircleAvatar(
