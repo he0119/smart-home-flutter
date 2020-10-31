@@ -28,7 +28,7 @@ dependencies:
   quick_actions: ^0.4.0+2
 
   device_info: ^0.4.2+1
-  package_info: '>=0.4.0+16 <2.0.0'
+  package_info_plus: ^0.5.0
   version: ^1.0.3
 
   url_launcher: ^5.4.2
