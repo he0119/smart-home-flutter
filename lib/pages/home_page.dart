@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
           return BlocListener<UpdateBloc, UpdateState>(
             listener: (context, state) {
               if (state is UpdateSuccess && state.needUpdate) {
-                scaffoldKey.currentState.showSnackBar(
+                scaffoldMessengerKey.currentState.showSnackBar(
                   SnackBar(
                     content: Text('发现新版本（${state.version}）'),
                     action: SnackBarAction(
@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
                 );
               }
               if (state is UpdateFailure) {
-                scaffoldKey.currentState.showSnackBar(
+                scaffoldMessengerKey.currentState.showSnackBar(
                   SnackBar(
                     content: Text(state.message),
                     action: SnackBarAction(

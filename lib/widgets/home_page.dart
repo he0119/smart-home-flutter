@@ -21,20 +21,22 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      drawer: MyDrawer(),
-      appBar: AppBar(
-        title: Text(activeTab.title),
-        actions: actions,
+    return ScaffoldMessenger(
+      key: scaffoldMessengerKey,
+      child: Scaffold(
+        drawer: MyDrawer(),
+        appBar: AppBar(
+          title: Text(activeTab.title),
+          actions: actions,
+        ),
+        body: body,
+        bottomNavigationBar: TabSelector(
+          activeTab: activeTab,
+          onTabSelected: (tab) =>
+              BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
+        ),
+        floatingActionButton: floatingActionButton,
       ),
-      body: body,
-      bottomNavigationBar: TabSelector(
-        activeTab: activeTab,
-        onTabSelected: (tab) =>
-            BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
-      ),
-      floatingActionButton: floatingActionButton,
     );
   }
 }

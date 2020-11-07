@@ -84,7 +84,10 @@ class AppPreferencesBloc
     if (event is DefaultPageChanged) {
       try {
         final SharedPreferences prefs = await _prefs;
-        prefs.setString('defaultPage', EnumToString.parse(event.defaultPage));
+        prefs.setString(
+          'defaultPage',
+          EnumToString.convertToString(event.defaultPage),
+        );
         yield state.copyWith(
           defaultPage: event.defaultPage,
         );

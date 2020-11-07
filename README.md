@@ -4,7 +4,7 @@
 
 ## Requirements
 
-- Flutter (Channel dev, 1.23.0-4.0.pre)
+- Flutter (Channel dev, 1.24.0-7.0.pre)
 
 ## Setup
 
