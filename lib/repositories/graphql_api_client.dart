@@ -109,6 +109,13 @@ class GraphQLApiClient {
         _clearToken();
         throw GraphQLApiException(message: '认证出错，请稍后再试');
       }
+      // 如果 Token 过期，则清除 Token
+      // 一般是不会遇到这种情况，因为我会在发送请求之前检查一下 Token 是否过期
+      // 如果遇到，应该是设备时间与服务器时间偏差过大导致
+      if (message.contains('signature has expired')) {
+        _clearToken();
+        throw GraphQLApiException(message: '令牌过期，请检查设备时间是否正确');
+      }
     }
     throw GraphQLApiException(message: errors.graphqlErrors[0].message);
   }
