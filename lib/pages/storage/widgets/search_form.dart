@@ -34,9 +34,15 @@ class _SearchBarState extends State<_SearchBar> {
         );
       },
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search),
+        prefixIcon: Icon(
+          Icons.search,
+          color: Colors.blue,
+        ),
         suffixIcon: GestureDetector(
-          child: Icon(Icons.clear),
+          child: Icon(
+            Icons.clear,
+            color: Colors.blue,
+          ),
           onTap: _onClearTapped,
         ),
         border: InputBorder.none,
