@@ -269,6 +269,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
       _descriptionController =
           TextEditingController(text: widget.item.description);
       storageId = widget.item.storage.id;
+      expirationDate = widget.item.expirationDate;
     } else {
       _nameController = TextEditingController();
       _numberController = TextEditingController(text: '1');

@@ -71,7 +71,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         }
         // 从物品管理主页进入
         if (storageHomeBloc != null) {
-          storageHomeBloc.add(StorageHomeChanged(itemType: ItemType.all));
+          storageHomeBloc.add(StorageHomeRefreshed(itemType: ItemType.all));
         }
         // 从搜索界面进入
         if (storageSearchBloc != null) {
