@@ -7,9 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.5.7] - 2020-11-13
+
 ### Added
 
-- 添加 Windows 支持
+- 添加初步的 Windows 支持（不完善）
+
+### Changed
+
+- 允许留言板详情界面中的文字被选中
+
+### Fixed
+
+- 修复搜索界面图标在选中文本框时无法看清的问题
+- 修复修改物品时有效期消失的问题
+- 修复令牌过期时，无法正确提示并删除过期令牌的问题
+- 修复网页版无法打开关于界面的问题
 
 ## [0.5.6] - 2020-08-17
 
@@ -172,8 +185,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.6...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.7...HEAD
 
+[0.5.7]: https://github.com/he0119/smart-home-flutter/compare/v0.5.6...v0.5.7
 [0.5.6]: https://github.com/he0119/smart-home-flutter/compare/v0.5.5...v0.5.6
 [0.5.5]: https://github.com/he0119/smart-home-flutter/compare/v0.5.4...v0.5.5
 [0.5.4]: https://github.com/he0119/smart-home-flutter/compare/v0.5.3...v0.5.4
