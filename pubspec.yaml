@@ -42,6 +42,8 @@ dependencies:
   settings_ui:
     git: https://github.com/he0119/flutter-settings-ui.git
 
+  xiao_mi_push_plugin: ^1.0.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
