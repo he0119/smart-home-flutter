@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -9,6 +10,7 @@ import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/models/user.dart';
+import 'package:xiao_mi_push_plugin/xiao_mi_push_plugin.dart';
 
 part 'app_preferences_event.dart';
 part 'app_preferences_state.dart';
@@ -26,6 +28,11 @@ class AppPreferencesBloc
   ) async* {
     if (event is AppStarted) {
       try {
+        if (!kIsWeb && Platform.isAndroid) {
+          // 注册小米推送
+          XiaoMiPushPlugin.init(
+              appId: 'XiaoMiPushAppId', appKey: 'XiaoMiPushAppKey');
+        }
         final SharedPreferences prefs = await _prefs;
         String apiUrl = prefs.getString('apiUrl');
         int refreshInterval = prefs.getInt('refreshInterval');
