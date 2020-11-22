@@ -19,8 +19,7 @@ jobs:
     - task: Install-Flutter@0
       inputs:
         channel: $(flutter_channel)
-        version: custom
-        customVersion: $(flutter_version)
+        version: latest
     - script: |
         flutter pub get
         flutter test --coverage --machine > example.jsonl
