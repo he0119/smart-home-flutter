@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Install lcov-to-cobertura
+      - name: Get curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
         run: pip3 install git+https://github.com/eriwen/lcov-to-cobertura-xml.git
       - uses: subosito/flutter-action@v1.4.0
         with:
@@ -31,7 +31,7 @@ jobs:
           flutter test --coverage --machine > example.jsonl
           flutter pub global activate junitreport
           flutter pub global run junitreport:tojunit --input example.jsonl --output TEST-report.xml
-          lcov_cobertura coverage/lcov.info
+          python lcov_cobertura.py coverage/lcov.info
       - name: Publish unit test results
         uses: EnricoMi/publish-unit-test-result-action@v1.5
         if: always()
