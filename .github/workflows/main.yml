@@ -19,8 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Get curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
-        run: pip3 install git+https://github.com/eriwen/lcov-to-cobertura-xml.git
+      - name: Get lcov_cobertura
+        run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
       - uses: subosito/flutter-action@v1.4.0
         with:
           channel: ${{ env.flutter_channel }}
