@@ -62,6 +62,7 @@ jobs:
           flutter-version: ${{ env.flutter_version }}
       - run: flutter build apk --split-per-abi -t ./lib/main_prod.dart
       - uses: actions/upload-artifact@v2
+        if: github.event_name != 'pull_request'
         with:
           name: android
           path: ${{ github.workspace }}/build/app/outputs/apk/release/*.apk
