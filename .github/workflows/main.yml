@@ -2,9 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - 'master'
+      - 'dev'
+    tags:
+      - 'v*'
   pull_request:
-    branches: [ master ]
 
 env:
   flutter_channel: 'dev'
@@ -16,12 +19,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Install lcov-to-cobertura
+        run: pip install git+https://github.com/eriwen/lcov-to-cobertura-xml.git
       - uses: subosito/flutter-action@v1.4.0
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
-      - run: flutter pub get
-      - run: flutter test
+      - name: Flutter Test
+        run: |
+          flutter pub get
+          flutter test --coverage --machine > example.jsonl
+          flutter pub global activate junitreport
+          flutter pub global run junitreport:tojunit --input example.jsonl --output TEST-report.xml
+          lcov_cobertura coverage/lcov.info
+      - name: Publish unit test results
+        uses: EnricoMi/publish-unit-test-result-action@v1.5
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: "**/TEST-*.xml"
+          comment_on_pr: false
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests
 
   android:
     name: Android
@@ -44,6 +67,7 @@ jobs:
           path: ${{ github.workspace }}/build/app/outputs/apk/release/*.apk
       - run: flutter build apk -t ./lib/main_prod.dart
       - uses: actions/upload-artifact@v2
+        if: github.event_name != 'pull_request'
         with:
           name: android-universal
           path: ${{ github.workspace }}/build/app/outputs/apk/release/*.apk
@@ -61,6 +85,7 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter build web -t ./lib/main_prod.dart
       - uses: actions/upload-artifact@v2
+        if: github.event_name != 'pull_request'
         with:
           name: web
           path: ${{ github.workspace }}/build/web
@@ -78,6 +103,7 @@ jobs:
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows -t ./lib/main_prod.dart
       - uses: actions/upload-artifact@v2
+        if: github.event_name != 'pull_request'
         with:
           name: windows
           path: ${{ github.workspace }}/build/windows/runner/Release
