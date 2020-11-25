@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install lcov-to-cobertura
-        run: pip install git+https://github.com/eriwen/lcov-to-cobertura-xml.git
+        run: pip3 install git+https://github.com/eriwen/lcov-to-cobertura-xml.git
       - uses: subosito/flutter-action@v1.4.0
         with:
           channel: ${{ env.flutter_channel }}
