@@ -124,7 +124,7 @@ jobs:
           path: ${{ github.workspace }}/build/windows/runner/Release
 
   deploy_web:
-    name: Deploy web to server
+    name: Deploy Web
     runs-on: ubuntu-latest
     needs: web
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
@@ -144,7 +144,7 @@ jobs:
           remote_key: ${{ secrets.SSH_KEY }}
 
   deploy_github:
-    name: Deploy to github
+    name: Deploy Github
     runs-on: ubuntu-latest
     needs: [android, web, windows]
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
