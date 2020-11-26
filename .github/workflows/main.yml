@@ -5,9 +5,9 @@ on:
     branches:
       - 'master'
       - 'dev'
-    tags:
-      - 'v*'
   pull_request:
+  release:
+    types: [released]
 
 env:
   flutter_channel: 'dev'
@@ -21,11 +21,12 @@ jobs:
       - uses: actions/checkout@v1
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
-      - uses: subosito/flutter-action@v1.4.0
+      - name: Install flutter
+        uses: subosito/flutter-action@v1.4.0
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
-      - name: Flutter Test
+      - name: Flutter test
         run: |
           flutter pub get
           flutter test --coverage --machine > example.jsonl
@@ -56,18 +57,23 @@ jobs:
         run: ./.github/scripts/decrypt_secret.sh
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
-      - uses: subosito/flutter-action@v1.4.0
+      - name: Install flutter
+        uses: subosito/flutter-action@v1.4.0
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
-      - run: flutter build apk --split-per-abi -t ./lib/main_prod.dart
-      - uses: actions/upload-artifact@v2
+      - name: Build split-per-abi apks
+        run: flutter build apk --split-per-abi -t ./lib/main_prod.dart
+      - name: Upload split-per-abi apks
+        uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request'
         with:
           name: android
           path: ${{ github.workspace }}/build/app/outputs/apk/release/*.apk
-      - run: flutter build apk -t ./lib/main_prod.dart
-      - uses: actions/upload-artifact@v2
+      - name: Build universal apk
+        run: flutter build apk -t ./lib/main_prod.dart
+      - name: Upload universal apk
+        uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request'
         with:
           name: android-universal
@@ -79,13 +85,17 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1.4.0
+      - name: Install flutter
+        uses: subosito/flutter-action@v1.4.0
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
-      - run: flutter config --enable-web
-      - run: flutter build web -t ./lib/main_prod.dart
-      - uses: actions/upload-artifact@v2
+      - name: Build web version
+        run: |
+          flutter config --enable-web
+          flutter build web -t ./lib/main_prod.dart
+      - name: Upload web version
+        uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request'
         with:
           name: web
@@ -97,13 +107,17 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1.4.0
+      - name: Install flutter
+        uses: subosito/flutter-action@v1.4.0
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
-      - run: flutter config --enable-windows-desktop
-      - run: flutter build windows -t ./lib/main_prod.dart
-      - uses: actions/upload-artifact@v2
+      - name: Build windows version
+        run: |
+          flutter config --enable-windows-desktop
+          flutter build windows -t ./lib/main_prod.dart
+      - name: Upload version version
+        uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request'
         with:
           name: windows
