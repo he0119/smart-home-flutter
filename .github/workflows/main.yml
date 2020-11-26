@@ -116,7 +116,7 @@ jobs:
         run: |
           flutter config --enable-windows-desktop
           flutter build windows -t ./lib/main_prod.dart
-      - name: Upload version version
+      - name: Upload windows version
         uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request'
         with:
@@ -142,3 +142,22 @@ jobs:
           remote_host: ${{ secrets.SSH_HOST }}
           remote_user: ${{ secrets.SSH_USERNAME }}
           remote_key: ${{ secrets.SSH_KEY }}
+
+  deploy_github:
+    name: Deploy to github
+    runs-on: ubuntu-latest
+    needs: [android, web, windows]
+    if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+      - name: Compress files
+        run: |
+          tar -czvf web.tar.gz web
+          tar -czvf windows.tar.gz windows
+      - name: Upload Release Assets
+        uses: alexellis/upload-assets@0.2.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          asset_paths: '["android/*.apk", "android-universal/*.apk", "web.tar.gz", "windows.tar.gz"]'
