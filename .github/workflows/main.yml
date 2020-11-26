@@ -2,9 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - 'master'
+      - 'dev'
   pull_request:
-    branches: [ master ]
+  release:
+    types: [released]
 
 env:
   flutter_channel: 'dev'
@@ -16,12 +19,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1.4.0
+      - name: Get lcov_cobertura
+        run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
+      - name: Install flutter
+        uses: subosito/flutter-action@v1.4.0
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
-      - run: flutter pub get
-      - run: flutter test
+      - name: Flutter test
+        run: |
+          flutter pub get
+          flutter test --coverage --machine > example.jsonl
+          flutter pub global activate junitreport
+          flutter pub global run junitreport:tojunit --input example.jsonl --output TEST-report.xml
+          python lcov_cobertura.py coverage/lcov.info
+      - name: Publish unit test results
+        uses: EnricoMi/publish-unit-test-result-action@v1.5
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: "**/TEST-*.xml"
+          comment_on_pr: false
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests
 
   android:
     name: Android
@@ -33,17 +57,24 @@ jobs:
         run: ./.github/scripts/decrypt_secret.sh
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
-      - uses: subosito/flutter-action@v1.4.0
+      - name: Install flutter
+        uses: subosito/flutter-action@v1.4.0
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
-      - run: flutter build apk --split-per-abi -t ./lib/main_prod.dart
-      - uses: actions/upload-artifact@v2
+      - name: Build split-per-abi apks
+        run: flutter build apk --split-per-abi -t ./lib/main_prod.dart
+      - name: Upload split-per-abi apks
+        uses: actions/upload-artifact@v2
+        if: github.event_name != 'pull_request'
         with:
           name: android
           path: ${{ github.workspace }}/build/app/outputs/apk/release/*.apk
-      - run: flutter build apk -t ./lib/main_prod.dart
-      - uses: actions/upload-artifact@v2
+      - name: Build universal apk
+        run: flutter build apk -t ./lib/main_prod.dart
+      - name: Upload universal apk
+        uses: actions/upload-artifact@v2
+        if: github.event_name != 'pull_request'
         with:
           name: android-universal
           path: ${{ github.workspace }}/build/app/outputs/apk/release/*.apk
@@ -54,13 +85,18 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1.4.0
+      - name: Install flutter
+        uses: subosito/flutter-action@v1.4.0
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
-      - run: flutter config --enable-web
-      - run: flutter build web -t ./lib/main_prod.dart
-      - uses: actions/upload-artifact@v2
+      - name: Build web version
+        run: |
+          flutter config --enable-web
+          flutter build web -t ./lib/main_prod.dart
+      - name: Upload web version
+        uses: actions/upload-artifact@v2
+        if: github.event_name != 'pull_request'
         with:
           name: web
           path: ${{ github.workspace }}/build/web
@@ -71,13 +107,57 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1.4.0
+      - name: Install flutter
+        uses: subosito/flutter-action@v1.4.0
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
-      - run: flutter config --enable-windows-desktop
-      - run: flutter build windows -t ./lib/main_prod.dart
-      - uses: actions/upload-artifact@v2
+      - name: Build windows version
+        run: |
+          flutter config --enable-windows-desktop
+          flutter build windows -t ./lib/main_prod.dart
+      - name: Upload windows version
+        uses: actions/upload-artifact@v2
+        if: github.event_name != 'pull_request'
         with:
           name: windows
           path: ${{ github.workspace }}/build/windows/runner/Release
+
+  deploy_web:
+    name: Deploy Web
+    runs-on: ubuntu-latest
+    needs: web
+    if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+    steps:
+      - name: Download web files
+        uses: actions/download-artifact@v2
+        with:
+          name: web
+      - name: Copy file to server
+        uses: Burnett01/rsync-deployments@4.1
+        with:
+          switches: -vzr --delete
+          path: "."
+          remote_path: "websites/smart-home/web"
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_user: ${{ secrets.SSH_USERNAME }}
+          remote_key: ${{ secrets.SSH_KEY }}
+
+  deploy_github:
+    name: Deploy Github
+    runs-on: ubuntu-latest
+    needs: [android, web, windows]
+    if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+      - name: Compress files
+        run: |
+          tar -czvf web.tar.gz web
+          tar -czvf windows.tar.gz windows
+      - name: Upload Release Assets
+        uses: alexellis/upload-assets@0.2.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          asset_paths: '["android/*.apk", "android-universal/*.apk", "web.tar.gz", "windows.tar.gz"]'
