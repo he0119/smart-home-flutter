@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home/blocs/authentication/authentication_bloc.dart';
 import 'package:smart_home/graphql/mutations/mutations.dart';
-import 'package:smart_home/graphql/queries/me.dart';
+import 'package:smart_home/graphql/queries/viewer.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 
@@ -54,10 +54,10 @@ class UserRepository {
 
   Future<User> currentUser() async {
     QueryOptions _options = QueryOptions(
-      documentNode: gql(me),
+      documentNode: gql(viewer),
     );
     QueryResult results = await graphqlApiClient.query(_options);
-    User user = User.fromJson(results.data['me']);
+    User user = User.fromJson(results.data['viewer']);
     return user;
   }
 

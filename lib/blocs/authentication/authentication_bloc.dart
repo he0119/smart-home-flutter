@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:smart_home/blocs/app_preferences/app_preferences_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/user_repository.dart';
-import 'package:xiao_mi_push_plugin/xiao_mi_push_plugin.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -62,10 +61,6 @@ class AuthenticationBloc
       if (result) {
         User user = await userRepository.currentUser();
         appPreferencesBloc.add(LoginUserChanged(loginUser: user));
-        if (!kIsWeb && Platform.isAndroid) {
-          // 首次登录时设置小米推送别名
-          XiaoMiPushPlugin.setAlias(alias: user.username, category: null);
-        }
         yield AuthenticationSuccess(user);
       } else {
         yield AuthenticationFailure('用户名或密码错误');
@@ -76,11 +71,6 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapLogoutToState() async* {
-    if (!kIsWeb && Platform.isAndroid) {
-      // 登出时取消小米推送别名
-      XiaoMiPushPlugin.unsetAlias(
-          alias: appPreferencesBloc.state.loginUser.username, category: null);
-    }
     yield AuthenticationFailure('已登出');
     await userRepository.logout();
   }
