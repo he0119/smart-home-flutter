@@ -68,6 +68,8 @@ class MyApp extends StatelessWidget {
           BlocProvider<PushBloc>(
             create: (context) => PushBloc(
               pushRepository: RepositoryProvider.of<PushRepository>(context),
+              appPreferencesBloc:
+                  RepositoryProvider.of<AppPreferencesBloc>(context),
             ),
           ),
           BlocProvider<StorageHomeBloc>(
