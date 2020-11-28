@@ -34,6 +34,10 @@ class HomePage extends StatelessWidget {
           if (state is AuthenticationFailure) {
             Navigator.of(context).popUntil((route) => route.isFirst);
           }
+          if (state is AuthenticationSuccess) {
+            // 当登录成功时，开始初始化推送服务
+            BlocProvider.of<PushBloc>(context).add(PushStarted());
+          }
         },
         builder: (context, state) {
           // 用户仓库同时也需要认证 BLoC 来处理认证相关逻辑
@@ -48,8 +52,6 @@ class HomePage extends StatelessWidget {
               state is AuthenticationFailure) {
             return LoginPage();
           }
-          // 初始化推送服务
-          BlocProvider.of<PushBloc>(context).add(PushStarted());
           return BlocListener<UpdateBloc, UpdateState>(
             listener: (context, state) {
               if (state is UpdateSuccess && state.needUpdate) {
