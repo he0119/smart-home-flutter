@@ -28,6 +28,9 @@ class AppPreferencesBloc
       try {
         final SharedPreferences prefs = await _prefs;
         String apiUrl = prefs.getString('apiUrl');
+        String miPushAppId = prefs.getString('miPushAppId');
+        String miPushAppKey = prefs.getString('miPushAppKey');
+        String miPushRegId = prefs.getString('miPushRegId');
         int refreshInterval = prefs.getInt('refreshInterval');
         String blogUrl = prefs.getString('blogUrl');
         String blogAdminUrl = prefs.getString('blogAdminUrl');
@@ -40,6 +43,9 @@ class AppPreferencesBloc
         yield state.copyWith(
           initialized: true,
           apiUrl: apiUrl,
+          miPushAppId: miPushAppId,
+          miPushAppKey: miPushAppKey,
+          miPushRegId: miPushRegId,
           refreshInterval: refreshInterval,
           blogUrl: blogUrl,
           blogAdminUrl: blogAdminUrl,
@@ -104,6 +110,30 @@ class AppPreferencesBloc
         );
       } catch (e) {
         _log.severe('设置登录用户失败');
+      }
+    }
+    if (event is MiPushKeyChanged) {
+      try {
+        final SharedPreferences prefs = await _prefs;
+        prefs.setString('miPushAppId', event.miPushAppId);
+        prefs.setString('miPushAppKey', event.miPushAppKey);
+        yield state.copyWith(
+          miPushAppId: event.miPushAppId,
+          miPushAppKey: event.miPushAppKey,
+        );
+      } catch (e) {
+        _log.severe('设置小米推送密钥失败');
+      }
+    }
+    if (event is MiPushRegIdChanged) {
+      try {
+        final SharedPreferences prefs = await _prefs;
+        prefs.setString('miPushRegId', event.miPushRegId);
+        yield state.copyWith(
+          miPushRegId: event.miPushRegId,
+        );
+      } catch (e) {
+        _log.severe('设置小米推送注册标识符失败');
       }
     }
   }

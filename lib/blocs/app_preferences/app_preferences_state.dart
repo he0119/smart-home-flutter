@@ -3,6 +3,9 @@ part of 'app_preferences_bloc.dart';
 class AppPreferencesState extends Equatable {
   final bool initialized;
   final String apiUrl;
+  final String miPushAppId;
+  final String miPushAppKey;
+  final String miPushRegId;
   final int refreshInterval;
   final String blogUrl;
   final String blogAdminUrl;
@@ -12,6 +15,9 @@ class AppPreferencesState extends Equatable {
   const AppPreferencesState({
     @required this.initialized,
     @required this.apiUrl,
+    @required this.miPushAppId,
+    @required this.miPushAppKey,
+    @required this.miPushRegId,
     @required this.refreshInterval,
     @required this.blogUrl,
     @required this.blogAdminUrl,
@@ -23,6 +29,9 @@ class AppPreferencesState extends Equatable {
     return AppPreferencesState(
       initialized: false,
       apiUrl: null,
+      miPushAppId: null,
+      miPushAppKey: null,
+      miPushRegId: null,
       refreshInterval: 10,
       blogUrl: null,
       blogAdminUrl: null,
@@ -34,6 +43,9 @@ class AppPreferencesState extends Equatable {
   AppPreferencesState copyWith({
     bool initialized,
     String apiUrl,
+    String miPushAppId,
+    String miPushAppKey,
+    String miPushRegId,
     int refreshInterval,
     String blogUrl,
     String blogAdminUrl,
@@ -43,6 +55,9 @@ class AppPreferencesState extends Equatable {
     return AppPreferencesState(
       initialized: initialized ?? this.initialized,
       apiUrl: apiUrl ?? this.apiUrl,
+      miPushAppId: miPushAppId ?? this.miPushAppId,
+      miPushAppKey: miPushAppKey ?? this.miPushAppKey,
+      miPushRegId: miPushRegId ?? this.miPushRegId,
       refreshInterval: refreshInterval ?? this.refreshInterval,
       blogUrl: blogUrl ?? this.blogUrl,
       blogAdminUrl: blogAdminUrl ?? this.blogAdminUrl,
@@ -55,6 +70,9 @@ class AppPreferencesState extends Equatable {
   List<Object> get props => [
         initialized,
         apiUrl,
+        miPushAppId,
+        miPushAppKey,
+        miPushRegId,
         refreshInterval,
         blogUrl,
         blogAdminUrl,

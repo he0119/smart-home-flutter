@@ -2,6 +2,7 @@ name: smart_home
 description: 智慧家庭
 version: 0.5.7+3
 homepage: https://github.com/he0119/smart-home-flutter
+publish_to: none
 
 environment:
   sdk: ">=2.8.0 <3.0.0"
@@ -41,6 +42,8 @@ dependencies:
   cached_network_image: ^2.1.0+1
   settings_ui:
     git: https://github.com/he0119/flutter-settings-ui.git
+
+  xiao_mi_push_plugin: ^1.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

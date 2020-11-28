@@ -84,3 +84,35 @@ class LoginUserChanged extends AppPreferencesEvent {
   @override
   String toString() => 'LoginUserChanged { loginUser: ${loginUser.username} }';
 }
+
+/// 更改小米推送密钥
+class MiPushKeyChanged extends AppPreferencesEvent {
+  final String miPushAppId;
+  final String miPushAppKey;
+
+  MiPushKeyChanged({
+    @required this.miPushAppId,
+    @required this.miPushAppKey,
+  });
+
+  @override
+  List<Object> get props => [miPushAppId, miPushAppKey];
+
+  @override
+  String toString() => 'MiPushKeyChanged { miPushAppId: $miPushAppId }';
+}
+
+/// 更改小米推送注册标识符
+class MiPushRegIdChanged extends AppPreferencesEvent {
+  final String miPushRegId;
+
+  MiPushRegIdChanged({
+    @required this.miPushRegId,
+  });
+
+  @override
+  List<Object> get props => [miPushRegId];
+
+  @override
+  String toString() => 'MiPushRegIdChanged { miPushRegId: $miPushRegId }';
+}
