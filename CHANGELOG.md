@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.5.9] - 2020-11-28
+
+### Fixed
+
+- 修复文本框删除键一次删除两个字符的问题
+
 ## [0.5.8] - 2020-11-28
 
 ### Added
@@ -191,8 +197,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.8...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.9...HEAD
 
+[0.5.9]: https://github.com/he0119/smart-home-flutter/compare/v0.5.8...v0.5.9
 [0.5.8]: https://github.com/he0119/smart-home-flutter/compare/v0.5.7...v0.5.8
 [0.5.7]: https://github.com/he0119/smart-home-flutter/compare/v0.5.6...v0.5.7
 [0.5.6]: https://github.com/he0119/smart-home-flutter/compare/v0.5.5...v0.5.6
