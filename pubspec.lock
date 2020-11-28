@@ -231,7 +231,7 @@ packages:
       name: cupertino_icons
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1+1"
   dart_style:
     dependency: transitive
     description:
@@ -280,7 +280,7 @@ packages:
       name: enum_to_string
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.13"
+    version: "1.0.14"
   equatable:
     dependency: "direct main"
     description:
@@ -360,7 +360,7 @@ packages:
       name: flutter_markdown
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.5.0"
+    version: "0.5.1"
   flutter_sticky_header:
     dependency: "direct main"
     description:
@@ -538,14 +538,14 @@ packages:
       name: node_interop
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.1"
   node_io:
     dependency: transitive
     description:
       name: node_io
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.1"
+    version: "1.2.0"
   node_preamble:
     dependency: transitive
     description:
@@ -643,7 +643,7 @@ packages:
       name: pedantic
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.10.0-nullsafety.2"
+    version: "1.10.0-nullsafety.3"
   petitparser:
     dependency: transitive
     description:
@@ -678,7 +678,7 @@ packages:
       name: pool
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.5.0-nullsafety.2"
+    version: "1.5.0-nullsafety.3"
   process:
     dependency: transitive
     description:
@@ -825,14 +825,14 @@ packages:
       name: source_map_stack_trace
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.0-nullsafety.3"
+    version: "2.1.0-nullsafety.4"
   source_maps:
     dependency: transitive
     description:
       name: source_maps
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.10.10-nullsafety.2"
+    version: "0.10.10-nullsafety.3"
   source_span:
     dependency: transitive
     description:
@@ -1063,7 +1063,7 @@ packages:
       name: win32
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.7.3"
+    version: "1.7.4"
   xdg_directories:
     dependency: transitive
     description:
@@ -1093,5 +1093,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.12.0-0.0 <=2.12.0-29.10.beta"
+  dart: ">=2.12.0-0.0 <3.0.0"
   flutter: ">=1.22.2 <2.0.0"

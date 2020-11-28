@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.5.8] - 2020-11-13
+
+### Added
+
+- 小米推送
+
 ## [0.5.7] - 2020-11-13
 
 ### Added
@@ -185,8 +191,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.7...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.8...HEAD
 
+[0.5.8]: https://github.com/he0119/smart-home-flutter/compare/v0.5.7...v0.5.8
 [0.5.7]: https://github.com/he0119/smart-home-flutter/compare/v0.5.6...v0.5.7
 [0.5.6]: https://github.com/he0119/smart-home-flutter/compare/v0.5.5...v0.5.6
 [0.5.5]: https://github.com/he0119/smart-home-flutter/compare/v0.5.4...v0.5.5

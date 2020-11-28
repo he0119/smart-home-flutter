@@ -4,7 +4,7 @@
 
 ## Requirements
 
-- Flutter (Channel dev, 1.24.0-7.0.pre)
+- Flutter (Channel dev, 1.24.0-10.2.pre)
 
 ## Setup
 
@@ -38,12 +38,3 @@ flutter run -t ./lib/main_dev.dart
 ## Windows
 
 使用 `flutter build windows -t ./lib/main_prod.dart` 编译 Windows 版。
-
-## Tags
-
-创建和共享标签
-
-```shell
-git tag -a v1.4
-git push origin --tags
-```
