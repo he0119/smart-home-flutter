@@ -7,7 +7,7 @@ on:
       - 'dev'
   pull_request:
   release:
-    types: [released]
+    types: [published]
 
 env:
   flutter_channel: 'dev'
