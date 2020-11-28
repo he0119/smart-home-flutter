@@ -10,8 +10,8 @@ on:
     types: [published]
 
 env:
-  flutter_channel: 'beta'
-  flutter_version: '1.23.0-18.1.pre'
+  flutter_channel: 'dev'
+  flutter_version: '1.24.0-7.0.pre'
 
 jobs:
   test:
