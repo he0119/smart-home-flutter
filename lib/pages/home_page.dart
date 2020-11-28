@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
+import 'package:smart_home/blocs/push/push_bloc.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/grobal_keys.dart';
@@ -47,6 +48,8 @@ class HomePage extends StatelessWidget {
               state is AuthenticationFailure) {
             return LoginPage();
           }
+          // 初始化推送服务
+          BlocProvider.of<PushBloc>(context).add(PushStarted());
           return BlocListener<UpdateBloc, UpdateState>(
             listener: (context, state) {
               if (state is UpdateSuccess && state.needUpdate) {

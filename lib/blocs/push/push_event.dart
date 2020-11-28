@@ -6,3 +6,7 @@ abstract class PushEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class PushStarted extends PushEvent {}
+
+class PushUpdated extends PushEvent {}

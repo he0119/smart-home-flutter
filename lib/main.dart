@@ -5,10 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
+import 'package:smart_home/blocs/push/push_bloc.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/repositories/iot_repository.dart';
+import 'package:smart_home/repositories/push_repository.dart';
 import 'package:smart_home/repositories/repositories.dart';
 
 class MyApp extends StatelessWidget {
@@ -30,6 +32,10 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<VersionRepository>(
           create: (context) => VersionRepository(),
+        ),
+        RepositoryProvider<PushRepository>(
+          create: (context) =>
+              PushRepository(graphqlApiClient: graphQLApiClient),
         ),
         RepositoryProvider<StorageRepository>(
           create: (context) =>
@@ -58,6 +64,11 @@ class MyApp extends StatelessWidget {
               versionRepository:
                   RepositoryProvider.of<VersionRepository>(context),
             )..add(UpdateStarted()),
+          ),
+          BlocProvider<PushBloc>(
+            create: (context) => PushBloc(
+              pushRepository: RepositoryProvider.of<PushRepository>(context),
+            ),
           ),
           BlocProvider<StorageHomeBloc>(
             create: (context) => StorageHomeBloc(
