@@ -48,6 +48,7 @@ android {
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders = [appName:"智慧家庭"]
     }
 
     flavorDimensions "version"
@@ -55,9 +56,7 @@ android {
         dev {
             dimension "version"
             applicationIdSuffix ".dev"
-        }
-        prod {
-            dimension "version"
+            manifestPlaceholders = [appName:"智慧家庭 DEV"]
         }
     }
 
