@@ -3,10 +3,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <permission
-        android:name="com.hehome.home.permission.MIPUSH_RECEIVE"
+        android:name="${applicationId}.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
     <uses-permission
-        android:name="com.hehome.home.permission.MIPUSH_RECEIVE" />
+        android:name="${applicationId}.permission.MIPUSH_RECEIVE" />
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
