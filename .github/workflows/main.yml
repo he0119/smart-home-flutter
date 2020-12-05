@@ -17,7 +17,17 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.setVersion.outputs.version }}
     steps:
+      - name: Set build version
+        id: setVersion
+        run: |
+          if [[ "${{github.event_name}}" == "release" && "${{github.event.action}}" == "published" ]]; then
+            echo "::set-output name=version::prod"
+          else
+            echo "::set-output name=version::dev"
+          fi
       - uses: actions/checkout@v1
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
@@ -63,7 +73,9 @@ jobs:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
       - name: Build split-per-abi apks
-        run: flutter build apk --split-per-abi -t ./lib/main_prod.dart
+        run: flutter build apk --split-per-abi -t ./lib/main_$VERSION.dart --flavor $VERSION
+        env:
+          VERSION: ${{ needs.test.outputs.version }}
       - name: Upload split-per-abi apks
         uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request'
@@ -71,7 +83,9 @@ jobs:
           name: android
           path: ${{ github.workspace }}/build/app/outputs/apk/release/*.apk
       - name: Build universal apk
-        run: flutter build apk -t ./lib/main_prod.dart
+        run: flutter build apk -t ./lib/main_$VERSION.dart --flavor $VERSION
+        env:
+          VERSION: ${{ needs.test.outputs.version }}
       - name: Upload universal apk
         uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request'
@@ -93,7 +107,9 @@ jobs:
       - name: Build web version
         run: |
           flutter config --enable-web
-          flutter build web -t ./lib/main_prod.dart
+          flutter build web -t ./lib/main_$VERSION.dart
+        env:
+          VERSION: ${{ needs.test.outputs.version }}
       - name: Upload web version
         uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request'
@@ -115,7 +131,9 @@ jobs:
       - name: Build windows version
         run: |
           flutter config --enable-windows-desktop
-          flutter build windows -t ./lib/main_prod.dart
+          flutter build windows -t ./lib/main_$VERSION.dart
+        env:
+          VERSION: ${{ needs.test.outputs.version }}
       - name: Upload windows version
         uses: actions/upload-artifact@v2
         if: github.event_name != 'pull_request'
