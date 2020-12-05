@@ -11,4 +11,14 @@ class PushInitial extends PushState {}
 
 class PushInProgress extends PushState {}
 
-class PushSuccess extends PushState {}
+class PushSuccess extends PushState {
+  final MiPush miPush;
+
+  PushSuccess({this.miPush});
+
+  @override
+  List<Object> get props => [miPush];
+
+  @override
+  String toString() => 'PushSuccess { regId: ${miPush.regId} }';
+}
