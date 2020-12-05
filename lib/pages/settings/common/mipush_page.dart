@@ -18,6 +18,18 @@ class MiPushPage extends StatelessWidget {
         builder: (context, state) => Scaffold(
           appBar: AppBar(
             title: Text('小米推送'),
+            actions: [
+              Tooltip(
+                message: '更新',
+                child: IconButton(
+                    icon: Icon(Icons.refresh),
+                    onPressed: () {
+                      BlocProvider.of<AppPreferencesBloc>(context)
+                          .add(MiPushRegIdChanged(miPushRegId: '正在更新注册标识符'));
+                      BlocProvider.of<PushBloc>(context).add(PushStarted());
+                    }),
+              ),
+            ],
           ),
           body: ListView(
             children: [
