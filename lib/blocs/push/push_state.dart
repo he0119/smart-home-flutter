@@ -22,3 +22,16 @@ class PushSuccess extends PushState {
   @override
   String toString() => 'PushSuccess { regId: ${miPush.regId} }';
 }
+
+/// 网络错误
+class PushError extends PushState {
+  final String message;
+
+  const PushError(this.message);
+
+  @override
+  List<Object> get props => [message];
+
+  @override
+  String toString() => 'PushError { error: $message }';
+}

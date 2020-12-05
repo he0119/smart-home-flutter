@@ -11,8 +11,14 @@ class MiPushPage extends StatelessWidget {
   Widget build(BuildContext context) {
     MiPush miPush;
     return BlocBuilder<PushBloc, PushState>(builder: (context, state) {
+      if (state is PushInProgress) {
+        miPush = MiPush(regId: '正在获取数据');
+      }
       if (state is PushSuccess) {
         miPush = state.miPush;
+      }
+      if (state is PushError) {
+        miPush = MiPush(regId: state.message);
       }
       return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => Scaffold(
@@ -20,12 +26,12 @@ class MiPushPage extends StatelessWidget {
             title: Text('小米推送'),
             actions: [
               Tooltip(
-                message: '更新',
+                message: '同步',
                 child: IconButton(
-                    icon: Icon(Icons.refresh),
+                    icon: Icon(Icons.sync),
                     onPressed: () {
                       BlocProvider.of<AppPreferencesBloc>(context)
-                          .add(MiPushRegIdChanged(miPushRegId: '正在更新注册标识符'));
+                          .add(MiPushRegIdChanged(miPushRegId: '正在同步注册标识符'));
                       BlocProvider.of<PushBloc>(context).add(PushStarted());
                     }),
               ),

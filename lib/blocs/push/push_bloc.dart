@@ -50,13 +50,14 @@ class PushBloc extends Bloc<PushEvent, PushState> {
           if (type == XiaoMiPushListenerTypeEnum.ReceiveRegisterResult) {
             _log.fine('小米推送注册成功');
             add(PushUpdated(miPush: MiPush(regId: null)));
+
             if (data.commandArguments.single !=
                 appPreferencesBloc.state.miPushRegId) {
               MiPush mipush = await pushRepository.updateMiPush(
                   regId: data.commandArguments.single);
               add(PushUpdated(miPush: mipush));
-              appPreferencesBloc.add(MiPushRegIdChanged(
-                  miPushRegId: data.commandArguments.single));
+              appPreferencesBloc
+                  .add(MiPushRegIdChanged(miPushRegId: mipush.regId));
               _log.fine('小米推送注册标识符上传成功。');
             }
           }
@@ -67,8 +68,13 @@ class PushBloc extends Bloc<PushEvent, PushState> {
       yield PushSuccess(miPush: event.miPush);
     }
     if (event is PushRefreshed) {
-      MiPush mipush = await pushRepository.miPush();
-      yield PushSuccess(miPush: mipush);
+      yield PushInProgress();
+      try {
+        MiPush mipush = await pushRepository.miPush();
+        yield PushSuccess(miPush: mipush);
+      } catch (e) {
+        yield PushError(e.message);
+      }
     }
   }
 }
