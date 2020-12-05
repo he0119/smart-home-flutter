@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.5.10] - 2020-12-05
+
+### Added
+
+- 添加注册多个设备的功能
+- 添加手动同步小米推送的注册标识码的功能
+- 开发和正式版使用不同的应用 ID
+
 ## [0.5.9] - 2020-11-28
 
 ### Fixed
@@ -197,8 +205,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.9...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.5.10...HEAD
 
+[0.5.10]: https://github.com/he0119/smart-home-flutter/compare/v0.5.9...v0.5.10
 [0.5.9]: https://github.com/he0119/smart-home-flutter/compare/v0.5.8...v0.5.9
 [0.5.8]: https://github.com/he0119/smart-home-flutter/compare/v0.5.7...v0.5.8
 [0.5.7]: https://github.com/he0119/smart-home-flutter/compare/v0.5.6...v0.5.7
