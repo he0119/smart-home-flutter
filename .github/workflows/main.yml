@@ -83,7 +83,7 @@ jobs:
         if: github.event_name != 'pull_request'
         with:
           name: android
-          path: ${{ github.workspace }}/build/app/outputs/apk/release/*.apk
+          path: ${{ github.workspace }}/build/app/outputs/apk/${{ needs.test.outputs.version }}/release/*.apk
       - name: Build universal apk
         run: flutter build apk -t ./lib/main_$VERSION.dart --flavor $VERSION
         env:
@@ -93,7 +93,7 @@ jobs:
         if: github.event_name != 'pull_request'
         with:
           name: android-universal
-          path: ${{ github.workspace }}/build/app/outputs/apk/release/*.apk
+          path: ${{ github.workspace }}/build/app/outputs/apk/${{ needs.test.outputs.version }}/release/*.apk
 
   web:
     name: Web
