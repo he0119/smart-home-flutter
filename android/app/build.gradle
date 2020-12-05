@@ -50,6 +50,19 @@ android {
         versionName flutterVersionName
     }
 
+    flavorDimensions "version"
+    productFlavors {
+        dev {
+            dimension "version"
+            applicationIdSuffix ".dev"
+            manifestPlaceholders = [appName:"智慧家庭 DEV"]
+        }
+        prod {
+            dimension "version"
+            manifestPlaceholders = [appName:"智慧家庭"]
+        }
+    }
+
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']

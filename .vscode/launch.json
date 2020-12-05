@@ -9,6 +9,7 @@
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart",
+            "args": ["--flavor", "dev"],
         },
         {
             "name": "Flutter Release",
@@ -16,6 +17,7 @@
             "type": "dart",
             "flutterMode": "release",
             "program": "lib/main_dev.dart",
+            "args": ["--flavor", "dev"],
         },
         {
             "name": "Flutter Profile",
@@ -23,6 +25,7 @@
             "type": "dart",
             "flutterMode": "profile",
             "program": "lib/main_dev.dart",
+            "args": ["--flavor", "dev"],
         }
     ]
 }
