@@ -1,6 +1,6 @@
 const String miPushQuery = r"""
-query miPush {
-  miPush {
+query miPush($deviceId: String!) {
+  miPush(deviceId: $deviceId) {
     regId
   }
 }

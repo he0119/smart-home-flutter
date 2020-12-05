@@ -3,6 +3,8 @@ mutation updateMiPush($input: UpdateMiPushInput!) {
   updateMiPush(input: $input) {
     miPush {
       regId
+      deviceId
+      model
     }
   }
 }
