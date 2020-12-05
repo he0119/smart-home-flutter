@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:smart_home/graphql/mutations/push/mutations.dart';
@@ -24,8 +25,14 @@ class PushRepository {
 
   /// MiPush
   Future<MiPush> miPush() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+
     QueryOptions _options = QueryOptions(
       documentNode: gql(miPushQuery),
+      variables: {
+        'deviceId': androidInfo.androidId,
+      },
       fetchPolicy: FetchPolicy.networkOnly,
     );
     QueryResult results = await graphqlApiClient.query(_options);
@@ -38,11 +45,15 @@ class PushRepository {
   Future<MiPush> updateMiPush({
     @required String regId,
   }) async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     final MutationOptions options = MutationOptions(
       documentNode: gql(updateMiPushMutation),
       variables: {
         'input': {
           'regId': regId,
+          'deviceId': androidInfo.androidId,
+          'model': androidInfo.model,
         }
       },
     );

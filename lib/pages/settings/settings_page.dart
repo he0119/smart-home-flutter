@@ -8,6 +8,7 @@ import 'package:smart_home/pages/settings/blog/blog_admin_url_page.dart';
 import 'package:smart_home/pages/settings/blog/blog_url_page.dart';
 import 'package:smart_home/pages/settings/common/api_url_page.dart';
 import 'package:smart_home/pages/settings/common/default_page.dart';
+import 'package:smart_home/pages/settings/common/mipush_page.dart';
 import 'package:smart_home/pages/settings/iot/refresh_interval_page.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -21,9 +22,9 @@ class SettingsPage extends StatelessWidget {
       ),
       body: BlocBuilder<PushBloc, PushState>(
         builder: (context, state) {
-          String _pushStatus = '未注册（单击重试）';
+          String _pushStatus = '未注册';
           if (state is PushInProgress) {
-            _pushStatus = '注册中（单击重试）';
+            _pushStatus = '注册中';
           }
           if (state is PushSuccess) {
             _pushStatus = '已注册';
@@ -56,9 +57,9 @@ class SettingsPage extends StatelessWidget {
                       title: '小米推送',
                       subtitle: _pushStatus,
                       onTap: () {
-                        if (_pushStatus != '已注册') {
-                          BlocProvider.of<PushBloc>(context).add(PushStarted());
-                        }
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MiPushPage(),
+                        ));
                       },
                     ),
                   ],

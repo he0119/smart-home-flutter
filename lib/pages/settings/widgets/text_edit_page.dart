@@ -47,14 +47,17 @@ class _TextEditPageState extends State<TextEditPage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: () {
-              if (_formKey.currentState.validate()) {
-                widget.onSubmit(_textController.text);
-                Navigator.of(context).pop();
-              }
-            },
+          Tooltip(
+            message: '确认',
+            child: IconButton(
+              icon: Icon(Icons.check),
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
+                  widget.onSubmit(_textController.text);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
           ),
         ],
       ),

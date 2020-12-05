@@ -9,9 +9,11 @@ part 'push.g.dart';
 class MiPush {
   final User user;
   final String regId;
+  final String deviceId;
+  final String model;
   final bool enable;
 
-  MiPush({this.user, this.regId, this.enable});
+  MiPush({this.user, this.regId, this.enable, this.deviceId, this.model});
 
   factory MiPush.fromJson(Map<String, dynamic> json) => _$MiPushFromJson(json);
 
