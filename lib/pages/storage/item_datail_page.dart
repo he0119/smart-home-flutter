@@ -11,7 +11,6 @@ import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
-import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class ItemDetailPage extends StatelessWidget {
   final String itemId;
@@ -74,44 +73,13 @@ class _ItemDetailPage extends StatelessWidget {
                 ItemDetailRefreshed(itemId: itemId),
               );
             },
-            child: MultiBlocListener(
-              listeners: [
-                BlocListener<SnackBarBloc, SnackBarState>(
-                  // 仅在物品详情页面显示特定消息提示
-                  listenWhen: (previous, current) {
-                    if (current is SnackBarSuccess &&
-                        current.position == SnackBarPosition.itemDetail) {
-                      return true;
-                    }
-                    return false;
-                  },
-                  listener: (context, state) {
-                    if (state is SnackBarSuccess &&
-                        state.type == MessageType.error) {
-                      showErrorSnackBar(
-                        state.message,
-                        duration: state.duration,
-                      );
-                    }
-                    if (state is SnackBarSuccess &&
-                        state.type == MessageType.info) {
-                      showInfoSnackBar(
-                        state.message,
-                        duration: state.duration,
-                      );
-                    }
-                  },
-                ),
-                BlocListener<ItemEditBloc, ItemEditState>(
-                  listener: (context, state) {
-                    if (state is ItemDeleteSuccess) {
-                      Navigator.pop(context);
-                    }
-                  },
-                )
-              ],
-              child: _buildBody(context, state),
-            ),
+            child: BlocListener<ItemEditBloc, ItemEditState>(
+                listener: (context, state) {
+                  if (state is ItemDeleteSuccess) {
+                    Navigator.pop(context);
+                  }
+                },
+                child: _buildBody(context, state)),
           ),
         );
       },

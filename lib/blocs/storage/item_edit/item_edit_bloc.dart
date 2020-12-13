@@ -50,7 +50,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         yield ItemUpdateSuccess(item: item);
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.itemDetail,
             message: '修改成功',
             type: MessageType.info,
           ),
@@ -81,7 +80,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         yield ItemEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.itemEdit,
             message: e.message,
             type: MessageType.error,
           ),
@@ -103,7 +101,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         yield ItemAddSuccess(item: item);
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storageDetail,
             message: '${item.name} 添加成功',
             type: MessageType.info,
           ),
@@ -115,7 +112,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         yield ItemEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.itemEdit,
             message: e.message,
             type: MessageType.error,
           ),
@@ -126,7 +122,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
       yield ItemEditInProgress();
       snackBarBloc.add(
         SnackBarChanged(
-          position: SnackBarPosition.itemDetail,
           message: '正在删除...',
           type: MessageType.info,
           duration: 1,
@@ -137,7 +132,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         yield ItemDeleteSuccess(item: event.item);
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storageDetail,
             message: '${event.item.name} 删除成功',
             type: MessageType.info,
           ),
@@ -157,7 +151,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         yield ItemEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.itemDetail,
             message: e.message,
             type: MessageType.error,
           ),

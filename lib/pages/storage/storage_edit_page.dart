@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/storage.dart';
@@ -106,103 +105,79 @@ class _StorageEditPageState extends State<StorageEditPage> {
               ? Text('编辑 ${widget.storage.name}')
               : Text('添加位置'),
         ),
-        body: BlocListener<SnackBarBloc, SnackBarState>(
-          // 仅在位置修改页面显示特定消息提示
-          listenWhen: (previous, current) {
-            if (current is SnackBarSuccess &&
-                current.position == SnackBarPosition.storageEdit) {
-              return true;
-            }
-            return false;
-          },
-          listener: (context, state) {
-            if (state is SnackBarSuccess && state.type == MessageType.error) {
-              showErrorSnackBar(
-                state.message,
-                duration: state.duration,
-              );
-            }
-            if (state is SnackBarSuccess && state.type == MessageType.info) {
-              showInfoSnackBar(
-                state.message,
-                duration: state.duration,
-              );
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
-            child: BlocConsumer<StorageEditBloc, StorageEditState>(
-              listener: (context, state) {
-                if (state is StorageEditInProgress) {
-                  showInfoSnackBar('正在提交...', duration: 1);
-                }
-              },
-              builder: (context, state) => Form(
-                key: _formKey,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        controller: _nameController,
-                        decoration: InputDecoration(
-                          labelText: '名称',
-                        ),
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(200),
-                        ],
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return '名称不能为空';
-                          }
-                          return null;
-                        },
-                        textInputAction: TextInputAction.next,
-                        focusNode: _nameFocusNode,
-                        onFieldSubmitted: (_) {
-                          _fieldFocusChange(
-                              context, _nameFocusNode, _descriptionFocusNode);
-                        },
+        body: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: BlocConsumer<StorageEditBloc, StorageEditState>(
+            listener: (context, state) {
+              if (state is StorageEditInProgress) {
+                showInfoSnackBar('正在提交...', duration: 1);
+              }
+            },
+            builder: (context, state) => Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: '名称',
                       ),
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          labelText: '属于',
-                        ),
-                        value: widget.isEditing
-                            ? widget.storage.parent?.id
-                            : widget.storageId,
-                        items: widget.listofStorages
-                            .map((e) => DropdownMenuItem(
-                                  value: e.id,
-                                  child: Text(e.name),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          parentId = value;
-                        },
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(200),
+                      ],
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return '名称不能为空';
+                        }
+                        return null;
+                      },
+                      textInputAction: TextInputAction.next,
+                      focusNode: _nameFocusNode,
+                      onFieldSubmitted: (_) {
+                        _fieldFocusChange(
+                            context, _nameFocusNode, _descriptionFocusNode);
+                      },
+                    ),
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        labelText: '属于',
                       ),
-                      TextFormField(
-                        controller: _descriptionController,
-                        decoration: InputDecoration(
-                          labelText: '备注',
-                        ),
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(200),
-                        ],
-                        focusNode: _descriptionFocusNode,
+                      value: widget.isEditing
+                          ? widget.storage.parent?.id
+                          : widget.storageId,
+                      items: widget.listofStorages
+                          .map((e) => DropdownMenuItem(
+                                value: e.id,
+                                child: Text(e.name),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        parentId = value;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _descriptionController,
+                      decoration: InputDecoration(
+                        labelText: '备注',
                       ),
-                      RoundedRaisedButton(
-                        onPressed: (state is! StorageEditInProgress)
-                            ? () {
-                                if (_formKey.currentState.validate()) {
-                                  _onSubmitPressed();
-                                }
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(200),
+                      ],
+                      focusNode: _descriptionFocusNode,
+                    ),
+                    RoundedRaisedButton(
+                      onPressed: (state is! StorageEditInProgress)
+                          ? () {
+                              if (_formKey.currentState.validate()) {
+                                _onSubmitPressed();
                               }
-                            : null,
-                        child: Text('提交'),
-                      ),
-                    ],
-                  ),
+                            }
+                          : null,
+                      child: Text('提交'),
+                    ),
+                  ],
                 ),
               ),
             ),

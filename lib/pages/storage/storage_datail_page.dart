@@ -11,7 +11,6 @@ import 'package:smart_home/pages/storage/storage_edit_page.dart';
 import 'package:smart_home/pages/storage/widgets/add_storage_icon_button.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
-import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
 
 class StorageDetailPage extends StatelessWidget {
@@ -90,32 +89,7 @@ class _StorageDetailPage extends StatelessWidget {
                   );
                 }
               },
-              child: BlocListener<SnackBarBloc, SnackBarState>(
-                  // 仅在位置详情页面显示特定消息提示
-                  listenWhen: (previous, current) {
-                    if (current is SnackBarSuccess &&
-                        current.position == SnackBarPosition.storageDetail) {
-                      return true;
-                    }
-                    return false;
-                  },
-                  listener: (context, state) {
-                    if (state is SnackBarSuccess &&
-                        state.type == MessageType.error) {
-                      showErrorSnackBar(
-                        state.message,
-                        duration: state.duration,
-                      );
-                    }
-                    if (state is SnackBarSuccess &&
-                        state.type == MessageType.info) {
-                      showInfoSnackBar(
-                        state.message,
-                        duration: state.duration,
-                      );
-                    }
-                  },
-                  child: _buildBody(context, state)),
+              child: _buildBody(context, state),
             ),
             floatingActionButton: _buildFloatingActionButton(context, state),
           ),

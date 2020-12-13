@@ -18,6 +18,7 @@ import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/utils/launch_url.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
@@ -52,38 +53,57 @@ class HomePage extends StatelessWidget {
               state is AuthenticationFailure) {
             return LoginPage();
           }
-          return BlocListener<UpdateBloc, UpdateState>(
-            listener: (context, state) {
-              if (state is UpdateSuccess && state.needUpdate) {
-                scaffoldMessengerKey.currentState.showSnackBar(
-                  SnackBar(
-                    content: Text('发现新版本（${state.version}）'),
-                    action: SnackBarAction(
-                      label: '更新',
-                      onPressed: () {
-                        launchUrl(state.url);
-                      },
+          return MultiBlocListener(listeners: [
+            BlocListener<UpdateBloc, UpdateState>(
+              listener: (context, state) {
+                if (state is UpdateSuccess && state.needUpdate) {
+                  scaffoldMessengerKey.currentState.showSnackBar(
+                    SnackBar(
+                      content: Text('发现新版本（${state.version}）'),
+                      action: SnackBarAction(
+                        label: '更新',
+                        onPressed: () {
+                          launchUrl(state.url);
+                        },
+                      ),
                     ),
-                  ),
-                );
-              }
-              if (state is UpdateFailure) {
-                scaffoldMessengerKey.currentState.showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    action: SnackBarAction(
-                      label: '重试',
-                      onPressed: () {
-                        BlocProvider.of<UpdateBloc>(context)
-                            .add(UpdateStarted());
-                      },
+                  );
+                }
+                if (state is UpdateFailure) {
+                  scaffoldMessengerKey.currentState.showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                      action: SnackBarAction(
+                        label: '重试',
+                        onPressed: () {
+                          BlocProvider.of<UpdateBloc>(context)
+                              .add(UpdateStarted());
+                        },
+                      ),
                     ),
-                  ),
-                );
-              }
-            },
-            child: _HomePage(),
-          );
+                  );
+                }
+              },
+            ),
+            BlocListener<SnackBarBloc, SnackBarState>(
+              listener: (context, state) {
+                if (state is SnackBarSuccess &&
+                    state.type == MessageType.error) {
+                  showErrorSnackBar(
+                    state.message,
+                    duration: state.duration,
+                  );
+                }
+                if (state is SnackBarSuccess &&
+                    state.type == MessageType.info) {
+                  showInfoSnackBar(
+                    state.message,
+                    duration: state.duration,
+                  );
+                }
+              },
+            )
+          ], child: _HomePage());
         },
       ),
     );

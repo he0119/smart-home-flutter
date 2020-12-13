@@ -16,7 +16,6 @@ class SnackBarBloc extends Bloc<SnackBarEvent, SnackBarState> {
   ) async* {
     if (event is SnackBarChanged) {
       yield SnackBarSuccess(
-        position: event.position,
         message: event.message,
         type: event.type,
         duration: event.duration,

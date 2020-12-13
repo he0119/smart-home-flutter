@@ -39,7 +39,6 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         yield StorageUpdateSuccess();
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storageDetail,
             message: '修改成功',
             type: MessageType.info,
           ),
@@ -60,7 +59,6 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         yield StorageEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storageEdit,
             message: e.message,
             type: MessageType.error,
           ),
@@ -84,7 +82,6 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         yield StorageAddSuccess();
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storageDetail,
             message: '${event.name} 添加成功',
             type: MessageType.info,
           ),
@@ -96,7 +93,6 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         yield StorageEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storageEdit,
             message: e.message,
             type: MessageType.error,
           ),
@@ -107,7 +103,6 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
       yield StorageEditInProgress();
       snackBarBloc.add(
         SnackBarChanged(
-          position: SnackBarPosition.storageDetail,
           message: '正在删除...',
           type: MessageType.info,
           duration: 1,
@@ -124,7 +119,6 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         yield StorageDeleteSuccess();
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storageDetail,
             message: '${event.storage.name} 删除成功',
             type: MessageType.info,
           ),
@@ -135,7 +129,6 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         yield StorageEditFailure(e.message);
         snackBarBloc.add(
           SnackBarChanged(
-            position: SnackBarPosition.storageDetail,
             message: e.message,
             type: MessageType.error,
           ),
