@@ -2,13 +2,12 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/storage.dart';
 import 'package:smart_home/widgets/rounded_raised_button.dart';
-import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class ItemEditPage extends StatefulWidget {
   final bool isEditing;
@@ -48,51 +47,28 @@ class _ItemEditPageState extends State<ItemEditPage> {
       appBar: AppBar(
         title: widget.isEditing ? Text('编辑 ${widget.item.name}') : Text('添加物品'),
       ),
-      body: MultiBlocListener(
-        listeners: [
-          BlocListener<ItemEditBloc, ItemEditState>(
-            listener: (context, state) {
-              // 物品添加和修改成功过后自动返回物品详情界面
-              if (state is ItemAddSuccess || state is ItemUpdateSuccess) {
-                Navigator.of(context).pop();
-              }
-            },
-          ),
-          BlocListener<SnackBarBloc, SnackBarState>(
-            // 仅在物品修改页面显示特定消息提示
-            listenWhen: (previous, current) {
-              if (current is SnackBarSuccess &&
-                  current.position == SnackBarPosition.itemEdit) {
-                return true;
-              }
-              return false;
-            },
-            listener: (context, state) {
-              if (state is SnackBarSuccess && state.type == MessageType.error) {
-                showErrorSnackBar(
-                  context,
-                  state.message,
-                  duration: state.duration,
-                );
-              }
-              if (state is SnackBarSuccess && state.type == MessageType.info) {
-                showInfoSnackBar(
-                  context,
-                  state.message,
-                  duration: state.duration,
-                );
-              }
-            },
-          )
-        ],
+      body: BlocListener<ItemEditBloc, ItemEditState>(
+        listener: (context, state) {
+          if (state is ItemEditInProgress) {
+            showInfoSnackBar('正在提交...', duration: 1);
+          }
+          if (state is ItemAddSuccess) {
+            showInfoSnackBar('物品 ${state.item.name} 添加成功');
+          }
+          if (state is ItemUpdateSuccess) {
+            showInfoSnackBar('物品 ${state.item.name} 修改成功');
+          }
+          if (state is ItemEditFailure) {
+            showErrorSnackBar(state.message);
+          }
+          // 物品添加和修改成功过后自动返回物品详情界面
+          if (state is ItemAddSuccess || state is ItemUpdateSuccess) {
+            Navigator.of(context).pop();
+          }
+        },
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
-          child: BlocConsumer<ItemEditBloc, ItemEditState>(
-            listener: (context, state) {
-              if (state is ItemEditInProgress) {
-                showInfoSnackBar(context, '正在提交...', duration: 1);
-              }
-            },
+          child: BlocBuilder<ItemEditBloc, ItemEditState>(
             builder: (context, state) => Form(
               key: _formKey,
               child: SingleChildScrollView(

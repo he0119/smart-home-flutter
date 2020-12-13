@@ -7,6 +7,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/blocs/push/push_bloc.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
+import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/repositories/iot_repository.dart';
@@ -56,9 +57,6 @@ class MyApp extends StatelessWidget {
             create: (BuildContext context) =>
                 AppPreferencesBloc()..add(AppStarted()),
           ),
-          BlocProvider<SnackBarBloc>(
-            create: (context) => SnackBarBloc(),
-          ),
           BlocProvider<UpdateBloc>(
             create: (context) => UpdateBloc(
               versionRepository:
@@ -85,6 +83,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          scaffoldMessengerKey: scaffoldMessengerKey,
           theme: ThemeData(
             brightness: Brightness.light,
             primaryColor: Colors.white,

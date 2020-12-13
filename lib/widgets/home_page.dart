@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/widgets/drawer.dart';
 import 'package:smart_home/widgets/tab_selector.dart';
 
@@ -21,22 +20,19 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldMessenger(
-      key: scaffoldMessengerKey,
-      child: Scaffold(
-        drawer: MyDrawer(),
-        appBar: AppBar(
-          title: Text(activeTab.title),
-          actions: actions,
-        ),
-        body: body,
-        bottomNavigationBar: TabSelector(
-          activeTab: activeTab,
-          onTabSelected: (tab) =>
-              BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
-        ),
-        floatingActionButton: floatingActionButton,
+    return Scaffold(
+      drawer: MyDrawer(),
+      appBar: AppBar(
+        title: Text(activeTab.title),
+        actions: actions,
       ),
+      body: body,
+      bottomNavigationBar: TabSelector(
+        activeTab: activeTab,
+        onTabSelected: (tab) =>
+            BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
+      ),
+      floatingActionButton: floatingActionButton,
     );
   }
 }

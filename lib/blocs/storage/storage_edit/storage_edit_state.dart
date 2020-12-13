@@ -20,8 +20,29 @@ class StorageEditFailure extends StorageEditState {
   String toString() => 'StorageEditFailure { message: $message }';
 }
 
-class StorageAddSuccess extends StorageEditState {}
+class StorageAddSuccess extends StorageEditState {
+  final Storage storage;
 
-class StorageUpdateSuccess extends StorageEditState {}
+  const StorageAddSuccess({@required this.storage});
 
-class StorageDeleteSuccess extends StorageEditState {}
+  @override
+  String toString() => 'StorageAddSuccess { storage: ${storage.name} }';
+}
+
+class StorageUpdateSuccess extends StorageEditState {
+  final Storage storage;
+
+  const StorageUpdateSuccess({@required this.storage});
+
+  @override
+  String toString() => 'StorageUpdateSuccess { storage: ${storage.name} }';
+}
+
+class StorageDeleteSuccess extends StorageEditState {
+  final Storage storage;
+
+  const StorageDeleteSuccess({@required this.storage});
+
+  @override
+  String toString() => 'StorageDeleteSuccess { storage: ${storage.name} }';
+}

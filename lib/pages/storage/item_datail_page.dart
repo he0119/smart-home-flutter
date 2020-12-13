@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
@@ -43,7 +42,6 @@ class ItemDetailPage extends StatelessWidget {
           create: (context) => ItemEditBloc(
             storageRepository:
                 RepositoryProvider.of<StorageRepository>(context),
-            snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
             itemDetailBloc: BlocProvider.of<ItemDetailBloc>(context),
             storageHomeBloc: storageHomeBloc,
             storageDetailBloc: storageDetailBloc,
@@ -74,44 +72,16 @@ class _ItemDetailPage extends StatelessWidget {
                 ItemDetailRefreshed(itemId: itemId),
               );
             },
-            child: MultiBlocListener(
-              listeners: [
-                BlocListener<SnackBarBloc, SnackBarState>(
-                  // 仅在物品详情页面显示特定消息提示
-                  listenWhen: (previous, current) {
-                    if (current is SnackBarSuccess &&
-                        current.position == SnackBarPosition.itemDetail) {
-                      return true;
-                    }
-                    return false;
-                  },
-                  listener: (context, state) {
-                    if (state is SnackBarSuccess &&
-                        state.type == MessageType.error) {
-                      showErrorSnackBar(
-                        context,
-                        state.message,
-                        duration: state.duration,
-                      );
-                    }
-                    if (state is SnackBarSuccess &&
-                        state.type == MessageType.info) {
-                      showInfoSnackBar(
-                        context,
-                        state.message,
-                        duration: state.duration,
-                      );
-                    }
-                  },
-                ),
-                BlocListener<ItemEditBloc, ItemEditState>(
-                  listener: (context, state) {
-                    if (state is ItemDeleteSuccess) {
-                      Navigator.pop(context);
-                    }
-                  },
-                )
-              ],
+            child: BlocListener<ItemEditBloc, ItemEditState>(
+              listener: (context, state) {
+                if (state is ItemDeleteSuccess) {
+                  showInfoSnackBar('物品 ${state.item.name} 删除成功');
+                  Navigator.pop(context);
+                }
+                if (state is ItemEditFailure) {
+                  showErrorSnackBar(state.message);
+                }
+              },
               child: _buildBody(context, state),
             ),
           ),

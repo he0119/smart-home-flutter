@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/repositories.dart';
@@ -13,7 +12,6 @@ part 'item_edit_state.dart';
 
 class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
   final StorageRepository storageRepository;
-  final SnackBarBloc snackBarBloc;
   final ItemDetailBloc itemDetailBloc;
   final StorageHomeBloc storageHomeBloc;
   final StorageDetailBloc storageDetailBloc;
@@ -22,7 +20,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
 
   ItemEditBloc({
     @required this.storageRepository,
-    @required this.snackBarBloc,
     this.itemDetailBloc,
     this.storageHomeBloc,
     this.storageDetailBloc,
@@ -48,13 +45,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         );
         itemDetailBloc.add(ItemDetailRefreshed(itemId: item.id));
         yield ItemUpdateSuccess(item: item);
-        snackBarBloc.add(
-          SnackBarChanged(
-            position: SnackBarPosition.itemDetail,
-            message: '修改成功',
-            type: MessageType.info,
-          ),
-        );
         // 刷新受影响的页面
         // 从位置详情界面进入，修改后会影响物品详情界面的显示
         // 调整了物品位置后，需要重新刷新位置详情界面
@@ -79,13 +69,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         }
       } catch (e) {
         yield ItemEditFailure(e.message);
-        snackBarBloc.add(
-          SnackBarChanged(
-            position: SnackBarPosition.itemEdit,
-            message: e.message,
-            type: MessageType.error,
-          ),
-        );
       }
     }
     if (event is ItemAdded) {
@@ -101,47 +84,18 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         );
 
         yield ItemAddSuccess(item: item);
-        snackBarBloc.add(
-          SnackBarChanged(
-            position: SnackBarPosition.storageDetail,
-            message: '${item.name} 添加成功',
-            type: MessageType.info,
-          ),
-        );
         // 刷新位置详情界面
         assert(storageDetailBloc != null);
         storageDetailBloc.add(StorageDetailRefreshed(id: event.storageId));
       } catch (e) {
         yield ItemEditFailure(e.message);
-        snackBarBloc.add(
-          SnackBarChanged(
-            position: SnackBarPosition.itemEdit,
-            message: e.message,
-            type: MessageType.error,
-          ),
-        );
       }
     }
     if (event is ItemDeleted) {
       yield ItemEditInProgress();
-      snackBarBloc.add(
-        SnackBarChanged(
-          position: SnackBarPosition.itemDetail,
-          message: '正在删除...',
-          type: MessageType.info,
-          duration: 1,
-        ),
-      );
       try {
         await storageRepository.deleteItem(id: event.item.id);
         yield ItemDeleteSuccess(item: event.item);
-        snackBarBloc.add(
-          SnackBarChanged(
-            position: SnackBarPosition.storageDetail,
-            message: '${event.item.name} 删除成功',
-            type: MessageType.info,
-          ),
-        );
         // 刷新受影响的页面
         if (storageHomeBloc != null) {
           storageHomeBloc.add(StorageHomeRefreshed(itemType: ItemType.all));
@@ -155,13 +109,6 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         }
       } catch (e) {
         yield ItemEditFailure(e.message);
-        snackBarBloc.add(
-          SnackBarChanged(
-            position: SnackBarPosition.itemDetail,
-            message: e.message,
-            type: MessageType.error,
-          ),
-        );
       }
     }
   }

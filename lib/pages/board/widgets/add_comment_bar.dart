@@ -54,7 +54,7 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
           trailing: OutlineButton(
             onPressed: () {
               if (_formKey.currentState.validate()) {
-                showInfoSnackBar(context, '正在发送...', duration: 1);
+                showInfoSnackBar('正在发送...', duration: 1);
                 BlocProvider.of<CommentEditBloc>(context).add(CommentAdded(
                   topicId: widget.topic.id,
                   body: _controller.text,

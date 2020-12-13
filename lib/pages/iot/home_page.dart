@@ -90,7 +90,7 @@ class _IotHomeBody extends StatelessWidget {
                       value: value.toString(),
                       valueType: 'bool',
                     ));
-                    showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
+                    showInfoSnackBar(value ? '正在开启...' : '正在关闭...');
                   },
                 ),
                 SwitchListTile(
@@ -103,7 +103,7 @@ class _IotHomeBody extends StatelessWidget {
                       value: value.toString(),
                       valueType: 'bool',
                     ));
-                    showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
+                    showInfoSnackBar(value ? '正在开启...' : '正在关闭...');
                   },
                 ),
                 SwitchListTile(
@@ -116,7 +116,7 @@ class _IotHomeBody extends StatelessWidget {
                       value: value.toString(),
                       valueType: 'bool',
                     ));
-                    showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
+                    showInfoSnackBar(value ? '正在开启...' : '正在关闭...');
                   },
                 ),
                 SwitchListTile(
@@ -129,7 +129,7 @@ class _IotHomeBody extends StatelessWidget {
                       value: value.toString(),
                       valueType: 'bool',
                     ));
-                    showInfoSnackBar(context, value ? '正在开启...' : '正在关闭...');
+                    showInfoSnackBar(value ? '正在开启...' : '正在关闭...');
                   },
                 ),
                 ListTile(title: Text('无线信号强度：' + data.wifiSignal.toString())),
@@ -149,7 +149,7 @@ class _IotHomeBody extends StatelessWidget {
                               valueType: 'int',
                             ),
                           );
-                          showInfoSnackBar(context, '正在设置...');
+                          showInfoSnackBar('正在设置...');
                         },
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -175,7 +175,7 @@ class _IotHomeBody extends StatelessWidget {
                               valueType: 'int',
                             ),
                           );
-                          showInfoSnackBar(context, '正在设置...');
+                          showInfoSnackBar('正在设置...');
                         },
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -201,7 +201,7 @@ class _IotHomeBody extends StatelessWidget {
                               valueType: 'int',
                             ),
                           );
-                          showInfoSnackBar(context, '正在设置...');
+                          showInfoSnackBar('正在设置...');
                         },
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -227,7 +227,7 @@ class _IotHomeBody extends StatelessWidget {
                               valueType: 'int',
                             ),
                           );
-                          showInfoSnackBar(context, '正在设置...');
+                          showInfoSnackBar('正在设置...');
                         },
                         keyboardType: TextInputType.number,
                         inputFormatters: [

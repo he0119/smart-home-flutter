@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
@@ -11,8 +10,8 @@ import 'package:smart_home/pages/storage/storage_edit_page.dart';
 import 'package:smart_home/pages/storage/widgets/add_storage_icon_button.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
-import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class StorageDetailPage extends StatelessWidget {
   final String storageId;
@@ -27,7 +26,6 @@ class StorageDetailPage extends StatelessWidget {
           create: (context) => StorageDetailBloc(
             storageRepository:
                 RepositoryProvider.of<StorageRepository>(context),
-            snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
           )..add(
               storageId != null
                   ? StorageDetailChanged(id: storageId)
@@ -35,13 +33,12 @@ class StorageDetailPage extends StatelessWidget {
             ),
         ),
         BlocProvider<StorageEditBloc>(
-          create: (context) => StorageEditBloc(
-            storageRepository:
-                RepositoryProvider.of<StorageRepository>(context),
-            storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
-            snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
-          ),
-        )
+            create: (context) => StorageEditBloc(
+                  storageRepository:
+                      RepositoryProvider.of<StorageRepository>(context),
+                  storageDetailBloc:
+                      BlocProvider.of<StorageDetailBloc>(context),
+                ))
       ],
       child: _StorageDetailPage(storageId: storageId),
     );
@@ -90,34 +87,17 @@ class _StorageDetailPage extends StatelessWidget {
                   );
                 }
               },
-              child: BlocListener<SnackBarBloc, SnackBarState>(
-                  // 仅在位置详情页面显示特定消息提示
-                  listenWhen: (previous, current) {
-                    if (current is SnackBarSuccess &&
-                        current.position == SnackBarPosition.storageDetail) {
-                      return true;
-                    }
-                    return false;
-                  },
-                  listener: (context, state) {
-                    if (state is SnackBarSuccess &&
-                        state.type == MessageType.error) {
-                      showErrorSnackBar(
-                        context,
-                        state.message,
-                        duration: state.duration,
-                      );
-                    }
-                    if (state is SnackBarSuccess &&
-                        state.type == MessageType.info) {
-                      showInfoSnackBar(
-                        context,
-                        state.message,
-                        duration: state.duration,
-                      );
-                    }
-                  },
-                  child: _buildBody(context, state)),
+              child: BlocListener<StorageEditBloc, StorageEditState>(
+                listener: (context, state) {
+                  if (state is StorageDeleteSuccess) {
+                    showInfoSnackBar('位置 ${state.storage.name} 删除成功');
+                  }
+                  if (state is StorageEditFailure) {
+                    showErrorSnackBar(state.message);
+                  }
+                },
+                child: _buildBody(context, state),
+              ),
             ),
             floatingActionButton: _buildFloatingActionButton(context, state),
           ),
@@ -302,7 +282,6 @@ class _StorageDetailPage extends StatelessWidget {
                 create: (_) => ItemEditBloc(
                   storageRepository:
                       RepositoryProvider.of<StorageRepository>(context),
-                  snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
                   storageDetailBloc:
                       BlocProvider.of<StorageDetailBloc>(context),
                 ),
