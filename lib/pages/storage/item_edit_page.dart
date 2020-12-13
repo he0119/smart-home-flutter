@@ -6,8 +6,8 @@ import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/storage.dart';
 import 'package:smart_home/widgets/rounded_raised_button.dart';
-import 'package:smart_home/widgets/show_snack_bar.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class ItemEditPage extends StatefulWidget {
   final bool isEditing;
@@ -49,6 +49,18 @@ class _ItemEditPageState extends State<ItemEditPage> {
       ),
       body: BlocListener<ItemEditBloc, ItemEditState>(
         listener: (context, state) {
+          if (state is ItemEditInProgress) {
+            showInfoSnackBar('正在提交...', duration: 1);
+          }
+          if (state is ItemAddSuccess) {
+            showInfoSnackBar('物品 ${state.item.name} 添加成功');
+          }
+          if (state is ItemUpdateSuccess) {
+            showInfoSnackBar('物品 ${state.item.name} 修改成功');
+          }
+          if (state is ItemEditFailure) {
+            showErrorSnackBar(state.message);
+          }
           // 物品添加和修改成功过后自动返回物品详情界面
           if (state is ItemAddSuccess || state is ItemUpdateSuccess) {
             Navigator.of(context).pop();
@@ -56,12 +68,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
-          child: BlocConsumer<ItemEditBloc, ItemEditState>(
-            listener: (context, state) {
-              if (state is ItemEditInProgress) {
-                showInfoSnackBar('正在提交...', duration: 1);
-              }
-            },
+          child: BlocBuilder<ItemEditBloc, ItemEditState>(
             builder: (context, state) => Form(
               key: _formKey,
               child: SingleChildScrollView(

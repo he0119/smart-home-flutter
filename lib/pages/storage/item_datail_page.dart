@@ -10,6 +10,7 @@ import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class ItemDetailPage extends StatelessWidget {
   final String itemId;
@@ -72,12 +73,17 @@ class _ItemDetailPage extends StatelessWidget {
               );
             },
             child: BlocListener<ItemEditBloc, ItemEditState>(
-                listener: (context, state) {
-                  if (state is ItemDeleteSuccess) {
-                    Navigator.pop(context);
-                  }
-                },
-                child: _buildBody(context, state)),
+              listener: (context, state) {
+                if (state is ItemDeleteSuccess) {
+                  showInfoSnackBar('物品 ${state.item.name} 删除成功');
+                  Navigator.pop(context);
+                }
+                if (state is ItemEditFailure) {
+                  showErrorSnackBar(state.message);
+                }
+              },
+              child: _buildBody(context, state),
+            ),
           ),
         );
       },

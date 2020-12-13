@@ -11,6 +11,7 @@ import 'package:smart_home/pages/storage/widgets/add_storage_icon_button.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class StorageDetailPage extends StatelessWidget {
   final String storageId;
@@ -86,7 +87,17 @@ class _StorageDetailPage extends StatelessWidget {
                   );
                 }
               },
-              child: _buildBody(context, state),
+              child: BlocListener<StorageEditBloc, StorageEditState>(
+                listener: (context, state) {
+                  if (state is StorageDeleteSuccess) {
+                    showInfoSnackBar('位置 ${state.storage.name} 删除成功');
+                  }
+                  if (state is StorageEditFailure) {
+                    showErrorSnackBar(state.message);
+                  }
+                },
+                child: _buildBody(context, state),
+              ),
             ),
             floatingActionButton: _buildFloatingActionButton(context, state),
           ),
