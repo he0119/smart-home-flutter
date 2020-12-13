@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Added
+
+- 支持在安卓保存用户名密码用以自动填充
+
 ## [0.5.10] - 2020-12-05
 
 ### Added
