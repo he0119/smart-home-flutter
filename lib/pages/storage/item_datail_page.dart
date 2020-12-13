@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
@@ -42,7 +41,6 @@ class ItemDetailPage extends StatelessWidget {
           create: (context) => ItemEditBloc(
             storageRepository:
                 RepositoryProvider.of<StorageRepository>(context),
-            snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
             itemDetailBloc: BlocProvider.of<ItemDetailBloc>(context),
             storageHomeBloc: storageHomeBloc,
             storageDetailBloc: storageDetailBloc,

@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_home/blocs/snack_bar/snack_bar_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 
@@ -9,12 +8,10 @@ part 'storage_detail_state.dart';
 
 class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
   final StorageRepository storageRepository;
-  final SnackBarBloc snackBarBloc;
   bool backImmediately;
 
   StorageDetailBloc({
     @required this.storageRepository,
-    @required this.snackBarBloc,
   }) : super(StorageDetailInProgress());
 
   @override

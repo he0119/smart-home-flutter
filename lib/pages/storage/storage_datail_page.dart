@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
@@ -26,7 +25,6 @@ class StorageDetailPage extends StatelessWidget {
           create: (context) => StorageDetailBloc(
             storageRepository:
                 RepositoryProvider.of<StorageRepository>(context),
-            snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
           )..add(
               storageId != null
                   ? StorageDetailChanged(id: storageId)
@@ -34,13 +32,12 @@ class StorageDetailPage extends StatelessWidget {
             ),
         ),
         BlocProvider<StorageEditBloc>(
-          create: (context) => StorageEditBloc(
-            storageRepository:
-                RepositoryProvider.of<StorageRepository>(context),
-            storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
-            snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
-          ),
-        )
+            create: (context) => StorageEditBloc(
+                  storageRepository:
+                      RepositoryProvider.of<StorageRepository>(context),
+                  storageDetailBloc:
+                      BlocProvider.of<StorageDetailBloc>(context),
+                ))
       ],
       child: _StorageDetailPage(storageId: storageId),
     );
@@ -274,7 +271,6 @@ class _StorageDetailPage extends StatelessWidget {
                 create: (_) => ItemEditBloc(
                   storageRepository:
                       RepositoryProvider.of<StorageRepository>(context),
-                  snackBarBloc: BlocProvider.of<SnackBarBloc>(context),
                   storageDetailBloc:
                       BlocProvider.of<StorageDetailBloc>(context),
                 ),

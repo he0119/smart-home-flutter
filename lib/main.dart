@@ -57,9 +57,6 @@ class MyApp extends StatelessWidget {
             create: (BuildContext context) =>
                 AppPreferencesBloc()..add(AppStarted()),
           ),
-          BlocProvider<SnackBarBloc>(
-            create: (context) => SnackBarBloc(),
-          ),
           BlocProvider<UpdateBloc>(
             create: (context) => UpdateBloc(
               versionRepository:
