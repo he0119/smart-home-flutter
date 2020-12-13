@@ -118,14 +118,12 @@ class _StorageEditPageState extends State<StorageEditPage> {
           listener: (context, state) {
             if (state is SnackBarSuccess && state.type == MessageType.error) {
               showErrorSnackBar(
-                context,
                 state.message,
                 duration: state.duration,
               );
             }
             if (state is SnackBarSuccess && state.type == MessageType.info) {
               showInfoSnackBar(
-                context,
                 state.message,
                 duration: state.duration,
               );
@@ -136,7 +134,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
             child: BlocConsumer<StorageEditBloc, StorageEditState>(
               listener: (context, state) {
                 if (state is StorageEditInProgress) {
-                  showInfoSnackBar(context, '正在提交...', duration: 1);
+                  showInfoSnackBar('正在提交...', duration: 1);
                 }
               },
               builder: (context, state) => Form(

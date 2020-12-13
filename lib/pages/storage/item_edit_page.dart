@@ -70,14 +70,12 @@ class _ItemEditPageState extends State<ItemEditPage> {
             listener: (context, state) {
               if (state is SnackBarSuccess && state.type == MessageType.error) {
                 showErrorSnackBar(
-                  context,
                   state.message,
                   duration: state.duration,
                 );
               }
               if (state is SnackBarSuccess && state.type == MessageType.info) {
                 showInfoSnackBar(
-                  context,
                   state.message,
                   duration: state.duration,
                 );
@@ -90,7 +88,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
           child: BlocConsumer<ItemEditBloc, ItemEditState>(
             listener: (context, state) {
               if (state is ItemEditInProgress) {
-                showInfoSnackBar(context, '正在提交...', duration: 1);
+                showInfoSnackBar('正在提交...', duration: 1);
               }
             },
             builder: (context, state) => Form(

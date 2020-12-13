@@ -103,7 +103,6 @@ class _StorageDetailPage extends StatelessWidget {
                     if (state is SnackBarSuccess &&
                         state.type == MessageType.error) {
                       showErrorSnackBar(
-                        context,
                         state.message,
                         duration: state.duration,
                       );
@@ -111,7 +110,6 @@ class _StorageDetailPage extends StatelessWidget {
                     if (state is SnackBarSuccess &&
                         state.type == MessageType.info) {
                       showInfoSnackBar(
-                        context,
                         state.message,
                         duration: state.duration,
                       );

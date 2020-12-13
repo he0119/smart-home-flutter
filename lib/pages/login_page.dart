@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
           if (state is AuthenticationFailure) {
-            showErrorSnackBar(context, state.message);
+            showErrorSnackBar(state.message);
           }
         },
         child: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
@@ -167,7 +167,7 @@ class _LoginFormState extends State<LoginForm> {
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state is AuthenticationInProgress) {
-          showInfoSnackBar(context, '正在登录...', duration: 1);
+          showInfoSnackBar('正在登录...', duration: 1);
         }
       },
       builder: (context, state) {
