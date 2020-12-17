@@ -9,6 +9,7 @@ class VersionRepository {
   Version _currentVersion;
   Version _onlineVersion;
   String _deviceAbi;
+  bool _fileExist = false;
 
   Future<Version> get currentVersion async {
     if (_currentVersion == null) {
@@ -33,15 +34,18 @@ class VersionRepository {
 
   /// 是否需要更新
   Future<bool> needUpdate() async {
-    if (await onlineVersion > await currentVersion) {
+    if (await onlineVersion > await currentVersion && _fileExist) {
       return true;
     }
     return false;
   }
 
+  Future<String> get filename async =>
+      'app-prod-${await deviceAbi}-release.apk';
+
   /// 更新文件的下载地址
   Future<String> updateUrl() async {
-    return 'https://hub.fastgit.org/he0119/smart-home-flutter/releases/download/v${await onlineVersion}/app-${await deviceAbi}-release.apk';
+    return 'https://hub.fastgit.org/he0119/smart-home-flutter/releases/download/v${await onlineVersion}/${await filename}';
   }
 
   /// 当前版本
@@ -77,12 +81,13 @@ class VersionRepository {
         'https://hub.fastgit.org/he0119/smart-home-flutter/releases/latest';
     try {
       var response = await http.get(url);
+      _fileExist = response.body.contains(await filename);
       final Match match = _versionRegex.firstMatch(response.body);
       if (match == null) {
         throw Exception('检查更新失败，请重试');
       } else {
         String versionName = match.group(1);
-        _log.fine('最新的版本号字符 { $versionName }');
+        _log.fine('最新的版本号为 { $versionName }');
         return Version.parse(versionName);
       }
     } catch (e) {
