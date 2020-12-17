@@ -28,8 +28,8 @@ dependencies:
   shared_preferences: '>=0.5.7+3 <2.0.0'
   quick_actions: ^0.4.0+2
 
-  device_info_plus: ^0.5.0
-  package_info_plus: ^0.5.0
+  device_info_plus: ^0.6.0
+  package_info_plus: ^0.6.0
   version: ^1.0.3
 
   url_launcher: ^5.4.2
@@ -39,11 +39,14 @@ dependencies:
   substring_highlight: ^0.1.2
   flutter_sticky_header: ^0.5.0
   flutter_markdown: ^0.5.0
-  cached_network_image: ^2.1.0+1
+  cached_network_image: ^2.4.1
   settings_ui:
     git: https://github.com/he0119/flutter-settings-ui.git
 
-  xiao_mi_push_plugin: ^1.0.1
+  xiao_mi_push_plugin:
+    git:
+      url: https://github.com/he0119/FlutterXiaoMiPushPlugin.git
+      ref: hehome
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
