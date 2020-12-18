@@ -19,8 +19,12 @@ class AddStorageIconButton extends StatelessWidget {
               await RepositoryProvider.of<StorageRepository>(context)
                   .storages();
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: BlocProvider.of<StorageEditBloc>(context),
+            builder: (_) => BlocProvider<StorageEditBloc>(
+              create: (_) => StorageEditBloc(
+                storageRepository:
+                    RepositoryProvider.of<StorageRepository>(context),
+                storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
+              ),
               child: StorageEditPage(
                 isEditing: false,
                 listofStorages: listofStorages,

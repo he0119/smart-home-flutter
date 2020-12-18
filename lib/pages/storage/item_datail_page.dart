@@ -57,8 +57,19 @@ class ItemDetailPage extends StatelessWidget {
 
 class _ItemDetailPage extends StatelessWidget {
   final String itemId;
+  final StorageHomeBloc storageHomeBloc;
+  final StorageDetailBloc storageDetailBloc;
+  final StorageSearchBloc storageSearchBloc;
+  final String searchKeyword;
 
-  const _ItemDetailPage({Key key, @required this.itemId}) : super(key: key);
+  const _ItemDetailPage({
+    Key key,
+    @required this.itemId,
+    this.storageHomeBloc,
+    this.storageDetailBloc,
+    this.storageSearchBloc,
+    this.searchKeyword,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -103,8 +114,16 @@ class _ItemDetailPage extends StatelessWidget {
                     await RepositoryProvider.of<StorageRepository>(context)
                         .storages();
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => BlocProvider.value(
-                    value: BlocProvider.of<ItemEditBloc>(context),
+                  builder: (_) => BlocProvider<ItemEditBloc>(
+                    create: (_) => ItemEditBloc(
+                      storageRepository:
+                          RepositoryProvider.of<StorageRepository>(context),
+                      itemDetailBloc: BlocProvider.of<ItemDetailBloc>(context),
+                      storageHomeBloc: storageHomeBloc,
+                      storageDetailBloc: storageDetailBloc,
+                      storageSearchBloc: storageSearchBloc,
+                      searchKeyword: searchKeyword,
+                    ),
                     child: ItemEditPage(
                       isEditing: true,
                       listofStorages: listofStorages,

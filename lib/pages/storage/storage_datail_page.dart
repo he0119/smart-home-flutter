@@ -33,12 +33,12 @@ class StorageDetailPage extends StatelessWidget {
             ),
         ),
         BlocProvider<StorageEditBloc>(
-            create: (context) => StorageEditBloc(
-                  storageRepository:
-                      RepositoryProvider.of<StorageRepository>(context),
-                  storageDetailBloc:
-                      BlocProvider.of<StorageDetailBloc>(context),
-                ))
+          create: (context) => StorageEditBloc(
+            storageRepository:
+                RepositoryProvider.of<StorageRepository>(context),
+            storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
+          ),
+        )
       ],
       child: _StorageDetailPage(storageId: storageId),
     );
@@ -133,8 +133,13 @@ class _StorageDetailPage extends StatelessWidget {
                     await RepositoryProvider.of<StorageRepository>(context)
                         .storages();
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => BlocProvider.value(
-                    value: BlocProvider.of<StorageEditBloc>(context),
+                  builder: (_) => BlocProvider<StorageEditBloc>(
+                    create: (_) => StorageEditBloc(
+                      storageRepository:
+                          RepositoryProvider.of<StorageRepository>(context),
+                      storageDetailBloc:
+                          BlocProvider.of<StorageDetailBloc>(context),
+                    ),
                     child: StorageEditPage(
                       isEditing: true,
                       listofStorages: listofStorages,
