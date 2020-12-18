@@ -1,6 +1,6 @@
 name: smart_home
 description: 智慧家庭
-version: 0.5.10+3
+version: 0.5.11+3
 homepage: https://github.com/he0119/smart-home-flutter
 publish_to: none
 
@@ -16,7 +16,7 @@ dependencies:
 
   logging: ^0.11.4
 
-  graphql_flutter: ^3.1.0
+  graphql: ^4.0.0-beta.5
   http: ^0.12.0+4
 
   bloc: ^6.1.0
