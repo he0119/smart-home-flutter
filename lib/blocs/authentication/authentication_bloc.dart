@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -14,6 +16,15 @@ class AuthenticationBloc
   final UserRepository userRepository;
   final GraphQLApiClient graphqlApiClient;
   final AppPreferencesBloc appPreferencesBloc;
+
+  // 监控登录状态
+  StreamSubscription<bool> _loginSubscription;
+
+  @override
+  Future<void> close() {
+    _loginSubscription?.cancel();
+    return super.close();
+  }
 
   AuthenticationBloc({
     @required this.userRepository,
@@ -35,6 +46,12 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapAuthenticationStartedToState(
       AuthenticationStarted event) async* {
+    // 监听认证情况
+    _loginSubscription = graphqlApiClient.loginStatus.listen((event) {
+      if (!event) {
+        add(AuthenticationLogout());
+      }
+    });
     try {
       // 检查是否登录
       if (await graphqlApiClient.isLogin) {
