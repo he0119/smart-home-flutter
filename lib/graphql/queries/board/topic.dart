@@ -1,7 +1,6 @@
 const String topicQuery = r"""
 query topic($id: ID!) {
   topic(id: $id) {
-    __typename
     id
     title
     description

@@ -1,7 +1,6 @@
 const String deviceDataQuery = r"""
 query deviceData($deviceId: ID!, $number: Int) {
   deviceData(deviceId: $deviceId, number: $number) {
-    __typename
     id
     device {
       id

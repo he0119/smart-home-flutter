@@ -2,7 +2,6 @@ const String addItemMutation = r"""
 mutation addItem($input: AddItemInput!) {
   addItem(input: $input) {
     item {
-      __typename
       id
       name
       number

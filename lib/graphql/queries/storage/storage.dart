@@ -1,7 +1,6 @@
 const String storagesQuery = r"""
 query storages {
   storages {
-    __typename
     id
     name
     description
@@ -12,7 +11,6 @@ query storages {
 const String storageQuery = r"""
 query storage($id: ID!) {
   storage(id: $id) {
-    __typename
     id
     name
     description
@@ -22,7 +20,6 @@ query storage($id: ID!) {
       description
     }
     items {
-      __typename
       id
       name
       number
@@ -33,13 +30,11 @@ query storage($id: ID!) {
       }
     }
     parent {
-      __typename
       id
       name
     }
   }
   storageAncestors(id: $id) {
-    __typename
     id
     name
   }
