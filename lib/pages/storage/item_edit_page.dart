@@ -58,6 +58,9 @@ class _ItemEditPageState extends State<ItemEditPage> {
           if (state is ItemUpdateSuccess) {
             showInfoSnackBar('物品 ${state.item.name} 修改成功');
           }
+          if (state is ItemEditFailure) {
+            showErrorSnackBar(state.message);
+          }
           // 物品添加和修改成功过后自动返回物品详情界面
           if (state is ItemAddSuccess || state is ItemUpdateSuccess) {
             Navigator.of(context).pop();
