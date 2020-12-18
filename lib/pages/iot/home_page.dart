@@ -6,6 +6,7 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/iot/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/models/iot.dart';
+import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/pages/settings/iot/settings_page.dart';
 import 'package:smart_home/repositories/iot_repository.dart';
@@ -239,6 +240,16 @@ class _IotHomeBody extends StatelessWidget {
                 ),
               ],
             ),
+          );
+        }
+        if (state is DeviceDataFailure) {
+          return ErrorPage(
+            onPressed: () {
+              final appPreference = context.read<AppPreferencesBloc>().state;
+              BlocProvider.of<DeviceDataBloc>(context)
+                  .add(DeviceDataStarted(appPreference.refreshInterval));
+            },
+            message: state.message,
           );
         }
         return LoadingPage();

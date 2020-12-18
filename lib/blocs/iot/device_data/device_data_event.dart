@@ -16,7 +16,14 @@ class DeviceDataStarted extends DeviceDataEvent {
   String toString() => 'DeviceDataStarted { refreshInterval $refreshInterval }';
 }
 
-class DeviceDataStoped extends DeviceDataEvent {}
+class DeviceDataStoped extends DeviceDataEvent {
+  final String message;
+
+  const DeviceDataStoped(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
 
 class DeviceDataupdated extends DeviceDataEvent {
   final AutowateringData autowateringData;

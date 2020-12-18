@@ -55,6 +55,7 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
   Stream<DeviceDataState> _mapDeviceDataStopedToState(
       DeviceDataStoped event) async* {
     _dataSubscription?.cancel();
+    yield DeviceDataFailure(event.message);
   }
 
   Stream<DeviceDataState> _mapDeviceDataStartedToState(
@@ -66,7 +67,9 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
         List<AutowateringData> data =
             await iotRepository.deviceData(deviceId: deviceId, number: 1);
         add(DeviceDataupdated(data[0]));
-      } catch (e) {}
+      } catch (e) {
+        add(DeviceDataStoped(e.message));
+      }
     });
   }
 }

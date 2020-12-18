@@ -25,3 +25,12 @@ class DeviceDataSuccess extends DeviceDataState {
   @override
   String toString() => 'DeviceDataSuccess { time ${autowateringData.time} }';
 }
+
+class DeviceDataFailure extends DeviceDataState {
+  final String message;
+
+  const DeviceDataFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
