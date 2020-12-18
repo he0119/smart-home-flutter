@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
     GraphQLApiClient graphQLApiClient = GraphQLApiClient();
     UserRepository userRepository =
         UserRepository(graphqlApiClient: graphQLApiClient);
-    graphQLApiClient.userRepository = userRepository;
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<GraphQLApiClient>(

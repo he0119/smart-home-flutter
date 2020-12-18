@@ -118,9 +118,6 @@ class _StorageEditPageState extends State<StorageEditPage> {
               if (state is StorageUpdateSuccess) {
                 showInfoSnackBar('位置 ${state.storage.name} 修改成功');
               }
-              if (state is StorageEditFailure) {
-                showErrorSnackBar(state.message);
-              }
             },
             builder: (context, state) => Form(
               key: _formKey,

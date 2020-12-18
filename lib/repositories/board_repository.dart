@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:graphql/client.dart';
 import 'package:smart_home/graphql/mutations/board/mutations.dart';
 import 'package:smart_home/graphql/queries/board/queries.dart';
 import 'package:smart_home/models/board.dart';
@@ -16,7 +16,7 @@ class BoardRepository {
     String parentId,
   }) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(addCommentMutation),
+      document: gql(addCommentMutation),
       variables: {
         'input': {
           'topicId': topicId,
@@ -36,7 +36,7 @@ class BoardRepository {
     @required String description,
   }) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(addTopicMutation),
+      document: gql(addTopicMutation),
       variables: {
         'input': {
           'title': title,
@@ -52,7 +52,7 @@ class BoardRepository {
 
   Future<Topic> closeTopic({@required String topicId}) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(closeTopicMutation),
+      document: gql(closeTopicMutation),
       variables: {
         'input': {'topicId': topicId}
       },
@@ -69,7 +69,7 @@ class BoardRepository {
     bool cache = true,
   }) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(commentsQuery),
+      document: gql(commentsQuery),
       variables: {
         'topicId': topicId,
         'number': number,
@@ -85,7 +85,7 @@ class BoardRepository {
 
   Future<String> deleteComment({@required String commentId}) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(deleteCommentMutation),
+      document: gql(deleteCommentMutation),
       variables: {
         'input': {'commentId': commentId}
       },
@@ -96,7 +96,7 @@ class BoardRepository {
 
   Future<String> deleteTopic({@required String topicId}) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(deleteTopicMutation),
+      document: gql(deleteTopicMutation),
       variables: {
         'input': {'topicId': topicId}
       },
@@ -107,7 +107,7 @@ class BoardRepository {
 
   Future<Topic> reopenTopic({@required String topicId}) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(reopenTopicMutation),
+      document: gql(reopenTopicMutation),
       variables: {
         'input': {'topicId': topicId}
       },
@@ -124,7 +124,7 @@ class BoardRepository {
     bool cache = true,
   }) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(topicDetailQuery),
+      document: gql(topicDetailQuery),
       variables: {
         'topicId': topicId,
         'number': number,
@@ -142,7 +142,7 @@ class BoardRepository {
 
   Future<List<Topic>> topics({int number, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(topicsQuery),
+      document: gql(topicsQuery),
       variables: {'number': number},
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
@@ -158,7 +158,7 @@ class BoardRepository {
     @required String body,
   }) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(updateCommentMutation),
+      document: gql(updateCommentMutation),
       variables: {
         'input': {
           'id': id,
@@ -178,7 +178,7 @@ class BoardRepository {
     @required String description,
   }) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(updateTopicMutation),
+      document: gql(updateTopicMutation),
       variables: {
         'input': {
           'id': id,

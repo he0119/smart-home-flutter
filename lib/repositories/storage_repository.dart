@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:graphql/client.dart';
 import 'package:smart_home/graphql/mutations/storage/mutations.dart';
 import 'package:smart_home/graphql/queries/storage/queries.dart';
 import 'package:smart_home/models/models.dart';
@@ -19,7 +19,7 @@ class StorageRepository {
     DateTime expirationDate,
   }) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(addItemMutation),
+      document: gql(addItemMutation),
       variables: {
         'input': {
           'name': name,
@@ -43,7 +43,7 @@ class StorageRepository {
     String description,
   }) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(addStorageMutation),
+      document: gql(addStorageMutation),
       variables: {
         'input': {
           'name': name,
@@ -60,7 +60,7 @@ class StorageRepository {
 
   Future<String> deleteItem({String id}) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(deleteItemMutation),
+      document: gql(deleteItemMutation),
       variables: {
         'id': id,
       },
@@ -72,7 +72,7 @@ class StorageRepository {
 
   Future<String> deleteStorage({String id}) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(deleteStorageMutation),
+      document: gql(deleteStorageMutation),
       variables: {
         'id': id,
       },
@@ -84,7 +84,7 @@ class StorageRepository {
 
   Future<List<Item>> expiredItems({int number, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(expiredItemsQuery),
+      document: gql(expiredItemsQuery),
       variables: {
         'number': number,
       },
@@ -104,7 +104,7 @@ class StorageRepository {
   /// 过期，即将过期和最近添加，更新的物品
   Future<Map<String, List<Item>>> homePage({bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(homepageQuery),
+      document: gql(homepageQuery),
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
@@ -136,7 +136,7 @@ class StorageRepository {
 
   Future<Item> item({@required String id, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(itemQuery),
+      document: gql(itemQuery),
       variables: {
         'id': id,
       },
@@ -151,7 +151,7 @@ class StorageRepository {
   Future<List<Item>> nearExpiredItems(
       {@required int within, int number, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(nearExpiredItemsQuery),
+      document: gql(nearExpiredItemsQuery),
       variables: {
         'within': within,
         'number': number,
@@ -171,7 +171,7 @@ class StorageRepository {
   Future<List<Item>> recentlyAddedItems(
       {@required int number, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(recentlyAddedItemsQuery),
+      document: gql(recentlyAddedItemsQuery),
       variables: {
         'number': number,
       },
@@ -190,7 +190,7 @@ class StorageRepository {
   Future<List<Item>> recentlyUpdatedItems(
       {@required int number, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(recentlyUpdatedItemsQuery),
+      document: gql(recentlyUpdatedItemsQuery),
       variables: {
         'number': number,
       },
@@ -209,7 +209,7 @@ class StorageRepository {
 
   Future<List<Storage>> rootStorage({bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(rootStorageQuery),
+      document: gql(rootStorageQuery),
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
@@ -221,7 +221,7 @@ class StorageRepository {
 
   Future<List<dynamic>> search(String key) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(searchQuery),
+      document: gql(searchQuery),
       variables: {'key': key},
       fetchPolicy: FetchPolicy.noCache,
     );
@@ -238,7 +238,7 @@ class StorageRepository {
   Future<Map<String, dynamic>> storage(
       {@required String id, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(storageQuery),
+      document: gql(storageQuery),
       variables: {
         'id': id,
       },
@@ -258,7 +258,7 @@ class StorageRepository {
 
   Future<List<Storage>> storages({bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      documentNode: gql(storagesQuery),
+      document: gql(storagesQuery),
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final result = await graphqlApiClient.query(options);
@@ -278,7 +278,7 @@ class StorageRepository {
     DateTime expirationDate,
   }) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(updateItemMutation),
+      document: gql(updateItemMutation),
       variables: {
         'input': {
           'id': id,
@@ -304,7 +304,7 @@ class StorageRepository {
     String description,
   }) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(updateStorageMutation),
+      document: gql(updateStorageMutation),
       variables: {
         'input': {
           'id': id,
