@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:graphql/client.dart';
 import 'package:smart_home/graphql/mutations/iot/mutations.dart';
 import 'package:smart_home/graphql/queries/iot/queries.dart';
 import 'package:smart_home/models/iot.dart';
@@ -18,7 +18,7 @@ class IotRepository {
     int number,
   }) async {
     QueryOptions _options = QueryOptions(
-      documentNode: gql(deviceDataQuery),
+      document: gql(deviceDataQuery),
       variables: {
         'deviceId': deviceId,
         'number': number,
@@ -38,7 +38,7 @@ class IotRepository {
     String location,
   }) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(addDeviceMutation),
+      document: gql(addDeviceMutation),
       variables: {
         'input': {
           'name': name,
@@ -61,7 +61,7 @@ class IotRepository {
     String location,
   }) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(setDeviceMutation),
+      document: gql(setDeviceMutation),
       variables: {
         'input': {
           'id': id,
@@ -79,7 +79,7 @@ class IotRepository {
 
   Future<String> deleteDevice({@required String deviceId}) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(deleteDeviceMutation),
+      document: gql(deleteDeviceMutation),
       variables: {
         'input': {'deviceId': deviceId}
       },
@@ -95,7 +95,7 @@ class IotRepository {
     String location,
   }) async {
     final MutationOptions options = MutationOptions(
-      documentNode: gql(updateDeviceMutation),
+      document: gql(updateDeviceMutation),
       variables: {
         'input': {
           'id ': id,

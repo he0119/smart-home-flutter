@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smart_home/blocs/app_preferences/app_preferences_bloc.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/repositories/user_repository.dart';
 
 part 'authentication_event.dart';
@@ -11,10 +12,12 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final UserRepository userRepository;
+  final GraphQLApiClient graphqlApiClient;
   final AppPreferencesBloc appPreferencesBloc;
 
   AuthenticationBloc({
     @required this.userRepository,
+    @required this.graphqlApiClient,
     @required this.appPreferencesBloc,
   }) : super(AuthenticationInitial());
 
@@ -55,7 +58,7 @@ class AuthenticationBloc
     yield AuthenticationInProgress();
     try {
       bool result =
-          await userRepository.authenticate(event.username, event.password);
+          await graphqlApiClient.authenticate(event.username, event.password);
       if (result) {
         User user = await userRepository.currentUser();
         appPreferencesBloc.add(LoginUserChanged(loginUser: user));
