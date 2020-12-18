@@ -26,10 +26,7 @@ class GraphQLApiClient {
     final HttpLink _httpLink = HttpLink(url);
     final ErrorLink _tokenErrorLink =
         ErrorLink(onGraphQLError: handleTokenError);
-    final Link _link = Link.from([
-      DedupeLink(),
-      _tokenErrorLink,
-    ]).split((request) {
+    final Link _link = _tokenErrorLink.split((request) {
       for (var definition in request.operation.document.definitions) {
         final String operationName = definition.name.value;
         if (operationName == 'tokenAuth' || operationName == 'refreshToken') {
@@ -54,12 +51,18 @@ class GraphQLApiClient {
   /// 更改
   Future<QueryResult> mutate(MutationOptions options) async {
     final results = await _client.mutate(options);
+    if (results.hasException) {
+      _handleException(results.exception);
+    }
     return results;
   }
 
   /// 查询
   Future<QueryResult> query(QueryOptions options) async {
     final results = await _client.query(options);
+    if (results.hasException) {
+      _handleException(results.exception);
+    }
     return results;
   }
 
@@ -68,8 +71,10 @@ class GraphQLApiClient {
     MutationOptions loginOptions = MutationOptions(
       document: gql(tokenAuth),
       variables: {
-        'username': username,
-        'password': password,
+        'input': {
+          'username': username,
+          'password': password,
+        }
       },
     );
     QueryResult results = await _client.mutate(loginOptions);
@@ -87,22 +92,29 @@ class GraphQLApiClient {
     }
   }
 
-  /// 刷新 Token
-  Future refreshToken() async {
+  /// 刷新令牌
+  Future<List<GraphQLError>> refreshToken() async {
     final SharedPreferences prefs = await _prefs;
     _log.fine('refreshing token');
     String refreshToken = prefs.getString('refreshToken');
     MutationOptions options = MutationOptions(
       document: gql(refreshTokenMutation),
       variables: {
-        'token': refreshToken,
+        'input': {
+          'refreshToken': refreshToken,
+        }
       },
     );
     QueryResult results = await _client.mutate(options);
-    if (!results.hasException) {
+
+    // 如果刷新令牌出错，则返回错误
+    if (results.hasException && results.exception.graphqlErrors.isNotEmpty) {
+      return results.exception.graphqlErrors;
+    } else {
       String token = results.data['refreshToken']['token'];
       await _setToken(token);
       _log.fine('token refreshed');
+      return [];
     }
   }
 
@@ -120,31 +132,56 @@ class GraphQLApiClient {
   Stream<Response> handleTokenError(
       Request request, forward, Response response) async* {
     String message = response.errors[0].message.toLowerCase();
-    if (message.contains('signature has expired')) {
+    if ([
+      'signature has expired',
+      'error decoding signature',
+    ].contains(message)) {
       // 如果访问令牌失效，则自动刷新
-      await refreshToken();
+      final error = await refreshToken();
+      if (error.isEmpty) {
+        yield* forward(request);
+      } else {
+        yield Response(
+          context: response.context,
+          data: response.data,
+          errors: error,
+        );
+      }
+    } else {
+      yield response;
     }
-    if (message.contains('invalid refresh token')) {
-      // 刷新令牌无效时，删除刷新令牌
-      await _clearToken();
-      await _clearRefreshToken();
-      throw AuthenticationException('登陆失效，请重新登录');
-    }
-    yield* forward(request);
   }
 
-  /// 清除 Token
-  Future _clearToken() async {
+  void _handleException(OperationException exception) {
+    for (var error in exception.graphqlErrors) {
+      if (error.message.contains('refresh token')) {
+        throw AuthenticationException('认证过期，请重新登录');
+      }
+    }
+    if (exception.linkException != null) {
+      throw Exception('网络异常，请稍后再试');
+    }
+  }
+
+  /// 登出
+  Future logout() async {
     final SharedPreferences prefs = await _prefs;
     await prefs.remove('token');
-    _log.fine('clear token');
+    await prefs.remove('refreshToken');
+    await prefs.remove('loginUser');
+    _log.fine('clear refresh token');
   }
 
-  /// 清除 Token
-  Future _clearRefreshToken() async {
+  /// 是否登录
+  /// 通过判断是否拥有 Refresh Token
+  Future<bool> get isLogin async {
     final SharedPreferences prefs = await _prefs;
-    await prefs.remove('refreshToken');
-    _log.fine('clear refresh token');
+    String token = prefs.getString('refreshToken');
+    if (token == null || token == '') {
+      return false;
+    } else {
+      return true;
+    }
   }
 }
 
@@ -152,11 +189,8 @@ class GraphQLApiClient {
 class GraphQLApiException implements Exception {
   final String message;
 
-  GraphQLApiException({this.message});
+  GraphQLApiException(this.message);
 }
-
-/// 访问令牌失效
-class AccessTokenException implements Exception {}
 
 /// 认证出错
 class AuthenticationException implements Exception {

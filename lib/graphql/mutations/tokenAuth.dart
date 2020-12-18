@@ -1,6 +1,6 @@
 const String tokenAuth = r"""
-mutation tokenAuth($username: String!, $password: String!) {
-  tokenAuth(username: $username, password: $password) {
+mutation tokenAuth($input: ObtainJSONWebTokenInput!) {
+  tokenAuth(input: $input) {
     token
     refreshToken
   }

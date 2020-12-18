@@ -1,6 +1,6 @@
 const String refreshTokenMutation = r"""
-mutation refreshToken($token: String!) {
-  refreshToken(refreshToken: $token) {
+mutation refreshToken($input: RefreshInput!) {
+  refreshToken(input: $input) {
     token
   }
 }

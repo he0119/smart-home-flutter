@@ -37,7 +37,7 @@ class AuthenticationBloc
       AuthenticationStarted event) async* {
     try {
       // 检查是否登录
-      if (await userRepository.isLogin) {
+      if (await graphqlApiClient.isLogin) {
         if (appPreferencesBloc.state.loginUser != null) {
           yield AuthenticationSuccess(appPreferencesBloc.state.loginUser);
         } else {
@@ -73,6 +73,6 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapLogoutToState() async* {
     yield AuthenticationFailure('已登出');
-    await userRepository.logout();
+    await graphqlApiClient.logout();
   }
 }
