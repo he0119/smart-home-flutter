@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Fixed
+
+- 修复物品管理中错误提示显示两次的问题
+- 修复物联网界面出现网络问题时会一直转圈的问题
+
 ## [0.5.11] - 2020-12-17
 
 ### Added
