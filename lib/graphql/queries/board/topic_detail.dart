@@ -1,5 +1,5 @@
 const String topicDetailQuery = r"""
-query topicDetail($topicId: ID!, $number: Int) {
+query topicDetail($topicId: ID!) {
   topic(id: $topicId) {
     id
     title
@@ -12,20 +12,24 @@ query topicDetail($topicId: ID!, $number: Int) {
     dateCreated
     dateModified
   }
-  comments(topicId: $topicId, number: $number) {
-    id
-    body
-    user {
-      username
-      email
-    }
-    dateCreated
-    dateModified
-    parent {
-      id
-    }
-    replyTo {
-      username
+  comments(topic: $topicId) {
+    edges {
+      node {
+        id
+        body
+        user {
+          username
+          email
+        }
+        dateCreated
+        dateModified
+        parent {
+          id
+        }
+        replyTo {
+          username
+        }
+      }
     }
   }
 }

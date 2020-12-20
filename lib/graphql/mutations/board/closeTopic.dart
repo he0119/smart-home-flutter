@@ -1,5 +1,5 @@
 const String closeTopicMutation = r"""
-mutation closeTopic($input: CloseTopicInput!) {
+mutation closeTopic($input: CloseTopicMutationInput!) {
   closeTopic(input: $input) {
     topic {
       id

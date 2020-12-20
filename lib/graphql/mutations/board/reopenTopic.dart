@@ -1,5 +1,5 @@
 const String reopenTopicMutation = r"""
-mutation reopenTopic($input: ReopenTopicInput!) {
+mutation reopenTopic($input: ReopenTopicMutationInput!) {
   reopenTopic(input: $input) {
     topic {
       id

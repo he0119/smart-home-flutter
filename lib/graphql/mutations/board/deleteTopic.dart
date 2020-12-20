@@ -1,7 +1,7 @@
 const String deleteTopicMutation = r"""
-mutation deleteTopic($id: ID!) {
-  deleteTopic(id: $id) {
-    topicId
+mutation deleteTopic($input: DeleteTopicMutationInput!) {
+  deleteTopic(input: $input) {
+    clientMutationId
   }
 }
 """;

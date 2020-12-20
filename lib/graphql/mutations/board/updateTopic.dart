@@ -1,5 +1,5 @@
 const String updateTopicMutation = r"""
-mutation updateTopic($input: UpdateTopicInput!) {
+mutation updateTopic($input: UpdateTopicMutationInput!) {
   updateTopic(input: $input) {
     topic {
       id
