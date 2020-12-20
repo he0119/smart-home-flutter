@@ -145,10 +145,36 @@ jobs:
           name: windows
           path: ${{ github.workspace }}/build/windows/runner/Release
 
-  deploy_web:
-    name: Deploy Web
+  deploy_web_dev:
+    name: Deploy Web Dev
     runs-on: ubuntu-latest
     needs: web
+    environment:
+      name: dev
+      url: https://smart-test.hehome.xyz
+    if: ${{ github.ref == 'refs/heads/dev' }}
+    steps:
+      - name: Download web files
+        uses: actions/download-artifact@v2
+        with:
+          name: web
+      - name: Copy file to server
+        uses: Burnett01/rsync-deployments@4.1
+        with:
+          switches: -vzr --delete
+          path: "."
+          remote_path: "websites/smart-home/web"
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_user: ${{ secrets.SSH_USERNAME }}
+          remote_key: ${{ secrets.SSH_KEY }}
+
+  deploy_web_prod:
+    name: Deploy Web Prod
+    runs-on: ubuntu-latest
+    needs: web
+    environment:
+      name: prod
+      url: https://smart.hehome.xyz
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     steps:
       - name: Download web files
