@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:smart_home/blocs/storage/search/search_bloc.dart';
 import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
 
@@ -89,7 +90,6 @@ class _SearchBody extends StatelessWidget {
                     storages: state.storages,
                     isHighlight: true,
                     term: state.term,
-                    hasNextPage: false,
                   ),
                 );
         }

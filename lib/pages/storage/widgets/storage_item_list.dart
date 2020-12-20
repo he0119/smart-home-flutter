@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/widgets/bottom_loader.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
+import 'package:smart_home/widgets/bottom_loader.dart';
 
 class StorageItemList extends StatefulWidget {
   final List<Item> items;
@@ -14,6 +14,7 @@ class StorageItemList extends StatefulWidget {
   final String term;
   final bool isHighlight;
   final bool hasNextPage;
+  final VoidCallback onFetch;
 
   const StorageItemList({
     Key key,
@@ -21,8 +22,10 @@ class StorageItemList extends StatefulWidget {
     this.storages,
     this.term = '',
     this.isHighlight = false,
-    this.hasNextPage,
-  }) : super(key: key);
+    this.hasNextPage = false,
+    this.onFetch,
+  })  : assert(hasNextPage != null),
+        super(key: key);
 
   @override
   _StorageItemListState createState() => _StorageItemListState();
@@ -40,7 +43,7 @@ class _StorageItemListState extends State<StorageItemList> {
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> merged = List.from(widget.items)..addAll(widget.storages);
+    List<dynamic> merged = List.from(widget.storages)..addAll(widget.items);
     return ListView.separated(
       itemCount: widget.hasNextPage ? merged.length + 1 : merged.length,
       itemBuilder: (BuildContext context, int index) {
@@ -70,8 +73,8 @@ class _StorageItemListState extends State<StorageItemList> {
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= _scrollThreshold) {
-      BlocProvider.of<StorageDetailBloc>(context).add(StorageDetailFetched());
+    if (maxScroll - currentScroll <= _scrollThreshold && widget.hasNextPage) {
+      widget.onFetch();
     }
   }
 }

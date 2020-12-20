@@ -59,5 +59,4 @@ query storage($id: ID!, $itemCursor: String, $storageCursor: String) {
     }
   }
 }
-
 """;

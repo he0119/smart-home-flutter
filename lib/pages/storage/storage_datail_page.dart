@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
@@ -9,14 +10,17 @@ import 'package:smart_home/pages/storage/item_edit_page.dart';
 import 'package:smart_home/pages/storage/storage_edit_page.dart';
 import 'package:smart_home/pages/storage/widgets/add_storage_icon_button.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
-import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
+import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class StorageDetailPage extends StatelessWidget {
   final String storageId;
 
-  const StorageDetailPage({Key key, this.storageId}) : super(key: key);
+  const StorageDetailPage({
+    Key key,
+    this.storageId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +264,6 @@ class _StorageDetailPage extends StatelessWidget {
       return StorageItemList(
         storages: state.storages.toList(),
         items: [],
-        hasNextPage: false,
       );
     }
     if (state is StorageDetailSuccess) {
@@ -268,6 +271,8 @@ class _StorageDetailPage extends StatelessWidget {
         items: state.storage.items.toList(),
         storages: state.storage.children.toList(),
         hasNextPage: state.hasNextPage,
+        onFetch: () => BlocProvider.of<StorageDetailBloc>(context)
+            .add(StorageDetailFetched()),
       );
     }
     return LoadingPage();
