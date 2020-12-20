@@ -260,12 +260,14 @@ class _StorageDetailPage extends StatelessWidget {
       return StorageItemList(
         storages: state.storages.toList(),
         items: [],
+        hasNextPage: false,
       );
     }
     if (state is StorageDetailSuccess) {
       return StorageItemList(
         items: state.storage.items.toList(),
         storages: state.storage.children.toList(),
+        hasNextPage: state.hasNextPage,
       );
     }
     return LoadingPage();

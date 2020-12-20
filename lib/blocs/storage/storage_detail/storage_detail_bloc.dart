@@ -18,6 +18,24 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
   Stream<StorageDetailState> mapEventToState(
     StorageDetailEvent event,
   ) async* {
+    final currentState = state;
+    if (event is StorageDetailFetched && _hasNextPage(currentState)) {
+      if (currentState is StorageDetailSuccess) {
+        final results = await storageRepository.storage(
+            id: currentState.storage.id,
+            itemCursor: currentState.itemEndCursor,
+            storageCursor: currentState.stroageEndCursor);
+        yield currentState.copyWith(
+          storage: currentState.storage.copyWith(
+            children: currentState.storage.children + results.item1.children,
+            items: currentState.storage.items + results.item1.items,
+          ),
+          hasNextPage: results.item4 || results.item6,
+          stroageEndCursor: results.item3,
+          itemEndCursor: results.item5,
+        );
+      }
+    }
     if (event is StorageDetailRoot) {
       backImmediately = false;
       yield StorageDetailInProgress();
@@ -93,4 +111,11 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       }
     }
   }
+}
+
+bool _hasNextPage(StorageDetailState currentState) {
+  if (currentState is StorageDetailSuccess) {
+    return currentState.hasNextPage;
+  }
+  return false;
 }

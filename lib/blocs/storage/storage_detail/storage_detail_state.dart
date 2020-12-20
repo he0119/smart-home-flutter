@@ -53,7 +53,7 @@ class StorageDetailSuccess extends StorageDetailState {
     bool backImmediately,
     Storage storage,
     List<Storage> ancestors,
-    bool hasReachedMax,
+    bool hasNextPage,
     String itemEndCursor,
     String stroageEndCursor,
   }) {
@@ -61,7 +61,7 @@ class StorageDetailSuccess extends StorageDetailState {
       backImmediately: backImmediately ?? this.backImmediately,
       storage: storage ?? this.storage,
       ancestors: ancestors ?? this.ancestors,
-      hasNextPage: hasReachedMax ?? this.hasNextPage,
+      hasNextPage: hasNextPage ?? this.hasNextPage,
       itemEndCursor: itemEndCursor ?? this.itemEndCursor,
       stroageEndCursor: stroageEndCursor ?? this.stroageEndCursor,
     );

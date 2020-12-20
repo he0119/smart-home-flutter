@@ -89,6 +89,7 @@ class _SearchBody extends StatelessWidget {
                     storages: state.storages,
                     isHighlight: true,
                     term: state.term,
+                    hasNextPage: false,
                   ),
                 );
         }

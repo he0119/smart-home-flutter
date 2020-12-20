@@ -41,6 +41,24 @@ class Storage extends Equatable {
       items,
     ];
   }
+
+  Storage copyWith({
+    String id,
+    String name,
+    Storage parent,
+    String description,
+    List<Storage> children,
+    List<Item> items,
+  }) {
+    return Storage(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      parent: parent ?? this.parent,
+      description: description ?? this.description,
+      children: children ?? this.children,
+      items: items ?? this.items,
+    );
+  }
 }
 
 @JsonSerializable()
