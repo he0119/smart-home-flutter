@@ -18,6 +18,24 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
   Stream<StorageDetailState> mapEventToState(
     StorageDetailEvent event,
   ) async* {
+    final currentState = state;
+    if (event is StorageDetailFetched && _hasNextPage(currentState)) {
+      if (currentState is StorageDetailSuccess) {
+        final results = await storageRepository.storage(
+            id: currentState.storage.id,
+            itemCursor: currentState.itemEndCursor,
+            storageCursor: currentState.stroageEndCursor);
+        yield currentState.copyWith(
+          storage: currentState.storage.copyWith(
+            children: currentState.storage.children + results.item1.children,
+            items: currentState.storage.items + results.item1.items,
+          ),
+          hasNextPage: results.item4 || results.item6,
+          stroageEndCursor: results.item3,
+          itemEndCursor: results.item5,
+        );
+      }
+    }
     if (event is StorageDetailRoot) {
       backImmediately = false;
       yield StorageDetailInProgress();
@@ -54,12 +72,14 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       }
       yield StorageDetailInProgress();
       try {
-        Map<String, dynamic> results =
-            await storageRepository.storage(id: event.id);
+        final results = await storageRepository.storage(id: event.id);
         yield StorageDetailSuccess(
-          storage: results['storage'],
-          ancestors: results['ancestors'],
           backImmediately: backImmediately,
+          storage: results.item1,
+          ancestors: results.item2,
+          hasNextPage: results.item4 || results.item6,
+          stroageEndCursor: results.item3,
+          itemEndCursor: results.item5,
         );
       } catch (e) {
         yield StorageDetailFailure(
@@ -71,14 +91,17 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     if (event is StorageDetailRefreshed) {
       yield StorageDetailInProgress();
       try {
-        Map<String, dynamic> results = await storageRepository.storage(
+        final results = await storageRepository.storage(
           id: event.id,
           cache: false,
         );
         yield StorageDetailSuccess(
-          storage: results['storage'],
-          ancestors: results['ancestors'],
           backImmediately: backImmediately,
+          storage: results.item1,
+          ancestors: results.item2,
+          hasNextPage: results.item4 || results.item6,
+          stroageEndCursor: results.item3,
+          itemEndCursor: results.item5,
         );
       } catch (e) {
         yield StorageDetailFailure(
@@ -88,4 +111,11 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       }
     }
   }
+}
+
+bool _hasNextPage(StorageDetailState currentState) {
+  if (currentState is StorageDetailSuccess) {
+    return currentState.hasNextPage;
+  }
+  return false;
 }

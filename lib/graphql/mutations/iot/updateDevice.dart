@@ -1,5 +1,5 @@
 const String updateDeviceMutation = r"""
-mutation updateDevice($input: UpdateDeviceInput!) {
+mutation updateDevice($input: UpdateDeviceMutationInput!) {
   updateDevice(input: $input) {
     device {
       id

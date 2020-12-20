@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:substring_highlight/substring_highlight.dart';
+
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
-import 'package:substring_highlight/substring_highlight.dart';
+import 'package:smart_home/widgets/bottom_loader.dart';
 
-class StorageItemList extends StatelessWidget {
+class StorageItemList extends StatefulWidget {
   final List<Item> items;
   final List<Storage> storages;
   final String term;
   final bool isHighlight;
+  final bool hasNextPage;
+  final VoidCallback onFetch;
 
   const StorageItemList({
     Key key,
@@ -18,25 +22,60 @@ class StorageItemList extends StatelessWidget {
     this.storages,
     this.term = '',
     this.isHighlight = false,
-  }) : super(key: key);
+    this.hasNextPage = false,
+    this.onFetch,
+  })  : assert(hasNextPage != null),
+        super(key: key);
+
+  @override
+  _StorageItemListState createState() => _StorageItemListState();
+}
+
+class _StorageItemListState extends State<StorageItemList> {
+  final _scrollController = ScrollController();
+  final _scrollThreshold = 200.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> merged = List.from(items)..addAll(storages);
+    List<dynamic> merged = List.from(widget.storages)..addAll(widget.items);
     return ListView.separated(
-      itemCount: merged.length,
+      itemCount: widget.hasNextPage ? merged.length + 1 : merged.length,
       itemBuilder: (BuildContext context, int index) {
-        if (isHighlight) {
+        if (index >= merged.length) {
+          return BottomLoader();
+        }
+        if (widget.isHighlight) {
           return _HighlightStorageItemListItem(
             item: merged[index],
-            term: term,
+            term: widget.term,
           );
         } else {
           return _StorageItemListItem(item: merged[index]);
         }
       },
       separatorBuilder: (contexit, index) => Divider(),
+      controller: _scrollController,
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (maxScroll - currentScroll <= _scrollThreshold && widget.hasNextPage) {
+      widget.onFetch();
+    }
   }
 }
 

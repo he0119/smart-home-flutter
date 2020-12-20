@@ -1,28 +1,44 @@
 const String homepageQuery = r"""
-query homepage {
-  recentlyAddedItems(number: 10) {
-    id
-    name
-    description
-    dateAdded
+query homepage($nearExpiredTime: DateTime!, $now: DateTime!) {
+  recentlyAddedItems: items(first:10, orderBy: "-date_added") {
+    edges {
+      node {
+        id
+        name
+        description
+        dateAdded
+      }
+    }
   }
-  recentlyUpdatedItems(number: 10) {
-    id
-    name
-    description
-    updateDate
+  recentlyUpdatedItems: items(first:10, orderBy: "-update_date") {
+    edges {
+      node {
+        id
+        name
+        description
+        updateDate
+      }
+    }
   }
-  nearExpiredItems(within: 365, number: 10) {
-    id
-    name
-    description
-    expirationDate
+  nearExpiredItems: items(first:10, expirationDate_Gt: $now, expirationDate_Lt: $nearExpiredTime, orderBy: "-expiration_date") {
+    edges {
+      node {
+        id
+        name
+        description
+        expirationDate
+      }
+    }
   }
-  expiredItems(number: 10) {
-    id
-    name
-    description
-    expirationDate
+  expiredItems: items(first:10, expirationDate_Lt: $now, orderBy: "-expiration_date") {
+    edges {
+      node {
+        id
+        name
+        description
+        expirationDate
+      }
+    }
   }
 }
 """;

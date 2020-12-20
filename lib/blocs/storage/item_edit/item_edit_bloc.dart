@@ -94,7 +94,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
     if (event is ItemDeleted) {
       yield ItemEditInProgress();
       try {
-        await storageRepository.deleteItem(id: event.item.id);
+        await storageRepository.deleteItem(itemId: event.item.id);
         yield ItemDeleteSuccess(item: event.item);
         // 刷新受影响的页面
         if (storageHomeBloc != null) {

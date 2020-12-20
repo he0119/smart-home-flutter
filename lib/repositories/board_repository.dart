@@ -63,26 +63,6 @@ class BoardRepository {
     return topicObject;
   }
 
-  Future<List<Comment>> comments({
-    @required String topicId,
-    int number,
-    bool cache = true,
-  }) async {
-    final QueryOptions options = QueryOptions(
-      document: gql(commentsQuery),
-      variables: {
-        'topicId': topicId,
-        'number': number,
-      },
-      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
-    );
-    final results = await graphqlApiClient.query(options);
-    final List<dynamic> comments = results.data['comments'];
-    final List<Comment> listofComments =
-        comments.map((dynamic e) => Comment.fromJson(e)).toList();
-    return listofComments;
-  }
-
   Future<String> deleteComment({@required String commentId}) async {
     final MutationOptions options = MutationOptions(
       document: gql(deleteCommentMutation),
@@ -127,29 +107,32 @@ class BoardRepository {
       document: gql(topicDetailQuery),
       variables: {
         'topicId': topicId,
-        'number': number,
       },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
+
     final dynamic topic = results.data['topic'];
     final Topic topicObject = Topic.fromJson(topic);
-    final List<dynamic> comments = results.data['comments'];
+    final List<dynamic> comments = results.data['comments']['edges'];
     final List<Comment> listofComments =
-        comments.map((dynamic e) => Comment.fromJson(e)).toList();
+        comments.map((dynamic e) => Comment.fromJson(e['node'])).toList();
     return [topicObject, listofComments];
   }
 
-  Future<List<Topic>> topics({int number, bool cache = true}) async {
+  Future<List<Topic>> topics({String after, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       document: gql(topicsQuery),
-      variables: {'number': number},
+      variables: {
+        'after': after,
+      },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
-    final List<dynamic> topics = results.data['topics'];
+
+    final List<dynamic> topics = results.data['topics']['edges'];
     final List<Topic> listofTopics =
-        topics.map((dynamic e) => Topic.fromJson(e)).toList();
+        topics.map((dynamic e) => Topic.fromJson(e['node'])).toList();
     return listofTopics;
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
+
 import 'package:smart_home/graphql/mutations/iot/mutations.dart';
 import 'package:smart_home/graphql/queries/iot/queries.dart';
 import 'package:smart_home/models/iot.dart';
@@ -8,27 +9,27 @@ import 'package:smart_home/repositories/graphql_api_client.dart';
 class IotRepository {
   final GraphQLApiClient graphqlApiClient;
 
-  IotRepository({@required this.graphqlApiClient});
+  IotRepository({
+    @required this.graphqlApiClient,
+  });
 
   /// 设备数据
   ///
   /// 永远不缓存
-  Future<List<AutowateringData>> deviceData({
+  Future<List<AutowateringData>> autowateringData({
     @required String deviceId,
     int number,
   }) async {
     QueryOptions _options = QueryOptions(
       document: gql(deviceDataQuery),
-      variables: {
-        'deviceId': deviceId,
-        'number': number,
-      },
       fetchPolicy: FetchPolicy.networkOnly,
     );
     QueryResult results = await graphqlApiClient.query(_options);
-    final List<dynamic> deviceData = results.data['deviceData'];
-    final List<AutowateringData> listofAutowateringData =
-        deviceData.map((dynamic e) => AutowateringData.fromJson(e)).toList();
+
+    final List<dynamic> deviceData = results.data['autowateringData']['edges'];
+    final List<AutowateringData> listofAutowateringData = deviceData
+        .map((dynamic e) => AutowateringData.fromJson(e['node']))
+        .toList();
     return listofAutowateringData;
   }
 

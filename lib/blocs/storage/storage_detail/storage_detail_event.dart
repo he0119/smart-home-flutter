@@ -25,3 +25,8 @@ class StorageDetailRefreshed extends StorageDetailEvent {
   @override
   String toString() => 'StorageDetailRefreshed { id: $id }';
 }
+
+class StorageDetailFetched extends StorageDetailEvent {
+  @override
+  String toString() => 'StorageDetailFetched';
+}

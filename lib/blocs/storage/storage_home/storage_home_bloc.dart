@@ -50,8 +50,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             );
             break;
           case ItemType.nearExpired:
-            List<Item> nearExpiredItems = await storageRepository
-                .nearExpiredItems(within: 365, number: 50);
+            List<Item> nearExpiredItems =
+                await storageRepository.nearExpiredItems();
             yield StorageHomeSuccess(
               nearExpiredItems: nearExpiredItems,
               itemType: ItemType.nearExpired,
@@ -59,7 +59,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             break;
           case ItemType.recentlyAdded:
             List<Item> recentlyAddedItems =
-                await storageRepository.recentlyAddedItems(number: 50);
+                await storageRepository.recentlyAddedItems();
             yield StorageHomeSuccess(
               recentlyAddedItems: recentlyAddedItems,
               itemType: ItemType.recentlyAdded,
@@ -67,7 +67,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             break;
           case ItemType.recentlyUpdated:
             List<Item> recentlyUpdatedItems =
-                await storageRepository.recentlyUpdatedItems(number: 50);
+                await storageRepository.recentlyUpdatedItems();
             yield StorageHomeSuccess(
               recentlyUpdatedItems: recentlyUpdatedItems,
               itemType: ItemType.recentlyUpdated,
@@ -105,8 +105,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             );
             break;
           case ItemType.nearExpired:
-            List<Item> nearExpiredItems = await storageRepository
-                .nearExpiredItems(within: 360, number: 50, cache: false);
+            List<Item> nearExpiredItems =
+                await storageRepository.nearExpiredItems(cache: false);
             yield StorageHomeSuccess(
               nearExpiredItems: nearExpiredItems,
               itemType: ItemType.nearExpired,
@@ -115,7 +115,6 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
           case ItemType.recentlyAdded:
             List<Item> recentlyAddedItems =
                 await storageRepository.recentlyAddedItems(
-              number: 50,
               cache: false,
             );
             yield StorageHomeSuccess(
@@ -126,7 +125,6 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
           case ItemType.recentlyUpdated:
             List<Item> recentlyUpdatedItems =
                 await storageRepository.recentlyUpdatedItems(
-              number: 50,
               cache: false,
             );
             yield StorageHomeSuccess(

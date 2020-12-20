@@ -1,5 +1,5 @@
 const String addStorageMutation = r"""
-mutation addStorage($input: AddStorageInput!) {
+mutation addStorage($input: AddStorageMutationInput!) {
   addStorage(input: $input) {
     storage {
       id

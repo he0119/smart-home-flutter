@@ -1,12 +1,14 @@
 library storage;
 
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:smart_home/models/user.dart';
 
 part 'storage.g.dart';
 
 @JsonSerializable()
-class Storage {
+class Storage extends Equatable {
   final String id;
   final String name;
   final Storage parent;
@@ -27,10 +29,40 @@ class Storage {
       _$StorageFromJson(json);
 
   Map<String, dynamic> toJson() => _$StorageToJson(this);
+
+  @override
+  List<Object> get props {
+    return [
+      id,
+      name,
+      parent,
+      description,
+      children,
+      items,
+    ];
+  }
+
+  Storage copyWith({
+    String id,
+    String name,
+    Storage parent,
+    String description,
+    List<Storage> children,
+    List<Item> items,
+  }) {
+    return Storage(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      parent: parent ?? this.parent,
+      description: description ?? this.description,
+      children: children ?? this.children,
+      items: items ?? this.items,
+    );
+  }
 }
 
 @JsonSerializable()
-class Item {
+class Item extends Equatable {
   final String id;
   final String name;
   final int number;
@@ -58,4 +90,20 @@ class Item {
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$ItemToJson(this);
+
+  @override
+  List<Object> get props {
+    return [
+      id,
+      name,
+      number,
+      storage,
+      description,
+      price,
+      expirationDate,
+      editor,
+      updateDate,
+      dateAdded,
+    ];
+  }
 }

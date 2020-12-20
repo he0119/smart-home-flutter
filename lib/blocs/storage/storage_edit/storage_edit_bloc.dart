@@ -75,7 +75,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
     if (event is StorageDeleted) {
       yield StorageEditInProgress();
       try {
-        await storageRepository.deleteStorage(id: event.storage.id);
+        await storageRepository.deleteStorage(storageId: event.storage.id);
         if (event.storage.parent != null) {
           storageDetailBloc
               .add(StorageDetailRefreshed(id: event.storage.parent.id));

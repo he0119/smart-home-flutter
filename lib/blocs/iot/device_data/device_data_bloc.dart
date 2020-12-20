@@ -65,7 +65,7 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
     _dataSubscription = timedCounter(event.refreshInterval).listen((x) async {
       try {
         List<AutowateringData> data =
-            await iotRepository.deviceData(deviceId: deviceId, number: 1);
+            await iotRepository.autowateringData(deviceId: deviceId, number: 1);
         add(DeviceDataupdated(data[0]));
       } catch (e) {
         add(DeviceDataStoped(e.message));

@@ -1,5 +1,5 @@
 const String updateMiPushMutation = r"""
-mutation updateMiPush($input: UpdateMiPushInput!) {
+mutation updateMiPush($input: UpdateMiPushMutationInput!) {
   updateMiPush(input: $input) {
     miPush {
       regId
