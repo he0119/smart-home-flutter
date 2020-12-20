@@ -1,43 +1,63 @@
+/// 获取所有的存储位置
 const String storagesQuery = r"""
 query storages {
   storages {
-    id
-    name
-    description
+    edges {
+      node {
+        id
+        name
+        description
+      }
+    }
   }
 }
 """;
 
+/// 通过 ID 获取位置详情
 const String storageQuery = r"""
-query storage($id: ID!) {
+query storage($id: ID!, $itemCursor: String, $storageCursor: String) {
   storage(id: $id) {
     id
     name
     description
-    children {
-      id
-      name
-      description
+    children(after: $storageCursor) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+          description
+        }
+      }
     }
-    items {
-      id
-      name
-      number
-      description
-      storage {
-        id
-        name
+    items(after: $itemCursor) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+          description
+        }
       }
     }
     parent {
       id
-      name
     }
   }
   storageAncestors(id: $id) {
-    id
-    name
+    edges {
+      node {
+        id
+        name
+      }
+    }
   }
 }
-""";
 
+""";

@@ -1,7 +1,7 @@
 const String deleteStorageMutation = r"""
-mutation deleteStorage($id: ID!) {
-  deleteStorage(id: $id) {
-    deletedId
+mutation deleteStorage($input: DeleteStorageMutationInput!) {
+  deleteStorage(input: $input) {
+    clientMutationId
   }
 }
 """;

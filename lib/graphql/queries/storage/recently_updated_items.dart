@@ -1,10 +1,18 @@
 const String recentlyUpdatedItemsQuery = r"""
-query recentlyUpdatedItems($number: Int!) {
-  recentlyUpdatedItems(number: $number) {
-    id
-    name
-    description
-    updateDate
+query recentlyUpdatedItems($after: String) {
+  recentlyUpdatedItems: items(after: $after, orderBy: "-update_date") {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        id
+        name
+        description
+        updateDate
+      }
+    }
   }
 }
 """;

@@ -54,12 +54,14 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       }
       yield StorageDetailInProgress();
       try {
-        Map<String, dynamic> results =
-            await storageRepository.storage(id: event.id);
+        final results = await storageRepository.storage(id: event.id);
         yield StorageDetailSuccess(
-          storage: results['storage'],
-          ancestors: results['ancestors'],
           backImmediately: backImmediately,
+          storage: results.item1,
+          ancestors: results.item2,
+          hasNextPage: results.item4 || results.item6,
+          stroageEndCursor: results.item3,
+          itemEndCursor: results.item5,
         );
       } catch (e) {
         yield StorageDetailFailure(
@@ -71,14 +73,17 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     if (event is StorageDetailRefreshed) {
       yield StorageDetailInProgress();
       try {
-        Map<String, dynamic> results = await storageRepository.storage(
+        final results = await storageRepository.storage(
           id: event.id,
           cache: false,
         );
         yield StorageDetailSuccess(
-          storage: results['storage'],
-          ancestors: results['ancestors'],
           backImmediately: backImmediately,
+          storage: results.item1,
+          ancestors: results.item2,
+          hasNextPage: results.item4 || results.item6,
+          stroageEndCursor: results.item3,
+          itemEndCursor: results.item5,
         );
       } catch (e) {
         yield StorageDetailFailure(

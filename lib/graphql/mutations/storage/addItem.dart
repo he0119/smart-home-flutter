@@ -1,5 +1,5 @@
 const String addItemMutation = r"""
-mutation addItem($input: AddItemInput!) {
+mutation addItem($input: AddItemMutationInput!) {
   addItem(input: $input) {
     item {
       id
