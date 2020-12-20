@@ -1,5 +1,5 @@
 const String deleteDeviceMutation = r"""
-mutation deleteDevice($input: DeleteDeviceInput!) {
+mutation deleteDevice($input: DeleteDeviceMutationInput!) {
   deleteDevice(input: $input) {
     deletedId
   }

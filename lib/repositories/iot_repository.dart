@@ -16,7 +16,7 @@ class IotRepository {
   /// 设备数据
   ///
   /// 永远不缓存
-  Future<List<AutowateringData>> deviceData({
+  Future<List<AutowateringData>> autowateringData({
     @required String deviceId,
     int number,
   }) async {
