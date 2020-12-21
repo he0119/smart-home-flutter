@@ -44,23 +44,25 @@ class _StorageItemListState extends State<StorageItemList> {
   @override
   Widget build(BuildContext context) {
     List<dynamic> merged = List.from(widget.storages)..addAll(widget.items);
-    return ListView.separated(
-      itemCount: widget.hasNextPage ? merged.length + 1 : merged.length,
-      itemBuilder: (BuildContext context, int index) {
-        if (index >= merged.length) {
-          return BottomLoader();
-        }
-        if (widget.isHighlight) {
-          return _HighlightStorageItemListItem(
-            item: merged[index],
-            term: widget.term,
-          );
-        } else {
-          return _StorageItemListItem(item: merged[index]);
-        }
-      },
-      separatorBuilder: (contexit, index) => Divider(),
-      controller: _scrollController,
+    return Scrollbar(
+      child: ListView.separated(
+        itemCount: widget.hasNextPage ? merged.length + 1 : merged.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (index >= merged.length) {
+            return BottomLoader();
+          }
+          if (widget.isHighlight) {
+            return _HighlightStorageItemListItem(
+              item: merged[index],
+              term: widget.term,
+            );
+          } else {
+            return _StorageItemListItem(item: merged[index]);
+          }
+        },
+        separatorBuilder: (contexit, index) => Divider(),
+        controller: _scrollController,
+      ),
     );
   }
 
