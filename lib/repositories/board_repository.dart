@@ -4,6 +4,7 @@ import 'package:smart_home/graphql/mutations/board/mutations.dart';
 import 'package:smart_home/graphql/queries/board/queries.dart';
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
+import 'package:tuple/tuple.dart';
 
 class BoardRepository {
   final GraphQLApiClient graphqlApiClient;
@@ -98,9 +99,8 @@ class BoardRepository {
     return topicObject;
   }
 
-  Future<List<dynamic>> topicDetail({
+  Future<Tuple2<Topic, List<Comment>>> topicDetail({
     @required String topicId,
-    int number,
     bool cache = true,
   }) async {
     final QueryOptions options = QueryOptions(
@@ -112,12 +112,21 @@ class BoardRepository {
     );
     final results = await graphqlApiClient.query(options);
 
-    final dynamic topic = results.data['topic'];
-    final Topic topicObject = Topic.fromJson(topic);
-    final List<dynamic> comments = results.data['comments']['edges'];
-    final List<Comment> listofComments =
-        comments.map((dynamic e) => Comment.fromJson(e['node'])).toList();
-    return [topicObject, listofComments];
+    final dynamic topicJson = results.data['topic'];
+    final Topic topic = Topic.fromJson(topicJson);
+
+    final List<dynamic> commentsJson = results.data['comments']['edges'];
+    final List<Comment> comments = commentsJson.map((dynamic e) {
+      List<dynamic> children = e['node']['children']['edges'];
+      if (children.isNotEmpty) {
+        final newchildren = children.map((dynamic e) => e['node']).toList();
+        e['node']['children'] = newchildren;
+      } else {
+        e['node']['children'] = [];
+      }
+      return Comment.fromJson(e['node']);
+    }).toList();
+    return Tuple2(topic, comments);
   }
 
   Future<List<Topic>> topics({String after, bool cache = true}) async {

@@ -20,10 +20,10 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
     if (event is TopicDetailChanged) {
       try {
         yield TopicDetailInProgress();
-        List<dynamic> topicDetail =
+        final topicDetail =
             await boardRepository.topicDetail(topicId: event.topicId);
         yield TopicDetailSuccess(
-            topic: topicDetail[0], comments: topicDetail[1]);
+            topic: topicDetail.item1, comments: topicDetail.item2);
       } catch (e) {
         yield TopicDetailFailure(
           e.message,
@@ -34,10 +34,10 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
     if (event is TopicDetailRefreshed) {
       try {
         yield TopicDetailInProgress();
-        List<dynamic> topicDetail = await boardRepository.topicDetail(
+        final topicDetail = await boardRepository.topicDetail(
             topicId: event.topicId, cache: false);
         yield TopicDetailSuccess(
-            topic: topicDetail[0], comments: topicDetail[1]);
+            topic: topicDetail.item1, comments: topicDetail.item2);
       } catch (e) {
         yield TopicDetailFailure(
           e.message,

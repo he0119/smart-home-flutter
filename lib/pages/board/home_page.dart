@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
@@ -10,7 +11,9 @@ import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/widgets/home_page.dart';
 
 class BoardHomePage extends StatelessWidget {
-  const BoardHomePage({Key key}) : super(key: key);
+  const BoardHomePage({
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +25,13 @@ class BoardHomePage extends StatelessWidget {
           tooltip: '添加话题',
           child: Icon(Icons.create),
           onPressed: () async {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => TopicEditPage(
-                isEditing: false,
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => TopicEditPage(
+                  isEditing: false,
+                ),
               ),
-            ));
+            );
           },
         ),
       ),

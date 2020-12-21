@@ -1,6 +1,7 @@
 library board;
 
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:smart_home/models/user.dart';
 
 part 'board.g.dart';
@@ -40,6 +41,7 @@ class Comment {
   final DateTime dateModified;
   final Comment parent;
   final User replyTo;
+  final List<Comment> children;
 
   Comment({
     this.id,
@@ -50,6 +52,7 @@ class Comment {
     this.dateModified,
     this.parent,
     this.replyTo,
+    this.children,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) =>

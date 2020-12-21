@@ -56,6 +56,10 @@ Comment _$CommentFromJson(Map<String, dynamic> json) {
     replyTo: json['replyTo'] == null
         ? null
         : User.fromJson(json['replyTo'] as Map<String, dynamic>),
+    children: (json['children'] as List)
+        ?.map((e) =>
+            e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -68,4 +72,5 @@ Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
       'dateModified': instance.dateModified?.toIso8601String(),
       'parent': instance.parent,
       'replyTo': instance.replyTo,
+      'children': instance.children,
     };

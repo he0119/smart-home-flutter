@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/blocs/board/topic_detail/topic_detail_bloc.dart';
 import 'package:smart_home/pages/board/widgets/add_comment_bar.dart';
@@ -11,11 +12,12 @@ import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/repositories/board_repository.dart';
 
 class TopicDetailPage extends StatelessWidget {
-  static const routeName = '/topic';
-
   final String topicId;
 
-  const TopicDetailPage({Key key, @required this.topicId}) : super(key: key);
+  const TopicDetailPage({
+    Key key,
+    @required this.topicId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

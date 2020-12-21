@@ -12,7 +12,7 @@ query topicDetail($topicId: ID!) {
     dateCreated
     dateModified
   }
-  comments(topic: $topicId) {
+  comments(topic: $topicId, level: 0) {
     edges {
       node {
         id
@@ -28,6 +28,21 @@ query topicDetail($topicId: ID!) {
         }
         replyTo {
           username
+        }
+        children(first: 2) {
+          edges {
+            node {
+              id
+              body
+              user {
+                username
+                email
+              }
+              replyTo {
+                username
+              }
+            }
+          }
         }
       }
     }
