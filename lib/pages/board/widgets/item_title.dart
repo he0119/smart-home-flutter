@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
@@ -9,8 +10,12 @@ class ItemTitle extends StatelessWidget {
   final DateTime dateModified;
   final Function(Menu) onSelected;
 
-  const ItemTitle({Key key, this.user, this.dateModified, this.onSelected})
-      : super(key: key);
+  const ItemTitle({
+    Key key,
+    this.user,
+    this.dateModified,
+    this.onSelected,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

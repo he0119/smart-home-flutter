@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/pages/board/topic_detail_page.dart';
 import 'package:smart_home/pages/board/widgets/item_title.dart';
@@ -8,8 +9,11 @@ class TopicItem extends StatelessWidget {
   final Topic topic;
   final bool showBody;
 
-  const TopicItem({Key key, @required this.topic, this.showBody = false})
-      : super(key: key);
+  const TopicItem({
+    Key key,
+    @required this.topic,
+    this.showBody = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

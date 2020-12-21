@@ -7,7 +7,10 @@ import 'package:smart_home/pages/board/widgets/item_title.dart';
 class CommentItem extends StatelessWidget {
   final Comment comment;
 
-  const CommentItem({Key key, @required this.comment}) : super(key: key);
+  const CommentItem({
+    Key key,
+    @required this.comment,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
