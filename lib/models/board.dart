@@ -16,6 +16,7 @@ class Topic extends Equatable {
   final User user;
   final DateTime dateCreated;
   final DateTime dateModified;
+  final List<Comment> comments;
 
   Topic({
     this.id,
@@ -25,6 +26,7 @@ class Topic extends Equatable {
     this.user,
     this.dateCreated,
     this.dateModified,
+    this.comments,
   });
 
   factory Topic.fromJson(Map<String, dynamic> json) => _$TopicFromJson(json);
@@ -41,6 +43,7 @@ class Topic extends Equatable {
       user,
       dateCreated,
       dateModified,
+      comments,
     ];
   }
 }

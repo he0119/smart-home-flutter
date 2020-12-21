@@ -17,6 +17,13 @@ class TopicItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 获取最近互动时间
+    DateTime recentActive = topic.dateModified;
+    if (topic.comments != null &&
+        topic.comments.isNotEmpty &&
+        recentActive.isBefore(topic.comments.last.dateCreated)) {
+      recentActive = topic.comments.last.dateCreated;
+    }
     if (showBody) {
       return Container(
         child: Column(
@@ -57,7 +64,7 @@ class TopicItem extends StatelessWidget {
             children: <Widget>[
               ItemTitle(
                 user: topic.user,
-                dateModified: topic.dateModified,
+                dateModified: recentActive,
               ),
               ListTile(title: Text(topic.title)),
             ],

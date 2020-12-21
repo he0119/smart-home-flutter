@@ -21,6 +21,10 @@ Topic _$TopicFromJson(Map<String, dynamic> json) {
     dateModified: json['dateModified'] == null
         ? null
         : DateTime.parse(json['dateModified'] as String),
+    comments: (json['comments'] as List)
+        ?.map((e) =>
+            e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -32,6 +36,7 @@ Map<String, dynamic> _$TopicToJson(Topic instance) => <String, dynamic>{
       'user': instance.user,
       'dateCreated': instance.dateCreated?.toIso8601String(),
       'dateModified': instance.dateModified?.toIso8601String(),
+      'comments': instance.comments,
     };
 
 Comment _$CommentFromJson(Map<String, dynamic> json) {

@@ -139,9 +139,17 @@ class BoardRepository {
     );
     final results = await graphqlApiClient.query(options);
 
-    final List<dynamic> topics = results.data['topics']['edges'];
-    final List<Topic> listofTopics =
-        topics.map((dynamic e) => Topic.fromJson(e['node'])).toList();
+    final List<dynamic> topicsJson = results.data['topics']['edges'];
+    final List<Topic> listofTopics = topicsJson.map((dynamic e) {
+      List<dynamic> comments = e['node']['comments']['edges'];
+      if (comments.isNotEmpty) {
+        final newchildren = comments.map((dynamic e) => e['node']).toList();
+        e['node']['comments'] = newchildren;
+      } else {
+        e['node']['comments'] = [];
+      }
+      return Topic.fromJson(e['node']);
+    }).toList();
     return listofTopics;
   }
 
