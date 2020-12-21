@@ -26,6 +26,15 @@ class _TopicEditPageState extends State<TopicEditPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.isEditing) {
+      _titleController.text = widget.topic.title;
+      _descriptionController.text = widget.topic.description;
+    }
+  }
+
+  @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
@@ -41,7 +50,12 @@ class _TopicEditPageState extends State<TopicEditPage> {
         listener: (context, state) {
           if (state is TopicAddSuccess || state is TopicUpdateSuccess) {
             Navigator.of(context).pop();
-            BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
+            if (widget.isEditing) {
+              BlocProvider.of<TopicDetailBloc>(context)
+                  .add(TopicDetailRefreshed());
+            } else {
+              BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
+            }
           }
         },
         builder: (context, state) => Scaffold(

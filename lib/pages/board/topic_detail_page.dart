@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/blocs/board/topic_detail/topic_detail_bloc.dart';
+import 'package:smart_home/pages/board/topic_edit_page.dart';
 import 'package:smart_home/pages/board/widgets/add_comment_bar.dart';
 import 'package:smart_home/pages/board/widgets/comment_list.dart';
 import 'package:smart_home/pages/board/widgets/topic_item.dart';
@@ -73,7 +74,30 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
               boardRepository: RepositoryProvider.of<BoardRepository>(context),
             ),
             child: Scaffold(
-              appBar: AppBar(),
+              appBar: AppBar(
+                actions: <Widget>[
+                  Tooltip(
+                    message: '修改',
+                    child: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                              value: BlocProvider.of<TopicDetailBloc>(context),
+                              child: TopicEditPage(
+                                isEditing: true,
+                                topic: state.topic,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
               body: BlocListener<CommentEditBloc, CommentEditState>(
                 listener: (context, state) {
                   // TODO: 更自然的刷新方法
