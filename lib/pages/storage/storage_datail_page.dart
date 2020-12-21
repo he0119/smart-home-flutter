@@ -126,7 +126,11 @@ class _StorageDetailPage extends StatelessWidget {
     if (state is StorageDetailSuccess) {
       List<Storage> paths = state.ancestors;
       if (!paths.contains(state.storage)) {
-        paths.add(state.storage);
+        // 防止重复添加相同名称的位置
+        // 因为无限列表重新获取时，位置对象虽然名字不会变，但是内容改变
+        if (paths.isEmpty || paths.last.name != state.storage.name) {
+          paths.add(state.storage);
+        }
       }
       return AppBar(
         title: Text(state.storage.name),
