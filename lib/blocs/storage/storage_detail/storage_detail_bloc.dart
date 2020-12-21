@@ -51,7 +51,6 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     }
     if (event is StorageDetailRootRefreshed) {
       backImmediately = false;
-      yield StorageDetailInProgress();
       try {
         List<Storage> results =
             await storageRepository.rootStorage(cache: false);
@@ -89,7 +88,6 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       }
     }
     if (event is StorageDetailRefreshed) {
-      yield StorageDetailInProgress();
       try {
         final results = await storageRepository.storage(
           id: event.id,
