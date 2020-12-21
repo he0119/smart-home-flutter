@@ -7,6 +7,7 @@ import 'package:smart_home/models/board.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/board/widgets/comment_item.dart';
 import 'package:smart_home/pages/board/widgets/item_title.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class SliverCommentList extends StatelessWidget {
   final List<Comment> comments;
@@ -65,10 +66,9 @@ class CommentItem extends StatelessWidget {
                         FlatButton(
                           child: Text('是'),
                           onPressed: () {
+                            showInfoSnackBar('正在删除...', duration: 1);
                             BlocProvider.of<CommentEditBloc>(context)
                                 .add(CommentDeleted(comment: comment));
-                            BlocProvider.of<TopicDetailBloc>(context).add(
-                                TopicDetailRefreshed());
                             Navigator.pop(context);
                           },
                         ),

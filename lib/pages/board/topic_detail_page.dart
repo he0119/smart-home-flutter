@@ -11,6 +11,7 @@ import 'package:smart_home/pages/board/widgets/topic_item.dart';
 import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/repositories/board_repository.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class TopicDetailPage extends StatelessWidget {
   final String topicId;
@@ -106,10 +107,12 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
                     _buttonBarFocusNode.unfocus();
                     BlocProvider.of<TopicDetailBloc>(context)
                         .add(TopicDetailRefreshed());
+                    showInfoSnackBar('评论成功');
                   }
                   if (state is CommentDeleteSuccess) {
                     BlocProvider.of<TopicDetailBloc>(context)
                         .add(TopicDetailRefreshed());
+                    showInfoSnackBar('评论删除成功');
                   }
                 },
                 child: Column(

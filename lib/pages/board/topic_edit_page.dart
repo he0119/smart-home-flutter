@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/repositories/board_repository.dart';
+import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class TopicEditPage extends StatefulWidget {
   final bool isEditing;
@@ -53,8 +54,10 @@ class _TopicEditPageState extends State<TopicEditPage> {
             if (widget.isEditing) {
               BlocProvider.of<TopicDetailBloc>(context)
                   .add(TopicDetailRefreshed());
+              showInfoSnackBar('话题修改成功');
             } else {
               BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
+              showInfoSnackBar('话题添加成功');
             }
           }
         },
@@ -81,6 +84,7 @@ class _TopicEditPageState extends State<TopicEditPage> {
                           description: _descriptionController.text,
                         ));
                       }
+                      showInfoSnackBar('正在提交...', duration: 1);
                     }
                   },
                 ),
@@ -116,6 +120,13 @@ class _TopicEditPageState extends State<TopicEditPage> {
                       hintText: '想说点什么？',
                       hintStyle: TextStyle(fontSize: 18),
                     ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return '请填写内容';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
                 ],
               ),
