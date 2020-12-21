@@ -1,5 +1,6 @@
 library board;
 
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:smart_home/models/user.dart';
@@ -7,7 +8,7 @@ import 'package:smart_home/models/user.dart';
 part 'board.g.dart';
 
 @JsonSerializable()
-class Topic {
+class Topic extends Equatable {
   final String id;
   final String title;
   final String description;
@@ -29,10 +30,23 @@ class Topic {
   factory Topic.fromJson(Map<String, dynamic> json) => _$TopicFromJson(json);
 
   Map<String, dynamic> toJson() => _$TopicToJson(this);
+
+  @override
+  List<Object> get props {
+    return [
+      id,
+      title,
+      description,
+      isOpen,
+      user,
+      dateCreated,
+      dateModified,
+    ];
+  }
 }
 
 @JsonSerializable()
-class Comment {
+class Comment extends Equatable {
   final String id;
   final Topic topic;
   final User user;
@@ -59,4 +73,19 @@ class Comment {
       _$CommentFromJson(json);
 
   Map<String, dynamic> toJson() => _$CommentToJson(this);
+
+  @override
+  List<Object> get props {
+    return [
+      id,
+      topic,
+      user,
+      body,
+      dateCreated,
+      dateModified,
+      parent,
+      replyTo,
+      children,
+    ];
+  }
 }

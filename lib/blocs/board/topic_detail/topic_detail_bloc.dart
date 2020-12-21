@@ -31,17 +31,17 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
         );
       }
     }
-    if (event is TopicDetailRefreshed) {
+    final currentState = state;
+    if (event is TopicDetailRefreshed && currentState is TopicDetailSuccess) {
       try {
-        yield TopicDetailInProgress();
         final topicDetail = await boardRepository.topicDetail(
-            topicId: event.topicId, cache: false);
+            topicId: currentState.topic.id, cache: false);
         yield TopicDetailSuccess(
             topic: topicDetail.item1, comments: topicDetail.item2);
       } catch (e) {
         yield TopicDetailFailure(
           e.message,
-          topicId: event.topicId,
+          topicId: currentState.topic.id,
         );
       }
     }

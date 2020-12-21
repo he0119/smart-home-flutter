@@ -30,8 +30,25 @@ class TopicDetailPage extends StatelessWidget {
   }
 }
 
-class _TopicDetailPage extends StatelessWidget {
-  const _TopicDetailPage({Key key}) : super(key: key);
+class _TopicDetailPage extends StatefulWidget {
+  const _TopicDetailPage({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  __TopicDetailPageState createState() => __TopicDetailPageState();
+}
+
+class __TopicDetailPageState extends State<_TopicDetailPage> {
+  final _buttonBarController = TextEditingController();
+  final _buttonBarFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _buttonBarController.dispose();
+    _buttonBarFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,52 +74,64 @@ class _TopicDetailPage extends StatelessWidget {
             ),
             child: Scaffold(
               appBar: AppBar(),
-              body: Column(
-                children: [
-                  Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        BlocProvider.of<TopicDetailBloc>(context)
-                            .add(TopicDetailRefreshed(topicId: state.topic.id));
-                      },
-                      child: GestureDetector(
-                        onTap: () {
-                          // Dismiss the keyboard
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
+              body: BlocListener<CommentEditBloc, CommentEditState>(
+                listener: (context, state) {
+                  // TODO: 更自然的刷新方法
+                  if (state is CommentAddSuccess) {
+                    _buttonBarController.text = '';
+                    _buttonBarFocusNode.unfocus();
+                    BlocProvider.of<TopicDetailBloc>(context)
+                        .add(TopicDetailRefreshed());
+                  }
+                  if (state is CommentDeleteSuccess) {
+                    BlocProvider.of<TopicDetailBloc>(context)
+                        .add(TopicDetailRefreshed());
+                  }
+                },
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          BlocProvider.of<TopicDetailBloc>(context)
+                              .add(TopicDetailRefreshed());
                         },
-                        child: CustomScrollView(
-                          slivers: <Widget>[
-                            SliverToBoxAdapter(
-                              child: TopicItem(
-                                topic: state.topic,
-                                showBody: true,
+                        child: GestureDetector(
+                          onTap: () {
+                            _buttonBarFocusNode.unfocus();
+                          },
+                          child: CustomScrollView(
+                            slivers: <Widget>[
+                              SliverToBoxAdapter(
+                                child: TopicItem(
+                                  topic: state.topic,
+                                  showBody: true,
+                                ),
                               ),
-                            ),
-                            SliverToBoxAdapter(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                child: Text('全部评论',
-                                    style: TextStyle(fontSize: 20)),
+                              SliverToBoxAdapter(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                  child: Text('全部评论',
+                                      style: TextStyle(fontSize: 20)),
+                                ),
                               ),
-                            ),
-                            SliverCommentList(comments: state.comments),
-                          ],
+                              SliverCommentList(comments: state.comments),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    child: AddCommentButtonBar(
-                      topic: state.topic,
-                    ),
-                  )
-                ],
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      child: AddCommentButtonBar(
+                        topic: state.topic,
+                        controller: _buttonBarController,
+                        focusNode: _buttonBarFocusNode,
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );

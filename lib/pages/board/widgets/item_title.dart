@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_home/blocs/blocs.dart';
 
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
@@ -12,30 +14,38 @@ class ItemTitle extends StatelessWidget {
 
   const ItemTitle({
     Key key,
-    this.user,
-    this.dateModified,
+    @required this.user,
+    @required this.dateModified,
     this.onSelected,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final loginUser =
+        context.select((AppPreferencesBloc b) => b.state.loginUser);
     return ListTile(
       leading: CircleGravatar(email: user.email),
       title: Text(user.username),
       subtitle: Text(dateModified.toLocalStr()),
-      trailing: onSelected != null
+      trailing: (onSelected != null)
           ? PopupMenuButton(
               icon: Icon(Icons.expand_more),
               onSelected: onSelected,
               itemBuilder: (context) => <PopupMenuItem<Menu>>[
                 PopupMenuItem(
-                  value: Menu.edit,
-                  child: Text('修改'),
+                  value: Menu.reply,
+                  child: Text('回复'),
                 ),
-                PopupMenuItem(
-                  value: Menu.delete,
-                  child: Text('删除'),
-                ),
+                if (user == loginUser)
+                  PopupMenuItem(
+                    value: Menu.edit,
+                    child: Text('修改'),
+                  ),
+                if (user == loginUser)
+                  PopupMenuItem(
+                    value: Menu.delete,
+                    child: Text('删除'),
+                  ),
               ],
             )
           : null,
