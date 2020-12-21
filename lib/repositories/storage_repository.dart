@@ -1,15 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
+import 'package:tuple/tuple.dart';
+
 import 'package:smart_home/graphql/mutations/storage/mutations.dart';
 import 'package:smart_home/graphql/queries/storage/queries.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
-import 'package:tuple/tuple.dart';
 
 class StorageRepository {
   final GraphQLApiClient graphqlApiClient;
 
-  StorageRepository({@required this.graphqlApiClient});
+  StorageRepository({
+    @required this.graphqlApiClient,
+  });
 
   Future<Item> addItem({
     @required String name,
@@ -264,6 +267,10 @@ class StorageRepository {
     return [listofItem, listofStorage];
   }
 
+  /// 获取位置详情信息
+  /// 当前位置，Ancestors
+  /// stroageEndCursor，stroageHasNextPage
+  /// itemEndCursor，itemHasNextPage
   Future<Tuple6<Storage, List<Storage>, String, bool, String, bool>> storage({
     @required String id,
     String storageCursor,
@@ -281,18 +288,15 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.query(options);
 
+    final Map<String, dynamic> json = result.data['storage'];
+
     // 是否还有下一页
-    final String stroageEndCursor =
-        result.data['storage']['children']['pageInfo']['endCursor'];
-    final bool stroageHasNextPage =
-        result.data['storage']['children']['pageInfo']['hasNextPage'];
-    final String itemEndCursor =
-        result.data['storage']['items']['pageInfo']['endCursor'];
-    final bool itemHasNextPage =
-        result.data['storage']['items']['pageInfo']['hasNextPage'];
+    final String stroageEndCursor = json['children']['pageInfo']['endCursor'];
+    final bool stroageHasNextPage = json['children']['pageInfo']['hasNextPage'];
+    final String itemEndCursor = json['items']['pageInfo']['endCursor'];
+    final bool itemHasNextPage = json['items']['pageInfo']['hasNextPage'];
 
     // 位置详情
-    final Map<String, dynamic> json = result.data['storage'];
     List<dynamic> children = json['children']['edges'];
     if (children.isNotEmpty) {
       final newchildren = children.map((dynamic e) => e['node']).toList();
@@ -311,7 +315,7 @@ class StorageRepository {
     final Storage storageObject = Storage.fromJson(json);
 
     // 当前位置的上级节点
-    final List<dynamic> ancestors = result.data['storageAncestors']['edges'];
+    final List<dynamic> ancestors = json['ancestors']['edges'];
     final List<Storage> listofAncestors =
         ancestors.map((dynamic e) => Storage.fromJson(e['node'])).toList();
 

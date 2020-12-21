@@ -124,7 +124,10 @@ class _StorageDetailPage extends StatelessWidget {
       );
     }
     if (state is StorageDetailSuccess) {
-      List<Storage> paths = state.ancestors.toList();
+      List<Storage> paths = state.ancestors;
+      if (!paths.contains(state.storage)) {
+        paths.add(state.storage);
+      }
       return AppBar(
         title: Text(state.storage.name),
         actions: <Widget>[

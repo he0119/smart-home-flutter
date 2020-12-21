@@ -20,6 +20,14 @@ query storage($id: ID!, $itemCursor: String, $storageCursor: String) {
     id
     name
     description
+    ancestors {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
     children(after: $storageCursor) {
       pageInfo {
         hasNextPage
@@ -48,14 +56,6 @@ query storage($id: ID!, $itemCursor: String, $storageCursor: String) {
     }
     parent {
       id
-    }
-  }
-  storageAncestors(id: $id) {
-    edges {
-      node {
-        id
-        name
-      }
     }
   }
 }
