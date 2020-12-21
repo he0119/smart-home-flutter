@@ -57,47 +57,52 @@ class _TopicDetailPage extends StatelessWidget {
             ),
             child: Scaffold(
               appBar: AppBar(),
-              body: RefreshIndicator(
-                onRefresh: () async {
-                  BlocProvider.of<TopicDetailBloc>(context)
-                      .add(TopicDetailRefreshed(topicId: state.topic.id));
-                },
-                child: GestureDetector(
-                  onTap: () {
-                    // Dismiss the keyboard
-                    FocusScopeNode currentFocus = FocusScope.of(context);
+              body: Column(
+                children: [
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        BlocProvider.of<TopicDetailBloc>(context)
+                            .add(TopicDetailRefreshed(topicId: state.topic.id));
+                      },
+                      child: GestureDetector(
+                        onTap: () {
+                          // Dismiss the keyboard
+                          FocusScopeNode currentFocus = FocusScope.of(context);
 
-                    if (!currentFocus.hasPrimaryFocus) {
-                      currentFocus.unfocus();
-                    }
-                  },
-                  child: CustomScrollView(
-                    slivers: <Widget>[
-                      SliverToBoxAdapter(
-                        child: TopicItem(
-                          topic: state.topic,
-                          showBody: true,
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
+                        },
+                        child: CustomScrollView(
+                          slivers: <Widget>[
+                            SliverToBoxAdapter(
+                              child: TopicItem(
+                                topic: state.topic,
+                                showBody: true,
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                child: Text('全部评论',
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                            SliverCommentList(comments: state.comments),
+                          ],
                         ),
                       ),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                          child: Text('全部评论', style: TextStyle(fontSize: 20)),
-                        ),
-                      ),
-                      SliverCommentList(comments: state.comments),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              bottomNavigationBar: Transform.translate(
-                offset: MediaQuery.of(context).viewInsets.bottom == 0
-                    ? Offset(0.0, 0.0)
-                    : Offset(
-                        0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
-                child: AddCommentButtonBar(
-                  topic: state.topic,
-                ),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    child: AddCommentButtonBar(
+                      topic: state.topic,
+                    ),
+                  )
+                ],
               ),
             ),
           );

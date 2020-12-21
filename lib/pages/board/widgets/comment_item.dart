@@ -53,15 +53,17 @@ class SubCommentList extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(32, 8, 0, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: comments.map((e) {
-          return Row(
-            children: [
-              Text(e.user.username),
-              Text(': '),
-              Text(e.body),
-            ],
-          );
-        }).toList(),
+        children: [
+          for (var comment in comments.take(2))
+            Row(
+              children: [
+                Text(comment.user.username),
+                Text(': '),
+                Text(comment.body),
+              ],
+            ),
+          if (comments.length >= 2) Text('查看所有评论'),
+        ],
       ),
     );
   }

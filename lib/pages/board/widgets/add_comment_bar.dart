@@ -15,13 +15,25 @@ class AddCommentButtonBar extends StatefulWidget {
 
 class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
   final _controller = TextEditingController();
+  final FocusNode _focusNode = new FocusNode();
 
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
+  }
+
+  void _onFocusChange() {
+    setState(() {});
   }
 
   @override
@@ -40,10 +52,11 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
             key: _formKey,
             child: TextFormField(
               controller: _controller,
+              focusNode: _focusNode,
               maxLines: null,
               decoration: InputDecoration(labelText: '添加评论'),
               validator: (value) {
-                if (value.isEmpty) {
+                if (_focusNode.hasFocus && value.isEmpty) {
                   return '评论不能为空';
                 }
                 return null;
@@ -52,15 +65,18 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
             ),
           ),
           trailing: OutlineButton(
-            onPressed: () {
-              if (_formKey.currentState.validate()) {
-                showInfoSnackBar('正在发送...', duration: 1);
-                BlocProvider.of<CommentEditBloc>(context).add(CommentAdded(
-                  topicId: widget.topic.id,
-                  body: _controller.text,
-                ));
-              }
-            },
+            onPressed: _focusNode.hasFocus
+                ? () {
+                    if (_formKey.currentState.validate()) {
+                      showInfoSnackBar('正在发送...', duration: 1);
+                      BlocProvider.of<CommentEditBloc>(context)
+                          .add(CommentAdded(
+                        topicId: widget.topic.id,
+                        body: _controller.text,
+                      ));
+                    }
+                  }
+                : null,
             borderSide: BorderSide.none,
             child: Text('发送'),
           ),
