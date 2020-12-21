@@ -46,6 +46,7 @@ class _StorageItemListState extends State<StorageItemList> {
     List<dynamic> merged = List.from(widget.storages)..addAll(widget.items);
     return Scrollbar(
       child: ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
         itemCount: widget.hasNextPage ? merged.length + 1 : merged.length,
         itemBuilder: (BuildContext context, int index) {
           if (index >= merged.length) {
