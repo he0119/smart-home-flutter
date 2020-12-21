@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/blocs/board/topic_detail/topic_detail_bloc.dart';
 import 'package:smart_home/pages/board/topic_edit_page.dart';
@@ -54,6 +55,8 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final loginUser =
+        context.select((AppPreferencesBloc b) => b.state.loginUser);
     return BlocBuilder<TopicDetailBloc, TopicDetailState>(
       builder: (context, state) {
         if (state is TopicDetailFailure) {
@@ -77,26 +80,28 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
             child: Scaffold(
               appBar: AppBar(
                 actions: <Widget>[
-                  Tooltip(
-                    message: '修改',
-                    child: IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => BlocProvider.value(
-                              value: BlocProvider.of<TopicDetailBloc>(context),
-                              child: TopicEditPage(
-                                isEditing: true,
-                                topic: state.topic,
+                  if (loginUser == state.topic.user)
+                    Tooltip(
+                      message: '修改',
+                      child: IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                value:
+                                    BlocProvider.of<TopicDetailBloc>(context),
+                                child: TopicEditPage(
+                                  isEditing: true,
+                                  topic: state.topic,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
                 ],
               ),
               body: BlocListener<CommentEditBloc, CommentEditState>(

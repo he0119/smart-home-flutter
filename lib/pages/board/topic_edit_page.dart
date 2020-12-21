@@ -60,6 +60,9 @@ class _TopicEditPageState extends State<TopicEditPage> {
               showInfoSnackBar('话题添加成功');
             }
           }
+          if (state is TopicFailure) {
+            showErrorSnackBar(state.message);
+          }
         },
         builder: (context, state) => Scaffold(
           appBar: AppBar(
