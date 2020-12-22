@@ -1,6 +1,6 @@
 const String searchQuery = r"""
-query search($key: String!) {
-  itemName: items(isDeleted: false, name_Icontains: $key) {
+query search($isDeleted: Boolean, $key: String!) {
+  itemName: items(isDeleted: $isDeleted, name_Icontains: $key) {
     edges {
       node {
         id
@@ -9,7 +9,7 @@ query search($key: String!) {
       }
     }
   }
-  itemDescription: items(isDeleted: false, description_Icontains: $key) {
+  itemDescription: items(isDeleted: $isDeleted, description_Icontains: $key) {
     edges {
       node {
         id

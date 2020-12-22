@@ -234,10 +234,13 @@ class StorageRepository {
     return listofStorage;
   }
 
-  Future<List<dynamic>> search(String key) async {
+  Future<List<dynamic>> search(String key, {bool isDeleted = false}) async {
     final QueryOptions options = QueryOptions(
       document: gql(searchQuery),
-      variables: {'key': key},
+      variables: {
+        'key': key,
+        'isDeleted': isDeleted,
+      },
       fetchPolicy: FetchPolicy.noCache,
     );
     final results = await graphqlApiClient.query(options);
