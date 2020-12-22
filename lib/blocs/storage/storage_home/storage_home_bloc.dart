@@ -7,7 +7,7 @@ import 'package:smart_home/repositories/storage_repository.dart';
 part 'storage_home_event.dart';
 part 'storage_home_state.dart';
 
-enum ItemType { expired, nearExpired, recentlyAdded, recentlyUpdated, all }
+enum ItemType { expired, nearExpired, recentlyCreated, recentlyEdited, all }
 
 class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
   final StorageRepository storageRepository;
@@ -25,8 +25,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
         Map<String, List<Item>> homepage =
             await storageRepository.homePage(cache: false);
         yield StorageHomeSuccess(
-          recentlyAddedItems: homepage['recentlyAddedItems'],
-          recentlyUpdatedItems: homepage['recentlyUpdatedItems'],
+          recentlyCreatedItems: homepage['recentlyCreatedItems'],
+          recentlyEditedItems: homepage['recentlyEditedItems'],
           expiredItems: homepage['expiredItems'],
           nearExpiredItems: homepage['nearExpiredItems'],
           itemType: ItemType.all,
@@ -57,28 +57,28 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               itemType: ItemType.nearExpired,
             );
             break;
-          case ItemType.recentlyAdded:
-            List<Item> recentlyAddedItems =
-                await storageRepository.recentlyAddedItems();
+          case ItemType.recentlyCreated:
+            List<Item> recentlyCreatedItems =
+                await storageRepository.recentlyCreatedItems();
             yield StorageHomeSuccess(
-              recentlyAddedItems: recentlyAddedItems,
-              itemType: ItemType.recentlyAdded,
+              recentlyCreatedItems: recentlyCreatedItems,
+              itemType: ItemType.recentlyCreated,
             );
             break;
-          case ItemType.recentlyUpdated:
-            List<Item> recentlyUpdatedItems =
-                await storageRepository.recentlyUpdatedItems();
+          case ItemType.recentlyEdited:
+            List<Item> recentlyEditedItems =
+                await storageRepository.recentlyEditedItems();
             yield StorageHomeSuccess(
-              recentlyUpdatedItems: recentlyUpdatedItems,
-              itemType: ItemType.recentlyUpdated,
+              recentlyEditedItems: recentlyEditedItems,
+              itemType: ItemType.recentlyEdited,
             );
             break;
           case ItemType.all:
             Map<String, List<Item>> homepage =
                 await storageRepository.homePage();
             yield StorageHomeSuccess(
-              recentlyAddedItems: homepage['recentlyAddedItems'],
-              recentlyUpdatedItems: homepage['recentlyUpdatedItems'],
+              recentlyCreatedItems: homepage['recentlyCreatedItems'],
+              recentlyEditedItems: homepage['recentlyEditedItems'],
               expiredItems: homepage['expiredItems'],
               nearExpiredItems: homepage['nearExpiredItems'],
               itemType: ItemType.all,
@@ -112,32 +112,32 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               itemType: ItemType.nearExpired,
             );
             break;
-          case ItemType.recentlyAdded:
-            List<Item> recentlyAddedItems =
-                await storageRepository.recentlyAddedItems(
+          case ItemType.recentlyCreated:
+            List<Item> recentlyCreatedItems =
+                await storageRepository.recentlyCreatedItems(
               cache: false,
             );
             yield StorageHomeSuccess(
-              recentlyAddedItems: recentlyAddedItems,
-              itemType: ItemType.recentlyAdded,
+              recentlyCreatedItems: recentlyCreatedItems,
+              itemType: ItemType.recentlyCreated,
             );
             break;
-          case ItemType.recentlyUpdated:
-            List<Item> recentlyUpdatedItems =
-                await storageRepository.recentlyUpdatedItems(
+          case ItemType.recentlyEdited:
+            List<Item> recentlyEditedItems =
+                await storageRepository.recentlyEditedItems(
               cache: false,
             );
             yield StorageHomeSuccess(
-              recentlyUpdatedItems: recentlyUpdatedItems,
-              itemType: ItemType.recentlyUpdated,
+              recentlyEditedItems: recentlyEditedItems,
+              itemType: ItemType.recentlyEdited,
             );
             break;
           case ItemType.all:
             Map<String, List<Item>> homepage =
                 await storageRepository.homePage(cache: false);
             yield StorageHomeSuccess(
-              recentlyAddedItems: homepage['recentlyAddedItems'],
-              recentlyUpdatedItems: homepage['recentlyUpdatedItems'],
+              recentlyCreatedItems: homepage['recentlyCreatedItems'],
+              recentlyEditedItems: homepage['recentlyEditedItems'],
               expiredItems: homepage['expiredItems'],
               nearExpiredItems: homepage['nearExpiredItems'],
               itemType: ItemType.all,

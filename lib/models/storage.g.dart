@@ -44,18 +44,21 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
         : Storage.fromJson(json['storage'] as Map<String, dynamic>),
     description: json['description'] as String,
     price: (json['price'] as num)?.toDouble(),
-    expirationDate: json['expirationDate'] == null
+    expiredAt: json['expiredAt'] == null
         ? null
-        : DateTime.parse(json['expirationDate'] as String),
-    editor: json['editor'] == null
+        : DateTime.parse(json['expiredAt'] as String),
+    editedAt: json['editedAt'] == null
         ? null
-        : User.fromJson(json['editor'] as Map<String, dynamic>),
-    updateDate: json['updateDate'] == null
+        : DateTime.parse(json['editedAt'] as String),
+    editedBy: json['editedBy'] == null
         ? null
-        : DateTime.parse(json['updateDate'] as String),
-    dateAdded: json['dateAdded'] == null
+        : User.fromJson(json['editedBy'] as Map<String, dynamic>),
+    createdAt: json['createdAt'] == null
         ? null
-        : DateTime.parse(json['dateAdded'] as String),
+        : DateTime.parse(json['createdAt'] as String),
+    createdBy: json['createdBy'] == null
+        ? null
+        : User.fromJson(json['createdBy'] as Map<String, dynamic>),
   );
 }
 
@@ -66,8 +69,9 @@ Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
       'storage': instance.storage,
       'description': instance.description,
       'price': instance.price,
-      'expirationDate': instance.expirationDate?.toIso8601String(),
-      'editor': instance.editor,
-      'updateDate': instance.updateDate?.toIso8601String(),
-      'dateAdded': instance.dateAdded?.toIso8601String(),
+      'expiredAt': instance.expiredAt?.toIso8601String(),
+      'editedAt': instance.editedAt?.toIso8601String(),
+      'editedBy': instance.editedBy,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'createdBy': instance.createdBy,
     };

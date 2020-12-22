@@ -26,28 +26,28 @@ class StorageHomeFailure extends StorageHomeState {
 }
 
 class StorageHomeSuccess extends StorageHomeState {
-  final List<Item> recentlyAddedItems;
-  final List<Item> recentlyUpdatedItems;
+  final List<Item> recentlyCreatedItems;
+  final List<Item> recentlyEditedItems;
   final List<Item> expiredItems;
   final List<Item> nearExpiredItems;
   final ItemType itemType;
 
   const StorageHomeSuccess(
-      {this.recentlyAddedItems,
-      this.recentlyUpdatedItems,
+      {this.recentlyCreatedItems,
+      this.recentlyEditedItems,
       this.expiredItems,
       this.nearExpiredItems,
       @required this.itemType});
 
   @override
   List<Object> get props => [
-        recentlyAddedItems,
-        recentlyUpdatedItems,
+        recentlyCreatedItems,
+        recentlyEditedItems,
         expiredItems,
         nearExpiredItems
       ];
 
   @override
   String toString() =>
-      'StorageHomeSuccess { recentlyAddedItems ${recentlyAddedItems?.length ?? 0}, recentlyUpdatedItems ${recentlyUpdatedItems?.length ?? 0}, expiredItems ${expiredItems?.length ?? 0}, nearExpiredItems ${nearExpiredItems?.length ?? 0}, }';
+      'StorageHomeSuccess { recentlyCreatedItems ${recentlyCreatedItems?.length ?? 0}, recentlyEditedItems ${recentlyEditedItems?.length ?? 0}, expiredItems ${expiredItems?.length ?? 0}, nearExpiredItems ${nearExpiredItems?.length ?? 0}, }';
 }

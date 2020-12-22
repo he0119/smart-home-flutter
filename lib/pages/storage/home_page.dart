@@ -93,16 +93,16 @@ class _StorageHomeBody extends StatelessWidget {
       listofWidget.add(_buildSliverStickyHeader(context, state.nearExpiredItems,
           ItemType.nearExpired, state.itemType));
     }
-    if (state.recentlyUpdatedItems?.isNotEmpty ?? false) {
+    if (state.recentlyEditedItems?.isNotEmpty ?? false) {
+      listofWidget.add(_buildSliverStickyHeader(context,
+          state.recentlyEditedItems, ItemType.recentlyEdited, state.itemType));
+    }
+    if (state.recentlyCreatedItems?.isNotEmpty ?? false) {
       listofWidget.add(_buildSliverStickyHeader(
           context,
-          state.recentlyUpdatedItems,
-          ItemType.recentlyUpdated,
+          state.recentlyCreatedItems,
+          ItemType.recentlyCreated,
           state.itemType));
-    }
-    if (state.recentlyAddedItems?.isNotEmpty ?? false) {
-      listofWidget.add(_buildSliverStickyHeader(context,
-          state.recentlyAddedItems, ItemType.recentlyAdded, state.itemType));
     }
     return listofWidget;
   }
@@ -117,11 +117,11 @@ class _StorageHomeBody extends StatelessWidget {
       case ItemType.nearExpired:
         headerText = '即将过期';
         break;
-      case ItemType.recentlyAdded:
-        headerText = '最近添加';
+      case ItemType.recentlyCreated:
+        headerText = '最近录入';
         break;
-      case ItemType.recentlyUpdated:
-        headerText = '最近更新';
+      case ItemType.recentlyEdited:
+        headerText = '最近修改';
         break;
       case ItemType.all:
         break;
@@ -170,13 +170,13 @@ class _StorageHomeBody extends StatelessWidget {
     switch (type) {
       case ItemType.expired:
       case ItemType.nearExpired:
-        differenceText = '（${item.expirationDate.differenceFromNowStr()}）';
+        differenceText = '（${item.expiredAt.differenceFromNowStr()}）';
         break;
-      case ItemType.recentlyAdded:
-        differenceText = '（${item.dateAdded.differenceFromNowStr()}）';
+      case ItemType.recentlyCreated:
+        differenceText = '（${item.createdAt.differenceFromNowStr()}）';
         break;
-      case ItemType.recentlyUpdated:
-        differenceText = '（${item.updateDate.differenceFromNowStr()}）';
+      case ItemType.recentlyEdited:
+        differenceText = '（${item.editedAt.differenceFromNowStr()}）';
         break;
       case ItemType.all:
         break;

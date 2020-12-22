@@ -20,7 +20,7 @@ class StorageRepository {
     @required String storageId,
     String description,
     double price,
-    DateTime expirationDate,
+    DateTime expiredAt,
   }) async {
     final MutationOptions options = MutationOptions(
       document: gql(addItemMutation),
@@ -31,7 +31,7 @@ class StorageRepository {
           'storageId': storageId,
           'description': description,
           'price': price,
-          'expirationDate': expirationDate?.toIso8601String(),
+          'expiredAt': expiredAt?.toIso8601String(),
         }
       },
     );
@@ -105,7 +105,7 @@ class StorageRepository {
   }
 
   /// 存储管理主页所需要的数据
-  /// 过期，即将过期和最近添加，更新的物品
+  /// 过期，即将过期和最近录入，修改的物品
   Future<Map<String, List<Item>>> homePage({bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       document: gql(homepageQuery),
@@ -118,15 +118,15 @@ class StorageRepository {
     );
     final results = await graphqlApiClient.query(options);
 
-    final List<dynamic> recentlyAddedItems =
-        results.data['recentlyAddedItems']['edges'];
-    final List<Item> listofRecentlyAddedItems = recentlyAddedItems
+    final List<dynamic> recentlyCreatedItems =
+        results.data['recentlyCreatedItems']['edges'];
+    final List<Item> listofrecentlyCreatedItems = recentlyCreatedItems
         .map((dynamic e) => Item.fromJson(e['node']))
         .toList();
 
-    final List<dynamic> recentlyUpdatedItems =
-        results.data['recentlyUpdatedItems']['edges'];
-    final List<Item> listofRecentlyUpdatedItems = recentlyUpdatedItems
+    final List<dynamic> recentlyEditedItems =
+        results.data['recentlyEditedItems']['edges'];
+    final List<Item> listofrecentlyEditedItems = recentlyEditedItems
         .map((dynamic e) => Item.fromJson(e['node']))
         .toList();
 
@@ -140,8 +140,8 @@ class StorageRepository {
         nearExpiredItems.map((dynamic e) => Item.fromJson(e['node'])).toList();
 
     return {
-      'recentlyAddedItems': listofRecentlyAddedItems,
-      'recentlyUpdatedItems': listofRecentlyUpdatedItems,
+      'recentlyCreatedItems': listofrecentlyCreatedItems,
+      'recentlyEditedItems': listofrecentlyEditedItems,
       'expiredItems': listofExpiredItems,
       'nearExpiredItems': listofNearExpiredItems,
     };
@@ -182,10 +182,10 @@ class StorageRepository {
     return listofNearExpiredItems;
   }
 
-  Future<List<Item>> recentlyAddedItems(
+  Future<List<Item>> recentlyCreatedItems(
       {String after, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      document: gql(recentlyAddedItemsQuery),
+      document: gql(recentlyCreatedItemsQuery),
       variables: {
         'after': after,
       },
@@ -193,19 +193,19 @@ class StorageRepository {
     );
     final results = await graphqlApiClient.query(options);
 
-    final List<dynamic> recentlyAddedItems =
-        results.data['recentlyAddedItems']['edges'];
-    final List<Item> listofRecentlyAddedItems = recentlyAddedItems
+    final List<dynamic> recentlyCreatedItems =
+        results.data['recentlyCreatedItems']['edges'];
+    final List<Item> listofrecentlyCreatedItems = recentlyCreatedItems
         .map((dynamic e) => Item.fromJson(e['node']))
         .toList();
 
-    return listofRecentlyAddedItems;
+    return listofrecentlyCreatedItems;
   }
 
-  Future<List<Item>> recentlyUpdatedItems(
+  Future<List<Item>> recentlyEditedItems(
       {String after, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
-      document: gql(recentlyUpdatedItemsQuery),
+      document: gql(recentlyEditedItemsQuery),
       variables: {
         'after': after,
       },
@@ -213,13 +213,13 @@ class StorageRepository {
     );
     final results = await graphqlApiClient.query(options);
 
-    final List<dynamic> recentlyUpdatedItems =
-        results.data['recentlyUpdatedItems']['edges'];
-    final List<Item> listofRecentlyUpdatedItems = recentlyUpdatedItems
+    final List<dynamic> recentlyEditedItems =
+        results.data['recentlyEditedItems']['edges'];
+    final List<Item> listofrecentlyEditedItems = recentlyEditedItems
         .map((dynamic e) => Item.fromJson(e['node']))
         .toList();
 
-    return listofRecentlyUpdatedItems;
+    return listofrecentlyEditedItems;
   }
 
   Future<List<Storage>> rootStorage({bool cache = true}) async {
@@ -348,7 +348,7 @@ class StorageRepository {
     String storageId,
     String description,
     double price,
-    DateTime expirationDate,
+    DateTime expiredAt,
   }) async {
     final MutationOptions options = MutationOptions(
       document: gql(updateItemMutation),
@@ -360,7 +360,7 @@ class StorageRepository {
           'storageId': storageId,
           'description': description,
           'price': price,
-          'expirationDate': expirationDate?.toIso8601String(),
+          'expiredAt': expiredAt?.toIso8601String(),
         }
       },
     );

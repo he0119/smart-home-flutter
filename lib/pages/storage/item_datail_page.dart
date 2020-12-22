@@ -235,19 +235,23 @@ class _ItemDetailList extends StatelessWidget {
         ),
         ListTile(
           title: Text('有效期至'),
-          trailing: SelectableText(item.expirationDate?.toLocalStr() ?? ''),
+          trailing: SelectableText(item.expiredAt?.toLocalStr() ?? ''),
         ),
         ListTile(
-          title: Text('录入者'),
-          trailing: SelectableText(item.editor.username),
+          title: Text('修改人'),
+          trailing: SelectableText(item.editedBy.username),
         ),
         ListTile(
-          title: Text('更新时间'),
-          trailing: SelectableText(item.updateDate?.toLocalStr() ?? ''),
+          title: Text('修改时间'),
+          trailing: SelectableText(item.editedAt?.toLocalStr() ?? ''),
         ),
         ListTile(
-          title: Text('添加时间'),
-          trailing: SelectableText(item.dateAdded?.toLocalStr() ?? ''),
+          title: Text('录入人'),
+          trailing: SelectableText(item.createdBy.username),
+        ),
+        ListTile(
+          title: Text('录入时间'),
+          trailing: SelectableText(item.createdAt?.toLocalStr() ?? ''),
         ),
       ],
     );

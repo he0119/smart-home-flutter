@@ -69,10 +69,11 @@ class Item extends Equatable {
   final Storage storage;
   final String description;
   final double price;
-  final DateTime expirationDate;
-  final User editor;
-  final DateTime updateDate;
-  final DateTime dateAdded;
+  final DateTime expiredAt;
+  final DateTime editedAt;
+  final User editedBy;
+  final DateTime createdAt;
+  final User createdBy;
 
   Item({
     this.id,
@@ -81,10 +82,11 @@ class Item extends Equatable {
     this.storage,
     this.description,
     this.price,
-    this.expirationDate,
-    this.editor,
-    this.updateDate,
-    this.dateAdded,
+    this.expiredAt,
+    this.editedAt,
+    this.editedBy,
+    this.createdAt,
+    this.createdBy,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
@@ -100,10 +102,11 @@ class Item extends Equatable {
       storage,
       description,
       price,
-      expirationDate,
-      editor,
-      updateDate,
-      dateAdded,
+      expiredAt,
+      editedAt,
+      editedBy,
+      createdAt,
+      createdBy,
     ];
   }
 }

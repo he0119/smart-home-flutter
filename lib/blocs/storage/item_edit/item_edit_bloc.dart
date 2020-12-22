@@ -41,7 +41,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
           storageId: event.storageId,
           description: event.description,
           price: event.price,
-          expirationDate: event.expirationDate,
+          expiredAt: event.expiredAt,
         );
         itemDetailBloc.add(ItemDetailRefreshed(itemId: item.id));
         yield ItemUpdateSuccess(item: item);
@@ -80,7 +80,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
           storageId: event.storageId,
           description: event.description,
           price: event.price,
-          expirationDate: event.expirationDate,
+          expiredAt: event.expiredAt,
         );
 
         yield ItemAddSuccess(item: item);

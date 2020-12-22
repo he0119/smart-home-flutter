@@ -11,9 +11,9 @@ mutation addItem($input: AddItemMutationInput!) {
       }
       description
       price
-      expirationDate
-      updateDate
-      editor {
+      expiredAt
+      editedAt
+      editedBy {
         username
       }
     }

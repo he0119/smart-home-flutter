@@ -41,7 +41,7 @@ query storage($id: ID!, $itemCursor: String, $storageCursor: String) {
         }
       }
     }
-    items(after: $itemCursor) {
+    items(isDeleted: false, after: $itemCursor) {
       pageInfo {
         hasNextPage
         endCursor

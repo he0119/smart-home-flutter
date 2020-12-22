@@ -1,6 +1,6 @@
 const String expiredItemsQuery = r"""
 query expiredItems($now: DateTime!, $after: String) {
-  expiredItems: items(after: $after, expirationDate_Lt: $now, orderBy: "-expiration_date") {
+  expiredItems: items(isDeleted: false, after: $after, expiredAt_Lt: $now, orderBy: "-expired_at") {
     pageInfo {
       hasNextPage
       endCursor
@@ -10,7 +10,7 @@ query expiredItems($now: DateTime!, $after: String) {
         id
         name
         description
-        expirationDate
+        expiredAt
       }
     }
   }

@@ -11,10 +11,13 @@ query item($id: ID!) {
     }
     description
     price
-    expirationDate
-    updateDate
-    dateAdded
-    editor {
+    expiredAt
+    editedAt
+    createdAt
+    editedBy {
+      username
+    }
+    createdBy {
       username
     }
   }

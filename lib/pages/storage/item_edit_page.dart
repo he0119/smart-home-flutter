@@ -29,7 +29,7 @@ class ItemEditPage extends StatefulWidget {
 
 class _ItemEditPageState extends State<ItemEditPage> {
   String storageId;
-  DateTime expirationDate;
+  DateTime expiredAt;
   TextEditingController _nameController;
   TextEditingController _numberController;
   TextEditingController _descriptionController;
@@ -195,13 +195,13 @@ class _ItemEditPageState extends State<ItemEditPage> {
                         }
                       },
                       initialValue: widget.isEditing
-                          ? widget.item.expirationDate?.toLocal()
+                          ? widget.item.expiredAt?.toLocal()
                           : null,
                       decoration: InputDecoration(
                         labelText: '有效期至',
                       ),
                       onChanged: (value) {
-                        expirationDate = value;
+                        expiredAt = value;
                       },
                     ),
                     RoundedRaisedButton(
@@ -245,7 +245,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
       _descriptionController =
           TextEditingController(text: widget.item.description);
       storageId = widget.item.storage.id;
-      expirationDate = widget.item.expirationDate;
+      expiredAt = widget.item.expiredAt;
     } else {
       _nameController = TextEditingController();
       _numberController = TextEditingController(text: '1');
@@ -283,7 +283,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
         oldStorageId: widget.item.id,
         description: _descriptionController.text,
         price: _price,
-        expirationDate: expirationDate?.toUtc(),
+        expiredAt: expiredAt?.toUtc(),
       ));
     } else {
       BlocProvider.of<ItemEditBloc>(context).add(ItemAdded(
@@ -292,7 +292,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
         storageId: storageId,
         description: _descriptionController.text,
         price: _price,
-        expirationDate: expirationDate?.toUtc(),
+        expiredAt: expiredAt?.toUtc(),
       ));
     }
   }
