@@ -63,14 +63,15 @@ Widget _buildItem(BuildContext context, Item item) {
       children: <Widget>[
         ListTile(
           title: Text(item.name),
-          onTap: () {
-            Navigator.of(context).push(
+          onTap: () async {
+            await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => ItemDetailPage(
                   itemId: item.id,
                 ),
               ),
             );
+            BlocProvider.of<ConsumablesBloc>(context).add(ConsumablesFetched());
           },
         ),
         if (item.consumables != null)
@@ -82,14 +83,16 @@ Widget _buildItem(BuildContext context, Item item) {
                 subtitle: consumable.expiredAt != null
                     ? Text(consumable.expiredAt.differenceFromNowStr())
                     : null,
-                onTap: () {
-                  Navigator.of(context).push(
+                onTap: () async {
+                  await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => ItemDetailPage(
                         itemId: consumable.id,
                       ),
                     ),
                   );
+                  BlocProvider.of<ConsumablesBloc>(context)
+                      .add(ConsumablesFetched());
                 },
               ),
             ),
