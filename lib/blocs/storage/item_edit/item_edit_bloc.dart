@@ -111,5 +111,14 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         yield ItemEditFailure(e.message);
       }
     }
+    if (event is ItemRestored) {
+      yield ItemEditInProgress();
+      try {
+        await storageRepository.restoreItem(itemId: event.item.id);
+        yield ItemRestoreSuccess(item: event.item);
+      } catch (e) {
+        yield ItemEditFailure(e.message);
+      }
+    }
   }
 }

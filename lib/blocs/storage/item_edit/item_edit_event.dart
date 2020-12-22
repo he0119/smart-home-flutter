@@ -61,3 +61,12 @@ class ItemDeleted extends ItemEditEvent {
   @override
   String toString() => 'DeleteItem { name: ${item.name} }';
 }
+
+class ItemRestored extends ItemEditEvent {
+  final Item item;
+
+  const ItemRestored({@required this.item});
+
+  @override
+  String toString() => 'RestoreItem { name: ${item.name} }';
+}

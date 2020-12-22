@@ -46,3 +46,12 @@ class ItemDeleteSuccess extends ItemEditState {
   @override
   String toString() => 'ItemDeleteSuccess { item: ${item.name} }';
 }
+
+class ItemRestoreSuccess extends ItemEditState {
+  final Item item;
+
+  const ItemRestoreSuccess({@required this.item});
+
+  @override
+  String toString() => 'ItemRestoreSuccess { item: ${item.name} }';
+}

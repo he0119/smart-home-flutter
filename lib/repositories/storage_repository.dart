@@ -74,6 +74,18 @@ class StorageRepository {
     await graphqlApiClient.mutate(options);
   }
 
+  Future<void> restoreItem({String itemId}) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(restoreItemMutation),
+      variables: {
+        'input': {
+          'itemId': itemId,
+        },
+      },
+    );
+    await graphqlApiClient.mutate(options);
+  }
+
   Future<void> deleteStorage({String storageId}) async {
     final MutationOptions options = MutationOptions(
       document: gql(deleteStorageMutation),
@@ -102,6 +114,25 @@ class StorageRepository {
         expiredItems.map((dynamic e) => Item.fromJson(e['node'])).toList();
 
     return listofExpiredItems;
+  }
+
+  Future<List<Item>> deletedItems({String after, bool cache = true}) async {
+    final QueryOptions options = QueryOptions(
+      document: gql(deletedItemsQuery),
+      variables: {
+        'after': after,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final results = await graphqlApiClient.query(options);
+
+    final List<dynamic> deletedItemsJson =
+        results.data['deletedItems']['edges'];
+
+    final List<Item> deletedItems =
+        deletedItemsJson.map((dynamic e) => Item.fromJson(e['node'])).toList();
+
+    return deletedItems;
   }
 
   /// 存储管理主页所需要的数据

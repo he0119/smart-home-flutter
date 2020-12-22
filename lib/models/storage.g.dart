@@ -59,6 +59,10 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
     createdBy: json['createdBy'] == null
         ? null
         : User.fromJson(json['createdBy'] as Map<String, dynamic>),
+    isDeleted: json['isDeleted'] as bool,
+    deletedAt: json['deletedAt'] == null
+        ? null
+        : DateTime.parse(json['deletedAt'] as String),
   );
 }
 
@@ -74,4 +78,6 @@ Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
       'editedBy': instance.editedBy,
       'createdAt': instance.createdAt?.toIso8601String(),
       'createdBy': instance.createdBy,
+      'isDeleted': instance.isDeleted,
+      'deletedAt': instance.deletedAt?.toIso8601String(),
     };

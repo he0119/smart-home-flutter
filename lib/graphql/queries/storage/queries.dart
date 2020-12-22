@@ -7,3 +7,4 @@ export 'recently_edited_items.dart';
 export 'rootStorage.dart';
 export 'search.dart';
 export 'storage.dart';
+export 'deleted_items.dart';

@@ -74,6 +74,8 @@ class Item extends Equatable {
   final User editedBy;
   final DateTime createdAt;
   final User createdBy;
+  final bool isDeleted;
+  final DateTime deletedAt;
 
   Item({
     this.id,
@@ -87,6 +89,8 @@ class Item extends Equatable {
     this.editedBy,
     this.createdAt,
     this.createdBy,
+    this.isDeleted,
+    this.deletedAt,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
@@ -107,6 +111,8 @@ class Item extends Equatable {
       editedBy,
       createdAt,
       createdBy,
+      isDeleted,
+      deletedAt,
     ];
   }
 }
