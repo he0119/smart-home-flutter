@@ -124,7 +124,7 @@ class _StorageDetailPage extends StatelessWidget {
       );
     }
     if (state is StorageDetailSuccess) {
-      List<Storage> paths = state.ancestors;
+      List<Storage> paths = state.storage.ancestors ?? [];
       if (!paths.contains(state.storage)) {
         // 防止重复添加相同名称的位置
         // 因为无限列表重新获取时，位置对象虽然名字不会变，但是内容改变

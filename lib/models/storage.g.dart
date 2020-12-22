@@ -13,6 +13,10 @@ Storage _$StorageFromJson(Map<String, dynamic> json) {
     parent: json['parent'] == null
         ? null
         : Storage.fromJson(json['parent'] as Map<String, dynamic>),
+    ancestors: (json['ancestors'] as List)
+        ?.map((e) =>
+            e == null ? null : Storage.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     description: json['description'] as String,
     children: (json['children'] as List)
         ?.map((e) =>
@@ -29,6 +33,7 @@ Map<String, dynamic> _$StorageToJson(Storage instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'parent': instance.parent,
+      'ancestors': instance.ancestors,
       'description': instance.description,
       'children': instance.children,
       'items': instance.items,

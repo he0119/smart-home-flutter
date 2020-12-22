@@ -12,6 +12,7 @@ class Storage extends Equatable {
   final String id;
   final String name;
   final Storage parent;
+  final List<Storage> ancestors;
   final String description;
   final List<Storage> children;
   final List<Item> items;
@@ -20,6 +21,7 @@ class Storage extends Equatable {
     this.id,
     this.name,
     this.parent,
+    this.ancestors,
     this.description,
     this.children,
     this.items,
@@ -36,6 +38,7 @@ class Storage extends Equatable {
       id,
       name,
       parent,
+      ancestors,
       description,
       children,
       items,
@@ -46,6 +49,7 @@ class Storage extends Equatable {
     String id,
     String name,
     Storage parent,
+    List<Storage> ancestors,
     String description,
     List<Storage> children,
     List<Item> items,
@@ -54,6 +58,7 @@ class Storage extends Equatable {
       id: id ?? this.id,
       name: name ?? this.name,
       parent: parent ?? this.parent,
+      ancestors: ancestors ?? this.ancestors,
       description: description ?? this.description,
       children: children ?? this.children,
       items: items ?? this.items,
