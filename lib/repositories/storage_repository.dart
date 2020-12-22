@@ -249,6 +249,27 @@ class StorageRepository {
     return recentlyEditedItems;
   }
 
+  Future<List<Item>> consumables({String after, bool cache = true}) async {
+    final QueryOptions options = QueryOptions(
+      document: gql(consumablesQuery),
+      variables: {
+        'after': after,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final results = await graphqlApiClient.query(options);
+
+    final List<dynamic> consumablesJson =
+        results.data.flattenConnection['consumables'];
+    final List<Item> consumables =
+        consumablesJson.map((dynamic e) => Item.fromJson(e)).toList();
+
+    // 去重
+    // FIXME: 这是服务器上的 bug
+    // https://code.djangoproject.com/ticket/2361
+    return consumables.toSet().toList();
+  }
+
   Future<List<Storage>> rootStorage({bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       document: gql(rootStorageQuery),

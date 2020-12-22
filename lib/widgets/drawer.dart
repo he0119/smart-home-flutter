@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/authentication/authentication_bloc.dart';
 import 'package:smart_home/pages/settings/settings_page.dart';
+import 'package:smart_home/pages/storage/consumables_page.dart';
 import 'package:smart_home/pages/storage/recycle_bin_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/widgets/gravatar.dart';
@@ -17,16 +18,23 @@ class MyDrawer extends StatelessWidget {
         builder: (context, state) {
           return ListView(
             children: [
-              state is AuthenticationSuccess
-                  ? UserAccountsDrawerHeader(
-                      accountName: Text(state.currentUser.username),
-                      accountEmail: Text(state.currentUser.email),
-                      currentAccountPicture: CircleGravatar(
-                        email: state.currentUser.email,
-                        size: 512,
-                      ),
-                    )
-                  : Container(),
+              if (state is AuthenticationSuccess)
+                UserAccountsDrawerHeader(
+                  accountName: Text(state.currentUser.username),
+                  accountEmail: Text(state.currentUser.email),
+                  currentAccountPicture: CircleGravatar(
+                    email: state.currentUser.email,
+                    size: 512,
+                  ),
+                ),
+              ListTile(
+                title: Text('耗材管理'),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ConsumablesPage(),
+                  ));
+                },
+              ),
               ListTile(
                 title: Text('回收站'),
                 onTap: () {

@@ -68,6 +68,10 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
     deletedAt: json['deletedAt'] == null
         ? null
         : DateTime.parse(json['deletedAt'] as String),
+    consumables: (json['consumables'] as List)
+        ?.map(
+            (e) => e == null ? null : Item.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -85,4 +89,5 @@ Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
       'createdBy': instance.createdBy,
       'isDeleted': instance.isDeleted,
       'deletedAt': instance.deletedAt?.toIso8601String(),
+      'consumables': instance.consumables,
     };

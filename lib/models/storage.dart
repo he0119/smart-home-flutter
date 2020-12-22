@@ -81,6 +81,7 @@ class Item extends Equatable {
   final User createdBy;
   final bool isDeleted;
   final DateTime deletedAt;
+  final List<Item> consumables;
 
   Item({
     this.id,
@@ -96,6 +97,7 @@ class Item extends Equatable {
     this.createdBy,
     this.isDeleted,
     this.deletedAt,
+    this.consumables,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
@@ -118,6 +120,7 @@ class Item extends Equatable {
       createdBy,
       isDeleted,
       deletedAt,
+      consumables,
     ];
   }
 }
