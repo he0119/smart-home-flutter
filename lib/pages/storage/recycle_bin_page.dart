@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/storage/blocs.dart';
 
-import 'package:smart_home/blocs/storage/recycle_bin/recycle_bin_bloc.dart';
-import 'package:smart_home/blocs/storage/storage_home/storage_home_bloc.dart';
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/storage.dart';
 import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
