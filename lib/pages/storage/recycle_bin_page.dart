@@ -54,7 +54,10 @@ class RecycleBinPage extends StatelessWidget {
                 child: BlocListener<ItemEditBloc, ItemEditState>(
                   listener: (context, state) {
                     if (state is ItemRestoreSuccess) {
-                      showInfoSnackBar('物品 ${state.item.name} 恢复成功');
+                      showInfoSnackBar(
+                        '物品 ${state.item.name} 恢复成功',
+                        duration: 2,
+                      );
                     }
                     if (state is ItemEditFailure) {
                       showErrorSnackBar(state.message);
