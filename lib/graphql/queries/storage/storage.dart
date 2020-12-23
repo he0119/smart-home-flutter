@@ -1,18 +1,3 @@
-/// 获取所有的存储位置
-const String storagesQuery = r"""
-query storages($key: String) {
-  storages(name_Icontains: $key) {
-    edges {
-      node {
-        id
-        name
-        description
-      }
-    }
-  }
-}
-""";
-
 /// 通过 ID 获取位置详情
 const String storageQuery = r"""
 query storage($id: ID!, $itemCursor: String, $storageCursor: String) {

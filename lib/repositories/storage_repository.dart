@@ -192,6 +192,26 @@ class StorageRepository {
     return item;
   }
 
+  Future<List<Item>> items({
+    String key,
+    bool cache = true,
+  }) async {
+    final QueryOptions options = QueryOptions(
+      document: gql(itemsQuery),
+      variables: {
+        'key': key,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final result = await graphqlApiClient.query(options);
+
+    final List<dynamic> itemsJson = result.data.flattenConnection['items'];
+    final List<Item> items =
+        itemsJson.map((dynamic e) => Item.fromJson(e)).toList();
+
+    return items;
+  }
+
   Future<List<Item>> nearExpiredItems({String after, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       document: gql(nearExpiredItemsQuery),
