@@ -280,6 +280,8 @@ class _StorageDetailPage extends StatelessWidget {
         hasNextPage: state.hasNextPage,
         onFetch: () => BlocProvider.of<StorageDetailBloc>(context)
             .add(StorageDetailFetched()),
+        onPopDetailPage: () => BlocProvider.of<StorageDetailBloc>(context)
+            .add(StorageDetailChanged(id: state.storage.id)),
       );
     }
     return LoadingPage();
@@ -301,8 +303,6 @@ class _StorageDetailPage extends StatelessWidget {
                 create: (_) => ItemEditBloc(
                   storageRepository:
                       RepositoryProvider.of<StorageRepository>(context),
-                  storageDetailBloc:
-                      BlocProvider.of<StorageDetailBloc>(context),
                 ),
                 child: ItemEditPage(
                   isEditing: false,

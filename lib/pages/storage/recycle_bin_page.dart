@@ -104,15 +104,15 @@ Widget _buildItem(BuildContext context, Item item) {
     child: ListTile(
       title: text,
       subtitle: Text(item.description ?? ''),
-      onTap: () {
-        Navigator.of(context).push(
+      onTap: () async {
+        await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => ItemDetailPage(
               itemId: item.id,
-              storageHomeBloc: BlocProvider.of<StorageHomeBloc>(context),
             ),
           ),
         );
+        BlocProvider.of<RecycleBinBloc>(context).add(RecycleBinFetched());
       },
     ),
   );

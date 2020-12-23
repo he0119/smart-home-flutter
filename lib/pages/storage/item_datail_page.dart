@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
@@ -14,18 +15,10 @@ import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class ItemDetailPage extends StatelessWidget {
   final String itemId;
-  final StorageHomeBloc storageHomeBloc;
-  final StorageDetailBloc storageDetailBloc;
-  final StorageSearchBloc storageSearchBloc;
-  final String searchKeyword;
 
   const ItemDetailPage({
     Key key,
     @required this.itemId,
-    this.storageHomeBloc,
-    this.storageDetailBloc,
-    this.storageSearchBloc,
-    this.searchKeyword,
   }) : super(key: key);
 
   @override
@@ -42,11 +35,6 @@ class ItemDetailPage extends StatelessWidget {
           create: (context) => ItemEditBloc(
             storageRepository:
                 RepositoryProvider.of<StorageRepository>(context),
-            itemDetailBloc: BlocProvider.of<ItemDetailBloc>(context),
-            storageHomeBloc: storageHomeBloc,
-            storageDetailBloc: storageDetailBloc,
-            storageSearchBloc: storageSearchBloc,
-            searchKeyword: searchKeyword,
           ),
         ),
       ],
@@ -57,18 +45,10 @@ class ItemDetailPage extends StatelessWidget {
 
 class _ItemDetailPage extends StatelessWidget {
   final String itemId;
-  final StorageHomeBloc storageHomeBloc;
-  final StorageDetailBloc storageDetailBloc;
-  final StorageSearchBloc storageSearchBloc;
-  final String searchKeyword;
 
   const _ItemDetailPage({
     Key key,
     @required this.itemId,
-    this.storageHomeBloc,
-    this.storageDetailBloc,
-    this.storageSearchBloc,
-    this.searchKeyword,
   }) : super(key: key);
 
   @override
@@ -113,16 +93,11 @@ class _ItemDetailPage extends StatelessWidget {
                 List<Storage> listofStorages =
                     await RepositoryProvider.of<StorageRepository>(context)
                         .storages();
-                Navigator.of(context).push(MaterialPageRoute(
+                await Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<ItemEditBloc>(
                     create: (_) => ItemEditBloc(
                       storageRepository:
                           RepositoryProvider.of<StorageRepository>(context),
-                      itemDetailBloc: BlocProvider.of<ItemDetailBloc>(context),
-                      storageHomeBloc: storageHomeBloc,
-                      storageDetailBloc: storageDetailBloc,
-                      storageSearchBloc: storageSearchBloc,
-                      searchKeyword: searchKeyword,
                     ),
                     child: ItemEditPage(
                       isEditing: true,
@@ -131,6 +106,8 @@ class _ItemDetailPage extends StatelessWidget {
                     ),
                   ),
                 ));
+                BlocProvider.of<ItemDetailBloc>(context)
+                    .add(ItemDetailChanged(itemId: state.item.id));
               }
               if (value == Menu.delete) {
                 showDialog(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:smart_home/blocs/storage/storage_home/storage_home_bloc.dart';
+
+import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
@@ -49,7 +50,10 @@ class _StorageHomeBody extends StatelessWidget {
           return ErrorPage(
             onPressed: () {
               BlocProvider.of<StorageHomeBloc>(context).add(
-                StorageHomeRefreshed(itemType: state.itemType),
+                StorageHomeChanged(
+                  itemType: state.itemType,
+                  refresh: true,
+                ),
               );
             },
             message: state.message,
@@ -69,7 +73,10 @@ class _StorageHomeBody extends StatelessWidget {
             child: RefreshIndicator(
               onRefresh: () async {
                 BlocProvider.of<StorageHomeBloc>(context)
-                    .add(StorageHomeRefreshed(itemType: state.itemType));
+                    .add(StorageHomeChanged(
+                  itemType: state.itemType,
+                  refresh: true,
+                ));
               },
               child: CustomScrollView(
                 key: ValueKey(state.itemType),
@@ -107,8 +114,12 @@ class _StorageHomeBody extends StatelessWidget {
     return listofWidget;
   }
 
-  SliverStickyHeader _buildSliverStickyHeader(BuildContext context,
-      List<Item> items, ItemType listType, ItemType currentType) {
+  SliverStickyHeader _buildSliverStickyHeader(
+    BuildContext context,
+    List<Item> items,
+    ItemType listType,
+    ItemType currentType,
+  ) {
     String headerText;
     switch (listType) {
       case ItemType.expired:
@@ -158,14 +169,19 @@ class _StorageHomeBody extends StatelessWidget {
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) =>
-              _buildItemListItem(context, items[index], listType),
+              _buildItemListItem(context, items[index], listType, currentType),
           childCount: items.length,
         ),
       ),
     );
   }
 
-  ListTile _buildItemListItem(BuildContext context, Item item, ItemType type) {
+  ListTile _buildItemListItem(
+    BuildContext context,
+    Item item,
+    ItemType type,
+    ItemType currentType,
+  ) {
     String differenceText;
     switch (type) {
       case ItemType.expired:
@@ -198,15 +214,16 @@ class _StorageHomeBody extends StatelessWidget {
     return ListTile(
       title: text,
       subtitle: Text(item.description ?? ''),
-      onTap: () {
-        Navigator.of(context).push(
+      onTap: () async {
+        await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => ItemDetailPage(
               itemId: item.id,
-              storageHomeBloc: BlocProvider.of<StorageHomeBloc>(context),
             ),
           ),
         );
+        BlocProvider.of<StorageHomeBloc>(context)
+            .add(StorageHomeChanged(itemType: currentType));
       },
     );
   }

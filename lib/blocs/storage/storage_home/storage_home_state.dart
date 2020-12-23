@@ -32,19 +32,21 @@ class StorageHomeSuccess extends StorageHomeState {
   final List<Item> nearExpiredItems;
   final ItemType itemType;
 
-  const StorageHomeSuccess(
-      {this.recentlyCreatedItems,
-      this.recentlyEditedItems,
-      this.expiredItems,
-      this.nearExpiredItems,
-      @required this.itemType});
+  const StorageHomeSuccess({
+    this.recentlyCreatedItems,
+    this.recentlyEditedItems,
+    this.expiredItems,
+    this.nearExpiredItems,
+    @required this.itemType,
+  });
 
   @override
   List<Object> get props => [
         recentlyCreatedItems,
         recentlyEditedItems,
         expiredItems,
-        nearExpiredItems
+        nearExpiredItems,
+        itemType,
       ];
 
   @override
