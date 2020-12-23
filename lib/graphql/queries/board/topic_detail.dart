@@ -5,14 +5,15 @@ query topicDetail($topicId: ID!) {
     title
     description
     isOpen
+    isPin
     user {
       username
       email
     }
-    dateCreated
-    dateModified
+    createdAt
+    editedAt
   }
-  comments(topic: $topicId) {
+  comments(topic: $topicId, level: 0) {
     edges {
       node {
         id
@@ -21,8 +22,8 @@ query topicDetail($topicId: ID!) {
           username
           email
         }
-        dateCreated
-        dateModified
+        createdAt
+        editedAt
         parent {
           id
         }

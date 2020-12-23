@@ -4,7 +4,7 @@ mutation updateComment($input: UpdateCommentMutationInput!) {
     comment {
       id
       body
-      dateModified
+      editedAt
     }
   }
 }

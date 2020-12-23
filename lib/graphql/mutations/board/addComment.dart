@@ -7,8 +7,8 @@ mutation addComment($input: AddCommentMutationInput!) {
       user {
         username
       }
-      dateCreated
-      dateModified
+      createdAt
+      editedAt
       parent {
         id
       }

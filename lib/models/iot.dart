@@ -10,22 +10,22 @@ class Device {
   final String name;
   final String deviceType;
   final String location;
-  final DateTime dateCreated;
-  final DateTime dateUpdated;
+  final DateTime createdAt;
+  final DateTime editedAt;
   final bool isOnline;
-  final DateTime dateOnline;
-  final DateTime dateOffline;
+  final DateTime onlineAt;
+  final DateTime offlineAt;
 
   Device({
     this.id,
     this.name,
     this.deviceType,
     this.location,
-    this.dateCreated,
-    this.dateUpdated,
+    this.createdAt,
+    this.editedAt,
     this.isOnline,
-    this.dateOnline,
-    this.dateOffline,
+    this.onlineAt,
+    this.offlineAt,
   });
 
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);

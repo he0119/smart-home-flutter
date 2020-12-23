@@ -17,10 +17,8 @@ class TopicDetailChanged extends TopicDetailEvent {
 }
 
 class TopicDetailRefreshed extends TopicDetailEvent {
-  final String topicId;
-
-  const TopicDetailRefreshed({@required this.topicId});
+  const TopicDetailRefreshed();
 
   @override
-  String toString() => 'TopicRefreshed { TopicId: $topicId }';
+  String toString() => 'TopicRefreshed';
 }

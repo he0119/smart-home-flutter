@@ -4,6 +4,8 @@ import 'package:smart_home/graphql/mutations/board/mutations.dart';
 import 'package:smart_home/graphql/queries/board/queries.dart';
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
+import 'package:smart_home/utils/graphql_helper.dart';
+import 'package:tuple/tuple.dart';
 
 class BoardRepository {
   final GraphQLApiClient graphqlApiClient;
@@ -63,6 +65,32 @@ class BoardRepository {
     return topicObject;
   }
 
+  Future<Topic> pinTopic({@required String topicId}) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(pinTopicMutation),
+      variables: {
+        'input': {'topicId': topicId}
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> topicJson = result.data['pinTopic']['topic'];
+    final Topic topic = Topic.fromJson(topicJson);
+    return topic;
+  }
+
+  Future<Topic> unpinTopic({@required String topicId}) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(unpinTopicMutation),
+      variables: {
+        'input': {'topicId': topicId}
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> topicJson = result.data['unpinTopic']['topic'];
+    final Topic topic = Topic.fromJson(topicJson);
+    return topic;
+  }
+
   Future<String> deleteComment({@required String commentId}) async {
     final MutationOptions options = MutationOptions(
       document: gql(deleteCommentMutation),
@@ -98,9 +126,8 @@ class BoardRepository {
     return topicObject;
   }
 
-  Future<List<dynamic>> topicDetail({
+  Future<Tuple2<Topic, List<Comment>>> topicDetail({
     @required String topicId,
-    int number,
     bool cache = true,
   }) async {
     final QueryOptions options = QueryOptions(
@@ -112,12 +139,16 @@ class BoardRepository {
     );
     final results = await graphqlApiClient.query(options);
 
-    final dynamic topic = results.data['topic'];
-    final Topic topicObject = Topic.fromJson(topic);
-    final List<dynamic> comments = results.data['comments']['edges'];
-    final List<Comment> listofComments =
-        comments.map((dynamic e) => Comment.fromJson(e['node'])).toList();
-    return [topicObject, listofComments];
+    final json = results.data.flattenConnection;
+
+    final dynamic topicJson = json['topic'];
+    final Topic topic = Topic.fromJson(topicJson);
+
+    final List<dynamic> commentsJson = json['comments'];
+    final List<Comment> comments =
+        commentsJson.map((e) => Comment.fromJson(e)).toList();
+
+    return Tuple2(topic, comments);
   }
 
   Future<List<Topic>> topics({String after, bool cache = true}) async {
@@ -130,10 +161,11 @@ class BoardRepository {
     );
     final results = await graphqlApiClient.query(options);
 
-    final List<dynamic> topics = results.data['topics']['edges'];
-    final List<Topic> listofTopics =
-        topics.map((dynamic e) => Topic.fromJson(e['node'])).toList();
-    return listofTopics;
+    final List<dynamic> topicsJson = results.data.flattenConnection['topics'];
+    final List<Topic> topics =
+        topicsJson.map((e) => Topic.fromJson(e)).toList();
+
+    return topics;
   }
 
   Future<Comment> updateComment({

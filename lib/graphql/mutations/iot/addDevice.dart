@@ -6,8 +6,8 @@ mutation addDevice($input: AddDeviceMutationInput!) {
       name
       location
       isOnline
-      dateCreated
-      dateUpdated
+      createdAt
+      editedAt
     }
   }
 }

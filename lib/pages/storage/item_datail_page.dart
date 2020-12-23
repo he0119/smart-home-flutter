@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:smart_home/blocs/storage/blocs.dart';
-import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
@@ -88,9 +87,9 @@ class _ItemDetailPage extends StatelessWidget {
         title: Text(state.item.name),
         actions: <Widget>[
           SearchIconButton(),
-          PopupMenuButton<Menu>(
+          PopupMenuButton<ItemDetailMenu>(
             onSelected: (value) async {
-              if (value == Menu.edit) {
+              if (value == ItemDetailMenu.edit) {
                 await Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<ItemEditBloc>(
                     create: (_) => ItemEditBloc(
@@ -106,7 +105,7 @@ class _ItemDetailPage extends StatelessWidget {
                 BlocProvider.of<ItemDetailBloc>(context)
                     .add(ItemDetailChanged(itemId: state.item.id));
               }
-              if (value == Menu.consumable) {
+              if (value == ItemDetailMenu.consumable) {
                 await Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<ItemEditBloc>(
                     create: (_) => ItemEditBloc(
@@ -121,7 +120,7 @@ class _ItemDetailPage extends StatelessWidget {
                 BlocProvider.of<ItemDetailBloc>(context)
                     .add(ItemDetailChanged(itemId: state.item.id));
               }
-              if (value == Menu.delete) {
+              if (value == ItemDetailMenu.delete) {
                 showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
@@ -150,15 +149,15 @@ class _ItemDetailPage extends StatelessWidget {
             },
             itemBuilder: (context) => [
               PopupMenuItem(
-                value: Menu.edit,
+                value: ItemDetailMenu.edit,
                 child: Text('编辑'),
               ),
               PopupMenuItem(
-                value: Menu.consumable,
+                value: ItemDetailMenu.consumable,
                 child: Text('耗材编辑'),
               ),
               PopupMenuItem(
-                value: Menu.delete,
+                value: ItemDetailMenu.delete,
                 child: Text('删除'),
               ),
             ],

@@ -1,8 +1,6 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/repositories/board_repository.dart';
 
@@ -12,7 +10,9 @@ part 'topic_edit_state.dart';
 class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   final BoardRepository boardRepository;
 
-  TopicEditBloc({@required this.boardRepository}) : super(TopicInitial());
+  TopicEditBloc({
+    @required this.boardRepository,
+  }) : super(TopicInProgress());
 
   @override
   Stream<TopicEditState> mapEventToState(
@@ -48,6 +48,42 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
       try {
         await boardRepository.deleteTopic(topicId: event.topic.id);
         yield TopicDeleteSuccess(topic: event.topic);
+      } catch (e) {
+        yield TopicFailure(e.message);
+      }
+    }
+    if (event is TopicClosed) {
+      yield TopicInProgress();
+      try {
+        await boardRepository.closeTopic(topicId: event.topic.id);
+        yield TopicCloseSuccess(topic: event.topic);
+      } catch (e) {
+        yield TopicFailure(e.message);
+      }
+    }
+    if (event is TopicReopened) {
+      yield TopicInProgress();
+      try {
+        await boardRepository.reopenTopic(topicId: event.topic.id);
+        yield TopicReopenSuccess(topic: event.topic);
+      } catch (e) {
+        yield TopicFailure(e.message);
+      }
+    }
+    if (event is TopicPinned) {
+      yield TopicInProgress();
+      try {
+        await boardRepository.pinTopic(topicId: event.topic.id);
+        yield TopicPinSuccess(topic: event.topic);
+      } catch (e) {
+        yield TopicFailure(e.message);
+      }
+    }
+    if (event is TopicUnpinned) {
+      yield TopicInProgress();
+      try {
+        await boardRepository.unpinTopic(topicId: event.topic.id);
+        yield TopicUnpinSuccess(topic: event.topic);
       } catch (e) {
         yield TopicFailure(e.message);
       }

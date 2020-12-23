@@ -52,3 +52,51 @@ class TopicDeleted extends TopicEditEvent {
   @override
   String toString() => 'TopicDeleted { name: ${topic.title} }';
 }
+
+class TopicClosed extends TopicEditEvent {
+  final Topic topic;
+
+  const TopicClosed({@required this.topic});
+
+  @override
+  List<Object> get props => [topic];
+
+  @override
+  String toString() => 'TopicClosed { name: ${topic.title} }';
+}
+
+class TopicReopened extends TopicEditEvent {
+  final Topic topic;
+
+  const TopicReopened({@required this.topic});
+
+  @override
+  List<Object> get props => [topic];
+
+  @override
+  String toString() => 'TopicReopened { name: ${topic.title} }';
+}
+
+class TopicPinned extends TopicEditEvent {
+  final Topic topic;
+
+  const TopicPinned({@required this.topic});
+
+  @override
+  List<Object> get props => [topic];
+
+  @override
+  String toString() => 'TopicPinned { name: ${topic.title} }';
+}
+
+class TopicUnpinned extends TopicEditEvent {
+  final Topic topic;
+
+  const TopicUnpinned({@required this.topic});
+
+  @override
+  List<Object> get props => [topic];
+
+  @override
+  String toString() => 'TopicUnpinned { name: ${topic.title} }';
+}

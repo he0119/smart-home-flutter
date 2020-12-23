@@ -5,7 +5,7 @@ mutation updateDevice($input: UpdateDeviceMutationInput!) {
       id
       name
       location
-      dateUpdated
+      editedAt
     }
   }
 }

@@ -12,19 +12,19 @@ Device _$DeviceFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     deviceType: json['deviceType'] as String,
     location: json['location'] as String,
-    dateCreated: json['dateCreated'] == null
+    createdAt: json['createdAt'] == null
         ? null
-        : DateTime.parse(json['dateCreated'] as String),
-    dateUpdated: json['dateUpdated'] == null
+        : DateTime.parse(json['createdAt'] as String),
+    editedAt: json['editedAt'] == null
         ? null
-        : DateTime.parse(json['dateUpdated'] as String),
+        : DateTime.parse(json['editedAt'] as String),
     isOnline: json['isOnline'] as bool,
-    dateOnline: json['dateOnline'] == null
+    onlineAt: json['onlineAt'] == null
         ? null
-        : DateTime.parse(json['dateOnline'] as String),
-    dateOffline: json['dateOffline'] == null
+        : DateTime.parse(json['onlineAt'] as String),
+    offlineAt: json['offlineAt'] == null
         ? null
-        : DateTime.parse(json['dateOffline'] as String),
+        : DateTime.parse(json['offlineAt'] as String),
   );
 }
 
@@ -33,11 +33,11 @@ Map<String, dynamic> _$DeviceToJson(Device instance) => <String, dynamic>{
       'name': instance.name,
       'deviceType': instance.deviceType,
       'location': instance.location,
-      'dateCreated': instance.dateCreated?.toIso8601String(),
-      'dateUpdated': instance.dateUpdated?.toIso8601String(),
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'editedAt': instance.editedAt?.toIso8601String(),
       'isOnline': instance.isOnline,
-      'dateOnline': instance.dateOnline?.toIso8601String(),
-      'dateOffline': instance.dateOffline?.toIso8601String(),
+      'onlineAt': instance.onlineAt?.toIso8601String(),
+      'offlineAt': instance.offlineAt?.toIso8601String(),
     };
 
 AutowateringData _$AutowateringDataFromJson(Map<String, dynamic> json) {

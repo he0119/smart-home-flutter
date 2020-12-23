@@ -4,7 +4,7 @@ mutation reopenTopic($input: ReopenTopicMutationInput!) {
     topic {
       id
       isOpen
-      dateModified
+      editedAt
     }
   }
 }

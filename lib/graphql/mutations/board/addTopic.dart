@@ -9,8 +9,8 @@ mutation addTopic($input: AddTopicMutationInput!) {
       user {
         username
       }
-      dateCreated
-      dateModified
+      createdAt
+      editedAt
     }
   }
 }

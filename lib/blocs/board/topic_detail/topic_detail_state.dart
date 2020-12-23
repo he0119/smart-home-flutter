@@ -1,10 +1,7 @@
 part of 'topic_detail_bloc.dart';
 
-abstract class TopicDetailState extends Equatable {
+abstract class TopicDetailState {
   const TopicDetailState();
-
-  @override
-  List<Object> get props => [];
 }
 
 class TopicDetailInProgress extends TopicDetailState {}
@@ -26,7 +23,10 @@ class TopicDetailSuccess extends TopicDetailState {
   final Topic topic;
   final List<Comment> comments;
 
-  const TopicDetailSuccess({@required this.topic, @required this.comments});
+  const TopicDetailSuccess({
+    @required this.topic,
+    @required this.comments,
+  });
 
   @override
   String toString() =>
