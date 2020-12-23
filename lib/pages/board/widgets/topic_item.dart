@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
-
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/pages/board/topic_detail_page.dart';
 import 'package:smart_home/pages/board/widgets/item_title.dart';
@@ -58,6 +57,10 @@ class TopicItem extends StatelessWidget {
         ),
       );
     } else {
+      // 依据话题添加标志
+      String title = topic.title;
+      if (!topic.isOpen) title = '🔒' + title;
+      if (topic.isPin) title = '🔝' + title;
       return InkWell(
         child: Container(
           child: Column(
@@ -68,7 +71,7 @@ class TopicItem extends StatelessWidget {
                 user: topic.user,
                 editedAt: activeAt,
               ),
-              ListTile(title: Text(topic.title)),
+              ListTile(title: Text(title)),
             ],
           ),
         ),
