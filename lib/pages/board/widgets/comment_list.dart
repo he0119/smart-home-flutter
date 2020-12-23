@@ -5,7 +5,6 @@ import 'package:smart_home/blocs/board/blocs.dart';
 
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/pages/board/widgets/comment_item.dart';
 import 'package:smart_home/pages/board/widgets/item_title.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
@@ -88,11 +87,6 @@ class CommentItem extends StatelessWidget {
               selectable: true,
             ),
           ),
-          if (comment.children.isNotEmpty) Divider(),
-          if (comment.children.isNotEmpty)
-            SubCommentList(
-              comments: comment.children,
-            ),
           Divider(),
         ],
       ),

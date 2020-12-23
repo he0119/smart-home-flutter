@@ -58,7 +58,6 @@ class Comment extends Equatable {
   final DateTime dateModified;
   final Comment parent;
   final User replyTo;
-  final List<Comment> children;
 
   Comment({
     this.id,
@@ -69,7 +68,6 @@ class Comment extends Equatable {
     this.dateModified,
     this.parent,
     this.replyTo,
-    this.children,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) =>
@@ -88,7 +86,6 @@ class Comment extends Equatable {
       dateModified,
       parent,
       replyTo,
-      children,
     ];
   }
 }

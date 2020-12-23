@@ -29,21 +29,6 @@ query topicDetail($topicId: ID!) {
         replyTo {
           username
         }
-        children(first: 2) {
-          edges {
-            node {
-              id
-              body
-              user {
-                username
-                email
-              }
-              replyTo {
-                username
-              }
-            }
-          }
-        }
       }
     }
   }

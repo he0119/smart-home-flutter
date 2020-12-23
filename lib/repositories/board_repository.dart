@@ -4,6 +4,7 @@ import 'package:smart_home/graphql/mutations/board/mutations.dart';
 import 'package:smart_home/graphql/queries/board/queries.dart';
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
+import 'package:smart_home/utils/graphql_helper.dart';
 import 'package:tuple/tuple.dart';
 
 class BoardRepository {
@@ -112,20 +113,15 @@ class BoardRepository {
     );
     final results = await graphqlApiClient.query(options);
 
-    final dynamic topicJson = results.data['topic'];
+    final json = results.data.flattenConnection;
+
+    final dynamic topicJson = json['topic'];
     final Topic topic = Topic.fromJson(topicJson);
 
-    final List<dynamic> commentsJson = results.data['comments']['edges'];
-    final List<Comment> comments = commentsJson.map((dynamic e) {
-      List<dynamic> children = e['node']['children']['edges'];
-      if (children.isNotEmpty) {
-        final newchildren = children.map((dynamic e) => e['node']).toList();
-        e['node']['children'] = newchildren;
-      } else {
-        e['node']['children'] = [];
-      }
-      return Comment.fromJson(e['node']);
-    }).toList();
+    final List<dynamic> commentsJson = json['comments'];
+    final List<Comment> comments =
+        commentsJson.map((e) => Comment.fromJson(e)).toList();
+
     return Tuple2(topic, comments);
   }
 
@@ -139,18 +135,11 @@ class BoardRepository {
     );
     final results = await graphqlApiClient.query(options);
 
-    final List<dynamic> topicsJson = results.data['topics']['edges'];
-    final List<Topic> listofTopics = topicsJson.map((dynamic e) {
-      List<dynamic> comments = e['node']['comments']['edges'];
-      if (comments.isNotEmpty) {
-        final newchildren = comments.map((dynamic e) => e['node']).toList();
-        e['node']['comments'] = newchildren;
-      } else {
-        e['node']['comments'] = [];
-      }
-      return Topic.fromJson(e['node']);
-    }).toList();
-    return listofTopics;
+    final List<dynamic> topicsJson = results.data.flattenConnection['topics'];
+    final List<Topic> topics =
+        topicsJson.map((e) => Topic.fromJson(e)).toList();
+
+    return topics;
   }
 
   Future<Comment> updateComment({
