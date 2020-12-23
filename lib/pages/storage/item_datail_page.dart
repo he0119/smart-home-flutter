@@ -178,15 +178,15 @@ class _ItemDetailList extends StatelessWidget {
       children: <Widget>[
         ListTile(
           title: Text('数量'),
-          trailing: SelectableText(item.number.toString()),
+          subtitle: SelectableText(item.number.toString()),
         ),
         ListTile(
           title: Text('备注'),
-          trailing: SelectableText(item.description ?? ''),
+          subtitle: SelectableText(item.description ?? ''),
         ),
         ListTile(
           title: Text('属于'),
-          trailing: SelectableText(
+          subtitle: SelectableText(
             item.storage.name,
             onTap: () {
               Navigator.push(
@@ -204,27 +204,27 @@ class _ItemDetailList extends StatelessWidget {
         ),
         ListTile(
           title: Text('价格'),
-          trailing: SelectableText(item.price?.toString() ?? ''),
+          subtitle: SelectableText(item.price?.toString() ?? ''),
         ),
         ListTile(
           title: Text('有效期至'),
-          trailing: SelectableText(item.expiredAt?.toLocalStr() ?? ''),
+          subtitle: SelectableText(item.expiredAt?.toLocalStr() ?? ''),
         ),
         ListTile(
           title: Text('修改人'),
-          trailing: SelectableText(item.editedBy.username),
+          subtitle: SelectableText(item.editedBy.username),
         ),
         ListTile(
           title: Text('修改时间'),
-          trailing: SelectableText(item.editedAt?.toLocalStr() ?? ''),
+          subtitle: SelectableText(item.editedAt?.toLocalStr() ?? ''),
         ),
         ListTile(
           title: Text('录入人'),
-          trailing: SelectableText(item.createdBy.username),
+          subtitle: SelectableText(item.createdBy.username),
         ),
         ListTile(
           title: Text('录入时间'),
-          trailing: SelectableText(item.createdAt?.toLocalStr() ?? ''),
+          subtitle: SelectableText(item.createdAt?.toLocalStr() ?? ''),
         ),
       ],
     );
