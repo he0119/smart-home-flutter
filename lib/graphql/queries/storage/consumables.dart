@@ -1,11 +1,11 @@
 const String consumablesQuery = r"""
 query consumables($after: String) {
-  consumables: items(consumables_Isnull: false, after: $after) {
+  consumables: items(isDeleted: false, consumables_Isnull: false, after: $after) {
     edges {
       node {
         id
         name
-        consumables {
+        consumables(isDeleted: false) {
           edges {
             node {
               id

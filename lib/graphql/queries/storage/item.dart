@@ -12,7 +12,7 @@ query item($id: ID!) {
     description
     price
     expiredAt
-    consumables {
+    consumables(isDeleted: false) {
       edges {
         node {
           id
