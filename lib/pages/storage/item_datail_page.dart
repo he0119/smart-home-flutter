@@ -213,10 +213,31 @@ class _ItemDetailList extends StatelessWidget {
             title: Text('有效期至'),
             subtitle: SelectableText(item.expiredAt?.toLocalStr() ?? ''),
           ),
-        if (item.consumables != null)
+        if (item.consumables.isNotEmpty)
           ListTile(
             title: Text('耗材'),
-            subtitle: SelectableText(item.consumables.join(' ')),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: item.consumables
+                  .map(
+                    (item) => SelectableText(
+                      item.name,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ItemDetailPage(itemId: item.id),
+                          ),
+                        );
+                      },
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
         ListTile(
           title: Text('修改人'),
