@@ -279,7 +279,7 @@ class _StorageDetailPage extends StatelessWidget {
         onFetch: () => BlocProvider.of<StorageDetailBloc>(context)
             .add(StorageDetailFetched()),
         onPopDetailPage: () => BlocProvider.of<StorageDetailBloc>(context)
-            .add(StorageDetailChanged(id: state.storage.id)),
+            .add(StorageDetailRefreshed(id: state.storage.id)),
       );
     }
     return LoadingPage();
