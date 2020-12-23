@@ -46,6 +46,7 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
       title: Form(
         key: _formKey,
         child: TextFormField(
+          enabled: widget.topic.isOpen,
           controller: widget.controller,
           focusNode: widget.focusNode,
           maxLines: null,
