@@ -85,13 +85,15 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
                       message: '修改',
                       child: IconButton(
                         icon: Icon(Icons.edit),
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async {
+                          await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => BlocProvider.value(
-                                value:
-                                    BlocProvider.of<TopicDetailBloc>(context),
+                              builder: (_) => BlocProvider(
+                                create: (context) => TopicEditBloc(
+                                    boardRepository:
+                                        RepositoryProvider.of<BoardRepository>(
+                                            context)),
                                 child: TopicEditPage(
                                   isEditing: true,
                                   topic: state.topic,
@@ -99,6 +101,8 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
                               ),
                             ),
                           );
+                          BlocProvider.of<TopicDetailBloc>(context)
+                              .add(TopicDetailRefreshed());
                         },
                       ),
                     ),

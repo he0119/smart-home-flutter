@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/models/board.dart';
+import 'package:smart_home/pages/board/widgets/topic_item.dart';
 import 'package:smart_home/repositories/board_repository.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
@@ -12,7 +14,7 @@ class TopicEditPage extends StatefulWidget {
 
   const TopicEditPage({
     Key key,
-    @required this.isEditing,
+    this.isEditing,
     this.topic,
   }) : super(key: key);
 
@@ -23,7 +25,6 @@ class TopicEditPage extends StatefulWidget {
 class _TopicEditPageState extends State<TopicEditPage> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -44,27 +45,25 @@ class _TopicEditPageState extends State<TopicEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TopicEditBloc(
-          boardRepository: RepositoryProvider.of<BoardRepository>(context)),
-      child: BlocConsumer<TopicEditBloc, TopicEditState>(
-        listener: (context, state) {
-          if (state is TopicAddSuccess || state is TopicUpdateSuccess) {
-            Navigator.of(context).pop();
-            if (widget.isEditing) {
-              BlocProvider.of<TopicDetailBloc>(context)
-                  .add(TopicDetailRefreshed());
-              showInfoSnackBar('话题修改成功');
-            } else {
-              BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
-              showInfoSnackBar('话题添加成功');
-            }
+    final List<String> tabs = ['编辑', '预览'];
+    return BlocListener<TopicEditBloc, TopicEditState>(
+      listener: (context, state) {
+        if (state is TopicAddSuccess || state is TopicUpdateSuccess) {
+          Navigator.of(context).pop();
+          if (widget.isEditing) {
+            showInfoSnackBar('话题修改成功');
+          } else {
+            BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
+            showInfoSnackBar('话题添加成功');
           }
-          if (state is TopicFailure) {
-            showErrorSnackBar(state.message);
-          }
-        },
-        builder: (context, state) => Scaffold(
+        }
+        if (state is TopicFailure) {
+          showErrorSnackBar(state.message);
+        }
+      },
+      child: DefaultTabController(
+        length: tabs.length,
+        child: Scaffold(
           appBar: AppBar(
             title: widget.isEditing ? Text('修改话题') : Text('新话题'),
             actions: [
@@ -93,49 +92,142 @@ class _TopicEditPageState extends State<TopicEditPage> {
                 ),
               )
             ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _titleController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '添加标题',
-                      hintStyle: TextStyle(fontSize: 18),
-                    ),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return '请填写标题';
-                      }
-                      return null;
-                    },
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                  ),
-                  TextFormField(
-                    controller: _descriptionController,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '想说点什么？',
-                      hintStyle: TextStyle(fontSize: 18),
-                    ),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return '请填写内容';
-                      }
-                      return null;
-                    },
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                  ),
-                ],
-              ),
+            bottom: TabBar(
+              tabs: [for (final tab in tabs) Tab(text: tab)],
             ),
           ),
+          body: TabBarView(
+            children: [
+              _EditPage(
+                isEditing: widget.isEditing,
+                topic: widget.topic,
+                formKey: _formKey,
+                titleController: _titleController,
+                descriptionController: _descriptionController,
+              ),
+              _PreviewPage(
+                titleController: _titleController,
+                descriptionController: _descriptionController,
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class _EditPage extends StatelessWidget {
+  final bool isEditing;
+  final Topic topic;
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
+  final GlobalKey<FormState> formKey;
+
+  const _EditPage({
+    Key key,
+    @required this.isEditing,
+    this.topic,
+    @required this.titleController,
+    @required this.descriptionController,
+    @required this.formKey,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Form(
+        key: formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextFormField(
+                controller: titleController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: '添加标题',
+                  hintStyle: TextStyle(fontSize: 18),
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return '请填写标题';
+                  }
+                  return null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+              ),
+              TextFormField(
+                controller: descriptionController,
+                maxLines: null,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: '想说点什么？',
+                  hintStyle: TextStyle(fontSize: 18),
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return '请填写内容';
+                  }
+                  return null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PreviewPage extends StatefulWidget {
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
+
+  const _PreviewPage({
+    Key key,
+    @required this.titleController,
+    @required this.descriptionController,
+  }) : super(key: key);
+
+  @override
+  __PreviewPageState createState() => __PreviewPageState();
+}
+
+class __PreviewPageState extends State<_PreviewPage> {
+  @override
+  void initState() {
+    super.initState();
+    widget.titleController.addListener(_onChanged);
+    widget.descriptionController.addListener(_onChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.titleController.removeListener(_onChanged);
+    widget.descriptionController.removeListener(_onChanged);
+    super.dispose();
+  }
+
+  void _onChanged() {
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loginUser =
+        context.select((AppPreferencesBloc b) => b.state.loginUser);
+    return SingleChildScrollView(
+      child: TopicItem(
+        topic: Topic(
+          user: loginUser,
+          title: widget.titleController.text,
+          description: widget.descriptionController.text,
+          dateCreated: DateTime.now(),
+          dateModified: DateTime.now(),
+        ),
+        showBody: true,
       ),
     );
   }
