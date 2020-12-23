@@ -366,9 +366,15 @@ class StorageRepository {
     );
   }
 
-  Future<List<Storage>> storages({bool cache = true}) async {
+  Future<List<Storage>> storages({
+    String key,
+    bool cache = true,
+  }) async {
     final QueryOptions options = QueryOptions(
       document: gql(storagesQuery),
+      variables: {
+        'key': key,
+      },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final result = await graphqlApiClient.query(options);

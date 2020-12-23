@@ -1,7 +1,7 @@
 /// 获取所有的存储位置
 const String storagesQuery = r"""
-query storages {
-  storages {
+query storages($key: String) {
+  storages(name_Icontains: $key) {
     edges {
       node {
         id
@@ -56,6 +56,7 @@ query storage($id: ID!, $itemCursor: String, $storageCursor: String) {
     }
     parent {
       id
+      name
     }
   }
 }

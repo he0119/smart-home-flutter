@@ -135,14 +135,13 @@ class _StorageDetailPage extends StatelessWidget {
       return AppBar(
         title: Text(state.storage.name),
         actions: <Widget>[
-          AddStorageIconButton(),
+          AddStorageIconButton(
+            storage: state.storage,
+          ),
           SearchIconButton(),
           PopupMenuButton<Menu>(
             onSelected: (value) async {
               if (value == Menu.edit) {
-                List<Storage> listofStorages =
-                    await RepositoryProvider.of<StorageRepository>(context)
-                        .storages();
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<StorageEditBloc>(
                     create: (_) => StorageEditBloc(
@@ -153,7 +152,6 @@ class _StorageDetailPage extends StatelessWidget {
                     ),
                     child: StorageEditPage(
                       isEditing: true,
-                      listofStorages: listofStorages,
                       storage: state.storage,
                     ),
                   ),
@@ -294,9 +292,6 @@ class _StorageDetailPage extends StatelessWidget {
         tooltip: '添加物品',
         child: Icon(Icons.add),
         onPressed: () async {
-          List<Storage> listofStorages =
-              await RepositoryProvider.of<StorageRepository>(context)
-                  .storages();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => BlocProvider<ItemEditBloc>(
@@ -306,8 +301,7 @@ class _StorageDetailPage extends StatelessWidget {
                 ),
                 child: ItemEditPage(
                   isEditing: false,
-                  listofStorages: listofStorages,
-                  storageId: state.storage.id,
+                  storage: state.storage,
                 ),
               ),
             ),
