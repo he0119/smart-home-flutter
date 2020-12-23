@@ -4,7 +4,7 @@ mutation closeTopic($input: CloseTopicMutationInput!) {
     topic {
       id
       isOpen
-      dateModified
+      editedAt
     }
   }
 }

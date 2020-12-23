@@ -14,8 +14,8 @@ class Topic extends Equatable {
   final String description;
   final bool isOpen;
   final User user;
-  final DateTime dateCreated;
-  final DateTime dateModified;
+  final DateTime createdAt;
+  final DateTime editedAt;
   final List<Comment> comments;
 
   Topic({
@@ -24,8 +24,8 @@ class Topic extends Equatable {
     this.description,
     this.isOpen,
     this.user,
-    this.dateCreated,
-    this.dateModified,
+    this.createdAt,
+    this.editedAt,
     this.comments,
   });
 
@@ -41,8 +41,8 @@ class Topic extends Equatable {
       description,
       isOpen,
       user,
-      dateCreated,
-      dateModified,
+      createdAt,
+      editedAt,
       comments,
     ];
   }
@@ -54,8 +54,8 @@ class Comment extends Equatable {
   final Topic topic;
   final User user;
   final String body;
-  final DateTime dateCreated;
-  final DateTime dateModified;
+  final DateTime createdAt;
+  final DateTime editedAt;
   final Comment parent;
   final User replyTo;
 
@@ -64,8 +64,8 @@ class Comment extends Equatable {
     this.topic,
     this.user,
     this.body,
-    this.dateCreated,
-    this.dateModified,
+    this.createdAt,
+    this.editedAt,
     this.parent,
     this.replyTo,
   });
@@ -82,8 +82,8 @@ class Comment extends Equatable {
       topic,
       user,
       body,
-      dateCreated,
-      dateModified,
+      createdAt,
+      editedAt,
       parent,
       replyTo,
     ];

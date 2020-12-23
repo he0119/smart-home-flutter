@@ -20,11 +20,11 @@ class TopicItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 获取最近互动时间
-    DateTime recentActive = topic.dateModified;
+    DateTime activeAt = topic.editedAt;
     if (topic.comments != null &&
         topic.comments.isNotEmpty &&
-        recentActive.isBefore(topic.comments.last.dateCreated)) {
-      recentActive = topic.comments.last.dateCreated;
+        activeAt.isBefore(topic.comments.last.createdAt)) {
+      activeAt = topic.comments.last.createdAt;
     }
     if (showBody) {
       return Container(
@@ -44,7 +44,7 @@ class TopicItem extends StatelessWidget {
             ),
             ItemTitle(
               user: topic.user,
-              dateModified: topic.dateModified,
+              editedAt: topic.editedAt,
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -66,7 +66,7 @@ class TopicItem extends StatelessWidget {
             children: <Widget>[
               ItemTitle(
                 user: topic.user,
-                dateModified: recentActive,
+                editedAt: activeAt,
               ),
               ListTile(title: Text(topic.title)),
             ],

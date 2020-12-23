@@ -190,8 +190,8 @@ class __PreviewPageState extends State<_PreviewPage> {
         comment: Comment(
           user: loginUser,
           body: widget.bodyController.text,
-          dateCreated: DateTime.now(),
-          dateModified: DateTime.now(),
+          createdAt: DateTime.now(),
+          editedAt: DateTime.now(),
         ),
       ),
     );

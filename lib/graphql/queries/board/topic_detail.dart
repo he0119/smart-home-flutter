@@ -9,8 +9,8 @@ query topicDetail($topicId: ID!) {
       username
       email
     }
-    dateCreated
-    dateModified
+    createdAt
+    editedAt
   }
   comments(topic: $topicId, level: 0) {
     edges {
@@ -21,8 +21,8 @@ query topicDetail($topicId: ID!) {
           username
           email
         }
-        dateCreated
-        dateModified
+        createdAt
+        editedAt
         parent {
           id
         }

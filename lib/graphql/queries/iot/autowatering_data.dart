@@ -7,10 +7,10 @@ query autowateringData {
         device {
           id
           name
-          dateUpdated
+          editedAt
           isOnline
-          dateOnline
-          dateOffline
+          onlineAt
+          offlineAt
         }
         time
         temperature

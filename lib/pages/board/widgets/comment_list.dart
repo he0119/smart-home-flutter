@@ -48,7 +48,7 @@ class CommentItem extends StatelessWidget {
         children: <Widget>[
           ItemTitle(
             user: comment.user,
-            dateModified: comment.dateModified,
+            editedAt: comment.editedAt,
             onSelected: (Menu menu) async {
               switch (menu) {
                 case Menu.delete:

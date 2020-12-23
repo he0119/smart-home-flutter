@@ -15,12 +15,12 @@ Topic _$TopicFromJson(Map<String, dynamic> json) {
     user: json['user'] == null
         ? null
         : User.fromJson(json['user'] as Map<String, dynamic>),
-    dateCreated: json['dateCreated'] == null
+    createdAt: json['createdAt'] == null
         ? null
-        : DateTime.parse(json['dateCreated'] as String),
-    dateModified: json['dateModified'] == null
+        : DateTime.parse(json['createdAt'] as String),
+    editedAt: json['editedAt'] == null
         ? null
-        : DateTime.parse(json['dateModified'] as String),
+        : DateTime.parse(json['editedAt'] as String),
     comments: (json['comments'] as List)
         ?.map((e) =>
             e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
@@ -34,8 +34,8 @@ Map<String, dynamic> _$TopicToJson(Topic instance) => <String, dynamic>{
       'description': instance.description,
       'isOpen': instance.isOpen,
       'user': instance.user,
-      'dateCreated': instance.dateCreated?.toIso8601String(),
-      'dateModified': instance.dateModified?.toIso8601String(),
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'editedAt': instance.editedAt?.toIso8601String(),
       'comments': instance.comments,
     };
 
@@ -49,12 +49,12 @@ Comment _$CommentFromJson(Map<String, dynamic> json) {
         ? null
         : User.fromJson(json['user'] as Map<String, dynamic>),
     body: json['body'] as String,
-    dateCreated: json['dateCreated'] == null
+    createdAt: json['createdAt'] == null
         ? null
-        : DateTime.parse(json['dateCreated'] as String),
-    dateModified: json['dateModified'] == null
+        : DateTime.parse(json['createdAt'] as String),
+    editedAt: json['editedAt'] == null
         ? null
-        : DateTime.parse(json['dateModified'] as String),
+        : DateTime.parse(json['editedAt'] as String),
     parent: json['parent'] == null
         ? null
         : Comment.fromJson(json['parent'] as Map<String, dynamic>),
@@ -69,8 +69,8 @@ Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
       'topic': instance.topic,
       'user': instance.user,
       'body': instance.body,
-      'dateCreated': instance.dateCreated?.toIso8601String(),
-      'dateModified': instance.dateModified?.toIso8601String(),
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'editedAt': instance.editedAt?.toIso8601String(),
       'parent': instance.parent,
       'replyTo': instance.replyTo,
     };

@@ -5,7 +5,7 @@ mutation updateTopic($input: UpdateTopicMutationInput!) {
       id
       title
       description
-      dateModified
+      editedAt
     }
   }
 }

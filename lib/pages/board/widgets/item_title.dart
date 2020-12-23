@@ -8,13 +8,13 @@ import 'package:smart_home/widgets/gravatar.dart';
 
 class ItemTitle extends StatelessWidget {
   final User user;
-  final DateTime dateModified;
+  final DateTime editedAt;
   final Function(Menu) onSelected;
 
   const ItemTitle({
     Key key,
     @required this.user,
-    @required this.dateModified,
+    @required this.editedAt,
     this.onSelected,
   }) : super(key: key);
 
@@ -25,7 +25,7 @@ class ItemTitle extends StatelessWidget {
     return ListTile(
       leading: CircleGravatar(email: user.email),
       title: Text(user.username),
-      subtitle: Text(dateModified.toLocalStr()),
+      subtitle: Text(editedAt.toLocalStr()),
       trailing: (onSelected != null && user == loginUser)
           ? PopupMenuButton(
               icon: Icon(Icons.expand_more),
