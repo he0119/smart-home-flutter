@@ -9,6 +9,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
   final DropdownSearchItemAsString<T> itemAsString;
   final ValueChanged<T> onChanged;
   final T selectedItem;
+  final bool showClearButton;
 
   const MyDropdownSearch({
     Key key,
@@ -17,6 +18,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
     this.itemAsString,
     this.onChanged,
     this.selectedItem,
+    this.showClearButton = false,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
       label: label,
       mode: Mode.MENU,
       showSearchBox: true,
-      showClearButton: true,
+      showClearButton: showClearButton,
       dropdownSearchDecoration: InputDecoration(
         contentPadding: EdgeInsets.zero,
       ),
