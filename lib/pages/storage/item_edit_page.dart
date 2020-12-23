@@ -133,7 +133,6 @@ class _ItemEditPageState extends State<ItemEditPage> {
                                 .storages(key: filter);
                         return storages;
                       },
-                      itemAsString: (item) => item.name,
                       onChanged: (Storage data) {
                         storageId = data.id;
                       },

@@ -180,10 +180,11 @@ class _ItemDetailList extends StatelessWidget {
           title: Text('数量'),
           subtitle: SelectableText(item.number.toString()),
         ),
-        ListTile(
-          title: Text('备注'),
-          subtitle: SelectableText(item.description ?? ''),
-        ),
+        if (item.description.isNotEmpty)
+          ListTile(
+            title: Text('备注'),
+            subtitle: SelectableText(item.description),
+          ),
         ListTile(
           title: Text('属于'),
           subtitle: SelectableText(
@@ -202,14 +203,21 @@ class _ItemDetailList extends StatelessWidget {
             ),
           ),
         ),
-        ListTile(
-          title: Text('价格'),
-          subtitle: SelectableText(item.price?.toString() ?? ''),
-        ),
-        ListTile(
-          title: Text('有效期至'),
-          subtitle: SelectableText(item.expiredAt?.toLocalStr() ?? ''),
-        ),
+        if (item.price != null)
+          ListTile(
+            title: Text('价格'),
+            subtitle: SelectableText(item.price.toString() ?? ''),
+          ),
+        if (item.expiredAt != null)
+          ListTile(
+            title: Text('有效期至'),
+            subtitle: SelectableText(item.expiredAt?.toLocalStr() ?? ''),
+          ),
+        if (item.consumables != null)
+          ListTile(
+            title: Text('耗材'),
+            subtitle: SelectableText(item.consumables.join(' ')),
+          ),
         ListTile(
           title: Text('修改人'),
           subtitle: SelectableText(item.editedBy.username),

@@ -12,6 +12,15 @@ query item($id: ID!) {
     description
     price
     expiredAt
+    consumables {
+      edges {
+        node {
+          id
+          name
+          expiredAt
+        }
+      }
+    }
     editedAt
     createdAt
     editedBy {

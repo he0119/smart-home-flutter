@@ -185,8 +185,10 @@ class StorageRepository {
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final result = await graphqlApiClient.query(options);
-    final Map<String, dynamic> json = result.data['item'];
-    final Item item = Item.fromJson(json);
+
+    final Map<String, dynamic> itemJson = result.data.flattenConnection['item'];
+    final Item item = Item.fromJson(itemJson);
+
     return item;
   }
 

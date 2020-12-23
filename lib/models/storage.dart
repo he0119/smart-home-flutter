@@ -64,6 +64,9 @@ class Storage extends Equatable {
       items: items ?? this.items,
     );
   }
+
+  @override
+  String toString() => name;
 }
 
 @JsonSerializable()
@@ -123,4 +126,7 @@ class Item extends Equatable {
       consumables,
     ];
   }
+
+  @override
+  String toString() => name;
 }

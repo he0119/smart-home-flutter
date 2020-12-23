@@ -155,7 +155,6 @@ class _StorageEditPageState extends State<StorageEditPage> {
                               .storages(key: filter);
                       return storages;
                     },
-                    itemAsString: (item) => item.name,
                     onChanged: (Storage data) {
                       parentId = data?.id;
                     },
