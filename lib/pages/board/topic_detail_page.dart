@@ -99,6 +99,12 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
                 if (state is TopicUnpinSuccess) {
                   showInfoSnackBar('话题 ${state.topic.title} 已取消置顶');
                 }
+                if (state is TopicCloseSuccess) {
+                  showInfoSnackBar('话题 ${state.topic.title} 关闭成功');
+                }
+                if (state is TopicReopenSuccess) {
+                  showInfoSnackBar('话题 ${state.topic.title} 开启成功');
+                }
                 if (state is TopicFailure) {
                   showErrorSnackBar(state.message);
                 }
@@ -205,6 +211,58 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
                             ),
                           );
                         }
+                        if (value == TopicDetailMenu.close) {
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: Text('关闭话题'),
+                              content: Text('你确认要关闭该话题？'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('否'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text('是'),
+                                  onPressed: () {
+                                    showInfoSnackBar('正在关闭...', duration: 1);
+                                    BlocProvider.of<TopicEditBloc>(context)
+                                        .add(TopicClosed(topic: state.topic));
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                        if (value == TopicDetailMenu.reopen) {
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: Text('开启话题'),
+                              content: Text('你确认要重新开启该话题？'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('否'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text('是'),
+                                  onPressed: () {
+                                    showInfoSnackBar('正在开启...', duration: 1);
+                                    BlocProvider.of<TopicEditBloc>(context)
+                                        .add(TopicReopened(topic: state.topic));
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        }
                       },
                       itemBuilder: (context) => [
                         if (!state.topic.isPin)
@@ -216,6 +274,16 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
                           PopupMenuItem(
                             value: TopicDetailMenu.unpin,
                             child: Text('取消置顶'),
+                          ),
+                        if (state.topic.isOpen)
+                          PopupMenuItem(
+                            value: TopicDetailMenu.close,
+                            child: Text('关闭'),
+                          ),
+                        if (!state.topic.isOpen)
+                          PopupMenuItem(
+                            value: TopicDetailMenu.reopen,
+                            child: Text('开启'),
                           ),
                         if (loginUser == state.topic.user)
                           PopupMenuItem(
@@ -244,6 +312,9 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
                       BlocProvider.of<TopicDetailBloc>(context)
                           .add(TopicDetailRefreshed());
                       showInfoSnackBar('评论删除成功');
+                    }
+                    if (state is CommentFailure) {
+                      showErrorSnackBar(state.message);
                     }
                   },
                   child: Column(
