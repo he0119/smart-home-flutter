@@ -11,10 +11,22 @@ query item($id: ID!) {
     }
     description
     price
-    expirationDate
-    updateDate
-    dateAdded
-    editor {
+    expiredAt
+    consumables(isDeleted: false) {
+      edges {
+        node {
+          id
+          name
+          expiredAt
+        }
+      }
+    }
+    editedAt
+    createdAt
+    editedBy {
+      username
+    }
+    createdBy {
       username
     }
   }

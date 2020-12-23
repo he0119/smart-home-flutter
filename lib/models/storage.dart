@@ -12,6 +12,7 @@ class Storage extends Equatable {
   final String id;
   final String name;
   final Storage parent;
+  final List<Storage> ancestors;
   final String description;
   final List<Storage> children;
   final List<Item> items;
@@ -20,6 +21,7 @@ class Storage extends Equatable {
     this.id,
     this.name,
     this.parent,
+    this.ancestors,
     this.description,
     this.children,
     this.items,
@@ -36,6 +38,7 @@ class Storage extends Equatable {
       id,
       name,
       parent,
+      ancestors,
       description,
       children,
       items,
@@ -46,6 +49,7 @@ class Storage extends Equatable {
     String id,
     String name,
     Storage parent,
+    List<Storage> ancestors,
     String description,
     List<Storage> children,
     List<Item> items,
@@ -54,11 +58,15 @@ class Storage extends Equatable {
       id: id ?? this.id,
       name: name ?? this.name,
       parent: parent ?? this.parent,
+      ancestors: ancestors ?? this.ancestors,
       description: description ?? this.description,
       children: children ?? this.children,
       items: items ?? this.items,
     );
   }
+
+  @override
+  String toString() => name;
 }
 
 @JsonSerializable()
@@ -69,10 +77,14 @@ class Item extends Equatable {
   final Storage storage;
   final String description;
   final double price;
-  final DateTime expirationDate;
-  final User editor;
-  final DateTime updateDate;
-  final DateTime dateAdded;
+  final DateTime expiredAt;
+  final DateTime editedAt;
+  final User editedBy;
+  final DateTime createdAt;
+  final User createdBy;
+  final bool isDeleted;
+  final DateTime deletedAt;
+  final List<Item> consumables;
 
   Item({
     this.id,
@@ -81,10 +93,14 @@ class Item extends Equatable {
     this.storage,
     this.description,
     this.price,
-    this.expirationDate,
-    this.editor,
-    this.updateDate,
-    this.dateAdded,
+    this.expiredAt,
+    this.editedAt,
+    this.editedBy,
+    this.createdAt,
+    this.createdBy,
+    this.isDeleted,
+    this.deletedAt,
+    this.consumables,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
@@ -100,10 +116,17 @@ class Item extends Equatable {
       storage,
       description,
       price,
-      expirationDate,
-      editor,
-      updateDate,
-      dateAdded,
+      expiredAt,
+      editedAt,
+      editedBy,
+      createdAt,
+      createdBy,
+      isDeleted,
+      deletedAt,
+      consumables,
     ];
   }
+
+  @override
+  String toString() => name;
 }

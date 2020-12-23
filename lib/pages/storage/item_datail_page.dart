@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
+import 'package:smart_home/pages/storage/consumable_edit_page.dart';
 import 'package:smart_home/pages/storage/item_edit_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
@@ -14,18 +16,10 @@ import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class ItemDetailPage extends StatelessWidget {
   final String itemId;
-  final StorageHomeBloc storageHomeBloc;
-  final StorageDetailBloc storageDetailBloc;
-  final StorageSearchBloc storageSearchBloc;
-  final String searchKeyword;
 
   const ItemDetailPage({
     Key key,
     @required this.itemId,
-    this.storageHomeBloc,
-    this.storageDetailBloc,
-    this.storageSearchBloc,
-    this.searchKeyword,
   }) : super(key: key);
 
   @override
@@ -42,11 +36,6 @@ class ItemDetailPage extends StatelessWidget {
           create: (context) => ItemEditBloc(
             storageRepository:
                 RepositoryProvider.of<StorageRepository>(context),
-            itemDetailBloc: BlocProvider.of<ItemDetailBloc>(context),
-            storageHomeBloc: storageHomeBloc,
-            storageDetailBloc: storageDetailBloc,
-            storageSearchBloc: storageSearchBloc,
-            searchKeyword: searchKeyword,
           ),
         ),
       ],
@@ -57,18 +46,10 @@ class ItemDetailPage extends StatelessWidget {
 
 class _ItemDetailPage extends StatelessWidget {
   final String itemId;
-  final StorageHomeBloc storageHomeBloc;
-  final StorageDetailBloc storageDetailBloc;
-  final StorageSearchBloc storageSearchBloc;
-  final String searchKeyword;
 
   const _ItemDetailPage({
     Key key,
     @required this.itemId,
-    this.storageHomeBloc,
-    this.storageDetailBloc,
-    this.storageSearchBloc,
-    this.searchKeyword,
   }) : super(key: key);
 
   @override
@@ -110,27 +91,35 @@ class _ItemDetailPage extends StatelessWidget {
           PopupMenuButton<Menu>(
             onSelected: (value) async {
               if (value == Menu.edit) {
-                List<Storage> listofStorages =
-                    await RepositoryProvider.of<StorageRepository>(context)
-                        .storages();
-                Navigator.of(context).push(MaterialPageRoute(
+                await Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<ItemEditBloc>(
                     create: (_) => ItemEditBloc(
                       storageRepository:
                           RepositoryProvider.of<StorageRepository>(context),
-                      itemDetailBloc: BlocProvider.of<ItemDetailBloc>(context),
-                      storageHomeBloc: storageHomeBloc,
-                      storageDetailBloc: storageDetailBloc,
-                      storageSearchBloc: storageSearchBloc,
-                      searchKeyword: searchKeyword,
                     ),
                     child: ItemEditPage(
                       isEditing: true,
-                      listofStorages: listofStorages,
                       item: state.item,
                     ),
                   ),
                 ));
+                BlocProvider.of<ItemDetailBloc>(context)
+                    .add(ItemDetailChanged(itemId: state.item.id));
+              }
+              if (value == Menu.consumable) {
+                await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider<ItemEditBloc>(
+                    create: (_) => ItemEditBloc(
+                      storageRepository:
+                          RepositoryProvider.of<StorageRepository>(context),
+                    ),
+                    child: ConsumableEditPage(
+                      item: state.item,
+                    ),
+                  ),
+                ));
+                BlocProvider.of<ItemDetailBloc>(context)
+                    .add(ItemDetailChanged(itemId: state.item.id));
               }
               if (value == Menu.delete) {
                 showDialog(
@@ -163,6 +152,10 @@ class _ItemDetailPage extends StatelessWidget {
               PopupMenuItem(
                 value: Menu.edit,
                 child: Text('编辑'),
+              ),
+              PopupMenuItem(
+                value: Menu.consumable,
+                child: Text('耗材编辑'),
               ),
               PopupMenuItem(
                 value: Menu.delete,
@@ -205,15 +198,16 @@ class _ItemDetailList extends StatelessWidget {
       children: <Widget>[
         ListTile(
           title: Text('数量'),
-          trailing: SelectableText(item.number.toString()),
+          subtitle: SelectableText(item.number.toString()),
         ),
-        ListTile(
-          title: Text('备注'),
-          trailing: SelectableText(item.description ?? ''),
-        ),
+        if (item.description.isNotEmpty)
+          ListTile(
+            title: Text('备注'),
+            subtitle: SelectableText(item.description),
+          ),
         ListTile(
           title: Text('属于'),
-          trailing: SelectableText(
+          subtitle: SelectableText(
             item.storage.name,
             onTap: () {
               Navigator.push(
@@ -229,25 +223,57 @@ class _ItemDetailList extends StatelessWidget {
             ),
           ),
         ),
+        if (item.price != null)
+          ListTile(
+            title: Text('价格'),
+            subtitle: SelectableText(item.price.toString() ?? ''),
+          ),
+        if (item.expiredAt != null)
+          ListTile(
+            title: Text('有效期至'),
+            subtitle: SelectableText(item.expiredAt?.toLocalStr() ?? ''),
+          ),
+        if (item.consumables.isNotEmpty)
+          ListTile(
+            title: Text('耗材'),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: item.consumables
+                  .map(
+                    (item) => SelectableText(
+                      item.name,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ItemDetailPage(itemId: item.id),
+                          ),
+                        );
+                      },
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
         ListTile(
-          title: Text('价格'),
-          trailing: SelectableText(item.price?.toString() ?? ''),
+          title: Text('修改人'),
+          subtitle: SelectableText(item.editedBy.username),
         ),
         ListTile(
-          title: Text('有效期至'),
-          trailing: SelectableText(item.expirationDate?.toLocalStr() ?? ''),
+          title: Text('修改时间'),
+          subtitle: SelectableText(item.editedAt?.toLocalStr() ?? ''),
         ),
         ListTile(
-          title: Text('录入者'),
-          trailing: SelectableText(item.editor.username),
+          title: Text('录入人'),
+          subtitle: SelectableText(item.createdBy.username),
         ),
         ListTile(
-          title: Text('更新时间'),
-          trailing: SelectableText(item.updateDate?.toLocalStr() ?? ''),
-        ),
-        ListTile(
-          title: Text('添加时间'),
-          trailing: SelectableText(item.dateAdded?.toLocalStr() ?? ''),
+          title: Text('录入时间'),
+          subtitle: SelectableText(item.createdAt?.toLocalStr() ?? ''),
         ),
       ],
     );

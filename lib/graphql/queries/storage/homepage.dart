@@ -1,42 +1,42 @@
 const String homepageQuery = r"""
 query homepage($nearExpiredTime: DateTime!, $now: DateTime!) {
-  recentlyAddedItems: items(first:10, orderBy: "-date_added") {
+  recentlyCreatedItems: items(isDeleted: false, first:10, orderBy: "-created_at") {
     edges {
       node {
         id
         name
         description
-        dateAdded
+        createdAt
       }
     }
   }
-  recentlyUpdatedItems: items(first:10, orderBy: "-update_date") {
+  recentlyEditedItems: items(isDeleted: false, first:10, orderBy: "-edited_at") {
     edges {
       node {
         id
         name
         description
-        updateDate
+        editedAt
       }
     }
   }
-  nearExpiredItems: items(first:10, expirationDate_Gt: $now, expirationDate_Lt: $nearExpiredTime, orderBy: "-expiration_date") {
+  nearExpiredItems: items(isDeleted: false, first:10, expiredAt_Gt: $now, expiredAt_Lt: $nearExpiredTime, orderBy: "-expired_at") {
     edges {
       node {
         id
         name
         description
-        expirationDate
+        expiredAt
       }
     }
   }
-  expiredItems: items(first:10, expirationDate_Lt: $now, orderBy: "-expiration_date") {
+  expiredItems: items(isDeleted: false, first:10, expiredAt_Lt: $now, orderBy: "-expired_at") {
     edges {
       node {
         id
         name
         description
-        expirationDate
+        expiredAt
       }
     }
   }

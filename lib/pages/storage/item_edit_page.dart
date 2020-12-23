@@ -2,26 +2,33 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/storage.dart';
+import 'package:smart_home/repositories/repositories.dart';
+import 'package:smart_home/widgets/dropdown_search.dart';
 import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class ItemEditPage extends StatefulWidget {
+  /// 是否为编辑模式
   final bool isEditing;
+
+  /// 提供需要编辑的物品
   final Item item;
-  final String storageId;
-  final List<Storage> listofStorages;
+
+  /// 提供需要提供要添加到的位置
+  final Storage storage;
 
   const ItemEditPage({
     Key key,
     @required this.isEditing,
-    @required this.listofStorages,
     this.item,
-    this.storageId,
-  }) : super(key: key);
+    this.storage,
+  })  : assert(item != null || storage != null),
+        super(key: key);
 
   @override
   _ItemEditPageState createState() => _ItemEditPageState();
@@ -29,7 +36,7 @@ class ItemEditPage extends StatefulWidget {
 
 class _ItemEditPageState extends State<ItemEditPage> {
   String storageId;
-  DateTime expirationDate;
+  DateTime expiredAt;
   TextEditingController _nameController;
   TextEditingController _numberController;
   TextEditingController _descriptionController;
@@ -117,22 +124,21 @@ class _ItemEditPageState extends State<ItemEditPage> {
                             context, _numberFocusNode, _descriptionFocusNode);
                       },
                     ),
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: '属于',
-                      ),
-                      value: widget.isEditing
-                          ? widget.item.storage.id
-                          : widget.storageId,
-                      items: widget.listofStorages
-                          .map((e) => DropdownMenuItem(
-                                value: e.id,
-                                child: Text(e.name),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        storageId = value;
+                    MyDropdownSearch<Storage>(
+                      label: '属于',
+                      onFind: (String filter) async {
+                        final storages =
+                            await RepositoryProvider.of<StorageRepository>(
+                                    context)
+                                .storages(key: filter);
+                        return storages;
                       },
+                      onChanged: (Storage data) {
+                        storageId = data.id;
+                      },
+                      selectedItem: widget.isEditing
+                          ? widget.item.storage
+                          : widget.storage,
                     ),
                     TextFormField(
                       controller: _descriptionController,
@@ -195,13 +201,13 @@ class _ItemEditPageState extends State<ItemEditPage> {
                         }
                       },
                       initialValue: widget.isEditing
-                          ? widget.item.expirationDate?.toLocal()
+                          ? widget.item.expiredAt?.toLocal()
                           : null,
                       decoration: InputDecoration(
                         labelText: '有效期至',
                       ),
                       onChanged: (value) {
-                        expirationDate = value;
+                        expiredAt = value;
                       },
                     ),
                     RoundedRaisedButton(
@@ -245,13 +251,13 @@ class _ItemEditPageState extends State<ItemEditPage> {
       _descriptionController =
           TextEditingController(text: widget.item.description);
       storageId = widget.item.storage.id;
-      expirationDate = widget.item.expirationDate;
+      expiredAt = widget.item.expiredAt;
     } else {
       _nameController = TextEditingController();
       _numberController = TextEditingController(text: '1');
       _descriptionController = TextEditingController();
       _priceController = TextEditingController();
-      storageId = widget.storageId;
+      storageId = widget.storage.id;
     }
 
     _nameFocusNode = FocusNode();
@@ -283,7 +289,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
         oldStorageId: widget.item.id,
         description: _descriptionController.text,
         price: _price,
-        expirationDate: expirationDate?.toUtc(),
+        expiredAt: expiredAt?.toUtc(),
       ));
     } else {
       BlocProvider.of<ItemEditBloc>(context).add(ItemAdded(
@@ -292,7 +298,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
         storageId: storageId,
         description: _descriptionController.text,
         price: _price,
-        expirationDate: expirationDate?.toUtc(),
+        expiredAt: expiredAt?.toUtc(),
       ));
     }
   }

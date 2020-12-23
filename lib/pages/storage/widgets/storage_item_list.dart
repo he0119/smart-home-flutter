@@ -15,6 +15,7 @@ class StorageItemList extends StatefulWidget {
   final bool isHighlight;
   final bool hasNextPage;
   final VoidCallback onFetch;
+  final VoidCallback onPopDetailPage;
 
   const StorageItemList({
     Key key,
@@ -24,6 +25,7 @@ class StorageItemList extends StatefulWidget {
     this.isHighlight = false,
     this.hasNextPage = false,
     this.onFetch,
+    this.onPopDetailPage,
   })  : assert(hasNextPage != null),
         super(key: key);
 
@@ -44,23 +46,30 @@ class _StorageItemListState extends State<StorageItemList> {
   @override
   Widget build(BuildContext context) {
     List<dynamic> merged = List.from(widget.storages)..addAll(widget.items);
-    return ListView.separated(
-      itemCount: widget.hasNextPage ? merged.length + 1 : merged.length,
-      itemBuilder: (BuildContext context, int index) {
-        if (index >= merged.length) {
-          return BottomLoader();
-        }
-        if (widget.isHighlight) {
-          return _HighlightStorageItemListItem(
-            item: merged[index],
-            term: widget.term,
-          );
-        } else {
-          return _StorageItemListItem(item: merged[index]);
-        }
-      },
-      separatorBuilder: (contexit, index) => Divider(),
-      controller: _scrollController,
+    return Scrollbar(
+      child: ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
+        itemCount: widget.hasNextPage ? merged.length + 1 : merged.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (index >= merged.length) {
+            return BottomLoader();
+          }
+          if (widget.isHighlight) {
+            return _HighlightStorageItemListItem(
+              item: merged[index],
+              term: widget.term,
+              onPopDetailPage: widget.onPopDetailPage,
+            );
+          } else {
+            return _StorageItemListItem(
+              item: merged[index],
+              onPopDetailPage: widget.onPopDetailPage,
+            );
+          }
+        },
+        separatorBuilder: (contexit, index) => Divider(),
+        controller: _scrollController,
+      ),
     );
   }
 
@@ -82,8 +91,13 @@ class _StorageItemListState extends State<StorageItemList> {
 /// 位置详情界面使用的列表
 class _StorageItemListItem extends StatelessWidget {
   final dynamic item;
+  final VoidCallback onPopDetailPage;
 
-  const _StorageItemListItem({Key key, @required this.item}) : super(key: key);
+  const _StorageItemListItem({
+    Key key,
+    @required this.item,
+    @required this.onPopDetailPage,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -101,10 +115,10 @@ class _StorageItemListItem extends StatelessWidget {
             MaterialPageRoute(
               builder: (_) => ItemDetailPage(
                 itemId: item.id,
-                storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
               ),
             ),
           );
+          onPopDetailPage();
         },
       );
     } else {
@@ -128,11 +142,13 @@ class _StorageItemListItem extends StatelessWidget {
 class _HighlightStorageItemListItem extends StatelessWidget {
   final dynamic item;
   final String term;
+  final VoidCallback onPopDetailPage;
 
   const _HighlightStorageItemListItem({
     Key key,
     @required this.item,
     @required this.term,
+    @required this.onPopDetailPage,
   }) : super(key: key);
 
   @override
@@ -157,17 +173,16 @@ class _HighlightStorageItemListItem extends StatelessWidget {
           textStyle: style,
           textStyleHighlight: highlightStyle,
         ),
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => ItemDetailPage(
                 itemId: item.id,
-                storageSearchBloc: BlocProvider.of<StorageSearchBloc>(context),
-                searchKeyword: term,
               ),
             ),
           );
+          onPopDetailPage();
         },
       );
     } else {
@@ -188,12 +203,13 @@ class _HighlightStorageItemListItem extends StatelessWidget {
           textStyle: style,
           textStyleHighlight: highlightStyle,
         ),
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (_) => StorageDetailPage(storageId: item.id)),
           );
+          onPopDetailPage();
         },
       );
     }

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quick_actions/quick_actions.dart';
+
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/blocs/push/push_bloc.dart';
@@ -120,7 +121,8 @@ class _HomePage extends StatelessWidget {
       listener: (context, activeTab) {
         switch (activeTab) {
           case AppTab.storage:
-            BlocProvider.of<StorageHomeBloc>(context).add(StorageHomeStarted());
+            BlocProvider.of<StorageHomeBloc>(context)
+                .add(StorageHomeChanged(itemType: ItemType.all));
             break;
           case AppTab.board:
             BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeStarted());

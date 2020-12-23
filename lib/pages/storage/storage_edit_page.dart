@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/storage.dart';
+import 'package:smart_home/repositories/storage_repository.dart';
+import 'package:smart_home/widgets/dropdown_search.dart';
 import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class StorageEditPage extends StatefulWidget {
   final bool isEditing;
   final Storage storage;
-  final String storageId;
-  final List<Storage> listofStorages;
 
   const StorageEditPage({
     Key key,
     @required this.isEditing,
-    @required this.listofStorages,
-    this.storage,
-    this.storageId,
+    @required this.storage,
   }) : super(key: key);
 
   @override
@@ -44,7 +43,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
     } else {
       _nameController = TextEditingController();
       _descriptionController = TextEditingController();
-      parentId = widget.storageId;
+      parentId = widget.storage?.id;
     }
 
     _nameFocusNode = FocusNode();
@@ -146,22 +145,22 @@ class _StorageEditPageState extends State<StorageEditPage> {
                           context, _nameFocusNode, _descriptionFocusNode);
                     },
                   ),
-                  DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: '属于',
-                    ),
-                    value: widget.isEditing
-                        ? widget.storage.parent?.id
-                        : widget.storageId,
-                    items: widget.listofStorages
-                        .map((e) => DropdownMenuItem(
-                              value: e.id,
-                              child: Text(e.name),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      parentId = value;
+                  MyDropdownSearch<Storage>(
+                    label: '属于',
+                    showClearButton: true,
+                    onFind: (String filter) async {
+                      final storages =
+                          await RepositoryProvider.of<StorageRepository>(
+                                  context)
+                              .storages(key: filter);
+                      return storages;
                     },
+                    onChanged: (Storage data) {
+                      parentId = data?.id;
+                    },
+                    selectedItem: widget.isEditing
+                        ? widget.storage.parent
+                        : widget.storage,
                   ),
                   TextFormField(
                     controller: _descriptionController,

@@ -30,9 +30,9 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             children: currentState.storage.children + results.item1.children,
             items: currentState.storage.items + results.item1.items,
           ),
-          hasNextPage: results.item4 || results.item6,
-          stroageEndCursor: results.item3,
-          itemEndCursor: results.item5,
+          hasNextPage: results.item3 || results.item5,
+          stroageEndCursor: results.item2,
+          itemEndCursor: results.item4,
         );
       }
     }
@@ -51,7 +51,6 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     }
     if (event is StorageDetailRootRefreshed) {
       backImmediately = false;
-      yield StorageDetailInProgress();
       try {
         List<Storage> results =
             await storageRepository.rootStorage(cache: false);
@@ -76,10 +75,9 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         yield StorageDetailSuccess(
           backImmediately: backImmediately,
           storage: results.item1,
-          ancestors: results.item2,
-          hasNextPage: results.item4 || results.item6,
-          stroageEndCursor: results.item3,
-          itemEndCursor: results.item5,
+          hasNextPage: results.item3 || results.item5,
+          stroageEndCursor: results.item2,
+          itemEndCursor: results.item4,
         );
       } catch (e) {
         yield StorageDetailFailure(
@@ -89,7 +87,6 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       }
     }
     if (event is StorageDetailRefreshed) {
-      yield StorageDetailInProgress();
       try {
         final results = await storageRepository.storage(
           id: event.id,
@@ -98,10 +95,9 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         yield StorageDetailSuccess(
           backImmediately: backImmediately,
           storage: results.item1,
-          ancestors: results.item2,
-          hasNextPage: results.item4 || results.item6,
-          stroageEndCursor: results.item3,
-          itemEndCursor: results.item5,
+          hasNextPage: results.item3 || results.item5,
+          stroageEndCursor: results.item2,
+          itemEndCursor: results.item4,
         );
       } catch (e) {
         yield StorageDetailFailure(
