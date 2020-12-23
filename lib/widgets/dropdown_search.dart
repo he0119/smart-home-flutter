@@ -28,6 +28,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
       mode: Mode.MENU,
       showSearchBox: true,
       showClearButton: showClearButton,
+      isFilteredOnline: true,
       dropdownSearchDecoration: InputDecoration(
         contentPadding: EdgeInsets.zero,
       ),
