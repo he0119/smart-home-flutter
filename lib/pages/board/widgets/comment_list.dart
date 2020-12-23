@@ -5,7 +5,9 @@ import 'package:smart_home/blocs/board/blocs.dart';
 
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/pages/board/comment_edit_page.dart';
 import 'package:smart_home/pages/board/widgets/item_title.dart';
+import 'package:smart_home/repositories/board_repository.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class SliverCommentList extends StatelessWidget {
@@ -47,7 +49,7 @@ class CommentItem extends StatelessWidget {
           ItemTitle(
             user: comment.user,
             dateModified: comment.dateModified,
-            onSelected: (Menu menu) {
+            onSelected: (Menu menu) async {
               switch (menu) {
                 case Menu.delete:
                   showDialog(
@@ -76,6 +78,23 @@ class CommentItem extends StatelessWidget {
                   );
                   break;
                 case Menu.edit:
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider(
+                        create: (context) => CommentEditBloc(
+                            boardRepository:
+                                RepositoryProvider.of<BoardRepository>(
+                                    context)),
+                        child: CommentEditPage(
+                          isEditing: true,
+                          comment: comment,
+                        ),
+                      ),
+                    ),
+                  );
+                  BlocProvider.of<TopicDetailBloc>(context)
+                      .add(TopicDetailRefreshed());
                   break;
               }
             },
