@@ -5,6 +5,7 @@ query topicDetail($topicId: ID!) {
     title
     description
     isOpen
+    isPin
     user {
       username
       email

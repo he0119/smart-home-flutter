@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/blocs/board/topic_detail/topic_detail_bloc.dart';
+import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/board/topic_edit_page.dart';
 import 'package:smart_home/pages/board/widgets/add_comment_bar.dart';
 import 'package:smart_home/pages/board/widgets/comment_list.dart';
@@ -92,6 +93,12 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
                   showInfoSnackBar('话题 ${state.topic.title} 删除成功');
                   Navigator.of(context).pop();
                 }
+                if (state is TopicPinSuccess) {
+                  showInfoSnackBar('话题 ${state.topic.title} 置顶成功');
+                }
+                if (state is TopicUnpinSuccess) {
+                  showInfoSnackBar('话题 ${state.topic.title} 已取消置顶');
+                }
                 if (state is TopicFailure) {
                   showErrorSnackBar(state.message);
                 }
@@ -99,65 +106,129 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
               child: Scaffold(
                 appBar: AppBar(
                   actions: <Widget>[
-                    if (loginUser == state.topic.user)
-                      Tooltip(
-                        message: '删除',
-                        child: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () async {
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title: Text('删除话题'),
-                                content: Text('你确认要删除该话题？'),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: Text('否'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  FlatButton(
-                                    child: Text('是'),
-                                    onPressed: () {
-                                      showInfoSnackBar('正在删除...', duration: 1);
-                                      BlocProvider.of<TopicEditBloc>(context)
-                                          .add(
-                                              TopicDeleted(topic: state.topic));
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    if (loginUser == state.topic.user)
-                      Tooltip(
-                        message: '修改',
-                        child: IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => BlocProvider(
-                                  create: (context) => TopicEditBloc(
-                                      boardRepository: RepositoryProvider.of<
-                                          BoardRepository>(context)),
-                                  child: TopicEditPage(
-                                    isEditing: true,
-                                    topic: state.topic,
-                                  ),
+                    PopupMenuButton<TopicDetailMenu>(
+                      onSelected: (value) async {
+                        if (value == TopicDetailMenu.edit) {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (context) => TopicEditBloc(
+                                    boardRepository:
+                                        RepositoryProvider.of<BoardRepository>(
+                                            context)),
+                                child: TopicEditPage(
+                                  isEditing: true,
+                                  topic: state.topic,
                                 ),
                               ),
-                            );
-                            BlocProvider.of<TopicDetailBloc>(context)
-                                .add(TopicDetailRefreshed());
-                          },
-                        ),
-                      ),
+                            ),
+                          );
+                          BlocProvider.of<TopicDetailBloc>(context)
+                              .add(TopicDetailRefreshed());
+                        }
+                        if (value == TopicDetailMenu.delete) {
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: Text('删除话题'),
+                              content: Text('你确认要删除该话题？'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('否'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text('是'),
+                                  onPressed: () {
+                                    showInfoSnackBar('正在删除...', duration: 1);
+                                    BlocProvider.of<TopicEditBloc>(context)
+                                        .add(TopicDeleted(topic: state.topic));
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                        if (value == TopicDetailMenu.pin) {
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: Text('置顶话题'),
+                              content: Text('你确认要置顶该话题？'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('否'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text('是'),
+                                  onPressed: () {
+                                    showInfoSnackBar('正在置顶...', duration: 1);
+                                    BlocProvider.of<TopicEditBloc>(context)
+                                        .add(TopicPinned(topic: state.topic));
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                        if (value == TopicDetailMenu.unpin) {
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: Text('取消置顶'),
+                              content: Text('你确认要取消该话题的置顶？'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('否'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text('是'),
+                                  onPressed: () {
+                                    showInfoSnackBar('正在取消...', duration: 1);
+                                    BlocProvider.of<TopicEditBloc>(context)
+                                        .add(TopicUnpinned(topic: state.topic));
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        if (!state.topic.isPin)
+                          PopupMenuItem(
+                            value: TopicDetailMenu.pin,
+                            child: Text('置顶'),
+                          ),
+                        if (state.topic.isPin)
+                          PopupMenuItem(
+                            value: TopicDetailMenu.unpin,
+                            child: Text('取消置顶'),
+                          ),
+                        if (loginUser == state.topic.user)
+                          PopupMenuItem(
+                            value: TopicDetailMenu.edit,
+                            child: Text('编辑'),
+                          ),
+                        if (loginUser == state.topic.user)
+                          PopupMenuItem(
+                            value: TopicDetailMenu.delete,
+                            child: Text('删除'),
+                          ),
+                      ],
+                    ),
                   ],
                 ),
                 body: BlocListener<CommentEditBloc, CommentEditState>(

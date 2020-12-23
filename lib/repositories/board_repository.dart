@@ -65,6 +65,32 @@ class BoardRepository {
     return topicObject;
   }
 
+  Future<Topic> pinTopic({@required String topicId}) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(pinTopicMutation),
+      variables: {
+        'input': {'topicId': topicId}
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> topicJson = result.data['pinTopic']['topic'];
+    final Topic topic = Topic.fromJson(topicJson);
+    return topic;
+  }
+
+  Future<Topic> unpinTopic({@required String topicId}) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(unpinTopicMutation),
+      variables: {
+        'input': {'topicId': topicId}
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> topicJson = result.data['unpinTopic']['topic'];
+    final Topic topic = Topic.fromJson(topicJson);
+    return topic;
+  }
+
   Future<String> deleteComment({@required String commentId}) async {
     final MutationOptions options = MutationOptions(
       document: gql(deleteCommentMutation),

@@ -6,3 +6,5 @@ export 'deleteTopic.dart';
 export 'reopenTopic.dart';
 export 'updateComment.dart';
 export 'updateTopic.dart';
+export 'pinTopic.dart';
+export 'unpinTopic.dart';

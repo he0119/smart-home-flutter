@@ -7,8 +7,6 @@ abstract class TopicEditState extends Equatable {
   List<Object> get props => [];
 }
 
-class TopicInitial extends TopicEditState {}
-
 class TopicInProgress extends TopicEditState {}
 
 class TopicFailure extends TopicEditState {
@@ -20,9 +18,7 @@ class TopicFailure extends TopicEditState {
   List<Object> get props => [message];
 
   @override
-  String toString() {
-    return 'TopicFailure { $message }';
-  }
+  String toString() => 'TopicFailure(message: $message)';
 }
 
 class TopicAddSuccess extends TopicEditState {
@@ -32,6 +28,9 @@ class TopicAddSuccess extends TopicEditState {
 
   @override
   List<Object> get props => [topic];
+
+  @override
+  String toString() => 'TopicAddSuccess(topic: $topic)';
 }
 
 class TopicUpdateSuccess extends TopicEditState {
@@ -41,6 +40,9 @@ class TopicUpdateSuccess extends TopicEditState {
 
   @override
   List<Object> get props => [topic];
+
+  @override
+  String toString() => 'TopicUpdateSuccess(topic: $topic)';
 }
 
 class TopicDeleteSuccess extends TopicEditState {
@@ -50,4 +52,55 @@ class TopicDeleteSuccess extends TopicEditState {
 
   @override
   List<Object> get props => [topic];
+
+  @override
+  String toString() => 'TopicDeleteSuccess(topic: $topic)';
+}
+
+class TopicPinSuccess extends TopicEditState {
+  final Topic topic;
+
+  const TopicPinSuccess({@required this.topic});
+
+  @override
+  List<Object> get props => [topic];
+
+  @override
+  String toString() => 'TopicPinSuccess(topic: $topic)';
+}
+
+class TopicUnpinSuccess extends TopicEditState {
+  final Topic topic;
+
+  const TopicUnpinSuccess({@required this.topic});
+
+  @override
+  List<Object> get props => [topic];
+
+  @override
+  String toString() => 'TopicUnpinSuccess(topic: $topic)';
+}
+
+class TopicCloseSuccess extends TopicEditState {
+  final Topic topic;
+
+  const TopicCloseSuccess({@required this.topic});
+
+  @override
+  List<Object> get props => [topic];
+
+  @override
+  String toString() => 'TopicCloseSuccess(topic: $topic)';
+}
+
+class TopicReopenSuccess extends TopicEditState {
+  final Topic topic;
+
+  const TopicReopenSuccess({@required this.topic});
+
+  @override
+  List<Object> get props => [topic];
+
+  @override
+  String toString() => 'TopicReopenSuccess(topic: $topic)';
 }

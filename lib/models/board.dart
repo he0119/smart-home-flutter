@@ -13,6 +13,7 @@ class Topic extends Equatable {
   final String title;
   final String description;
   final bool isOpen;
+  final bool isPin;
   final User user;
   final DateTime createdAt;
   final DateTime editedAt;
@@ -23,6 +24,7 @@ class Topic extends Equatable {
     this.title,
     this.description,
     this.isOpen,
+    this.isPin,
     this.user,
     this.createdAt,
     this.editedAt,
@@ -40,12 +42,16 @@ class Topic extends Equatable {
       title,
       description,
       isOpen,
+      isPin,
       user,
       createdAt,
       editedAt,
       comments,
     ];
   }
+
+  @override
+  String toString() => title;
 }
 
 @JsonSerializable()
@@ -88,4 +94,7 @@ class Comment extends Equatable {
       replyTo,
     ];
   }
+
+  @override
+  String toString() => body.substring(0, 20);
 }
