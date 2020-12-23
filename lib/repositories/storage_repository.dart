@@ -63,6 +63,48 @@ class StorageRepository {
     return storageObject;
   }
 
+  Future<Item> addConsumable({
+    @required String id,
+    List<String> consumableIds,
+  }) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(addConsumableMutation),
+      variables: {
+        'input': {
+          'id': id,
+          'consumableIds': consumableIds,
+        }
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> itemJson =
+        result.data.flattenConnection['addConsumable']['item'];
+
+    final Item item = Item.fromJson(itemJson);
+    return item;
+  }
+
+  Future<Item> deleteConsumable({
+    @required String id,
+    List<String> consumableIds,
+  }) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(deleteConsumableMutation),
+      variables: {
+        'input': {
+          'id': id,
+          'consumableIds': consumableIds,
+        }
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> itemJson =
+        result.data.flattenConnection['deleteConsumable']['item'];
+
+    final Item item = Item.fromJson(itemJson);
+    return item;
+  }
+
   Future<void> deleteItem({String itemId}) async {
     final MutationOptions options = MutationOptions(
       document: gql(deleteItemMutation),

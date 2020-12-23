@@ -6,7 +6,6 @@ typedef Future<List<T>> DropdownSearchOnFind<T>(String text);
 class MyDropdownSearch<T> extends StatelessWidget {
   final String label;
   final DropdownSearchOnFind<T> onFind;
-  final DropdownSearchItemAsString<T> itemAsString;
   final ValueChanged<T> onChanged;
   final T selectedItem;
   final bool showClearButton;
@@ -15,7 +14,6 @@ class MyDropdownSearch<T> extends StatelessWidget {
     Key key,
     this.label,
     this.onFind,
-    this.itemAsString,
     this.onChanged,
     this.selectedItem,
     this.showClearButton = false,
@@ -40,7 +38,6 @@ class MyDropdownSearch<T> extends StatelessWidget {
         child: Text('无结果'),
       ),
       onFind: onFind,
-      itemAsString: itemAsString,
       onChanged: onChanged,
       selectedItem: selectedItem,
     );

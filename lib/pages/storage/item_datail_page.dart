@@ -6,6 +6,7 @@ import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
+import 'package:smart_home/pages/storage/consumable_edit_page.dart';
 import 'package:smart_home/pages/storage/item_edit_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
@@ -105,6 +106,21 @@ class _ItemDetailPage extends StatelessWidget {
                 BlocProvider.of<ItemDetailBloc>(context)
                     .add(ItemDetailChanged(itemId: state.item.id));
               }
+              if (value == Menu.consumable) {
+                await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider<ItemEditBloc>(
+                    create: (_) => ItemEditBloc(
+                      storageRepository:
+                          RepositoryProvider.of<StorageRepository>(context),
+                    ),
+                    child: ConsumableEditPage(
+                      item: state.item,
+                    ),
+                  ),
+                ));
+                BlocProvider.of<ItemDetailBloc>(context)
+                    .add(ItemDetailChanged(itemId: state.item.id));
+              }
               if (value == Menu.delete) {
                 showDialog(
                   context: context,
@@ -136,6 +152,10 @@ class _ItemDetailPage extends StatelessWidget {
               PopupMenuItem(
                 value: Menu.edit,
                 child: Text('编辑'),
+              ),
+              PopupMenuItem(
+                value: Menu.consumable,
+                child: Text('耗材编辑'),
               ),
               PopupMenuItem(
                 value: Menu.delete,

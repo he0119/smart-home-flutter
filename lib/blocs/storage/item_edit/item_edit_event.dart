@@ -70,3 +70,29 @@ class ItemRestored extends ItemEditEvent {
   @override
   String toString() => 'RestoreItem { name: ${item.name} }';
 }
+
+class ConsumableAdded extends ItemEditEvent {
+  final Item item;
+  final List<Item> consumables;
+
+  const ConsumableAdded({
+    @required this.item,
+    @required this.consumables,
+  });
+
+  @override
+  String toString() => 'ConsumableAdded { name: ${item.name} }';
+}
+
+class ConsumableDeleted extends ItemEditEvent {
+  final Item item;
+  final List<Item> consumables;
+
+  const ConsumableDeleted({
+    @required this.item,
+    @required this.consumables,
+  });
+
+  @override
+  String toString() => 'ConsumableDeleted { name: ${item.name} }';
+}

@@ -1,1 +1,1 @@
-enum Menu { edit, delete }
+enum Menu { edit, delete, consumable }

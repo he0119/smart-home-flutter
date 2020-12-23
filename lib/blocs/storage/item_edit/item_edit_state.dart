@@ -55,3 +55,21 @@ class ItemRestoreSuccess extends ItemEditState {
   @override
   String toString() => 'ItemRestoreSuccess { item: ${item.name} }';
 }
+
+class ConsumableAddSuccess extends ItemEditState {
+  final Item item;
+
+  const ConsumableAddSuccess({@required this.item});
+
+  @override
+  String toString() => 'ConsumableAddSuccess { item: ${item.name} }';
+}
+
+class ConsumableDeleteSuccess extends ItemEditState {
+  final Item item;
+
+  const ConsumableDeleteSuccess({@required this.item});
+
+  @override
+  String toString() => 'ConsumableIdDeleteSuccess { item: ${item.name} }';
+}

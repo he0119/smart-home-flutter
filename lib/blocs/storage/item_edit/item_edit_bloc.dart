@@ -71,5 +71,27 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         yield ItemEditFailure(e.message);
       }
     }
+    if (event is ConsumableAdded) {
+      yield ItemEditInProgress();
+      try {
+        final item = await storageRepository.addConsumable(
+            id: event.item.id,
+            consumableIds: event.consumables.map((e) => e.id).toList());
+        yield ConsumableAddSuccess(item: item);
+      } catch (e) {
+        yield ItemEditFailure(e.message);
+      }
+    }
+    if (event is ConsumableDeleted) {
+      yield ItemEditInProgress();
+      try {
+        final item = await storageRepository.deleteConsumable(
+            id: event.item.id,
+            consumableIds: event.consumables.map((e) => e.id).toList());
+        yield ConsumableDeleteSuccess(item: item);
+      } catch (e) {
+        yield ItemEditFailure(e.message);
+      }
+    }
   }
 }
