@@ -1,6 +1,6 @@
 const String nearExpiredItemsQuery = r"""
 query nearExpiredItems($nearExpiredTime: DateTime!, $now: DateTime!, $after: String) {
-  nearExpiredItems: items(after: $after, expirationDate_Gt: $now, expirationDate_Lt: $nearExpiredTime, orderBy: "-expiration_date") {
+  nearExpiredItems: items(isDeleted: false, after: $after, expiredAt_Gt: $now, expiredAt_Lt: $nearExpiredTime, orderBy: "-expired_at") {
     pageInfo {
       hasNextPage
       endCursor
@@ -10,7 +10,7 @@ query nearExpiredItems($nearExpiredTime: DateTime!, $now: DateTime!, $after: Str
         id
         name
         description
-        expirationDate
+        expiredAt
       }
     }
   }

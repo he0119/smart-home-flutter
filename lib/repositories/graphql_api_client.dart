@@ -132,9 +132,11 @@ class GraphQLApiClient {
         _loginStatusControler.sink.add(false);
         throw AuthenticationException('认证过期，请重新登录');
       }
+      _log.warning(error.toString());
       throw Exception(error.message);
     }
     if (exception.linkException != null) {
+      _log.severe(exception.linkException.toString());
       throw Exception('网络异常，请稍后再试');
     }
   }

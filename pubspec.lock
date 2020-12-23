@@ -239,6 +239,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.0"
+  dropdown_search:
+    dependency: "direct main"
+    description:
+      name: dropdown_search
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.4.8"
   enum_to_string:
     dependency: "direct main"
     description:

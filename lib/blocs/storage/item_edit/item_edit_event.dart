@@ -15,7 +15,7 @@ class ItemUpdated extends ItemEditEvent {
   final String oldStorageId;
   final String description;
   final double price;
-  final DateTime expirationDate;
+  final DateTime expiredAt;
 
   const ItemUpdated({
     @required this.id,
@@ -25,7 +25,7 @@ class ItemUpdated extends ItemEditEvent {
     this.oldStorageId,
     this.description,
     this.price,
-    this.expirationDate,
+    this.expiredAt,
   });
 
   @override
@@ -38,7 +38,7 @@ class ItemAdded extends ItemEditEvent {
   final String storageId;
   final String description;
   final double price;
-  final DateTime expirationDate;
+  final DateTime expiredAt;
 
   const ItemAdded({
     @required this.name,
@@ -46,7 +46,7 @@ class ItemAdded extends ItemEditEvent {
     @required this.storageId,
     this.description,
     this.price,
-    this.expirationDate,
+    this.expiredAt,
   });
 
   @override
@@ -60,4 +60,39 @@ class ItemDeleted extends ItemEditEvent {
 
   @override
   String toString() => 'DeleteItem { name: ${item.name} }';
+}
+
+class ItemRestored extends ItemEditEvent {
+  final Item item;
+
+  const ItemRestored({@required this.item});
+
+  @override
+  String toString() => 'RestoreItem { name: ${item.name} }';
+}
+
+class ConsumableAdded extends ItemEditEvent {
+  final Item item;
+  final List<Item> consumables;
+
+  const ConsumableAdded({
+    @required this.item,
+    @required this.consumables,
+  });
+
+  @override
+  String toString() => 'ConsumableAdded { name: ${item.name} }';
+}
+
+class ConsumableDeleted extends ItemEditEvent {
+  final Item item;
+  final List<Item> consumables;
+
+  const ConsumableDeleted({
+    @required this.item,
+    @required this.consumables,
+  });
+
+  @override
+  String toString() => 'ConsumableDeleted { name: ${item.name} }';
 }

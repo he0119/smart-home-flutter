@@ -124,7 +124,7 @@ class _StorageDetailPage extends StatelessWidget {
       );
     }
     if (state is StorageDetailSuccess) {
-      List<Storage> paths = state.ancestors;
+      List<Storage> paths = state.storage.ancestors ?? [];
       if (!paths.contains(state.storage)) {
         // 防止重复添加相同名称的位置
         // 因为无限列表重新获取时，位置对象虽然名字不会变，但是内容改变
@@ -135,14 +135,13 @@ class _StorageDetailPage extends StatelessWidget {
       return AppBar(
         title: Text(state.storage.name),
         actions: <Widget>[
-          AddStorageIconButton(),
+          AddStorageIconButton(
+            storage: state.storage,
+          ),
           SearchIconButton(),
           PopupMenuButton<Menu>(
             onSelected: (value) async {
               if (value == Menu.edit) {
-                List<Storage> listofStorages =
-                    await RepositoryProvider.of<StorageRepository>(context)
-                        .storages();
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<StorageEditBloc>(
                     create: (_) => StorageEditBloc(
@@ -153,7 +152,6 @@ class _StorageDetailPage extends StatelessWidget {
                     ),
                     child: StorageEditPage(
                       isEditing: true,
-                      listofStorages: listofStorages,
                       storage: state.storage,
                     ),
                   ),
@@ -280,6 +278,8 @@ class _StorageDetailPage extends StatelessWidget {
         hasNextPage: state.hasNextPage,
         onFetch: () => BlocProvider.of<StorageDetailBloc>(context)
             .add(StorageDetailFetched()),
+        onPopDetailPage: () => BlocProvider.of<StorageDetailBloc>(context)
+            .add(StorageDetailRefreshed(id: state.storage.id)),
       );
     }
     return LoadingPage();
@@ -292,22 +292,16 @@ class _StorageDetailPage extends StatelessWidget {
         tooltip: '添加物品',
         child: Icon(Icons.add),
         onPressed: () async {
-          List<Storage> listofStorages =
-              await RepositoryProvider.of<StorageRepository>(context)
-                  .storages();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => BlocProvider<ItemEditBloc>(
                 create: (_) => ItemEditBloc(
                   storageRepository:
                       RepositoryProvider.of<StorageRepository>(context),
-                  storageDetailBloc:
-                      BlocProvider.of<StorageDetailBloc>(context),
                 ),
                 child: ItemEditPage(
                   isEditing: false,
-                  listofStorages: listofStorages,
-                  storageId: state.storage.id,
+                  storage: state.storage,
                 ),
               ),
             ),
