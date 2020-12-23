@@ -77,10 +77,6 @@ class CommentItem extends StatelessWidget {
                   );
                   break;
                 case Menu.edit:
-                  // TODO: Handle this case.
-                  break;
-                case Menu.reply:
-                  // TODO: Handle this case.
                   break;
               }
             },

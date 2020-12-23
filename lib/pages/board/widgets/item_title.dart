@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/blocs.dart';
 
-import 'package:smart_home/models/detail_page_menu.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/gravatar.dart';
@@ -27,25 +26,19 @@ class ItemTitle extends StatelessWidget {
       leading: CircleGravatar(email: user.email),
       title: Text(user.username),
       subtitle: Text(dateModified.toLocalStr()),
-      trailing: (onSelected != null)
+      trailing: (onSelected != null && user == loginUser)
           ? PopupMenuButton(
               icon: Icon(Icons.expand_more),
               onSelected: onSelected,
               itemBuilder: (context) => <PopupMenuItem<Menu>>[
                 PopupMenuItem(
-                  value: Menu.reply,
-                  child: Text('回复'),
+                  value: Menu.edit,
+                  child: Text('修改'),
                 ),
-                if (user == loginUser)
-                  PopupMenuItem(
-                    value: Menu.edit,
-                    child: Text('修改'),
-                  ),
-                if (user == loginUser)
-                  PopupMenuItem(
-                    value: Menu.delete,
-                    child: Text('删除'),
-                  ),
+                PopupMenuItem(
+                  value: Menu.delete,
+                  child: Text('删除'),
+                ),
               ],
             )
           : null,
