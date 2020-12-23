@@ -17,73 +17,81 @@ import 'package:smart_home/pages/iot/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
-import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/utils/launch_url.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
+class HomePage extends Page {
+  final AppTab defaultPage;
+
+  const HomePage({
+    @required this.defaultPage,
+  });
+
+  @override
+  Route createRoute(BuildContext context) {
+    BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationStarted());
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthenticationBloc(
-        userRepository: RepositoryProvider.of<UserRepository>(context),
-        graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(context),
-        appPreferencesBloc: RepositoryProvider.of<AppPreferencesBloc>(context),
-      )..add(AuthenticationStarted()),
-      child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-          if (state is AuthenticationFailure) {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          }
-          if (state is AuthenticationSuccess) {
-            // 当登录成功时，开始初始化推送服务
-            BlocProvider.of<PushBloc>(context).add(PushStarted());
-          }
-        },
-        builder: (context, state) {
-          if (state is AuthenticationInitial) {
-            return SplashPage();
-          }
-          // 仅在登陆失败和登陆中进入登陆界面
-          if (state is AuthenticationInProgress ||
-              state is AuthenticationFailure) {
-            return LoginPage();
-          }
-          return BlocListener<UpdateBloc, UpdateState>(
-            listener: (context, state) {
-              if (state is UpdateSuccess && state.needUpdate) {
-                scaffoldMessengerKey.currentState.showSnackBar(
-                  SnackBar(
-                    content: Text('发现新版本（${state.version}）'),
-                    action: SnackBarAction(
-                      label: '更新',
-                      onPressed: () {
-                        launchUrl(state.url);
-                      },
-                    ),
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state is AuthenticationFailure) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        }
+        if (state is AuthenticationSuccess) {
+          // 当登录成功时，开始初始化推送服务
+          BlocProvider.of<PushBloc>(context).add(PushStarted());
+        }
+      },
+      builder: (context, state) {
+        if (state is AuthenticationInitial) {
+          return SplashScreen();
+        }
+        // 仅在登陆失败和登陆中进入登陆界面
+        if (state is AuthenticationInProgress ||
+            state is AuthenticationFailure) {
+          return LoginPage();
+        }
+        return BlocListener<UpdateBloc, UpdateState>(
+          listener: (context, state) {
+            if (state is UpdateSuccess && state.needUpdate) {
+              scaffoldMessengerKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text('发现新版本（${state.version}）'),
+                  action: SnackBarAction(
+                    label: '更新',
+                    onPressed: () {
+                      launchUrl(state.url);
+                    },
                   ),
-                );
-              }
-              if (state is UpdateFailure) {
-                scaffoldMessengerKey.currentState.showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    action: SnackBarAction(
-                      label: '重试',
-                      onPressed: () {
-                        BlocProvider.of<UpdateBloc>(context)
-                            .add(UpdateStarted());
-                      },
-                    ),
+                ),
+              );
+            }
+            if (state is UpdateFailure) {
+              scaffoldMessengerKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  action: SnackBarAction(
+                    label: '重试',
+                    onPressed: () {
+                      BlocProvider.of<UpdateBloc>(context).add(UpdateStarted());
+                    },
                   ),
-                );
-              }
-            },
-            child: _HomePage(),
-          );
-        },
-      ),
+                ),
+              );
+            }
+          },
+          child: _HomePage(),
+        );
+      },
     );
   }
 }
@@ -117,22 +125,11 @@ class _HomePage extends StatelessWidget {
         ],
       );
     }
-    return BlocConsumer<TabBloc, AppTab>(
-      listener: (context, activeTab) {
-        switch (activeTab) {
-          case AppTab.storage:
-            BlocProvider.of<StorageHomeBloc>(context)
-                .add(StorageHomeChanged(itemType: ItemType.all));
-            break;
-          case AppTab.board:
-            BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeStarted());
-            break;
-          case AppTab.blog:
-          case AppTab.iot:
-        }
-      },
+    return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         if (activeTab == AppTab.storage) {
+          BlocProvider.of<StorageHomeBloc>(context)
+              .add(StorageHomeChanged(itemType: ItemType.all));
           return StorageHomePage();
         }
         if (activeTab == AppTab.blog) {
@@ -141,6 +138,7 @@ class _HomePage extends StatelessWidget {
         if (activeTab == AppTab.iot) {
           return IotHomePage();
         }
+        BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeStarted());
         return BoardHomePage();
       },
     );

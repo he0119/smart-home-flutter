@@ -47,6 +47,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapAuthenticationStartedToState(
       AuthenticationStarted event) async* {
     // 监听认证情况
+    await _loginSubscription?.cancel();
     _loginSubscription = graphqlApiClient.loginStatus.listen((event) {
       if (!event) {
         add(AuthenticationLogout());
