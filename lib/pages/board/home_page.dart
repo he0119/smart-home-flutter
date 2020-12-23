@@ -7,6 +7,7 @@ import 'package:smart_home/pages/board/topic_edit_page.dart';
 import 'package:smart_home/pages/board/widgets/topic_list.dart';
 import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
+import 'package:smart_home/repositories/board_repository.dart';
 import 'package:smart_home/widgets/home_page.dart';
 
 class BoardHomePage extends StatelessWidget {
@@ -23,13 +24,19 @@ class BoardHomePage extends StatelessWidget {
         tooltip: '添加话题',
         child: Icon(Icons.create),
         onPressed: () async {
-          Navigator.of(context).push(
+          await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => TopicEditPage(
-                isEditing: false,
+              builder: (context) => BlocProvider(
+                create: (context) => TopicEditBloc(
+                    boardRepository:
+                        RepositoryProvider.of<BoardRepository>(context)),
+                child: TopicEditPage(
+                  isEditing: false,
+                ),
               ),
             ),
           );
+          BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
         },
       ),
     );

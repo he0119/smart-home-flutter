@@ -24,10 +24,19 @@ class TopicDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TopicDetailBloc(
-        boardRepository: RepositoryProvider.of<BoardRepository>(context),
-      )..add(TopicDetailChanged(topicId: topicId)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<TopicDetailBloc>(
+          create: (context) => TopicDetailBloc(
+            boardRepository: RepositoryProvider.of<BoardRepository>(context),
+          )..add(TopicDetailChanged(topicId: topicId)),
+        ),
+        BlocProvider<TopicEditBloc>(
+          create: (context) => TopicEditBloc(
+            boardRepository: RepositoryProvider.of<BoardRepository>(context),
+          ),
+        )
+      ],
       child: _TopicDetailPage(),
     );
   }
@@ -77,96 +86,139 @@ class __TopicDetailPageState extends State<_TopicDetailPage> {
             create: (context) => CommentEditBloc(
               boardRepository: RepositoryProvider.of<BoardRepository>(context),
             ),
-            child: Scaffold(
-              appBar: AppBar(
-                actions: <Widget>[
-                  if (loginUser == state.topic.user)
-                    Tooltip(
-                      message: '修改',
-                      child: IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => BlocProvider(
-                                create: (context) => TopicEditBloc(
-                                    boardRepository:
-                                        RepositoryProvider.of<BoardRepository>(
-                                            context)),
-                                child: TopicEditPage(
-                                  isEditing: true,
-                                  topic: state.topic,
-                                ),
+            child: BlocListener<TopicEditBloc, TopicEditState>(
+              listener: (context, state) {
+                if (state is TopicDeleteSuccess) {
+                  showInfoSnackBar('话题 ${state.topic.title} 删除成功');
+                  Navigator.of(context).pop();
+                }
+                if (state is TopicFailure) {
+                  showErrorSnackBar(state.message);
+                }
+              },
+              child: Scaffold(
+                appBar: AppBar(
+                  actions: <Widget>[
+                    if (loginUser == state.topic.user)
+                      Tooltip(
+                        message: '删除',
+                        child: IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () async {
+                            showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                title: Text('删除话题'),
+                                content: Text('你确认要删除该话题？'),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('否'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text('是'),
+                                    onPressed: () {
+                                      showInfoSnackBar('正在删除...', duration: 1);
+                                      BlocProvider.of<TopicEditBloc>(context)
+                                          .add(
+                                              TopicDeleted(topic: state.topic));
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
                               ),
-                            ),
-                          );
-                          BlocProvider.of<TopicDetailBloc>(context)
-                              .add(TopicDetailRefreshed());
-                        },
-                      ),
-                    ),
-                ],
-              ),
-              body: BlocListener<CommentEditBloc, CommentEditState>(
-                listener: (context, state) {
-                  // TODO: 更自然的刷新方法
-                  if (state is CommentAddSuccess) {
-                    _buttonBarController.text = '';
-                    _buttonBarFocusNode.unfocus();
-                    BlocProvider.of<TopicDetailBloc>(context)
-                        .add(TopicDetailRefreshed());
-                    showInfoSnackBar('评论成功');
-                  }
-                  if (state is CommentDeleteSuccess) {
-                    BlocProvider.of<TopicDetailBloc>(context)
-                        .add(TopicDetailRefreshed());
-                    showInfoSnackBar('评论删除成功');
-                  }
-                },
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          BlocProvider.of<TopicDetailBloc>(context)
-                              .add(TopicDetailRefreshed());
-                        },
-                        child: GestureDetector(
-                          onTap: () {
-                            _buttonBarFocusNode.unfocus();
+                            );
                           },
-                          child: CustomScrollView(
-                            slivers: <Widget>[
-                              SliverToBoxAdapter(
-                                child: TopicItem(
-                                  topic: state.topic,
-                                  showBody: true,
+                        ),
+                      ),
+                    if (loginUser == state.topic.user)
+                      Tooltip(
+                        message: '修改',
+                        child: IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => BlocProvider(
+                                  create: (context) => TopicEditBloc(
+                                      boardRepository: RepositoryProvider.of<
+                                          BoardRepository>(context)),
+                                  child: TopicEditPage(
+                                    isEditing: true,
+                                    topic: state.topic,
+                                  ),
                                 ),
                               ),
-                              SliverToBoxAdapter(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                  child: Text('全部评论',
-                                      style: TextStyle(fontSize: 20)),
+                            );
+                            BlocProvider.of<TopicDetailBloc>(context)
+                                .add(TopicDetailRefreshed());
+                          },
+                        ),
+                      ),
+                  ],
+                ),
+                body: BlocListener<CommentEditBloc, CommentEditState>(
+                  listener: (context, state) {
+                    if (state is CommentAddSuccess) {
+                      _buttonBarController.text = '';
+                      _buttonBarFocusNode.unfocus();
+                      BlocProvider.of<TopicDetailBloc>(context)
+                          .add(TopicDetailRefreshed());
+                      showInfoSnackBar('评论成功');
+                    }
+                    if (state is CommentDeleteSuccess) {
+                      BlocProvider.of<TopicDetailBloc>(context)
+                          .add(TopicDetailRefreshed());
+                      showInfoSnackBar('评论删除成功');
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            BlocProvider.of<TopicDetailBloc>(context)
+                                .add(TopicDetailRefreshed());
+                          },
+                          child: GestureDetector(
+                            onTap: () {
+                              _buttonBarFocusNode.unfocus();
+                            },
+                            child: CustomScrollView(
+                              slivers: <Widget>[
+                                SliverToBoxAdapter(
+                                  child: TopicItem(
+                                    topic: state.topic,
+                                    showBody: true,
+                                  ),
                                 ),
-                              ),
-                              SliverCommentList(comments: state.comments),
-                            ],
+                                SliverToBoxAdapter(
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                    child: Text('全部评论',
+                                        style: TextStyle(fontSize: 20)),
+                                  ),
+                                ),
+                                SliverCommentList(comments: state.comments),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      child: AddCommentButtonBar(
-                        topic: state.topic,
-                        controller: _buttonBarController,
-                        focusNode: _buttonBarFocusNode,
-                      ),
-                    )
-                  ],
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        child: AddCommentButtonBar(
+                          topic: state.topic,
+                          controller: _buttonBarController,
+                          focusNode: _buttonBarFocusNode,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

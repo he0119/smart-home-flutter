@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:smart_home/blocs/board/blocs.dart';
 
 import 'package:smart_home/models/board.dart';
 import 'package:smart_home/pages/board/topic_detail_page.dart';
@@ -70,9 +72,13 @@ class TopicItem extends StatelessWidget {
             ],
           ),
         ),
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => TopicDetailPage(topicId: topic.id)));
+        onTap: () async {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => TopicDetailPage(topicId: topic.id),
+            ),
+          );
+          BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
         },
       );
     }
