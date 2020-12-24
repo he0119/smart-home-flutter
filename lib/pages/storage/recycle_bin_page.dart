@@ -92,21 +92,44 @@ Widget _buildItem(BuildContext context, Item item) {
       ],
     ),
   );
-  return Dismissible(
-    key: ValueKey(item.name),
-    background: Container(
-      color: Colors.green,
-    ),
-    onDismissed: (direction) {
-      BlocProvider.of<ItemEditBloc>(context).add(ItemRestored(item: item));
-      showInfoSnackBar('正在恢复...', duration: 1);
+  return ListTile(
+    title: text,
+    subtitle: Text(item.description ?? ''),
+    onTap: () {
+      MyRouterDelegate.of(context).addItemPage(item: item);
     },
-    child: ListTile(
-      title: text,
-      subtitle: Text(item.description ?? ''),
-      onTap: () {
-        MyRouterDelegate.of(context).addItemPage(item: item);
-      },
+    trailing: Tooltip(
+      message: '恢复',
+      child: IconButton(
+        icon: Icon(Icons.undo),
+        onPressed: () async {
+          await showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: Text('恢复物品'),
+              content: Text('你确认要恢复该物品？'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('否'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text('是'),
+                  onPressed: () {
+                    BlocProvider.of<ItemEditBloc>(context)
+                        .add(ItemRestored(item: item));
+                    showInfoSnackBar('正在恢复...', duration: 1);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+          BlocProvider.of<RecycleBinBloc>(context).add(RecycleBinRefreshed());
+        },
+      ),
     ),
   );
 }
