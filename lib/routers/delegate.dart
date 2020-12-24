@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/home_page.dart';
+import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/routers/route_path.dart';
 
 class MyRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
+  static final Logger _log = Logger('RouterDelegate');
+
   @override
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -17,6 +22,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   /// 是否登录
   bool isLogin = false;
+
+  AppTab defaultPage;
 
   RoutePath get configuration => _configuration;
   RoutePath _configuration;
@@ -44,11 +51,13 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   @override
   Widget build(BuildContext context) {
-    print('initialized: $initialized');
-    print('isLogin: $isLogin');
+    final currentAppPath = configuration;
+    _log.fine('Router rebuilded');
+    _log.fine('currentAppPath: $currentAppPath');
+    _log.fine('initialized: $initialized');
+    _log.fine('isLogin: $isLogin');
     final graphQLApiClient = RepositoryProvider.of<GraphQLApiClient>(context);
     final AppConfig config = AppConfig.of(context);
-    final current = configuration;
     return MultiBlocListener(
       listeners: [
         BlocListener<AppPreferencesBloc, AppPreferencesState>(
@@ -68,9 +77,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             if (state.initialized) {
               initialized = state.initialized;
               isLogin = state.loginUser != null;
-              configuration = AppRoutePath(
-                appTab: state.defaultPage,
-              );
+              defaultPage = state.defaultPage;
+              notifyListeners();
             }
           },
         ),
@@ -80,16 +88,29 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
               isLogin = false;
               notifyListeners();
             }
+            if (state is AuthenticationSuccess) {
+              isLogin = true;
+              notifyListeners();
+            }
+          },
+        ),
+        BlocListener<TabBloc, AppTab>(
+          listener: (context, state) {
+            if (state != null) {
+              configuration = AppRoutePath(appTab: state);
+            }
           },
         )
       ],
       child: Navigator(
         key: navigatorKey,
         pages: initialized
-            ? <Page>[
-                if (current is AppRoutePath)
-                  HomePage(defaultPage: current.appTab),
-              ]
+            ? isLogin
+                ? <Page>[
+                    if (currentAppPath is AppRoutePath)
+                      HomePage(appTab: currentAppPath.appTab ?? defaultPage),
+                  ]
+                : [LoginPage()]
             : [
                 SplashPage(),
               ],

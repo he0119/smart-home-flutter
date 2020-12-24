@@ -9,4 +9,7 @@ class AppRoutePath extends RoutePath {
   AppRoutePath({
     this.appTab,
   });
+
+  @override
+  String toString() => 'AppRoutePath(appTab: $appTab)';
 }

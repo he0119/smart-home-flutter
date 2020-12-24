@@ -7,10 +7,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   @override
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
-    final String routeName = routeInformation.location;
-
-    return AppRoutePath(appTab: AppTab.iot);
-    throw 'unknown';
+    return AppRoutePath(appTab: null);
   }
 
   @override
@@ -27,6 +24,8 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
         case AppTab.board:
           return const RouteInformation(location: '/board');
           break;
+        default:
+          return const RouteInformation(location: '/');
       }
     }
     throw 'unknown';
