@@ -7,16 +7,39 @@ import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/pages/storage/consumable_edit_page.dart';
 import 'package:smart_home/pages/storage/item_edit_page.dart';
-import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
+import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
-class ItemDetailPage extends StatelessWidget {
+class ItemDetailPage extends Page {
+  final String itemId;
+  final int group;
+
+  ItemDetailPage({
+    this.itemId,
+    this.group,
+  }) : super(
+          key: ValueKey('$group/$itemId'),
+          name: '/item/$group/$itemId',
+        );
+
+  @override
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => ItemDetailScreen(
+        itemId: itemId,
+      ),
+    );
+  }
+}
+
+class ItemDetailScreen extends StatelessWidget {
   final String itemId;
 
-  const ItemDetailPage({
+  const ItemDetailScreen({
     Key key,
     @required this.itemId,
   }) : super(key: key);
@@ -209,13 +232,8 @@ class _ItemDetailList extends StatelessWidget {
           subtitle: SelectableText(
             item.storage.name,
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      StorageDetailPage(storageId: item.storage.id),
-                ),
-              );
+              MyRouterDelegate.of(context)
+                  .addStorageGroup(storage: item.storage);
             },
             style: TextStyle(
               decoration: TextDecoration.underline,
@@ -241,15 +259,7 @@ class _ItemDetailList extends StatelessWidget {
                   .map(
                     (item) => SelectableText(
                       item.name,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ItemDetailPage(itemId: item.id),
-                          ),
-                        );
-                      },
+                      onTap: () {},
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                       ),

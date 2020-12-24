@@ -15,10 +15,28 @@ import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/repositories/board_repository.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
-class TopicDetailPage extends StatelessWidget {
+class TopicDetailPage extends Page {
   final String topicId;
 
-  const TopicDetailPage({
+  TopicDetailPage({
+    this.topicId,
+  }) : super(key: ValueKey(topicId), name: '/board/$topicId');
+
+  @override
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => TopicDetailScreen(
+        topicId: topicId,
+      ),
+    );
+  }
+}
+
+class TopicDetailScreen extends StatelessWidget {
+  final String topicId;
+
+  const TopicDetailScreen({
     Key key,
     @required this.topicId,
   }) : super(key: key);
@@ -38,21 +56,21 @@ class TopicDetailPage extends StatelessWidget {
           ),
         )
       ],
-      child: _TopicDetailPage(),
+      child: _DetailScreen(),
     );
   }
 }
 
-class _TopicDetailPage extends StatefulWidget {
-  const _TopicDetailPage({
+class _DetailScreen extends StatefulWidget {
+  const _DetailScreen({
     Key key,
   }) : super(key: key);
 
   @override
-  __TopicDetailPageState createState() => __TopicDetailPageState();
+  _DetailScreenState createState() => _DetailScreenState();
 }
 
-class __TopicDetailPageState extends State<_TopicDetailPage> {
+class _DetailScreenState extends State<_DetailScreen> {
   final _buttonBarController = TextEditingController();
   final _buttonBarFocusNode = FocusNode();
 

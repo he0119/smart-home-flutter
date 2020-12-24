@@ -5,8 +5,8 @@ import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/storage.dart';
 import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
-import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
+import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
@@ -104,15 +104,8 @@ Widget _buildItem(BuildContext context, Item item) {
     child: ListTile(
       title: text,
       subtitle: Text(item.description ?? ''),
-      onTap: () async {
-        await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => ItemDetailPage(
-              itemId: item.id,
-            ),
-          ),
-        );
-        BlocProvider.of<RecycleBinBloc>(context).add(RecycleBinFetched());
+      onTap: () {
+        MyRouterDelegate.of(context).addItemPage(item: item);
       },
     ),
   );

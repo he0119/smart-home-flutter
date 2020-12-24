@@ -5,12 +5,22 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends Page {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => LoginScreen(),
+    );
+  }
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   bool canLogin = true;
 
   @override

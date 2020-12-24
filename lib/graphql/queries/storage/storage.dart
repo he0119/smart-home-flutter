@@ -10,6 +10,14 @@ query storage($id: ID!, $itemCursor: String, $storageCursor: String) {
         node {
           id
           name
+          ancestors {
+            edges {
+              node {
+                id
+                name
+              }
+            }
+          }
         }
       }
     }
@@ -23,6 +31,14 @@ query storage($id: ID!, $itemCursor: String, $storageCursor: String) {
           id
           name
           description
+          ancestors {
+            edges {
+              node {
+                id
+                name
+              }
+            }
+          }
         }
       }
     }

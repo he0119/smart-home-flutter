@@ -9,90 +9,27 @@ import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/blocs/push/push_bloc.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
-import 'package:smart_home/models/models.dart';
 import 'package:smart_home/models/grobal_keys.dart';
+import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/blog/home_page.dart';
 import 'package:smart_home/pages/board/home_page.dart';
 import 'package:smart_home/pages/iot/home_page.dart';
-import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/pages/storage/home_page.dart';
-import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/utils/launch_url.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
+class HomePage extends Page {
+  final AppTab appTab;
+
+  HomePage({
+    @required this.appTab,
+  }) : super(
+          key: ValueKey(appTab.toString()),
+          name: '/${appTab.toString()}',
+        );
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthenticationBloc(
-        userRepository: RepositoryProvider.of<UserRepository>(context),
-        graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(context),
-        appPreferencesBloc: RepositoryProvider.of<AppPreferencesBloc>(context),
-      )..add(AuthenticationStarted()),
-      child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-          if (state is AuthenticationFailure) {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          }
-          if (state is AuthenticationSuccess) {
-            // 当登录成功时，开始初始化推送服务
-            BlocProvider.of<PushBloc>(context).add(PushStarted());
-          }
-        },
-        builder: (context, state) {
-          if (state is AuthenticationInitial) {
-            return SplashPage();
-          }
-          // 仅在登陆失败和登陆中进入登陆界面
-          if (state is AuthenticationInProgress ||
-              state is AuthenticationFailure) {
-            return LoginPage();
-          }
-          return BlocListener<UpdateBloc, UpdateState>(
-            listener: (context, state) {
-              if (state is UpdateSuccess && state.needUpdate) {
-                scaffoldMessengerKey.currentState.showSnackBar(
-                  SnackBar(
-                    content: Text('发现新版本（${state.version}）'),
-                    action: SnackBarAction(
-                      label: '更新',
-                      onPressed: () {
-                        launchUrl(state.url);
-                      },
-                    ),
-                  ),
-                );
-              }
-              if (state is UpdateFailure) {
-                scaffoldMessengerKey.currentState.showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    action: SnackBarAction(
-                      label: '重试',
-                      onPressed: () {
-                        BlocProvider.of<UpdateBloc>(context)
-                            .add(UpdateStarted());
-                      },
-                    ),
-                  ),
-                );
-              }
-            },
-            child: _HomePage(),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _HomePage extends StatelessWidget {
-  const _HomePage({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Route createRoute(BuildContext context) {
     // 仅在客户端上注册 Shortcut
     if (!kIsWeb && !Platform.isWindows) {
       final QuickActions quickActions = QuickActions();
@@ -117,32 +54,97 @@ class _HomePage extends StatelessWidget {
         ],
       );
     }
-    return BlocConsumer<TabBloc, AppTab>(
-      listener: (context, activeTab) {
-        switch (activeTab) {
-          case AppTab.storage:
-            BlocProvider.of<StorageHomeBloc>(context)
-                .add(StorageHomeChanged(itemType: ItemType.all));
-            break;
-          case AppTab.board:
-            BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeStarted());
-            break;
-          case AppTab.blog:
-          case AppTab.iot:
+    BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationStarted());
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => HomeScreen(
+        appTab: appTab,
+      ),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  final AppTab appTab;
+
+  const HomeScreen({
+    Key key,
+    @required this.appTab,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state is AuthenticationSuccess) {
+          // 当登录成功时，开始初始化推送服务
+          BlocProvider.of<PushBloc>(context).add(PushStarted());
         }
       },
-      builder: (context, activeTab) {
-        if (activeTab == AppTab.storage) {
-          return StorageHomePage();
+      builder: (context, state) {
+        if (state is AuthenticationInitial) {
+          return SplashScreen();
         }
-        if (activeTab == AppTab.blog) {
-          return BlogHomePage();
-        }
-        if (activeTab == AppTab.iot) {
-          return IotHomePage();
-        }
-        return BoardHomePage();
+        return BlocListener<UpdateBloc, UpdateState>(
+          listener: (context, state) {
+            if (state is UpdateSuccess && state.needUpdate) {
+              scaffoldMessengerKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text('发现新版本（${state.version}）'),
+                  action: SnackBarAction(
+                    label: '更新',
+                    onPressed: () {
+                      launchUrl(state.url);
+                    },
+                  ),
+                ),
+              );
+            }
+            if (state is UpdateFailure) {
+              scaffoldMessengerKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  action: SnackBarAction(
+                    label: '重试',
+                    onPressed: () {
+                      BlocProvider.of<UpdateBloc>(context).add(UpdateStarted());
+                    },
+                  ),
+                ),
+              );
+            }
+          },
+          child: _HomePage(
+            appTab: appTab,
+          ),
+        );
       },
     );
+  }
+}
+
+class _HomePage extends StatelessWidget {
+  final AppTab appTab;
+
+  const _HomePage({
+    Key key,
+    @required this.appTab,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (appTab == AppTab.storage) {
+      BlocProvider.of<StorageHomeBloc>(context)
+          .add(StorageHomeChanged(itemType: ItemType.all));
+      return StorageHomePage();
+    }
+    if (appTab == AppTab.blog) {
+      return BlogHomePage();
+    }
+    if (appTab == AppTab.iot) {
+      return IotHomePage();
+    }
+    BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeStarted());
+    return BoardHomePage();
   }
 }
