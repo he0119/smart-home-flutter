@@ -36,6 +36,14 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           break;
       }
     }
+    if (routePath is StorageRoutePath) {
+      if (routePath.storageId == null) {
+        return RouteInformation(location: '/storage/home');
+      }
+      return RouteInformation(location: '/storage/${routePath.storageId}');
+    }
+    if (routePath is TopicRoutePath)
+      return RouteInformation(location: '/board/topic/${routePath.topicId}');
     return const RouteInformation(location: '/');
   }
 }

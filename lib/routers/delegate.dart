@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/blocs.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/pages/board/topic_detail_page.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
@@ -107,13 +108,15 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   RoutePath get routePath {
+    final uri = Uri.parse(_pages.last.name);
     if (_pages.last is HomePage) return AppRoutePath(appTab: currentHomePage);
     if (_pages.last is StorageDetailPage) {
-      final uri = Uri.parse(_pages.last.name);
-      final storageId = uri.pathSegments[1];
+      final storageId = uri.pathSegments[2];
       if (storageId == 'home') return StorageRoutePath();
       return StorageRoutePath(storageId: storageId);
     }
+    if (_pages.last is TopicDetailPage)
+      return TopicRoutePath(topicId: uri.pathSegments[1]);
     return AppRoutePath();
   }
 

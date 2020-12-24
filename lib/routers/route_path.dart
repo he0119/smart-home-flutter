@@ -26,3 +26,16 @@ class StorageRoutePath extends RoutePath {
   @override
   String toString() => 'StorageRoutePath(storageId: $storageId)';
 }
+
+/// 留言板相关的信息
+class TopicRoutePath extends RoutePath {
+  /// 物品 ID，空则为 家(/storage/home)
+  final String topicId;
+
+  TopicRoutePath({
+    this.topicId,
+  });
+
+  @override
+  String toString() => 'TopicRoutePath(topicId: $topicId)';
+}
