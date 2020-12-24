@@ -14,6 +14,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
   static final Logger _log = Logger('RouterDelegate');
 
+  static MyRouterDelegate of(BuildContext context) {
+    final delegate = Router.of(context).routerDelegate;
+    assert(delegate is MyRouterDelegate, 'Delegate type must match');
+    return delegate as MyRouterDelegate;
+  }
+
   @override
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -23,27 +29,60 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   /// 是否登录
   bool isLogin = false;
 
-  AppTab defaultPage;
+  /// 当前主页
+  AppTab currentHomePage;
 
-  RoutePath get configuration => _configuration;
-  RoutePath _configuration;
-  set configuration(RoutePath routePath) {
-    _configuration = routePath;
+  /// 默认主页
+  AppTab defaultHomePage;
+
+  List<Page> _pages = <Page>[];
+
+  List<Page> get pages {
+    _log.fine('Router rebuilded');
+    _log.fine('configuration $routePath');
+    if (!initialized) {
+      _pages = [SplashPage()];
+      return _pages;
+    }
+    if (!isLogin) {
+      _pages = [LoginPage()];
+      return _pages;
+    }
+    final current = routePath;
+    if (current is AppRoutePath) {
+      if (current.appTab == null) {
+        _routePath = AppRoutePath(appTab: defaultHomePage);
+        currentHomePage = defaultHomePage;
+        _pages = [HomePage(appTab: currentHomePage)];
+      }
+    }
+    _log.fine('pages $_pages');
+    return List.unmodifiable(_pages);
+  }
+
+  RoutePath get routePath => _routePath;
+  RoutePath _routePath;
+  set routePath(RoutePath routePath) {
+    if (routePath is AppRoutePath) {
+      _routePath = routePath;
+      currentHomePage = routePath.appTab;
+    }
     notifyListeners();
   }
 
   @override
-  Future<void> setNewRoutePath(RoutePath configuration) async {
-    _configuration = configuration;
+  Future<void> setNewRoutePath(RoutePath routePath) async {
+    _routePath = routePath;
   }
 
   // For web application
   @override
-  RoutePath get currentConfiguration => configuration;
+  RoutePath get currentConfiguration => routePath;
 
   bool _handlePopPage(Route<dynamic> route, dynamic result) {
     final bool success = route.didPop(result);
     if (success) {
+      _pages.remove(route.settings);
       notifyListeners();
     }
     return success;
@@ -51,11 +90,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   @override
   Widget build(BuildContext context) {
-    final currentAppPath = configuration;
-    _log.fine('Router rebuilded');
-    _log.fine('currentAppPath: $currentAppPath');
-    _log.fine('initialized: $initialized');
-    _log.fine('isLogin: $isLogin');
     final graphQLApiClient = RepositoryProvider.of<GraphQLApiClient>(context);
     final AppConfig config = AppConfig.of(context);
     return MultiBlocListener(
@@ -77,7 +111,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             if (state.initialized) {
               initialized = state.initialized;
               isLogin = state.loginUser != null;
-              defaultPage = state.defaultPage;
+              defaultHomePage = state.defaultPage;
               notifyListeners();
             }
           },
@@ -97,23 +131,15 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         BlocListener<TabBloc, AppTab>(
           listener: (context, state) {
             if (state != null) {
-              configuration = AppRoutePath(appTab: state);
+              routePath = AppRoutePath(appTab: state);
+              notifyListeners();
             }
           },
         )
       ],
       child: Navigator(
         key: navigatorKey,
-        pages: initialized
-            ? isLogin
-                ? <Page>[
-                    if (currentAppPath is AppRoutePath)
-                      HomePage(appTab: currentAppPath.appTab ?? defaultPage),
-                  ]
-                : [LoginPage()]
-            : [
-                SplashPage(),
-              ],
+        pages: pages,
         onPopPage: _handlePopPage,
       ),
     );

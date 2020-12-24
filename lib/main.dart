@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Intl.defaultLocale = 'zh';
-    AppConfig config = AppConfig.of(context);
     GraphQLApiClient graphQLApiClient = GraphQLApiClient();
     UserRepository userRepository =
         UserRepository(graphqlApiClient: graphQLApiClient);
@@ -93,7 +92,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ],
-        child: MyMaterialApp(config: config),
+        child: MyMaterialApp(),
       ),
     );
   }
@@ -102,17 +101,16 @@ class MyApp extends StatelessWidget {
 class MyMaterialApp extends StatefulWidget {
   const MyMaterialApp({
     Key key,
-    @required this.config,
   }) : super(key: key);
-
-  final AppConfig config;
 
   @override
   _MyMaterialAppState createState() => _MyMaterialAppState();
 }
 
 class _MyMaterialAppState extends State<MyMaterialApp> {
+  // 为了保存路由状态
   MyRouterDelegate _delegate = MyRouterDelegate();
+
   @override
   Widget build(BuildContext context) {
     final AppConfig config = AppConfig.of(context);
