@@ -125,21 +125,27 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       },
                     ),
                     MyDropdownSearch<Storage>(
-                      label: '属于',
-                      onFind: (String filter) async {
-                        final storages =
-                            await RepositoryProvider.of<StorageRepository>(
-                                    context)
-                                .storages(key: filter);
-                        return storages;
-                      },
-                      onChanged: (Storage data) {
-                        storageId = data.id;
-                      },
-                      selectedItem: widget.isEditing
-                          ? widget.item.storage
-                          : widget.storage,
-                    ),
+                        label: '属于',
+                        onFind: (String filter) async {
+                          final storages =
+                              await RepositoryProvider.of<StorageRepository>(
+                                      context)
+                                  .storages(key: filter);
+                          return storages;
+                        },
+                        onChanged: (Storage data) {
+                          storageId = data.id;
+                        },
+                        selectedItem: widget.isEditing
+                            ? widget.item.storage
+                            : widget.storage,
+                        autoValidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value == null) {
+                            return '请选择一个存放位置';
+                          }
+                          return null;
+                        }),
                     TextFormField(
                       controller: _descriptionController,
                       decoration: InputDecoration(
@@ -250,7 +256,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
           TextEditingController(text: widget.item.price?.toString());
       _descriptionController =
           TextEditingController(text: widget.item.description);
-      storageId = widget.item.storage.id;
+      storageId = widget.item.storage?.id;
       expiredAt = widget.item.expiredAt;
     } else {
       _nameController = TextEditingController();
