@@ -7,6 +7,16 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   @override
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
+    final uri = Uri.parse(routeInformation.location);
+    if (uri.pathSegments.length == 1) {
+      if (uri.pathSegments[0] == 'iot') return AppRoutePath(appTab: AppTab.iot);
+      if (uri.pathSegments[0] == 'board')
+        return AppRoutePath(appTab: AppTab.board);
+      if (uri.pathSegments[0] == 'storage')
+        return AppRoutePath(appTab: AppTab.storage);
+      if (uri.pathSegments[0] == 'board')
+        return AppRoutePath(appTab: AppTab.board);
+    }
     return AppRoutePath(appTab: null);
   }
 
@@ -24,10 +34,8 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
         case AppTab.board:
           return const RouteInformation(location: '/board');
           break;
-        default:
-          return const RouteInformation(location: '/');
       }
     }
-    throw 'unknown';
+    return const RouteInformation(location: '/');
   }
 }
