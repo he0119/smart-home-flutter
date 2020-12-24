@@ -17,6 +17,17 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
       if (uri.pathSegments[0] == 'board')
         return AppRoutePath(appTab: AppTab.board);
     }
+    if (uri.pathSegments.length == 2) {
+      switch (uri.pathSegments[0]) {
+        case 'item':
+          return ItemRoutePath(itemId: uri.pathSegments[1]);
+        case 'topic':
+          return TopicRoutePath(topicId: uri.pathSegments[1]);
+        case 'storage':
+          if (uri.pathSegments[1] == 'home') return StorageRoutePath();
+          return StorageRoutePath(storageId: uri.pathSegments[1]);
+      }
+    }
     return AppRoutePath(appTab: null);
   }
 

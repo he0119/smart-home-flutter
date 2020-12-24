@@ -131,7 +131,33 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   @override
-  Future<void> setNewRoutePath(RoutePath routePath) async {}
+  Future<void> setNewRoutePath(RoutePath routePath) async {
+    if (routePath is AppRoutePath) {
+      _pages = [HomePage(appTab: routePath.appTab)];
+    }
+    if (routePath is TopicRoutePath) {
+      _pages = [
+        HomePage(appTab: AppTab.board),
+        TopicDetailPage(topicId: routePath.topicId),
+      ];
+    }
+    if (routePath is ItemRoutePath) {
+      storageGroup = 0;
+      itemCount = 1;
+      _pages = [
+        HomePage(appTab: AppTab.storage),
+        ItemDetailPage(itemId: routePath.itemId,group: 1),
+      ];
+    }
+    if (routePath is StorageRoutePath) {
+      storageGroup = 1;
+      itemCount = 0;
+      _pages = [
+        HomePage(appTab: AppTab.storage),
+        StorageDetailPage(storageId: routePath.storageId, group: 1),
+      ];
+    }
+  }
 
   // 网页版显示网页用
   @override
