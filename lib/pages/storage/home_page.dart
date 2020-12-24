@@ -7,6 +7,7 @@ import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
+import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
@@ -27,12 +28,7 @@ class StorageHomePage extends StatelessWidget {
         tooltip: '所有位置',
         child: Icon(Icons.storage),
         onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => StorageDetailPage(),
-            ),
-          );
+          MyRouterDelegate.of(context).push(StorageDetailPage());
         },
       ),
     );

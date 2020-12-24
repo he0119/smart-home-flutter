@@ -11,12 +11,34 @@ import 'package:smart_home/pages/storage/widgets/add_storage_icon_button.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
+import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
-class StorageDetailPage extends StatelessWidget {
+class StorageDetailPage extends Page {
   final String storageId;
 
-  const StorageDetailPage({
+  StorageDetailPage({
+    this.storageId,
+  }) : super(
+          key: Key(storageId),
+          name: storageId != null ? '/storage/$storageId' : '/storage/home',
+        );
+
+  @override
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => StorageDetailScreen(
+        storageId: storageId,
+      ),
+    );
+  }
+}
+
+class StorageDetailScreen extends StatelessWidget {
+  final String storageId;
+
+  const StorageDetailScreen({
     Key key,
     this.storageId,
   }) : super(key: key);
@@ -43,67 +65,53 @@ class StorageDetailPage extends StatelessWidget {
           ),
         )
       ],
-      child: _StorageDetailPage(storageId: storageId),
+      child: _DetailScreen(
+        storageId: storageId,
+      ),
     );
   }
 }
 
-class _StorageDetailPage extends StatelessWidget {
+class _DetailScreen extends StatelessWidget {
   final String storageId;
 
-  const _StorageDetailPage({Key key, @required this.storageId})
-      : super(key: key);
+  const _DetailScreen({
+    Key key,
+    this.storageId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StorageDetailBloc, StorageDetailState>(
       builder: (context, state) {
-        return WillPopScope(
-          onWillPop: () async {
-            if (state is StorageDetailSuccess && state.backImmediately) {
-              return true;
-            }
-            if (state is StorageDetailSuccess && state.storage.parent != null) {
-              BlocProvider.of<StorageDetailBloc>(context)
-                  .add(StorageDetailChanged(id: state.storage.parent.id));
-              return false;
-            }
-            if (state is StorageDetailSuccess && state.storage.parent == null) {
-              BlocProvider.of<StorageDetailBloc>(context)
-                  .add(StorageDetailRoot());
-              return false;
-            }
-            return true;
-          },
-          child: Scaffold(
-            appBar: _buildAppBar(context, state),
-            body: RefreshIndicator(
-              onRefresh: () async {
-                if (state is StorageDetailSuccess) {
-                  BlocProvider.of<StorageDetailBloc>(context).add(
-                    StorageDetailRefreshed(id: state.storage.id),
-                  );
+        return Scaffold(
+          appBar: _buildAppBar(context, state),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              if (state is StorageDetailSuccess) {
+                BlocProvider.of<StorageDetailBloc>(context).add(
+                  StorageDetailRefreshed(id: state.storage.id),
+                );
+              }
+              if (state is StorageDetailRootSuccess) {
+                BlocProvider.of<StorageDetailBloc>(context).add(
+                  StorageDetailRootRefreshed(),
+                );
+              }
+            },
+            child: BlocListener<StorageEditBloc, StorageEditState>(
+              listener: (context, state) {
+                if (state is StorageDeleteSuccess) {
+                  showInfoSnackBar('位置 ${state.storage.name} 删除成功');
                 }
-                if (state is StorageDetailRootSuccess) {
-                  BlocProvider.of<StorageDetailBloc>(context).add(
-                    StorageDetailRootRefreshed(),
-                  );
+                if (state is StorageEditFailure) {
+                  showErrorSnackBar(state.message);
                 }
               },
-              child: BlocListener<StorageEditBloc, StorageEditState>(
-                listener: (context, state) {
-                  if (state is StorageDeleteSuccess) {
-                    showInfoSnackBar('位置 ${state.storage.name} 删除成功');
-                  }
-                  if (state is StorageEditFailure) {
-                    showErrorSnackBar(state.message);
-                  }
-                },
-                child: _buildBody(context, state),
-              ),
+              child: _buildBody(context, state),
             ),
-            floatingActionButton: _buildFloatingActionButton(context, state),
           ),
+          floatingActionButton: _buildFloatingActionButton(context, state),
         );
       },
     );
@@ -209,14 +217,13 @@ class _StorageDetailPage extends StatelessWidget {
                       ? IconButton(
                           icon: Icon(Icons.home),
                           onPressed: () {
-                            BlocProvider.of<StorageDetailBloc>(context)
-                                .add(StorageDetailRoot());
+                            MyRouterDelegate.of(context)..setStoragePage();
                           },
                         )
                       : InkWell(
                           onTap: () {
-                            BlocProvider.of<StorageDetailBloc>(context).add(
-                                StorageDetailChanged(id: paths[index - 1].id));
+                            MyRouterDelegate.of(context)
+                                .setStoragePage(storage: paths[index - 1]);
                           },
                           child: Container(
                             height: 40,
@@ -277,8 +284,6 @@ class _StorageDetailPage extends StatelessWidget {
         hasNextPage: state.hasNextPage,
         onFetch: () => BlocProvider.of<StorageDetailBloc>(context)
             .add(StorageDetailFetched()),
-        onPopDetailPage: () => BlocProvider.of<StorageDetailBloc>(context)
-            .add(StorageDetailRefreshed(id: state.storage.id)),
       );
     }
     return LoadingPage();

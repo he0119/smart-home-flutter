@@ -7,6 +7,7 @@ import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
+import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/routers/route_path.dart';
 
@@ -39,7 +40,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   List<Page> get pages {
     _log.fine('Router rebuilded');
-    _log.fine('configuration $routePath');
     if (!initialized) {
       _pages = [SplashPage()];
       return _pages;
@@ -48,34 +48,60 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       _pages = [LoginPage()];
       return _pages;
     }
-    final current = routePath;
-    if (current is AppRoutePath) {
-      if (current.appTab == null) {
-        _routePath = AppRoutePath(appTab: defaultHomePage);
-        currentHomePage = defaultHomePage;
-        _pages = [HomePage(appTab: currentHomePage)];
-      }
+    if (_pages.isEmpty || _pages.length == 1) {
+      _pages = [HomePage(appTab: currentHomePage ?? defaultHomePage)];
     }
     _log.fine('pages $_pages');
     return List.unmodifiable(_pages);
   }
 
-  RoutePath get routePath => _routePath;
-  RoutePath _routePath;
-  set routePath(RoutePath routePath) {
-    if (routePath is AppRoutePath) {
-      _routePath = routePath;
-      currentHomePage = routePath.appTab;
+  void push(Page newPage) {
+    _pages.add(newPage);
+    notifyListeners();
+  }
+
+  void pop() {
+    if (_pages.isNotEmpty) {
+      _pages.remove(_pages.last);
     }
     notifyListeners();
   }
 
-  @override
-  Future<void> setNewRoutePath(RoutePath routePath) async {
-    _routePath = routePath;
+  /// 物品位置页面间的导航
+  void setStoragePage({Storage storage}) {
+    // 先从最后开始删除当前的物品位置页面
+    // 一直删除到其他页面
+    while (_pages.last is StorageDetailPage) {
+      _pages.removeLast();
+    }
+    // 再重新添加
+    _pages.add(StorageDetailPage());
+    if (storage != null) {
+      if (storage.ancestors != null) {
+        for (Storage storage in storage.ancestors) {
+          _pages.add(StorageDetailPage(storageId: storage.id));
+        }
+      }
+      _pages.add(StorageDetailPage(storageId: storage.id));
+    }
+    notifyListeners();
   }
 
-  // For web application
+  RoutePath get routePath {
+    if (_pages.last is HomePage) return AppRoutePath(appTab: currentHomePage);
+    if (_pages.last is StorageDetailPage) {
+      final uri = Uri.parse(_pages.last.name);
+      final storageId = uri.pathSegments[1];
+      if (storageId == 'home') return StorageRoutePath();
+      return StorageRoutePath(storageId: storageId);
+    }
+    return AppRoutePath();
+  }
+
+  @override
+  Future<void> setNewRoutePath(RoutePath routePath) async {}
+
+  // 网页版显示网页用
   @override
   RoutePath get currentConfiguration => routePath;
 
@@ -131,7 +157,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         BlocListener<TabBloc, AppTab>(
           listener: (context, state) {
             if (state != null) {
-              routePath = AppRoutePath(appTab: state);
+              currentHomePage = state;
               notifyListeners();
             }
           },

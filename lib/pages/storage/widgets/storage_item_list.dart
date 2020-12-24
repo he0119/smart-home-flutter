@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_home/routers/delegate.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
-import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/pages/storage/item_datail_page.dart';
-import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/widgets/bottom_loader.dart';
 
 class StorageItemList extends StatefulWidget {
@@ -15,7 +12,6 @@ class StorageItemList extends StatefulWidget {
   final bool isHighlight;
   final bool hasNextPage;
   final VoidCallback onFetch;
-  final VoidCallback onPopDetailPage;
 
   const StorageItemList({
     Key key,
@@ -25,7 +21,6 @@ class StorageItemList extends StatefulWidget {
     this.isHighlight = false,
     this.hasNextPage = false,
     this.onFetch,
-    this.onPopDetailPage,
   })  : assert(hasNextPage != null),
         super(key: key);
 
@@ -58,12 +53,10 @@ class _StorageItemListState extends State<StorageItemList> {
             return _HighlightStorageItemListItem(
               item: merged[index],
               term: widget.term,
-              onPopDetailPage: widget.onPopDetailPage,
             );
           } else {
             return _StorageItemListItem(
               item: merged[index],
-              onPopDetailPage: widget.onPopDetailPage,
             );
           }
         },
@@ -91,12 +84,10 @@ class _StorageItemListState extends State<StorageItemList> {
 /// 位置详情界面使用的列表
 class _StorageItemListItem extends StatelessWidget {
   final dynamic item;
-  final VoidCallback onPopDetailPage;
 
   const _StorageItemListItem({
     Key key,
     @required this.item,
-    @required this.onPopDetailPage,
   }) : super(key: key);
 
   @override
@@ -109,17 +100,7 @@ class _StorageItemListItem extends StatelessWidget {
         ),
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ItemDetailPage(
-                itemId: item.id,
-              ),
-            ),
-          );
-          onPopDetailPage();
-        },
+        onTap: () async {},
       );
     } else {
       return ListTile(
@@ -130,8 +111,7 @@ class _StorageItemListItem extends StatelessWidget {
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
         onTap: () {
-          BlocProvider.of<StorageDetailBloc>(context)
-              .add(StorageDetailChanged(id: item.id));
+          MyRouterDelegate.of(context).setStoragePage(storage: item);
         },
       );
     }
@@ -142,13 +122,11 @@ class _StorageItemListItem extends StatelessWidget {
 class _HighlightStorageItemListItem extends StatelessWidget {
   final dynamic item;
   final String term;
-  final VoidCallback onPopDetailPage;
 
   const _HighlightStorageItemListItem({
     Key key,
     @required this.item,
     @required this.term,
-    @required this.onPopDetailPage,
   }) : super(key: key);
 
   @override
@@ -173,17 +151,7 @@ class _HighlightStorageItemListItem extends StatelessWidget {
           textStyle: style,
           textStyleHighlight: highlightStyle,
         ),
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ItemDetailPage(
-                itemId: item.id,
-              ),
-            ),
-          );
-          onPopDetailPage();
-        },
+        onTap: () async {},
       );
     } else {
       return ListTile(
@@ -203,14 +171,7 @@ class _HighlightStorageItemListItem extends StatelessWidget {
           textStyle: style,
           textStyleHighlight: highlightStyle,
         ),
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => StorageDetailPage(storageId: item.id)),
-          );
-          onPopDetailPage();
-        },
+        onTap: () async {},
       );
     }
   }

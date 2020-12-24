@@ -90,9 +90,6 @@ class _SearchBody extends StatelessWidget {
                     storages: state.storages,
                     isHighlight: true,
                     term: state.term,
-                    onPopDetailPage: () =>
-                        BlocProvider.of<StorageSearchBloc>(context)
-                            .add(StorageSearchChanged(key: state.term)),
                   ),
                 );
         }

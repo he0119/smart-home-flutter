@@ -10,6 +10,7 @@ import 'package:smart_home/pages/storage/item_edit_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
+import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
@@ -209,12 +210,8 @@ class _ItemDetailList extends StatelessWidget {
           subtitle: SelectableText(
             item.storage.name,
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      StorageDetailPage(storageId: item.storage.id),
-                ),
+              MyRouterDelegate.of(context).push(
+                StorageDetailPage(storageId: item.storage.id),
               );
             },
             style: TextStyle(
