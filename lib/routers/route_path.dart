@@ -14,9 +14,9 @@ class AppRoutePath extends RoutePath {
   String toString() => 'AppRoutePath(appTab: $appTab)';
 }
 
-/// 物品管理相关的信息
+/// 位置相关的信息
 class StorageRoutePath extends RoutePath {
-  /// 物品 ID，空则为 家(/storage/home)
+  /// 位置 ID，空则为 家(/storage/home)
   final String storageId;
 
   StorageRoutePath({
@@ -25,6 +25,17 @@ class StorageRoutePath extends RoutePath {
 
   @override
   String toString() => 'StorageRoutePath(storageId: $storageId)';
+}
+
+/// 物品相关的信息
+class ItemRoutePath extends RoutePath {
+  final String itemId;
+  ItemRoutePath({
+    this.itemId,
+  });
+
+  @override
+  String toString() => 'ItemRoutePath(itemId: $itemId)';
 }
 
 /// 留言板相关的信息

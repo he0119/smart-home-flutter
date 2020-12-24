@@ -42,6 +42,8 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
       }
       return RouteInformation(location: '/storage/${routePath.storageId}');
     }
+    if (routePath is ItemRoutePath)
+      return RouteInformation(location: '/item/${routePath.itemId}');
     if (routePath is TopicRoutePath)
       return RouteInformation(location: '/board/topic/${routePath.topicId}');
     return const RouteInformation(location: '/');

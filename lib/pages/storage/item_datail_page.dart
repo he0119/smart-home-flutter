@@ -13,10 +13,33 @@ import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
-class ItemDetailPage extends StatelessWidget {
+class ItemDetailPage extends Page {
+  final String itemId;
+  final int group;
+
+  ItemDetailPage({
+    this.itemId,
+    this.group,
+  }) : super(
+          key: ValueKey('$group/$itemId'),
+          name: '/item/$group/$itemId',
+        );
+
+  @override
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => ItemDetailScreen(
+        itemId: itemId,
+      ),
+    );
+  }
+}
+
+class ItemDetailScreen extends StatelessWidget {
   final String itemId;
 
-  const ItemDetailPage({
+  const ItemDetailScreen({
     Key key,
     @required this.itemId,
   }) : super(key: key);
@@ -236,15 +259,7 @@ class _ItemDetailList extends StatelessWidget {
                   .map(
                     (item) => SelectableText(
                       item.name,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ItemDetailPage(itemId: item.id),
-                          ),
-                        );
-                      },
+                      onTap: () {},
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                       ),

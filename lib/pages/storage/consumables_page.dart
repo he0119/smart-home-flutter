@@ -5,8 +5,8 @@ import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/storage.dart';
 import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
-import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
+import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 
 class ConsumablesPage extends StatelessWidget {
@@ -63,15 +63,8 @@ Widget _buildItem(BuildContext context, Item item) {
       children: <Widget>[
         ListTile(
           title: Text(item.name),
-          onTap: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => ItemDetailPage(
-                  itemId: item.id,
-                ),
-              ),
-            );
-            BlocProvider.of<ConsumablesBloc>(context).add(ConsumablesFetched());
+          onTap: () {
+            MyRouterDelegate.of(context).addItemPage(item: item);
           },
         ),
         if (item.consumables != null)
@@ -83,16 +76,8 @@ Widget _buildItem(BuildContext context, Item item) {
                 subtitle: consumable.expiredAt != null
                     ? Text(consumable.expiredAt.differenceFromNowStr())
                     : null,
-                onTap: () async {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => ItemDetailPage(
-                        itemId: consumable.id,
-                      ),
-                    ),
-                  );
-                  BlocProvider.of<ConsumablesBloc>(context)
-                      .add(ConsumablesFetched());
+                onTap: () {
+                  MyRouterDelegate.of(context).addItemPage(item: consumable);
                 },
               ),
             ),
