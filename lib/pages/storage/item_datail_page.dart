@@ -7,7 +7,6 @@ import 'package:smart_home/pages/error_page.dart';
 import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/pages/storage/consumable_edit_page.dart';
 import 'package:smart_home/pages/storage/item_edit_page.dart';
-import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/routers/delegate.dart';
@@ -210,9 +209,8 @@ class _ItemDetailList extends StatelessWidget {
           subtitle: SelectableText(
             item.storage.name,
             onTap: () {
-              MyRouterDelegate.of(context).push(
-                StorageDetailPage(storageId: item.storage.id),
-              );
+              MyRouterDelegate.of(context)
+                  .addStorageGroup(storage: item.storage);
             },
             style: TextStyle(
               decoration: TextDecoration.underline,

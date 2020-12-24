@@ -16,12 +16,16 @@ import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class StorageDetailPage extends Page {
   final String storageId;
+  final int group;
 
   StorageDetailPage({
     this.storageId,
+    this.group,
   }) : super(
-          key: Key(storageId),
-          name: storageId != null ? '/storage/$storageId' : '/storage/home',
+          key: ValueKey('$group/$storageId'),
+          name: storageId != null
+              ? '/storage/$group/$storageId'
+              : '/storage/$group/home',
         );
 
   @override

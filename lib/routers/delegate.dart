@@ -41,15 +41,21 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   List<Page> get pages {
     _log.fine('Router rebuilded');
     if (!initialized) {
-      _pages = [SplashPage()];
+      _pages = [
+        SplashPage(),
+      ];
       return _pages;
     }
     if (!isLogin) {
-      _pages = [LoginPage()];
+      _pages = [
+        LoginPage(),
+      ];
       return _pages;
     }
     if (_pages.isEmpty || _pages.length == 1) {
-      _pages = [HomePage(appTab: currentHomePage ?? defaultHomePage)];
+      _pages = [
+        HomePage(appTab: currentHomePage ?? defaultHomePage),
+      ];
     }
     _log.fine('pages $_pages');
     return List.unmodifiable(_pages);
@@ -67,22 +73,35 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     notifyListeners();
   }
 
+  // 记录当前位置组的数量
+  int storageGroup = 0;
+
+  /// 添加一组位置
+  void addStorageGroup({Storage storage}) {
+    storageGroup += 1;
+    _pages.add(StorageDetailPage(storageId: storage?.id, group: storageGroup));
+    notifyListeners();
+  }
+
   /// 物品位置页面间的导航
   void setStoragePage({Storage storage}) {
     // 先从最后开始删除当前的物品位置页面
-    // 一直删除到其他页面
-    while (_pages.last is StorageDetailPage) {
+    // 一直删除到这一组结束
+    // 每次只删除一个 Group
+    while (_pages.last is StorageDetailPage &&
+        _pages.last.name.startsWith('/storage/$storageGroup')) {
       _pages.removeLast();
     }
     // 再重新添加
-    _pages.add(StorageDetailPage());
+    _pages.add(StorageDetailPage(group: storageGroup));
     if (storage != null) {
       if (storage.ancestors != null) {
         for (Storage storage in storage.ancestors) {
-          _pages.add(StorageDetailPage(storageId: storage.id));
+          _pages.add(
+              StorageDetailPage(storageId: storage.id, group: storageGroup));
         }
       }
-      _pages.add(StorageDetailPage(storageId: storage.id));
+      _pages.add(StorageDetailPage(storageId: storage.id, group: storageGroup));
     }
     notifyListeners();
   }
@@ -109,6 +128,13 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     final bool success = route.didPop(result);
     if (success) {
       _pages.remove(route.settings);
+      // 每当一组位置全部 Pop，Group 计数减一
+      if (route.settings.name.startsWith('/storage')) {
+        _log.fine('pop ${route.settings.name}');
+        if (!_pages.last.name.startsWith('/storage/$storageGroup')) {
+          storageGroup -= 1;
+        }
+      }
       notifyListeners();
     }
     return success;

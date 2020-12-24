@@ -23,7 +23,10 @@ class HomePage extends Page {
 
   HomePage({
     @required this.appTab,
-  }) : super(key: Key(appTab.toString()));
+  }) : super(
+          key: ValueKey(appTab.toString()),
+          name: '/${appTab.toString()}',
+        );
 
   @override
   Route createRoute(BuildContext context) {
