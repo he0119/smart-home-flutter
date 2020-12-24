@@ -7,8 +7,8 @@ import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
-import 'package:smart_home/pages/error_page.dart';
-import 'package:smart_home/pages/loading_page.dart';
+import 'package:smart_home/widgets/center_loading_indicator.dart';
+import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/widgets/home_page.dart';
 
 class StorageHomePage extends StatelessWidget {
@@ -41,7 +41,7 @@ class _StorageHomeBody extends StatelessWidget {
     return BlocBuilder<StorageHomeBloc, StorageHomeState>(
       builder: (context, state) {
         if (state is StorageHomeFailure) {
-          return ErrorPage(
+          return ErrorMessageButton(
             onPressed: () {
               BlocProvider.of<StorageHomeBloc>(context).add(
                 StorageHomeChanged(
@@ -79,7 +79,7 @@ class _StorageHomeBody extends StatelessWidget {
             ),
           );
         }
-        return LoadingPage();
+        return CenterLoadingIndicator();
       },
     );
   }

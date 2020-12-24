@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/storage.dart';
-import 'package:smart_home/pages/error_page.dart';
-import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
+import 'package:smart_home/widgets/center_loading_indicator.dart';
+import 'package:smart_home/widgets/error_message_button.dart';
 
 class ConsumablesPage extends StatelessWidget {
   @override
@@ -28,7 +28,7 @@ class ConsumablesPage extends StatelessWidget {
         body: BlocBuilder<ConsumablesBloc, ConsumablesState>(
           builder: (context, state) {
             if (state is ConsumablesFailure) {
-              return ErrorPage(
+              return ErrorMessageButton(
                 message: state.message,
                 onPressed: () {
                   BlocProvider.of<ConsumablesBloc>(context)
@@ -49,7 +49,7 @@ class ConsumablesPage extends StatelessWidget {
                 ),
               );
             }
-            return LoadingPage();
+            return CenterLoadingIndicator();
           },
         ),
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:smart_home/app_config.dart';
-import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/board/topic_detail_page.dart';
 import 'package:smart_home/pages/home_page.dart';

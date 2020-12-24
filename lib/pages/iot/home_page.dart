@@ -2,16 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/blocs/iot/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/models/iot.dart';
-import 'package:smart_home/pages/error_page.dart';
-import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/pages/settings/iot/settings_page.dart';
 import 'package:smart_home/repositories/iot_repository.dart';
+import 'package:smart_home/widgets/center_loading_indicator.dart';
+import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/widgets/home_page.dart';
-import 'package:smart_home/widgets/show_snack_bar.dart';
+import 'package:smart_home/utils/show_snack_bar.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 
 class IotHomePage extends StatelessWidget {
@@ -243,7 +243,7 @@ class _IotHomeBody extends StatelessWidget {
           );
         }
         if (state is DeviceDataFailure) {
-          return ErrorPage(
+          return ErrorMessageButton(
             onPressed: () {
               final appPreference = context.read<AppPreferencesBloc>().state;
               BlocProvider.of<DeviceDataBloc>(context)
@@ -252,7 +252,7 @@ class _IotHomeBody extends StatelessWidget {
             message: state.message,
           );
         }
-        return LoadingPage();
+        return CenterLoadingIndicator();
       },
     );
   }

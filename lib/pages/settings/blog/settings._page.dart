@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/pages/settings/blog/blog_admin_url_page.dart';
 import 'package:smart_home/pages/settings/blog/blog_url_page.dart';
 

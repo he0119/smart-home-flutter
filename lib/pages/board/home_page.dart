@@ -5,9 +5,9 @@ import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/pages/board/topic_edit_page.dart';
 import 'package:smart_home/pages/board/widgets/topic_list.dart';
-import 'package:smart_home/pages/error_page.dart';
-import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/repositories/board_repository.dart';
+import 'package:smart_home/widgets/center_loading_indicator.dart';
+import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/widgets/home_page.dart';
 
 class BoardHomePage extends StatelessWidget {
@@ -53,7 +53,7 @@ class _BoardHomeBody extends StatelessWidget {
     return BlocBuilder<BoardHomeBloc, BoardHomeState>(
       builder: (context, state) {
         if (state is BoardHomeFailure) {
-          return ErrorPage(
+          return ErrorMessageButton(
             onPressed: () {
               BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
             },
@@ -69,7 +69,7 @@ class _BoardHomeBody extends StatelessWidget {
             child: TopicList(topics: state.topics),
           );
         }
-        return LoadingPage();
+        return CenterLoadingIndicator();
       },
     );
   }

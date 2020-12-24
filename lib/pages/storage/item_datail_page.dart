@@ -3,15 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
-import 'package:smart_home/pages/error_page.dart';
-import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/pages/storage/consumable_edit_page.dart';
 import 'package:smart_home/pages/storage/item_edit_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
-import 'package:smart_home/widgets/show_snack_bar.dart';
+import 'package:smart_home/widgets/center_loading_indicator.dart';
+import 'package:smart_home/widgets/error_message_button.dart';
+import 'package:smart_home/utils/show_snack_bar.dart';
 
 class ItemDetailPage extends Page {
   final String itemId;
@@ -193,7 +193,7 @@ class _ItemDetailPage extends StatelessWidget {
 
   Widget _buildBody(BuildContext context, ItemDetailState state) {
     if (state is ItemDetailFailure) {
-      return ErrorPage(
+      return ErrorMessageButton(
         onPressed: () {
           BlocProvider.of<ItemDetailBloc>(context).add(
             ItemDetailChanged(itemId: state.itemId),
@@ -205,7 +205,7 @@ class _ItemDetailPage extends StatelessWidget {
     if (state is ItemDetailSuccess) {
       return _ItemDetailList(item: state.item);
     }
-    return LoadingPage();
+    return CenterLoadingIndicator();
   }
 }
 

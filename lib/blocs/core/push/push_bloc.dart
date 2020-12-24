@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
-import 'package:smart_home/blocs/app_preferences/app_preferences_bloc.dart';
+import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/models/push.dart';
 import 'package:smart_home/repositories/push_repository.dart';
 import 'package:xiao_mi_push_plugin/xiao_mi_push_plugin.dart';

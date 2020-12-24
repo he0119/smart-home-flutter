@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/authentication/authentication_bloc.dart';
+import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/pages/settings/settings_page.dart';
 import 'package:smart_home/pages/storage/consumables_page.dart';
 import 'package:smart_home/pages/storage/recycle_bin_page.dart';

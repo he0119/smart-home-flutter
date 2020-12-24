@@ -7,8 +7,10 @@ abstract class AuthenticationEvent extends Equatable {
   List<Object> get props => [];
 }
 
+/// 开始确认用户身份
 class AuthenticationStarted extends AuthenticationEvent {}
 
+/// 登录
 class AuthenticationLogin extends AuthenticationEvent {
   final String username;
   final String password;
@@ -22,4 +24,5 @@ class AuthenticationLogin extends AuthenticationEvent {
   List<Object> get props => [username, password];
 }
 
+/// 登出
 class AuthenticationLogout extends AuthenticationEvent {}

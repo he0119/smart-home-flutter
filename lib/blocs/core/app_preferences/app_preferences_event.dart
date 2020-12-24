@@ -7,6 +7,7 @@ abstract class AppPreferencesEvent extends Equatable {
   List<Object> get props => [];
 }
 
+/// 软件启动
 class AppStarted extends AppPreferencesEvent {}
 
 /// 更改服务器网址

@@ -10,7 +10,7 @@ import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/widgets/dropdown_search.dart';
 import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
-import 'package:smart_home/widgets/show_snack_bar.dart';
+import 'package:smart_home/utils/show_snack_bar.dart';
 
 class ItemEditPage extends StatefulWidget {
   /// 是否为编辑模式

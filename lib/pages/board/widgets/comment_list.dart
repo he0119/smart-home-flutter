@@ -8,7 +8,7 @@ import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/board/comment_edit_page.dart';
 import 'package:smart_home/pages/board/widgets/item_title.dart';
 import 'package:smart_home/repositories/board_repository.dart';
-import 'package:smart_home/widgets/show_snack_bar.dart';
+import 'package:smart_home/utils/show_snack_bar.dart';
 
 class SliverCommentList extends StatelessWidget {
   final List<Comment> comments;

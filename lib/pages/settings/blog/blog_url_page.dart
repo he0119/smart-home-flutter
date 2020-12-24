@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/app_preferences/app_preferences_bloc.dart';
+import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/pages/settings/widgets/text_edit_page.dart';
 
 class BlogUrlPage extends StatelessWidget {

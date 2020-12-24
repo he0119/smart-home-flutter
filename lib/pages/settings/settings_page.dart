@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:smart_home/blocs/app_preferences/app_preferences_bloc.dart';
-import 'package:smart_home/blocs/push/push_bloc.dart';
-import 'package:smart_home/models/app_tab.dart';
+import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/pages/settings/blog/blog_admin_url_page.dart';
 import 'package:smart_home/pages/settings/blog/blog_url_page.dart';
 import 'package:smart_home/pages/settings/common/api_url_page.dart';
 import 'package:smart_home/pages/settings/common/default_page.dart';
 import 'package:smart_home/pages/settings/common/mipush_page.dart';
 import 'package:smart_home/pages/settings/iot/refresh_interval_page.dart';
+import 'package:smart_home/models/app_tab.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key key}) : super(key: key);

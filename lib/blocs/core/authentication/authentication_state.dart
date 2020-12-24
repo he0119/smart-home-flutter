@@ -11,6 +11,7 @@ class AuthenticationInitial extends AuthenticationState {}
 
 class AuthenticationInProgress extends AuthenticationState {}
 
+/// 登陆成功
 class AuthenticationSuccess extends AuthenticationState {
   final User currentUser;
 
@@ -20,7 +21,8 @@ class AuthenticationSuccess extends AuthenticationState {
   List<Object> get props => [currentUser];
 
   @override
-  String toString() => 'Authenticated { username: ${currentUser.username} }';
+  String toString() =>
+      'AuthenticationSuccess(currentUser: ${currentUser.username})';
 }
 
 /// 登陆失败

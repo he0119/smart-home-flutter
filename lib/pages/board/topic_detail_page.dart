@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/blocs/board/topic_detail/topic_detail_bloc.dart';
 import 'package:smart_home/models/models.dart';
@@ -10,10 +10,10 @@ import 'package:smart_home/pages/board/topic_edit_page.dart';
 import 'package:smart_home/pages/board/widgets/add_comment_bar.dart';
 import 'package:smart_home/pages/board/widgets/comment_list.dart';
 import 'package:smart_home/pages/board/widgets/topic_item.dart';
-import 'package:smart_home/pages/error_page.dart';
-import 'package:smart_home/pages/loading_page.dart';
 import 'package:smart_home/repositories/board_repository.dart';
-import 'package:smart_home/widgets/show_snack_bar.dart';
+import 'package:smart_home/widgets/center_loading_indicator.dart';
+import 'package:smart_home/widgets/error_message_button.dart';
+import 'package:smart_home/utils/show_snack_bar.dart';
 
 class TopicDetailPage extends Page {
   final String topicId;
@@ -90,7 +90,7 @@ class _DetailScreenState extends State<_DetailScreen> {
         if (state is TopicDetailFailure) {
           return Scaffold(
             appBar: AppBar(),
-            body: ErrorPage(
+            body: ErrorMessageButton(
               onPressed: () {
                 BlocProvider.of<TopicDetailBloc>(context).add(
                   TopicDetailChanged(topicId: state.topicId),
@@ -386,7 +386,7 @@ class _DetailScreenState extends State<_DetailScreen> {
         }
         return Scaffold(
           appBar: AppBar(),
-          body: LoadingPage(),
+          body: CenterLoadingIndicator(),
         );
       },
     );

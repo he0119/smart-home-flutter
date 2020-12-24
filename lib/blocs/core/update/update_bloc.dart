@@ -2,7 +2,6 @@ import 'dart:io' show Platform;
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 import 'package:smart_home/repositories/version_repository.dart';
 import 'package:version/version.dart';
 

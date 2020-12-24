@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:smart_home/widgets/rounded_raised_button.dart';
 
-class ErrorPage extends StatelessWidget {
+/// 居中的可以显示错误提示的按钮
+class ErrorMessageButton extends StatelessWidget {
   final Function onPressed;
   final String message;
 
-  const ErrorPage({
+  const ErrorMessageButton({
     Key key,
     @required this.onPressed,
     @required this.message,

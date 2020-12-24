@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/blocs.dart';
+import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/pages/settings/blog/settings._page.dart';
 import 'package:smart_home/utils/launch_url.dart';

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smart_home/blocs/app_preferences/app_preferences_bloc.dart';
+import 'package:smart_home/blocs/core/app_preferences/app_preferences_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/repositories/user_repository.dart';
@@ -49,9 +49,7 @@ class AuthenticationBloc
     // 监听认证情况
     if (_loginSubscription == null) {
       _loginSubscription = graphqlApiClient.loginStatus.listen((event) {
-        if (!event) {
-          add(AuthenticationLogout());
-        }
+        if (!event) add(AuthenticationLogout());
       });
     }
     try {
