@@ -47,7 +47,7 @@ class _CommentEditPageState extends State<CommentEditPage> {
         if (state is CommentAddSuccess || state is CommentUpdateSuccess) {
           Navigator.of(context).pop();
           if (widget.isEditing) {
-            showInfoSnackBar('评论修改成功');
+            showInfoSnackBar('评论编辑成功');
           } else {
             BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
             showInfoSnackBar('评论添加成功');
@@ -61,7 +61,7 @@ class _CommentEditPageState extends State<CommentEditPage> {
         length: tabs.length,
         child: Scaffold(
           appBar: AppBar(
-            title: widget.isEditing ? Text('修改评论') : Text('新评论'),
+            title: widget.isEditing ? Text('编辑评论') : Text('新评论'),
             actions: [
               Tooltip(
                 message: '提交',

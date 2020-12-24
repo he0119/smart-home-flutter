@@ -32,7 +32,7 @@ class ItemTitle extends StatelessWidget {
               itemBuilder: (context) => <PopupMenuItem<Menu>>[
                 PopupMenuItem(
                   value: Menu.edit,
-                  child: Text('修改'),
+                  child: Text('编辑'),
                 ),
                 PopupMenuItem(
                   value: Menu.delete,

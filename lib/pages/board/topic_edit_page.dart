@@ -50,7 +50,7 @@ class _TopicEditPageState extends State<TopicEditPage> {
         if (state is TopicAddSuccess || state is TopicUpdateSuccess) {
           Navigator.of(context).pop();
           if (widget.isEditing) {
-            showInfoSnackBar('话题修改成功');
+            showInfoSnackBar('话题编辑成功');
           } else {
             BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
             showInfoSnackBar('话题添加成功');
@@ -64,7 +64,7 @@ class _TopicEditPageState extends State<TopicEditPage> {
         length: tabs.length,
         child: Scaffold(
           appBar: AppBar(
-            title: widget.isEditing ? Text('修改话题') : Text('新话题'),
+            title: widget.isEditing ? Text('编辑话题') : Text('新话题'),
             actions: [
               Tooltip(
                 message: '提交',
