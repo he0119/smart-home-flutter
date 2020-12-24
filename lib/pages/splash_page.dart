@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SplashPage extends Page {
+  SplashPage()
+      : super(
+          key: ValueKey('splash'),
+          name: '/splash',
+        );
+
   @override
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(

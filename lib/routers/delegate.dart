@@ -12,6 +12,7 @@ import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/routers/route_path.dart';
+import 'package:smart_home/routers/transition_delegate.dart';
 
 class MyRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
@@ -116,17 +117,19 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   RoutePath get routePath {
-    final uri = Uri.parse(_pages.last.name);
-    if (_pages.last is HomePage) return AppRoutePath(appTab: currentHomePage);
-    if (_pages.last is StorageDetailPage) {
-      final storageId = uri.pathSegments[2];
-      if (storageId == 'home') return StorageRoutePath();
-      return StorageRoutePath(storageId: storageId);
+    if (_pages.isNotEmpty && _pages.last.name != null) {
+      final uri = Uri.parse(_pages.last.name);
+      if (_pages.last is HomePage) return AppRoutePath(appTab: currentHomePage);
+      if (_pages.last is StorageDetailPage) {
+        final storageId = uri.pathSegments[2];
+        if (storageId == 'home') return StorageRoutePath();
+        return StorageRoutePath(storageId: storageId);
+      }
+      if (_pages.last is ItemDetailPage)
+        return ItemRoutePath(itemId: uri.pathSegments[2]);
+      if (_pages.last is TopicDetailPage)
+        return TopicRoutePath(topicId: uri.pathSegments[1]);
     }
-    if (_pages.last is ItemDetailPage)
-      return ItemRoutePath(itemId: uri.pathSegments[2]);
-    if (_pages.last is TopicDetailPage)
-      return TopicRoutePath(topicId: uri.pathSegments[1]);
     return AppRoutePath();
   }
 
@@ -146,7 +149,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       itemCount = 1;
       _pages = [
         HomePage(appTab: AppTab.storage),
-        ItemDetailPage(itemId: routePath.itemId,group: 1),
+        ItemDetailPage(itemId: routePath.itemId, group: 1),
       ];
     }
     if (routePath is StorageRoutePath) {
@@ -181,6 +184,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     }
     return success;
   }
+
+  TransitionDelegate transitionDelegate = MyTransitionDelegate();
 
   @override
   Widget build(BuildContext context) {
@@ -235,6 +240,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         key: navigatorKey,
         pages: pages,
         onPopPage: _handlePopPage,
+        transitionDelegate: transitionDelegate,
       ),
     );
   }

@@ -6,6 +6,12 @@ import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:smart_home/widgets/show_snack_bar.dart';
 
 class LoginPage extends Page {
+  LoginPage()
+      : super(
+          key: ValueKey('login'),
+          name: '/login',
+        );
+
   @override
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
