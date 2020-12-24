@@ -227,19 +227,20 @@ class _ItemDetailList extends StatelessWidget {
             title: Text('备注'),
             subtitle: SelectableText(item.description),
           ),
-        ListTile(
-          title: Text('属于'),
-          subtitle: SelectableText(
-            item.storage.name,
-            onTap: () {
-              MyRouterDelegate.of(context)
-                  .addStorageGroup(storage: item.storage);
-            },
-            style: TextStyle(
-              decoration: TextDecoration.underline,
+        if (item.storage != null)
+          ListTile(
+            title: Text('属于'),
+            subtitle: SelectableText(
+              item.storage.name,
+              onTap: () {
+                MyRouterDelegate.of(context)
+                    .addStorageGroup(storage: item.storage);
+              },
+              style: TextStyle(
+                decoration: TextDecoration.underline,
+              ),
             ),
           ),
-        ),
         if (item.price != null)
           ListTile(
             title: Text('价格'),
@@ -259,7 +260,9 @@ class _ItemDetailList extends StatelessWidget {
                   .map(
                     (item) => SelectableText(
                       item.name,
-                      onTap: () {},
+                      onTap: () {
+                        MyRouterDelegate.of(context).addItemPage(item: item);
+                      },
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                       ),
