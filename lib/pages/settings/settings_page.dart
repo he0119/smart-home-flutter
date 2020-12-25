@@ -4,6 +4,7 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/pages/settings/blog/blog_admin_url_page.dart';
 import 'package:smart_home/pages/settings/blog/blog_url_page.dart';
+import 'package:smart_home/pages/settings/board/comment_order_page.dart';
 import 'package:smart_home/pages/settings/common/api_url_page.dart';
 import 'package:smart_home/pages/settings/common/default_page.dart';
 import 'package:smart_home/pages/settings/common/mipush_page.dart';
@@ -95,6 +96,20 @@ class SettingsPage extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => BlogAdminUrlPage(),
+                        ));
+                      },
+                    ),
+                  ],
+                ),
+                SettingsSection(
+                  title: '留言板',
+                  tiles: [
+                    SettingsTile(
+                      title: '评论排序',
+                      subtitle: state.commentDescending ? '倒序' : '正序',
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => CommentOrderPage(),
                         ));
                       },
                     ),

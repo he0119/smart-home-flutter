@@ -117,3 +117,18 @@ class MiPushRegIdChanged extends AppPreferencesEvent {
   @override
   String toString() => 'MiPushRegIdChanged { miPushRegId: $miPushRegId }';
 }
+
+/// 更改评论排序方式
+class CommentDescendingChanged extends AppPreferencesEvent {
+  final bool descending;
+
+  CommentDescendingChanged({
+    @required this.descending,
+  });
+
+  @override
+  List<Object> get props => [descending];
+
+  @override
+  String toString() => 'CommentDescendingChanged(descending: $descending)';
+}
