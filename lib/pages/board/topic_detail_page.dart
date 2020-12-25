@@ -43,12 +43,14 @@ class TopicDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final descending =
+        context.select((AppPreferencesBloc b) => b.state.commentDescending);
     return MultiBlocProvider(
       providers: [
         BlocProvider<TopicDetailBloc>(
           create: (context) => TopicDetailBloc(
             boardRepository: RepositoryProvider.of<BoardRepository>(context),
-          )..add(TopicDetailChanged(topicId: topicId)),
+          )..add(TopicDetailChanged(topicId: topicId, descending: descending)),
         ),
         BlocProvider<TopicEditBloc>(
           create: (context) => TopicEditBloc(
@@ -85,6 +87,8 @@ class _DetailScreenState extends State<_DetailScreen> {
   Widget build(BuildContext context) {
     final loginUser =
         context.select((AppPreferencesBloc b) => b.state.loginUser);
+    final descending =
+        context.select((AppPreferencesBloc b) => b.state.commentDescending);
     return BlocBuilder<TopicDetailBloc, TopicDetailState>(
       builder: (context, state) {
         if (state is TopicDetailFailure) {
@@ -93,7 +97,8 @@ class _DetailScreenState extends State<_DetailScreen> {
             body: ErrorMessageButton(
               onPressed: () {
                 BlocProvider.of<TopicDetailBloc>(context).add(
-                  TopicDetailChanged(topicId: state.topicId),
+                  TopicDetailChanged(
+                      topicId: state.topicId, descending: descending),
                 );
               },
               message: state.message,
@@ -356,11 +361,9 @@ class _DetailScreenState extends State<_DetailScreen> {
                                   ),
                                 ),
                                 SliverToBoxAdapter(
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                    child: Text('全部评论',
-                                        style: TextStyle(fontSize: 20)),
+                                  child: CommentOrder(
+                                    topicId: state.topic.id,
+                                    descending: descending,
                                   ),
                                 ),
                                 SliverCommentList(comments: state.comments),
@@ -389,6 +392,55 @@ class _DetailScreenState extends State<_DetailScreen> {
           body: CenterLoadingIndicator(),
         );
       },
+    );
+  }
+}
+
+class CommentOrder extends StatelessWidget {
+  const CommentOrder({
+    Key key,
+    @required this.topicId,
+    @required this.descending,
+  }) : super(key: key);
+
+  final String topicId;
+  final bool descending;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+      child: Row(
+        children: <Widget>[
+          Text(
+            '全部评论',
+            style: TextStyle(fontSize: 20),
+          ),
+          Spacer(),
+          PopupMenuButton(
+            tooltip: '评论排序',
+            icon: Icon(
+              descending ? Icons.arrow_downward : Icons.arrow_upward,
+            ),
+            onSelected: (value) {
+              BlocProvider.of<AppPreferencesBloc>(context)
+                  .add(CommentDescendingChanged(descending: value));
+              BlocProvider.of<TopicDetailBloc>(context)
+                  .add(TopicDetailChanged(topicId: topicId, descending: value));
+            },
+            itemBuilder: (context) => <PopupMenuItem<bool>>[
+              PopupMenuItem(
+                value: false,
+                child: Text('正序'),
+              ),
+              PopupMenuItem(
+                value: true,
+                child: Text('倒序'),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

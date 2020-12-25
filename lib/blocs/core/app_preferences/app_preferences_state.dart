@@ -11,6 +11,7 @@ class AppPreferencesState extends Equatable {
   final String blogAdminUrl;
   final AppTab defaultPage;
   final User loginUser;
+  final bool commentDescending;
 
   const AppPreferencesState({
     @required this.initialized,
@@ -23,6 +24,7 @@ class AppPreferencesState extends Equatable {
     @required this.blogAdminUrl,
     @required this.defaultPage,
     @required this.loginUser,
+    @required this.commentDescending,
   });
 
   factory AppPreferencesState.initial() {
@@ -37,6 +39,7 @@ class AppPreferencesState extends Equatable {
       blogAdminUrl: null,
       defaultPage: AppTab.storage,
       loginUser: null,
+      commentDescending: false,
     );
   }
 
@@ -51,6 +54,7 @@ class AppPreferencesState extends Equatable {
     String blogAdminUrl,
     AppTab defaultPage,
     User loginUser,
+    bool commentDescending,
   }) {
     return AppPreferencesState(
       initialized: initialized ?? this.initialized,
@@ -63,20 +67,24 @@ class AppPreferencesState extends Equatable {
       blogAdminUrl: blogAdminUrl ?? this.blogAdminUrl,
       defaultPage: defaultPage ?? this.defaultPage,
       loginUser: loginUser ?? this.loginUser,
+      commentDescending: commentDescending ?? this.commentDescending,
     );
   }
 
   @override
-  List<Object> get props => [
-        initialized,
-        apiUrl,
-        miPushAppId,
-        miPushAppKey,
-        miPushRegId,
-        refreshInterval,
-        blogUrl,
-        blogAdminUrl,
-        defaultPage,
-        loginUser,
-      ];
+  List<Object> get props {
+    return [
+      initialized,
+      apiUrl,
+      miPushAppId,
+      miPushAppKey,
+      miPushRegId,
+      refreshInterval,
+      blogUrl,
+      blogAdminUrl,
+      defaultPage,
+      loginUser,
+      commentDescending,
+    ];
+  }
 }

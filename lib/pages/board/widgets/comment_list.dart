@@ -42,6 +42,7 @@ class CommentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: ValueKey(comment.id),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

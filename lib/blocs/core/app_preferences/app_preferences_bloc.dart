@@ -40,6 +40,8 @@ class AppPreferencesBloc
         User loginUser = loginUserJsonString != null
             ? User.fromJson(jsonDecode(loginUserJsonString))
             : null;
+        bool commentDescending =
+            prefs.getString('commentDescending')?.toLowerCase() == 'true';
         yield state.copyWith(
           initialized: true,
           apiUrl: apiUrl,
@@ -51,6 +53,7 @@ class AppPreferencesBloc
           blogAdminUrl: blogAdminUrl,
           defaultPage: defaultPage,
           loginUser: loginUser,
+          commentDescending: commentDescending,
         );
       } catch (e) {
         _log.severe('启动失败，无法获取配置');
@@ -134,6 +137,17 @@ class AppPreferencesBloc
         );
       } catch (e) {
         _log.severe('设置小米推送注册标识符失败');
+      }
+    }
+    if (event is CommentDescendingChanged) {
+      try {
+        final SharedPreferences prefs = await _prefs;
+        prefs.setString('commentDescending', event.descending.toString());
+        yield state.copyWith(
+          commentDescending: event.descending,
+        );
+      } catch (e) {
+        _log.severe('设置评论排序方式失败');
       }
     }
   }

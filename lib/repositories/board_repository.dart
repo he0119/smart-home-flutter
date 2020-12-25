@@ -126,14 +126,18 @@ class BoardRepository {
     return topicObject;
   }
 
+  /// 话题详情的数据
+  /// 评论可选择是否按创建时间倒序，默认为正序
   Future<Tuple2<Topic, List<Comment>>> topicDetail({
     @required String topicId,
+    bool descending = false,
     bool cache = true,
   }) async {
     final QueryOptions options = QueryOptions(
       document: gql(topicDetailQuery),
       variables: {
         'topicId': topicId,
+        'orderBy': descending ? '-created_at' : 'created_at',
       },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
