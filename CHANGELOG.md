@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.6.1] - 2020-12-25
+
+### Added
+
+- 评论支持选择倒序排列
+
+### Fixed
+
+- 修复物品备注为 null 时无法显示的问题
+- 修复物联网数据显示不正常的问题
+
 ## [0.6.0] - 2020-12-25
 
 ### Added
@@ -236,8 +247,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.6.1...HEAD
 
+[0.6.1]: https://github.com/he0119/smart-home-flutter/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/he0119/smart-home-flutter/compare/v0.5.11...v0.6.0
 [0.5.11]: https://github.com/he0119/smart-home-flutter/compare/v0.5.10...v0.5.11
 [0.5.10]: https://github.com/he0119/smart-home-flutter/compare/v0.5.9...v0.5.10
