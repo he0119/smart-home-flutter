@@ -222,7 +222,7 @@ class _ItemDetailList extends StatelessWidget {
           title: Text('数量'),
           subtitle: SelectableText(item.number.toString()),
         ),
-        if (item.description.isNotEmpty)
+        if (item.description != null && item.description.isNotEmpty)
           ListTile(
             title: Text('备注'),
             subtitle: SelectableText(item.description),
