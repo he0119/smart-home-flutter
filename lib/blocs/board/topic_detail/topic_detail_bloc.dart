@@ -9,6 +9,7 @@ part 'topic_detail_state.dart';
 
 class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
   final BoardRepository boardRepository;
+  bool descending = false;
 
   TopicDetailBloc({@required this.boardRepository})
       : super(TopicDetailInProgress());
@@ -20,8 +21,11 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
     if (event is TopicDetailChanged) {
       try {
         yield TopicDetailInProgress();
-        final topicDetail =
-            await boardRepository.topicDetail(topicId: event.topicId);
+        descending = event.descending;
+        final topicDetail = await boardRepository.topicDetail(
+          topicId: event.topicId,
+          descending: descending,
+        );
         yield TopicDetailSuccess(
             topic: topicDetail.item1, comments: topicDetail.item2);
       } catch (e) {
@@ -35,7 +39,10 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
     if (event is TopicDetailRefreshed && currentState is TopicDetailSuccess) {
       try {
         final topicDetail = await boardRepository.topicDetail(
-            topicId: currentState.topic.id, cache: false);
+          topicId: currentState.topic.id,
+          descending: descending,
+          cache: false,
+        );
         yield TopicDetailSuccess(
             topic: topicDetail.item1, comments: topicDetail.item2);
       } catch (e) {

@@ -9,11 +9,16 @@ abstract class TopicDetailEvent extends Equatable {
 
 class TopicDetailChanged extends TopicDetailEvent {
   final String topicId;
+  final bool descending;
 
-  const TopicDetailChanged({@required this.topicId});
+  const TopicDetailChanged({
+    @required this.topicId,
+    @required this.descending,
+  });
 
   @override
-  String toString() => 'TopicChanged { TopicId: $topicId }';
+  String toString() =>
+      'TopicChanged { TopicId: $topicId, descending: $descending }';
 }
 
 class TopicDetailRefreshed extends TopicDetailEvent {
