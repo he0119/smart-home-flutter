@@ -10,33 +10,52 @@ part 'board_home_state.dart';
 class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
   final BoardRepository boardRepository;
 
-  BoardHomeBloc({@required this.boardRepository})
-      : super(BoardHomeInProgress());
+  BoardHomeBloc({
+    @required this.boardRepository,
+  }) : super(BoardHomeInitial());
 
   @override
   Stream<BoardHomeState> mapEventToState(
     BoardHomeEvent event,
   ) async* {
-    if (event is BoardHomeStarted) {
+    final currentState = state;
+    if (event is BoardHomeFetched && !_hasReachedMax(currentState)) {
       try {
-        final currentState = state;
-        if (currentState is! BoardHomeSuccess) {
-          yield BoardHomeInProgress();
+        // 获取第一页数据
+        if (currentState is BoardHomeInitial) {
+          final results = await boardRepository.topics();
+          yield BoardHomeSuccess(
+            topics: results.item1,
+            topicsEndCursor: results.item2.item1,
+            hasReachedMax: !results.item2.item2,
+          );
+          return;
         }
-        List<Topic> topics = await boardRepository.topics(cache: false);
-        yield BoardHomeSuccess(topics: topics);
+        // 获取下一页数据
+        if (currentState is BoardHomeSuccess) {
+          final results =
+              await boardRepository.topics(after: currentState.topicsEndCursor);
+          yield BoardHomeSuccess(
+            topics: currentState.topics + results.item1,
+            topicsEndCursor: results.item2.item1,
+            hasReachedMax: !results.item2.item2,
+          );
+        }
       } catch (e) {
         yield BoardHomeFailure(e.message);
       }
     }
     if (event is BoardHomeRefreshed) {
-      try {
-        yield BoardHomeInProgress();
-        List<Topic> topics = await boardRepository.topics(cache: false);
-        yield BoardHomeSuccess(topics: topics);
-      } catch (e) {
-        yield BoardHomeFailure(e.message);
-      }
+      final results = await boardRepository.topics(cache: false);
+      yield BoardHomeSuccess(
+        topics: results.item1,
+        topicsEndCursor: results.item2.item1,
+        hasReachedMax: !results.item2.item2,
+      );
+      return;
     }
   }
 }
+
+bool _hasReachedMax(BoardHomeState state) =>
+    state is BoardHomeSuccess && state.hasReachedMax;

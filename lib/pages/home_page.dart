@@ -143,7 +143,7 @@ class _HomePage extends StatelessWidget {
     if (appTab == AppTab.iot) {
       return IotHomePage();
     }
-    BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeStarted());
+    BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeFetched());
     return BoardHomePage();
   }
 }

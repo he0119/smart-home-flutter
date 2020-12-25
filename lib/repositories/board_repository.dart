@@ -155,7 +155,13 @@ class BoardRepository {
     return Tuple2(topic, comments);
   }
 
-  Future<List<Topic>> topics({String after, bool cache = true}) async {
+  /// 话题列表
+  ///
+  /// topics, (topicsEndCursor, topicsHasNextPage)
+  Future<Tuple2<List<Topic>, Tuple2<String, bool>>> topics({
+    String after,
+    bool cache = true,
+  }) async {
     final QueryOptions options = QueryOptions(
       document: gql(topicsQuery),
       variables: {
@@ -165,11 +171,15 @@ class BoardRepository {
     );
     final results = await graphqlApiClient.query(options);
 
+    // 是否还有下一页
+    final String endCursor = results.data['topics']['pageInfo']['endCursor'];
+    final bool hasNextPage = results.data['topics']['pageInfo']['hasNextPage'];
+
     final List<dynamic> topicsJson = results.data.flattenConnection['topics'];
     final List<Topic> topics =
         topicsJson.map((e) => Topic.fromJson(e)).toList();
 
-    return topics;
+    return Tuple2(topics, Tuple2(endCursor, hasNextPage));
   }
 
   Future<Comment> updateComment({

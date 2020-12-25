@@ -7,6 +7,12 @@ abstract class BoardHomeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class BoardHomeStarted extends BoardHomeEvent {}
+class BoardHomeFetched extends BoardHomeEvent {
+  @override
+  String toString() => 'BoardHomeFetched';
+}
 
-class BoardHomeRefreshed extends BoardHomeEvent {}
+class BoardHomeRefreshed extends BoardHomeEvent {
+  @override
+  String toString() => 'BoardHomeRefreshed';
+}
