@@ -6,7 +6,7 @@ import 'main.dart';
 void main() {
   var configuredApp = AppConfig(
     appName: '智慧家庭',
-    flavorName: 'production',
+    flavorName: 'prod',
     apiUrl: 'https://smart.hehome.xyz/graphql',
     child: MyApp(),
   );
