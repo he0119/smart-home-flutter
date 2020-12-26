@@ -82,7 +82,11 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   /// 添加一组位置
   void addStorageGroup({Storage storage}) {
     storageGroup += 1;
-    _pages.add(StorageDetailPage(storageId: storage?.id, group: storageGroup));
+    _pages.add(StorageDetailPage(
+      storageName: storage?.name,
+      storageId: storage?.id,
+      group: storageGroup,
+    ));
     notifyListeners();
   }
 
@@ -100,11 +104,18 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     if (storage != null) {
       if (storage.ancestors != null) {
         for (Storage storage in storage.ancestors) {
-          _pages.add(
-              StorageDetailPage(storageId: storage.id, group: storageGroup));
+          _pages.add(StorageDetailPage(
+            storageName: storage.name,
+            storageId: storage.id,
+            group: storageGroup,
+          ));
         }
       }
-      _pages.add(StorageDetailPage(storageId: storage.id, group: storageGroup));
+      _pages.add(StorageDetailPage(
+        storageName: storage.name,
+        storageId: storage.id,
+        group: storageGroup,
+      ));
     }
     notifyListeners();
   }
@@ -113,9 +124,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   void addItemPage({@required Item item}) {
     itemCount += 1;
     _pages.add(ItemDetailPage(
+      itemName: item.name,
       itemId: item.id,
       group: itemCount,
-      itemName: item.name,
     ));
     notifyListeners();
   }
