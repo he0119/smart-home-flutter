@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.setVersion.outputs.version }}
+      commit_id: ${{ steps.setVersion.outputs.commit_id }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -30,6 +31,7 @@ jobs:
           else
             echo "::set-output name=version::dev"
           fi
+          echo "::set-output name=commit_id::$(git rev-parse --short HEAD)"
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
       - name: Install flutter
@@ -65,6 +67,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set dev version name
+        if: ${{ github.event_name != 'release' || github.event.action != 'published' }}
+        run: |
+          sed -ri "s#version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)#version: \1-git.$COMMIT_ID+\2#g" pubspec.yaml
+        env:
+          COMMIT_ID: ${{ needs.test.outputs.commit_id }}
       - name: Decrypt large secret
         run: ./.github/scripts/decrypt_secret.sh
         env:
@@ -102,6 +110,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set dev version name
+        if: ${{ github.event_name != 'release' || github.event.action != 'published' }}
+        run: |
+          sed -ri "s#version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)#version: \1-git.$COMMIT_ID+\2#g" pubspec.yaml
+        env:
+          COMMIT_ID: ${{ needs.test.outputs.commit_id }}
       - name: Install flutter
         uses: subosito/flutter-action@v1.4.0
         with:
@@ -127,6 +141,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set dev version name
+        if: ${{ github.event_name != 'release' || github.event.action != 'published' }}
+        run: |
+          sed -ri "s#version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)#version: \1-git.${env:COMMIT_ID}+\2#g" pubspec.yaml
+        env:
+          COMMIT_ID: ${{ needs.test.outputs.commit_id }}
       - name: Install flutter
         uses: subosito/flutter-action@v1.4.0
         with:
@@ -135,7 +155,7 @@ jobs:
       - name: Build windows version
         run: |
           flutter config --enable-windows-desktop
-          flutter build windows -t ./lib/main_"$env:VERSION".dart
+          flutter build windows -t ./lib/main_${env:VERSION}.dart
         env:
           VERSION: ${{ needs.test.outputs.version }}
       - name: Upload windows version
