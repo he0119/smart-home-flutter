@@ -29,13 +29,16 @@ class StorageRoutePath extends RoutePath {
 
 /// 物品相关的信息
 class ItemRoutePath extends RoutePath {
+  final String itemName;
   final String itemId;
+
   ItemRoutePath({
+    this.itemName,
     this.itemId,
   });
 
   @override
-  String toString() => 'ItemRoutePath(itemId: $itemId)';
+  String toString() => 'ItemRoutePath(itemName: $itemName)';
 }
 
 /// 留言板相关的信息

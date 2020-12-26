@@ -24,7 +24,7 @@ class ItemDetailPage extends Page {
     @required this.group,
   }) : super(
           key: ValueKey('$group/$itemId'),
-          name: '/item/$group/$itemId',
+          name: '/item/$itemName',
         );
 
   @override

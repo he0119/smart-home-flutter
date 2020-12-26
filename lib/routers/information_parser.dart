@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:smart_home/models/app_tab.dart';
+import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/routers/route_path.dart';
 
 class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
+  final StorageRepository storageRepository;
+
+  MyRouteInformationParser({
+    this.storageRepository,
+  });
+
   @override
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
@@ -20,7 +27,12 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
     if (uri.pathSegments.length == 2) {
       switch (uri.pathSegments[0]) {
         case 'item':
-          return ItemRoutePath(itemId: uri.pathSegments[1]);
+          final item =
+              await storageRepository.itemByName(name: uri.pathSegments[1]);
+          if (item != null) {
+            break;
+          }
+          return ItemRoutePath(itemName: item.name, itemId: item.id);
         case 'topic':
           return TopicRoutePath(topicId: uri.pathSegments[1]);
         case 'storage':
@@ -54,7 +66,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
       return RouteInformation(location: '/storage/${routePath.storageId}');
     }
     if (routePath is ItemRoutePath)
-      return RouteInformation(location: '/item/${routePath.itemId}');
+      return RouteInformation(location: '/item/${routePath.itemName}');
     if (routePath is TopicRoutePath)
       return RouteInformation(location: '/topic/${routePath.topicId}');
     return const RouteInformation(location: '/');

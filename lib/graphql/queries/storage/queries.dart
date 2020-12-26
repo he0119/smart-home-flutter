@@ -2,6 +2,7 @@ export 'expired_items.dart';
 export 'homepage.dart';
 export 'item.dart';
 export 'items.dart';
+export 'item_by_name.dart';
 export 'near_expired_items.dart';
 export 'recently_created_items.dart';
 export 'recently_edited_items.dart';

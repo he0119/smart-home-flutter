@@ -141,7 +141,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         return StorageRoutePath(storageId: storageId);
       }
       if (_pages.last is ItemDetailPage)
-        return ItemRoutePath(itemId: uri.pathSegments[2]);
+        return ItemRoutePath(itemName: uri.pathSegments[1]);
       if (_pages.last is TopicDetailPage)
         return TopicRoutePath(topicId: uri.pathSegments[1]);
     }
@@ -164,7 +164,11 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       itemCount = 1;
       _pages = [
         HomePage(appTab: AppTab.storage),
-        ItemDetailPage(itemId: routePath.itemId, group: 1, itemName: ''),
+        ItemDetailPage(
+          itemName: routePath.itemName,
+          itemId: routePath.itemId,
+          group: 1,
+        ),
       ];
     }
     if (routePath is StorageRoutePath) {
