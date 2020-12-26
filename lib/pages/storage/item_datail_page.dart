@@ -14,12 +14,14 @@ import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/utils/show_snack_bar.dart';
 
 class ItemDetailPage extends Page {
+  final String itemName;
   final String itemId;
   final int group;
 
   ItemDetailPage({
-    this.itemId,
-    this.group,
+    @required this.itemName,
+    @required this.itemId,
+    @required this.group,
   }) : super(
           key: ValueKey('$group/$itemId'),
           name: '/item/$group/$itemId',
@@ -29,48 +31,37 @@ class ItemDetailPage extends Page {
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => ItemDetailScreen(
-        itemId: itemId,
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider<ItemDetailBloc>(
+            create: (context) => ItemDetailBloc(
+              storageRepository:
+                  RepositoryProvider.of<StorageRepository>(context),
+            )..add(ItemDetailChanged(itemId: itemId)),
+          ),
+          BlocProvider<ItemEditBloc>(
+            create: (context) => ItemEditBloc(
+              storageRepository:
+                  RepositoryProvider.of<StorageRepository>(context),
+            ),
+          ),
+        ],
+        child: ItemDetailScreen(
+          itemId: itemId,
+          itemName: itemName,
+        ),
       ),
     );
   }
 }
 
 class ItemDetailScreen extends StatelessWidget {
+  final String itemName;
   final String itemId;
 
   const ItemDetailScreen({
     Key key,
-    @required this.itemId,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<ItemDetailBloc>(
-          create: (context) => ItemDetailBloc(
-            storageRepository:
-                RepositoryProvider.of<StorageRepository>(context),
-          )..add(ItemDetailChanged(itemId: itemId)),
-        ),
-        BlocProvider<ItemEditBloc>(
-          create: (context) => ItemEditBloc(
-            storageRepository:
-                RepositoryProvider.of<StorageRepository>(context),
-          ),
-        ),
-      ],
-      child: _ItemDetailPage(itemId: itemId),
-    );
-  }
-}
-
-class _ItemDetailPage extends StatelessWidget {
-  final String itemId;
-
-  const _ItemDetailPage({
-    Key key,
+    @required this.itemName,
     @required this.itemId,
   }) : super(key: key);
 
@@ -188,7 +179,9 @@ class _ItemDetailPage extends StatelessWidget {
         ],
       );
     }
-    return AppBar();
+    return AppBar(
+      title: Text(itemName),
+    );
   }
 
   Widget _buildBody(BuildContext context, ItemDetailState state) {

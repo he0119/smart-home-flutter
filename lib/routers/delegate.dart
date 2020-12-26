@@ -112,7 +112,11 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   int itemCount = 0;
   void addItemPage({@required Item item}) {
     itemCount += 1;
-    _pages.add(ItemDetailPage(itemId: item.id, group: itemCount));
+    _pages.add(ItemDetailPage(
+      itemId: item.id,
+      group: itemCount,
+      itemName: item.name,
+    ));
     notifyListeners();
   }
 
@@ -149,7 +153,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       itemCount = 1;
       _pages = [
         HomePage(appTab: AppTab.storage),
-        ItemDetailPage(itemId: routePath.itemId, group: 1),
+        ItemDetailPage(itemId: routePath.itemId, group: 1, itemName: ''),
       ];
     }
     if (routePath is StorageRoutePath) {
