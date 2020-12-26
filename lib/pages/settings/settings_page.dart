@@ -10,7 +10,6 @@ import 'package:smart_home/pages/settings/blog/blog_url_page.dart';
 import 'package:smart_home/pages/settings/board/comment_order_page.dart';
 import 'package:smart_home/pages/settings/common/api_url_page.dart';
 import 'package:smart_home/pages/settings/common/default_page.dart';
-import 'package:smart_home/pages/settings/common/mipush_page.dart';
 import 'package:smart_home/pages/settings/common/mipush_settings_tile.dart';
 import 'package:smart_home/pages/settings/iot/refresh_interval_page.dart';
 import 'package:smart_home/models/app_tab.dart';
