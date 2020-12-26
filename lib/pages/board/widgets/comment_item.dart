@@ -15,7 +15,7 @@ class CommentItem extends StatelessWidget {
   const CommentItem({
     Key key,
     @required this.comment,
-    this.showMenu = true,
+    @required this.showMenu,
   }) : super(key: key);
 
   @override
