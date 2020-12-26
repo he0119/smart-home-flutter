@@ -25,9 +25,7 @@ class StorageDetailPage extends Page {
     @required this.group,
   }) : super(
           key: ValueKey('$group/$storageId'),
-          name: storageId != null
-              ? '/storage/$group/$storageId'
-              : '/storage/$group/home',
+          name: storageName != null ? '/storage/$storageName' : '/storage/home',
         );
 
   @override

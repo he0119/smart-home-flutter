@@ -16,15 +16,18 @@ class AppRoutePath extends RoutePath {
 
 /// 位置相关的信息
 class StorageRoutePath extends RoutePath {
+  final String storageName;
+
   /// 位置 ID，空则为 家(/storage/home)
   final String storageId;
 
   StorageRoutePath({
+    this.storageName,
     this.storageId,
   });
 
   @override
-  String toString() => 'StorageRoutePath(storageId: $storageId)';
+  String toString() => 'StorageRoutePath(storageId: $storageName)';
 }
 
 /// 物品相关的信息

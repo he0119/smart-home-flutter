@@ -253,6 +253,26 @@ class StorageRepository {
     return item;
   }
 
+  Future<Storage> storageByName(
+      {@required String name, bool cache = true}) async {
+    final QueryOptions options = QueryOptions(
+      document: gql(storageByNameQuery),
+      variables: {
+        'name': name,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final result = await graphqlApiClient.query(options);
+
+    final List<dynamic> storageJson = result.data.flattenConnection['storages'];
+    if (storageJson.isEmpty) {
+      return null;
+    }
+    final Storage storage = Storage.fromJson(storageJson[0]);
+
+    return storage;
+  }
+
   Future<List<Item>> items({
     String key,
     bool cache = true,

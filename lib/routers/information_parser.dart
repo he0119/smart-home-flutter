@@ -37,7 +37,15 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           return TopicRoutePath(topicId: uri.pathSegments[1]);
         case 'storage':
           if (uri.pathSegments[1] == 'home') return StorageRoutePath();
-          return StorageRoutePath(storageId: uri.pathSegments[1]);
+          final storage =
+              await storageRepository.storageByName(name: uri.pathSegments[1]);
+          if (storage != null) {
+            break;
+          }
+          return StorageRoutePath(
+            storageName: storage.name,
+            storageId: storage.id,
+          );
       }
     }
     return AppRoutePath(appTab: null);
@@ -60,10 +68,10 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
       }
     }
     if (routePath is StorageRoutePath) {
-      if (routePath.storageId == null) {
+      if (routePath.storageName == 'home') {
         return RouteInformation(location: '/storage/home');
       }
-      return RouteInformation(location: '/storage/${routePath.storageId}');
+      return RouteInformation(location: '/storage/${routePath.storageName}');
     }
     if (routePath is ItemRoutePath)
       return RouteInformation(location: '/item/${routePath.itemName}');
