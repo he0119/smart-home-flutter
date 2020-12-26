@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/gravatar.dart';
@@ -19,13 +17,11 @@ class ItemTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginUser =
-        context.select((AppPreferencesBloc b) => b.state.loginUser);
     return ListTile(
       leading: CircleGravatar(email: user.email),
       title: Text(user.username),
       subtitle: Text(editedAt.toLocalStr()),
-      trailing: (onSelected != null && user == loginUser)
+      trailing: (onSelected != null)
           ? PopupMenuButton(
               icon: Icon(Icons.expand_more),
               onSelected: onSelected,

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
 import 'package:smart_home/models/board.dart';
-import 'package:smart_home/pages/board/widgets/comment_list.dart';
+import 'package:smart_home/pages/board/widgets/comment_item.dart';
 import 'package:smart_home/utils/show_snack_bar.dart';
 
 class CommentEditPage extends StatefulWidget {
@@ -193,6 +193,7 @@ class __PreviewPageState extends State<_PreviewPage> {
           createdAt: DateTime.now(),
           editedAt: DateTime.now(),
         ),
+        showMenu: false,
       ),
     );
   }
