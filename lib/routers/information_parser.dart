@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
 import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/routers/route_path.dart';
 
 class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
+  static final Logger _log = Logger('InformationParser');
   final StorageRepository storageRepository;
 
   MyRouteInformationParser({
@@ -32,6 +34,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           if (item != null) {
             break;
           }
+          _log.fine('parseRouteInformation: item{ name: $item }');
           return ItemRoutePath(itemName: item.name, itemId: item.id);
         case 'topic':
           return TopicRoutePath(topicId: uri.pathSegments[1]);
@@ -42,6 +45,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           if (storage != null) {
             break;
           }
+          _log.fine('parseRouteInformation: storage{ name: $storage }');
           return StorageRoutePath(
             storageName: storage.name,
             storageId: storage.id,
