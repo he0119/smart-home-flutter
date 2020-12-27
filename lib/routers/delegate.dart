@@ -163,7 +163,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       if (_pages.last is HomePage) {
         return AppRoutePath(appTab: currentHomePage);
       } else if (_pages.last is StorageDetailPage) {
-        return StorageRoutePath(storageName: uri.pathSegments[1]);
+        return StorageRoutePath(storageName: uri.pathSegments[2]);
       } else if (_pages.last is ItemDetailPage) {
         return ItemRoutePath(itemName: uri.pathSegments[1]);
       } else if (_pages.last is TopicDetailPage) {

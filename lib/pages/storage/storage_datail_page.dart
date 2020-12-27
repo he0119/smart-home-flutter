@@ -25,7 +25,7 @@ class StorageDetailPage extends Page {
     @required this.group,
   }) : super(
           key: ValueKey('$group/$storageName'),
-          name: '/storage/$storageName',
+          name: '/storage/$group/$storageName',
         );
 
   @override
