@@ -38,7 +38,7 @@ class StorageDetailPage extends Page {
             create: (context) => StorageDetailBloc(
               storageRepository:
                   RepositoryProvider.of<StorageRepository>(context),
-            )..add(StorageDetailStarted(name: storageName, id: storageId)),
+            )..add(StorageDetailFetched(name: storageName, id: storageId)),
           ),
           BlocProvider<StorageEditBloc>(
             create: (context) => StorageEditBloc(
@@ -236,7 +236,7 @@ class StorageDetailScreen extends StatelessWidget {
       return ErrorMessageButton(
         onPressed: () {
           BlocProvider.of<StorageDetailBloc>(context).add(
-            StorageDetailStarted(name: state.name, id: state.id),
+            StorageDetailFetched(name: state.name, id: state.id),
           );
         },
         message: state.message,
@@ -252,9 +252,13 @@ class StorageDetailScreen extends StatelessWidget {
       return StorageItemList(
         items: state.storage.items.toList(),
         storages: state.storage.children.toList(),
-        hasNextPage: state.hasNextPage,
-        onFetch: () => BlocProvider.of<StorageDetailBloc>(context)
-            .add(StorageDetailFetched()),
+        hasReachedMax: state.hasReachedMax,
+        onFetch: () => BlocProvider.of<StorageDetailBloc>(context).add(
+          StorageDetailFetched(
+            name: state.storage.name,
+            id: state.storage.id,
+          ),
+        ),
       );
     }
     return CenterLoadingIndicator();

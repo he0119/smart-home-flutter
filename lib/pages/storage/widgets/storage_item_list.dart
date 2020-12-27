@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:smart_home/models/models.dart';
 import 'package:smart_home/routers/delegate.dart';
+import 'package:smart_home/widgets/infinite_list.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
-import 'package:smart_home/models/models.dart';
-import 'package:smart_home/widgets/bottom_loader.dart';
-
-class StorageItemList extends StatefulWidget {
+class StorageItemList extends StatelessWidget {
   final List<Item> items;
   final List<Storage> storages;
   final String term;
   final bool isHighlight;
-  final bool hasNextPage;
+  final bool hasReachedMax;
   final VoidCallback onFetch;
 
   const StorageItemList({
@@ -19,104 +18,31 @@ class StorageItemList extends StatefulWidget {
     this.storages,
     this.term = '',
     this.isHighlight = false,
-    this.hasNextPage = false,
+    this.hasReachedMax = true,
     this.onFetch,
-  })  : assert(hasNextPage != null),
+  })  : assert(hasReachedMax != null),
         super(key: key);
 
   @override
-  _StorageItemListState createState() => _StorageItemListState();
-}
-
-class _StorageItemListState extends State<StorageItemList> {
-  final _scrollController = ScrollController();
-  final _scrollThreshold = 200.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    List<dynamic> merged = List.from(widget.storages)..addAll(widget.items);
-    return Scrollbar(
-      child: ListView.separated(
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemCount: widget.hasNextPage ? merged.length + 1 : merged.length,
-        itemBuilder: (BuildContext context, int index) {
-          if (index >= merged.length) {
-            return BottomLoader();
-          }
-          if (widget.isHighlight) {
-            return _HighlightStorageItemListItem(
-              item: merged[index],
-              term: widget.term,
-            );
-          } else {
-            return _StorageItemListItem(
-              item: merged[index],
-            );
-          }
-        },
-        separatorBuilder: (contexit, index) => Divider(),
-        controller: _scrollController,
-      ),
+    List<dynamic> merged = List.from(storages)..addAll(items);
+    return InfiniteList(
+      items: merged,
+      itemBuilder: (context, item) {
+        if (isHighlight) {
+          return _HighlightStorageItemListItem(
+            item: item,
+            term: term,
+          );
+        } else {
+          return _StorageItemListItem(
+            item: item,
+          );
+        }
+      },
+      hasReachedMax: hasReachedMax,
+      onFetch: onFetch,
     );
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= _scrollThreshold && widget.hasNextPage) {
-      widget.onFetch();
-    }
-  }
-}
-
-/// 位置详情界面使用的列表
-class _StorageItemListItem extends StatelessWidget {
-  final dynamic item;
-
-  const _StorageItemListItem({
-    Key key,
-    @required this.item,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if (item is Item) {
-      return ListTile(
-        leading: const Icon(
-          Icons.insert_drive_file,
-          size: 34.0,
-        ),
-        title: Text(item.name),
-        subtitle: Text(item.description ?? ''),
-        onTap: () {
-          MyRouterDelegate.of(context).addItemPage(item: item);
-        },
-      );
-    } else {
-      return ListTile(
-        leading: const Icon(
-          Icons.storage,
-          size: 34.0,
-        ),
-        title: Text(item.name),
-        subtitle: Text(item.description ?? ''),
-        onTap: () {
-          MyRouterDelegate.of(context).setStoragePage(storage: item);
-        },
-      );
-    }
   }
 }
 
@@ -177,6 +103,45 @@ class _HighlightStorageItemListItem extends StatelessWidget {
         ),
         onTap: () async {
           MyRouterDelegate.of(context).addStorageGroup(storage: item);
+        },
+      );
+    }
+  }
+}
+
+/// 位置详情界面使用的列表
+class _StorageItemListItem extends StatelessWidget {
+  final dynamic item;
+
+  const _StorageItemListItem({
+    Key key,
+    @required this.item,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (item is Item) {
+      return ListTile(
+        leading: const Icon(
+          Icons.insert_drive_file,
+          size: 34.0,
+        ),
+        title: Text(item.name),
+        subtitle: Text(item.description ?? ''),
+        onTap: () {
+          MyRouterDelegate.of(context).addItemPage(item: item);
+        },
+      );
+    } else {
+      return ListTile(
+        leading: const Icon(
+          Icons.storage,
+          size: 34.0,
+        ),
+        title: Text(item.name),
+        subtitle: Text(item.description ?? ''),
+        onTap: () {
+          MyRouterDelegate.of(context).setStoragePage(storage: item);
         },
       );
     }

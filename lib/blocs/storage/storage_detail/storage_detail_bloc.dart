@@ -12,49 +12,52 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
 
   StorageDetailBloc({
     @required this.storageRepository,
-  }) : super(StorageDetailInProgress());
+  }) : super(StorageDetailInitial());
 
   @override
   Stream<StorageDetailState> mapEventToState(
     StorageDetailEvent event,
   ) async* {
     final currentState = state;
-    if (event is StorageDetailFetched && _hasNextPage(currentState)) {
-      if (currentState is StorageDetailSuccess) {
-        final results = await storageRepository.storage(
-            name: currentState.storage.name,
-            id: currentState.storage.id,
-            itemCursor: currentState.itemEndCursor,
-            storageCursor: currentState.stroageEndCursor);
-        yield currentState.copyWith(
-          storage: currentState.storage.copyWith(
-            children: currentState.storage.children + results.item1.children,
-            items: currentState.storage.items + results.item1.items,
-          ),
-          hasNextPage: results.item3 || results.item5,
-          stroageEndCursor: results.item2,
-          itemEndCursor: results.item4,
-        );
-      }
-    }
-    if (event is StorageDetailStarted) {
+    if (event is StorageDetailFetched && !_hasReachedMax(currentState)) {
       try {
-        if (event.name == '') {
-          final storages = await storageRepository.rootStorage();
-          yield StorageDetailSuccess(storages: storages);
-        } else {
-          final results =
-              await storageRepository.storage(name: event.name, id: event.id);
-          if (results == null) {
-            yield StorageDetailFailure(
-              '获取位置失败，位置不存在',
-              name: event.name,
-              id: event.id,
+        // 获取第一页的数据
+        if (currentState is StorageDetailInitial) {
+          if (event.name == '') {
+            final storages = await storageRepository.rootStorage();
+            yield StorageDetailSuccess(storages: storages);
+          } else {
+            final results =
+                await storageRepository.storage(name: event.name, id: event.id);
+            if (results == null) {
+              yield StorageDetailFailure(
+                '获取位置失败，位置不存在',
+                name: event.name,
+                id: event.id,
+              );
+            }
+            yield StorageDetailSuccess(
+              storage: results.item1,
+              hasReachedMax: !results.item3 && !results.item5,
+              stroageEndCursor: results.item2,
+              itemEndCursor: results.item4,
             );
           }
-          yield StorageDetailSuccess(
-            storage: results.item1,
-            hasNextPage: results.item3 || results.item5,
+          return;
+        }
+        // 获取下一页数据
+        if (currentState is StorageDetailSuccess) {
+          final results = await storageRepository.storage(
+              name: currentState.storage.name,
+              id: currentState.storage.id,
+              itemCursor: currentState.itemEndCursor,
+              storageCursor: currentState.stroageEndCursor);
+          yield currentState.copyWith(
+            storage: currentState.storage.copyWith(
+              children: currentState.storage.children + results.item1.children,
+              items: currentState.storage.items + results.item1.items,
+            ),
+            hasReachedMax: !results.item3 && !results.item5,
             stroageEndCursor: results.item2,
             itemEndCursor: results.item4,
           );
@@ -81,7 +84,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           );
           yield StorageDetailSuccess(
             storage: results.item1,
-            hasNextPage: results.item3 || results.item5,
+            hasReachedMax: !results.item3 && !results.item5,
             stroageEndCursor: results.item2,
             itemEndCursor: results.item4,
           );
@@ -97,9 +100,9 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
   }
 }
 
-bool _hasNextPage(StorageDetailState currentState) {
+bool _hasReachedMax(StorageDetailState currentState) {
   if (currentState is StorageDetailSuccess) {
-    return currentState.hasNextPage;
+    return currentState.hasReachedMax;
   }
   return false;
 }

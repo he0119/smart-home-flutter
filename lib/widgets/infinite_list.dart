@@ -18,7 +18,6 @@ class InfiniteList<T> extends StatefulWidget {
     this.hasReachedMax = true,
     this.threshold = 200,
   })  : assert(hasReachedMax != null),
-        assert(onFetch != null),
         super(key: key);
 
   @override
