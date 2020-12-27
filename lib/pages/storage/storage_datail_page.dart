@@ -74,9 +74,23 @@ class StorageDetailScreen extends StatelessWidget {
           appBar: _buildAppBar(context, state),
           body: RefreshIndicator(
             onRefresh: () async {
-              BlocProvider.of<StorageDetailBloc>(context).add(
-                StorageDetailRefreshed(),
-              );
+              if (state is StorageDetailSuccess) {
+                BlocProvider.of<StorageDetailBloc>(context).add(
+                  StorageDetailFetched(
+                    name: state.storage.name,
+                    id: state.storage.id,
+                    refresh: true,
+                  ),
+                );
+              } else {
+                BlocProvider.of<StorageDetailBloc>(context).add(
+                  StorageDetailFetched(
+                    name: storageName,
+                    id: storageId,
+                    refresh: true,
+                  ),
+                );
+              }
             },
             child: BlocListener<StorageEditBloc, StorageEditState>(
               listener: (context, state) {

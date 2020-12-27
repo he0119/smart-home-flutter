@@ -33,39 +33,38 @@ class StorageDetailSuccess extends StorageDetailState {
 
   /// 其他位置页面所需数据
   final Storage storage;
-  final bool hasReachedMax;
-  final String itemEndCursor;
-  final String stroageEndCursor;
+  final PageInfo itemPageInfo;
+  final PageInfo storagePageInfo;
 
   const StorageDetailSuccess({
     this.storages,
     this.storage,
-    this.hasReachedMax,
-    this.itemEndCursor,
-    this.stroageEndCursor,
+    this.itemPageInfo,
+    this.storagePageInfo,
   }) : assert(storages != null || storage != null);
+
+  bool get hasReachedMax =>
+      !itemPageInfo.hasNextPage && !storagePageInfo.hasNextPage;
 
   StorageDetailSuccess copyWith({
     List<Storage> storages,
     Storage storage,
-    bool hasReachedMax,
-    String itemEndCursor,
-    String stroageEndCursor,
+    PageInfo itemPageInfo,
+    PageInfo storagePageInfo,
   }) {
     return StorageDetailSuccess(
       storages: storages ?? this.storages,
       storage: storage ?? this.storage,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-      itemEndCursor: itemEndCursor ?? this.itemEndCursor,
-      stroageEndCursor: stroageEndCursor ?? this.stroageEndCursor,
+      itemPageInfo: itemPageInfo ?? this.itemPageInfo,
+      storagePageInfo: storagePageInfo ?? this.storagePageInfo,
     );
   }
 
   @override
-  List<Object> get props => [storages, storage, hasReachedMax];
+  List<Object> get props => [storages, storage, itemPageInfo, storagePageInfo];
 
   @override
   String toString() {
-    return 'StorageDetailSuccess(storage: $storage, hasReachedMax: $hasReachedMax';
+    return 'StorageDetailSuccess(storage: $storage, hasReachedMax: $hasReachedMax)';
   }
 }

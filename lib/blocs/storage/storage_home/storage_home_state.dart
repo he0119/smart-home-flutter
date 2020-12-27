@@ -46,6 +46,8 @@ class StorageHomeSuccess extends StorageHomeState {
     this.pageInfo,
   });
 
+  bool get hasReachedMax => !pageInfo.hasNextPage;
+
   StorageHomeSuccess copyWith({
     ItemType itemType,
     List<Item> recentlyCreatedItems,
@@ -71,10 +73,10 @@ class StorageHomeSuccess extends StorageHomeState {
         expiredItems,
         nearExpiredItems,
         itemType,
+        pageInfo,
       ];
 
   @override
-  String toString() {
-    return 'StorageHomeSuccess(itemType: $itemType)';
-  }
+  String toString() =>
+      'StorageHomeSuccess(itemType: $itemType, hasReachedMax: $hasReachedMax)';
 }
