@@ -253,26 +253,6 @@ class StorageRepository {
     return item;
   }
 
-  Future<Storage> storageByName(
-      {@required String name, bool cache = true}) async {
-    final QueryOptions options = QueryOptions(
-      document: gql(storageByNameQuery),
-      variables: {
-        'name': name,
-      },
-      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
-    );
-    final result = await graphqlApiClient.query(options);
-
-    final List<dynamic> storageJson = result.data.flattenConnection['storages'];
-    if (storageJson.isEmpty) {
-      return null;
-    }
-    final Storage storage = Storage.fromJson(storageJson[0]);
-
-    return storage;
-  }
-
   Future<List<Item>> items({
     String key,
     bool cache = true,
@@ -428,23 +408,47 @@ class StorageRepository {
   /// stroageEndCursor，stroageHasNextPage
   /// itemEndCursor，itemHasNextPage
   Future<Tuple5<Storage, String, bool, String, bool>> storage({
-    @required String id,
+    @required String name,
+    String id,
     String storageCursor,
     String itemCursor,
     bool cache = true,
   }) async {
-    final QueryOptions options = QueryOptions(
-      document: gql(storageQuery),
-      variables: {
-        'id': id,
-        'itemCursor': itemCursor,
-        'storageCursor': storageCursor,
-      },
-      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
-    );
-    final result = await graphqlApiClient.query(options);
+    Map<String, dynamic> storageJson;
 
-    final Map<String, dynamic> storageJson = result.data['storage'];
+    if (id != null) {
+      // 如果有 ID，则直接通过 ID 获取数据
+      final QueryOptions options = QueryOptions(
+        document: gql(storageQuery),
+        variables: {
+          'id': id,
+          'itemCursor': itemCursor,
+          'storageCursor': storageCursor,
+        },
+        fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+      );
+      final result = await graphqlApiClient.query(options);
+
+      storageJson = result.data['storage'];
+    } else {
+      // 通过名称来获取数据
+      final QueryOptions options = QueryOptions(
+        document: gql(storageByNameQuery),
+        variables: {
+          'name': name,
+          'itemCursor': itemCursor,
+          'storageCursor': storageCursor,
+        },
+        fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+      );
+      final result = await graphqlApiClient.query(options);
+
+      List<dynamic> storageListJson = result.data.flattenConnection['storage'];
+      if (storageListJson.isEmpty) {
+        return null;
+      }
+      storageJson = storageListJson[0];
+    }
 
     // 是否还有下一页
     final String stroageEndCursor =
@@ -456,9 +460,9 @@ class StorageRepository {
         storageJson['items']['pageInfo']['hasNextPage'];
 
     // 位置详情
-    final Map<String, dynamic> json = result.data.flattenConnection;
+    final Map<String, dynamic> json = storageJson.flattenConnection;
 
-    final Storage storage = Storage.fromJson(json['storage']);
+    final Storage storage = Storage.fromJson(json);
 
     return Tuple5(
       storage,

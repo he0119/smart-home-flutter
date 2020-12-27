@@ -83,7 +83,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   void addStorageGroup({Storage storage}) {
     storageGroup += 1;
     _pages.add(StorageDetailPage(
-      storageName: storage?.name,
+      storageName: storage?.name ?? '',
       storageId: storage?.id,
       group: storageGroup,
     ));
@@ -100,7 +100,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       _pages.removeLast();
     }
     // 再重新添加
-    _pages.add(StorageDetailPage(group: storageGroup));
+    _pages.add(StorageDetailPage(storageName: '', group: storageGroup));
     if (storage != null) {
       if (storage.ancestors != null) {
         for (Storage storage in storage.ancestors) {
@@ -133,19 +133,42 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     notifyListeners();
   }
 
+  bool _handlePopPage(Route<dynamic> route, dynamic result) {
+    final bool success = route.didPop(result);
+    if (success) {
+      _log.fine('pop ${route.settings.name}');
+      _pages.remove(route.settings);
+      // 每当一组位置全部 Pop，Group 计数减一
+      if (route.settings.name.startsWith('/storage')) {
+        if (!_pages.last.name.startsWith('/storage/$storageGroup')) {
+          storageGroup -= 1;
+        }
+      }
+      if (route.settings.name.startsWith('/item')) {
+        itemCount -= 1;
+      }
+      notifyListeners();
+    }
+    return success;
+  }
+
+  // 网页版显示网址
+  @override
+  RoutePath get currentConfiguration => routePath;
+
+  /// 从当前显示页面倒推 RoutePath
   RoutePath get routePath {
     if (_pages.isNotEmpty && _pages.last.name != null) {
       final uri = Uri.parse(_pages.last.name);
-      if (_pages.last is HomePage) return AppRoutePath(appTab: currentHomePage);
-      if (_pages.last is StorageDetailPage) {
-        final storageName = uri.pathSegments[1];
-        if (storageName == 'home') return StorageRoutePath();
-        return StorageRoutePath(storageName: storageName);
-      }
-      if (_pages.last is ItemDetailPage)
+      if (_pages.last is HomePage) {
+        return AppRoutePath(appTab: currentHomePage);
+      } else if (_pages.last is StorageDetailPage) {
+        return StorageRoutePath(storageName: uri.pathSegments[1]);
+      } else if (_pages.last is ItemDetailPage) {
         return ItemRoutePath(itemName: uri.pathSegments[1]);
-      if (_pages.last is TopicDetailPage)
+      } else if (_pages.last is TopicDetailPage) {
         return TopicRoutePath(topicId: uri.pathSegments[1]);
+      }
     }
     return AppRoutePath();
   }
@@ -186,29 +209,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         ),
       ];
     }
-  }
-
-  // 网页版显示网页用
-  @override
-  RoutePath get currentConfiguration => routePath;
-
-  bool _handlePopPage(Route<dynamic> route, dynamic result) {
-    final bool success = route.didPop(result);
-    if (success) {
-      _log.fine('pop ${route.settings.name}');
-      _pages.remove(route.settings);
-      // 每当一组位置全部 Pop，Group 计数减一
-      if (route.settings.name.startsWith('/storage')) {
-        if (!_pages.last.name.startsWith('/storage/$storageGroup')) {
-          storageGroup -= 1;
-        }
-      }
-      if (route.settings.name.startsWith('/item')) {
-        itemCount -= 1;
-      }
-      notifyListeners();
-    }
-    return success;
   }
 
   TransitionDelegate transitionDelegate = MyTransitionDelegate();
