@@ -443,11 +443,11 @@ class StorageRepository {
       );
       final result = await graphqlApiClient.query(options);
 
-      List<dynamic> storageListJson = result.data['storage'];
-      if (storageListJson.isEmpty) {
+      Map<String, dynamic> storageListJson = result.data['storage'];
+      if (storageListJson['edges'].isEmpty) {
         return null;
       }
-      storageJson = storageListJson[0];
+      storageJson = storageListJson['edges'][0]['node'];
     }
 
     // 是否还有下一页
