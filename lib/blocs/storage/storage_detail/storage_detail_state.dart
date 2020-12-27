@@ -48,6 +48,22 @@ class StorageDetailSuccess extends StorageDetailState {
     this.stroageEndCursor,
   }) : assert(storages != null || storage != null);
 
+  StorageDetailSuccess copyWith({
+    List<Storage> storages,
+    Storage storage,
+    bool hasNextPage,
+    String itemEndCursor,
+    String stroageEndCursor,
+  }) {
+    return StorageDetailSuccess(
+      storages: storages ?? this.storages,
+      storage: storage ?? this.storage,
+      hasNextPage: hasNextPage ?? this.hasNextPage,
+      itemEndCursor: itemEndCursor ?? this.itemEndCursor,
+      stroageEndCursor: stroageEndCursor ?? this.stroageEndCursor,
+    );
+  }
+
   @override
   List<Object> get props => [storages, storage, hasNextPage];
 

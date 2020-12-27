@@ -26,7 +26,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             id: currentState.storage.id,
             itemCursor: currentState.itemEndCursor,
             storageCursor: currentState.stroageEndCursor);
-        yield StorageDetailSuccess(
+        yield currentState.copyWith(
           storage: currentState.storage.copyWith(
             children: currentState.storage.children + results.item1.children,
             items: currentState.storage.items + results.item1.items,
