@@ -8,19 +8,19 @@ abstract class ItemDetailEvent extends Equatable {
 }
 
 class ItemDetailStarted extends ItemDetailEvent {
-  final String itemName;
-  final String itemId;
+  final String name;
+  final String id;
 
   const ItemDetailStarted({
-    @required this.itemName,
-    this.itemId,
+    @required this.name,
+    this.id,
   });
 
   @override
-  List<Object> get props => [itemName, itemId];
+  List<Object> get props => [name, id];
 
   @override
-  String toString() => 'ItemDetailChanged(itemName: $itemName)';
+  String toString() => 'ItemDetailStarted(name: $name, id: $id)';
 }
 
 class ItemDetailRefreshed extends ItemDetailEvent {

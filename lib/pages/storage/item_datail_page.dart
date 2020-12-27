@@ -41,8 +41,8 @@ class ItemDetailPage extends Page {
               storageRepository:
                   RepositoryProvider.of<StorageRepository>(context),
             )..add(ItemDetailStarted(
-                itemName: itemName,
-                itemId: itemId,
+                name: itemName,
+                id: itemId,
               )),
           ),
           BlocProvider<ItemEditBloc>(
@@ -123,8 +123,8 @@ class ItemDetailScreen extends StatelessWidget {
                   ),
                 ));
                 BlocProvider.of<ItemDetailBloc>(context).add(ItemDetailStarted(
-                  itemName: state.item.name,
-                  itemId: state.item.id,
+                  name: state.item.name,
+                  id: state.item.id,
                 ));
               }
               if (value == ItemDetailMenu.consumable) {
@@ -140,8 +140,8 @@ class ItemDetailScreen extends StatelessWidget {
                   ),
                 ));
                 BlocProvider.of<ItemDetailBloc>(context).add(ItemDetailStarted(
-                  itemName: state.item.name,
-                  itemId: state.item.id,
+                  name: state.item.name,
+                  id: state.item.id,
                 ));
               }
               if (value == ItemDetailMenu.delete) {
@@ -200,8 +200,8 @@ class ItemDetailScreen extends StatelessWidget {
         onPressed: () {
           BlocProvider.of<ItemDetailBloc>(context).add(
             ItemDetailStarted(
-              itemName: state.itemName,
-              itemId: state.itemId,
+              name: state.name,
+              id: state.id,
             ),
           );
         },

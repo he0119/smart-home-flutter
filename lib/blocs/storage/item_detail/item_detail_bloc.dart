@@ -20,27 +20,25 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
   ) async* {
     if (event is ItemDetailStarted) {
       try {
-        Item item;
         // 如果有 id 则直接使用 id 查询，如果没有则使用名称查询
-        if (event.itemId != null) {
-          item = await storageRepository.item(id: event.itemId);
-        } else {
-          item = await storageRepository.itemByName(name: event.itemName);
-          if (item == null) {
-            yield ItemDetailFailure(
-              '获取物品失败，物品不存在',
-              itemName: event.itemName,
-              itemId: event.itemId,
-            );
-            return;
-          }
+        final item = await storageRepository.item(
+          name: event.name,
+          id: event.id,
+        );
+        if (item == null) {
+          yield ItemDetailFailure(
+            '获取物品失败，物品不存在',
+            name: event.name,
+            id: event.id,
+          );
+          return;
         }
         yield ItemDetailSuccess(item: item);
       } catch (e) {
         yield ItemDetailFailure(
           e?.message ?? e.toString(),
-          itemName: event.itemName,
-          itemId: event.itemId,
+          name: event.name,
+          id: event.id,
         );
       }
     }
@@ -49,6 +47,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
       yield ItemDetailInProgress();
       try {
         Item item = await storageRepository.item(
+          name: currentState.item.name,
           id: currentState.item.id,
           cache: false,
         );
@@ -56,8 +55,8 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
       } catch (e) {
         yield ItemDetailFailure(
           e?.message ?? e.toString(),
-          itemName: currentState.item.name,
-          itemId: currentState.item.id,
+          name: currentState.item.name,
+          id: currentState.item.id,
         );
       }
     }
