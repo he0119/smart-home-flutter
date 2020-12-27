@@ -7,23 +7,21 @@ abstract class TopicDetailEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class TopicDetailChanged extends TopicDetailEvent {
+class TopicDetailFetched extends TopicDetailEvent {
   final String topicId;
   final bool descending;
+  final bool refresh;
 
-  const TopicDetailChanged({
+  const TopicDetailFetched({
     @required this.topicId,
     @required this.descending,
+    this.refresh = false,
   });
 
   @override
-  String toString() =>
-      'TopicChanged { TopicId: $topicId, descending: $descending }';
-}
-
-class TopicDetailRefreshed extends TopicDetailEvent {
-  const TopicDetailRefreshed();
+  List<Object> get props => [topicId, descending, refresh];
 
   @override
-  String toString() => 'TopicRefreshed';
+  String toString() =>
+      'TopicDetailFetched(topicId: $topicId, descending: $descending, refresh: $refresh)';
 }

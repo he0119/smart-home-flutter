@@ -7,7 +7,10 @@ abstract class BoardHomeState extends Equatable {
   List<Object> get props => [];
 }
 
-class BoardHomeInitial extends BoardHomeState {}
+class BoardHomeInitial extends BoardHomeState {
+  @override
+  String toString() => 'BoardHomeInitial';
+}
 
 class BoardHomeFailure extends BoardHomeState {
   final String message;
@@ -23,17 +26,17 @@ class BoardHomeFailure extends BoardHomeState {
 
 class BoardHomeSuccess extends BoardHomeState {
   final List<Topic> topics;
-  final bool hasReachedMax;
-  final String topicsEndCursor;
+  final PageInfo pageInfo;
 
   const BoardHomeSuccess({
-    this.topics,
-    this.hasReachedMax,
-    this.topicsEndCursor,
+    @required this.topics,
+    @required this.pageInfo,
   });
 
+  bool get hasReachedMax => !pageInfo.hasNextPage;
+
   @override
-  List<Object> get props => [topics, hasReachedMax, topicsEndCursor];
+  List<Object> get props => [topics, pageInfo];
 
   @override
   String toString() =>

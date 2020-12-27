@@ -50,7 +50,7 @@ class TopicDetailScreen extends StatelessWidget {
         BlocProvider<TopicDetailBloc>(
           create: (context) => TopicDetailBloc(
             boardRepository: RepositoryProvider.of<BoardRepository>(context),
-          )..add(TopicDetailChanged(topicId: topicId, descending: descending)),
+          )..add(TopicDetailFetched(topicId: topicId, descending: descending)),
         ),
         BlocProvider<TopicEditBloc>(
           create: (context) => TopicEditBloc(
@@ -97,7 +97,7 @@ class _DetailScreenState extends State<_DetailScreen> {
             body: ErrorMessageButton(
               onPressed: () {
                 BlocProvider.of<TopicDetailBloc>(context).add(
-                  TopicDetailChanged(
+                  TopicDetailFetched(
                       topicId: state.topicId, descending: descending),
                 );
               },
@@ -154,7 +154,11 @@ class _DetailScreenState extends State<_DetailScreen> {
                             ),
                           );
                           BlocProvider.of<TopicDetailBloc>(context)
-                              .add(TopicDetailRefreshed());
+                              .add(TopicDetailFetched(
+                            topicId: state.topic.id,
+                            descending: descending,
+                            refresh: true,
+                          ));
                         }
                         if (value == TopicDetailMenu.delete) {
                           showDialog(
@@ -328,12 +332,20 @@ class _DetailScreenState extends State<_DetailScreen> {
                       _buttonBarController.text = '';
                       _buttonBarFocusNode.unfocus();
                       BlocProvider.of<TopicDetailBloc>(context)
-                          .add(TopicDetailRefreshed());
+                          .add(TopicDetailFetched(
+                        topicId: state.comment.topic.id,
+                        descending: descending,
+                        refresh: true,
+                      ));
                       showInfoSnackBar('评论成功');
                     }
                     if (state is CommentDeleteSuccess) {
                       BlocProvider.of<TopicDetailBloc>(context)
-                          .add(TopicDetailRefreshed());
+                          .add(TopicDetailFetched(
+                        topicId: state.comment.topic.id,
+                        descending: descending,
+                        refresh: true,
+                      ));
                       showInfoSnackBar('评论删除成功');
                     }
                     if (state is CommentFailure) {
@@ -346,7 +358,11 @@ class _DetailScreenState extends State<_DetailScreen> {
                         child: RefreshIndicator(
                           onRefresh: () async {
                             BlocProvider.of<TopicDetailBloc>(context)
-                                .add(TopicDetailRefreshed());
+                                .add(TopicDetailFetched(
+                              topicId: state.topic.id,
+                              descending: descending,
+                              refresh: true,
+                            ));
                           },
                           child: GestureDetector(
                             onTap: () {
@@ -426,7 +442,7 @@ class CommentOrder extends StatelessWidget {
               BlocProvider.of<AppPreferencesBloc>(context)
                   .add(CommentDescendingChanged(descending: value));
               BlocProvider.of<TopicDetailBloc>(context)
-                  .add(TopicDetailChanged(topicId: topicId, descending: value));
+                  .add(TopicDetailFetched(topicId: topicId, descending: value));
             },
             itemBuilder: (context) => <PopupMenuItem<bool>>[
               PopupMenuItem(

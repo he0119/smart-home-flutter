@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:smart_home/models/board.dart';
-import 'package:smart_home/repositories/board_repository.dart';
+import 'package:flutter/foundation.dart';
+import 'package:smart_home/models/models.dart';
+import 'package:smart_home/repositories/repositories.dart';
 
 part 'board_home_event.dart';
 part 'board_home_state.dart';
@@ -21,41 +21,33 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
     final currentState = state;
     if (event is BoardHomeFetched && !_hasReachedMax(currentState)) {
       try {
-        // 获取第一页数据
-        if (currentState is BoardHomeInitial) {
-          final results = await boardRepository.topics();
-          yield BoardHomeSuccess(
-            topics: results.item1,
-            topicsEndCursor: results.item2.item1,
-            hasReachedMax: !results.item2.item2,
+        if (currentState is BoardHomeSuccess && !event.refresh) {
+          final results = await boardRepository.topics(
+            after: currentState.pageInfo.endCursor,
           );
-          return;
-        }
-        // 获取下一页数据
-        if (currentState is BoardHomeSuccess) {
-          final results =
-              await boardRepository.topics(after: currentState.topicsEndCursor);
           yield BoardHomeSuccess(
             topics: currentState.topics + results.item1,
-            topicsEndCursor: results.item2.item1,
-            hasReachedMax: !results.item2.item2,
+            pageInfo: currentState.pageInfo.copyWith(results.item2),
+          );
+        } else {
+          final results = await boardRepository.topics(
+            cache: !event.refresh,
+          );
+          yield BoardHomeSuccess(
+            topics: results.item1,
+            pageInfo: results.item2,
           );
         }
       } catch (e) {
-        yield BoardHomeFailure(e.message);
+        yield BoardHomeFailure(e?.message ?? e.toString());
       }
-    }
-    if (event is BoardHomeRefreshed) {
-      final results = await boardRepository.topics(cache: false);
-      yield BoardHomeSuccess(
-        topics: results.item1,
-        topicsEndCursor: results.item2.item1,
-        hasReachedMax: !results.item2.item2,
-      );
-      return;
     }
   }
 }
 
-bool _hasReachedMax(BoardHomeState state) =>
-    state is BoardHomeSuccess && state.hasReachedMax;
+bool _hasReachedMax(BoardHomeState currentState) {
+  if (currentState is BoardHomeSuccess) {
+    return currentState.hasReachedMax;
+  }
+  return false;
+}

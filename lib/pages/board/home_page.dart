@@ -37,7 +37,8 @@ class BoardHomePage extends StatelessWidget {
               ),
             ),
           );
-          BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
+          BlocProvider.of<BoardHomeBloc>(context)
+              .add(BoardHomeFetched(refresh: true));
         },
       ),
     );
@@ -56,7 +57,8 @@ class _BoardHomeBody extends StatelessWidget {
         if (state is BoardHomeFailure) {
           return ErrorMessageButton(
             onPressed: () {
-              BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
+              BlocProvider.of<BoardHomeBloc>(context)
+                  .add(BoardHomeFetched(refresh: true));
             },
             message: state.message,
           );
@@ -65,7 +67,8 @@ class _BoardHomeBody extends StatelessWidget {
           // 从各种类型详情页返回
           return RefreshIndicator(
             onRefresh: () async {
-              BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
+              BlocProvider.of<BoardHomeBloc>(context)
+                  .add(BoardHomeFetched(refresh: true));
             },
             child: InfiniteList(
               items: state.topics,

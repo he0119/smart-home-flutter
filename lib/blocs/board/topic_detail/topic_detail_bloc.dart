@@ -1,56 +1,62 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:smart_home/models/board.dart';
-import 'package:smart_home/repositories/board_repository.dart';
+import 'package:flutter/foundation.dart';
+import 'package:smart_home/models/models.dart';
+import 'package:smart_home/repositories/repositories.dart';
 
 part 'topic_detail_event.dart';
 part 'topic_detail_state.dart';
 
 class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
   final BoardRepository boardRepository;
-  bool descending = false;
 
-  TopicDetailBloc({@required this.boardRepository})
-      : super(TopicDetailInProgress());
+  TopicDetailBloc({
+    @required this.boardRepository,
+  }) : super(TopicDetailInProgress());
 
   @override
   Stream<TopicDetailState> mapEventToState(
     TopicDetailEvent event,
   ) async* {
-    if (event is TopicDetailChanged) {
-      try {
-        yield TopicDetailInProgress();
-        descending = event.descending;
-        final topicDetail = await boardRepository.topicDetail(
-          topicId: event.topicId,
-          descending: descending,
-        );
-        yield TopicDetailSuccess(
-            topic: topicDetail.item1, comments: topicDetail.item2);
-      } catch (e) {
-        yield TopicDetailFailure(
-          e.message,
-          topicId: event.topicId,
-        );
-      }
-    }
     final currentState = state;
-    if (event is TopicDetailRefreshed && currentState is TopicDetailSuccess) {
+    if (event is TopicDetailFetched && !_hasReachedMax(currentState)) {
       try {
-        final topicDetail = await boardRepository.topicDetail(
-          topicId: currentState.topic.id,
-          descending: descending,
-          cache: false,
-        );
-        yield TopicDetailSuccess(
-            topic: topicDetail.item1, comments: topicDetail.item2);
+        if (currentState is TopicDetailSuccess && !event.refresh) {
+          final results = await boardRepository.topicDetail(
+            topicId: event.topicId,
+            descending: event.descending,
+            after: currentState.pageInfo.endCursor,
+          );
+          yield TopicDetailSuccess(
+            topic: results.item1,
+            comments: currentState.comments + results.item1.comments,
+            pageInfo: currentState.pageInfo.copyWith(results.item2),
+          );
+        } else {
+          final results = await boardRepository.topicDetail(
+            topicId: event.topicId,
+            descending: event.descending,
+            cache: !event.refresh,
+          );
+          yield TopicDetailSuccess(
+            topic: results.item1,
+            comments: results.item1.comments,
+            pageInfo: results.item2,
+          );
+        }
       } catch (e) {
         yield TopicDetailFailure(
-          e.message,
-          topicId: currentState.topic.id,
+          e?.message ?? e.toString(),
+          topicId: event.topicId,
         );
       }
     }
   }
+}
+
+bool _hasReachedMax(TopicDetailState currentState) {
+  if (currentState is TopicDetailSuccess) {
+    return currentState.hasReachedMax;
+  }
+  return false;
 }

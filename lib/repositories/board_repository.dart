@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:smart_home/graphql/mutations/board/mutations.dart';
 import 'package:smart_home/graphql/queries/board/queries.dart';
 import 'package:smart_home/models/board.dart';
+import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/utils/graphql_helper.dart';
 import 'package:tuple/tuple.dart';
@@ -128,9 +130,10 @@ class BoardRepository {
 
   /// 话题详情的数据
   /// 评论可选择是否按创建时间倒序，默认为正序
-  Future<Tuple2<Topic, List<Comment>>> topicDetail({
+  Future<Tuple2<Topic, PageInfo>> topicDetail({
     @required String topicId,
     bool descending = false,
+    String after,
     bool cache = true,
   }) async {
     final QueryOptions options = QueryOptions(
@@ -138,27 +141,25 @@ class BoardRepository {
       variables: {
         'topicId': topicId,
         'orderBy': descending ? '-created_at' : 'created_at',
+        'after': after,
       },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
 
-    final json = results.data.flattenConnection;
+    final PageInfo pageInfo =
+        PageInfo.fromJson(results.data['comments']['pageInfo']);
 
-    final dynamic topicJson = json['topic'];
+    final dynamic topicJson = results.data.flattenConnection['topic'];
     final Topic topic = Topic.fromJson(topicJson);
 
-    final List<dynamic> commentsJson = json['comments'];
-    final List<Comment> comments =
-        commentsJson.map((e) => Comment.fromJson(e)).toList();
-
-    return Tuple2(topic, comments);
+    return Tuple2(topic, pageInfo);
   }
 
   /// 话题列表
   ///
-  /// topics, (topicsEndCursor, topicsHasNextPage)
-  Future<Tuple2<List<Topic>, Tuple2<String, bool>>> topics({
+  /// PageInfo
+  Future<Tuple2<List<Topic>, PageInfo>> topics({
     String after,
     bool cache = true,
   }) async {
@@ -171,15 +172,13 @@ class BoardRepository {
     );
     final results = await graphqlApiClient.query(options);
 
-    // 是否还有下一页
-    final String endCursor = results.data['topics']['pageInfo']['endCursor'];
-    final bool hasNextPage = results.data['topics']['pageInfo']['hasNextPage'];
+    final pageInfo = PageInfo.fromJson(results.data['topics']['pageInfo']);
 
     final List<dynamic> topicsJson = results.data.flattenConnection['topics'];
     final List<Topic> topics =
         topicsJson.map((e) => Topic.fromJson(e)).toList();
 
-    return Tuple2(topics, Tuple2(endCursor, hasNextPage));
+    return Tuple2(topics, pageInfo);
   }
 
   Future<Comment> updateComment({
