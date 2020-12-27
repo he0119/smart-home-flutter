@@ -45,6 +45,13 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         } else {
           final results =
               await storageRepository.storage(name: event.name, id: event.id);
+          if (results == null) {
+            yield StorageDetailFailure(
+              '获取位置失败，位置不存在',
+              name: event.name,
+              id: event.id,
+            );
+          }
           yield StorageDetailSuccess(
             storage: results.item1,
             hasNextPage: results.item3 || results.item5,
