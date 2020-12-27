@@ -77,8 +77,8 @@ class StorageDetailScreen extends StatelessWidget {
               if (state is StorageDetailSuccess) {
                 BlocProvider.of<StorageDetailBloc>(context).add(
                   StorageDetailFetched(
-                    name: state.storage.name,
-                    id: state.storage.id,
+                    name: state.storage?.name ?? '',
+                    id: state.storage?.id,
                     cache: false,
                   ),
                 );
