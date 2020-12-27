@@ -27,9 +27,10 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             final results = await storageRepository.rootStorage(
               after: currentState.storagePageInfo.endCursor,
             );
-            yield currentState.copyWith(
+            yield StorageDetailSuccess(
               storages: currentState.storages + results.item1,
-              storagePageInfo: results.item2,
+              storagePageInfo:
+                  currentState.storagePageInfo.copyWith(results.item2),
             );
           } else {
             final results = await storageRepository.storage(
@@ -38,44 +39,45 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
               itemCursor: currentState.itemPageInfo.endCursor,
               storageCursor: currentState.storagePageInfo.endCursor,
             );
-            yield currentState.copyWith(
+            yield StorageDetailSuccess(
               storage: currentState.storage.copyWith(
                 children:
                     currentState.storage.children + results.item1.children,
                 items: currentState.storage.items + results.item1.items,
               ),
+              storagePageInfo:
+                  currentState.storagePageInfo.copyWith(results.item2),
+              itemPageInfo: currentState.itemPageInfo.copyWith(results.item3),
+            );
+          }
+        } else {
+          // 获取第一页数据
+          if (event.name == '') {
+            final results =
+                await storageRepository.rootStorage(cache: !event.refresh);
+            yield StorageDetailSuccess(
+              storages: results.item1,
+              storagePageInfo: results.item2,
+            );
+          } else {
+            final results = await storageRepository.storage(
+              name: event.name,
+              id: event.id,
+              cache: !event.refresh,
+            );
+            if (results == null) {
+              yield StorageDetailFailure(
+                '获取位置失败，位置不存在',
+                name: event.name,
+                id: event.id,
+              );
+            }
+            yield StorageDetailSuccess(
+              storage: results.item1,
               storagePageInfo: results.item2,
               itemPageInfo: results.item3,
             );
           }
-          return;
-        }
-        // 获取第一页数据
-        if (event.name == '') {
-          final results =
-              await storageRepository.rootStorage(cache: !event.refresh);
-          yield StorageDetailSuccess(
-            storages: results.item1,
-            storagePageInfo: results.item2,
-          );
-        } else {
-          final results = await storageRepository.storage(
-            name: event.name,
-            id: event.id,
-            cache: !event.refresh,
-          );
-          if (results == null) {
-            yield StorageDetailFailure(
-              '获取位置失败，位置不存在',
-              name: event.name,
-              id: event.id,
-            );
-          }
-          yield StorageDetailSuccess(
-            storage: results.item1,
-            storagePageInfo: results.item2,
-            itemPageInfo: results.item3,
-          );
         }
       } catch (e) {
         yield StorageDetailFailure(

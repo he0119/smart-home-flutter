@@ -46,20 +46,6 @@ class StorageDetailSuccess extends StorageDetailState {
   bool get hasReachedMax =>
       !itemPageInfo.hasNextPage && !storagePageInfo.hasNextPage;
 
-  StorageDetailSuccess copyWith({
-    List<Storage> storages,
-    Storage storage,
-    PageInfo itemPageInfo,
-    PageInfo storagePageInfo,
-  }) {
-    return StorageDetailSuccess(
-      storages: storages ?? this.storages,
-      storage: storage ?? this.storage,
-      itemPageInfo: itemPageInfo ?? this.itemPageInfo,
-      storagePageInfo: storagePageInfo ?? this.storagePageInfo,
-    );
-  }
-
   @override
   List<Object> get props => [storages, storage, itemPageInfo, storagePageInfo];
 

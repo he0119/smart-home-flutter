@@ -28,6 +28,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
         yield StorageHomeInProgress();
       }
       try {
+        // 获取下一页
         if (currentState is StorageHomeSuccess &&
             currentState.itemType == event.itemType &&
             !event.refresh) {
@@ -37,8 +38,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
                 after: currentState.pageInfo.endCursor,
               );
               yield StorageHomeSuccess(
-                expiredItems: results.item1,
-                pageInfo: results.item2,
+                expiredItems: currentState.expiredItems + results.item1,
+                pageInfo: results.item2.copyWith(currentState.pageInfo),
                 itemType: ItemType.expired,
               );
               break;
@@ -47,8 +48,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
                 after: currentState.pageInfo.endCursor,
               );
               yield StorageHomeSuccess(
-                nearExpiredItems: results.item1,
-                pageInfo: results.item2,
+                nearExpiredItems: currentState.nearExpiredItems + results.item1,
+                pageInfo: results.item2.copyWith(currentState.pageInfo),
                 itemType: ItemType.nearExpired,
               );
               break;
@@ -57,8 +58,9 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
                 after: currentState.pageInfo.endCursor,
               );
               yield StorageHomeSuccess(
-                recentlyCreatedItems: results.item1,
-                pageInfo: results.item2,
+                recentlyCreatedItems:
+                    currentState.recentlyCreatedItems + results.item1,
+                pageInfo: results.item2.copyWith(currentState.pageInfo),
                 itemType: ItemType.recentlyCreated,
               );
               break;
@@ -67,64 +69,65 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
                 after: currentState.pageInfo.endCursor,
               );
               yield StorageHomeSuccess(
-                recentlyEditedItems: results.item1,
-                pageInfo: results.item2,
+                recentlyEditedItems:
+                    currentState.recentlyEditedItems + results.item1,
+                pageInfo: results.item2.copyWith(currentState.pageInfo),
                 itemType: ItemType.recentlyEdited,
               );
               break;
             case ItemType.all:
               break;
           }
-          return;
-        }
-        switch (event.itemType) {
-          case ItemType.expired:
-            final results =
-                await storageRepository.expiredItems(cache: !event.refresh);
-            yield StorageHomeSuccess(
-              expiredItems: results.item1,
-              pageInfo: results.item2,
-              itemType: ItemType.expired,
-            );
-            break;
-          case ItemType.nearExpired:
-            final results =
-                await storageRepository.nearExpiredItems(cache: !event.refresh);
-            yield StorageHomeSuccess(
-              nearExpiredItems: results.item1,
-              pageInfo: results.item2,
-              itemType: ItemType.nearExpired,
-            );
-            break;
-          case ItemType.recentlyCreated:
-            final results = await storageRepository.recentlyCreatedItems(
-                cache: !event.refresh);
-            yield StorageHomeSuccess(
-              recentlyCreatedItems: results.item1,
-              pageInfo: results.item2,
-              itemType: ItemType.recentlyCreated,
-            );
-            break;
-          case ItemType.recentlyEdited:
-            final results = await storageRepository.recentlyEditedItems(
-                cache: !event.refresh);
-            yield StorageHomeSuccess(
-              recentlyEditedItems: results.item1,
-              pageInfo: results.item2,
-              itemType: ItemType.recentlyEdited,
-            );
-            break;
-          case ItemType.all:
-            Map<String, List<Item>> homepage =
-                await storageRepository.homePage(cache: !event.refresh);
-            yield StorageHomeSuccess(
-              recentlyCreatedItems: homepage['recentlyCreatedItems'],
-              recentlyEditedItems: homepage['recentlyEditedItems'],
-              expiredItems: homepage['expiredItems'],
-              nearExpiredItems: homepage['nearExpiredItems'],
-              itemType: ItemType.all,
-            );
-            break;
+        } else {
+          switch (event.itemType) {
+            case ItemType.expired:
+              final results =
+                  await storageRepository.expiredItems(cache: !event.refresh);
+              yield StorageHomeSuccess(
+                expiredItems: results.item1,
+                pageInfo: results.item2,
+                itemType: ItemType.expired,
+              );
+              break;
+            case ItemType.nearExpired:
+              final results = await storageRepository.nearExpiredItems(
+                  cache: !event.refresh);
+              yield StorageHomeSuccess(
+                nearExpiredItems: results.item1,
+                pageInfo: results.item2,
+                itemType: ItemType.nearExpired,
+              );
+              break;
+            case ItemType.recentlyCreated:
+              final results = await storageRepository.recentlyCreatedItems(
+                  cache: !event.refresh);
+              yield StorageHomeSuccess(
+                recentlyCreatedItems: results.item1,
+                pageInfo: results.item2,
+                itemType: ItemType.recentlyCreated,
+              );
+              break;
+            case ItemType.recentlyEdited:
+              final results = await storageRepository.recentlyEditedItems(
+                  cache: !event.refresh);
+              yield StorageHomeSuccess(
+                recentlyEditedItems: results.item1,
+                pageInfo: results.item2,
+                itemType: ItemType.recentlyEdited,
+              );
+              break;
+            case ItemType.all:
+              Map<String, List<Item>> homepage =
+                  await storageRepository.homePage(cache: !event.refresh);
+              yield StorageHomeSuccess(
+                recentlyCreatedItems: homepage['recentlyCreatedItems'],
+                recentlyEditedItems: homepage['recentlyEditedItems'],
+                expiredItems: homepage['expiredItems'],
+                nearExpiredItems: homepage['nearExpiredItems'],
+                itemType: ItemType.all,
+              );
+              break;
+          }
         }
       } catch (e) {
         yield StorageHomeFailure(

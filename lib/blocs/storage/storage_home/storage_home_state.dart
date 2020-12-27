@@ -48,24 +48,6 @@ class StorageHomeSuccess extends StorageHomeState {
 
   bool get hasReachedMax => !pageInfo.hasNextPage;
 
-  StorageHomeSuccess copyWith({
-    ItemType itemType,
-    List<Item> recentlyCreatedItems,
-    List<Item> recentlyEditedItems,
-    List<Item> expiredItems,
-    List<Item> nearExpiredItems,
-    PageInfo pageInfo,
-  }) {
-    return StorageHomeSuccess(
-      itemType: itemType ?? this.itemType,
-      recentlyCreatedItems: recentlyCreatedItems ?? this.recentlyCreatedItems,
-      recentlyEditedItems: recentlyEditedItems ?? this.recentlyEditedItems,
-      expiredItems: expiredItems ?? this.expiredItems,
-      nearExpiredItems: nearExpiredItems ?? this.nearExpiredItems,
-      pageInfo: pageInfo ?? this.pageInfo,
-    );
-  }
-
   @override
   List<Object> get props => [
         recentlyCreatedItems,
