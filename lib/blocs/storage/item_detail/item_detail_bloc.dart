@@ -20,7 +20,6 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
   ) async* {
     if (event is ItemDetailStarted) {
       try {
-        // 如果有 id 则直接使用 id 查询，如果没有则使用名称查询
         final item = await storageRepository.item(
           name: event.name,
           id: event.id,

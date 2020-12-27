@@ -20,7 +20,7 @@ class StorageDetailStarted extends StorageDetailEvent {
   List<Object> get props => [name, id];
 
   @override
-  String toString() => 'StorageDetailChanged(name: $name, id: $id)';
+  String toString() => 'StorageDetailStarted(name: $name, id: $id)';
 }
 
 class StorageDetailRefreshed extends StorageDetailEvent {
