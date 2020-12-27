@@ -19,8 +19,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
     StorageHomeEvent event,
   ) async* {
     final currentState = state;
-    if (event is StorageHomeFetched &&
-        !_hasReachedMax(currentState, event.itemType)) {
+    if (event is StorageHomeFetched) {
       // 如果切换了物品种类，则显示加载提示
       if (currentState is StorageHomeSuccess &&
           currentState.itemType != event.itemType) {
@@ -29,8 +28,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
       try {
         // 获取下一页
         if (currentState is StorageHomeSuccess &&
-            currentState.itemType == event.itemType &&
-            !event.refresh) {
+            !_hasReachedMax(currentState, event.itemType) &&
+            event.cache) {
           switch (event.itemType) {
             case ItemType.expired:
               final results = await storageRepository.expiredItems(
@@ -81,7 +80,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
           switch (event.itemType) {
             case ItemType.expired:
               final results =
-                  await storageRepository.expiredItems(cache: !event.refresh);
+                  await storageRepository.expiredItems(cache: event.cache);
               yield StorageHomeSuccess(
                 expiredItems: results.item1,
                 pageInfo: results.item2,
@@ -89,8 +88,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               );
               break;
             case ItemType.nearExpired:
-              final results = await storageRepository.nearExpiredItems(
-                  cache: !event.refresh);
+              final results =
+                  await storageRepository.nearExpiredItems(cache: event.cache);
               yield StorageHomeSuccess(
                 nearExpiredItems: results.item1,
                 pageInfo: results.item2,
@@ -99,7 +98,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               break;
             case ItemType.recentlyCreated:
               final results = await storageRepository.recentlyCreatedItems(
-                  cache: !event.refresh);
+                  cache: event.cache);
               yield StorageHomeSuccess(
                 recentlyCreatedItems: results.item1,
                 pageInfo: results.item2,
@@ -108,7 +107,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               break;
             case ItemType.recentlyEdited:
               final results = await storageRepository.recentlyEditedItems(
-                  cache: !event.refresh);
+                  cache: event.cache);
               yield StorageHomeSuccess(
                 recentlyEditedItems: results.item1,
                 pageInfo: results.item2,
@@ -117,7 +116,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               break;
             case ItemType.all:
               Map<String, List<Item>> homepage =
-                  await storageRepository.homePage(cache: !event.refresh);
+                  await storageRepository.homePage(cache: event.cache);
               yield StorageHomeSuccess(
                   recentlyCreatedItems: homepage['recentlyCreatedItems'],
                   recentlyEditedItems: homepage['recentlyEditedItems'],

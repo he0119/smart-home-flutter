@@ -8,15 +8,15 @@ abstract class BoardHomeEvent extends Equatable {
 }
 
 class BoardHomeFetched extends BoardHomeEvent {
-  final bool refresh;
+  final bool cache;
 
   BoardHomeFetched({
-    this.refresh = false,
+    this.cache = true,
   });
 
   @override
-  List<Object> get props => [refresh];
+  List<Object> get props => [cache];
 
   @override
-  String toString() => 'BoardHomeFetched(refresh: $refresh)';
+  String toString() => 'BoardHomeFetched(cache: $cache)';
 }

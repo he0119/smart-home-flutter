@@ -38,7 +38,7 @@ class BoardHomePage extends StatelessWidget {
             ),
           );
           BlocProvider.of<BoardHomeBloc>(context)
-              .add(BoardHomeFetched(refresh: true));
+              .add(BoardHomeFetched(cache: false));
         },
       ),
     );
@@ -58,7 +58,7 @@ class _BoardHomeBody extends StatelessWidget {
           return ErrorMessageButton(
             onPressed: () {
               BlocProvider.of<BoardHomeBloc>(context)
-                  .add(BoardHomeFetched(refresh: true));
+                  .add(BoardHomeFetched(cache: false));
             },
             message: state.message,
           );
@@ -68,7 +68,7 @@ class _BoardHomeBody extends StatelessWidget {
           return RefreshIndicator(
             onRefresh: () async {
               BlocProvider.of<BoardHomeBloc>(context)
-                  .add(BoardHomeFetched(refresh: true));
+                  .add(BoardHomeFetched(cache: false));
             },
             child: InfiniteList(
               items: state.topics,

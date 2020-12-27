@@ -79,9 +79,8 @@ class CommentItem extends StatelessWidget {
                         );
                         BlocProvider.of<TopicDetailBloc>(context)
                             .add(TopicDetailFetched(
-                          topicId: comment.topic.id,
                           descending: descending,
-                          refresh: true,
+                          cache: false,
                         ));
                         break;
                     }

@@ -46,7 +46,7 @@ class _StorageHomeBody extends StatelessWidget {
               BlocProvider.of<StorageHomeBloc>(context).add(
                 StorageHomeFetched(
                   itemType: state.itemType,
-                  refresh: true,
+                  cache: false,
                 ),
               );
             },
@@ -69,7 +69,7 @@ class _StorageHomeBody extends StatelessWidget {
                 BlocProvider.of<StorageHomeBloc>(context)
                     .add(StorageHomeFetched(
                   itemType: state.itemType,
-                  refresh: true,
+                  cache: false,
                 ));
               },
               child: CustomScrollView(

@@ -21,9 +21,11 @@ class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
     ConsumablesEvent event,
   ) async* {
     final currentState = state;
-    if (event is ConsumablesFetched && !_hasReachedMax(currentState)) {
+    if (event is ConsumablesFetched) {
       try {
-        if (currentState is ConsumablesSuccess && !event.refresh) {
+        if (currentState is ConsumablesSuccess &&
+            !_hasReachedMax(currentState) &&
+            event.cache) {
           final results = await storageRepository.consumables(
             after: currentState.pageInfo.endCursor,
           );
@@ -33,7 +35,7 @@ class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
           );
         } else {
           final results = await storageRepository.consumables(
-            cache: !event.refresh,
+            cache: event.cache,
           );
           yield ConsumablesSuccess(
             items: results.item1,

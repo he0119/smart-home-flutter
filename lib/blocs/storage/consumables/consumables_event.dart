@@ -5,15 +5,15 @@ abstract class ConsumablesEvent extends Equatable {
 }
 
 class ConsumablesFetched extends ConsumablesEvent {
-  final bool refresh;
+  final bool cache;
 
   ConsumablesFetched({
-    this.refresh = false,
+    this.cache = true,
   });
 
   @override
-  List<Object> get props => [refresh];
+  List<Object> get props => [cache];
 
   @override
-  String toString() => 'ConsumablesFetched(refresh: $refresh)';
+  String toString() => 'ConsumablesFetched(cache: $cache)';
 }

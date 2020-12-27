@@ -33,7 +33,7 @@ class ConsumablesPage extends StatelessWidget {
                 message: state.message,
                 onPressed: () {
                   BlocProvider.of<ConsumablesBloc>(context)
-                      .add(ConsumablesFetched(refresh: true));
+                      .add(ConsumablesFetched(cache: false));
                 },
               );
             }
@@ -41,7 +41,7 @@ class ConsumablesPage extends StatelessWidget {
               return RefreshIndicator(
                   onRefresh: () async {
                     BlocProvider.of<ConsumablesBloc>(context)
-                        .add(ConsumablesFetched(refresh: true));
+                        .add(ConsumablesFetched(cache: false));
                   },
                   child: InfiniteList(
                     itemBuilder: _buildItem,

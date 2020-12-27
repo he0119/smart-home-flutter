@@ -53,7 +53,7 @@ class _TopicEditPageState extends State<TopicEditPage> {
             showInfoSnackBar('话题编辑成功');
           } else {
             BlocProvider.of<BoardHomeBloc>(context)
-                .add(BoardHomeFetched(refresh: true));
+                .add(BoardHomeFetched(cache: false));
             showInfoSnackBar('话题添加成功');
           }
         }

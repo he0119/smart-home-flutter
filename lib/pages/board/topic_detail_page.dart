@@ -155,9 +155,8 @@ class _DetailScreenState extends State<_DetailScreen> {
                           );
                           BlocProvider.of<TopicDetailBloc>(context)
                               .add(TopicDetailFetched(
-                            topicId: state.topic.id,
                             descending: descending,
-                            refresh: true,
+                            cache: false,
                           ));
                         }
                         if (value == TopicDetailMenu.delete) {
@@ -333,18 +332,16 @@ class _DetailScreenState extends State<_DetailScreen> {
                       _buttonBarFocusNode.unfocus();
                       BlocProvider.of<TopicDetailBloc>(context)
                           .add(TopicDetailFetched(
-                        topicId: state.comment.topic.id,
                         descending: descending,
-                        refresh: true,
+                        cache: false,
                       ));
                       showInfoSnackBar('评论成功');
                     }
                     if (state is CommentDeleteSuccess) {
                       BlocProvider.of<TopicDetailBloc>(context)
                           .add(TopicDetailFetched(
-                        topicId: state.comment.topic.id,
                         descending: descending,
-                        refresh: true,
+                        cache: false,
                       ));
                       showInfoSnackBar('评论删除成功');
                     }
@@ -359,9 +356,8 @@ class _DetailScreenState extends State<_DetailScreen> {
                           onRefresh: () async {
                             BlocProvider.of<TopicDetailBloc>(context)
                                 .add(TopicDetailFetched(
-                              topicId: state.topic.id,
                               descending: descending,
-                              refresh: true,
+                              cache: false,
                             ));
                           },
                           child: GestureDetector(

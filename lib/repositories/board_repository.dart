@@ -130,7 +130,7 @@ class BoardRepository {
 
   /// 话题详情的数据
   /// 评论可选择是否按创建时间倒序，默认为正序
-  Future<Tuple2<Topic, PageInfo>> topicDetail({
+  Future<Tuple3<Topic, List<Comment>, PageInfo>> topicDetail({
     @required String topicId,
     bool descending = false,
     String after,
@@ -150,10 +150,15 @@ class BoardRepository {
     final PageInfo pageInfo =
         PageInfo.fromJson(results.data['comments']['pageInfo']);
 
+    final List<dynamic> commentsJson =
+        results.data.flattenConnection['comments'];
+    final List<Comment> comments =
+        commentsJson.map((e) => Comment.fromJson(e)).toList();
+
     final dynamic topicJson = results.data.flattenConnection['topic'];
     final Topic topic = Topic.fromJson(topicJson);
 
-    return Tuple2(topic, pageInfo);
+    return Tuple3(topic, comments, pageInfo);
   }
 
   /// 话题列表

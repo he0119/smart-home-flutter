@@ -79,7 +79,7 @@ class StorageDetailScreen extends StatelessWidget {
                   StorageDetailFetched(
                     name: state.storage.name,
                     id: state.storage.id,
-                    refresh: true,
+                    cache: false,
                   ),
                 );
               } else {
@@ -87,7 +87,7 @@ class StorageDetailScreen extends StatelessWidget {
                   StorageDetailFetched(
                     name: storageName,
                     id: storageId,
-                    refresh: true,
+                    cache: false,
                   ),
                 );
               }

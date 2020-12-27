@@ -50,7 +50,7 @@ class _CommentEditPageState extends State<CommentEditPage> {
             showInfoSnackBar('评论编辑成功');
           } else {
             BlocProvider.of<BoardHomeBloc>(context)
-                .add(BoardHomeFetched(refresh: true));
+                .add(BoardHomeFetched(cache: false));
             showInfoSnackBar('评论添加成功');
           }
         }

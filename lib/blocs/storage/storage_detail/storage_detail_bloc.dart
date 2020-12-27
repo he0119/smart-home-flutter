@@ -19,10 +19,12 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     StorageDetailEvent event,
   ) async* {
     final currentState = state;
-    if (event is StorageDetailFetched && !_hasReachedMax(currentState)) {
+    if (event is StorageDetailFetched) {
       try {
         // 获取下一页数据
-        if (currentState is StorageDetailSuccess && !event.refresh) {
+        if (currentState is StorageDetailSuccess &&
+            !_hasReachedMax(currentState) &&
+            event.cache) {
           if (currentState.storage == null) {
             final results = await storageRepository.rootStorage(
               after: currentState.storagePageInfo.endCursor,
@@ -55,7 +57,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           // 获取第一页数据
           if (event.name == '') {
             final results =
-                await storageRepository.rootStorage(cache: !event.refresh);
+                await storageRepository.rootStorage(cache: event.cache);
             yield StorageDetailSuccess(
               storages: results.item1,
               storagePageInfo: results.item2,
@@ -65,7 +67,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             final results = await storageRepository.storage(
               name: event.name,
               id: event.id,
-              cache: !event.refresh,
+              cache: event.cache,
             );
             if (results == null) {
               yield StorageDetailFailure(

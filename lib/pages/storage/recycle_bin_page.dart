@@ -40,7 +40,7 @@ class RecycleBinPage extends StatelessWidget {
                 message: state.message,
                 onPressed: () {
                   BlocProvider.of<RecycleBinBloc>(context)
-                      .add(RecycleBinFetched(refresh: true));
+                      .add(RecycleBinFetched(cache: false));
                 },
               );
             }
@@ -48,7 +48,7 @@ class RecycleBinPage extends StatelessWidget {
               return RefreshIndicator(
                 onRefresh: () async {
                   BlocProvider.of<RecycleBinBloc>(context)
-                      .add(RecycleBinFetched(refresh: true));
+                      .add(RecycleBinFetched(cache: false));
                 },
                 child: BlocListener<ItemEditBloc, ItemEditState>(
                     listener: (context, state) {
@@ -131,7 +131,7 @@ Widget _buildItem(BuildContext context, Item item) {
             ),
           );
           BlocProvider.of<RecycleBinBloc>(context)
-              .add(RecycleBinFetched(refresh: true));
+              .add(RecycleBinFetched(cache: false));
         },
       ),
     ),

@@ -21,9 +21,11 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
     RecycleBinEvent event,
   ) async* {
     final currentState = state;
-    if (event is RecycleBinFetched && !_hasReachedMax(currentState)) {
+    if (event is RecycleBinFetched) {
       try {
-        if (currentState is RecycleBinSuccess && !event.refresh) {
+        if (currentState is RecycleBinSuccess &&
+            !_hasReachedMax(currentState) &&
+            event.cache) {
           final results = await storageRepository.deletedItems(
             after: currentState.pageInfo.endCursor,
           );
@@ -33,7 +35,7 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
           );
         } else {
           final results = await storageRepository.deletedItems(
-            cache: !event.refresh,
+            cache: event.cache,
           );
           yield RecycleBinSuccess(
             items: results.item1,

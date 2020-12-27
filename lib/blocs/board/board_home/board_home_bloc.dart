@@ -19,9 +19,12 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
     BoardHomeEvent event,
   ) async* {
     final currentState = state;
-    if (event is BoardHomeFetched && !_hasReachedMax(currentState)) {
+    if (event is BoardHomeFetched) {
       try {
-        if (currentState is BoardHomeSuccess && !event.refresh) {
+        if (currentState is BoardHomeSuccess &&
+            !_hasReachedMax(currentState) &&
+            event.cache) {
+          // 获取下一页
           final results = await boardRepository.topics(
             after: currentState.pageInfo.endCursor,
           );
@@ -31,7 +34,7 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
           );
         } else {
           final results = await boardRepository.topics(
-            cache: !event.refresh,
+            cache: event.cache,
           );
           yield BoardHomeSuccess(
             topics: results.item1,

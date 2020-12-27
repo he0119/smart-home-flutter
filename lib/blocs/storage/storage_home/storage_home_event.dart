@@ -12,17 +12,16 @@ class StorageHomeFetched extends StorageHomeEvent {
   final ItemType itemType;
 
   /// 是否需要刷新，默认不需要
-  final bool refresh;
+  final bool cache;
 
   const StorageHomeFetched({
     @required this.itemType,
-    this.refresh = false,
+    this.cache = true,
   });
 
   @override
-  List<Object> get props => [itemType, refresh];
+  List<Object> get props => [itemType, cache];
 
   @override
-  String toString() =>
-      'StorageHomeFetched(itemType: $itemType, refresh: $refresh)';
+  String toString() => 'StorageHomeFetched(itemType: $itemType, cache: $cache)';
 }

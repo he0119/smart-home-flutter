@@ -5,15 +5,15 @@ abstract class RecycleBinEvent extends Equatable {
 }
 
 class RecycleBinFetched extends RecycleBinEvent {
-  final bool refresh;
+  final bool cache;
 
   RecycleBinFetched({
-    this.refresh = false,
+    this.cache = true,
   });
 
   @override
-  List<Object> get props => [refresh];
+  List<Object> get props => [cache];
 
   @override
-  String toString() => 'RecycleBinFetched(refresh: $refresh)';
+  String toString() => 'RecycleBinFetched(cache: $cache)';
 }
