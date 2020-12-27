@@ -134,7 +134,7 @@ class _HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (appTab == AppTab.storage) {
       BlocProvider.of<StorageHomeBloc>(context)
-          .add(StorageHomeChanged(itemType: ItemType.all));
+          .add(StorageHomeFetched(itemType: ItemType.all));
       return StorageHomePage();
     }
     if (appTab == AppTab.blog) {

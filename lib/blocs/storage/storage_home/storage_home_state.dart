@@ -7,7 +7,10 @@ abstract class StorageHomeState extends Equatable {
   List<Object> get props => [];
 }
 
-class StorageHomeInProgress extends StorageHomeState {}
+class StorageHomeInProgress extends StorageHomeState {
+  @override
+  String toString() => 'StorageHomeInProgress';
+}
 
 class StorageHomeFailure extends StorageHomeState {
   final String message;
@@ -22,23 +25,44 @@ class StorageHomeFailure extends StorageHomeState {
   List<Object> get props => [message, itemType];
 
   @override
-  String toString() => 'StorageHomeFailure { message: $message }';
+  String toString() =>
+      'StorageHomeFailure(message: $message, itemType: $itemType)';
 }
 
 class StorageHomeSuccess extends StorageHomeState {
+  final ItemType itemType;
   final List<Item> recentlyCreatedItems;
   final List<Item> recentlyEditedItems;
   final List<Item> expiredItems;
   final List<Item> nearExpiredItems;
-  final ItemType itemType;
+  final PageInfo pageInfo;
 
   const StorageHomeSuccess({
+    @required this.itemType,
     this.recentlyCreatedItems,
     this.recentlyEditedItems,
     this.expiredItems,
     this.nearExpiredItems,
-    @required this.itemType,
+    this.pageInfo,
   });
+
+  StorageHomeSuccess copyWith({
+    ItemType itemType,
+    List<Item> recentlyCreatedItems,
+    List<Item> recentlyEditedItems,
+    List<Item> expiredItems,
+    List<Item> nearExpiredItems,
+    PageInfo pageInfo,
+  }) {
+    return StorageHomeSuccess(
+      itemType: itemType ?? this.itemType,
+      recentlyCreatedItems: recentlyCreatedItems ?? this.recentlyCreatedItems,
+      recentlyEditedItems: recentlyEditedItems ?? this.recentlyEditedItems,
+      expiredItems: expiredItems ?? this.expiredItems,
+      nearExpiredItems: nearExpiredItems ?? this.nearExpiredItems,
+      pageInfo: pageInfo ?? this.pageInfo,
+    );
+  }
 
   @override
   List<Object> get props => [
@@ -50,6 +74,7 @@ class StorageHomeSuccess extends StorageHomeState {
       ];
 
   @override
-  String toString() =>
-      'StorageHomeSuccess { recentlyCreatedItems ${recentlyCreatedItems?.length ?? 0}, recentlyEditedItems ${recentlyEditedItems?.length ?? 0}, expiredItems ${expiredItems?.length ?? 0}, nearExpiredItems ${nearExpiredItems?.length ?? 0}, }';
+  String toString() {
+    return 'StorageHomeSuccess(itemType: $itemType)';
+  }
 }

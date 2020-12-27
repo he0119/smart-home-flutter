@@ -44,7 +44,7 @@ class _StorageHomeBody extends StatelessWidget {
           return ErrorMessageButton(
             onPressed: () {
               BlocProvider.of<StorageHomeBloc>(context).add(
-                StorageHomeChanged(
+                StorageHomeFetched(
                   itemType: state.itemType,
                   refresh: true,
                 ),
@@ -61,13 +61,13 @@ class _StorageHomeBody extends StatelessWidget {
                 return true;
               }
               BlocProvider.of<StorageHomeBloc>(context)
-                  .add(StorageHomeChanged(itemType: ItemType.all));
+                  .add(StorageHomeFetched(itemType: ItemType.all));
               return false;
             },
             child: RefreshIndicator(
               onRefresh: () async {
                 BlocProvider.of<StorageHomeBloc>(context)
-                    .add(StorageHomeChanged(
+                    .add(StorageHomeFetched(
                   itemType: state.itemType,
                   refresh: true,
                 ));
@@ -150,7 +150,7 @@ class _StorageHomeBody extends StatelessWidget {
                   : Icons.expand_less),
               onPressed: () {
                 BlocProvider.of<StorageHomeBloc>(context).add(
-                  StorageHomeChanged(
+                  StorageHomeFetched(
                       itemType: currentType != ItemType.all
                           ? ItemType.all
                           : listType),
