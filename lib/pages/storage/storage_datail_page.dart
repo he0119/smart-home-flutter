@@ -227,7 +227,7 @@ class StorageDetailScreen extends StatelessWidget {
       );
     }
     return AppBar(
-      title: Text(storageId != null ? storageName : '家'),
+      title: Text(storageName != '' ? storageName : '家'),
     );
   }
 
