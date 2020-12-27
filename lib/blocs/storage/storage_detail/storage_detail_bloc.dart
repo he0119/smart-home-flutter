@@ -31,6 +31,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
               storages: currentState.storages + results.item1,
               storagePageInfo:
                   currentState.storagePageInfo.copyWith(results.item2),
+              itemPageInfo: PageInfo(hasNextPage: false),
             );
           } else {
             final results = await storageRepository.storage(
@@ -58,6 +59,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             yield StorageDetailSuccess(
               storages: results.item1,
               storagePageInfo: results.item2,
+              itemPageInfo: PageInfo(hasNextPage: false),
             );
           } else {
             final results = await storageRepository.storage(
@@ -81,7 +83,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         }
       } catch (e) {
         yield StorageDetailFailure(
-          e?.message ?? e.toString(),
+          e.message,
           name: event.name,
           id: event.id,
         );

@@ -15,7 +15,7 @@ class StorageDetailFetched extends StorageDetailEvent {
   const StorageDetailFetched({
     @required this.name,
     this.id,
-    this.refresh,
+    this.refresh = false,
   });
 
   @override

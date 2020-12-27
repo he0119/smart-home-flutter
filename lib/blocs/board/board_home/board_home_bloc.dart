@@ -39,7 +39,7 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
           );
         }
       } catch (e) {
-        yield BoardHomeFailure(e?.message ?? e.toString());
+        yield BoardHomeFailure(e.message);
       }
     }
   }

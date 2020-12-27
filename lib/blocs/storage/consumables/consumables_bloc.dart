@@ -41,7 +41,7 @@ class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
           );
         }
       } catch (e) {
-        yield ConsumablesFailure(e?.message ?? e.toString());
+        yield ConsumablesFailure(e.message);
       }
     }
   }

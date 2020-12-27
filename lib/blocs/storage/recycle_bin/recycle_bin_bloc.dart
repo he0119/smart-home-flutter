@@ -41,7 +41,7 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
           );
         }
       } catch (e) {
-        yield RecycleBinFailure(e?.message ?? e.toString());
+        yield RecycleBinFailure(e.message);
       }
     }
   }

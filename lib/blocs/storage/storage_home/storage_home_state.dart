@@ -43,7 +43,7 @@ class StorageHomeSuccess extends StorageHomeState {
     this.recentlyEditedItems,
     this.expiredItems,
     this.nearExpiredItems,
-    this.pageInfo,
+    @required this.pageInfo,
   });
 
   bool get hasReachedMax => !pageInfo.hasNextPage;

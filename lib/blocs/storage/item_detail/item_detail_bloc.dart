@@ -35,7 +35,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         yield ItemDetailSuccess(item: item);
       } catch (e) {
         yield ItemDetailFailure(
-          e?.message ?? e.toString(),
+          e.message,
           name: event.name,
           id: event.id,
         );
@@ -53,7 +53,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         yield ItemDetailSuccess(item: item);
       } catch (e) {
         yield ItemDetailFailure(
-          e?.message ?? e.toString(),
+          e.message,
           name: currentState.item.name,
           id: currentState.item.id,
         );

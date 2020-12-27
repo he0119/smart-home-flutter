@@ -8,8 +8,6 @@ import 'package:smart_home/repositories/storage_repository.dart';
 part 'storage_home_event.dart';
 part 'storage_home_state.dart';
 
-enum ItemType { expired, nearExpired, recentlyCreated, recentlyEdited, all }
-
 class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
   final StorageRepository storageRepository;
 
@@ -21,7 +19,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
     StorageHomeEvent event,
   ) async* {
     final currentState = state;
-    if (event is StorageHomeFetched && _hasReachedMax(currentState)) {
+    if (event is StorageHomeFetched &&
+        !_hasReachedMax(currentState, event.itemType)) {
       // 如果切换了物品种类，则显示加载提示
       if (currentState is StorageHomeSuccess &&
           currentState.itemType != event.itemType) {
@@ -120,18 +119,18 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               Map<String, List<Item>> homepage =
                   await storageRepository.homePage(cache: !event.refresh);
               yield StorageHomeSuccess(
-                recentlyCreatedItems: homepage['recentlyCreatedItems'],
-                recentlyEditedItems: homepage['recentlyEditedItems'],
-                expiredItems: homepage['expiredItems'],
-                nearExpiredItems: homepage['nearExpiredItems'],
-                itemType: ItemType.all,
-              );
+                  recentlyCreatedItems: homepage['recentlyCreatedItems'],
+                  recentlyEditedItems: homepage['recentlyEditedItems'],
+                  expiredItems: homepage['expiredItems'],
+                  nearExpiredItems: homepage['nearExpiredItems'],
+                  itemType: ItemType.all,
+                  pageInfo: PageInfo(hasNextPage: false));
               break;
           }
         }
       } catch (e) {
         yield StorageHomeFailure(
-          e?.message ?? e.toString(),
+          e.message,
           itemType: event.itemType,
         );
       }
@@ -139,8 +138,9 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
   }
 }
 
-bool _hasReachedMax(StorageHomeState currentState) {
-  if (currentState is StorageHomeSuccess) {
+bool _hasReachedMax(StorageHomeState currentState, ItemType currentType) {
+  if (currentState is StorageHomeSuccess &&
+      currentType == currentState.itemType) {
     return !currentState.pageInfo.hasNextPage;
   }
   return false;

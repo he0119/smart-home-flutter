@@ -7,6 +7,8 @@ import 'package:smart_home/models/user.dart';
 
 part 'storage.g.dart';
 
+enum ItemType { expired, nearExpired, recentlyCreated, recentlyEdited, all }
+
 @JsonSerializable()
 class Storage extends Equatable {
   final String id;

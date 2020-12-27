@@ -14,6 +14,10 @@ query topicDetail($topicId: ID!, $orderBy: String!, $after: String) {
     editedAt
   }
   comments(topic: $topicId, level: 0, orderBy: $orderBy, after: $after) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
     edges {
       node {
         id
