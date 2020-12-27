@@ -22,7 +22,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   PushBloc({
     @required this.pushRepository,
     @required this.appPreferencesBloc,
-  }) : super(PushInitial());
+  }) : super(PushInProgress());
 
   @override
   Stream<PushState> mapEventToState(

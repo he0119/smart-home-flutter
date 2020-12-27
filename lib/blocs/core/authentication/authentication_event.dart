@@ -8,7 +8,10 @@ abstract class AuthenticationEvent extends Equatable {
 }
 
 /// 开始确认用户身份
-class AuthenticationStarted extends AuthenticationEvent {}
+class AuthenticationStarted extends AuthenticationEvent {
+  @override
+  String toString() => 'AuthenticationStarted';
+}
 
 /// 登录
 class AuthenticationLogin extends AuthenticationEvent {
@@ -22,7 +25,14 @@ class AuthenticationLogin extends AuthenticationEvent {
 
   @override
   List<Object> get props => [username, password];
+
+  @override
+  String toString() =>
+      'AuthenticationLogin(username: $username, password: $password)';
 }
 
 /// 登出
-class AuthenticationLogout extends AuthenticationEvent {}
+class AuthenticationLogout extends AuthenticationEvent {
+  @override
+  String toString() => 'AuthenticationLogout';
+}

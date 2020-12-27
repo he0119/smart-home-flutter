@@ -14,63 +14,60 @@ import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/utils/show_snack_bar.dart';
 
 class ItemDetailPage extends Page {
+  /// 物品名称
+  final String itemName;
+
+  /// 物品 ID
   final String itemId;
   final int group;
 
   ItemDetailPage({
+    @required this.itemName,
     this.itemId,
-    this.group,
+    @required this.group,
   }) : super(
-          key: ValueKey('$group/$itemId'),
-          name: '/item/$group/$itemId',
+          key: ValueKey('$group/$itemName'),
+          name: '/item/$itemName',
         );
 
   @override
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => ItemDetailScreen(
-        itemId: itemId,
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider<ItemDetailBloc>(
+            create: (context) => ItemDetailBloc(
+              storageRepository:
+                  RepositoryProvider.of<StorageRepository>(context),
+            )..add(ItemDetailStarted(
+                name: itemName,
+                id: itemId,
+              )),
+          ),
+          BlocProvider<ItemEditBloc>(
+            create: (context) => ItemEditBloc(
+              storageRepository:
+                  RepositoryProvider.of<StorageRepository>(context),
+            ),
+          ),
+        ],
+        child: ItemDetailScreen(
+          itemName: itemName,
+          itemId: itemId,
+        ),
       ),
     );
   }
 }
 
 class ItemDetailScreen extends StatelessWidget {
+  final String itemName;
   final String itemId;
 
   const ItemDetailScreen({
     Key key,
-    @required this.itemId,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<ItemDetailBloc>(
-          create: (context) => ItemDetailBloc(
-            storageRepository:
-                RepositoryProvider.of<StorageRepository>(context),
-          )..add(ItemDetailChanged(itemId: itemId)),
-        ),
-        BlocProvider<ItemEditBloc>(
-          create: (context) => ItemEditBloc(
-            storageRepository:
-                RepositoryProvider.of<StorageRepository>(context),
-          ),
-        ),
-      ],
-      child: _ItemDetailPage(itemId: itemId),
-    );
-  }
-}
-
-class _ItemDetailPage extends StatelessWidget {
-  final String itemId;
-
-  const _ItemDetailPage({
-    Key key,
+    @required this.itemName,
     @required this.itemId,
   }) : super(key: key);
 
@@ -83,7 +80,7 @@ class _ItemDetailPage extends StatelessWidget {
           body: RefreshIndicator(
             onRefresh: () async {
               BlocProvider.of<ItemDetailBloc>(context).add(
-                ItemDetailRefreshed(itemId: itemId),
+                ItemDetailRefreshed(),
               );
             },
             child: BlocListener<ItemEditBloc, ItemEditState>(
@@ -125,8 +122,10 @@ class _ItemDetailPage extends StatelessWidget {
                     ),
                   ),
                 ));
-                BlocProvider.of<ItemDetailBloc>(context)
-                    .add(ItemDetailChanged(itemId: state.item.id));
+                BlocProvider.of<ItemDetailBloc>(context).add(ItemDetailStarted(
+                  name: state.item.name,
+                  id: state.item.id,
+                ));
               }
               if (value == ItemDetailMenu.consumable) {
                 await Navigator.of(context).push(MaterialPageRoute(
@@ -140,8 +139,10 @@ class _ItemDetailPage extends StatelessWidget {
                     ),
                   ),
                 ));
-                BlocProvider.of<ItemDetailBloc>(context)
-                    .add(ItemDetailChanged(itemId: state.item.id));
+                BlocProvider.of<ItemDetailBloc>(context).add(ItemDetailStarted(
+                  name: state.item.name,
+                  id: state.item.id,
+                ));
               }
               if (value == ItemDetailMenu.delete) {
                 showDialog(
@@ -188,7 +189,9 @@ class _ItemDetailPage extends StatelessWidget {
         ],
       );
     }
-    return AppBar();
+    return AppBar(
+      title: Text(itemName),
+    );
   }
 
   Widget _buildBody(BuildContext context, ItemDetailState state) {
@@ -196,7 +199,10 @@ class _ItemDetailPage extends StatelessWidget {
       return ErrorMessageButton(
         onPressed: () {
           BlocProvider.of<ItemDetailBloc>(context).add(
-            ItemDetailChanged(itemId: state.itemId),
+            ItemDetailStarted(
+              name: state.name,
+              id: state.id,
+            ),
           );
         },
         message: state.message,

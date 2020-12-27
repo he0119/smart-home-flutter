@@ -15,8 +15,8 @@ void main() {
   });
   var configuredApp = AppConfig(
     appName: '智慧家庭 DEV',
-    flavorName: 'development',
-    apiUrl: 'http://127.0.0.1:8000/graphql',
+    flavorName: 'dev',
+    apiUrl: 'https://smart-test.hehome.xyz/graphql',
     child: MyApp(),
   );
   runApp(configuredApp);

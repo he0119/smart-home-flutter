@@ -20,7 +20,7 @@ class TopicDetailPage extends Page {
 
   TopicDetailPage({
     this.topicId,
-  }) : super(key: ValueKey(topicId), name: '/board/$topicId');
+  }) : super(key: ValueKey(topicId), name: '/topic/$topicId');
 
   @override
   Route createRoute(BuildContext context) {

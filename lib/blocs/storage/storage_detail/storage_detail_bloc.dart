@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
@@ -8,7 +9,6 @@ part 'storage_detail_state.dart';
 
 class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
   final StorageRepository storageRepository;
-  bool backImmediately;
 
   StorageDetailBloc({
     @required this.storageRepository,
@@ -22,6 +22,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     if (event is StorageDetailFetched && _hasNextPage(currentState)) {
       if (currentState is StorageDetailSuccess) {
         final results = await storageRepository.storage(
+            name: currentState.storage.name,
             id: currentState.storage.id,
             itemCursor: currentState.itemEndCursor,
             storageCursor: currentState.stroageEndCursor);
@@ -36,73 +37,60 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         );
       }
     }
-    if (event is StorageDetailRoot) {
-      backImmediately = false;
-      yield StorageDetailInProgress();
+    if (event is StorageDetailStarted) {
       try {
-        List<Storage> results = await storageRepository.rootStorage();
-        yield StorageDetailRootSuccess(storages: results);
+        if (event.name == '') {
+          final storages = await storageRepository.rootStorage();
+          yield StorageDetailSuccess(storages: storages);
+        } else {
+          final results =
+              await storageRepository.storage(name: event.name, id: event.id);
+          if (results == null) {
+            yield StorageDetailFailure(
+              '获取位置失败，位置不存在',
+              name: event.name,
+              id: event.id,
+            );
+          }
+          yield StorageDetailSuccess(
+            storage: results.item1,
+            hasNextPage: results.item3 || results.item5,
+            stroageEndCursor: results.item2,
+            itemEndCursor: results.item4,
+          );
+        }
       } catch (e) {
         yield StorageDetailFailure(
-          e.message,
-          storageId: null,
-        );
-      }
-    }
-    if (event is StorageDetailRootRefreshed) {
-      backImmediately = false;
-      try {
-        List<Storage> results =
-            await storageRepository.rootStorage(cache: false);
-        yield StorageDetailRootSuccess(storages: results);
-      } catch (e) {
-        yield StorageDetailFailure(
-          e.message,
-          storageId: null,
-        );
-      }
-    }
-    if (event is StorageDetailChanged) {
-      // 是否马上返回上级界面
-      if (backImmediately == null) {
-        backImmediately = true;
-      } else {
-        backImmediately = false;
-      }
-      yield StorageDetailInProgress();
-      try {
-        final results = await storageRepository.storage(id: event.id);
-        yield StorageDetailSuccess(
-          backImmediately: backImmediately,
-          storage: results.item1,
-          hasNextPage: results.item3 || results.item5,
-          stroageEndCursor: results.item2,
-          itemEndCursor: results.item4,
-        );
-      } catch (e) {
-        yield StorageDetailFailure(
-          e.message,
-          storageId: event.id,
-        );
-      }
-    }
-    if (event is StorageDetailRefreshed) {
-      try {
-        final results = await storageRepository.storage(
+          e?.message ?? e.toString(),
+          name: event.name,
           id: event.id,
-          cache: false,
         );
-        yield StorageDetailSuccess(
-          backImmediately: backImmediately,
-          storage: results.item1,
-          hasNextPage: results.item3 || results.item5,
-          stroageEndCursor: results.item2,
-          itemEndCursor: results.item4,
-        );
+      }
+    }
+    if (event is StorageDetailRefreshed &&
+        currentState is StorageDetailSuccess) {
+      try {
+        if (currentState.storage == null) {
+          final storages = await storageRepository.rootStorage(cache: false);
+          yield StorageDetailSuccess(storages: storages);
+        } else {
+          final results = await storageRepository.storage(
+            name: currentState.storage.name,
+            id: currentState.storage.id,
+            cache: false,
+          );
+          yield StorageDetailSuccess(
+            storage: results.item1,
+            hasNextPage: results.item3 || results.item5,
+            stroageEndCursor: results.item2,
+            itemEndCursor: results.item4,
+          );
+        }
       } catch (e) {
         yield StorageDetailFailure(
-          e.message,
-          storageId: event.id,
+          e?.message ?? e.toString(),
+          name: currentState.storage.name,
+          id: currentState.storage.id,
         );
       }
     }

@@ -7,8 +7,6 @@ abstract class PushState extends Equatable {
   List<Object> get props => [];
 }
 
-class PushInitial extends PushState {}
-
 class PushInProgress extends PushState {}
 
 class PushSuccess extends PushState {

@@ -15,73 +15,55 @@ import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/utils/show_snack_bar.dart';
 
 class StorageDetailPage extends Page {
+  final String storageName;
   final String storageId;
   final int group;
 
   StorageDetailPage({
+    @required this.storageName,
     this.storageId,
-    this.group,
+    @required this.group,
   }) : super(
-          key: ValueKey('$group/$storageId'),
-          name: storageId != null
-              ? '/storage/$group/$storageId'
-              : '/storage/$group/home',
+          key: ValueKey('$group/$storageName'),
+          name: '/storage/$group/$storageName',
         );
 
   @override
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => StorageDetailScreen(
-        storageId: storageId,
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider<StorageDetailBloc>(
+            create: (context) => StorageDetailBloc(
+              storageRepository:
+                  RepositoryProvider.of<StorageRepository>(context),
+            )..add(StorageDetailStarted(name: storageName, id: storageId)),
+          ),
+          BlocProvider<StorageEditBloc>(
+            create: (context) => StorageEditBloc(
+              storageRepository:
+                  RepositoryProvider.of<StorageRepository>(context),
+            ),
+          )
+        ],
+        child: StorageDetailScreen(
+          storageName: storageName,
+          storageId: storageId,
+        ),
       ),
     );
   }
 }
 
 class StorageDetailScreen extends StatelessWidget {
+  final String storageName;
   final String storageId;
 
   const StorageDetailScreen({
     Key key,
-    this.storageId,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<StorageDetailBloc>(
-          create: (context) => StorageDetailBloc(
-            storageRepository:
-                RepositoryProvider.of<StorageRepository>(context),
-          )..add(
-              storageId != null
-                  ? StorageDetailChanged(id: storageId)
-                  : StorageDetailRoot(),
-            ),
-        ),
-        BlocProvider<StorageEditBloc>(
-          create: (context) => StorageEditBloc(
-            storageRepository:
-                RepositoryProvider.of<StorageRepository>(context),
-            storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
-          ),
-        )
-      ],
-      child: _DetailScreen(
-        storageId: storageId,
-      ),
-    );
-  }
-}
-
-class _DetailScreen extends StatelessWidget {
-  final String storageId;
-
-  const _DetailScreen({
-    Key key,
-    this.storageId,
+    @required this.storageName,
+    @required this.storageId,
   }) : super(key: key);
 
   @override
@@ -92,21 +74,15 @@ class _DetailScreen extends StatelessWidget {
           appBar: _buildAppBar(context, state),
           body: RefreshIndicator(
             onRefresh: () async {
-              if (state is StorageDetailSuccess) {
-                BlocProvider.of<StorageDetailBloc>(context).add(
-                  StorageDetailRefreshed(id: state.storage.id),
-                );
-              }
-              if (state is StorageDetailRootSuccess) {
-                BlocProvider.of<StorageDetailBloc>(context).add(
-                  StorageDetailRootRefreshed(),
-                );
-              }
+              BlocProvider.of<StorageDetailBloc>(context).add(
+                StorageDetailRefreshed(),
+              );
             },
             child: BlocListener<StorageEditBloc, StorageEditState>(
               listener: (context, state) {
                 if (state is StorageDeleteSuccess) {
                   showInfoSnackBar('位置 ${state.storage.name} 删除成功');
+                  Navigator.pop(context);
                 }
                 if (state is StorageEditFailure) {
                   showErrorSnackBar(state.message);
@@ -122,10 +98,7 @@ class _DetailScreen extends StatelessWidget {
   }
 
   AppBar _buildAppBar(BuildContext context, StorageDetailState state) {
-    if (state is StorageDetailFailure) {
-      return AppBar();
-    }
-    if (state is StorageDetailRootSuccess) {
+    if (state is StorageDetailSuccess && state.storages != null) {
       return AppBar(
         title: Text('家'),
         actions: <Widget>[
@@ -134,7 +107,7 @@ class _DetailScreen extends StatelessWidget {
         ],
       );
     }
-    if (state is StorageDetailSuccess) {
+    if (state is StorageDetailSuccess && state.storage != null) {
       List<Storage> paths = state.storage.ancestors ?? [];
       if (!paths.contains(state.storage)) {
         // 防止重复添加相同名称的位置
@@ -158,8 +131,6 @@ class _DetailScreen extends StatelessWidget {
                     create: (_) => StorageEditBloc(
                       storageRepository:
                           RepositoryProvider.of<StorageRepository>(context),
-                      storageDetailBloc:
-                          BlocProvider.of<StorageDetailBloc>(context),
                     ),
                     child: StorageEditPage(
                       isEditing: true,
@@ -255,33 +226,29 @@ class _DetailScreen extends StatelessWidget {
         ),
       );
     }
-    return AppBar();
+    return AppBar(
+      title: Text(storageName != '' ? storageName : '家'),
+    );
   }
 
   Widget _buildBody(BuildContext context, StorageDetailState state) {
     if (state is StorageDetailFailure) {
       return ErrorMessageButton(
         onPressed: () {
-          if (state.storageId != null) {
-            BlocProvider.of<StorageDetailBloc>(context).add(
-              StorageDetailChanged(id: state.storageId),
-            );
-          } else {
-            BlocProvider.of<StorageDetailBloc>(context).add(
-              StorageDetailRoot(),
-            );
-          }
+          BlocProvider.of<StorageDetailBloc>(context).add(
+            StorageDetailStarted(name: state.name, id: state.id),
+          );
         },
         message: state.message,
       );
     }
-    if (state is StorageDetailRootSuccess) {
+    if (state is StorageDetailSuccess && state.storages != null) {
       return StorageItemList(
         storages: state.storages.toList(),
         items: [],
       );
     }
-    if (state is StorageDetailSuccess) {
+    if (state is StorageDetailSuccess && state.storage != null) {
       return StorageItemList(
         items: state.storage.items.toList(),
         storages: state.storage.children.toList(),
@@ -295,7 +262,7 @@ class _DetailScreen extends StatelessWidget {
 
   Widget _buildFloatingActionButton(
       BuildContext context, StorageDetailState state) {
-    if (state is StorageDetailSuccess) {
+    if (state is StorageDetailSuccess && state.storage != null) {
       return FloatingActionButton(
         tooltip: '添加物品',
         child: Icon(Icons.add),

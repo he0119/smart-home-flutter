@@ -34,7 +34,14 @@ class VersionRepository {
 
   /// 是否需要更新
   Future<bool> needUpdate() async {
-    if (await onlineVersion > await currentVersion && _fileExist) {
+    final current = await currentVersion;
+
+    // 如果是从 Git 编译的开发版，则不用检查更新
+    if (current.preRelease.isNotEmpty && current.preRelease.first == 'git') {
+      return false;
+    }
+
+    if (await onlineVersion > current && _fileExist) {
       return true;
     }
     return false;
