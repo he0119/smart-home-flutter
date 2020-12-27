@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:smart_home/models/models.dart';
 
 import 'package:smart_home/models/storage.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
@@ -12,29 +14,42 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
 
   RecycleBinBloc({
     @required this.storageRepository,
-  }) : super(RecycleBinInitial());
+  }) : super(RecycleBinInProgress());
 
   @override
   Stream<RecycleBinState> mapEventToState(
     RecycleBinEvent event,
   ) async* {
-    if (event is RecycleBinFetched) {
-      yield RecycleBinInProgress();
+    final currentState = state;
+    if (event is RecycleBinFetched && !_hasReachedMax(currentState)) {
       try {
-        final List<Item> results = await storageRepository.deletedItems();
-        yield RecycleBinSuccess(items: results);
+        if (currentState is RecycleBinSuccess && !event.refresh) {
+          final results = await storageRepository.deletedItems(
+            after: currentState.pageInfo.endCursor,
+          );
+          yield RecycleBinSuccess(
+            items: currentState.items + results.item1,
+            pageInfo: currentState.pageInfo.copyWith(results.item2),
+          );
+        } else {
+          final results = await storageRepository.deletedItems(
+            cache: !event.refresh,
+          );
+          yield RecycleBinSuccess(
+            items: results.item1,
+            pageInfo: results.item2,
+          );
+        }
       } catch (e) {
-        yield RecycleBinFailure(e.message);
-      }
-    }
-    if (event is RecycleBinRefreshed) {
-      try {
-        final List<Item> results =
-            await storageRepository.deletedItems(cache: false);
-        yield RecycleBinSuccess(items: results);
-      } catch (e) {
-        yield RecycleBinFailure(e.message);
+        yield RecycleBinFailure(e?.message ?? e.toString());
       }
     }
   }
+}
+
+bool _hasReachedMax(RecycleBinState currentState) {
+  if (currentState is RecycleBinSuccess) {
+    return currentState.hasReachedMax;
+  }
+  return false;
 }

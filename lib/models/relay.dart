@@ -16,6 +16,15 @@ class PageInfo {
     this.endCursor,
   });
 
+  PageInfo copyWith(PageInfo pageInfo) {
+    return PageInfo(
+      hasNextPage: pageInfo.hasNextPage ?? this.hasNextPage,
+      hasPreviousPage: pageInfo.hasPreviousPage ?? this.hasPreviousPage,
+      startCursor: pageInfo.startCursor ?? this.startCursor,
+      endCursor: pageInfo.endCursor ?? this.endCursor,
+    );
+  }
+
   factory PageInfo.fromJson(Map<String, dynamic> json) =>
       _$PageInfoFromJson(json);
 
