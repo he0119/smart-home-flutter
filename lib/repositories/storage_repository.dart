@@ -360,19 +360,32 @@ class StorageRepository {
     await graphqlApiClient.mutate(options);
   }
 
-  Future<List<Storage>> rootStorage({bool cache = true}) async {
+  /// storages, (endCursor, hasNextPage)
+  Future<Tuple2<List<Storage>, Tuple2<String, bool>>> rootStorage({
+    String after,
+    bool cache = true,
+  }) async {
     final QueryOptions options = QueryOptions(
       document: gql(rootStorageQuery),
+      variables: {
+        'after': after,
+      },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
+
+    // 是否还有下一页
+    final String endCursor =
+        results.data['rootStorage']['pageInfo']['endCursor'];
+    final bool hasNextPage =
+        results.data['rootStorage']['pageInfo']['hasNextPage'];
 
     final List<dynamic> storagesJson =
         results.data.flattenConnection['rootStorage'];
     final List<Storage> storages =
         storagesJson.map((dynamic e) => Storage.fromJson(e)).toList();
 
-    return storages;
+    return Tuple2(storages, Tuple2(endCursor, hasNextPage));
   }
 
   Future<List<dynamic>> search(String key, {bool isDeleted = false}) async {

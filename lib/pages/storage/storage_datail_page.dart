@@ -246,6 +246,10 @@ class StorageDetailScreen extends StatelessWidget {
       return StorageItemList(
         storages: state.storages.toList(),
         items: [],
+        hasReachedMax: state.hasReachedMax,
+        onFetch: () => BlocProvider.of<StorageDetailBloc>(context).add(
+          StorageDetailFetched(name: ''),
+        ),
       );
     }
     if (state is StorageDetailSuccess && state.storage != null) {
