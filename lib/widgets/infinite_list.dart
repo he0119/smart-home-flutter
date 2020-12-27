@@ -30,6 +30,7 @@ class _InfiniteListState extends State<InfiniteList> {
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
+      controller: _scrollController,
       child: ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: !widget.hasReachedMax
