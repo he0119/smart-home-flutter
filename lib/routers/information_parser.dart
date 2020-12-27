@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-
 import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/routers/route_path.dart';
 
 class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   static final Logger _log = Logger('InformationParser');
-  final StorageRepository storageRepository;
-
-  MyRouteInformationParser({
-    this.storageRepository,
-  });
 
   @override
   Future<RoutePath> parseRouteInformation(
@@ -43,6 +36,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
 
   @override
   RouteInformation restoreRouteInformation(RoutePath routePath) {
+    _log.fine('restoreRouteInformation: $routePath');
     if (routePath is AppRoutePath) {
       switch (routePath.appTab) {
         case AppTab.blog:
@@ -51,22 +45,16 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           return const RouteInformation(location: '/iot');
         case AppTab.storage:
           return const RouteInformation(location: '/storage');
-          break;
         case AppTab.board:
           return const RouteInformation(location: '/board');
-          break;
       }
-    }
-    if (routePath is StorageRoutePath) {
-      if (routePath.storageName == 'home') {
-        return RouteInformation(location: '/storage/home');
-      }
+    } else if (routePath is StorageRoutePath) {
       return RouteInformation(location: '/storage/${routePath.storageName}');
-    }
-    if (routePath is ItemRoutePath)
+    } else if (routePath is ItemRoutePath) {
       return RouteInformation(location: '/item/${routePath.itemName}');
-    if (routePath is TopicRoutePath)
+    } else if (routePath is TopicRoutePath) {
       return RouteInformation(location: '/topic/${routePath.topicId}');
+    }
     return const RouteInformation(location: '/');
   }
 }

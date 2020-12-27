@@ -42,7 +42,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   List<Page> _pages = <Page>[];
 
   List<Page> get pages {
-    _log.fine('Router rebuilded');
     if (!initialized) {
       _pages = [
         SplashPage(),
@@ -60,7 +59,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         HomePage(appTab: currentHomePage ?? defaultHomePage),
       ];
     }
-    _log.fine('pages $_pages');
     return List.unmodifiable(_pages);
   }
 
@@ -136,7 +134,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   bool _handlePopPage(Route<dynamic> route, dynamic result) {
     final bool success = route.didPop(result);
     if (success) {
-      _log.fine('pop ${route.settings.name}');
+      _log.fine('Pop ${route.settings.name}');
       _pages.remove(route.settings);
       // 每当一组位置全部 Pop，Group 计数减一
       if (route.settings.name.startsWith('/storage')) {
@@ -215,6 +213,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   @override
   Widget build(BuildContext context) {
+    _log.fine('Router rebuilded');
+    _log.fine('pages $pages');
     final graphQLApiClient = RepositoryProvider.of<GraphQLApiClient>(context);
     final AppConfig config = AppConfig.of(context);
     return MultiBlocListener(

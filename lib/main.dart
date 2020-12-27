@@ -137,9 +137,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
         const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
       ],
       title: config.appName,
-      routeInformationParser: MyRouteInformationParser(
-        storageRepository: RepositoryProvider.of<StorageRepository>(context),
-      ),
+      routeInformationParser: MyRouteInformationParser(),
       routerDelegate: _delegate,
     );
   }

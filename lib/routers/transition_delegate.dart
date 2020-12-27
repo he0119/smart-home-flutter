@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 
 class MyTransitionDelegate extends TransitionDelegate<void> {
-  static final Logger _log = Logger('TransitionDelegate');
   final defaultTransitionDelegate = DefaultTransitionDelegate();
 
   @override
