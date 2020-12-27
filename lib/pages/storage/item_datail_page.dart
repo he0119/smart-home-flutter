@@ -14,17 +14,20 @@ import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/utils/show_snack_bar.dart';
 
 class ItemDetailPage extends Page {
+  /// 物品名称
   final String itemName;
+
+  /// 物品 ID
   final String itemId;
   final int group;
 
   ItemDetailPage({
     @required this.itemName,
-    @required this.itemId,
+    this.itemId,
     @required this.group,
   }) : super(
-          key: ValueKey('$group/$itemId'),
-          name: '/item/$group/$itemId',
+          key: ValueKey('$group/$itemName'),
+          name: '/item/$itemName',
         );
 
   @override
@@ -37,7 +40,10 @@ class ItemDetailPage extends Page {
             create: (context) => ItemDetailBloc(
               storageRepository:
                   RepositoryProvider.of<StorageRepository>(context),
-            )..add(ItemDetailChanged(itemId: itemId)),
+            )..add(ItemDetailStarted(
+                name: itemName,
+                id: itemId,
+              )),
           ),
           BlocProvider<ItemEditBloc>(
             create: (context) => ItemEditBloc(
@@ -47,8 +53,8 @@ class ItemDetailPage extends Page {
           ),
         ],
         child: ItemDetailScreen(
-          itemId: itemId,
           itemName: itemName,
+          itemId: itemId,
         ),
       ),
     );
@@ -74,7 +80,7 @@ class ItemDetailScreen extends StatelessWidget {
           body: RefreshIndicator(
             onRefresh: () async {
               BlocProvider.of<ItemDetailBloc>(context).add(
-                ItemDetailRefreshed(itemId: itemId),
+                ItemDetailRefreshed(),
               );
             },
             child: BlocListener<ItemEditBloc, ItemEditState>(
@@ -116,8 +122,10 @@ class ItemDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ));
-                BlocProvider.of<ItemDetailBloc>(context)
-                    .add(ItemDetailChanged(itemId: state.item.id));
+                BlocProvider.of<ItemDetailBloc>(context).add(ItemDetailStarted(
+                  name: state.item.name,
+                  id: state.item.id,
+                ));
               }
               if (value == ItemDetailMenu.consumable) {
                 await Navigator.of(context).push(MaterialPageRoute(
@@ -131,8 +139,10 @@ class ItemDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ));
-                BlocProvider.of<ItemDetailBloc>(context)
-                    .add(ItemDetailChanged(itemId: state.item.id));
+                BlocProvider.of<ItemDetailBloc>(context).add(ItemDetailStarted(
+                  name: state.item.name,
+                  id: state.item.id,
+                ));
               }
               if (value == ItemDetailMenu.delete) {
                 showDialog(
@@ -189,7 +199,10 @@ class ItemDetailScreen extends StatelessWidget {
       return ErrorMessageButton(
         onPressed: () {
           BlocProvider.of<ItemDetailBloc>(context).add(
-            ItemDetailChanged(itemId: state.itemId),
+            ItemDetailStarted(
+              name: state.name,
+              id: state.id,
+            ),
           );
         },
         message: state.message,

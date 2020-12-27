@@ -42,7 +42,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   List<Page> _pages = <Page>[];
 
   List<Page> get pages {
-    _log.fine('Router rebuilded');
     if (!initialized) {
       _pages = [
         SplashPage(),
@@ -60,7 +59,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         HomePage(appTab: currentHomePage ?? defaultHomePage),
       ];
     }
-    _log.fine('pages $_pages');
     return List.unmodifiable(_pages);
   }
 
@@ -83,7 +81,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   void addStorageGroup({Storage storage}) {
     storageGroup += 1;
     _pages.add(StorageDetailPage(
-      storageName: storage?.name,
+      storageName: storage?.name ?? '',
       storageId: storage?.id,
       group: storageGroup,
     ));
@@ -100,7 +98,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       _pages.removeLast();
     }
     // 再重新添加
-    _pages.add(StorageDetailPage(group: storageGroup));
+    _pages.add(StorageDetailPage(storageName: '', group: storageGroup));
     if (storage != null) {
       if (storage.ancestors != null) {
         for (Storage storage in storage.ancestors) {
@@ -121,6 +119,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   int itemCount = 0;
+
+  /// 添加一个物品详情页面
   void addItemPage({@required Item item}) {
     itemCount += 1;
     _pages.add(ItemDetailPage(
@@ -131,60 +131,10 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     notifyListeners();
   }
 
-  RoutePath get routePath {
-    if (_pages.isNotEmpty && _pages.last.name != null) {
-      final uri = Uri.parse(_pages.last.name);
-      if (_pages.last is HomePage) return AppRoutePath(appTab: currentHomePage);
-      if (_pages.last is StorageDetailPage) {
-        final storageId = uri.pathSegments[2];
-        if (storageId == 'home') return StorageRoutePath();
-        return StorageRoutePath(storageId: storageId);
-      }
-      if (_pages.last is ItemDetailPage)
-        return ItemRoutePath(itemId: uri.pathSegments[2]);
-      if (_pages.last is TopicDetailPage)
-        return TopicRoutePath(topicId: uri.pathSegments[1]);
-    }
-    return AppRoutePath();
-  }
-
-  @override
-  Future<void> setNewRoutePath(RoutePath routePath) async {
-    if (routePath is AppRoutePath) {
-      _pages = [HomePage(appTab: routePath.appTab)];
-    }
-    if (routePath is TopicRoutePath) {
-      _pages = [
-        HomePage(appTab: AppTab.board),
-        TopicDetailPage(topicId: routePath.topicId),
-      ];
-    }
-    if (routePath is ItemRoutePath) {
-      storageGroup = 0;
-      itemCount = 1;
-      _pages = [
-        HomePage(appTab: AppTab.storage),
-        ItemDetailPage(itemId: routePath.itemId, group: 1, itemName: ''),
-      ];
-    }
-    if (routePath is StorageRoutePath) {
-      storageGroup = 1;
-      itemCount = 0;
-      _pages = [
-        HomePage(appTab: AppTab.storage),
-        StorageDetailPage(storageId: routePath.storageId, group: 1),
-      ];
-    }
-  }
-
-  // 网页版显示网页用
-  @override
-  RoutePath get currentConfiguration => routePath;
-
   bool _handlePopPage(Route<dynamic> route, dynamic result) {
     final bool success = route.didPop(result);
     if (success) {
-      _log.fine('pop ${route.settings.name}');
+      _log.fine('Pop ${route.settings.name}');
       _pages.remove(route.settings);
       // 每当一组位置全部 Pop，Group 计数减一
       if (route.settings.name.startsWith('/storage')) {
@@ -200,10 +150,71 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     return success;
   }
 
+  // 网页版显示网址
+  @override
+  RoutePath get currentConfiguration => routePath;
+
+  /// 从当前显示页面倒推 RoutePath
+  RoutePath get routePath {
+    if (_pages.isNotEmpty && _pages.last.name != null) {
+      final uri = Uri.parse(_pages.last.name);
+      if (_pages.last is HomePage) {
+        return AppRoutePath(appTab: currentHomePage);
+      } else if (_pages.last is StorageDetailPage) {
+        return StorageRoutePath(storageName: uri.pathSegments[2]);
+      } else if (_pages.last is ItemDetailPage) {
+        return ItemRoutePath(itemName: uri.pathSegments[1]);
+      } else if (_pages.last is TopicDetailPage) {
+        return TopicRoutePath(topicId: uri.pathSegments[1]);
+      }
+    }
+    return AppRoutePath();
+  }
+
+  @override
+  Future<void> setNewRoutePath(RoutePath routePath) async {
+    _log.fine('setNewRoutePath: $routePath');
+    if (routePath is AppRoutePath) {
+      _pages = [HomePage(appTab: routePath.appTab)];
+    }
+    if (routePath is TopicRoutePath) {
+      _pages = [
+        HomePage(appTab: AppTab.board),
+        TopicDetailPage(topicId: routePath.topicId),
+      ];
+    }
+    if (routePath is ItemRoutePath) {
+      storageGroup = 0;
+      itemCount = 1;
+      _pages = [
+        HomePage(appTab: AppTab.storage),
+        ItemDetailPage(
+          itemName: routePath.itemName,
+          itemId: routePath.itemId,
+          group: 1,
+        ),
+      ];
+    }
+    if (routePath is StorageRoutePath) {
+      storageGroup = 1;
+      itemCount = 0;
+      _pages = [
+        HomePage(appTab: AppTab.storage),
+        StorageDetailPage(
+          storageName: routePath.storageName,
+          storageId: routePath.storageId,
+          group: 1,
+        ),
+      ];
+    }
+  }
+
   TransitionDelegate transitionDelegate = MyTransitionDelegate();
 
   @override
   Widget build(BuildContext context) {
+    _log.fine('Router rebuilded');
+    _log.fine('pages $pages');
     final graphQLApiClient = RepositoryProvider.of<GraphQLApiClient>(context);
     final AppConfig config = AppConfig.of(context);
     return MultiBlocListener(

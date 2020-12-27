@@ -1,23 +1,29 @@
 part of 'item_detail_bloc.dart';
 
-abstract class ItemDetailEvent {
+abstract class ItemDetailEvent extends Equatable {
   const ItemDetailEvent();
-}
-
-class ItemDetailChanged extends ItemDetailEvent {
-  final String itemId;
-
-  const ItemDetailChanged({@required this.itemId});
 
   @override
-  String toString() => 'ItemChanged { itemId: $itemId }';
+  List<Object> get props => [];
+}
+
+class ItemDetailStarted extends ItemDetailEvent {
+  final String name;
+  final String id;
+
+  const ItemDetailStarted({
+    @required this.name,
+    this.id,
+  });
+
+  @override
+  List<Object> get props => [name, id];
+
+  @override
+  String toString() => 'ItemDetailStarted(name: $name, id: $id)';
 }
 
 class ItemDetailRefreshed extends ItemDetailEvent {
-  final String itemId;
-
-  const ItemDetailRefreshed({@required this.itemId});
-
   @override
-  String toString() => 'ItemRefreshed { itemId: $itemId }';
+  String toString() => 'ItemDetailRefreshed';
 }

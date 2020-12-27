@@ -20,14 +20,12 @@ class StorageDetailPage extends Page {
   final int group;
 
   StorageDetailPage({
-    this.storageName,
+    @required this.storageName,
     this.storageId,
     @required this.group,
   }) : super(
-          key: ValueKey('$group/$storageId'),
-          name: storageId != null
-              ? '/storage/$group/$storageId'
-              : '/storage/$group/home',
+          key: ValueKey('$group/$storageName'),
+          name: '/storage/$group/$storageName',
         );
 
   @override
@@ -40,17 +38,12 @@ class StorageDetailPage extends Page {
             create: (context) => StorageDetailBloc(
               storageRepository:
                   RepositoryProvider.of<StorageRepository>(context),
-            )..add(
-                storageId != null
-                    ? StorageDetailChanged(id: storageId)
-                    : StorageDetailRoot(),
-              ),
+            )..add(StorageDetailStarted(name: storageName, id: storageId)),
           ),
           BlocProvider<StorageEditBloc>(
             create: (context) => StorageEditBloc(
               storageRepository:
                   RepositoryProvider.of<StorageRepository>(context),
-              storageDetailBloc: BlocProvider.of<StorageDetailBloc>(context),
             ),
           )
         ],
@@ -69,11 +62,9 @@ class StorageDetailScreen extends StatelessWidget {
 
   const StorageDetailScreen({
     Key key,
-    this.storageName,
-    this.storageId,
-  })  : assert(storageId == null || storageName != null,
-            'storageId 与 storageName 必须同时都有值'),
-        super(key: key);
+    @required this.storageName,
+    @required this.storageId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,21 +74,15 @@ class StorageDetailScreen extends StatelessWidget {
           appBar: _buildAppBar(context, state),
           body: RefreshIndicator(
             onRefresh: () async {
-              if (state is StorageDetailSuccess) {
-                BlocProvider.of<StorageDetailBloc>(context).add(
-                  StorageDetailRefreshed(id: state.storage.id),
-                );
-              }
-              if (state is StorageDetailRootSuccess) {
-                BlocProvider.of<StorageDetailBloc>(context).add(
-                  StorageDetailRootRefreshed(),
-                );
-              }
+              BlocProvider.of<StorageDetailBloc>(context).add(
+                StorageDetailRefreshed(),
+              );
             },
             child: BlocListener<StorageEditBloc, StorageEditState>(
               listener: (context, state) {
                 if (state is StorageDeleteSuccess) {
                   showInfoSnackBar('位置 ${state.storage.name} 删除成功');
+                  Navigator.pop(context);
                 }
                 if (state is StorageEditFailure) {
                   showErrorSnackBar(state.message);
@@ -113,7 +98,7 @@ class StorageDetailScreen extends StatelessWidget {
   }
 
   AppBar _buildAppBar(BuildContext context, StorageDetailState state) {
-    if (state is StorageDetailRootSuccess) {
+    if (state is StorageDetailSuccess && state.storages != null) {
       return AppBar(
         title: Text('家'),
         actions: <Widget>[
@@ -122,7 +107,7 @@ class StorageDetailScreen extends StatelessWidget {
         ],
       );
     }
-    if (state is StorageDetailSuccess) {
+    if (state is StorageDetailSuccess && state.storage != null) {
       List<Storage> paths = state.storage.ancestors ?? [];
       if (!paths.contains(state.storage)) {
         // 防止重复添加相同名称的位置
@@ -146,8 +131,6 @@ class StorageDetailScreen extends StatelessWidget {
                     create: (_) => StorageEditBloc(
                       storageRepository:
                           RepositoryProvider.of<StorageRepository>(context),
-                      storageDetailBloc:
-                          BlocProvider.of<StorageDetailBloc>(context),
                     ),
                     child: StorageEditPage(
                       isEditing: true,
@@ -244,7 +227,7 @@ class StorageDetailScreen extends StatelessWidget {
       );
     }
     return AppBar(
-      title: Text(storageId != null ? storageName : '家'),
+      title: Text(storageName != '' ? storageName : '家'),
     );
   }
 
@@ -252,26 +235,20 @@ class StorageDetailScreen extends StatelessWidget {
     if (state is StorageDetailFailure) {
       return ErrorMessageButton(
         onPressed: () {
-          if (state.storageId != null) {
-            BlocProvider.of<StorageDetailBloc>(context).add(
-              StorageDetailChanged(id: state.storageId),
-            );
-          } else {
-            BlocProvider.of<StorageDetailBloc>(context).add(
-              StorageDetailRoot(),
-            );
-          }
+          BlocProvider.of<StorageDetailBloc>(context).add(
+            StorageDetailStarted(name: state.name, id: state.id),
+          );
         },
         message: state.message,
       );
     }
-    if (state is StorageDetailRootSuccess) {
+    if (state is StorageDetailSuccess && state.storages != null) {
       return StorageItemList(
         storages: state.storages.toList(),
         items: [],
       );
     }
-    if (state is StorageDetailSuccess) {
+    if (state is StorageDetailSuccess && state.storage != null) {
       return StorageItemList(
         items: state.storage.items.toList(),
         storages: state.storage.children.toList(),
@@ -285,7 +262,7 @@ class StorageDetailScreen extends StatelessWidget {
 
   Widget _buildFloatingActionButton(
       BuildContext context, StorageDetailState state) {
-    if (state is StorageDetailSuccess) {
+    if (state is StorageDetailSuccess && state.storage != null) {
       return FloatingActionButton(
         tooltip: '添加物品',
         child: Icon(Icons.add),

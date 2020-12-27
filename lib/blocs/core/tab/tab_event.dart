@@ -13,5 +13,5 @@ class TabChanged extends TabEvent {
   List<Object> get props => [tab];
 
   @override
-  String toString() => 'TabUpdated { tab: $tab }';
+  String toString() => 'TabChanged(tab: $tab)';
 }
