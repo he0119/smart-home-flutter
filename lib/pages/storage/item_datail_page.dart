@@ -277,14 +277,16 @@ class _ItemDetailList extends StatelessWidget {
                   .toList(),
             ),
           ),
-        ListTile(
-          title: Text('修改人'),
-          subtitle: SelectableText(item.editedBy.username),
-        ),
+        if (item.editedBy != null)
+          ListTile(
+            title: Text('修改人'),
+            subtitle: SelectableText(item.editedBy.username),
+          ),
         ListTile(
           title: Text('修改时间'),
           subtitle: SelectableText(item.editedAt?.toLocalStr() ?? ''),
         ),
+        if (item.createdBy != null)
         ListTile(
           title: Text('录入人'),
           subtitle: SelectableText(item.createdBy.username),
