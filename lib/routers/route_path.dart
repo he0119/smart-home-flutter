@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:smart_home/models/models.dart';
 
 abstract class RoutePath {}
@@ -36,7 +37,7 @@ class ItemRoutePath extends RoutePath {
   final String itemId;
 
   ItemRoutePath({
-    this.itemName,
+    @required this.itemName,
     this.itemId,
   });
 

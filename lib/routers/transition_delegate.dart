@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
 class MyTransitionDelegate extends TransitionDelegate<void> {
+  static final Logger _log = Logger('TransitionDelegate');
   final defaultTransitionDelegate = DefaultTransitionDelegate();
 
   @override
@@ -12,7 +14,8 @@ class MyTransitionDelegate extends TransitionDelegate<void> {
         pageRouteToPagelessRoutes,
   }) {
     final List<RouteTransitionRecord> results = <RouteTransitionRecord>[];
-
+    _log.fine('newPageRouteHistory: $newPageRouteHistory');
+    _log.fine('locationToExitingPageRoute: $locationToExitingPageRoute');
     // 主页之间的切换，不需要动画
     // 从启动界面或者登录界面进入主页，也不需要动画
     if (newPageRouteHistory.length == 1 &&

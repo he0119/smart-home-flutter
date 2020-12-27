@@ -16,6 +16,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   @override
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
+    _log.fine('parseRouteInformation: ${routeInformation.location}');
     final uri = Uri.parse(routeInformation.location);
     if (uri.pathSegments.length == 1) {
       if (uri.pathSegments[0] == 'iot') return AppRoutePath(appTab: AppTab.iot);
@@ -29,13 +30,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
     if (uri.pathSegments.length == 2) {
       switch (uri.pathSegments[0]) {
         case 'item':
-          final item =
-              await storageRepository.itemByName(name: uri.pathSegments[1]);
-          if (item != null) {
-            break;
-          }
-          _log.fine('parseRouteInformation: item{ name: $item }');
-          return ItemRoutePath(itemName: item.name, itemId: item.id);
+          return ItemRoutePath(itemName: uri.pathSegments[1]);
         case 'topic':
           return TopicRoutePath(topicId: uri.pathSegments[1]);
         case 'storage':

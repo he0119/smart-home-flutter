@@ -121,6 +121,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   int itemCount = 0;
+
+  /// 添加一个物品详情页面
   void addItemPage({@required Item item}) {
     itemCount += 1;
     _pages.add(ItemDetailPage(
@@ -150,6 +152,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   @override
   Future<void> setNewRoutePath(RoutePath routePath) async {
+    _log.fine('setNewRoutePath: $routePath');
     if (routePath is AppRoutePath) {
       _pages = [HomePage(appTab: routePath.appTab)];
     }

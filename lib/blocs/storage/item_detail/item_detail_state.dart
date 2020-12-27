@@ -1,7 +1,10 @@
 part of 'item_detail_bloc.dart';
 
-abstract class ItemDetailState {
+abstract class ItemDetailState extends Equatable {
   const ItemDetailState();
+
+  @override
+  List<Object> get props => [];
 }
 
 class ItemDetailInProgress extends ItemDetailState {
@@ -11,15 +14,20 @@ class ItemDetailInProgress extends ItemDetailState {
 
 class ItemDetailFailure extends ItemDetailState {
   final String message;
+  final String itemName;
   final String itemId;
 
   const ItemDetailFailure(
     this.message, {
+    @required this.itemName,
     @required this.itemId,
   });
 
   @override
-  String toString() => 'ItemDetailFailure { message: $message }';
+  List<Object> get props => [message, itemName, itemId];
+
+  @override
+  String toString() => 'ItemDetailFailure(message: $message)';
 }
 
 class ItemDetailSuccess extends ItemDetailState {
@@ -28,5 +36,8 @@ class ItemDetailSuccess extends ItemDetailState {
   const ItemDetailSuccess({@required this.item});
 
   @override
-  String toString() => 'ItemDetailSuccess { item: ${item.name} }';
+  List<Object> get props => [item];
+
+  @override
+  String toString() => 'ItemDetailSuccess(item: $item)';
 }

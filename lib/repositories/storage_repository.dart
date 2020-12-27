@@ -244,7 +244,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.query(options);
 
-    final List<dynamic> itemJson = result.data.flattenConnection['items'];
+    final List<dynamic> itemJson = result.data.flattenConnection['item'];
     if (itemJson.isEmpty) {
       return null;
     }
