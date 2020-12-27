@@ -82,6 +82,7 @@ class StorageDetailScreen extends StatelessWidget {
               listener: (context, state) {
                 if (state is StorageDeleteSuccess) {
                   showInfoSnackBar('位置 ${state.storage.name} 删除成功');
+                  Navigator.pop(context);
                 }
                 if (state is StorageEditFailure) {
                   showErrorSnackBar(state.message);
