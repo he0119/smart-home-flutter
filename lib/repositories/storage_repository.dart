@@ -443,7 +443,7 @@ class StorageRepository {
       );
       final result = await graphqlApiClient.query(options);
 
-      List<dynamic> storageListJson = result.data.flattenConnection['storage'];
+      List<dynamic> storageListJson = result.data['storage'];
       if (storageListJson.isEmpty) {
         return null;
       }
