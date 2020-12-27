@@ -8,7 +8,10 @@ abstract class AppPreferencesEvent extends Equatable {
 }
 
 /// 软件启动
-class AppStarted extends AppPreferencesEvent {}
+class AppStarted extends AppPreferencesEvent {
+  @override
+  String toString() => 'AppStarted';
+}
 
 /// 更改服务器网址
 class AppApiUrlChanged extends AppPreferencesEvent {

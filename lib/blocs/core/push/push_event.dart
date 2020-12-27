@@ -7,7 +7,10 @@ abstract class PushEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class PushStarted extends PushEvent {}
+class PushStarted extends PushEvent {
+  @override
+  String toString() => 'PushStarted';
+}
 
 class PushUpdated extends PushEvent {
   final MiPush miPush;
@@ -18,7 +21,10 @@ class PushUpdated extends PushEvent {
   List<Object> get props => [miPush];
 
   @override
-  String toString() => 'PushUpdated { regId: ${miPush.regId} }';
+  String toString() => 'PushUpdated(miPush: $miPush)';
 }
 
-class PushRefreshed extends PushEvent {}
+class PushRefreshed extends PushEvent {
+  @override
+  String toString() => 'PushRefreshed';
+}
