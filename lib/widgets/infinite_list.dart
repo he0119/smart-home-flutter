@@ -21,10 +21,10 @@ class InfiniteList<T> extends StatefulWidget {
         super(key: key);
 
   @override
-  _InfiniteListState createState() => _InfiniteListState();
+  _InfiniteListState createState() => _InfiniteListState<T>();
 }
 
-class _InfiniteListState extends State<InfiniteList> {
+class _InfiniteListState<T> extends State<InfiniteList<T>> {
   final _scrollController = ScrollController();
 
   @override
