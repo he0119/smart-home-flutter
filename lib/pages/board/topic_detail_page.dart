@@ -14,6 +14,7 @@ import 'package:smart_home/repositories/board_repository.dart';
 import 'package:smart_home/widgets/center_loading_indicator.dart';
 import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/utils/show_snack_bar.dart';
+import 'package:smart_home/widgets/infinite_list.dart';
 
 class TopicDetailPage extends Page {
   final String topicId;
@@ -364,7 +365,15 @@ class _DetailScreenState extends State<_DetailScreen> {
                             onTap: () {
                               _buttonBarFocusNode.unfocus();
                             },
-                            child: CustomScrollView(
+                            child: SliverInfiniteList(
+                              hasReachedMax: state.hasReachedMax,
+                              onFetch: () {
+                                BlocProvider.of<TopicDetailBloc>(context)
+                                    .add(TopicDetailFetched(
+                                  topicId: state.topic.id,
+                                  descending: descending,
+                                ));
+                              },
                               slivers: <Widget>[
                                 SliverToBoxAdapter(
                                   child: TopicItem(

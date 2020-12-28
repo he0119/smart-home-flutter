@@ -10,6 +10,7 @@ import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/center_loading_indicator.dart';
 import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/widgets/home_page.dart';
+import 'package:smart_home/widgets/infinite_list.dart';
 
 class StorageHomePage extends StatelessWidget {
   const StorageHomePage({Key key}) : super(key: key);
@@ -72,9 +73,16 @@ class _StorageHomeBody extends StatelessWidget {
                   cache: false,
                 ));
               },
-              child: CustomScrollView(
+              child: SliverInfiniteList<List<Item>>(
                 key: ValueKey(state.itemType),
                 slivers: _buildSlivers(context, state),
+                hasReachedMax: state.hasReachedMax,
+                onFetch: () {
+                  BlocProvider.of<StorageHomeBloc>(context)
+                      .add(StorageHomeFetched(
+                    itemType: state.itemType,
+                  ));
+                },
               ),
             ),
           );

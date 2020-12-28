@@ -37,7 +37,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               );
               yield StorageHomeSuccess(
                 expiredItems: currentState.expiredItems + results.item1,
-                pageInfo: results.item2.copyWith(currentState.pageInfo),
+                pageInfo: currentState.pageInfo.copyWith(results.item2),
                 itemType: ItemType.expired,
               );
               break;
@@ -47,7 +47,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               );
               yield StorageHomeSuccess(
                 nearExpiredItems: currentState.nearExpiredItems + results.item1,
-                pageInfo: results.item2.copyWith(currentState.pageInfo),
+                pageInfo: currentState.pageInfo.copyWith(results.item2),
                 itemType: ItemType.nearExpired,
               );
               break;
@@ -58,7 +58,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               yield StorageHomeSuccess(
                 recentlyCreatedItems:
                     currentState.recentlyCreatedItems + results.item1,
-                pageInfo: results.item2.copyWith(currentState.pageInfo),
+                pageInfo: currentState.pageInfo.copyWith(results.item2),
                 itemType: ItemType.recentlyCreated,
               );
               break;
@@ -69,7 +69,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               yield StorageHomeSuccess(
                 recentlyEditedItems:
                     currentState.recentlyEditedItems + results.item1,
-                pageInfo: results.item2.copyWith(currentState.pageInfo),
+                pageInfo: currentState.pageInfo.copyWith(results.item2),
                 itemType: ItemType.recentlyEdited,
               );
               break;
@@ -142,5 +142,5 @@ bool _hasReachedMax(StorageHomeState currentState, ItemType currentType) {
       currentType == currentState.itemType) {
     return !currentState.pageInfo.hasNextPage;
   }
-  return false;
+  return true;
 }
