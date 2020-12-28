@@ -12,7 +12,7 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
 
   BoardHomeBloc({
     @required this.boardRepository,
-  }) : super(BoardHomeInitial());
+  }) : super(BoardHomeInProgress());
 
   @override
   Stream<BoardHomeState> mapEventToState(
@@ -21,6 +21,11 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
     final currentState = state;
     if (event is BoardHomeFetched) {
       try {
+        // 如果需要刷新，则显示加载界面
+        // 因为需要请求网络最好提示用户
+        if (!event.cache) {
+          yield BoardHomeInProgress();
+        }
         if (event.cache &&
             currentState is BoardHomeSuccess &&
             !currentState.hasReachedMax) {

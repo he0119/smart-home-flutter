@@ -20,9 +20,12 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
   ) async* {
     final currentState = state;
     if (event is StorageHomeFetched) {
-      // 如果切换了物品种类，则显示加载提示
-      if (currentState is StorageHomeSuccess &&
-          currentState.itemType != event.itemType) {
+      // 如果需要刷新，则显示加载界面
+      // 因为需要请求网络最好提示用户
+      // 如果切换了物品种类，也显示加载提示
+      if (!event.cache ||
+          (currentState is StorageHomeSuccess &&
+              currentState.itemType != event.itemType)) {
         yield StorageHomeInProgress();
       }
       try {

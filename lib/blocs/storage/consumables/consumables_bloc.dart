@@ -23,6 +23,11 @@ class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
     final currentState = state;
     if (event is ConsumablesFetched) {
       try {
+        // 如果需要刷新，则显示加载界面
+        // 因为需要请求网络最好提示用户
+        if (!event.cache) {
+          yield ConsumablesInProgress();
+        }
         if (event.cache &&
             currentState is ConsumablesSuccess &&
             !currentState.hasReachedMax) {

@@ -7,7 +7,10 @@ abstract class StorageDetailState extends Equatable {
   List<Object> get props => [];
 }
 
-class StorageDetailInitial extends StorageDetailState {}
+class StorageDetailInProgress extends StorageDetailState {
+  @override
+  String toString() => 'StorageDetailInProgress';
+}
 
 class StorageDetailFailure extends StorageDetailState {
   final String message;

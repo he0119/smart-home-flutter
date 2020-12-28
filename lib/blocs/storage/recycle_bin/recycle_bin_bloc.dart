@@ -23,6 +23,11 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
     final currentState = state;
     if (event is RecycleBinFetched) {
       try {
+        // 如果需要刷新，则显示加载界面
+        // 因为需要请求网络最好提示用户
+        if (!event.cache) {
+          yield RecycleBinInProgress();
+        }
         if (event.cache &&
             currentState is RecycleBinSuccess &&
             !currentState.hasReachedMax) {

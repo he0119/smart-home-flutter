@@ -22,6 +22,11 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
     final currentState = state;
     if (event is TopicDetailFetched) {
       try {
+        // 如果需要刷新，则显示加载界面
+        // 因为需要请求网络最好提示用户
+        if (!event.cache) {
+          yield TopicDetailInProgress();
+        }
         if (event.cache &&
             currentState is TopicDetailSuccess &&
             !currentState.hasReachedMax) {

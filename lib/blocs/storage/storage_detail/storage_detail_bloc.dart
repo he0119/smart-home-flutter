@@ -12,7 +12,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
 
   StorageDetailBloc({
     @required this.storageRepository,
-  }) : super(StorageDetailInitial());
+  }) : super(StorageDetailInProgress());
 
   @override
   Stream<StorageDetailState> mapEventToState(
@@ -21,11 +21,16 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     final currentState = state;
     if (event is StorageDetailFetched) {
       try {
-        // 如果不需要刷新，不是首次启动，或遇到错误，并且有下一页
-        // 则获取下一页
+        // 如果需要刷新，则显示加载界面
+        // 因为需要请求网络最好提示用户
+        if (!event.cache) {
+          yield StorageDetailInProgress();
+        }
         if (event.cache &&
             currentState is StorageDetailSuccess &&
             !currentState.hasReachedMax) {
+          // 如果不需要刷新，不是首次启动，或遇到错误，并且有下一页
+          // 则获取下一页
           if (currentState.storage == null) {
             final results = await storageRepository.rootStorage(
               after: currentState.storagePageInfo.endCursor,

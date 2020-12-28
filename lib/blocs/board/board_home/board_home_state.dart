@@ -7,9 +7,9 @@ abstract class BoardHomeState extends Equatable {
   List<Object> get props => [];
 }
 
-class BoardHomeInitial extends BoardHomeState {
+class BoardHomeInProgress extends BoardHomeState {
   @override
-  String toString() => 'BoardHomeInitial';
+  String toString() => 'BoardHomeInProgress';
 }
 
 class BoardHomeFailure extends BoardHomeState {
