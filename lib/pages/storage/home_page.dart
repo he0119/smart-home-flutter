@@ -77,6 +77,7 @@ class _StorageHomeBody extends StatelessWidget {
                 key: ValueKey(state.itemType),
                 slivers: _buildSlivers(context, state),
                 hasReachedMax: state.hasReachedMax,
+                itemCount: state.itemCount,
                 onFetch: () {
                   BlocProvider.of<StorageHomeBloc>(context)
                       .add(StorageHomeFetched(

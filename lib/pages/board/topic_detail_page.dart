@@ -367,6 +367,7 @@ class _DetailScreenState extends State<_DetailScreen> {
                             },
                             child: SliverInfiniteList(
                               hasReachedMax: state.hasReachedMax,
+                              itemCount: state.comments.length,
                               onFetch: () {
                                 BlocProvider.of<TopicDetailBloc>(context)
                                     .add(TopicDetailFetched(
