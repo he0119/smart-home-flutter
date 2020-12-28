@@ -23,9 +23,11 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
     final currentState = state;
     if (event is RecycleBinFetched) {
       try {
-        if (currentState is RecycleBinSuccess &&
-            !_hasReachedMax(currentState) &&
-            event.cache) {
+        if (event.cache &&
+            currentState is RecycleBinSuccess &&
+            !currentState.hasReachedMax) {
+          // 如果不需要刷新，不是首次启动，或遇到错误，并且有下一页
+          // 则获取下一页
           final results = await storageRepository.deletedItems(
             after: currentState.pageInfo.endCursor,
           );
@@ -34,6 +36,7 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
             pageInfo: currentState.pageInfo.copyWith(results.item2),
           );
         } else {
+          // 其他情况根据设置看是否需要打开缓存，并获取第一页
           final results = await storageRepository.deletedItems(
             cache: event.cache,
           );
@@ -47,11 +50,4 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
       }
     }
   }
-}
-
-bool _hasReachedMax(RecycleBinState currentState) {
-  if (currentState is RecycleBinSuccess) {
-    return currentState.hasReachedMax;
-  }
-  return false;
 }

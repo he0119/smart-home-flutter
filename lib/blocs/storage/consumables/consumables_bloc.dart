@@ -23,9 +23,11 @@ class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
     final currentState = state;
     if (event is ConsumablesFetched) {
       try {
-        if (currentState is ConsumablesSuccess &&
-            !_hasReachedMax(currentState) &&
-            event.cache) {
+        if (event.cache &&
+            currentState is ConsumablesSuccess &&
+            !currentState.hasReachedMax) {
+          // 如果不需要刷新，不是首次启动，或遇到错误，并且有下一页
+          // 则获取下一页
           final results = await storageRepository.consumables(
             after: currentState.pageInfo.endCursor,
           );
@@ -34,6 +36,7 @@ class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
             pageInfo: currentState.pageInfo.copyWith(results.item2),
           );
         } else {
+          // 其他情况根据设置看是否需要打开缓存，并获取第一页s
           final results = await storageRepository.consumables(
             cache: event.cache,
           );
@@ -47,11 +50,4 @@ class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
       }
     }
   }
-}
-
-bool _hasReachedMax(ConsumablesState currentState) {
-  if (currentState is ConsumablesSuccess) {
-    return currentState.hasReachedMax;
-  }
-  return false;
 }

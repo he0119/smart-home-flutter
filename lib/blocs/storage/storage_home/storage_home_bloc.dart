@@ -26,10 +26,12 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
         yield StorageHomeInProgress();
       }
       try {
-        // 获取下一页
-        if (currentState is StorageHomeSuccess &&
-            !_hasReachedMax(currentState, event.itemType) &&
-            event.cache) {
+        if (event.cache &&
+            currentState is StorageHomeSuccess &&
+            event.itemType == currentState.itemType &&
+            !currentState.hasReachedMax) {
+          // 如果不需要刷新，不是首次启动，或遇到错误，并且有下一页
+          // 则获取下一页
           switch (event.itemType) {
             case ItemType.expired:
               final results = await storageRepository.expiredItems(
@@ -77,6 +79,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               break;
           }
         } else {
+          // 其他情况根据设置看是否需要打开缓存，并获取第一页
           switch (event.itemType) {
             case ItemType.expired:
               final results =
@@ -135,12 +138,4 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
       }
     }
   }
-}
-
-bool _hasReachedMax(StorageHomeState currentState, ItemType currentType) {
-  if (currentState is StorageHomeSuccess &&
-      currentType == currentState.itemType) {
-    return !currentState.pageInfo.hasNextPage;
-  }
-  return true;
 }

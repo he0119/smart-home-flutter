@@ -21,10 +21,11 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
     final currentState = state;
     if (event is BoardHomeFetched) {
       try {
-        if (currentState is BoardHomeSuccess &&
-            !_hasReachedMax(currentState) &&
-            event.cache) {
-          // 获取下一页
+        if (event.cache &&
+            currentState is BoardHomeSuccess &&
+            !currentState.hasReachedMax) {
+          // 如果不需要刷新，不是首次启动，或遇到错误，并且有下一页
+          // 则获取下一页
           final results = await boardRepository.topics(
             after: currentState.pageInfo.endCursor,
           );
@@ -33,6 +34,7 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
             pageInfo: currentState.pageInfo.copyWith(results.item2),
           );
         } else {
+          // 其他情况根据设置看是否需要打开缓存，并获取第一页
           final results = await boardRepository.topics(
             cache: event.cache,
           );
@@ -46,11 +48,4 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
       }
     }
   }
-}
-
-bool _hasReachedMax(BoardHomeState currentState) {
-  if (currentState is BoardHomeSuccess) {
-    return currentState.hasReachedMax;
-  }
-  return false;
 }

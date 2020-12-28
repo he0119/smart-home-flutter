@@ -22,9 +22,11 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
     final currentState = state;
     if (event is TopicDetailFetched) {
       try {
-        if (currentState is TopicDetailSuccess &&
-            !_hasReachedMax(currentState) &&
-            event.cache) {
+        if (event.cache &&
+            currentState is TopicDetailSuccess &&
+            !currentState.hasReachedMax) {
+          // 如果不需要刷新，不是首次启动，或遇到错误，并且有下一页
+          // 则获取下一页
           final results = await boardRepository.topicDetail(
             topicId: event.topicId,
             descending: event.descending,
@@ -36,6 +38,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
             pageInfo: currentState.pageInfo.copyWith(results.item3),
           );
         } else {
+          // 其他情况根据设置看是否需要打开缓存，并获取第一页
           Tuple3<Topic, List<Comment>, PageInfo> results;
           if (currentState is TopicDetailSuccess) {
             results = await boardRepository.topicDetail(
@@ -64,11 +67,4 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
       }
     }
   }
-}
-
-bool _hasReachedMax(TopicDetailState currentState) {
-  if (currentState is TopicDetailSuccess) {
-    return currentState.hasReachedMax;
-  }
-  return false;
 }

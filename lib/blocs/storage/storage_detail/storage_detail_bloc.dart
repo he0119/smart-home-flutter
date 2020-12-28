@@ -21,10 +21,11 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     final currentState = state;
     if (event is StorageDetailFetched) {
       try {
-        // 获取下一页数据
-        if (currentState is StorageDetailSuccess &&
-            !_hasReachedMax(currentState) &&
-            event.cache) {
+        // 如果不需要刷新，不是首次启动，或遇到错误，并且有下一页
+        // 则获取下一页
+        if (event.cache &&
+            currentState is StorageDetailSuccess &&
+            !currentState.hasReachedMax) {
           if (currentState.storage == null) {
             final results = await storageRepository.rootStorage(
               after: currentState.storagePageInfo.endCursor,
@@ -54,7 +55,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             );
           }
         } else {
-          // 获取第一页数据
+          // 其他情况根据设置看是否需要打开缓存，并获取第一页
           if (event.name == '') {
             final results =
                 await storageRepository.rootStorage(cache: event.cache);
@@ -92,11 +93,4 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       }
     }
   }
-}
-
-bool _hasReachedMax(StorageDetailState currentState) {
-  if (currentState is StorageDetailSuccess) {
-    return currentState.hasReachedMax;
-  }
-  return false;
 }
