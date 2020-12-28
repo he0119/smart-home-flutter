@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:smart_home/widgets/bottom_loader.dart';
 
 /// 无限长列表
@@ -29,6 +30,15 @@ class InfiniteList<T> extends StatefulWidget {
 
 class _InfiniteListState<T> extends State<InfiniteList<T>> {
   final _scrollController = ScrollController();
+
+  int current = 0;
+  bool get canFetch {
+    if (current != widget.items.length) {
+      current = widget.items.length;
+      return true;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +78,7 @@ class _InfiniteListState<T> extends State<InfiniteList<T>> {
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= widget.threshold &&
         !widget.hasReachedMax) {
-      if (widget.onFetch != null) widget.onFetch();
+      if (widget.onFetch != null && canFetch) widget.onFetch();
     }
   }
 }
@@ -78,13 +88,15 @@ class SliverInfiniteList<T> extends StatefulWidget {
   final bool hasReachedMax;
   final VoidCallback onFetch;
   final double threshold;
+  final int itemCount;
 
   const SliverInfiniteList({
     Key key,
-    this.slivers,
-    this.onFetch,
+    @required this.slivers,
     this.hasReachedMax = true,
+    this.onFetch,
     this.threshold = 200,
+    @required this.itemCount,
   })  : assert(hasReachedMax != null),
         super(key: key);
 
@@ -94,6 +106,15 @@ class SliverInfiniteList<T> extends StatefulWidget {
 
 class _SliverInfiniteListState<T> extends State<SliverInfiniteList<T>> {
   final _scrollController = ScrollController();
+
+  int current = 0;
+  bool get canFetch {
+    if (current != widget.itemCount) {
+      current = widget.itemCount;
+      return true;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +150,7 @@ class _SliverInfiniteListState<T> extends State<SliverInfiniteList<T>> {
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= widget.threshold &&
         !widget.hasReachedMax) {
-      if (widget.onFetch != null) widget.onFetch();
+      if (widget.onFetch != null && canFetch) widget.onFetch();
     }
   }
 }
