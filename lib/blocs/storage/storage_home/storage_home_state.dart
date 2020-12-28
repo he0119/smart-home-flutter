@@ -7,7 +7,10 @@ abstract class StorageHomeState extends Equatable {
   List<Object> get props => [];
 }
 
-class StorageHomeInProgress extends StorageHomeState {}
+class StorageHomeInProgress extends StorageHomeState {
+  @override
+  String toString() => 'StorageHomeInProgress';
+}
 
 class StorageHomeFailure extends StorageHomeState {
   final String message;
@@ -22,23 +25,37 @@ class StorageHomeFailure extends StorageHomeState {
   List<Object> get props => [message, itemType];
 
   @override
-  String toString() => 'StorageHomeFailure { message: $message }';
+  String toString() =>
+      'StorageHomeFailure(message: $message, itemType: $itemType)';
 }
 
 class StorageHomeSuccess extends StorageHomeState {
+  final ItemType itemType;
   final List<Item> recentlyCreatedItems;
   final List<Item> recentlyEditedItems;
   final List<Item> expiredItems;
   final List<Item> nearExpiredItems;
-  final ItemType itemType;
+  final PageInfo pageInfo;
 
   const StorageHomeSuccess({
+    @required this.itemType,
     this.recentlyCreatedItems,
     this.recentlyEditedItems,
     this.expiredItems,
     this.nearExpiredItems,
-    @required this.itemType,
+    @required this.pageInfo,
   });
+
+  bool get hasReachedMax => !pageInfo.hasNextPage;
+
+  int get itemCount {
+    int count = 0;
+    if (recentlyCreatedItems != null) count += recentlyCreatedItems.length;
+    if (recentlyEditedItems != null) count += recentlyEditedItems.length;
+    if (expiredItems != null) count += expiredItems.length;
+    if (nearExpiredItems != null) count += nearExpiredItems.length;
+    return count;
+  }
 
   @override
   List<Object> get props => [
@@ -47,9 +64,10 @@ class StorageHomeSuccess extends StorageHomeState {
         expiredItems,
         nearExpiredItems,
         itemType,
+        pageInfo,
       ];
 
   @override
   String toString() =>
-      'StorageHomeSuccess { recentlyCreatedItems ${recentlyCreatedItems?.length ?? 0}, recentlyEditedItems ${recentlyEditedItems?.length ?? 0}, expiredItems ${expiredItems?.length ?? 0}, nearExpiredItems ${nearExpiredItems?.length ?? 0}, }';
+      'StorageHomeSuccess(itemType: $itemType, hasReachedMax: $hasReachedMax)';
 }

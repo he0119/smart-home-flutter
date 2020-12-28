@@ -1,5 +1,5 @@
 const String topicDetailQuery = r"""
-query topicDetail($topicId: ID!, $orderBy: String) {
+query topicDetail($topicId: ID!, $orderBy: String!, $after: String) {
   topic(id: $topicId) {
     id
     title
@@ -13,7 +13,11 @@ query topicDetail($topicId: ID!, $orderBy: String) {
     createdAt
     editedAt
   }
-  comments(topic: $topicId, level: 0, orderBy: $orderBy) {
+  comments(topic: $topicId, level: 0, orderBy: $orderBy, after: $after) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
     edges {
       node {
         id

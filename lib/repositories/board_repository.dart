@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:smart_home/graphql/mutations/board/mutations.dart';
 import 'package:smart_home/graphql/queries/board/queries.dart';
 import 'package:smart_home/models/board.dart';
+import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/graphql_api_client.dart';
 import 'package:smart_home/utils/graphql_helper.dart';
 import 'package:tuple/tuple.dart';
@@ -128,9 +130,10 @@ class BoardRepository {
 
   /// 话题详情的数据
   /// 评论可选择是否按创建时间倒序，默认为正序
-  Future<Tuple2<Topic, List<Comment>>> topicDetail({
+  Future<Tuple3<Topic, List<Comment>, PageInfo>> topicDetail({
     @required String topicId,
     bool descending = false,
+    String after,
     bool cache = true,
   }) async {
     final QueryOptions options = QueryOptions(
@@ -138,24 +141,33 @@ class BoardRepository {
       variables: {
         'topicId': topicId,
         'orderBy': descending ? '-created_at' : 'created_at',
+        'after': after,
       },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
 
-    final json = results.data.flattenConnection;
+    final PageInfo pageInfo =
+        PageInfo.fromJson(results.data['comments']['pageInfo']);
 
-    final dynamic topicJson = json['topic'];
-    final Topic topic = Topic.fromJson(topicJson);
-
-    final List<dynamic> commentsJson = json['comments'];
+    final List<dynamic> commentsJson =
+        results.data.flattenConnection['comments'];
     final List<Comment> comments =
         commentsJson.map((e) => Comment.fromJson(e)).toList();
 
-    return Tuple2(topic, comments);
+    final dynamic topicJson = results.data.flattenConnection['topic'];
+    final Topic topic = Topic.fromJson(topicJson);
+
+    return Tuple3(topic, comments, pageInfo);
   }
 
-  Future<List<Topic>> topics({String after, bool cache = true}) async {
+  /// 话题列表
+  ///
+  /// PageInfo
+  Future<Tuple2<List<Topic>, PageInfo>> topics({
+    String after,
+    bool cache = true,
+  }) async {
     final QueryOptions options = QueryOptions(
       document: gql(topicsQuery),
       variables: {
@@ -165,11 +177,13 @@ class BoardRepository {
     );
     final results = await graphqlApiClient.query(options);
 
+    final pageInfo = PageInfo.fromJson(results.data['topics']['pageInfo']);
+
     final List<dynamic> topicsJson = results.data.flattenConnection['topics'];
     final List<Topic> topics =
         topicsJson.map((e) => Topic.fromJson(e)).toList();
 
-    return topics;
+    return Tuple2(topics, pageInfo);
   }
 
   Future<Comment> updateComment({

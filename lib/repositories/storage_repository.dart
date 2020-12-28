@@ -83,7 +83,10 @@ class StorageRepository {
     return storageObject;
   }
 
-  Future<List<Item>> consumables({String after, bool cache = true}) async {
+  Future<Tuple2<List<Item>, PageInfo>> consumables({
+    String after,
+    bool cache = true,
+  }) async {
     final QueryOptions options = QueryOptions(
       document: gql(consumablesQuery),
       variables: {
@@ -93,6 +96,8 @@ class StorageRepository {
     );
     final results = await graphqlApiClient.query(options);
 
+    final pageInfo = PageInfo.fromJson(results.data['consumables']['pageInfo']);
+
     final List<dynamic> consumablesJson =
         results.data.flattenConnection['consumables'];
     final List<Item> consumables =
@@ -101,7 +106,7 @@ class StorageRepository {
     // 去重
     // FIXME: 这是服务器上的 bug
     // https://code.djangoproject.com/ticket/2361
-    return consumables.toSet().toList();
+    return Tuple2(consumables.toSet().toList(), pageInfo);
   }
 
   Future<Item> deleteConsumable({
@@ -125,7 +130,8 @@ class StorageRepository {
     return item;
   }
 
-  Future<List<Item>> deletedItems({String after, bool cache = true}) async {
+  Future<Tuple2<List<Item>, PageInfo>> deletedItems(
+      {String after, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       document: gql(deletedItemsQuery),
       variables: {
@@ -135,12 +141,15 @@ class StorageRepository {
     );
     final results = await graphqlApiClient.query(options);
 
+    final pageInfo =
+        PageInfo.fromJson(results.data['deletedItems']['pageInfo']);
+
     final List<dynamic> deletedItemsJson =
         results.data.flattenConnection['deletedItems'];
     final List<Item> deletedItems =
         deletedItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
-    return deletedItems;
+    return Tuple2(deletedItems, pageInfo);
   }
 
   Future<void> deleteItem({String itemId}) async {
@@ -167,7 +176,10 @@ class StorageRepository {
     await graphqlApiClient.mutate(options);
   }
 
-  Future<List<Item>> expiredItems({String after, bool cache = true}) async {
+  Future<Tuple2<List<Item>, PageInfo>> expiredItems({
+    String after,
+    bool cache = true,
+  }) async {
     final QueryOptions options = QueryOptions(
       document: gql(expiredItemsQuery),
       variables: {
@@ -178,12 +190,15 @@ class StorageRepository {
     );
     final results = await graphqlApiClient.query(options);
 
+    final pageInfo =
+        PageInfo.fromJson(results.data['expiredItems']['pageInfo']);
+
     final List<dynamic> expiredItemsJson =
         results.data.flattenConnection['expiredItems'];
     final List<Item> expiredItems =
         expiredItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
-    return expiredItems;
+    return Tuple2(expiredItems, pageInfo);
   }
 
   /// 存储管理主页所需要的数据
@@ -289,7 +304,10 @@ class StorageRepository {
     return items;
   }
 
-  Future<List<Item>> nearExpiredItems({String after, bool cache = true}) async {
+  Future<Tuple2<List<Item>, PageInfo>> nearExpiredItems({
+    String after,
+    bool cache = true,
+  }) async {
     final QueryOptions options = QueryOptions(
       document: gql(nearExpiredItemsQuery),
       variables: {
@@ -302,15 +320,18 @@ class StorageRepository {
     );
     final results = await graphqlApiClient.query(options);
 
+    final pageInfo =
+        PageInfo.fromJson(results.data['nearExpiredItems']['pageInfo']);
+
     final List<dynamic> nearExpiredItemsJson =
         results.data.flattenConnection['nearExpiredItems'];
     final List<Item> nearExpiredItems =
         nearExpiredItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
-    return nearExpiredItems;
+    return Tuple2(nearExpiredItems, pageInfo);
   }
 
-  Future<List<Item>> recentlyCreatedItems(
+  Future<Tuple2<List<Item>, PageInfo>> recentlyCreatedItems(
       {String after, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       document: gql(recentlyCreatedItemsQuery),
@@ -321,15 +342,18 @@ class StorageRepository {
     );
     final results = await graphqlApiClient.query(options);
 
+    final pageInfo =
+        PageInfo.fromJson(results.data['recentlyCreatedItems']['pageInfo']);
+
     final List<dynamic> recentlyCreatedItemsJson =
         results.data.flattenConnection['recentlyCreatedItems'];
     final List<Item> recentlyCreatedItems =
         recentlyCreatedItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
-    return recentlyCreatedItems;
+    return Tuple2(recentlyCreatedItems, pageInfo);
   }
 
-  Future<List<Item>> recentlyEditedItems(
+  Future<Tuple2<List<Item>, PageInfo>> recentlyEditedItems(
       {String after, bool cache = true}) async {
     final QueryOptions options = QueryOptions(
       document: gql(recentlyEditedItemsQuery),
@@ -340,12 +364,15 @@ class StorageRepository {
     );
     final results = await graphqlApiClient.query(options);
 
+    final pageInfo =
+        PageInfo.fromJson(results.data['recentlyEditedItems']['pageInfo']);
+
     final List<dynamic> recentlyEditedItemsJson =
         results.data.flattenConnection['recentlyEditedItems'];
     final List<Item> recentlyEditedItems =
         recentlyEditedItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
-    return recentlyEditedItems;
+    return Tuple2(recentlyEditedItems, pageInfo);
   }
 
   Future<void> restoreItem({String itemId}) async {
@@ -360,19 +387,27 @@ class StorageRepository {
     await graphqlApiClient.mutate(options);
   }
 
-  Future<List<Storage>> rootStorage({bool cache = true}) async {
+  Future<Tuple2<List<Storage>, PageInfo>> rootStorage({
+    String after,
+    bool cache = true,
+  }) async {
     final QueryOptions options = QueryOptions(
       document: gql(rootStorageQuery),
+      variables: {
+        'after': after,
+      },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
+
+    final pageInfo = PageInfo.fromJson(results.data['rootStorage']['pageInfo']);
 
     final List<dynamic> storagesJson =
         results.data.flattenConnection['rootStorage'];
     final List<Storage> storages =
         storagesJson.map((dynamic e) => Storage.fromJson(e)).toList();
 
-    return storages;
+    return Tuple2(storages, pageInfo);
   }
 
   Future<List<dynamic>> search(String key, {bool isDeleted = false}) async {
@@ -411,10 +446,9 @@ class StorageRepository {
   }
 
   /// 获取位置详情信息
-  /// 当前位置
-  /// stroageEndCursor，stroageHasNextPage
-  /// itemEndCursor，itemHasNextPage
-  Future<Tuple5<Storage, String, bool, String, bool>> storage({
+  ///
+  /// stroagePageInfo, itemPageInfo
+  Future<Tuple3<Storage, PageInfo, PageInfo>> storage({
     @required String name,
     String id,
     String storageCursor,
@@ -458,26 +492,16 @@ class StorageRepository {
     }
 
     // 是否还有下一页
-    final String stroageEndCursor =
-        storageJson['children']['pageInfo']['endCursor'];
-    final bool stroageHasNextPage =
-        storageJson['children']['pageInfo']['hasNextPage'];
-    final String itemEndCursor = storageJson['items']['pageInfo']['endCursor'];
-    final bool itemHasNextPage =
-        storageJson['items']['pageInfo']['hasNextPage'];
+    final storagePageInfo =
+        PageInfo.fromJson(storageJson['children']['pageInfo']);
+    final itemPageInfo = PageInfo.fromJson(storageJson['items']['pageInfo']);
 
     // 位置详情
     final Map<String, dynamic> json = storageJson.flattenConnection;
 
     final Storage storage = Storage.fromJson(json);
 
-    return Tuple5(
-      storage,
-      stroageEndCursor,
-      stroageHasNextPage,
-      itemEndCursor,
-      itemHasNextPage,
-    );
+    return Tuple3(storage, storagePageInfo, itemPageInfo);
   }
 
   Future<List<Storage>> storages({

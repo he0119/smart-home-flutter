@@ -1,15 +1,19 @@
 part of 'recycle_bin_bloc.dart';
 
-abstract class RecycleBinEvent {
+abstract class RecycleBinEvent extends Equatable {
   const RecycleBinEvent();
 }
 
-class RecycleBinRefreshed extends RecycleBinEvent {
-  @override
-  String toString() => 'RecycleBinRefreshed';
-}
-
 class RecycleBinFetched extends RecycleBinEvent {
+  final bool cache;
+
+  RecycleBinFetched({
+    this.cache = true,
+  });
+
   @override
-  String toString() => 'RecycleBinFetched';
+  List<Object> get props => [cache];
+
+  @override
+  String toString() => 'RecycleBinFetched(cache: $cache)';
 }

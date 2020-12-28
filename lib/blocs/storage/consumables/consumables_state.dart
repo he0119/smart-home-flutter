@@ -1,7 +1,10 @@
 part of 'consumables_bloc.dart';
 
-abstract class ConsumablesState {
+abstract class ConsumablesState extends Equatable {
   const ConsumablesState();
+
+  @override
+  List<Object> get props => [];
 }
 
 class ConsumablesInProgress extends ConsumablesState {
@@ -15,14 +18,27 @@ class ConsumablesFailure extends ConsumablesState {
   const ConsumablesFailure(this.message);
 
   @override
-  String toString() => 'ConsumablesFailure { message: $message }';
+  List<Object> get props => [message];
+
+  @override
+  String toString() => 'ConsumablesFailure(message: $message)';
 }
 
 class ConsumablesSuccess extends ConsumablesState {
   final List<Item> items;
+  final PageInfo pageInfo;
 
-  const ConsumablesSuccess({@required this.items});
+  const ConsumablesSuccess({
+    @required this.items,
+    this.pageInfo,
+  });
+
+  bool get hasReachedMax => !pageInfo.hasNextPage;
 
   @override
-  String toString() => 'ConsumablesSuccess { items: ${items.length} }';
+  List<Object> get props => [items, pageInfo];
+
+  @override
+  String toString() =>
+      'ConsumablesSuccess(items: ${items.length}, hasReachedMax: $hasReachedMax)';
 }

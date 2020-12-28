@@ -36,39 +36,24 @@ class StorageDetailSuccess extends StorageDetailState {
 
   /// 其他位置页面所需数据
   final Storage storage;
-  final bool hasNextPage;
-  final String itemEndCursor;
-  final String stroageEndCursor;
+  final PageInfo itemPageInfo;
+  final PageInfo storagePageInfo;
 
   const StorageDetailSuccess({
     this.storages,
     this.storage,
-    this.hasNextPage,
-    this.itemEndCursor,
-    this.stroageEndCursor,
+    this.itemPageInfo,
+    this.storagePageInfo,
   }) : assert(storages != null || storage != null);
 
-  StorageDetailSuccess copyWith({
-    List<Storage> storages,
-    Storage storage,
-    bool hasNextPage,
-    String itemEndCursor,
-    String stroageEndCursor,
-  }) {
-    return StorageDetailSuccess(
-      storages: storages ?? this.storages,
-      storage: storage ?? this.storage,
-      hasNextPage: hasNextPage ?? this.hasNextPage,
-      itemEndCursor: itemEndCursor ?? this.itemEndCursor,
-      stroageEndCursor: stroageEndCursor ?? this.stroageEndCursor,
-    );
-  }
+  bool get hasReachedMax =>
+      !itemPageInfo.hasNextPage && !storagePageInfo.hasNextPage;
 
   @override
-  List<Object> get props => [storages, storage, hasNextPage];
+  List<Object> get props => [storages, storage, itemPageInfo, storagePageInfo];
 
   @override
   String toString() {
-    return 'StorageDetailSuccess(storage: $storage, hasNextPage: $hasNextPage';
+    return 'StorageDetailSuccess(storage: $storage, hasReachedMax: $hasReachedMax)';
   }
 }

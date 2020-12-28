@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:smart_home/blocs/board/blocs.dart';
+import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/board/comment_edit_page.dart';
 import 'package:smart_home/pages/board/widgets/item_title.dart';
@@ -20,6 +21,8 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final descending =
+        context.select((AppPreferencesBloc b) => b.state.commentDescending);
     return Container(
       key: ValueKey(comment.id),
       child: Column(
@@ -75,7 +78,10 @@ class CommentItem extends StatelessWidget {
                           ),
                         );
                         BlocProvider.of<TopicDetailBloc>(context)
-                            .add(TopicDetailRefreshed());
+                            .add(TopicDetailFetched(
+                          descending: descending,
+                          cache: false,
+                        ));
                         break;
                     }
                   }

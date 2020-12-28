@@ -134,7 +134,7 @@ class _HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (appTab == AppTab.storage) {
       BlocProvider.of<StorageHomeBloc>(context)
-          .add(StorageHomeChanged(itemType: ItemType.all));
+          .add(StorageHomeFetched(itemType: ItemType.all));
       return StorageHomePage();
     }
     if (appTab == AppTab.blog) {
@@ -143,7 +143,7 @@ class _HomePage extends StatelessWidget {
     if (appTab == AppTab.iot) {
       return IotHomePage();
     }
-    BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeStarted());
+    BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeFetched());
     return BoardHomePage();
   }
 }

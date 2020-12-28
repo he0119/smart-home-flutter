@@ -29,7 +29,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         );
         yield StorageUpdateSuccess(storage: storage);
       } catch (e) {
-        yield StorageEditFailure(e?.message ?? e.toString());
+        yield StorageEditFailure(e.message);
       }
     }
     if (event is StorageAdded) {
@@ -42,7 +42,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         );
         yield StorageAddSuccess(storage: storage);
       } catch (e) {
-        yield StorageEditFailure(e?.message ?? e.toString());
+        yield StorageEditFailure(e.message);
       }
     }
     if (event is StorageDeleted) {
@@ -51,7 +51,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         await storageRepository.deleteStorage(storageId: event.storage.id);
         yield StorageDeleteSuccess(storage: event.storage);
       } catch (e) {
-        yield StorageEditFailure(e?.message ?? e.toString());
+        yield StorageEditFailure(e.message);
       }
     }
   }

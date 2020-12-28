@@ -1,19 +1,27 @@
 part of 'storage_home_bloc.dart';
 
-abstract class StorageHomeEvent {
+abstract class StorageHomeEvent extends Equatable {
   const StorageHomeEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
-class StorageHomeChanged extends StorageHomeEvent {
+class StorageHomeFetched extends StorageHomeEvent {
+  /// 物品的种类
   final ItemType itemType;
-  final bool refresh;
 
-  const StorageHomeChanged({
+  /// 是否需要刷新，默认不需要
+  final bool cache;
+
+  const StorageHomeFetched({
     @required this.itemType,
-    this.refresh = false,
+    this.cache = true,
   });
 
   @override
-  String toString() =>
-      'StorageHomeChanged { itemType: $itemType, refresh: $refresh }';
+  List<Object> get props => [itemType, cache];
+
+  @override
+  String toString() => 'StorageHomeFetched(itemType: $itemType, cache: $cache)';
 }

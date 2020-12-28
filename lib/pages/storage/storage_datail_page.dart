@@ -38,7 +38,7 @@ class StorageDetailPage extends Page {
             create: (context) => StorageDetailBloc(
               storageRepository:
                   RepositoryProvider.of<StorageRepository>(context),
-            )..add(StorageDetailStarted(name: storageName, id: storageId)),
+            )..add(StorageDetailFetched(name: storageName, id: storageId)),
           ),
           BlocProvider<StorageEditBloc>(
             create: (context) => StorageEditBloc(
@@ -74,9 +74,23 @@ class StorageDetailScreen extends StatelessWidget {
           appBar: _buildAppBar(context, state),
           body: RefreshIndicator(
             onRefresh: () async {
-              BlocProvider.of<StorageDetailBloc>(context).add(
-                StorageDetailRefreshed(),
-              );
+              if (state is StorageDetailSuccess) {
+                BlocProvider.of<StorageDetailBloc>(context).add(
+                  StorageDetailFetched(
+                    name: state.storage?.name ?? '',
+                    id: state.storage?.id,
+                    cache: false,
+                  ),
+                );
+              } else {
+                BlocProvider.of<StorageDetailBloc>(context).add(
+                  StorageDetailFetched(
+                    name: storageName,
+                    id: storageId,
+                    cache: false,
+                  ),
+                );
+              }
             },
             child: BlocListener<StorageEditBloc, StorageEditState>(
               listener: (context, state) {
@@ -236,7 +250,7 @@ class StorageDetailScreen extends StatelessWidget {
       return ErrorMessageButton(
         onPressed: () {
           BlocProvider.of<StorageDetailBloc>(context).add(
-            StorageDetailStarted(name: state.name, id: state.id),
+            StorageDetailFetched(name: state.name, id: state.id),
           );
         },
         message: state.message,
@@ -246,15 +260,23 @@ class StorageDetailScreen extends StatelessWidget {
       return StorageItemList(
         storages: state.storages.toList(),
         items: [],
+        hasReachedMax: state.hasReachedMax,
+        onFetch: () => BlocProvider.of<StorageDetailBloc>(context).add(
+          StorageDetailFetched(name: ''),
+        ),
       );
     }
     if (state is StorageDetailSuccess && state.storage != null) {
       return StorageItemList(
         items: state.storage.items.toList(),
         storages: state.storage.children.toList(),
-        hasNextPage: state.hasNextPage,
-        onFetch: () => BlocProvider.of<StorageDetailBloc>(context)
-            .add(StorageDetailFetched()),
+        hasReachedMax: state.hasReachedMax,
+        onFetch: () => BlocProvider.of<StorageDetailBloc>(context).add(
+          StorageDetailFetched(
+            name: state.storage.name,
+            id: state.storage.id,
+          ),
+        ),
       );
     }
     return CenterLoadingIndicator();

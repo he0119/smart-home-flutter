@@ -1,10 +1,16 @@
 part of 'recycle_bin_bloc.dart';
 
-abstract class RecycleBinState {
+abstract class RecycleBinState extends Equatable {
   const RecycleBinState();
+
+  @override
+  List<Object> get props => [];
 }
 
-class RecycleBinInitial extends RecycleBinState {}
+class RecycleBinInitial extends RecycleBinState {
+  @override
+  String toString() => 'RecycleBinInitial';
+}
 
 class RecycleBinInProgress extends RecycleBinState {
   @override
@@ -17,14 +23,27 @@ class RecycleBinFailure extends RecycleBinState {
   const RecycleBinFailure(this.message);
 
   @override
-  String toString() => 'RecycleBinFailure { message: $message }';
+  List<Object> get props => [message];
+
+  @override
+  String toString() => 'RecycleBinFailure(message: $message)';
 }
 
 class RecycleBinSuccess extends RecycleBinState {
   final List<Item> items;
+  final PageInfo pageInfo;
 
-  const RecycleBinSuccess({@required this.items});
+  const RecycleBinSuccess({
+    @required this.items,
+    @required this.pageInfo,
+  });
+
+  bool get hasReachedMax => !pageInfo.hasNextPage;
 
   @override
-  String toString() => 'RecycleBinSuccess { items: ${items.length} }';
+  List<Object> get props => [items, pageInfo];
+
+  @override
+  String toString() =>
+      'RecycleBinSuccess(items: ${items.length}, hasReachedMax: $hasReachedMax)';
 }
