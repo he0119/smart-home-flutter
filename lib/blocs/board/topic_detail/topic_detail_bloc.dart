@@ -24,7 +24,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
       try {
         // 如果需要刷新，则显示加载界面
         // 因为需要请求网络最好提示用户
-        if (!event.cache) {
+        if (event.showInProgress && !event.cache) {
           yield TopicDetailInProgress();
         }
         if (event.cache &&
@@ -36,6 +36,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
             topicId: event.topicId,
             descending: event.descending,
             after: currentState.pageInfo.endCursor,
+            cache: false,
           );
           yield TopicDetailSuccess(
             topic: results.item1,

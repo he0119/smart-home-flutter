@@ -186,6 +186,7 @@ class _DetailScreen extends StatelessWidget {
                           .add(TopicDetailFetched(
                             descending: descending,
                             cache: false,
+                            showInProgress: false,
                           )),
                     ),
                   ),
