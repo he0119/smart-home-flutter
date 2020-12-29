@@ -32,6 +32,7 @@ dependencies:
   device_info_plus: ^0.6.0
   package_info_plus: ^0.6.0
   url_launcher: ^5.4.2
+  flutter_keyboard_visibility: ^4.0.0
 
   # Widget
   webview_flutter: ^1.0.1

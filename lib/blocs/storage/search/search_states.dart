@@ -7,7 +7,15 @@ abstract class StorageSearchState extends Equatable {
   List<Object> get props => [];
 }
 
-class StorageSearchInProgress extends StorageSearchState {}
+class StorageSearchInitial extends StorageSearchState {
+  @override
+  String toString() => 'StorageSearchInitial';
+}
+
+class StorageSearchInProgress extends StorageSearchState {
+  @override
+  String toString() => 'StorageSearchInProgress';
+}
 
 class StorageSearchFailure extends StorageSearchState {
   final String message;
@@ -18,7 +26,7 @@ class StorageSearchFailure extends StorageSearchState {
   List<Object> get props => [message];
 
   @override
-  String toString() => 'StorageSearchFailure { message: $message }';
+  String toString() => 'StorageSearchFailure(message: $message)';
 }
 
 class StorageSearchSuccess extends StorageSearchState {
@@ -34,4 +42,8 @@ class StorageSearchSuccess extends StorageSearchState {
 
   @override
   List<Object> get props => [items, storages, term];
+
+  @override
+  String toString() =>
+      'StorageSearchSuccess(items: $items, storages: $storages, term: $term)';
 }

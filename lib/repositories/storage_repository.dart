@@ -410,7 +410,8 @@ class StorageRepository {
     return Tuple2(storages, pageInfo);
   }
 
-  Future<List<dynamic>> search(String key, {bool isDeleted = false}) async {
+  Future<Tuple2<List<Item>, List<Storage>>> search(String key,
+      {bool isDeleted = false}) async {
     final QueryOptions options = QueryOptions(
       document: gql(searchQuery),
       variables: {
@@ -442,7 +443,7 @@ class StorageRepository {
         (storagesName + storagesDescription).toSet().toList();
     final List<Item> items = (itemsName + itemsDescription).toSet().toList();
 
-    return [items, storages];
+    return Tuple2(items, storages);
   }
 
   /// 获取位置详情信息
