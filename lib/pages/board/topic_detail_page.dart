@@ -8,6 +8,7 @@ import 'package:smart_home/blocs/board/topic_detail/topic_detail_bloc.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/board/topic_edit_page.dart';
 import 'package:smart_home/pages/board/widgets/add_comment_bar.dart';
+import 'package:smart_home/pages/board/widgets/comment_item.dart';
 import 'package:smart_home/pages/board/widgets/comment_list.dart';
 import 'package:smart_home/pages/board/widgets/topic_item.dart';
 import 'package:smart_home/repositories/board_repository.dart';
@@ -64,25 +65,10 @@ class TopicDetailScreen extends StatelessWidget {
   }
 }
 
-class _DetailScreen extends StatefulWidget {
+class _DetailScreen extends StatelessWidget {
   const _DetailScreen({
     Key key,
   }) : super(key: key);
-
-  @override
-  _DetailScreenState createState() => _DetailScreenState();
-}
-
-class _DetailScreenState extends State<_DetailScreen> {
-  final _buttonBarController = TextEditingController();
-  final _buttonBarFocusNode = FocusNode();
-
-  @override
-  void dispose() {
-    _buttonBarController.dispose();
-    _buttonBarFocusNode.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -326,83 +312,38 @@ class _DetailScreenState extends State<_DetailScreen> {
                     ),
                   ],
                 ),
-                body: BlocListener<CommentEditBloc, CommentEditState>(
-                  listener: (context, state) {
-                    if (state is CommentAddSuccess) {
-                      _buttonBarController.text = '';
-                      _buttonBarFocusNode.unfocus();
-                      BlocProvider.of<TopicDetailBloc>(context)
-                          .add(TopicDetailFetched(
-                        descending: descending,
-                        cache: false,
-                      ));
-                      showInfoSnackBar('评论成功');
-                    }
-                    if (state is CommentDeleteSuccess) {
-                      BlocProvider.of<TopicDetailBloc>(context)
-                          .add(TopicDetailFetched(
-                        descending: descending,
-                        cache: false,
-                      ));
-                      showInfoSnackBar('评论删除成功');
-                    }
-                    if (state is CommentFailure) {
-                      showErrorSnackBar(state.message);
-                    }
+                body: RefreshIndicator(
+                  onRefresh: () async {
+                    BlocProvider.of<TopicDetailBloc>(context)
+                        .add(TopicDetailFetched(
+                      descending: descending,
+                      cache: false,
+                    ));
                   },
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: RefreshIndicator(
-                          onRefresh: () async {
-                            BlocProvider.of<TopicDetailBloc>(context)
-                                .add(TopicDetailFetched(
-                              descending: descending,
-                              cache: false,
-                            ));
-                          },
-                          child: GestureDetector(
-                            onTap: () {
-                              _buttonBarFocusNode.unfocus();
-                            },
-                            child: SliverInfiniteList(
-                              hasReachedMax: state.hasReachedMax,
-                              itemCount: state.comments.length,
-                              onFetch: () {
-                                BlocProvider.of<TopicDetailBloc>(context)
-                                    .add(TopicDetailFetched(
-                                  topicId: state.topic.id,
-                                  descending: descending,
-                                ));
-                              },
-                              slivers: <Widget>[
-                                SliverToBoxAdapter(
-                                  child: TopicItem(
-                                    topic: state.topic,
-                                    showBody: true,
-                                  ),
-                                ),
-                                SliverToBoxAdapter(
-                                  child: CommentOrder(
-                                    topicId: state.topic.id,
-                                    descending: descending,
-                                  ),
-                                ),
-                                SliverCommentList(comments: state.comments),
-                              ],
-                            ),
-                          ),
-                        ),
+                  child: InfiniteList<Comment>(
+                    items: state.comments,
+                    itemBuilder: (context, item) => CommentItem(
+                      comment: item,
+                      showMenu: loginUser == item.user,
+                    ),
+                    onFetch: () {
+                      context.read<TopicDetailBloc>().add(TopicDetailFetched(
+                            topicId: state.topic.id,
+                            descending: descending,
+                          ));
+                    },
+                    hasReachedMax: state.hasReachedMax,
+                    top: [
+                      TopicItem(
+                        topic: state.topic,
+                        showBody: true,
                       ),
-                      Container(
-                        alignment: Alignment.bottomCenter,
-                        child: AddCommentButtonBar(
-                          topic: state.topic,
-                          controller: _buttonBarController,
-                          focusNode: _buttonBarFocusNode,
-                        ),
-                      )
+                      CommentOrder(
+                        topicId: state.topic.id,
+                        descending: descending,
+                      ),
                     ],
+                    botton: [Container()],
                   ),
                 ),
               ),

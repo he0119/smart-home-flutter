@@ -9,6 +9,8 @@ import 'package:smart_home/widgets/bottom_loader.dart';
 /// 使用的 [ListView.separated], 分隔为 [Divider]
 class InfiniteList<T> extends StatefulWidget {
   final List<T> items;
+  final List<Widget> top;
+  final List<Widget> botton;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final bool hasReachedMax;
   final VoidCallback onFetch;
@@ -17,9 +19,11 @@ class InfiniteList<T> extends StatefulWidget {
   const InfiniteList({
     Key key,
     @required this.items,
+    this.top,
+    this.botton,
     @required this.itemBuilder,
-    this.onFetch,
     this.hasReachedMax = true,
+    this.onFetch,
     this.threshold = 200,
   })  : assert(hasReachedMax != null),
         super(key: key);
@@ -42,18 +46,27 @@ class _InfiniteListState<T> extends State<InfiniteList<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final topCount = widget.top?.length ?? 0;
+    final bottonCount = widget.botton?.length ?? 0;
     return Scrollbar(
       controller: _scrollController,
       child: ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: !widget.hasReachedMax
-            ? widget.items.length + 1
-            : widget.items.length,
+            ? widget.items.length + 1 + topCount + bottonCount
+            : widget.items.length + topCount + bottonCount,
         itemBuilder: (context, index) {
-          if (index >= widget.items.length) {
-            return BottomLoader();
+          if (index < topCount) {
+            return widget.top[index];
           }
-          return widget.itemBuilder(context, widget.items[index]);
+          if (index >= topCount && index < widget.items.length + topCount) {
+            return widget.itemBuilder(context, widget.items[index - topCount]);
+          }
+          if (index >= widget.items.length + topCount &&
+              index < widget.items.length + topCount + bottonCount) {
+            return widget.botton[index - widget.items.length - topCount];
+          }
+          return BottomLoader();
         },
         separatorBuilder: (contexit, index) => Divider(),
         controller: _scrollController,

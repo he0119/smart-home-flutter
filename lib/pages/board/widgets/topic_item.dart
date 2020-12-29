@@ -51,7 +51,6 @@ class TopicItem extends StatelessWidget {
                 selectable: true,
               ),
             ),
-            Divider(),
           ],
         ),
       );
