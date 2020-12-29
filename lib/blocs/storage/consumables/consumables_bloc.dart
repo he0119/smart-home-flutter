@@ -35,6 +35,7 @@ class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
           // 则获取下一页
           final results = await storageRepository.consumables(
             after: currentState.pageInfo.endCursor,
+            cache: false,
           );
           yield ConsumablesSuccess(
             items: currentState.items + results.item1,

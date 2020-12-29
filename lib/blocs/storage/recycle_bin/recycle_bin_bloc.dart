@@ -35,6 +35,7 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
           // 则获取下一页
           final results = await storageRepository.deletedItems(
             after: currentState.pageInfo.endCursor,
+            cache: false,
           );
           yield RecycleBinSuccess(
             items: currentState.items + results.item1,

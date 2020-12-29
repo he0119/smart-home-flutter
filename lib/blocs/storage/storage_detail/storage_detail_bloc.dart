@@ -34,6 +34,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           if (currentState.storage == null) {
             final results = await storageRepository.rootStorage(
               after: currentState.storagePageInfo.endCursor,
+              cache: false,
             );
             yield StorageDetailSuccess(
               storages: currentState.storages + results.item1,
@@ -47,6 +48,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
               id: currentState.storage.id,
               itemCursor: currentState.itemPageInfo.endCursor,
               storageCursor: currentState.storagePageInfo.endCursor,
+              cache: false,
             );
             yield StorageDetailSuccess(
               storage: currentState.storage.copyWith(

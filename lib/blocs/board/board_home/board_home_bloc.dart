@@ -33,6 +33,7 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
           // 则获取下一页
           final results = await boardRepository.topics(
             after: currentState.pageInfo.endCursor,
+            cache: false,
           );
           yield BoardHomeSuccess(
             topics: currentState.topics + results.item1,
