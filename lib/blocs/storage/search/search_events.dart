@@ -16,5 +16,5 @@ class StorageSearchChanged extends StorageSearchEvent {
   List<Object> get props => [key];
 
   @override
-  String toString() => key;
+  String toString() => 'StorageSearchChanged(key: $key)';
 }

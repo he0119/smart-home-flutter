@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_home/pages/storage/search_page.dart';
+import 'package:smart_home/routers/delegate.dart';
 
 class SearchIconButton extends StatelessWidget {
   const SearchIconButton({Key key}) : super(key: key);
@@ -11,10 +12,7 @@ class SearchIconButton extends StatelessWidget {
       child: IconButton(
         icon: Icon(Icons.search),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => SearchPage()),
-          );
+          MyRouterDelegate.of(context).push(SearchPage());
         },
       ),
     );
