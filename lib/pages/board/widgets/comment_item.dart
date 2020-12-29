@@ -94,7 +94,6 @@ class CommentItem extends StatelessWidget {
               selectable: true,
             ),
           ),
-          Divider(),
         ],
       ),
     );
