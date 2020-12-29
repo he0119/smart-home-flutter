@@ -9,6 +9,7 @@ import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/center_loading_indicator.dart';
 import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/utils/show_snack_bar.dart';
+import 'package:smart_home/widgets/infinite_list.dart';
 
 class RecycleBinPage extends StatelessWidget {
   @override
@@ -19,7 +20,7 @@ class RecycleBinPage extends StatelessWidget {
           create: (context) => RecycleBinBloc(
             storageRepository:
                 RepositoryProvider.of<StorageRepository>(context),
-          )..add(RecycleBinRefreshed()),
+          )..add(RecycleBinFetched()),
         ),
         BlocProvider<ItemEditBloc>(
           create: (context) => ItemEditBloc(
@@ -39,7 +40,7 @@ class RecycleBinPage extends StatelessWidget {
                 message: state.message,
                 onPressed: () {
                   BlocProvider.of<RecycleBinBloc>(context)
-                      .add(RecycleBinRefreshed());
+                      .add(RecycleBinFetched(cache: false));
                 },
               );
             }
@@ -47,26 +48,28 @@ class RecycleBinPage extends StatelessWidget {
               return RefreshIndicator(
                 onRefresh: () async {
                   BlocProvider.of<RecycleBinBloc>(context)
-                      .add(RecycleBinRefreshed());
+                      .add(RecycleBinFetched(cache: false));
                 },
                 child: BlocListener<ItemEditBloc, ItemEditState>(
-                  listener: (context, state) {
-                    if (state is ItemRestoreSuccess) {
-                      showInfoSnackBar(
-                        '物品 ${state.item.name} 恢复成功',
-                        duration: 2,
-                      );
-                    }
-                    if (state is ItemEditFailure) {
-                      showErrorSnackBar(state.message);
-                    }
-                  },
-                  child: ListView.builder(
-                    itemCount: state.items.length,
-                    itemBuilder: (context, index) =>
-                        _buildItem(context, state.items[index]),
-                  ),
-                ),
+                    listener: (context, state) {
+                      if (state is ItemRestoreSuccess) {
+                        showInfoSnackBar(
+                          '物品 ${state.item.name} 恢复成功',
+                          duration: 2,
+                        );
+                      }
+                      if (state is ItemEditFailure) {
+                        showErrorSnackBar(state.message);
+                      }
+                    },
+                    child: InfiniteList(
+                      itemBuilder: _buildItem,
+                      items: state.items,
+                      hasReachedMax: state.hasReachedMax,
+                      onFetch: () => context
+                          .read<RecycleBinBloc>()
+                          .add(RecycleBinFetched()),
+                    )),
               );
             }
             return CenterLoadingIndicator();
@@ -127,7 +130,8 @@ Widget _buildItem(BuildContext context, Item item) {
               ],
             ),
           );
-          BlocProvider.of<RecycleBinBloc>(context).add(RecycleBinRefreshed());
+          BlocProvider.of<RecycleBinBloc>(context)
+              .add(RecycleBinFetched(cache: false));
         },
       ),
     ),

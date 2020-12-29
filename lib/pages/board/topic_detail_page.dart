@@ -14,6 +14,7 @@ import 'package:smart_home/repositories/board_repository.dart';
 import 'package:smart_home/widgets/center_loading_indicator.dart';
 import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/utils/show_snack_bar.dart';
+import 'package:smart_home/widgets/infinite_list.dart';
 
 class TopicDetailPage extends Page {
   final String topicId;
@@ -50,7 +51,7 @@ class TopicDetailScreen extends StatelessWidget {
         BlocProvider<TopicDetailBloc>(
           create: (context) => TopicDetailBloc(
             boardRepository: RepositoryProvider.of<BoardRepository>(context),
-          )..add(TopicDetailChanged(topicId: topicId, descending: descending)),
+          )..add(TopicDetailFetched(topicId: topicId, descending: descending)),
         ),
         BlocProvider<TopicEditBloc>(
           create: (context) => TopicEditBloc(
@@ -97,7 +98,7 @@ class _DetailScreenState extends State<_DetailScreen> {
             body: ErrorMessageButton(
               onPressed: () {
                 BlocProvider.of<TopicDetailBloc>(context).add(
-                  TopicDetailChanged(
+                  TopicDetailFetched(
                       topicId: state.topicId, descending: descending),
                 );
               },
@@ -154,7 +155,10 @@ class _DetailScreenState extends State<_DetailScreen> {
                             ),
                           );
                           BlocProvider.of<TopicDetailBloc>(context)
-                              .add(TopicDetailRefreshed());
+                              .add(TopicDetailFetched(
+                            descending: descending,
+                            cache: false,
+                          ));
                         }
                         if (value == TopicDetailMenu.delete) {
                           showDialog(
@@ -328,12 +332,18 @@ class _DetailScreenState extends State<_DetailScreen> {
                       _buttonBarController.text = '';
                       _buttonBarFocusNode.unfocus();
                       BlocProvider.of<TopicDetailBloc>(context)
-                          .add(TopicDetailRefreshed());
+                          .add(TopicDetailFetched(
+                        descending: descending,
+                        cache: false,
+                      ));
                       showInfoSnackBar('评论成功');
                     }
                     if (state is CommentDeleteSuccess) {
                       BlocProvider.of<TopicDetailBloc>(context)
-                          .add(TopicDetailRefreshed());
+                          .add(TopicDetailFetched(
+                        descending: descending,
+                        cache: false,
+                      ));
                       showInfoSnackBar('评论删除成功');
                     }
                     if (state is CommentFailure) {
@@ -346,13 +356,25 @@ class _DetailScreenState extends State<_DetailScreen> {
                         child: RefreshIndicator(
                           onRefresh: () async {
                             BlocProvider.of<TopicDetailBloc>(context)
-                                .add(TopicDetailRefreshed());
+                                .add(TopicDetailFetched(
+                              descending: descending,
+                              cache: false,
+                            ));
                           },
                           child: GestureDetector(
                             onTap: () {
                               _buttonBarFocusNode.unfocus();
                             },
-                            child: CustomScrollView(
+                            child: SliverInfiniteList(
+                              hasReachedMax: state.hasReachedMax,
+                              itemCount: state.comments.length,
+                              onFetch: () {
+                                BlocProvider.of<TopicDetailBloc>(context)
+                                    .add(TopicDetailFetched(
+                                  topicId: state.topic.id,
+                                  descending: descending,
+                                ));
+                              },
                               slivers: <Widget>[
                                 SliverToBoxAdapter(
                                   child: TopicItem(
@@ -426,7 +448,7 @@ class CommentOrder extends StatelessWidget {
               BlocProvider.of<AppPreferencesBloc>(context)
                   .add(CommentDescendingChanged(descending: value));
               BlocProvider.of<TopicDetailBloc>(context)
-                  .add(TopicDetailChanged(topicId: topicId, descending: value));
+                  .add(TopicDetailFetched(topicId: topicId, descending: value));
             },
             itemBuilder: (context) => <PopupMenuItem<bool>>[
               PopupMenuItem(

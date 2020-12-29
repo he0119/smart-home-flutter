@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:smart_home/models/board.dart';
-import 'package:smart_home/repositories/board_repository.dart';
+import 'package:flutter/foundation.dart';
+import 'package:smart_home/models/models.dart';
+import 'package:smart_home/repositories/repositories.dart';
 
 part 'board_home_event.dart';
 part 'board_home_state.dart';
@@ -10,30 +10,44 @@ part 'board_home_state.dart';
 class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
   final BoardRepository boardRepository;
 
-  BoardHomeBloc({@required this.boardRepository})
-      : super(BoardHomeInProgress());
+  BoardHomeBloc({
+    @required this.boardRepository,
+  }) : super(BoardHomeInProgress());
 
   @override
   Stream<BoardHomeState> mapEventToState(
     BoardHomeEvent event,
   ) async* {
-    if (event is BoardHomeStarted) {
+    final currentState = state;
+    if (event is BoardHomeFetched) {
       try {
-        final currentState = state;
-        if (currentState is! BoardHomeSuccess) {
+        // 如果需要刷新，则显示加载界面
+        // 因为需要请求网络最好提示用户
+        if (!event.cache) {
           yield BoardHomeInProgress();
         }
-        List<Topic> topics = await boardRepository.topics(cache: false);
-        yield BoardHomeSuccess(topics: topics);
-      } catch (e) {
-        yield BoardHomeFailure(e.message);
-      }
-    }
-    if (event is BoardHomeRefreshed) {
-      try {
-        yield BoardHomeInProgress();
-        List<Topic> topics = await boardRepository.topics(cache: false);
-        yield BoardHomeSuccess(topics: topics);
+        if (event.cache &&
+            currentState is BoardHomeSuccess &&
+            !currentState.hasReachedMax) {
+          // 如果不需要刷新，不是首次启动，或遇到错误，并且有下一页
+          // 则获取下一页
+          final results = await boardRepository.topics(
+            after: currentState.pageInfo.endCursor,
+          );
+          yield BoardHomeSuccess(
+            topics: currentState.topics + results.item1,
+            pageInfo: currentState.pageInfo.copyWith(results.item2),
+          );
+        } else {
+          // 其他情况根据设置看是否需要打开缓存，并获取第一页
+          final results = await boardRepository.topics(
+            cache: event.cache,
+          );
+          yield BoardHomeSuccess(
+            topics: results.item1,
+            pageInfo: results.item2,
+          );
+        }
       } catch (e) {
         yield BoardHomeFailure(e.message);
       }

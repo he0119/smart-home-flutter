@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
@@ -8,7 +9,6 @@ part 'storage_detail_state.dart';
 
 class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
   final StorageRepository storageRepository;
-  bool backImmediately;
 
   StorageDetailBloc({
     @required this.storageRepository,
@@ -19,99 +19,83 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
     StorageDetailEvent event,
   ) async* {
     final currentState = state;
-    if (event is StorageDetailFetched && _hasNextPage(currentState)) {
-      if (currentState is StorageDetailSuccess) {
-        final results = await storageRepository.storage(
-            id: currentState.storage.id,
-            itemCursor: currentState.itemEndCursor,
-            storageCursor: currentState.stroageEndCursor);
-        yield currentState.copyWith(
-          storage: currentState.storage.copyWith(
-            children: currentState.storage.children + results.item1.children,
-            items: currentState.storage.items + results.item1.items,
-          ),
-          hasNextPage: results.item3 || results.item5,
-          stroageEndCursor: results.item2,
-          itemEndCursor: results.item4,
-        );
-      }
-    }
-    if (event is StorageDetailRoot) {
-      backImmediately = false;
-      yield StorageDetailInProgress();
+    if (event is StorageDetailFetched) {
       try {
-        List<Storage> results = await storageRepository.rootStorage();
-        yield StorageDetailRootSuccess(storages: results);
+        // 如果需要刷新，则显示加载界面
+        // 因为需要请求网络最好提示用户
+        if (!event.cache) {
+          yield StorageDetailInProgress();
+        }
+        if (event.cache &&
+            currentState is StorageDetailSuccess &&
+            !currentState.hasReachedMax) {
+          // 如果不需要刷新，不是首次启动，或遇到错误，并且有下一页
+          // 则获取下一页
+          if (currentState.storage == null) {
+            final results = await storageRepository.rootStorage(
+              after: currentState.storagePageInfo.endCursor,
+            );
+            yield StorageDetailSuccess(
+              storages: currentState.storages + results.item1,
+              storagePageInfo:
+                  currentState.storagePageInfo.copyWith(results.item2),
+              itemPageInfo: PageInfo(hasNextPage: false),
+            );
+          } else {
+            final results = await storageRepository.storage(
+              name: currentState.storage.name,
+              id: currentState.storage.id,
+              itemCursor: currentState.itemPageInfo.endCursor,
+              storageCursor: currentState.storagePageInfo.endCursor,
+            );
+            yield StorageDetailSuccess(
+              storage: currentState.storage.copyWith(
+                children:
+                    currentState.storage.children + results.item1.children,
+                items: currentState.storage.items + results.item1.items,
+              ),
+              storagePageInfo:
+                  currentState.storagePageInfo.copyWith(results.item2),
+              itemPageInfo: currentState.itemPageInfo.copyWith(results.item3),
+            );
+          }
+        } else {
+          // 其他情况根据设置看是否需要打开缓存，并获取第一页
+          if (event.name == '') {
+            final results =
+                await storageRepository.rootStorage(cache: event.cache);
+            yield StorageDetailSuccess(
+              storages: results.item1,
+              storagePageInfo: results.item2,
+              itemPageInfo: PageInfo(hasNextPage: false),
+            );
+          } else {
+            final results = await storageRepository.storage(
+              name: event.name,
+              id: event.id,
+              cache: event.cache,
+            );
+            if (results == null) {
+              yield StorageDetailFailure(
+                '获取位置失败，位置不存在',
+                name: event.name,
+                id: event.id,
+              );
+            }
+            yield StorageDetailSuccess(
+              storage: results.item1,
+              storagePageInfo: results.item2,
+              itemPageInfo: results.item3,
+            );
+          }
+        }
       } catch (e) {
         yield StorageDetailFailure(
           e.message,
-          storageId: null,
-        );
-      }
-    }
-    if (event is StorageDetailRootRefreshed) {
-      backImmediately = false;
-      try {
-        List<Storage> results =
-            await storageRepository.rootStorage(cache: false);
-        yield StorageDetailRootSuccess(storages: results);
-      } catch (e) {
-        yield StorageDetailFailure(
-          e.message,
-          storageId: null,
-        );
-      }
-    }
-    if (event is StorageDetailChanged) {
-      // 是否马上返回上级界面
-      if (backImmediately == null) {
-        backImmediately = true;
-      } else {
-        backImmediately = false;
-      }
-      yield StorageDetailInProgress();
-      try {
-        final results = await storageRepository.storage(id: event.id);
-        yield StorageDetailSuccess(
-          backImmediately: backImmediately,
-          storage: results.item1,
-          hasNextPage: results.item3 || results.item5,
-          stroageEndCursor: results.item2,
-          itemEndCursor: results.item4,
-        );
-      } catch (e) {
-        yield StorageDetailFailure(
-          e.message,
-          storageId: event.id,
-        );
-      }
-    }
-    if (event is StorageDetailRefreshed) {
-      try {
-        final results = await storageRepository.storage(
+          name: event.name,
           id: event.id,
-          cache: false,
-        );
-        yield StorageDetailSuccess(
-          backImmediately: backImmediately,
-          storage: results.item1,
-          hasNextPage: results.item3 || results.item5,
-          stroageEndCursor: results.item2,
-          itemEndCursor: results.item4,
-        );
-      } catch (e) {
-        yield StorageDetailFailure(
-          e.message,
-          storageId: event.id,
         );
       }
     }
   }
-}
-
-bool _hasNextPage(StorageDetailState currentState) {
-  if (currentState is StorageDetailSuccess) {
-    return currentState.hasNextPage;
-  }
-  return false;
 }

@@ -8,6 +8,7 @@ import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/center_loading_indicator.dart';
 import 'package:smart_home/widgets/error_message_button.dart';
+import 'package:smart_home/widgets/infinite_list.dart';
 
 class ConsumablesPage extends StatelessWidget {
   @override
@@ -18,7 +19,7 @@ class ConsumablesPage extends StatelessWidget {
           create: (context) => ConsumablesBloc(
             storageRepository:
                 RepositoryProvider.of<StorageRepository>(context),
-          )..add(ConsumablesRefreshed()),
+          )..add(ConsumablesFetched()),
         ),
       ],
       child: Scaffold(
@@ -32,22 +33,24 @@ class ConsumablesPage extends StatelessWidget {
                 message: state.message,
                 onPressed: () {
                   BlocProvider.of<ConsumablesBloc>(context)
-                      .add(ConsumablesRefreshed());
+                      .add(ConsumablesFetched(cache: false));
                 },
               );
             }
             if (state is ConsumablesSuccess) {
               return RefreshIndicator(
-                onRefresh: () async {
-                  BlocProvider.of<ConsumablesBloc>(context)
-                      .add(ConsumablesRefreshed());
-                },
-                child: ListView.builder(
-                  itemCount: state.items.length,
-                  itemBuilder: (context, index) =>
-                      _buildItem(context, state.items[index]),
-                ),
-              );
+                  onRefresh: () async {
+                    BlocProvider.of<ConsumablesBloc>(context)
+                        .add(ConsumablesFetched(cache: false));
+                  },
+                  child: InfiniteList(
+                    itemBuilder: _buildItem,
+                    items: state.items,
+                    hasReachedMax: state.hasReachedMax,
+                    onFetch: () => context
+                        .read<ConsumablesBloc>()
+                        .add(ConsumablesFetched()),
+                  ));
             }
             return CenterLoadingIndicator();
           },

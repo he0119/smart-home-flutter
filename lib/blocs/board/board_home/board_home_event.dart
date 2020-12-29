@@ -7,6 +7,16 @@ abstract class BoardHomeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class BoardHomeStarted extends BoardHomeEvent {}
+class BoardHomeFetched extends BoardHomeEvent {
+  final bool cache;
 
-class BoardHomeRefreshed extends BoardHomeEvent {}
+  BoardHomeFetched({
+    this.cache = true,
+  });
+
+  @override
+  List<Object> get props => [cache];
+
+  @override
+  String toString() => 'BoardHomeFetched(cache: $cache)';
+}

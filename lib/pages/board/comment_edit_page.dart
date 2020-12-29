@@ -49,7 +49,8 @@ class _CommentEditPageState extends State<CommentEditPage> {
           if (widget.isEditing) {
             showInfoSnackBar('评论编辑成功');
           } else {
-            BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
+            BlocProvider.of<BoardHomeBloc>(context)
+                .add(BoardHomeFetched(cache: false));
             showInfoSnackBar('评论添加成功');
           }
         }

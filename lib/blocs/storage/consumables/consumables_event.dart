@@ -1,15 +1,19 @@
 part of 'consumables_bloc.dart';
 
-abstract class ConsumablesEvent {
+abstract class ConsumablesEvent extends Equatable {
   const ConsumablesEvent();
 }
 
-class ConsumablesRefreshed extends ConsumablesEvent {
-  @override
-  String toString() => 'ConsumablesRefreshed';
-}
-
 class ConsumablesFetched extends ConsumablesEvent {
+  final bool cache;
+
+  ConsumablesFetched({
+    this.cache = true,
+  });
+
   @override
-  String toString() => 'ConsumablesFetched';
+  List<Object> get props => [cache];
+
+  @override
+  String toString() => 'ConsumablesFetched(cache: $cache)';
 }

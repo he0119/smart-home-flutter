@@ -10,6 +10,7 @@ import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/center_loading_indicator.dart';
 import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/widgets/home_page.dart';
+import 'package:smart_home/widgets/infinite_list.dart';
 
 class StorageHomePage extends StatelessWidget {
   const StorageHomePage({Key key}) : super(key: key);
@@ -44,9 +45,9 @@ class _StorageHomeBody extends StatelessWidget {
           return ErrorMessageButton(
             onPressed: () {
               BlocProvider.of<StorageHomeBloc>(context).add(
-                StorageHomeChanged(
+                StorageHomeFetched(
                   itemType: state.itemType,
-                  refresh: true,
+                  cache: false,
                 ),
               );
             },
@@ -61,20 +62,28 @@ class _StorageHomeBody extends StatelessWidget {
                 return true;
               }
               BlocProvider.of<StorageHomeBloc>(context)
-                  .add(StorageHomeChanged(itemType: ItemType.all));
+                  .add(StorageHomeFetched(itemType: ItemType.all));
               return false;
             },
             child: RefreshIndicator(
               onRefresh: () async {
                 BlocProvider.of<StorageHomeBloc>(context)
-                    .add(StorageHomeChanged(
+                    .add(StorageHomeFetched(
                   itemType: state.itemType,
-                  refresh: true,
+                  cache: false,
                 ));
               },
-              child: CustomScrollView(
+              child: SliverInfiniteList<List<Item>>(
                 key: ValueKey(state.itemType),
                 slivers: _buildSlivers(context, state),
+                hasReachedMax: state.hasReachedMax,
+                itemCount: state.itemCount,
+                onFetch: () {
+                  BlocProvider.of<StorageHomeBloc>(context)
+                      .add(StorageHomeFetched(
+                    itemType: state.itemType,
+                  ));
+                },
               ),
             ),
           );
@@ -150,7 +159,7 @@ class _StorageHomeBody extends StatelessWidget {
                   : Icons.expand_less),
               onPressed: () {
                 BlocProvider.of<StorageHomeBloc>(context).add(
-                  StorageHomeChanged(
+                  StorageHomeFetched(
                       itemType: currentType != ItemType.all
                           ? ItemType.all
                           : listType),

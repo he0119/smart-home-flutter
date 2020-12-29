@@ -5,3 +5,4 @@ export 'user.dart';
 export 'storage.dart';
 export 'board.dart';
 export 'iot.dart';
+export 'relay.dart';

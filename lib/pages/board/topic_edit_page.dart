@@ -52,7 +52,8 @@ class _TopicEditPageState extends State<TopicEditPage> {
           if (widget.isEditing) {
             showInfoSnackBar('话题编辑成功');
           } else {
-            BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeRefreshed());
+            BlocProvider.of<BoardHomeBloc>(context)
+                .add(BoardHomeFetched(cache: false));
             showInfoSnackBar('话题添加成功');
           }
         }
