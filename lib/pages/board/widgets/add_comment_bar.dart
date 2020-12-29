@@ -7,14 +7,12 @@ import 'package:smart_home/utils/show_snack_bar.dart';
 
 class AddCommentButtonBar extends StatefulWidget {
   final Topic topic;
-  final TextEditingController controller;
-  final FocusNode focusNode;
+  final VoidCallback onAddSuccess;
 
   AddCommentButtonBar({
     Key key,
     @required this.topic,
-    @required this.controller,
-    @required this.focusNode,
+    this.onAddSuccess,
   }) : super(key: key);
 
   @override
@@ -23,16 +21,18 @@ class AddCommentButtonBar extends StatefulWidget {
 
 class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
   final _formKey = GlobalKey<FormState>();
+  final _foucsNode = FocusNode();
+  final _controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    widget.focusNode.addListener(_onFocusChange);
+    _foucsNode.addListener(_onFocusChange);
   }
 
   @override
   void dispose() {
-    widget.focusNode.removeListener(_onFocusChange);
+    _foucsNode.removeListener(_onFocusChange);
     super.dispose();
   }
 
@@ -42,38 +42,51 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Form(
-        key: _formKey,
-        child: TextFormField(
-          enabled: widget.topic.isOpen,
-          controller: widget.controller,
-          focusNode: widget.focusNode,
-          maxLines: null,
-          decoration: InputDecoration(labelText: '添加评论'),
-          validator: (value) {
-            if (widget.focusNode.hasFocus && value.isEmpty) {
-              return '评论不能为空';
-            }
-            return null;
-          },
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-        ),
-      ),
-      trailing: OutlineButton(
-        onPressed: widget.focusNode.hasFocus
-            ? () {
-                if (_formKey.currentState.validate()) {
-                  showInfoSnackBar('正在发送...', duration: 1);
-                  BlocProvider.of<CommentEditBloc>(context).add(CommentAdded(
-                    topicId: widget.topic.id,
-                    body: widget.controller.text,
-                  ));
+    return BlocListener<CommentEditBloc, CommentEditState>(
+      listener: (context, state) {
+        if (state is CommentAddSuccess) {
+          _controller.text = '';
+          _foucsNode.unfocus();
+          if (widget.onAddSuccess != null) widget.onAddSuccess();
+          showInfoSnackBar('评论成功');
+        }
+      },
+      child: Material(
+        child: ListTile(
+          title: Form(
+            key: _formKey,
+            child: TextFormField(
+              enabled: widget.topic.isOpen,
+              controller: _controller,
+              focusNode: _foucsNode,
+              maxLines: null,
+              decoration: InputDecoration(hintText: '添加评论'),
+              validator: (value) {
+                if (_foucsNode.hasFocus && value.isEmpty) {
+                  return '评论不能为空';
                 }
-              }
-            : null,
-        borderSide: BorderSide.none,
-        child: Text('发送'),
+                return null;
+              },
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+            ),
+          ),
+          trailing: OutlineButton(
+            onPressed: _foucsNode.hasFocus
+                ? () {
+                    if (_formKey.currentState.validate()) {
+                      showInfoSnackBar('正在发送...', duration: 1);
+                      BlocProvider.of<CommentEditBloc>(context)
+                          .add(CommentAdded(
+                        topicId: widget.topic.id,
+                        body: _controller.text,
+                      ));
+                    }
+                  }
+                : null,
+            borderSide: BorderSide.none,
+            child: Text('发送'),
+          ),
+        ),
       ),
     );
   }
