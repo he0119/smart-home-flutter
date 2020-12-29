@@ -39,6 +39,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             case ItemType.expired:
               final results = await storageRepository.expiredItems(
                 after: currentState.pageInfo.endCursor,
+                cache: false,
               );
               yield StorageHomeSuccess(
                 expiredItems: currentState.expiredItems + results.item1,
@@ -49,6 +50,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             case ItemType.nearExpired:
               final results = await storageRepository.nearExpiredItems(
                 after: currentState.pageInfo.endCursor,
+                cache: false,
               );
               yield StorageHomeSuccess(
                 nearExpiredItems: currentState.nearExpiredItems + results.item1,
@@ -59,6 +61,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             case ItemType.recentlyCreated:
               final results = await storageRepository.recentlyCreatedItems(
                 after: currentState.pageInfo.endCursor,
+                cache: false,
               );
               yield StorageHomeSuccess(
                 recentlyCreatedItems:
@@ -70,6 +73,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
             case ItemType.recentlyEdited:
               final results = await storageRepository.recentlyEditedItems(
                 after: currentState.pageInfo.endCursor,
+                cache: false,
               );
               yield StorageHomeSuccess(
                 recentlyEditedItems:
