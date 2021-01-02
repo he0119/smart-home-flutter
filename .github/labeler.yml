@@ -1,0 +1,11 @@
+# https://github.com/actions/labeler
+board:
+  - '**/board/**/*'
+iot:
+  - '**/iot/**/*'
+push:
+  - '**/push/**/*'
+storage:
+  - '**/storage/**/*'
+ci:
+  - .github/**/*

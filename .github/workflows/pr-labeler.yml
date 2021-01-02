@@ -1,0 +1,19 @@
+name: PR Labeler
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  pr-labeler:
+    name: PR Labeler
+    runs-on: ubuntu-latest
+    steps:
+      - name: Labeler(branch name)
+        uses: TimonVS/pr-labeler-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Labeler(modified paths)
+        uses: actions/labeler@main
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
