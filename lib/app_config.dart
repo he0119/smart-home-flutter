@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:meta/meta.dart';
 
 class AppConfig extends InheritedWidget {
@@ -20,11 +19,5 @@ class AppConfig extends InheritedWidget {
 
   static AppConfig of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<AppConfig>();
-  }
-}
-
-void configureApp() {
-  if (kIsWeb) {
-    setUrlStrategy(PathUrlStrategy());
   }
 }
