@@ -50,23 +50,24 @@ class PushBloc extends Bloc<PushEvent, PushState> {
         _log.fine('小米推送注册中');
         miPushMethod.invokeMethod(
             'init', {'appId': miPushKey.appId, 'appKey': miPushKey.appKey});
-        miPushMethod.setMethodCallHandler((call) async {
-          if (call.method == 'ReceiveRegisterResult' &&
-              call.arguments != null) {
-            _log.fine(call.arguments);
-            final String regId = call.arguments;
-            _log.fine('小米推送注册成功');
-            add(PushUpdated(miPush: MiPush(regId: null)));
+        miPushMethod.setMethodCallHandler(
+          (call) async {
+            if (call.method == 'ReceiveRegisterResult' &&
+                call.arguments != null) {
+              _log.fine('小米推送注册成功');
+              final String regId = call.arguments;
+              add(PushUpdated(miPush: MiPush(regId: null)));
 
-            if (regId != appPreferencesBloc.state.miPushRegId) {
-              MiPush mipush = await pushRepository.updateMiPush(regId: regId);
-              add(PushUpdated(miPush: mipush));
-              appPreferencesBloc
-                  .add(MiPushRegIdChanged(miPushRegId: mipush.regId));
-              _log.fine('小米推送注册标识符上传成功。');
+              if (regId != appPreferencesBloc.state.miPushRegId) {
+                MiPush mipush = await pushRepository.updateMiPush(regId: regId);
+                add(PushUpdated(miPush: mipush));
+                appPreferencesBloc
+                    .add(MiPushRegIdChanged(miPushRegId: mipush.regId));
+                _log.fine('小米推送注册标识符上传成功。');
+              }
             }
-          }
-        });
+          },
+        );
       }
     }
     if (event is PushUpdated) {

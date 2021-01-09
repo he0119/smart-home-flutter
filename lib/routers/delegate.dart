@@ -258,6 +258,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             }
             if (state is AuthenticationSuccess) {
               isLogin = true;
+              // 当登录成功时，开始初始化推送服务
+              BlocProvider.of<PushBloc>(context).add(PushStarted());
               notifyListeners();
             }
           },

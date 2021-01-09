@@ -73,13 +73,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
-        if (state is AuthenticationSuccess) {
-          // 当登录成功时，开始初始化推送服务
-          BlocProvider.of<PushBloc>(context).add(PushStarted());
-        }
-      },
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         if (state is AuthenticationInitial) {
           return SplashScreen();
