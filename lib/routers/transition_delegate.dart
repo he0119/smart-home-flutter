@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smart_home/pages/home_page.dart';
+import 'package:smart_home/pages/login_page.dart';
+import 'package:smart_home/pages/splash_page.dart';
 
 class MyTransitionDelegate extends TransitionDelegate<void> {
   final defaultTransitionDelegate = DefaultTransitionDelegate();
@@ -18,11 +21,10 @@ class MyTransitionDelegate extends TransitionDelegate<void> {
         locationToExitingPageRoute.length == 1) {
       final exitingRoute = locationToExitingPageRoute.values.last;
       final newRoute = newPageRouteHistory.last;
-      if (exitingRoute.route.settings.name != null &&
-          exitingRoute.route.settings.name
-              .startsWith(RegExp(r'^/(AppTab|splash|login)')) &&
-          newRoute.route.settings.name != null &&
-          newRoute.route.settings.name.startsWith('/AppTab')) {
+      if ((exitingRoute.route.settings is HomePage ||
+              exitingRoute.route.settings is LoginPage ||
+              exitingRoute.route.settings is SplashPage) &&
+          newRoute.route.settings is HomePage) {
         exitingRoute.markForRemove();
         newRoute.markForAdd();
         results.add(exitingRoute);
