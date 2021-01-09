@@ -13,6 +13,10 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
   lateinit var eventSink: EventChannel.EventSink
 
+  companion object {
+    lateinit var channel: MethodChannel
+  }
+
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     Log.i("New Intent", intent.data.toString())
@@ -39,7 +43,8 @@ class MainActivity : FlutterActivity() {
         override fun onCancel(p0: Any?) {}
       }
     )
-    MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "hehome.xyz/push/method").setMethodCallHandler { call, result ->
+    channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "hehome.xyz/push/method")
+    channel.setMethodCallHandler { call, result ->
       if (call.method == "init") {
         Log.i("Push", "Mipush initializing")
         // 获得参数
