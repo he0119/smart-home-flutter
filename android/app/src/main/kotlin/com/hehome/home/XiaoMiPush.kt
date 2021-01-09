@@ -9,14 +9,13 @@ import android.util.Log
 import com.xiaomi.mipush.sdk.MiPushCommandMessage
 import com.xiaomi.mipush.sdk.MiPushMessage
 import com.xiaomi.mipush.sdk.PushMessageReceiver
-import io.flutter.plugin.common.MethodChannel
 
 class XiaoMiMessageReceiver : PushMessageReceiver() {
   override fun onNotificationMessageClicked(context: Context?, message: MiPushMessage?) {
     super.onNotificationMessageClicked(context, message)
     if (context != null) {
       val intent: Intent = Intent(Intent.ACTION_VIEW).apply {
-        this.data = Uri.parse("https://smart-test.hehome.xyz/")
+        this.data = Uri.parse("https://${BuildConfig.HOST_NAME}/")
         this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         // 设置初始路由
         putExtra("route", message?.content);
