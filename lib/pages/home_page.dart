@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +25,7 @@ class HomePage extends Page {
     @required this.appTab,
   }) : super(
           key: ValueKey(appTab.toString()),
-          name: '/${appTab.toString()}',
+          name: '/${EnumToString.convertToString(appTab)}',
         );
 
   @override

@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
@@ -34,30 +35,24 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   /// 是否登录
   bool isLogin = false;
 
-  /// 当前主页
-  AppTab currentHomePage;
-
   /// 默认主页
   AppTab defaultHomePage;
 
   List<Page> _pages = <Page>[];
 
   List<Page> get pages {
+    // 未初始化时显示加载页面
     if (!initialized) {
-      _pages = [
-        SplashPage(),
-      ];
-      return _pages;
+      return [SplashPage()];
     }
+    // 未登录时显示登陆界面
     if (!isLogin) {
-      _pages = [
-        LoginPage(),
-      ];
-      return _pages;
+      return [LoginPage()];
     }
-    if (_pages.isEmpty || _pages.length == 1) {
+    // 未设置主页时显示默认主页
+    if (_pages.isEmpty) {
       _pages = [
-        HomePage(appTab: currentHomePage ?? defaultHomePage),
+        HomePage(appTab: defaultHomePage),
       ];
     }
     return List.unmodifiable(_pages);
@@ -72,6 +67,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     if (_pages.isNotEmpty) {
       _pages.remove(_pages.last);
     }
+    notifyListeners();
+  }
+
+  /// 设置主页
+  void setHomePage(AppTab appTab) {
+    _pages = [HomePage(appTab: appTab)];
     notifyListeners();
   }
 
@@ -163,15 +164,17 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   /// 从当前显示页面倒推 RoutePath
   RoutePath get routePath {
-    if (_pages.isNotEmpty && _pages.last.name != null) {
-      final uri = Uri.parse(_pages.last.name);
-      if (_pages.last is HomePage) {
-        return AppRoutePath(appTab: currentHomePage);
-      } else if (_pages.last is StorageDetailPage) {
+    if (pages.last.name != null) {
+      final uri = Uri.parse(pages.last.name);
+      if (pages.last is HomePage) {
+        return AppRoutePath(
+          appTab: EnumToString.fromString(AppTab.values, uri.pathSegments[0]),
+        );
+      } else if (pages.last is StorageDetailPage) {
         return StorageRoutePath(storageName: uri.pathSegments[2]);
-      } else if (_pages.last is ItemDetailPage) {
+      } else if (pages.last is ItemDetailPage) {
         return ItemRoutePath(itemName: uri.pathSegments[1]);
-      } else if (_pages.last is TopicDetailPage) {
+      } else if (pages.last is TopicDetailPage) {
         return TopicRoutePath(topicId: uri.pathSegments[1]);
       }
     }
@@ -181,8 +184,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   @override
   Future<void> setNewRoutePath(RoutePath routePath) async {
     _log.fine('setNewRoutePath: $routePath');
-    if (routePath is AppRoutePath) {
-      currentHomePage = routePath.appTab;
+    if (routePath is AppRoutePath && routePath.appTab != null) {
       _pages = [HomePage(appTab: routePath.appTab)];
     }
     if (routePath is TopicRoutePath) {
@@ -266,8 +268,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         BlocListener<TabBloc, AppTab>(
           listener: (context, state) {
             if (state != null) {
-              currentHomePage = state;
-              notifyListeners();
+              setHomePage(state);
             }
           },
         )
