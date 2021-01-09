@@ -8,8 +8,6 @@ import 'package:logging/logging.dart';
 import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/models/push.dart';
 import 'package:smart_home/repositories/push_repository.dart';
-// import 'package:xiao_mi_push_plugin/xiao_mi_push_plugin.dart';
-// import 'package:xiao_mi_push_plugin/xiao_mi_push_plugin_listener.dart';
 import 'package:flutter/services.dart';
 
 part 'push_event.dart';
@@ -20,7 +18,8 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   final PushRepository pushRepository;
   final AppPreferencesBloc appPreferencesBloc;
 
-  static const push = const MethodChannel('hehome.xyz/push');
+  static const miPushMethod = const MethodChannel('hehome.xyz/push/method');
+  static const miPushEvent = const EventChannel('hehome.xyz/push/event');
 
   PushBloc({
     @required this.pushRepository,
@@ -66,7 +65,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
         //   }
         // });
         _log.fine('小米推送注册中');
-        push.invokeMethod(
+        miPushMethod.invokeMethod(
             'init', {'appId': miPushKey.appId, 'appKey': miPushKey.appKey});
       }
     }

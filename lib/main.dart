@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
@@ -109,6 +110,17 @@ class MyMaterialApp extends StatefulWidget {
 class _MyMaterialAppState extends State<MyMaterialApp> {
   // 为了保存路由状态
   MyRouterDelegate _delegate = MyRouterDelegate();
+
+  @override
+  void initState() {
+    super.initState();
+    EventChannel('hehome.xyz/route')
+        .receiveBroadcastStream()
+        .listen((event) async {
+      print('event: ${event.toString()}');
+      _delegate.navigateNewPath(event.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

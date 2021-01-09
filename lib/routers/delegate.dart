@@ -11,6 +11,7 @@ import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
+import 'package:smart_home/routers/information_parser.dart';
 import 'package:smart_home/routers/route_path.dart';
 import 'package:smart_home/routers/transition_delegate.dart';
 
@@ -128,6 +129,13 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       itemId: item.id,
       group: itemCount,
     ));
+    notifyListeners();
+  }
+
+  Future<void> navigateNewPath(String url) async {
+    final routePath = await MyRouteInformationParser()
+        .parseRouteInformation(RouteInformation(location: url));
+    await setNewRoutePath(routePath);
     notifyListeners();
   }
 
