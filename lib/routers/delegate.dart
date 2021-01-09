@@ -133,8 +133,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   Future<void> navigateNewPath(String url) async {
-    final routePath = await MyRouteInformationParser()
-        .parseRouteInformation(RouteInformation(location: url));
+    final routePath = parseUrl(url);
     await setNewRoutePath(routePath);
     notifyListeners();
   }

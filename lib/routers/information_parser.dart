@@ -10,28 +10,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
     _log.fine('parseRouteInformation: ${routeInformation.location}');
-    final uri = Uri.parse(routeInformation.location);
-    _log.fine('uri pathSegments: ${uri.pathSegments}');
-    if (uri.pathSegments.length == 1) {
-      if (uri.pathSegments[0] == 'iot') return AppRoutePath(appTab: AppTab.iot);
-      if (uri.pathSegments[0] == 'board')
-        return AppRoutePath(appTab: AppTab.board);
-      if (uri.pathSegments[0] == 'storage')
-        return AppRoutePath(appTab: AppTab.storage);
-      if (uri.pathSegments[0] == 'board')
-        return AppRoutePath(appTab: AppTab.board);
-    }
-    if (uri.pathSegments.length == 2) {
-      switch (uri.pathSegments[0]) {
-        case 'item':
-          return ItemRoutePath(itemName: uri.pathSegments[1]);
-        case 'topic':
-          return TopicRoutePath(topicId: uri.pathSegments[1]);
-        case 'storage':
-          return StorageRoutePath(storageName: uri.pathSegments[1]);
-      }
-    }
-    return AppRoutePath(appTab: null);
+    return parseUrl(routeInformation.location);
   }
 
   @override
@@ -57,4 +36,29 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
     }
     return const RouteInformation(location: '/');
   }
+}
+
+/// 将 URL 转换成 RoutePath
+RoutePath parseUrl(String location) {
+  final uri = Uri.parse(location);
+  if (uri.pathSegments.length == 1) {
+    if (uri.pathSegments[0] == 'iot') return AppRoutePath(appTab: AppTab.iot);
+    if (uri.pathSegments[0] == 'board')
+      return AppRoutePath(appTab: AppTab.board);
+    if (uri.pathSegments[0] == 'storage')
+      return AppRoutePath(appTab: AppTab.storage);
+    if (uri.pathSegments[0] == 'board')
+      return AppRoutePath(appTab: AppTab.board);
+  }
+  if (uri.pathSegments.length == 2) {
+    switch (uri.pathSegments[0]) {
+      case 'item':
+        return ItemRoutePath(itemName: uri.pathSegments[1]);
+      case 'topic':
+        return TopicRoutePath(topicId: uri.pathSegments[1]);
+      case 'storage':
+        return StorageRoutePath(storageName: uri.pathSegments[1]);
+    }
+  }
+  return AppRoutePath(appTab: null);
 }
