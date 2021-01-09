@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +25,7 @@ class HomePage extends Page {
     @required this.appTab,
   }) : super(
           key: ValueKey(appTab.toString()),
-          name: '/${appTab.toString()}',
+          name: '/${EnumToString.convertToString(appTab)}',
         );
 
   @override
@@ -73,13 +74,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
-        if (state is AuthenticationSuccess) {
-          // 当登录成功时，开始初始化推送服务
-          BlocProvider.of<PushBloc>(context).add(PushStarted());
-        }
-      },
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         if (state is AuthenticationInitial) {
           return SplashScreen();
