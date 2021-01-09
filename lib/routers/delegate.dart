@@ -175,6 +175,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   Future<void> setNewRoutePath(RoutePath routePath) async {
     _log.fine('setNewRoutePath: $routePath');
     if (routePath is AppRoutePath) {
+      currentHomePage = routePath.appTab;
       _pages = [HomePage(appTab: routePath.appTab)];
     }
     if (routePath is TopicRoutePath) {
