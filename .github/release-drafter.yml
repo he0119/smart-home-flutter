@@ -4,6 +4,7 @@ categories:
   - title: 'Added'
     labels:
       - 'enhancement'
+      - 'feature'
   - title: 'Changed'
     labels:
       - 'improve'
