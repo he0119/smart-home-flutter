@@ -4,8 +4,21 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/pages/settings/iot/refresh_interval_page.dart';
 
-class IotSettingsPage extends StatelessWidget {
-  const IotSettingsPage({Key key}) : super(key: key);
+class IotSettingsPage extends Page {
+  IotSettingsPage()
+      : super(key: ValueKey('settings/iot'), name: '/settings/iot');
+
+  @override
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => IotSettingsScreen(),
+    );
+  }
+}
+
+class IotSettingsScreen extends StatelessWidget {
+  const IotSettingsScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

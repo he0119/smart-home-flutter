@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/pages/settings/blog/settings._page.dart';
+import 'package:smart_home/pages/settings/blog/settings_page.dart';
+import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/launch_url.dart';
 import 'package:smart_home/widgets/home_page.dart';
 import 'package:smart_home/widgets/rounded_raised_button.dart';
@@ -47,9 +48,7 @@ class _BlogHomePageState extends State<BlogHomePage> {
                       controller.data.loadUrl(state.blogAdminUrl);
                     }
                   } else {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BlogSettingsPage(),
-                    ));
+                    MyRouterDelegate.of(context).push(BlogSettingsPage());
                   }
                 },
               ),
@@ -59,10 +58,7 @@ class _BlogHomePageState extends State<BlogHomePage> {
               child: IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => BlogSettingsPage()),
-                  );
+                  MyRouterDelegate.of(context).push(BlogSettingsPage());
                 },
               ),
             ),
@@ -118,9 +114,7 @@ class SettingButton extends StatelessWidget {
     return Center(
       child: RoundedRaisedButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BlogSettingsPage(),
-          ));
+          MyRouterDelegate.of(context).push(BlogSettingsPage());
         },
         child: Text('设置博客网址'),
       ),

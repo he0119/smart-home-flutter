@@ -42,6 +42,15 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
         case AppPage.recycleBin:
           return const RouteInformation(location: '/recyclebin');
       }
+    } else if (routePath is SettingsRoutePath) {
+      switch (routePath.appSettings) {
+        case AppSettings.home:
+          return const RouteInformation(location: '/settings');
+        case AppSettings.iot:
+          return const RouteInformation(location: '/settings/iot');
+        case AppSettings.blog:
+          return const RouteInformation(location: '/settings/blog');
+      }
     }
     return const RouteInformation(location: '/');
   }
@@ -63,6 +72,8 @@ RoutePath parseUrl(String location) {
     if (uri.pathSegments[0] == 'login') return AppRoutePath(AppPage.login);
     if (uri.pathSegments[0] == 'recyclebin')
       return AppRoutePath(AppPage.recycleBin);
+    if (uri.pathSegments[0] == 'settings')
+      return SettingsRoutePath(appSettings: AppSettings.home);
   }
   if (uri.pathSegments.length == 2) {
     switch (uri.pathSegments[0]) {
@@ -72,6 +83,14 @@ RoutePath parseUrl(String location) {
         return TopicRoutePath(topicId: uri.pathSegments[1]);
       case 'storage':
         return StorageRoutePath(storageName: uri.pathSegments[1]);
+      case 'settings':
+        // 单独的设置界面
+        switch (uri.pathSegments[1]) {
+          case 'iot':
+            return SettingsRoutePath(appSettings: AppSettings.iot);
+          case 'blog':
+            return SettingsRoutePath(appSettings: AppSettings.blog);
+        }
     }
   }
   return HomeRoutePath(appTab: null);

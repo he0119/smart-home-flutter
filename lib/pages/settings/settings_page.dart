@@ -14,8 +14,20 @@ import 'package:smart_home/pages/settings/common/mipush_settings_tile.dart';
 import 'package:smart_home/pages/settings/iot/refresh_interval_page.dart';
 import 'package:smart_home/models/app_tab.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({Key key}) : super(key: key);
+class SettingsPage extends Page {
+  SettingsPage() : super(key: ValueKey('settings'), name: '/settings');
+
+  @override
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => SettingsScreen(),
+    );
+  }
+}
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

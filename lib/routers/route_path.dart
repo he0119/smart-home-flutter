@@ -71,3 +71,18 @@ class AppRoutePath extends RoutePath {
   @override
   String toString() => 'AppRoutePath(appPage: $appPage)';
 }
+
+/// 主页相关的信息
+class SettingsRoutePath extends RoutePath {
+  /// 主页
+  ///
+  /// 空则为默认主页
+  final AppSettings appSettings;
+
+  SettingsRoutePath({
+    this.appSettings,
+  });
+
+  @override
+  String toString() => 'SettingsRoutePath(appTab: $appSettings)';
+}

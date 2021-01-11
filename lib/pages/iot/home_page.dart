@@ -8,6 +8,7 @@ import 'package:smart_home/models/app_tab.dart';
 import 'package:smart_home/models/iot.dart';
 import 'package:smart_home/pages/settings/iot/settings_page.dart';
 import 'package:smart_home/repositories/iot_repository.dart';
+import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/widgets/center_loading_indicator.dart';
 import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/widgets/home_page.dart';
@@ -46,10 +47,7 @@ class IotHomePage extends StatelessWidget {
                 child: IconButton(
                   icon: Icon(Icons.settings),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => IotSettingsPage()),
-                    );
+                    MyRouterDelegate.of(context).push(IotSettingsPage());
                   },
                 ),
               ),

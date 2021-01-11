@@ -5,8 +5,21 @@ import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/pages/settings/blog/blog_admin_url_page.dart';
 import 'package:smart_home/pages/settings/blog/blog_url_page.dart';
 
-class BlogSettingsPage extends StatelessWidget {
-  const BlogSettingsPage({Key key}) : super(key: key);
+class BlogSettingsPage extends Page {
+  BlogSettingsPage()
+      : super(key: ValueKey('settings/blog'), name: '/settings/blog');
+
+  @override
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => BlogSettingsScreen(),
+    );
+  }
+}
+
+class BlogSettingsScreen extends StatelessWidget {
+  const BlogSettingsScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
