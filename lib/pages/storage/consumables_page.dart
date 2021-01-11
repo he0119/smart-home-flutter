@@ -88,6 +88,7 @@ Widget _buildItem(BuildContext context, Item item) {
                 onTap: () {
                   MyRouterDelegate.of(context).addItemPage(item: consumable);
                 },
+                trailing: Text(consumable.number.toString()),
               ),
             ),
       ],

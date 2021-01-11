@@ -14,6 +14,7 @@ query consumables($after: String) {
             node {
               id
               name
+              number
               expiredAt
             }
           }
