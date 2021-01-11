@@ -18,6 +18,7 @@ categories:
   - title: 'Fixed'
     labels:
       - 'bug'
+      - 'fix'
   - title: 'Security'
     labels:
       - 'security'
