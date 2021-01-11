@@ -9,8 +9,13 @@ import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/board/topic_detail_page.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
+import 'package:smart_home/pages/settings/blog/settings_page.dart';
+import 'package:smart_home/pages/settings/iot/settings_page.dart';
+import 'package:smart_home/pages/settings/settings_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
+import 'package:smart_home/pages/storage/consumables_page.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
+import 'package:smart_home/pages/storage/recycle_bin_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/routers/information_parser.dart';
@@ -169,7 +174,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     if (pages.last.name != null) {
       final uri = Uri.parse(pages.last.name);
       if (pages.last is HomePage) {
-        return AppRoutePath(
+        return HomeRoutePath(
           appTab: EnumToString.fromString(AppTab.values, uri.pathSegments[0]),
         );
       } else if (pages.last is StorageDetailPage) {
@@ -178,15 +183,27 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         return ItemRoutePath(itemName: uri.pathSegments[1]);
       } else if (pages.last is TopicDetailPage) {
         return TopicRoutePath(topicId: uri.pathSegments[1]);
+      } else if (pages.last is LoginPage) {
+        return AppRoutePath(AppPage.login);
+      } else if (pages.last is ConsumablesPage) {
+        return AppRoutePath(AppPage.consumables);
+      } else if (pages.last is RecycleBinPage) {
+        return AppRoutePath(AppPage.recycleBin);
+      } else if (pages.last is SettingsPage) {
+        return SettingsRoutePath(appSettings: AppSettings.home);
+      } else if (pages.last is BlogSettingsPage) {
+        return SettingsRoutePath(appSettings: AppSettings.blog);
+      } else if (pages.last is IotSettingsPage) {
+        return SettingsRoutePath(appSettings: AppSettings.iot);
       }
     }
-    return AppRoutePath();
+    return HomeRoutePath();
   }
 
   @override
   Future<void> setNewRoutePath(RoutePath routePath) async {
     _log.fine('setNewRoutePath: $routePath');
-    if (routePath is AppRoutePath && routePath.appTab != null) {
+    if (routePath is HomeRoutePath && routePath.appTab != null) {
       _pages = [HomePage(appTab: routePath.appTab)];
     }
     if (routePath is TopicRoutePath) {
@@ -218,6 +235,46 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           group: 1,
         ),
       ];
+    }
+    if (routePath is AppRoutePath) {
+      switch (routePath.appPage) {
+        case AppPage.login:
+          break;
+        case AppPage.consumables:
+          _pages = [
+            HomePage(appTab: AppTab.storage),
+            ConsumablesPage(),
+          ];
+          break;
+        case AppPage.recycleBin:
+          _pages = [
+            HomePage(appTab: AppTab.storage),
+            RecycleBinPage(),
+          ];
+          break;
+      }
+    }
+    if (routePath is SettingsRoutePath) {
+      switch (routePath.appSettings) {
+        case AppSettings.home:
+          _pages = [
+            HomePage(appTab: defaultHomePage),
+            SettingsPage(),
+          ];
+          break;
+        case AppSettings.iot:
+          _pages = [
+            HomePage(appTab: AppTab.iot),
+            IotSettingsPage(),
+          ];
+          break;
+        case AppSettings.blog:
+          _pages = [
+            HomePage(appTab: AppTab.blog),
+            BlogSettingsPage(),
+          ];
+          break;
+      }
     }
   }
 

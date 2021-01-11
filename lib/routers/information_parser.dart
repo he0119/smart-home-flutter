@@ -16,7 +16,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   @override
   RouteInformation restoreRouteInformation(RoutePath routePath) {
     _log.fine('restoreRouteInformation: $routePath');
-    if (routePath is AppRoutePath) {
+    if (routePath is HomeRoutePath) {
       switch (routePath.appTab) {
         case AppTab.blog:
           return const RouteInformation(location: '/blog');
@@ -33,6 +33,24 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
       return RouteInformation(location: '/item/${routePath.itemName}');
     } else if (routePath is TopicRoutePath) {
       return RouteInformation(location: '/topic/${routePath.topicId}');
+    } else if (routePath is AppRoutePath) {
+      switch (routePath.appPage) {
+        case AppPage.login:
+          return const RouteInformation(location: '/login');
+        case AppPage.consumables:
+          return const RouteInformation(location: '/consumables');
+        case AppPage.recycleBin:
+          return const RouteInformation(location: '/recyclebin');
+      }
+    } else if (routePath is SettingsRoutePath) {
+      switch (routePath.appSettings) {
+        case AppSettings.home:
+          return const RouteInformation(location: '/settings');
+        case AppSettings.iot:
+          return const RouteInformation(location: '/settings/iot');
+        case AppSettings.blog:
+          return const RouteInformation(location: '/settings/blog');
+      }
     }
     return const RouteInformation(location: '/');
   }
@@ -42,13 +60,20 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
 RoutePath parseUrl(String location) {
   final uri = Uri.parse(location);
   if (uri.pathSegments.length == 1) {
-    if (uri.pathSegments[0] == 'iot') return AppRoutePath(appTab: AppTab.iot);
+    if (uri.pathSegments[0] == 'iot') return HomeRoutePath(appTab: AppTab.iot);
     if (uri.pathSegments[0] == 'board')
-      return AppRoutePath(appTab: AppTab.board);
+      return HomeRoutePath(appTab: AppTab.board);
     if (uri.pathSegments[0] == 'storage')
-      return AppRoutePath(appTab: AppTab.storage);
+      return HomeRoutePath(appTab: AppTab.storage);
     if (uri.pathSegments[0] == 'board')
-      return AppRoutePath(appTab: AppTab.board);
+      return HomeRoutePath(appTab: AppTab.board);
+    if (uri.pathSegments[0] == 'consumables')
+      return AppRoutePath(AppPage.consumables);
+    if (uri.pathSegments[0] == 'login') return AppRoutePath(AppPage.login);
+    if (uri.pathSegments[0] == 'recyclebin')
+      return AppRoutePath(AppPage.recycleBin);
+    if (uri.pathSegments[0] == 'settings')
+      return SettingsRoutePath(appSettings: AppSettings.home);
   }
   if (uri.pathSegments.length == 2) {
     switch (uri.pathSegments[0]) {
@@ -58,7 +83,15 @@ RoutePath parseUrl(String location) {
         return TopicRoutePath(topicId: uri.pathSegments[1]);
       case 'storage':
         return StorageRoutePath(storageName: uri.pathSegments[1]);
+      case 'settings':
+        // 单独的设置界面
+        switch (uri.pathSegments[1]) {
+          case 'iot':
+            return SettingsRoutePath(appSettings: AppSettings.iot);
+          case 'blog':
+            return SettingsRoutePath(appSettings: AppSettings.blog);
+        }
     }
   }
-  return AppRoutePath(appTab: null);
+  return HomeRoutePath(appTab: null);
 }

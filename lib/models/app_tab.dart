@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// IOT，存储管理，博客，留言板
+/// IOT, 存储管理, 博客, 留言板
 enum AppTab { iot, storage, blog, board }
 
 extension AppTabExtension on AppTab {
@@ -46,3 +46,9 @@ extension AppTabExtension on AppTab {
     }
   }
 }
+
+/// 登录, 物品耗材, 回收站
+enum AppPage { login, consumables, recycleBin }
+
+/// 主页, 物联网, 博客
+enum AppSettings { home, iot, blog }

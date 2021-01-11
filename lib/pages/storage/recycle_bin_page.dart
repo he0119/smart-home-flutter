@@ -11,70 +11,81 @@ import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/utils/show_snack_bar.dart';
 import 'package:smart_home/widgets/infinite_list.dart';
 
-class RecycleBinPage extends StatelessWidget {
+class RecycleBinPage extends Page {
+  RecycleBinPage() : super(key: UniqueKey(), name: '/recyclebin');
+
+  @override
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider<RecycleBinBloc>(
+            create: (context) => RecycleBinBloc(
+              storageRepository:
+                  RepositoryProvider.of<StorageRepository>(context),
+            )..add(RecycleBinFetched()),
+          ),
+          BlocProvider<ItemEditBloc>(
+            create: (context) => ItemEditBloc(
+              storageRepository:
+                  RepositoryProvider.of<StorageRepository>(context),
+            ),
+          )
+        ],
+        child: RecycleBinScreen(),
+      ),
+    );
+  }
+}
+
+class RecycleBinScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<RecycleBinBloc>(
-          create: (context) => RecycleBinBloc(
-            storageRepository:
-                RepositoryProvider.of<StorageRepository>(context),
-          )..add(RecycleBinFetched()),
-        ),
-        BlocProvider<ItemEditBloc>(
-          create: (context) => ItemEditBloc(
-            storageRepository:
-                RepositoryProvider.of<StorageRepository>(context),
-          ),
-        )
-      ],
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('回收站'),
-        ),
-        body: BlocBuilder<RecycleBinBloc, RecycleBinState>(
-          builder: (context, state) {
-            if (state is RecycleBinFailure) {
-              return ErrorMessageButton(
-                message: state.message,
-                onPressed: () {
-                  BlocProvider.of<RecycleBinBloc>(context)
-                      .add(RecycleBinFetched(cache: false));
-                },
-              );
-            }
-            if (state is RecycleBinSuccess) {
-              return RefreshIndicator(
-                onRefresh: () async {
-                  BlocProvider.of<RecycleBinBloc>(context)
-                      .add(RecycleBinFetched(cache: false));
-                },
-                child: BlocListener<ItemEditBloc, ItemEditState>(
-                    listener: (context, state) {
-                      if (state is ItemRestoreSuccess) {
-                        showInfoSnackBar(
-                          '物品 ${state.item.name} 恢复成功',
-                          duration: 2,
-                        );
-                      }
-                      if (state is ItemEditFailure) {
-                        showErrorSnackBar(state.message);
-                      }
-                    },
-                    child: InfiniteList(
-                      itemBuilder: _buildItem,
-                      items: state.items,
-                      hasReachedMax: state.hasReachedMax,
-                      onFetch: () => context
-                          .read<RecycleBinBloc>()
-                          .add(RecycleBinFetched()),
-                    )),
-              );
-            }
-            return CenterLoadingIndicator();
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('回收站'),
+      ),
+      body: BlocBuilder<RecycleBinBloc, RecycleBinState>(
+        builder: (context, state) {
+          if (state is RecycleBinFailure) {
+            return ErrorMessageButton(
+              message: state.message,
+              onPressed: () {
+                BlocProvider.of<RecycleBinBloc>(context)
+                    .add(RecycleBinFetched(cache: false));
+              },
+            );
+          }
+          if (state is RecycleBinSuccess) {
+            return RefreshIndicator(
+              onRefresh: () async {
+                BlocProvider.of<RecycleBinBloc>(context)
+                    .add(RecycleBinFetched(cache: false));
+              },
+              child: BlocListener<ItemEditBloc, ItemEditState>(
+                  listener: (context, state) {
+                    if (state is ItemRestoreSuccess) {
+                      showInfoSnackBar(
+                        '物品 ${state.item.name} 恢复成功',
+                        duration: 2,
+                      );
+                    }
+                    if (state is ItemEditFailure) {
+                      showErrorSnackBar(state.message);
+                    }
+                  },
+                  child: InfiniteList(
+                    itemBuilder: _buildItem,
+                    items: state.items,
+                    hasReachedMax: state.hasReachedMax,
+                    onFetch: () =>
+                        context.read<RecycleBinBloc>().add(RecycleBinFetched()),
+                  )),
+            );
+          }
+          return CenterLoadingIndicator();
+        },
       ),
     );
   }
