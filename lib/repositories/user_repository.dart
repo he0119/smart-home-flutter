@@ -13,6 +13,7 @@ class UserRepository {
   Future<User> currentUser() async {
     QueryOptions _options = QueryOptions(
       document: gql(viewer),
+      fetchPolicy: FetchPolicy.networkOnly,
     );
     QueryResult results = await graphqlApiClient.query(_options);
     User user = User.fromJson(results.data['viewer']);

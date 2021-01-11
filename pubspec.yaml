@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0-nullsafety.2
@@ -44,12 +46,6 @@ dependencies:
   settings_ui:
     git: https://github.com/he0119/flutter-settings-ui.git
   dropdown_search: ^0.4.8
-
-  # SDK
-  xiao_mi_push_plugin:
-    git:
-      url: https://github.com/he0119/FlutterXiaoMiPushPlugin.git
-      ref: hehome
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

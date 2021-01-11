@@ -367,7 +367,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_web_plugins:
-    dependency: transitive
+    dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -1127,15 +1127,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.2"
-  xiao_mi_push_plugin:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: hehome
-      resolved-ref: fe76801ab6ea194f2796b33cf6d17cf8cc7a0d67
-      url: "https://github.com/he0119/FlutterXiaoMiPushPlugin.git"
-    source: git
-    version: "1.0.1"
   xml:
     dependency: transitive
     description:

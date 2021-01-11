@@ -181,7 +181,7 @@ jobs:
       - name: Copy file to server
         uses: Burnett01/rsync-deployments@4.1
         with:
-          switches: -vzr --delete
+          switches: -vzr --delete --exclude ".well-known"
           path: "."
           remote_path: "websites/smart-home/web"
           remote_host: ${{ secrets.SSH_HOST }}
@@ -204,7 +204,7 @@ jobs:
       - name: Copy file to server
         uses: Burnett01/rsync-deployments@4.1
         with:
-          switches: -vzr --delete
+          switches: -vzr --delete --exclude ".well-known"
           path: "."
           remote_path: "websites/smart-home/web"
           remote_host: ${{ secrets.SSH_HOST }}

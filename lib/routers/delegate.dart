@@ -1,8 +1,10 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/core/blocs.dart';
+import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/board/topic_detail_page.dart';
 import 'package:smart_home/pages/home_page.dart';
@@ -11,8 +13,10 @@ import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
+import 'package:smart_home/routers/information_parser.dart';
 import 'package:smart_home/routers/route_path.dart';
 import 'package:smart_home/routers/transition_delegate.dart';
+import 'package:smart_home/utils/launch_url.dart';
 
 class MyRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
@@ -33,30 +37,24 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   /// 是否登录
   bool isLogin = false;
 
-  /// 当前主页
-  AppTab currentHomePage;
-
   /// 默认主页
   AppTab defaultHomePage;
 
   List<Page> _pages = <Page>[];
 
   List<Page> get pages {
+    // 未初始化时显示加载页面
     if (!initialized) {
-      _pages = [
-        SplashPage(),
-      ];
-      return _pages;
+      return [SplashPage()];
     }
+    // 未登录时显示登陆界面
     if (!isLogin) {
-      _pages = [
-        LoginPage(),
-      ];
-      return _pages;
+      return [LoginPage()];
     }
-    if (_pages.isEmpty || _pages.length == 1) {
+    // 未设置主页时显示默认主页
+    if (_pages.isEmpty) {
       _pages = [
-        HomePage(appTab: currentHomePage ?? defaultHomePage),
+        HomePage(appTab: defaultHomePage),
       ];
     }
     return List.unmodifiable(_pages);
@@ -71,6 +69,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     if (_pages.isNotEmpty) {
       _pages.remove(_pages.last);
     }
+    notifyListeners();
+  }
+
+  /// 设置主页
+  void setHomePage(AppTab appTab) {
+    _pages = [HomePage(appTab: appTab)];
     notifyListeners();
   }
 
@@ -131,6 +135,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     notifyListeners();
   }
 
+  Future<void> navigateNewPath(String url) async {
+    final routePath = parseUrl(url);
+    await setNewRoutePath(routePath);
+    notifyListeners();
+  }
+
   bool _handlePopPage(Route<dynamic> route, dynamic result) {
     final bool success = route.didPop(result);
     if (success) {
@@ -156,15 +166,17 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   /// 从当前显示页面倒推 RoutePath
   RoutePath get routePath {
-    if (_pages.isNotEmpty && _pages.last.name != null) {
-      final uri = Uri.parse(_pages.last.name);
-      if (_pages.last is HomePage) {
-        return AppRoutePath(appTab: currentHomePage);
-      } else if (_pages.last is StorageDetailPage) {
+    if (pages.last.name != null) {
+      final uri = Uri.parse(pages.last.name);
+      if (pages.last is HomePage) {
+        return AppRoutePath(
+          appTab: EnumToString.fromString(AppTab.values, uri.pathSegments[0]),
+        );
+      } else if (pages.last is StorageDetailPage) {
         return StorageRoutePath(storageName: uri.pathSegments[2]);
-      } else if (_pages.last is ItemDetailPage) {
+      } else if (pages.last is ItemDetailPage) {
         return ItemRoutePath(itemName: uri.pathSegments[1]);
-      } else if (_pages.last is TopicDetailPage) {
+      } else if (pages.last is TopicDetailPage) {
         return TopicRoutePath(topicId: uri.pathSegments[1]);
       }
     }
@@ -174,7 +186,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   @override
   Future<void> setNewRoutePath(RoutePath routePath) async {
     _log.fine('setNewRoutePath: $routePath');
-    if (routePath is AppRoutePath) {
+    if (routePath is AppRoutePath && routePath.appTab != null) {
       _pages = [HomePage(appTab: routePath.appTab)];
     }
     if (routePath is TopicRoutePath) {
@@ -234,6 +246,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             // 如果软件配置中没有设置过 APIURL，则使用默认的 URL
             await graphQLApiClient.initailize(state.apiUrl ?? config.apiUrl);
             if (state.initialized) {
+              // GraphQL 客户端初始化后，开始认证用户
+              BlocProvider.of<AuthenticationBloc>(context)
+                  .add(AuthenticationStarted());
               initialized = state.initialized;
               isLogin = state.loginUser != null;
               defaultHomePage = state.defaultPage;
@@ -249,6 +264,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             }
             if (state is AuthenticationSuccess) {
               isLogin = true;
+              // 当登录成功时，开始初始化推送服务
+              BlocProvider.of<PushBloc>(context).add(PushStarted());
               notifyListeners();
             }
           },
@@ -256,11 +273,40 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         BlocListener<TabBloc, AppTab>(
           listener: (context, state) {
             if (state != null) {
-              currentHomePage = state;
-              notifyListeners();
+              setHomePage(state);
             }
           },
-        )
+        ),
+        BlocListener<UpdateBloc, UpdateState>(
+          listener: (context, state) {
+            if (state is UpdateSuccess && state.needUpdate) {
+              scaffoldMessengerKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text('发现新版本（${state.version}）'),
+                  action: SnackBarAction(
+                    label: '更新',
+                    onPressed: () {
+                      launchUrl(state.url);
+                    },
+                  ),
+                ),
+              );
+            }
+            if (state is UpdateFailure) {
+              scaffoldMessengerKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  action: SnackBarAction(
+                    label: '重试',
+                    onPressed: () {
+                      BlocProvider.of<UpdateBloc>(context).add(UpdateStarted());
+                    },
+                  ),
+                ),
+              );
+            }
+          },
+        ),
       ],
       child: Navigator(
         key: navigatorKey,
