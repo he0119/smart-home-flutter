@@ -103,10 +103,7 @@ class StorageRepository {
     final List<Item> consumables =
         consumablesJson.map((dynamic e) => Item.fromJson(e)).toList();
 
-    // 去重
-    // FIXME: 这是服务器上的 bug
-    // https://code.djangoproject.com/ticket/2361
-    return Tuple2(consumables.toSet().toList(), pageInfo);
+    return Tuple2(consumables, pageInfo);
   }
 
   Future<Item> deleteConsumable({
