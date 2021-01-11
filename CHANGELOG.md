@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.7.0] - 2021-01-11
+
+### Added
+
+- 支持 Android 应用链接
+- 所有列表均添加无限列表
+
+### Changed
+
+- 优化物品管理加载页面的显示
+- 给更多的页面添加网址支持
+- 给客户端加上 User-Agent
+- 移除网址上的 # 号
+- 网页版的物品管理相关网址直接显示物品或者位置名称
+- 仅在安卓上显示小米推送的设置
+
+### Fixed
+
+- 修复消息条挡住评论框的问题
+- 修复搜索界面单击搜索结果后键盘未收起的问题
+- 修复评论编辑预览界面还存在编辑按钮的问题
+- 修复话题详情界面的网址显示
+
 ## [0.6.1] - 2020-12-25
 
 ### Added
@@ -247,8 +270,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.7.0...HEAD
 
+[0.7.0]: https://github.com/he0119/smart-home-flutter/compare/v0.6.1...v0.7.0
 [0.6.1]: https://github.com/he0119/smart-home-flutter/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/he0119/smart-home-flutter/compare/v0.5.11...v0.6.0
 [0.5.11]: https://github.com/he0119/smart-home-flutter/compare/v0.5.10...v0.5.11
