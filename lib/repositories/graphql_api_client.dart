@@ -5,6 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:logging/logging.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home/graphql/mutations/mutations.dart';
 
@@ -78,13 +79,14 @@ class GraphQLApiClient {
         AuthLink(getToken: () async => 'JWT ${await token}');
     // 用户代理设置为当前手机
     // 暂时只支持 Android
-    // Dart (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
+    // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
     Map<String, String> headers = {};
     if (!kIsWeb && Platform.isAndroid) {
-      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      final PackageInfo packageInfo = await PackageInfo.fromPlatform();
       headers['User-Agent'] =
-          'Dart (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
+          'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
     }
     final HttpLink _httpLink = HttpLink(
       url,
