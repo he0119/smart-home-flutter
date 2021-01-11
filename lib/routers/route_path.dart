@@ -4,15 +4,18 @@ import 'package:smart_home/models/models.dart';
 abstract class RoutePath {}
 
 /// 主页相关的信息
-class AppRoutePath extends RoutePath {
+class HomeRoutePath extends RoutePath {
+  /// 主页
+  ///
+  /// 空则为默认主页
   final AppTab appTab;
 
-  AppRoutePath({
+  HomeRoutePath({
     this.appTab,
   });
 
   @override
-  String toString() => 'AppRoutePath(appTab: $appTab)';
+  String toString() => 'HomeRoutePath(appTab: $appTab)';
 }
 
 /// 位置相关的信息

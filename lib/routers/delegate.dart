@@ -169,7 +169,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     if (pages.last.name != null) {
       final uri = Uri.parse(pages.last.name);
       if (pages.last is HomePage) {
-        return AppRoutePath(
+        return HomeRoutePath(
           appTab: EnumToString.fromString(AppTab.values, uri.pathSegments[0]),
         );
       } else if (pages.last is StorageDetailPage) {
@@ -180,13 +180,13 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         return TopicRoutePath(topicId: uri.pathSegments[1]);
       }
     }
-    return AppRoutePath();
+    return HomeRoutePath();
   }
 
   @override
   Future<void> setNewRoutePath(RoutePath routePath) async {
     _log.fine('setNewRoutePath: $routePath');
-    if (routePath is AppRoutePath && routePath.appTab != null) {
+    if (routePath is HomeRoutePath && routePath.appTab != null) {
       _pages = [HomePage(appTab: routePath.appTab)];
     }
     if (routePath is TopicRoutePath) {

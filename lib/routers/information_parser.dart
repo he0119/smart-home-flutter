@@ -16,7 +16,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   @override
   RouteInformation restoreRouteInformation(RoutePath routePath) {
     _log.fine('restoreRouteInformation: $routePath');
-    if (routePath is AppRoutePath) {
+    if (routePath is HomeRoutePath) {
       switch (routePath.appTab) {
         case AppTab.blog:
           return const RouteInformation(location: '/blog');
@@ -42,13 +42,13 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
 RoutePath parseUrl(String location) {
   final uri = Uri.parse(location);
   if (uri.pathSegments.length == 1) {
-    if (uri.pathSegments[0] == 'iot') return AppRoutePath(appTab: AppTab.iot);
+    if (uri.pathSegments[0] == 'iot') return HomeRoutePath(appTab: AppTab.iot);
     if (uri.pathSegments[0] == 'board')
-      return AppRoutePath(appTab: AppTab.board);
+      return HomeRoutePath(appTab: AppTab.board);
     if (uri.pathSegments[0] == 'storage')
-      return AppRoutePath(appTab: AppTab.storage);
+      return HomeRoutePath(appTab: AppTab.storage);
     if (uri.pathSegments[0] == 'board')
-      return AppRoutePath(appTab: AppTab.board);
+      return HomeRoutePath(appTab: AppTab.board);
   }
   if (uri.pathSegments.length == 2) {
     switch (uri.pathSegments[0]) {
@@ -60,5 +60,5 @@ RoutePath parseUrl(String location) {
         return StorageRoutePath(storageName: uri.pathSegments[1]);
     }
   }
-  return AppRoutePath(appTab: null);
+  return HomeRoutePath(appTab: null);
 }
