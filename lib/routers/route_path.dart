@@ -59,3 +59,15 @@ class TopicRoutePath extends RoutePath {
   @override
   String toString() => 'TopicRoutePath(topicId: $topicId)';
 }
+
+/// 应用相关的信息
+///
+/// 一些独立页面
+class AppRoutePath extends RoutePath {
+  final AppPage appPage;
+
+  AppRoutePath(this.appPage);
+
+  @override
+  String toString() => 'AppRoutePath(appPage: $appPage)';
+}

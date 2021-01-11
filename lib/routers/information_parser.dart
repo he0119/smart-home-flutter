@@ -33,6 +33,15 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
       return RouteInformation(location: '/item/${routePath.itemName}');
     } else if (routePath is TopicRoutePath) {
       return RouteInformation(location: '/topic/${routePath.topicId}');
+    } else if (routePath is AppRoutePath) {
+      switch (routePath.appPage) {
+        case AppPage.login:
+          return const RouteInformation(location: '/login');
+        case AppPage.consumables:
+          return const RouteInformation(location: '/consumables');
+        case AppPage.recycle_bin:
+          return const RouteInformation(location: '/recyclebin');
+      }
     }
     return const RouteInformation(location: '/');
   }
@@ -49,6 +58,11 @@ RoutePath parseUrl(String location) {
       return HomeRoutePath(appTab: AppTab.storage);
     if (uri.pathSegments[0] == 'board')
       return HomeRoutePath(appTab: AppTab.board);
+    if (uri.pathSegments[0] == 'consumables')
+      return AppRoutePath(AppPage.consumables);
+    if (uri.pathSegments[0] == 'login') return AppRoutePath(AppPage.login);
+    if (uri.pathSegments[0] == 'recyclebin')
+      return AppRoutePath(AppPage.recycle_bin);
   }
   if (uri.pathSegments.length == 2) {
     switch (uri.pathSegments[0]) {

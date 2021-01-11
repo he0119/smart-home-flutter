@@ -5,6 +5,7 @@ import 'package:smart_home/pages/settings/settings_page.dart';
 import 'package:smart_home/pages/storage/consumables_page.dart';
 import 'package:smart_home/pages/storage/recycle_bin_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
+import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/widgets/gravatar.dart';
 import 'package:version/version.dart';
 
@@ -30,17 +31,13 @@ class MyDrawer extends StatelessWidget {
               ListTile(
                 title: Text('耗材管理'),
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ConsumablesPage(),
-                  ));
+                  MyRouterDelegate.of(context).push(ConsumablesPage());
                 },
               ),
               ListTile(
                 title: Text('回收站'),
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RecycleBinPage(),
-                  ));
+                  MyRouterDelegate.of(context).push(RecycleBinPage());
                 },
               ),
               ListTile(

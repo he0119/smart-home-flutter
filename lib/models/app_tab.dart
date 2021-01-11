@@ -46,3 +46,5 @@ extension AppTabExtension on AppTab {
     }
   }
 }
+
+enum AppPage { login, consumables, recycle_bin }

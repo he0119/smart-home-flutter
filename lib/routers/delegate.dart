@@ -10,7 +10,9 @@ import 'package:smart_home/pages/board/topic_detail_page.dart';
 import 'package:smart_home/pages/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
+import 'package:smart_home/pages/storage/consumables_page.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
+import 'package:smart_home/pages/storage/recycle_bin_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
 import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/routers/information_parser.dart';
@@ -178,6 +180,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         return ItemRoutePath(itemName: uri.pathSegments[1]);
       } else if (pages.last is TopicDetailPage) {
         return TopicRoutePath(topicId: uri.pathSegments[1]);
+      } else if (pages.last is LoginPage) {
+        return AppRoutePath(AppPage.login);
+      } else if (pages.last is ConsumablesPage) {
+        return AppRoutePath(AppPage.consumables);
+      } else if (pages.last is RecycleBinPage) {
+        return AppRoutePath(AppPage.recycle_bin);
       }
     }
     return HomeRoutePath();
@@ -218,6 +226,24 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           group: 1,
         ),
       ];
+    }
+    if (routePath is AppRoutePath) {
+      switch (routePath.appPage) {
+        case AppPage.login:
+          break;
+        case AppPage.consumables:
+          _pages = [
+            HomePage(appTab: AppTab.storage),
+            ConsumablesPage(),
+          ];
+          break;
+        case AppPage.recycle_bin:
+          _pages = [
+            HomePage(appTab: AppTab.storage),
+            RecycleBinPage(),
+          ];
+          break;
+      }
     }
   }
 
