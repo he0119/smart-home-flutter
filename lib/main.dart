@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -114,12 +117,15 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
   @override
   void initState() {
     super.initState();
-    EventChannel('hehome.xyz/route')
-        .receiveBroadcastStream()
-        .listen((event) async {
-      print('event: ${event.toString()}');
-      _delegate.navigateNewPath(event.toString());
-    });
+    // 仅在安卓上注册事件通道
+    if (!kIsWeb && Platform.isAndroid) {
+      EventChannel('hehome.xyz/route')
+          .receiveBroadcastStream()
+          .listen((event) async {
+        print('event: ${event.toString()}');
+        _delegate.navigateNewPath(event.toString());
+      });
+    }
   }
 
   @override
