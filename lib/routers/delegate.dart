@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/core/blocs.dart';
+import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/board/topic_detail_page.dart';
 import 'package:smart_home/pages/home_page.dart';
@@ -15,6 +16,7 @@ import 'package:smart_home/repositories/repositories.dart';
 import 'package:smart_home/routers/information_parser.dart';
 import 'package:smart_home/routers/route_path.dart';
 import 'package:smart_home/routers/transition_delegate.dart';
+import 'package:smart_home/utils/launch_url.dart';
 
 class MyRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
@@ -244,6 +246,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             // 如果软件配置中没有设置过 APIURL，则使用默认的 URL
             graphQLApiClient.initailize(state.apiUrl ?? config.apiUrl);
             if (state.initialized) {
+              // GraphQL 客户端初始化后，开始认证用户
+              BlocProvider.of<AuthenticationBloc>(context)
+                  .add(AuthenticationStarted());
               initialized = state.initialized;
               isLogin = state.loginUser != null;
               defaultHomePage = state.defaultPage;
@@ -271,7 +276,37 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
               setHomePage(state);
             }
           },
-        )
+        ),
+        BlocListener<UpdateBloc, UpdateState>(
+          listener: (context, state) {
+            if (state is UpdateSuccess && state.needUpdate) {
+              scaffoldMessengerKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text('发现新版本（${state.version}）'),
+                  action: SnackBarAction(
+                    label: '更新',
+                    onPressed: () {
+                      launchUrl(state.url);
+                    },
+                  ),
+                ),
+              );
+            }
+            if (state is UpdateFailure) {
+              scaffoldMessengerKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  action: SnackBarAction(
+                    label: '重试',
+                    onPressed: () {
+                      BlocProvider.of<UpdateBloc>(context).add(UpdateStarted());
+                    },
+                  ),
+                ),
+              );
+            }
+          },
+        ),
       ],
       child: Navigator(
         key: navigatorKey,
