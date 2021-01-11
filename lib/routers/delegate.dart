@@ -242,9 +242,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
               return false;
             }
           },
-          listener: (context, state) {
+          listener: (context, state) async {
             // 如果软件配置中没有设置过 APIURL，则使用默认的 URL
-            graphQLApiClient.initailize(state.apiUrl ?? config.apiUrl);
+            await graphQLApiClient.initailize(state.apiUrl ?? config.apiUrl);
             if (state.initialized) {
               // GraphQL 客户端初始化后，开始认证用户
               BlocProvider.of<AuthenticationBloc>(context)

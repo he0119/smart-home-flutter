@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:logging/logging.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home/graphql/mutations/mutations.dart';
 
@@ -70,10 +74,24 @@ class GraphQLApiClient {
   }
 
   /// 初始化 GraphQL 客户端
-  bool initailize(String url) {
+  Future<bool> initailize(String url) async {
     final AuthLink _authLink =
         AuthLink(getToken: () async => 'JWT ${await token}');
-    final HttpLink _httpLink = HttpLink(url);
+    // 用户代理设置为当前手机
+    // 暂时只支持 Android
+    // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
+    Map<String, String> headers = {};
+    if (!kIsWeb && Platform.isAndroid) {
+      final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      headers['User-Agent'] =
+          'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
+    }
+    final HttpLink _httpLink = HttpLink(
+      url,
+      defaultHeaders: headers,
+    );
     final ErrorLink _tokenErrorLink =
         ErrorLink(onGraphQLError: _handleTokenError);
     final Link _link = _tokenErrorLink.split((request) {
