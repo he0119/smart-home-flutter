@@ -39,7 +39,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           return const RouteInformation(location: '/login');
         case AppPage.consumables:
           return const RouteInformation(location: '/consumables');
-        case AppPage.recycle_bin:
+        case AppPage.recycleBin:
           return const RouteInformation(location: '/recyclebin');
       }
     }
@@ -62,7 +62,7 @@ RoutePath parseUrl(String location) {
       return AppRoutePath(AppPage.consumables);
     if (uri.pathSegments[0] == 'login') return AppRoutePath(AppPage.login);
     if (uri.pathSegments[0] == 'recyclebin')
-      return AppRoutePath(AppPage.recycle_bin);
+      return AppRoutePath(AppPage.recycleBin);
   }
   if (uri.pathSegments.length == 2) {
     switch (uri.pathSegments[0]) {

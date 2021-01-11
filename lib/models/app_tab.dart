@@ -47,4 +47,5 @@ extension AppTabExtension on AppTab {
   }
 }
 
-enum AppPage { login, consumables, recycle_bin }
+/// 登录，物品耗材，回收站
+enum AppPage { login, consumables, recycleBin }

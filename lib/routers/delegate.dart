@@ -185,7 +185,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       } else if (pages.last is ConsumablesPage) {
         return AppRoutePath(AppPage.consumables);
       } else if (pages.last is RecycleBinPage) {
-        return AppRoutePath(AppPage.recycle_bin);
+        return AppRoutePath(AppPage.recycleBin);
       }
     }
     return HomeRoutePath();
@@ -237,7 +237,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             ConsumablesPage(),
           ];
           break;
-        case AppPage.recycle_bin:
+        case AppPage.recycleBin:
           _pages = [
             HomePage(appTab: AppTab.storage),
             RecycleBinPage(),
