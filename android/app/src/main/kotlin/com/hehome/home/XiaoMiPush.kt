@@ -15,10 +15,8 @@ class XiaoMiMessageReceiver : PushMessageReceiver() {
     super.onNotificationMessageClicked(context, message)
     if (context != null) {
       val intent: Intent = Intent(Intent.ACTION_VIEW).apply {
-        this.data = Uri.parse("https://${BuildConfig.HOST_NAME}/")
+        this.data = Uri.parse("https://${BuildConfig.HOST_NAME}${message?.content}")
         this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        // 设置初始路由
-        putExtra("route", message?.content);
       }
       context.startActivity(intent)
     }

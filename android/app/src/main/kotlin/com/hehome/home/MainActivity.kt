@@ -17,14 +17,17 @@ class MainActivity : FlutterActivity() {
     lateinit var channel: MethodChannel
   }
 
+  override fun getInitialRoute(): String? {
+    if (intent.action == Intent.ACTION_VIEW) {
+      val path = Uri.parse(intent.data.toString()).path
+      return path
+    }
+    return super.getInitialRoute()
+  }
+
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
-    Log.i("New Intent", intent.data.toString())
-    val route = intent.extras?.getString("route")
-    if (route != null) {
-      eventSink.success(route)
-      Log.i("New Intent", route)
-    } else {
+    if (intent.action == Intent.ACTION_VIEW) {
       val path = Uri.parse(intent.data.toString()).path
       eventSink.success(path)
       Log.i("New Intent", path)
