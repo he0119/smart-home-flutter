@@ -13,7 +13,7 @@ import com.xiaomi.mipush.sdk.PushMessageReceiver
 class XiaoMiMessageReceiver : PushMessageReceiver() {
   override fun onNotificationMessageClicked(context: Context?, message: MiPushMessage?) {
     super.onNotificationMessageClicked(context, message)
-    if (context != null) {
+    context?.let {
       val intent: Intent = Intent(Intent.ACTION_VIEW).apply {
         this.data = Uri.parse("https://${BuildConfig.HOST_NAME}${message?.content}")
         this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -23,26 +23,11 @@ class XiaoMiMessageReceiver : PushMessageReceiver() {
     Log.i("MiPush", "onNotificationMessageClicked: $message")
   }
 
-  override fun onRequirePermissions(context: Context?, p1: Array<out String>?) {
-    super.onRequirePermissions(context, p1)
-    Log.i("MiPush", "onRequirePermissions: $p1")
-  }
-
-  override fun onReceivePassThroughMessage(context: Context?, message: MiPushMessage?) {
-    super.onReceivePassThroughMessage(context, message)
-    Log.i("MiPush", "onReceivePassThroughMessage: $message")
-  }
-
-  override fun onCommandResult(context: Context?, message: MiPushCommandMessage?) {
-    super.onCommandResult(context, message)
-    Log.i("MiPush", "onCommandResult: $message")
-  }
-
   override fun onReceiveRegisterResult(context: Context?, message: MiPushCommandMessage?) {
     super.onReceiveRegisterResult(context, message)
     Log.i("MiPush", "onReceiveRegisterResult: $message")
     Handler(Looper.getMainLooper()).post {
-      MainActivity.channel.invokeMethod("ReceiveRegisterResult", message?.commandArguments?.first())
+      MainActivity.pushChannel.invokeMethod("ReceiveRegisterResult", message?.commandArguments?.first())
     }
   }
 

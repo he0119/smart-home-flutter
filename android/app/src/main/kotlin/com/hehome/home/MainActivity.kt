@@ -11,10 +11,9 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
-  lateinit var eventSink: EventChannel.EventSink
-
   companion object {
-    lateinit var channel: MethodChannel
+    lateinit var pushChannel: MethodChannel
+    lateinit var routeChannel: MethodChannel
   }
 
   override fun getInitialRoute(): String? {
@@ -29,7 +28,7 @@ class MainActivity : FlutterActivity() {
     super.onNewIntent(intent)
     if (intent.action == Intent.ACTION_VIEW) {
       val path = Uri.parse(intent.data.toString()).path
-      eventSink.success(path)
+      routeChannel.invokeMethod("RouteChanged", path)
       Log.i("New Intent", path)
     }
   }
@@ -37,17 +36,9 @@ class MainActivity : FlutterActivity() {
   override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
     super.configureFlutterEngine(flutterEngine)
 
-    EventChannel(flutterEngine.dartExecutor.binaryMessenger, "hehome.xyz/route").setStreamHandler(
-      object : EventChannel.StreamHandler {
-        override fun onListen(p0: Any?, event: EventChannel.EventSink?) {
-          eventSink = event!!
-        }
-
-        override fun onCancel(p0: Any?) {}
-      }
-    )
-    channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "hehome.xyz/push/method")
-    channel.setMethodCallHandler { call, result ->
+    routeChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "hehome.xyz/route")
+    pushChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "hehome.xyz/push/method")
+    pushChannel.setMethodCallHandler { call, result ->
       if (call.method == "init") {
         Log.i("Push", "Mipush initializing")
         // 获得参数
