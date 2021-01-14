@@ -117,14 +117,15 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
   @override
   void initState() {
     super.initState();
-    // 仅在安卓上注册事件通道
+    // 仅在安卓上注册通道
     if (!kIsWeb && Platform.isAndroid) {
-      EventChannel('hehome.xyz/route')
-          .receiveBroadcastStream()
-          .listen((event) async {
-        print('event: ${event.toString()}');
-        _delegate.navigateNewPath(event.toString());
-      });
+      MethodChannel('hehome.xyz/route').setMethodCallHandler(
+        (call) async {
+          if (call.method == 'RouteChanged' && call.arguments != null) {
+            _delegate.navigateNewPath(call.arguments);
+          }
+        },
+      );
     }
   }
 
