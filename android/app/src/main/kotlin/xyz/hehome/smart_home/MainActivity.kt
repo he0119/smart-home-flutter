@@ -1,4 +1,4 @@
-package com.hehome.home
+package xyz.hehome.smart_home
 
 import android.content.Intent
 import android.net.Uri
@@ -28,8 +28,10 @@ class MainActivity : FlutterActivity() {
     super.onNewIntent(intent)
     if (intent.action == Intent.ACTION_VIEW) {
       val path = Uri.parse(intent.data.toString()).path
-      routeChannel.invokeMethod("RouteChanged", path)
-      Log.i("New Intent", path)
+      if (path != null) {
+        routeChannel.invokeMethod("RouteChanged", path)
+        Log.i("New Intent", path)
+      }
     }
   }
 
