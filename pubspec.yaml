@@ -47,10 +47,6 @@ dependencies:
     git: https://github.com/he0119/flutter-settings-ui.git
   dropdown_search: ^0.4.8
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -66,5 +62,4 @@ flutter:
 
 flutter_icons:
   android: true
-  ios: true
   image_path: "assets/icon/icon.png"
