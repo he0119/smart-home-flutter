@@ -15,6 +15,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0-nullsafety.2
+  cupertino_icons: ^1.0.2
 
   # Dart
   logging: ^0.11.4
