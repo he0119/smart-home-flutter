@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="xyz.hehome.smart_home">
+    package="com.hehome.home">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 小米推送 -->
@@ -14,6 +14,11 @@
         android:protectionLevel="signature" />
     <uses-permission
         android:name="${applicationId}.permission.MIPUSH_RECEIVE" />
+    <!-- io.flutter.app.FlutterApplication is an android.app.Application that
+         calls FlutterMain.startInitialization(this); in its onCreate method.
+         In most cases you can leave this as-is, but you if you want to provide
+         additional functionality it is fine to subclass or reimplement
+         FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="${appName}"
@@ -97,7 +102,7 @@
         <!-- 小米推送自定义的 BroadcastReceiver -->
         <receiver
             android:exported="true"
-            android:name="xyz.hehome.smart_home.XiaoMiMessageReceiver">
+            android:name="com.hehome.home.XiaoMiMessageReceiver">
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
             </intent-filter>
