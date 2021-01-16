@@ -1,4 +1,4 @@
-package com.hehome.home
+package xyz.hehome.smarthome
 
 import android.content.Context
 import android.content.Intent
