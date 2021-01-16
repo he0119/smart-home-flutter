@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hehome.home">
+    package="xyz.hehome.smarthome">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 小米推送 -->
@@ -102,7 +102,7 @@
         <!-- 小米推送自定义的 BroadcastReceiver -->
         <receiver
             android:exported="true"
-            android:name="com.hehome.home.XiaoMiMessageReceiver">
+            android:name="xyz.hehome.smarthome.XiaoMiMessageReceiver">
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
             </intent-filter>
