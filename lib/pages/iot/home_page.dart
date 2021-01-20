@@ -15,8 +15,24 @@ import 'package:smart_home/widgets/home_page.dart';
 import 'package:smart_home/utils/show_snack_bar.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 
-class IotHomePage extends StatelessWidget {
-  const IotHomePage({Key key}) : super(key: key);
+class IotHomePage extends Page {
+  IotHomePage()
+      : super(
+          key: ValueKey('iot'),
+          name: '/iot',
+        );
+
+  @override
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => IotHomeScreen(),
+    );
+  }
+}
+
+class IotHomeScreen extends StatelessWidget {
+  const IotHomeScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
