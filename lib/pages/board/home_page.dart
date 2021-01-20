@@ -11,8 +11,25 @@ import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/widgets/home_page.dart';
 import 'package:smart_home/widgets/infinite_list.dart';
 
-class BoardHomePage extends StatelessWidget {
-  const BoardHomePage({
+class BoardHomePage extends Page {
+  BoardHomePage()
+      : super(
+          key: ValueKey('board'),
+          name: '/board',
+        );
+
+  @override
+  Route createRoute(BuildContext context) {
+    BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeFetched());
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => BoardHomeScreen(),
+    );
+  }
+}
+
+class BoardHomeScreen extends StatelessWidget {
+  const BoardHomeScreen({
     Key key,
   }) : super(key: key);
 
