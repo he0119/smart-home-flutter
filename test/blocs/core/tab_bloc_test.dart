@@ -26,6 +26,7 @@ void main() {
       act: (TabBloc bloc) async {
         bloc.add(TabChanged(AppTab.board));
         bloc.add(TabChanged(AppTab.iot));
+        bloc.add(TabChanged(AppTab.iot));
       },
       expect: <AppTab>[
         AppTab.board,
