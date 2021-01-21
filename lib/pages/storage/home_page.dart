@@ -8,6 +8,7 @@ import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/date_format_extension.dart';
 import 'package:smart_home/widgets/center_loading_indicator.dart';
+import 'package:smart_home/widgets/drawer.dart';
 import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/widgets/home_page.dart';
 import 'package:smart_home/widgets/infinite_list.dart';
@@ -25,7 +26,27 @@ class StorageHomePage extends Page {
         .add(StorageHomeFetched(itemType: ItemType.all));
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => StorageHomeScreen(),
+      builder: (context) => NewStorageHomeScreen(),
+    );
+  }
+}
+
+/// TODO: 尝试新界面
+class NewStorageHomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: MyDrawer(),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 100,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text('物品管理'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
