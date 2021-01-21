@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:smart_home/pages/blog/home_page.dart';
+import 'package:smart_home/pages/board/home_page.dart';
+import 'package:smart_home/pages/iot/home_page.dart';
+import 'package:smart_home/pages/storage/home_page.dart';
 
 /// IOT, 存储管理, 博客, 留言板
 enum AppTab { iot, storage, blog, board }
@@ -43,6 +47,20 @@ extension AppTabExtension on AppTab {
         return '博客';
       default:
         return '留言板';
+    }
+  }
+
+  /// 对应的页面
+  Page get page {
+    switch (this) {
+      case AppTab.iot:
+        return IotHomePage();
+      case AppTab.storage:
+        return StorageHomePage();
+      case AppTab.blog:
+        return BlogHomePage();
+      default:
+        return BoardHomePage();
     }
   }
 }

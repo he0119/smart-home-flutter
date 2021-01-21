@@ -13,17 +13,31 @@ import 'package:smart_home/widgets/home_page.dart';
 import 'package:smart_home/widgets/rounded_raised_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-enum BlogMenu { admin, setting }
-
-/// 利用 WebView 实现的博客页面
-class BlogHomePage extends StatefulWidget {
-  const BlogHomePage({Key key}) : super(key: key);
+class BlogHomePage extends Page {
+  BlogHomePage()
+      : super(
+          key: ValueKey('blog'),
+          name: '/blog',
+        );
 
   @override
-  _BlogHomePageState createState() => _BlogHomePageState();
+  Route createRoute(BuildContext context) {
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => BlogHomeScreen(),
+    );
+  }
 }
 
-class _BlogHomePageState extends State<BlogHomePage> {
+/// 利用 WebView 实现的博客页面
+class BlogHomeScreen extends StatefulWidget {
+  const BlogHomeScreen({Key key}) : super(key: key);
+
+  @override
+  _BlogHomeScreenState createState() => _BlogHomeScreenState();
+}
+
+class _BlogHomeScreenState extends State<BlogHomeScreen> {
   Completer<WebViewController> _controller = Completer<WebViewController>();
 
   @override

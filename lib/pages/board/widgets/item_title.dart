@@ -23,7 +23,6 @@ class ItemTitle extends StatelessWidget {
       subtitle: Text(editedAt.toLocalStr()),
       trailing: (onSelected != null)
           ? PopupMenuButton(
-              icon: Icon(Icons.expand_more),
               onSelected: onSelected,
               itemBuilder: (context) => <PopupMenuItem<Menu>>[
                 PopupMenuItem(

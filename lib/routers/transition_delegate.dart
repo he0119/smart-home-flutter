@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:smart_home/pages/home_page.dart';
+import 'package:smart_home/pages/blog/home_page.dart';
+import 'package:smart_home/pages/board/home_page.dart';
+import 'package:smart_home/pages/iot/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
+import 'package:smart_home/pages/storage/home_page.dart';
 
 class MyTransitionDelegate extends TransitionDelegate<void> {
   final defaultTransitionDelegate = DefaultTransitionDelegate();
@@ -21,10 +24,16 @@ class MyTransitionDelegate extends TransitionDelegate<void> {
         locationToExitingPageRoute.length == 1) {
       final exitingRoute = locationToExitingPageRoute.values.last;
       final newRoute = newPageRouteHistory.last;
-      if ((exitingRoute.route.settings is HomePage ||
+      if ((exitingRoute.route.settings is IotHomePage ||
+              exitingRoute.route.settings is BlogHomePage ||
+              exitingRoute.route.settings is StorageHomePage ||
+              exitingRoute.route.settings is BoardHomePage ||
               exitingRoute.route.settings is LoginPage ||
               exitingRoute.route.settings is SplashPage) &&
-          newRoute.route.settings is HomePage) {
+          (newRoute.route.settings is IotHomePage ||
+              newRoute.route.settings is BlogHomePage ||
+              newRoute.route.settings is StorageHomePage ||
+              newRoute.route.settings is BoardHomePage)) {
         exitingRoute.markForRemove();
         newRoute.markForAdd();
         results.add(exitingRoute);

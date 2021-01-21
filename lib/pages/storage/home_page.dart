@@ -12,8 +12,26 @@ import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/widgets/home_page.dart';
 import 'package:smart_home/widgets/infinite_list.dart';
 
-class StorageHomePage extends StatelessWidget {
-  const StorageHomePage({Key key}) : super(key: key);
+class StorageHomePage extends Page {
+  StorageHomePage()
+      : super(
+          key: ValueKey('storage'),
+          name: '/storage',
+        );
+
+  @override
+  Route createRoute(BuildContext context) {
+    BlocProvider.of<StorageHomeBloc>(context)
+        .add(StorageHomeFetched(itemType: ItemType.all));
+    return MaterialPageRoute(
+      settings: this,
+      builder: (context) => StorageHomeScreen(),
+    );
+  }
+}
+
+class StorageHomeScreen extends StatelessWidget {
+  const StorageHomeScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

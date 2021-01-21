@@ -1,19 +1,26 @@
+import 'dart:io';
+
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'package:smart_home/app_config.dart';
 import 'package:smart_home/blocs/core/blocs.dart';
 import 'package:smart_home/models/grobal_keys.dart';
 import 'package:smart_home/models/models.dart';
+import 'package:smart_home/pages/blog/home_page.dart';
+import 'package:smart_home/pages/board/home_page.dart';
 import 'package:smart_home/pages/board/topic_detail_page.dart';
-import 'package:smart_home/pages/home_page.dart';
+import 'package:smart_home/pages/iot/home_page.dart';
 import 'package:smart_home/pages/login_page.dart';
 import 'package:smart_home/pages/settings/blog/settings_page.dart';
 import 'package:smart_home/pages/settings/iot/settings_page.dart';
 import 'package:smart_home/pages/settings/settings_page.dart';
 import 'package:smart_home/pages/splash_page.dart';
 import 'package:smart_home/pages/storage/consumables_page.dart';
+import 'package:smart_home/pages/storage/home_page.dart';
 import 'package:smart_home/pages/storage/item_datail_page.dart';
 import 'package:smart_home/pages/storage/recycle_bin_page.dart';
 import 'package:smart_home/pages/storage/storage_datail_page.dart';
@@ -59,7 +66,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     // 未设置主页时显示默认主页
     if (_pages.isEmpty) {
       _pages = [
-        HomePage(appTab: defaultHomePage),
+        defaultHomePage.page,
       ];
     }
     return List.unmodifiable(_pages);
@@ -79,7 +86,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   /// 设置主页
   void setHomePage(AppTab appTab) {
-    _pages = [HomePage(appTab: appTab)];
+    _pages = [appTab.page];
     notifyListeners();
   }
 
@@ -173,7 +180,10 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   RoutePath get routePath {
     if (pages.last.name != null) {
       final uri = Uri.parse(pages.last.name);
-      if (pages.last is HomePage) {
+      if (pages.last is IotHomePage ||
+          pages.last is BoardHomePage ||
+          pages.last is BlogHomePage ||
+          pages.last is StorageHomePage) {
         return HomeRoutePath(
           appTab: EnumToString.fromString(AppTab.values, uri.pathSegments[0]),
         );
@@ -204,11 +214,11 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   Future<void> setNewRoutePath(RoutePath routePath) async {
     _log.fine('setNewRoutePath: $routePath');
     if (routePath is HomeRoutePath && routePath.appTab != null) {
-      _pages = [HomePage(appTab: routePath.appTab)];
+      _pages = [routePath.appTab.page];
     }
     if (routePath is TopicRoutePath) {
       _pages = [
-        HomePage(appTab: AppTab.board),
+        BoardHomePage(),
         TopicDetailPage(topicId: routePath.topicId),
       ];
     }
@@ -216,7 +226,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       storageGroup = 0;
       itemCount = 1;
       _pages = [
-        HomePage(appTab: AppTab.storage),
+        StorageHomePage(),
         ItemDetailPage(
           itemName: routePath.itemName,
           itemId: routePath.itemId,
@@ -228,7 +238,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       storageGroup = 1;
       itemCount = 0;
       _pages = [
-        HomePage(appTab: AppTab.storage),
+        StorageHomePage(),
         StorageDetailPage(
           storageName: routePath.storageName,
           storageId: routePath.storageId,
@@ -242,13 +252,13 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           break;
         case AppPage.consumables:
           _pages = [
-            HomePage(appTab: AppTab.storage),
+            StorageHomePage(),
             ConsumablesPage(),
           ];
           break;
         case AppPage.recycleBin:
           _pages = [
-            HomePage(appTab: AppTab.storage),
+            StorageHomePage(),
             RecycleBinPage(),
           ];
           break;
@@ -258,19 +268,19 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       switch (routePath.appSettings) {
         case AppSettings.home:
           _pages = [
-            HomePage(appTab: defaultHomePage),
+            defaultHomePage.page,
             SettingsPage(),
           ];
           break;
         case AppSettings.iot:
           _pages = [
-            HomePage(appTab: AppTab.iot),
+            IotHomePage(),
             IotSettingsPage(),
           ];
           break;
         case AppSettings.blog:
           _pages = [
-            HomePage(appTab: AppTab.blog),
+            BlogHomePage(),
             BlogSettingsPage(),
           ];
           break;
@@ -303,12 +313,44 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             // 如果软件配置中没有设置过 APIURL，则使用默认的 URL
             await graphQLApiClient.initailize(state.apiUrl ?? config.apiUrl);
             if (state.initialized) {
-              // GraphQL 客户端初始化后，开始认证用户
-              BlocProvider.of<AuthenticationBloc>(context)
-                  .add(AuthenticationStarted());
               initialized = state.initialized;
               isLogin = state.loginUser != null;
               defaultHomePage = state.defaultPage;
+              // GraphQL 客户端初始化后，开始认证用户
+              BlocProvider.of<AuthenticationBloc>(context)
+                  .add(AuthenticationStarted());
+              // 仅在客户端上注册 Shortcut
+              if (!kIsWeb && !Platform.isWindows) {
+                final QuickActions quickActions = QuickActions();
+                quickActions.initialize((String shortcutType) async {
+                  if (shortcutType == 'action_iot') {
+                    BlocProvider.of<TabBloc>(context)
+                        .add(TabChanged(AppTab.iot));
+                  } else if (shortcutType == 'action_storage') {
+                    BlocProvider.of<TabBloc>(context)
+                        .add(TabChanged(AppTab.storage));
+                  } else if (shortcutType == 'action_blog') {
+                    BlocProvider.of<TabBloc>(context)
+                        .add(TabChanged(AppTab.blog));
+                  } else {
+                    BlocProvider.of<TabBloc>(context)
+                        .add(TabChanged(AppTab.board));
+                  }
+                });
+                quickActions.setShortcutItems(
+                  <ShortcutItem>[
+                    // TODO: 给快捷方式添加图标
+                    const ShortcutItem(
+                        type: 'action_iot', localizedTitle: 'IOT'),
+                    const ShortcutItem(
+                        type: 'action_storage', localizedTitle: '物品'),
+                    const ShortcutItem(
+                        type: 'action_blog', localizedTitle: '博客'),
+                    const ShortcutItem(
+                        type: 'action_board', localizedTitle: '留言'),
+                  ],
+                );
+              }
               notifyListeners();
             }
           },

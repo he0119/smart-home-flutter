@@ -35,7 +35,7 @@ class AppPreferencesState extends Equatable {
       miPushAppKey: null,
       miPushRegId: null,
       refreshInterval: 10,
-      blogUrl: null,
+      blogUrl: 'https://hehome.xyz',
       blogAdminUrl: null,
       defaultPage: AppTab.storage,
       loginUser: null,
