@@ -12,6 +12,7 @@ import 'package:smart_home/widgets/drawer.dart';
 import 'package:smart_home/widgets/error_message_button.dart';
 import 'package:smart_home/widgets/home_page.dart';
 import 'package:smart_home/widgets/infinite_list.dart';
+import 'package:smart_home/widgets/my_sliver_app_bar.dart';
 
 class StorageHomePage extends Page {
   StorageHomePage()
@@ -35,17 +36,34 @@ class StorageHomePage extends Page {
 class NewStorageHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: MyDrawer(),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 100,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text('物品管理'),
+    return BlocBuilder<StorageHomeBloc, StorageHomeState>(
+      builder: (context, state) => Scaffold(
+        drawer: MyDrawer(),
+        body: CustomScrollView(
+          slivers: [
+            MySliverAppBar(
+              title: '物品管理',
             ),
-          ),
-        ],
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Card(
+                  color: Color(0xFF189BD3),
+                  child: ListTile(
+                    title: Text(
+                      '所有位置',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            if (state is StorageHomeSuccess)
+              ..._StorageHomeBody()._buildSlivers(context, state),
+          ],
+        ),
       ),
     );
   }
