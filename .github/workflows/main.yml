@@ -10,8 +10,8 @@ on:
     types: [published]
 
 env:
-  flutter_channel: 'dev'
-  flutter_version: '1.26.0-8.0.pre'
+  flutter_channel: 'beta'
+  flutter_version: '1.25.0-8.3.pre'
 
 jobs:
   test:
@@ -92,16 +92,6 @@ jobs:
         with:
           name: android
           path: ${{ github.workspace }}/build/app/outputs/apk/${{ needs.test.outputs.version }}/release/*.apk
-      - name: Build universal apk
-        run: flutter build apk -t ./lib/main_$VERSION.dart --flavor $VERSION
-        env:
-          VERSION: ${{ needs.test.outputs.version }}
-      - name: Upload universal apk
-        uses: actions/upload-artifact@v2
-        if: github.event_name != 'pull_request'
-        with:
-          name: android-universal
-          path: ${{ github.workspace }}/build/app/outputs/apk/${{ needs.test.outputs.version }}/release/*.apk
 
   web:
     name: Web
@@ -134,36 +124,36 @@ jobs:
           name: web
           path: ${{ github.workspace }}/build/web
 
-  windows:
-    name: Windows
-    runs-on: windows-latest
-    needs: test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set dev version name
-        if: ${{ github.event_name != 'release' || github.event.action != 'published' }}
-        run: |
-          sed -ri "s#version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)#version: \1-git.${env:COMMIT_ID}+\2#g" pubspec.yaml
-        env:
-          COMMIT_ID: ${{ needs.test.outputs.commit_id }}
-      - name: Install flutter
-        uses: subosito/flutter-action@v1.4.0
-        with:
-          channel: ${{ env.flutter_channel }}
-          flutter-version: ${{ env.flutter_version }}
-      - name: Build windows version
-        run: |
-          flutter config --enable-windows-desktop
-          flutter build windows -t ./lib/main_${env:VERSION}.dart
-        env:
-          VERSION: ${{ needs.test.outputs.version }}
-      - name: Upload windows version
-        uses: actions/upload-artifact@v2
-        if: github.event_name != 'pull_request'
-        with:
-          name: windows
-          path: ${{ github.workspace }}/build/windows/runner/Release
+  # windows:
+  #   name: Windows
+  #   runs-on: windows-latest
+  #   needs: test
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Set dev version name
+  #       if: ${{ github.event_name != 'release' || github.event.action != 'published' }}
+  #       run: |
+  #         sed -ri "s#version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)#version: \1-git.${env:COMMIT_ID}+\2#g" pubspec.yaml
+  #       env:
+  #         COMMIT_ID: ${{ needs.test.outputs.commit_id }}
+  #     - name: Install flutter
+  #       uses: subosito/flutter-action@v1.4.0
+  #       with:
+  #         channel: ${{ env.flutter_channel }}
+  #         flutter-version: ${{ env.flutter_version }}
+  #     - name: Build windows version
+  #       run: |
+  #         flutter config --enable-windows-desktop
+  #         flutter build windows -t ./lib/main_${env:VERSION}.dart
+  #       env:
+  #         VERSION: ${{ needs.test.outputs.version }}
+  #     - name: Upload windows version
+  #       uses: actions/upload-artifact@v2
+  #       if: github.event_name != 'pull_request'
+  #       with:
+  #         name: windows
+  #         path: ${{ github.workspace }}/build/windows/runner/Release
 
   deploy_web_dev:
     name: Deploy Web Dev
@@ -214,7 +204,7 @@ jobs:
   deploy_github:
     name: Deploy Github
     runs-on: ubuntu-latest
-    needs: [android, web, windows]
+    needs: [android, web]
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     steps:
       - name: Download artifacts
@@ -222,10 +212,9 @@ jobs:
       - name: Compress files
         run: |
           tar -czvf web.tar.gz web
-          tar -czvf windows.tar.gz windows
       - name: Upload Release Assets
         uses: alexellis/upload-assets@0.2.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          asset_paths: '["android/*.apk", "android-universal/*.apk", "web.tar.gz", "windows.tar.gz"]'
+          asset_paths: '["android/*.apk", "web.tar.gz"]'

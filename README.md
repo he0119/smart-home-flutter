@@ -4,17 +4,17 @@
 
 ## Requirements
 
-- Flutter (Channel dev, 1.26.0-8.0.pre)
+- Flutter (Channel beta, 1.25.0-8.3.pre)
 
 ## Setup
 
 启用 Web 和 Windows 功能
 
 ```shell
-flutter channel dev
+flutter channel beta
 flutter upgrade
 flutter config --enable-web
-flutter config --enable-windows-desktop
+# flutter config --enable-windows-desktop
 ```
 
 ## Run
