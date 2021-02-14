@@ -226,7 +226,7 @@ class _LoginFormState extends State<LoginForm> {
                   : null,
               child: Text('登录'),
             ),
-            FlatButton(
+            TextButton(
               onPressed: widget.onTapBack,
               child: Text('返回'),
             ),

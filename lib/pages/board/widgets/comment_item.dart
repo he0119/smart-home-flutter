@@ -42,13 +42,13 @@ class CommentItem extends StatelessWidget {
                             title: Text('删除评论'),
                             content: Text('你确认要删除该评论？'),
                             actions: <Widget>[
-                              FlatButton(
+                              TextButton(
                                 child: Text('否'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
                               ),
-                              FlatButton(
+                              TextButton(
                                 child: Text('是'),
                                 onPressed: () {
                                   showInfoSnackBar('正在删除...', duration: 1);

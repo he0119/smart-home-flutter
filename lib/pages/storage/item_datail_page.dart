@@ -151,13 +151,13 @@ class ItemDetailScreen extends StatelessWidget {
                     title: Text('删除 ${state.item.name}'),
                     content: Text('你确认要删除该物品么？'),
                     actions: <Widget>[
-                      FlatButton(
+                      TextButton(
                         child: Text('否'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                       ),
-                      FlatButton(
+                      TextButton(
                         child: Text('是'),
                         onPressed: () {
                           BlocProvider.of<ItemEditBloc>(context).add(
@@ -287,10 +287,10 @@ class _ItemDetailList extends StatelessWidget {
           subtitle: SelectableText(item.editedAt?.toLocalStr() ?? ''),
         ),
         if (item.createdBy != null)
-        ListTile(
-          title: Text('录入人'),
-          subtitle: SelectableText(item.createdBy.username),
-        ),
+          ListTile(
+            title: Text('录入人'),
+            subtitle: SelectableText(item.createdBy.username),
+          ),
         ListTile(
           title: Text('录入时间'),
           subtitle: SelectableText(item.createdAt?.toLocalStr() ?? ''),

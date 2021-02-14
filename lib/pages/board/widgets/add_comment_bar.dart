@@ -70,7 +70,7 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
-          trailing: OutlineButton(
+          trailing: OutlinedButton(
             onPressed: _foucsNode.hasFocus
                 ? () {
                     if (_formKey.currentState.validate()) {
@@ -83,8 +83,10 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
                     }
                   }
                 : null,
-            borderSide: BorderSide.none,
             child: Text('发送'),
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(style: BorderStyle.none),
+            ),
           ),
         ),
       ),

@@ -72,13 +72,13 @@ class MyDrawer extends StatelessWidget {
                       title: Text('登出'),
                       content: Text('确认登出账户？'),
                       actions: <Widget>[
-                        FlatButton(
+                        TextButton(
                           child: Text('否'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
                         ),
-                        FlatButton(
+                        TextButton(
                           child: Text('是'),
                           onPressed: () {
                             BlocProvider.of<AuthenticationBloc>(context)

@@ -160,13 +160,13 @@ class StorageDetailScreen extends StatelessWidget {
                     title: Text('删除 ${state.storage.name}'),
                     content: Text('你确认要删除该位置么？'),
                     actions: <Widget>[
-                      FlatButton(
+                      TextButton(
                         child: Text('否'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                       ),
-                      FlatButton(
+                      TextButton(
                         child: Text('是'),
                         onPressed: () {
                           BlocProvider.of<StorageEditBloc>(context).add(

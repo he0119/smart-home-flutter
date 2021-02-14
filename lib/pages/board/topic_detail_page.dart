@@ -240,13 +240,13 @@ class _DetailScreen extends StatelessWidget {
                   title: Text('删除话题'),
                   content: Text('你确认要删除该话题？'),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
-                    FlatButton(
+                    TextButton(
                       child: Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在删除...', duration: 1);
@@ -266,13 +266,13 @@ class _DetailScreen extends StatelessWidget {
                   title: Text('置顶话题'),
                   content: Text('你确认要置顶该话题？'),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
-                    FlatButton(
+                    TextButton(
                       child: Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在置顶...', duration: 1);
@@ -292,13 +292,13 @@ class _DetailScreen extends StatelessWidget {
                   title: Text('取消置顶'),
                   content: Text('你确认要取消该话题的置顶？'),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
-                    FlatButton(
+                    TextButton(
                       child: Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在取消...', duration: 1);
@@ -318,13 +318,13 @@ class _DetailScreen extends StatelessWidget {
                   title: Text('关闭话题'),
                   content: Text('你确认要关闭该话题？'),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
-                    FlatButton(
+                    TextButton(
                       child: Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在关闭...', duration: 1);
@@ -344,13 +344,13 @@ class _DetailScreen extends StatelessWidget {
                   title: Text('开启话题'),
                   content: Text('你确认要重新开启该话题？'),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
-                    FlatButton(
+                    TextButton(
                       child: Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在开启...', duration: 1);

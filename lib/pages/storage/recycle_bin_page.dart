@@ -123,13 +123,13 @@ Widget _buildItem(BuildContext context, Item item) {
               title: Text('恢复物品'),
               content: Text('你确认要恢复该物品？'),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child: Text('否'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
-                FlatButton(
+                TextButton(
                   child: Text('是'),
                   onPressed: () {
                     BlocProvider.of<ItemEditBloc>(context)
