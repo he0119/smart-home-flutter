@@ -145,6 +145,7 @@ class GraphQLApiClient {
 
   void _handleException(OperationException exception) {
     for (var error in exception.graphqlErrors) {
+      // FIXME: 判断失败，需要加上 toLowerCase()
       if (error.message.contains('refresh token')) {
         // 通知认证 BLoC 登陆失败
         _loginStatusControler.sink.add(false);
