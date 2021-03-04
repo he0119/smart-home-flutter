@@ -10,8 +10,8 @@ on:
     types: [published]
 
 env:
-  flutter_channel: 'beta'
-  flutter_version: '1.26.0-17.3.pre'
+  flutter_channel: 'stable'
+  flutter_version: '2.0.0'
 
 jobs:
   test:
@@ -113,7 +113,6 @@ jobs:
           flutter-version: ${{ env.flutter_version }}
       - name: Build web version
         run: |
-          flutter config --enable-web
           flutter build web -t ./lib/main_$VERSION.dart
         env:
           VERSION: ${{ needs.test.outputs.version }}

@@ -4,18 +4,7 @@
 
 ## Requirements
 
-- Flutter (Channel beta, 1.26.0-17.3.pre)
-
-## Setup
-
-启用 Web 和 Windows 功能
-
-```shell
-flutter channel beta
-flutter upgrade
-flutter config --enable-web
-# flutter config --enable-windows-desktop
-```
+- Flutter (Channel stable, 2.0.0)
 
 ## Run
 
@@ -34,7 +23,3 @@ flutter run -t ./lib/main_dev.dart
 ## Web
 
 使用 `flutter build web -t ./lib/main_prod.dart` 编译网页版。
-
-## Windows
-
-使用 `flutter build windows -t ./lib/main_prod.dart` 编译 Windows 版。
