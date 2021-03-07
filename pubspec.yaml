@@ -5,7 +5,7 @@ homepage: https://github.com/he0119/smart-home-flutter
 publish_to: none
 
 environment:
-  sdk: ">=2.8.0 <3.0.0"
+  sdk: ">=2.11.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -18,32 +18,32 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   # Dart
-  logging: ^0.11.4
-  graphql: ^4.0.0
-  http: ^0.12.0+4
-  bloc: ^6.1.0
-  equatable: ^1.2.5
-  json_annotation: ^3.0.0
-  enum_to_string: ^1.0.9
-  version: ^1.0.3
-  tuple: ^1.0.3
+  logging: ^1.0.0
+  graphql: ^5.0.0-nullsafety.1+readmefix
+  http: ^0.13.0
+  bloc: ^7.0.0-nullsafety.3
+  equatable: ^2.0.0
+  json_annotation: ^4.0.0
+  enum_to_string: ^2.0.0-nullsafety.1
+  version: ^2.0.0-nullsafety
+  tuple: ^2.0.0-nullsafety.0
 
   # Flutter
-  flutter_bloc: ^6.1.0
-  shared_preferences: '>=0.5.7+3 <2.0.0'
-  quick_actions: ^0.4.0+2
-  device_info_plus: ^0.6.0
-  package_info_plus: ^0.6.0
-  url_launcher: ^5.4.2
-  flutter_keyboard_visibility: ^4.0.0
+  flutter_bloc: ^7.0.0-nullsafety.3
+  shared_preferences: '2.0.3'
+  quick_actions: ^0.5.0
+  device_info_plus: ^1.0.0
+  package_info_plus: ^1.0.0
+  url_launcher: ^6.0.2
+  flutter_keyboard_visibility: ^5.0.0
 
   # Widget
-  webview_flutter: ^1.0.1
-  datetime_picker_formfield: ^1.0.0
+  webview_flutter: ^2.0.2
+  datetime_picker_formfield: ^2.0.0
   substring_highlight: ^0.1.2
   flutter_sticky_header: ^0.5.0
-  flutter_markdown: ^0.5.0
-  cached_network_image: ^2.4.1
+  flutter_markdown: ^0.6.0
+  cached_network_image: ^3.0.0-nullsafety
   settings_ui:
     git: https://github.com/he0119/flutter-settings-ui.git
   dropdown_search: ^0.4.8
@@ -51,10 +51,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test: ^7.1.0
-  build_runner: ^1.8.0
-  json_serializable: ^3.2.0
-  flutter_launcher_icons: ^0.8.1
+  bloc_test: ^8.0.0-nullsafety.1
+  # build_runner:
+  json_serializable: ^4.0.0
+  flutter_launcher_icons: ^0.9.0
 
 flutter:
   uses-material-design: true
