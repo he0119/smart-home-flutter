@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -295,6 +296,34 @@ class _ItemDetailList extends StatelessWidget {
           title: Text('录入时间'),
           subtitle: SelectableText(item.createdAt?.toLocalStr() ?? ''),
         ),
+        if (item.pictures.isNotEmpty)
+          for (Picture picture in item.pictures)
+            ListTile(
+              title: picture.description.isNotEmpty
+                  ? Text('图片（${picture.description}）')
+                  : Text('图片（未命名）'),
+              subtitle: Text('单击打开'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Scaffold(
+                      appBar: AppBar(
+                        title: picture.description.isNotEmpty
+                            ? Text('图片（${picture.description}）')
+                            : Text('图片（未命名）'),
+                      ),
+                      body: Center(
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          imageUrl: picture.url,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
       ],
     );
   }
