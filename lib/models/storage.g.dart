@@ -39,6 +39,22 @@ Map<String, dynamic> _$StorageToJson(Storage instance) => <String, dynamic>{
       'items': instance.items,
     };
 
+Picture _$PictureFromJson(Map<String, dynamic> json) {
+  return Picture(
+    id: json['id'] as String,
+    name: json['name'] as String,
+    description: json['description'] as String,
+    url: json['url'] as String,
+  );
+}
+
+Map<String, dynamic> _$PictureToJson(Picture instance) => <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'description': instance.description,
+      'url': instance.url,
+    };
+
 Item _$ItemFromJson(Map<String, dynamic> json) {
   return Item(
     id: json['id'] as String,
@@ -72,6 +88,10 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
         ?.map(
             (e) => e == null ? null : Item.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    pictures: (json['pictures'] as List)
+        ?.map((e) =>
+            e == null ? null : Picture.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -90,4 +110,5 @@ Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
       'isDeleted': instance.isDeleted,
       'deletedAt': instance.deletedAt?.toIso8601String(),
       'consumables': instance.consumables,
+      'pictures': instance.pictures,
     };
