@@ -52,14 +52,7 @@ class _PictureScreenState extends State<PictureScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: _buildAppBar(context, state),
-          body: RefreshIndicator(
-            onRefresh: () async {
-              BlocProvider.of<ItemDetailBloc>(context).add(
-                ItemDetailRefreshed(),
-              );
-            },
-            child: _buildBody(context, state),
-          ),
+          body: _buildBody(context, state),
         );
       },
     );
@@ -93,10 +86,12 @@ class _PictureScreenState extends State<PictureScreen> {
     if (state is PictureSuccess) {
       return AppBar(
         title: state.picture.description.isNotEmpty
-            ? Text('图片（${state.picture.description}）')
-            : Text('图片（未命名）'),
+            ? Text('${state.picture.item.name}（${state.picture.description}）')
+            : Text('${state.picture.item.name}（未命名）'),
       );
     }
-    return AppBar();
+    return AppBar(
+      title: Text('图片'),
+    );
   }
 }

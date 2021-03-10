@@ -4,6 +4,9 @@ const String pictureQuery =
 query picture($id: ID!) {
   picture(id: $id) {
     id
+    item {
+      name
+    }
     name
     description
     url
