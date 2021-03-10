@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:smart_home/graphql/mutations/storage/mutations.dart';
@@ -60,6 +62,35 @@ class StorageRepository {
     final Map<String, dynamic> json = result.data['addItem']['item'];
     final Item itemObject = Item.fromJson(json);
     return itemObject;
+  }
+
+  Future<Picture> addPicture({
+    @required String itemId,
+    @required File file,
+    @required String boxX,
+    @required String boxY,
+    @required String boxH,
+    @required String boxW,
+    String description,
+  }) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(addPictureMutation),
+      variables: {
+        'input': {
+          'itemId': itemId,
+          'file': file,
+          'description': description,
+          'boxX': boxX,
+          'boxY': boxY,
+          'boxH': boxH,
+          'boxW': boxW,
+        }
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> json = result.data['addPicture']['picture'];
+    final Picture pictureObject = Picture.fromJson(json);
+    return pictureObject;
   }
 
   Future<Storage> addStorage({
@@ -155,6 +186,18 @@ class StorageRepository {
       variables: {
         'input': {
           'itemId': itemId,
+        },
+      },
+    );
+    await graphqlApiClient.mutate(options);
+  }
+
+  Future<void> deletePicture({String pictureId}) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(deletePictureMutation),
+      variables: {
+        'input': {
+          'pictureId': pictureId,
         },
       },
     );
@@ -279,6 +322,26 @@ class StorageRepository {
     final Item item = Item.fromJson(json);
 
     return item;
+  }
+
+  Future<Picture> picture({
+    @required String id,
+    bool cache = true,
+  }) async {
+    final QueryOptions options = QueryOptions(
+      document: gql(pictureQuery),
+      variables: {
+        'id': id,
+      },
+      fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
+    );
+    final result = await graphqlApiClient.query(options);
+
+    Map<String, dynamic> json = result.data['picture'];
+
+    final Picture pictureObject = Picture.fromJson(json);
+
+    return pictureObject;
   }
 
   Future<List<Item>> items({
@@ -552,6 +615,35 @@ class StorageRepository {
     final Item item = Item.fromJson(itemJson);
 
     return item;
+  }
+
+  Future<Picture> updatePicture({
+    @required String id,
+    @required String boxX,
+    @required String boxY,
+    @required String boxH,
+    @required String boxW,
+    File file,
+    String description,
+  }) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(updatePictureMutation),
+      variables: {
+        'input': {
+          'id': id,
+          'file': file,
+          'description': description,
+          'boxX': boxX,
+          'boxY': boxY,
+          'boxH': boxH,
+          'boxW': boxW,
+        }
+      },
+    );
+    final result = await graphqlApiClient.mutate(options);
+    final Map<String, dynamic> json = result.data['updatePicture']['picture'];
+    final Picture pictureObject = Picture.fromJson(json);
+    return pictureObject;
   }
 
   Future<Storage> updateStorage({
