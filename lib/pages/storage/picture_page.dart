@@ -31,6 +31,12 @@ class PicturePage extends Page {
                 id: pictureId,
               )),
           ),
+          BlocProvider<PictureEditBloc>(
+            create: (context) => PictureEditBloc(
+              storageRepository:
+                  RepositoryProvider.of<StorageRepository>(context),
+            ),
+          ),
         ],
         child: PictureScreen(),
       ),
@@ -38,14 +44,9 @@ class PicturePage extends Page {
   }
 }
 
-class PictureScreen extends StatefulWidget {
+class PictureScreen extends StatelessWidget {
   PictureScreen({Key key}) : super(key: key);
 
-  @override
-  _PictureScreenState createState() => _PictureScreenState();
-}
-
-class _PictureScreenState extends State<PictureScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PictureBloc, PictureState>(

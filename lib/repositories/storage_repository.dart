@@ -67,10 +67,10 @@ class StorageRepository {
   Future<Picture> addPicture({
     @required String itemId,
     @required File file,
-    @required String boxX,
-    @required String boxY,
-    @required String boxH,
-    @required String boxW,
+    @required double boxX,
+    @required double boxY,
+    @required double boxH,
+    @required double boxW,
     String description,
   }) async {
     final MutationOptions options = MutationOptions(
@@ -619,10 +619,10 @@ class StorageRepository {
 
   Future<Picture> updatePicture({
     @required String id,
-    @required String boxX,
-    @required String boxY,
-    @required String boxH,
-    @required String boxW,
+    @required double boxX,
+    @required double boxY,
+    @required double boxH,
+    @required double boxW,
     File file,
     String description,
   }) async {
