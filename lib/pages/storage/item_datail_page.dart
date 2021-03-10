@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,6 +5,7 @@ import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/consumable_edit_page.dart';
 import 'package:smart_home/pages/storage/item_edit_page.dart';
+import 'package:smart_home/pages/storage/picture_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/routers/delegate.dart';
@@ -304,24 +304,8 @@ class _ItemDetailList extends StatelessWidget {
                   : Text('图片（未命名）'),
               subtitle: Text('单击打开'),
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => Scaffold(
-                      appBar: AppBar(
-                        title: picture.description.isNotEmpty
-                            ? Text('图片（${picture.description}）')
-                            : Text('图片（未命名）'),
-                      ),
-                      body: Center(
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          imageUrl: picture.url,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+                MyRouterDelegate.of(context)
+                    .push(PicturePage(pictureId: picture.id));
               },
             )
       ],
