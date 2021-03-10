@@ -42,17 +42,29 @@ Map<String, dynamic> _$StorageToJson(Storage instance) => <String, dynamic>{
 Picture _$PictureFromJson(Map<String, dynamic> json) {
   return Picture(
     id: json['id'] as String,
+    item: json['item'] == null
+        ? null
+        : Item.fromJson(json['item'] as Map<String, dynamic>),
     name: json['name'] as String,
     description: json['description'] as String,
     url: json['url'] as String,
+    boxX: (json['boxX'] as num)?.toDouble(),
+    boxY: (json['boxY'] as num)?.toDouble(),
+    boxH: (json['boxH'] as num)?.toDouble(),
+    boxW: (json['boxW'] as num)?.toDouble(),
   );
 }
 
 Map<String, dynamic> _$PictureToJson(Picture instance) => <String, dynamic>{
       'id': instance.id,
+      'item': instance.item,
       'name': instance.name,
       'description': instance.description,
       'url': instance.url,
+      'boxX': instance.boxX,
+      'boxY': instance.boxY,
+      'boxH': instance.boxH,
+      'boxW': instance.boxW,
     };
 
 Item _$ItemFromJson(Map<String, dynamic> json) {

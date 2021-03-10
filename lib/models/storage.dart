@@ -74,15 +74,25 @@ class Storage extends Equatable {
 @JsonSerializable()
 class Picture extends Equatable {
   final String id;
+  final Item item;
   final String name;
   final String description;
   final String url;
+  final double boxX;
+  final double boxY;
+  final double boxH;
+  final double boxW;
 
   Picture({
     this.id,
+    this.item,
     this.name,
     this.description,
     this.url,
+    this.boxX,
+    this.boxY,
+    this.boxH,
+    this.boxW,
   });
 
   factory Picture.fromJson(Map<String, dynamic> json) =>
@@ -94,14 +104,19 @@ class Picture extends Equatable {
   List<Object> get props {
     return [
       id,
+      item,
       name,
       description,
       url,
+      boxX,
+      boxY,
+      boxH,
+      boxW,
     ];
   }
 
   @override
-  String toString() => description;
+  String toString() => name;
 }
 
 @JsonSerializable()

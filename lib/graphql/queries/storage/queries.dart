@@ -13,3 +13,4 @@ export 'storage_by_name.dart';
 export 'storages.dart';
 export 'deleted_items.dart';
 export 'consumables.dart';
+export 'picture.dart';
