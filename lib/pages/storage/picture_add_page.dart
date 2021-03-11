@@ -59,6 +59,8 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
     _controller = CameraController(
       widget.cameras.first,
       ResolutionPreset.max,
+      enableAudio: false,
+      imageFormatGroup: ImageFormatGroup.jpeg,
     );
 
     // Next, initialize the controller. This returns a Future.
@@ -144,25 +146,35 @@ class DisplayPictureScreen extends StatelessWidget {
           showErrorSnackBar(state.message);
         }
       },
-      child: Scaffold(
-        appBar: AppBar(title: Text('添加图片')),
-        body: Center(
-          child: Image.file(File(picturePath)),
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.check),
-          onPressed: () {
-            showInfoSnackBar('正在上传...');
-            BlocProvider.of<PictureEditBloc>(context).add(PictureAdded(
-                itemId: itemId,
-                file: File(picturePath),
-                description: '',
-                boxX: 0,
-                boxY: 0,
-                boxH: 0,
-                boxW: 0));
-          },
-        ),
+      child: BlocBuilder<PictureEditBloc, PictureEditState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(title: Text('添加图片')),
+            body: Center(
+              child: Image.file(File(picturePath)),
+            ),
+            floatingActionButton: state is PictureEditInProgress
+                ? null
+                : FloatingActionButton(
+                    child: Icon(Icons.file_upload),
+                    onPressed: () {
+                      showInfoSnackBar('正在上传...');
+                      // 默认物品就在图片正中，并占满整个屏幕
+                      BlocProvider.of<PictureEditBloc>(context).add(
+                        PictureAdded(
+                          itemId: itemId,
+                          file: File(picturePath),
+                          description: '',
+                          boxX: 0.5,
+                          boxY: 0.5,
+                          boxH: 0.5,
+                          boxW: 0.5,
+                        ),
+                      );
+                    },
+                  ),
+          );
+        },
       ),
     );
   }
