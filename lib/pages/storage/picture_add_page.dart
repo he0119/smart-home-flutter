@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/repositories/repositories.dart';
+import 'package:smart_home/routers/delegate.dart';
 import 'package:smart_home/utils/show_snack_bar.dart';
 
 class PictureAddPage extends Page {
@@ -137,7 +138,7 @@ class DisplayPictureScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is PictureAddSuccess) {
           showInfoSnackBar('图片添加成功');
-          Navigator.of(context).pop();
+          MyRouterDelegate.of(context).pop();
         }
         if (state is PictureEditFailure) {
           showErrorSnackBar(state.message);
@@ -151,6 +152,7 @@ class DisplayPictureScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.check),
           onPressed: () {
+            showInfoSnackBar('正在上传...');
             BlocProvider.of<PictureEditBloc>(context).add(PictureAdded(
                 itemId: itemId,
                 file: File(picturePath),

@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
+import 'package:smart_home/models/popup_menu.dart';
 import 'package:smart_home/repositories/repositories.dart';
+import 'package:smart_home/utils/show_snack_bar.dart';
 import 'package:smart_home/widgets/center_loading_indicator.dart';
 import 'package:smart_home/widgets/error_message_button.dart';
 
@@ -53,7 +55,18 @@ class PictureScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: _buildAppBar(context, state),
-          body: _buildBody(context, state),
+          body: BlocListener<PictureEditBloc, PictureEditState>(
+            listener: (context, state) {
+              if (state is PictureDeleteSuccess) {
+                showInfoSnackBar('图片 ${state.picture.description} 删除成功');
+                Navigator.pop(context);
+              }
+              if (state is PictureEditFailure) {
+                showErrorSnackBar(state.message);
+              }
+            },
+            child: _buildBody(context, state),
+          ),
         );
       },
     );
@@ -89,6 +102,45 @@ class PictureScreen extends StatelessWidget {
         title: state.picture.description.isNotEmpty
             ? Text('${state.picture.item.name}（${state.picture.description}）')
             : Text('${state.picture.item.name}（未命名）'),
+        actions: [
+          PopupMenuButton<PictureMenu>(
+            onSelected: (value) async {
+              if (value == PictureMenu.delete) {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text('删除 ${state.picture.description}'),
+                    content: Text('你确认要删除该图片么？'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('否'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: Text('是'),
+                        onPressed: () {
+                          showInfoSnackBar('正在删除...', duration: 1);
+                          BlocProvider.of<PictureEditBloc>(context).add(
+                            PictureDeleted(picture: state.picture),
+                          );
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: PictureMenu.delete,
+                child: Text('删除'),
+              ),
+            ],
+          )
+        ],
       );
     }
     return AppBar(
