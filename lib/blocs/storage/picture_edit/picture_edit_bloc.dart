@@ -25,6 +25,8 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
       try {
         Picture picture = await storageRepository.updatePicture(
           id: event.id,
+          file: event.file,
+          description: event.description,
           boxX: event.boxX,
           boxY: event.boxY,
           boxH: event.boxH,
@@ -41,6 +43,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
         Picture picture = await storageRepository.addPicture(
           itemId: event.itemId,
           file: event.file,
+          description: event.description,
           boxX: event.boxX,
           boxY: event.boxY,
           boxH: event.boxH,

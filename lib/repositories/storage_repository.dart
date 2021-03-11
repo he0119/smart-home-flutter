@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
+import 'package:http/http.dart' show MultipartFile;
 import 'package:smart_home/graphql/mutations/storage/mutations.dart';
 import 'package:smart_home/graphql/queries/storage/queries.dart';
 import 'package:smart_home/models/models.dart';
@@ -73,12 +74,14 @@ class StorageRepository {
     @required double boxW,
     String description,
   }) async {
+    final myFile = await MultipartFile.fromPath('', file.path);
+
     final MutationOptions options = MutationOptions(
       document: gql(addPictureMutation),
       variables: {
         'input': {
           'itemId': itemId,
-          'file': file,
+          'file': myFile,
           'description': description,
           'boxX': boxX,
           'boxY': boxY,

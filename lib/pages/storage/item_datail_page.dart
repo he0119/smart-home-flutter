@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -5,6 +6,7 @@ import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/consumable_edit_page.dart';
 import 'package:smart_home/pages/storage/item_edit_page.dart';
+import 'package:smart_home/pages/storage/picture_add_page.dart';
 import 'package:smart_home/pages/storage/picture_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
@@ -145,6 +147,15 @@ class ItemDetailScreen extends StatelessWidget {
                   id: state.item.id,
                 ));
               }
+              if (value == ItemDetailMenu.addPicture) {
+                final cameras = await availableCameras();
+                if (cameras.isEmpty) {
+                  showErrorSnackBar('没有找到相机');
+                } else {
+                  MyRouterDelegate.of(context)
+                      .push(PictureAddPage(itemId: itemId, cameras: cameras));
+                }
+              }
               if (value == ItemDetailMenu.delete) {
                 showDialog(
                   context: context,
@@ -176,6 +187,10 @@ class ItemDetailScreen extends StatelessWidget {
               PopupMenuItem(
                 value: ItemDetailMenu.edit,
                 child: Text('编辑'),
+              ),
+              PopupMenuItem(
+                value: ItemDetailMenu.addPicture,
+                child: Text('添加图片'),
               ),
               PopupMenuItem(
                 value: ItemDetailMenu.consumable,
