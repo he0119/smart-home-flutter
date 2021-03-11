@@ -1,6 +1,7 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intent/intent.dart' as android_intent;
+import 'package:intent/action.dart' as android_action;
 
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
@@ -148,13 +149,12 @@ class ItemDetailScreen extends StatelessWidget {
                 ));
               }
               if (value == ItemDetailMenu.addPicture) {
-                final cameras = await availableCameras();
-                if (cameras.isEmpty) {
-                  showErrorSnackBar('没有找到相机');
-                } else {
-                  MyRouterDelegate.of(context)
-                      .push(PictureAddPage(itemId: itemId, cameras: cameras));
-                }
+                android_intent.Intent()
+                  ..setAction(android_action.Action.ACTION_IMAGE_CAPTURE)
+                  ..startActivityForResult().then(
+                      (data) => MyRouterDelegate.of(context).push(
+                          PictureAddPage(itemId: itemId, picturePath: data[0])),
+                      onError: (e) => print(e));
               }
               if (value == ItemDetailMenu.delete) {
                 showDialog(
