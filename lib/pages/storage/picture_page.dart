@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_home/blocs/storage/blocs.dart';
@@ -68,9 +69,9 @@ class PictureScreen extends StatelessWidget {
             },
             child: _buildBody(context, state),
           ),
-          floatingActionButton: (state is PictureSuccess)
+          floatingActionButton: (state is PictureSuccess && kIsWeb)
               ? FloatingActionButton(
-                  tooltip: '使用浏览器打开',
+                  tooltip: '在新标签页中打开',
                   child: Icon(Icons.open_in_new),
                   onPressed: () async {
                     await launchUrl(state.picture.url);
