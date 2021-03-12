@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intent/intent.dart' as android_intent;
-import 'package:intent/action.dart' as android_action;
 
 import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
@@ -149,12 +147,8 @@ class ItemDetailScreen extends StatelessWidget {
                 ));
               }
               if (value == ItemDetailMenu.addPicture) {
-                android_intent.Intent()
-                  ..setAction(android_action.Action.ACTION_IMAGE_CAPTURE)
-                  ..startActivityForResult().then(
-                      (data) => MyRouterDelegate.of(context).push(
-                          PictureAddPage(itemId: itemId, picturePath: data[0])),
-                      onError: (e) => print(e));
+                MyRouterDelegate.of(context)
+                    .push(PictureAddPage(itemId: itemId));
               }
               if (value == ItemDetailMenu.delete) {
                 showDialog(
