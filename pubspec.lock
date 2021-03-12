@@ -476,6 +476,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.19"
+  intent:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "feature/second_call"
+      resolved-ref: "0172ca81fb772556b5a3f00e80f87104509d4287"
+      url: "https://github.com/he0119/intent.git"
+    source: git
+    version: "1.4.0"
   intl:
     dependency: "direct main"
     description:
@@ -909,7 +918,7 @@ packages:
       name: stream_transform
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "1.2.0"
   string_scanner:
     dependency: transitive
     description:

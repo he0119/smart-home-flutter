@@ -5,6 +5,8 @@ import 'package:smart_home/blocs/storage/blocs.dart';
 import 'package:smart_home/models/models.dart';
 import 'package:smart_home/pages/storage/consumable_edit_page.dart';
 import 'package:smart_home/pages/storage/item_edit_page.dart';
+import 'package:smart_home/pages/storage/picture_add_page.dart';
+import 'package:smart_home/pages/storage/picture_page.dart';
 import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
 import 'package:smart_home/repositories/storage_repository.dart';
 import 'package:smart_home/routers/delegate.dart';
@@ -144,6 +146,10 @@ class ItemDetailScreen extends StatelessWidget {
                   id: state.item.id,
                 ));
               }
+              if (value == ItemDetailMenu.addPicture) {
+                MyRouterDelegate.of(context)
+                    .push(PictureAddPage(itemId: itemId));
+              }
               if (value == ItemDetailMenu.delete) {
                 showDialog(
                   context: context,
@@ -175,6 +181,10 @@ class ItemDetailScreen extends StatelessWidget {
               PopupMenuItem(
                 value: ItemDetailMenu.edit,
                 child: Text('编辑'),
+              ),
+              PopupMenuItem(
+                value: ItemDetailMenu.addPicture,
+                child: Text('添加图片'),
               ),
               PopupMenuItem(
                 value: ItemDetailMenu.consumable,
@@ -295,6 +305,18 @@ class _ItemDetailList extends StatelessWidget {
           title: Text('录入时间'),
           subtitle: SelectableText(item.createdAt?.toLocalStr() ?? ''),
         ),
+        if (item.pictures.isNotEmpty)
+          for (Picture picture in item.pictures)
+            ListTile(
+              title: picture.description.isNotEmpty
+                  ? Text('图片（${picture.description}）')
+                  : Text('图片（未命名）'),
+              subtitle: Text('单击查看'),
+              onTap: () {
+                MyRouterDelegate.of(context)
+                    .push(PicturePage(pictureId: picture.id));
+              },
+            )
       ],
     );
   }

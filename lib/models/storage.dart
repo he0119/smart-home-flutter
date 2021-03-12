@@ -72,6 +72,54 @@ class Storage extends Equatable {
 }
 
 @JsonSerializable()
+class Picture extends Equatable {
+  final String id;
+  final Item item;
+  final String name;
+  final String description;
+  final String url;
+  final double boxX;
+  final double boxY;
+  final double boxH;
+  final double boxW;
+
+  Picture({
+    this.id,
+    this.item,
+    this.name,
+    this.description,
+    this.url,
+    this.boxX,
+    this.boxY,
+    this.boxH,
+    this.boxW,
+  });
+
+  factory Picture.fromJson(Map<String, dynamic> json) =>
+      _$PictureFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PictureToJson(this);
+
+  @override
+  List<Object> get props {
+    return [
+      id,
+      item,
+      name,
+      description,
+      url,
+      boxX,
+      boxY,
+      boxH,
+      boxW,
+    ];
+  }
+
+  @override
+  String toString() => description;
+}
+
+@JsonSerializable()
 class Item extends Equatable {
   final String id;
   final String name;
@@ -87,6 +135,7 @@ class Item extends Equatable {
   final bool isDeleted;
   final DateTime deletedAt;
   final List<Item> consumables;
+  final List<Picture> pictures;
 
   Item({
     this.id,
@@ -103,6 +152,7 @@ class Item extends Equatable {
     this.isDeleted,
     this.deletedAt,
     this.consumables,
+    this.pictures,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
@@ -126,6 +176,7 @@ class Item extends Equatable {
       isDeleted,
       deletedAt,
       consumables,
+      pictures,
     ];
   }
 
