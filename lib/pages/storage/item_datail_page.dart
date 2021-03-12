@@ -311,7 +311,7 @@ class _ItemDetailList extends StatelessWidget {
               title: picture.description.isNotEmpty
                   ? Text('图片（${picture.description}）')
                   : Text('图片（未命名）'),
-              subtitle: Text('单击打开'),
+              subtitle: Text('单击查看'),
               onTap: () {
                 MyRouterDelegate.of(context)
                     .push(PicturePage(pictureId: picture.id));

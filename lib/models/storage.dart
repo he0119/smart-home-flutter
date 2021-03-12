@@ -116,7 +116,7 @@ class Picture extends Equatable {
   }
 
   @override
-  String toString() => name;
+  String toString() => description;
 }
 
 @JsonSerializable()

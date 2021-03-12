@@ -33,9 +33,7 @@ query item($id: ID!) {
       edges {
         node {
           id
-          name
           description
-          url
         }
       }
     }
