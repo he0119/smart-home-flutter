@@ -4,7 +4,7 @@
 
 ## Requirements
 
-- Flutter (Channel stable, 2.0.0)
+- Flutter (Channel stable, 2.0.1)
 
 ## Run
 
