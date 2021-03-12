@@ -96,7 +96,7 @@ class GraphQLApiClient {
         ErrorLink(onGraphQLError: _handleTokenError);
     final Link _link = _tokenErrorLink.split((request) {
       for (var definition in request.operation.document.definitions) {
-        final String operationName = definition.name.value;
+        final String operationName = definition.span.text;
         if (operationName == 'tokenAuth' || operationName == 'refreshToken') {
           return false;
         }

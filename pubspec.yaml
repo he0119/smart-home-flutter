@@ -37,20 +37,22 @@ dependencies:
   url_launcher: ^6.0.2
   flutter_keyboard_visibility: ^5.0.0
   intent:
-    git:
-      url: https://github.com/he0119/intent.git
-      ref: feature/second_call
+    git: https://github.com/he0119/intent.git
 
   # Widget
   webview_flutter: ^2.0.2
   datetime_picker_formfield: ^2.0.0
-  substring_highlight: ^0.1.2
+  substring_highlight:
+    git:
+      url: https://github.com/he0119/substring_highlight.git
+      ref: nullsafety
   flutter_sticky_header: ^0.5.0
   flutter_markdown: ^0.6.0
   cached_network_image: ^3.0.0-nullsafety
   settings_ui:
     git: https://github.com/he0119/flutter-settings-ui.git
-  dropdown_search: ^0.4.8
+  dropdown_search:
+    git: https://github.com/GaspardMerten/searchable_dropdown.git
 
 dev_dependencies:
   flutter_test:
