@@ -1,9 +1,12 @@
 export 'addItem.dart';
 export 'addStorage.dart';
 export 'addConsumable.dart';
+export 'addPicture.dart';
 export 'updateItem.dart';
 export 'updateStorage.dart';
+export 'updatePicture.dart';
 export 'deleteItem.dart';
 export 'deleteStorage.dart';
 export 'deleteConsumable.dart';
+export 'deletePicture.dart';
 export 'restoreItem.dart';

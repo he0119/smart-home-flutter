@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.7.2] - 2021-03-12
+
+### Added
+
+- 支持上传物品照片
+
+## [0.7.1] - 2021-03-05
+
+### Changed
+
+- 升级至 Flutter 2.0.0
+- 更换安卓应用 ID
+- 优化 Android 应用链接
+
+### Fixed
+
+- 修复刷新令牌失效后无法正常登出的问题
+- 修复请求不必要数据的问题
+
 ## [0.7.0] - 2021-01-11
 
 ### Added
@@ -270,8 +289,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.7.2...HEAD
 
+[0.7.2]: https://github.com/he0119/smart-home-flutter/compare/v0.7.1...v0.7.2
+[0.7.1]: https://github.com/he0119/smart-home-flutter/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/he0119/smart-home-flutter/compare/v0.6.1...v0.7.0
 [0.6.1]: https://github.com/he0119/smart-home-flutter/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/he0119/smart-home-flutter/compare/v0.5.11...v0.6.0

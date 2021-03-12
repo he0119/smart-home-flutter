@@ -427,6 +427,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.1"
+  intent:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "feature/second_call"
+      resolved-ref: "0172ca81fb772556b5a3f00e80f87104509d4287"
+      url: "https://github.com/he0119/intent.git"
+    source: git
+    version: "1.4.0"
   intl:
     dependency: "direct main"
     description:

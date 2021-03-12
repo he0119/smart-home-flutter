@@ -29,6 +29,14 @@ query item($id: ID!) {
     createdBy {
       username
     }
+    pictures {
+      edges {
+        node {
+          id
+          description
+        }
+      }
+    }
   }
 }
 """;

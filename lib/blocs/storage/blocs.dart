@@ -6,3 +6,5 @@ export 'storage_edit/storage_edit_bloc.dart';
 export 'storage_home/storage_home_bloc.dart';
 export 'recycle_bin/recycle_bin_bloc.dart';
 export 'consumables/consumables_bloc.dart';
+export 'picture/picture_bloc.dart';
+export 'picture_edit/picture_edit_bloc.dart';
