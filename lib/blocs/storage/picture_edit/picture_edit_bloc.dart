@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -25,7 +23,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
       try {
         Picture picture = await storageRepository.updatePicture(
           id: event.id,
-          file: event.file,
+          picturePath: event.picturePath,
           description: event.description,
           boxX: event.boxX,
           boxY: event.boxY,
@@ -42,7 +40,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
       try {
         Picture picture = await storageRepository.addPicture(
           itemId: event.itemId,
-          file: event.file,
+          picturePath: event.picturePath,
           description: event.description,
           boxX: event.boxX,
           boxY: event.boxY,

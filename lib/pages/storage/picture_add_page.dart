@@ -171,7 +171,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
     BlocProvider.of<PictureEditBloc>(context).add(
       PictureAdded(
         itemId: widget.itemId,
-        file: File(picturePath),
+        picturePath: picturePath,
         description: _descriptionController.text,
         boxX: 0.5,
         boxY: 0.5,
