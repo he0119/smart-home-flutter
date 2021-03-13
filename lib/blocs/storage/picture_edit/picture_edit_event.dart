@@ -10,7 +10,7 @@ abstract class PictureEditEvent extends Equatable {
 class PictureAdded extends PictureEditEvent {
   final String itemId;
   final String description;
-  final File file;
+  final String picturePath;
   final double boxX;
   final double boxY;
   final double boxH;
@@ -18,7 +18,7 @@ class PictureAdded extends PictureEditEvent {
 
   const PictureAdded({
     @required this.itemId,
-    @required this.file,
+    @required this.picturePath,
     @required this.boxX,
     @required this.boxY,
     @required this.boxH,
@@ -42,13 +42,13 @@ class PictureDeleted extends PictureEditEvent {
   List<Object> get props => [picture];
 
   @override
-  String toString() => 'PictureDeleted { name: ${picture.id} }';
+  String toString() => 'PictureDeleted { id: ${picture.id} }';
 }
 
 class PictureUpdated extends PictureEditEvent {
   final String id;
   final String description;
-  final File file;
+  final String picturePath;
   final double boxX;
   final double boxY;
   final double boxH;
@@ -57,7 +57,7 @@ class PictureUpdated extends PictureEditEvent {
   const PictureUpdated({
     @required this.id,
     this.description,
-    this.file,
+    this.picturePath,
     this.boxX,
     this.boxY,
     this.boxH,
