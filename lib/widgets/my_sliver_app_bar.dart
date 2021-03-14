@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 /// 模仿 Microsoft To Do 的应用栏
 class MySliverAppBar extends StatefulWidget {
   final String title;
+  final List<Widget> actions;
 
   const MySliverAppBar({
     Key key,
     @required this.title,
+    this.actions,
   }) : super(key: key);
 
   @override
@@ -21,6 +23,7 @@ class _MySliverAppBarState extends State<MySliverAppBar> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      actions: widget.actions,
       pinned: true,
       expandedHeight: 100,
       flexibleSpace: LayoutBuilder(
