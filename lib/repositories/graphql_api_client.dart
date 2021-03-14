@@ -7,7 +7,7 @@ import 'package:graphql/client.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_home/graphql/mutations/mutations.dart';
+import 'package:smarthome/graphql/mutations/mutations.dart';
 
 /// 认证出错
 class AuthenticationException implements Exception {

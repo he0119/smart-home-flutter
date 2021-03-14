@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:smart_home/pages/blog/home_page.dart';
-import 'package:smart_home/pages/board/home_page.dart';
-import 'package:smart_home/pages/iot/home_page.dart';
-import 'package:smart_home/pages/storage/home_page.dart';
+import 'package:smarthome/pages/blog/home_page.dart';
+import 'package:smarthome/pages/board/home_page.dart';
+import 'package:smarthome/pages/iot/home_page.dart';
+import 'package:smarthome/pages/storage/home_page.dart';
 
 /// IOT, 存储管理, 博客, 留言板
 enum AppTab { iot, storage, blog, board }

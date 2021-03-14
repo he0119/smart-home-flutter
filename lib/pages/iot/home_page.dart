@@ -2,18 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/core/blocs.dart';
-import 'package:smart_home/blocs/iot/blocs.dart';
-import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/models/iot.dart';
-import 'package:smart_home/pages/settings/iot/settings_page.dart';
-import 'package:smart_home/repositories/iot_repository.dart';
-import 'package:smart_home/routers/delegate.dart';
-import 'package:smart_home/widgets/center_loading_indicator.dart';
-import 'package:smart_home/widgets/error_message_button.dart';
-import 'package:smart_home/widgets/home_page.dart';
-import 'package:smart_home/utils/show_snack_bar.dart';
-import 'package:smart_home/utils/date_format_extension.dart';
+import 'package:smarthome/blocs/core/blocs.dart';
+import 'package:smarthome/blocs/iot/blocs.dart';
+import 'package:smarthome/models/app_tab.dart';
+import 'package:smarthome/models/iot.dart';
+import 'package:smarthome/pages/settings/iot/settings_page.dart';
+import 'package:smarthome/repositories/iot_repository.dart';
+import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/widgets/center_loading_indicator.dart';
+import 'package:smarthome/widgets/error_message_button.dart';
+import 'package:smarthome/widgets/home_page.dart';
+import 'package:smarthome/utils/show_snack_bar.dart';
+import 'package:smarthome/utils/date_format_extension.dart';
 
 class IotHomePage extends Page {
   IotHomePage()

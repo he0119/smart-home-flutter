@@ -2,10 +2,10 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 
-import 'package:smart_home/graphql/mutations/push/mutations.dart';
-import 'package:smart_home/graphql/queries/push/queries.dart';
-import 'package:smart_home/models/push.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
+import 'package:smarthome/graphql/mutations/push/mutations.dart';
+import 'package:smarthome/graphql/queries/push/queries.dart';
+import 'package:smarthome/models/push.dart';
+import 'package:smarthome/repositories/graphql_api_client.dart';
 
 class PushRepository {
   final GraphQLApiClient graphqlApiClient;

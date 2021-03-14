@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:smart_home/blocs/storage/search/search_bloc.dart';
-import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
-import 'package:smart_home/repositories/storage_repository.dart';
-import 'package:smart_home/widgets/center_loading_indicator.dart';
+import 'package:smarthome/blocs/storage/search/search_bloc.dart';
+import 'package:smarthome/pages/storage/widgets/storage_item_list.dart';
+import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:smarthome/widgets/center_loading_indicator.dart';
 
 class SearchPage extends Page {
   // 按理来说每个搜索界面都不一样，所以每个界面的 key 都应不同

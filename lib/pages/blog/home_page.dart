@@ -4,13 +4,13 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/core/blocs.dart';
-import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/pages/settings/blog/settings_page.dart';
-import 'package:smart_home/routers/delegate.dart';
-import 'package:smart_home/utils/launch_url.dart';
-import 'package:smart_home/widgets/home_page.dart';
-import 'package:smart_home/widgets/rounded_raised_button.dart';
+import 'package:smarthome/blocs/core/blocs.dart';
+import 'package:smarthome/models/app_tab.dart';
+import 'package:smarthome/pages/settings/blog/settings_page.dart';
+import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/utils/launch_url.dart';
+import 'package:smarthome/widgets/home_page.dart';
+import 'package:smarthome/widgets/rounded_raised_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BlogHomePage extends Page {

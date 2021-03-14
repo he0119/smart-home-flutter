@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/models/user.dart';
+import 'package:smarthome/models/app_tab.dart';
+import 'package:smarthome/models/user.dart';
 
 part 'app_preferences_event.dart';
 part 'app_preferences_state.dart';

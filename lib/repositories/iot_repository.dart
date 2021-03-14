@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 
-import 'package:smart_home/graphql/mutations/iot/mutations.dart';
-import 'package:smart_home/graphql/queries/iot/queries.dart';
-import 'package:smart_home/models/iot.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
+import 'package:smarthome/graphql/mutations/iot/mutations.dart';
+import 'package:smarthome/graphql/queries/iot/queries.dart';
+import 'package:smarthome/models/iot.dart';
+import 'package:smarthome/repositories/graphql_api_client.dart';
 
 class IotRepository {
   final GraphQLApiClient graphqlApiClient;

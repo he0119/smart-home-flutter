@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smart_home/models/iot.dart';
-import 'package:smart_home/repositories/iot_repository.dart';
+import 'package:smarthome/models/iot.dart';
+import 'package:smarthome/repositories/iot_repository.dart';
 
 part 'device_data_event.dart';
 part 'device_data_state.dart';

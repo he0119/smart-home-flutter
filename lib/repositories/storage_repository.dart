@@ -2,11 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:http/http.dart' show MultipartFile;
 import 'package:http_parser/http_parser.dart';
-import 'package:smart_home/graphql/mutations/storage/mutations.dart';
-import 'package:smart_home/graphql/queries/storage/queries.dart';
-import 'package:smart_home/models/models.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
-import 'package:smart_home/utils/graphql_helper.dart';
+import 'package:smarthome/graphql/mutations/storage/mutations.dart';
+import 'package:smarthome/graphql/queries/storage/queries.dart';
+import 'package:smarthome/models/models.dart';
+import 'package:smarthome/repositories/graphql_api_client.dart';
+import 'package:smarthome/utils/graphql_helper.dart';
 import 'package:tuple/tuple.dart';
 
 class StorageRepository {

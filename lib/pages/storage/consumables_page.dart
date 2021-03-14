@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:smart_home/blocs/storage/blocs.dart';
-import 'package:smart_home/models/storage.dart';
-import 'package:smart_home/repositories/repositories.dart';
-import 'package:smart_home/routers/delegate.dart';
-import 'package:smart_home/utils/date_format_extension.dart';
-import 'package:smart_home/widgets/center_loading_indicator.dart';
-import 'package:smart_home/widgets/error_message_button.dart';
-import 'package:smart_home/widgets/infinite_list.dart';
+import 'package:smarthome/blocs/storage/blocs.dart';
+import 'package:smarthome/models/storage.dart';
+import 'package:smarthome/repositories/repositories.dart';
+import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/utils/date_format_extension.dart';
+import 'package:smarthome/widgets/center_loading_indicator.dart';
+import 'package:smarthome/widgets/error_message_button.dart';
+import 'package:smarthome/widgets/infinite_list.dart';
 
 class ConsumablesPage extends Page {
   ConsumablesPage() : super(key: UniqueKey(), name: '/consumables');

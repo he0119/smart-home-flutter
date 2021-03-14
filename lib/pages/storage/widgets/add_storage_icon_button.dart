@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:smart_home/blocs/storage/blocs.dart';
-import 'package:smart_home/models/storage.dart';
-import 'package:smart_home/pages/storage/storage_edit_page.dart';
-import 'package:smart_home/repositories/repositories.dart';
+import 'package:smarthome/blocs/storage/blocs.dart';
+import 'package:smarthome/models/storage.dart';
+import 'package:smarthome/pages/storage/storage_edit_page.dart';
+import 'package:smarthome/repositories/repositories.dart';
 
 class AddStorageIconButton extends StatelessWidget {
   final Storage storage;

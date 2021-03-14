@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_home/utils/gravatar_url.dart';
+import 'package:smarthome/utils/gravatar_url.dart';
 
 class CircleGravatar extends StatelessWidget {
   final String email;

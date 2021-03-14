@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:smart_home/blocs/board/blocs.dart';
-import 'package:smart_home/blocs/core/blocs.dart';
-import 'package:smart_home/models/models.dart';
-import 'package:smart_home/pages/board/comment_edit_page.dart';
-import 'package:smart_home/pages/board/widgets/item_title.dart';
-import 'package:smart_home/repositories/board_repository.dart';
-import 'package:smart_home/utils/show_snack_bar.dart';
+import 'package:smarthome/blocs/board/blocs.dart';
+import 'package:smarthome/blocs/core/blocs.dart';
+import 'package:smarthome/models/models.dart';
+import 'package:smarthome/pages/board/comment_edit_page.dart';
+import 'package:smarthome/pages/board/widgets/item_title.dart';
+import 'package:smarthome/repositories/board_repository.dart';
+import 'package:smarthome/utils/show_snack_bar.dart';
 
 class CommentItem extends StatelessWidget {
   final Comment comment;

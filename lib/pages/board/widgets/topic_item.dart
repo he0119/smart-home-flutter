@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:smart_home/models/board.dart';
-import 'package:smart_home/pages/board/topic_detail_page.dart';
-import 'package:smart_home/pages/board/widgets/item_title.dart';
-import 'package:smart_home/routers/delegate.dart';
+import 'package:smarthome/models/board.dart';
+import 'package:smarthome/pages/board/topic_detail_page.dart';
+import 'package:smarthome/pages/board/widgets/item_title.dart';
+import 'package:smarthome/routers/delegate.dart';
 
 class TopicItem extends StatelessWidget {
   final Topic topic;
