@@ -3,7 +3,7 @@ library storage;
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:smart_home/models/user.dart';
+import 'package:smarthome/models/user.dart';
 
 part 'storage.g.dart';
 

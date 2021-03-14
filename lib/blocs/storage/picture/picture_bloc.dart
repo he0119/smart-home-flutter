@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smart_home/models/models.dart';
-import 'package:smart_home/repositories/storage_repository.dart';
+import 'package:smarthome/models/models.dart';
+import 'package:smarthome/repositories/storage_repository.dart';
 
 part 'picture_event.dart';
 part 'picture_state.dart';

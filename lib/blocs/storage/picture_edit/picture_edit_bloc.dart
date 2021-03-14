@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smart_home/models/models.dart';
-import 'package:smart_home/repositories/repositories.dart';
+import 'package:smarthome/models/models.dart';
+import 'package:smarthome/repositories/repositories.dart';
 
 part 'picture_edit_event.dart';
 part 'picture_edit_state.dart';
@@ -25,7 +23,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
       try {
         Picture picture = await storageRepository.updatePicture(
           id: event.id,
-          file: event.file,
+          picturePath: event.picturePath,
           description: event.description,
           boxX: event.boxX,
           boxY: event.boxY,
@@ -42,7 +40,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
       try {
         Picture picture = await storageRepository.addPicture(
           itemId: event.itemId,
-          file: event.file,
+          picturePath: event.picturePath,
           description: event.description,
           boxX: event.boxX,
           boxY: event.boxY,

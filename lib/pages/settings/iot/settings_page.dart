@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:smart_home/blocs/core/blocs.dart';
-import 'package:smart_home/pages/settings/iot/refresh_interval_page.dart';
+import 'package:smarthome/blocs/core/blocs.dart';
+import 'package:smarthome/pages/settings/iot/refresh_interval_page.dart';
 
 class IotSettingsPage extends Page {
   IotSettingsPage()

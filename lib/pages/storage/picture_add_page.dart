@@ -6,11 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intent/intent.dart' as android_intent;
 import 'package:intent/action.dart' as android_action;
 
-import 'package:smart_home/blocs/storage/blocs.dart';
-import 'package:smart_home/repositories/storage_repository.dart';
-import 'package:smart_home/routers/delegate.dart';
-import 'package:smart_home/utils/show_snack_bar.dart';
-import 'package:smart_home/widgets/rounded_raised_button.dart';
+import 'package:smarthome/blocs/storage/blocs.dart';
+import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/utils/show_snack_bar.dart';
+import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class PictureAddPage extends Page {
   /// 物品 ID
@@ -171,7 +171,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
     BlocProvider.of<PictureEditBloc>(context).add(
       PictureAdded(
         itemId: widget.itemId,
-        file: File(picturePath),
+        picturePath: picturePath,
         description: _descriptionController.text,
         boxX: 0.5,
         boxY: 0.5,

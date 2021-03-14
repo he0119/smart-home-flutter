@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:smart_home/blocs/storage/blocs.dart';
-import 'package:smart_home/models/models.dart';
-import 'package:smart_home/models/storage.dart';
-import 'package:smart_home/repositories/storage_repository.dart';
-import 'package:smart_home/widgets/dropdown_search.dart';
-import 'package:smart_home/widgets/rounded_raised_button.dart';
-import 'package:smart_home/utils/show_snack_bar.dart';
+import 'package:smarthome/blocs/storage/blocs.dart';
+import 'package:smarthome/models/models.dart';
+import 'package:smarthome/models/storage.dart';
+import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:smarthome/widgets/dropdown_search.dart';
+import 'package:smarthome/widgets/rounded_raised_button.dart';
+import 'package:smarthome/utils/show_snack_bar.dart';
 
 class StorageEditPage extends StatefulWidget {
   final bool isEditing;

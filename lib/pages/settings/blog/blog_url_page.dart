@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/core/blocs.dart';
-import 'package:smart_home/pages/settings/widgets/text_edit_page.dart';
+import 'package:smarthome/blocs/core/blocs.dart';
+import 'package:smarthome/pages/settings/widgets/text_edit_page.dart';
 
 class BlogUrlPage extends StatelessWidget {
   const BlogUrlPage({Key key}) : super(key: key);

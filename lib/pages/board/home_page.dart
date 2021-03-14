@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:smart_home/blocs/board/blocs.dart';
-import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/pages/board/topic_edit_page.dart';
-import 'package:smart_home/pages/board/widgets/topic_item.dart';
-import 'package:smart_home/repositories/board_repository.dart';
-import 'package:smart_home/widgets/center_loading_indicator.dart';
-import 'package:smart_home/widgets/error_message_button.dart';
-import 'package:smart_home/widgets/home_page.dart';
-import 'package:smart_home/widgets/infinite_list.dart';
+import 'package:smarthome/blocs/board/blocs.dart';
+import 'package:smarthome/models/app_tab.dart';
+import 'package:smarthome/pages/board/topic_edit_page.dart';
+import 'package:smarthome/pages/board/widgets/topic_item.dart';
+import 'package:smarthome/repositories/board_repository.dart';
+import 'package:smarthome/widgets/center_loading_indicator.dart';
+import 'package:smarthome/widgets/error_message_button.dart';
+import 'package:smarthome/widgets/home_page.dart';
+import 'package:smarthome/widgets/infinite_list.dart';
 
 class BoardHomePage extends Page {
   BoardHomePage()

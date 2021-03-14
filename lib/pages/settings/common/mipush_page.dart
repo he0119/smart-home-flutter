@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/core/blocs.dart';
-import 'package:smart_home/models/push.dart';
+import 'package:smarthome/blocs/core/blocs.dart';
+import 'package:smarthome/models/push.dart';
 
 class MiPushPage extends StatelessWidget {
   const MiPushPage({Key key}) : super(key: key);

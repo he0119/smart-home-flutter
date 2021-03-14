@@ -31,6 +31,14 @@ query itemByName($name: String) {
         createdBy {
           username
         }
+        pictures {
+          edges {
+            node {
+              id
+              description
+            }
+          }
+        }
       }
     }
   }

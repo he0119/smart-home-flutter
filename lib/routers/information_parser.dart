@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/routers/route_path.dart';
+import 'package:smarthome/models/app_tab.dart';
+import 'package:smarthome/routers/route_path.dart';
 
 class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   static final Logger _log = Logger('InformationParser');

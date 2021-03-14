@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:smart_home/widgets/bottom_loader.dart';
+import 'package:smarthome/widgets/bottom_loader.dart';
 
 /// 无限长列表
 ///

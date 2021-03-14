@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/storage/blocs.dart';
-import 'package:smart_home/models/popup_menu.dart';
-import 'package:smart_home/repositories/repositories.dart';
-import 'package:smart_home/utils/launch_url.dart';
-import 'package:smart_home/utils/show_snack_bar.dart';
-import 'package:smart_home/widgets/center_loading_indicator.dart';
-import 'package:smart_home/widgets/error_message_button.dart';
+import 'package:smarthome/blocs/storage/blocs.dart';
+import 'package:smarthome/models/popup_menu.dart';
+import 'package:smarthome/repositories/repositories.dart';
+import 'package:smarthome/utils/launch_url.dart';
+import 'package:smarthome/utils/show_snack_bar.dart';
+import 'package:smarthome/widgets/center_loading_indicator.dart';
+import 'package:smarthome/widgets/error_message_button.dart';
 
 class PicturePage extends Page {
   /// 图片 ID

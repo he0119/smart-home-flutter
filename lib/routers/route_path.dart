@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:smart_home/models/models.dart';
+import 'package:smarthome/models/models.dart';
 
 abstract class RoutePath {}
 

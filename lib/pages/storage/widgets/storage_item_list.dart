@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_home/models/models.dart';
-import 'package:smart_home/routers/delegate.dart';
-import 'package:smart_home/widgets/infinite_list.dart';
+import 'package:smarthome/models/models.dart';
+import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/widgets/infinite_list.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
 class StorageItemList extends StatelessWidget {
