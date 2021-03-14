@@ -4,9 +4,11 @@
 
 ## Requirements
 
-- Flutter (Channel stable, 2.0.1)
+- Flutter (Channel stable, 2.0.2)
 
 ## Create
+
+生成项目的方法
 
 ```shell
 flutter create --org xyz.hehome --platforms=android,web smarthome
