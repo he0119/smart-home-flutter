@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:smart_home/blocs/core/blocs.dart';
-import 'package:smart_home/blocs/board/blocs.dart';
-import 'package:smart_home/models/board.dart';
-import 'package:smart_home/pages/board/widgets/comment_item.dart';
-import 'package:smart_home/utils/show_snack_bar.dart';
+import 'package:smarthome/blocs/core/blocs.dart';
+import 'package:smarthome/blocs/board/blocs.dart';
+import 'package:smarthome/models/board.dart';
+import 'package:smarthome/pages/board/widgets/comment_item.dart';
+import 'package:smarthome/utils/show_snack_bar.dart';
 
 class CommentEditPage extends StatefulWidget {
   final bool isEditing;

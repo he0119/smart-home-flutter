@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smart_home/blocs/core/app_preferences/app_preferences_bloc.dart';
-import 'package:smart_home/models/models.dart';
-import 'package:smart_home/repositories/graphql_api_client.dart';
-import 'package:smart_home/repositories/user_repository.dart';
+import 'package:smarthome/blocs/core/app_preferences/app_preferences_bloc.dart';
+import 'package:smarthome/models/models.dart';
+import 'package:smarthome/repositories/graphql_api_client.dart';
+import 'package:smarthome/repositories/user_repository.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';

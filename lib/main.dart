@@ -6,16 +6,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_home/app_config.dart';
-import 'package:smart_home/blocs/core/blocs.dart';
-import 'package:smart_home/blocs/board/blocs.dart';
-import 'package:smart_home/blocs/storage/blocs.dart';
-import 'package:smart_home/models/grobal_keys.dart';
-import 'package:smart_home/repositories/iot_repository.dart';
-import 'package:smart_home/repositories/push_repository.dart';
-import 'package:smart_home/repositories/repositories.dart';
-import 'package:smart_home/routers/delegate.dart';
-import 'package:smart_home/routers/information_parser.dart';
+import 'package:smarthome/app_config.dart';
+import 'package:smarthome/blocs/core/blocs.dart';
+import 'package:smarthome/blocs/board/blocs.dart';
+import 'package:smarthome/blocs/storage/blocs.dart';
+import 'package:smarthome/models/grobal_keys.dart';
+import 'package:smarthome/repositories/iot_repository.dart';
+import 'package:smarthome/repositories/push_repository.dart';
+import 'package:smarthome/repositories/repositories.dart';
+import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/routers/information_parser.dart';
 
 class MyApp extends StatelessWidget {
   @override

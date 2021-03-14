@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smart_home/models/board.dart';
-import 'package:smart_home/repositories/board_repository.dart';
+import 'package:smarthome/models/board.dart';
+import 'package:smarthome/repositories/board_repository.dart';
 
 part 'topic_edit_event.dart';
 part 'topic_edit_state.dart';

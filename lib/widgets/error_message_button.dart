@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_home/widgets/rounded_raised_button.dart';
+import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 /// 居中的可以显示错误提示的按钮
 class ErrorMessageButton extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_home/models/models.dart';
-import 'package:smart_home/utils/date_format_extension.dart';
-import 'package:smart_home/widgets/gravatar.dart';
+import 'package:smarthome/models/models.dart';
+import 'package:smarthome/utils/date_format_extension.dart';
+import 'package:smarthome/widgets/gravatar.dart';
 
 class ItemTitle extends StatelessWidget {
   final User user;

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:smart_home/blocs/storage/blocs.dart';
-import 'package:smart_home/models/models.dart';
-import 'package:smart_home/pages/storage/item_edit_page.dart';
-import 'package:smart_home/pages/storage/storage_edit_page.dart';
-import 'package:smart_home/pages/storage/widgets/add_storage_icon_button.dart';
-import 'package:smart_home/pages/storage/widgets/search_icon_button.dart';
-import 'package:smart_home/pages/storage/widgets/storage_item_list.dart';
-import 'package:smart_home/repositories/storage_repository.dart';
-import 'package:smart_home/routers/delegate.dart';
-import 'package:smart_home/widgets/center_loading_indicator.dart';
-import 'package:smart_home/widgets/error_message_button.dart';
-import 'package:smart_home/utils/show_snack_bar.dart';
+import 'package:smarthome/blocs/storage/blocs.dart';
+import 'package:smarthome/models/models.dart';
+import 'package:smarthome/pages/storage/item_edit_page.dart';
+import 'package:smarthome/pages/storage/storage_edit_page.dart';
+import 'package:smarthome/pages/storage/widgets/add_storage_icon_button.dart';
+import 'package:smarthome/pages/storage/widgets/search_icon_button.dart';
+import 'package:smarthome/pages/storage/widgets/storage_item_list.dart';
+import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/widgets/center_loading_indicator.dart';
+import 'package:smarthome/widgets/error_message_button.dart';
+import 'package:smarthome/utils/show_snack_bar.dart';
 
 class StorageDetailPage extends Page {
   final String storageName;

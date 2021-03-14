@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/core/blocs.dart';
-import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/widgets/drawer.dart';
-import 'package:smart_home/widgets/tab_selector.dart';
+import 'package:smarthome/blocs/core/blocs.dart';
+import 'package:smarthome/models/app_tab.dart';
+import 'package:smarthome/widgets/drawer.dart';
+import 'package:smarthome/widgets/tab_selector.dart';
 
 class MyHomePage extends StatelessWidget {
   final List<Widget> actions;

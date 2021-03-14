@@ -6,6 +6,12 @@
 
 - Flutter (Channel stable, 2.0.1)
 
+## Create
+
+```shell
+flutter create --org xyz.hehome --platforms=android,web smarthome
+```
+
 ## Run
 
 项目通过 `main_dev.dart` 和 `main_prod.dart` 两个文件分离测试和正式环境的配置。运行时需要指定文件。

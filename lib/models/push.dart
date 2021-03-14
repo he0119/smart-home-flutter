@@ -1,7 +1,7 @@
 library push;
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:smart_home/models/user.dart';
+import 'package:smarthome/models/user.dart';
 
 part 'push.g.dart';
 
