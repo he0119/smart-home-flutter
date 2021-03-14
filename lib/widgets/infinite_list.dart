@@ -6,7 +6,8 @@ import 'package:smart_home/widgets/bottom_loader.dart';
 ///
 /// 随着用户的滚动载入新数据
 ///
-/// 使用的 [ListView.separated], 分隔为 [Divider]
+/// 如果 [separated] 为 true，则使用的 [ListView.separated], 默认分隔为 [Divider]
+/// 可通过设置 [separatorBuilder] 修改
 class InfiniteList<T> extends StatefulWidget {
   final List<T> items;
   final List<Widget> top;
@@ -15,6 +16,8 @@ class InfiniteList<T> extends StatefulWidget {
   final bool hasReachedMax;
   final VoidCallback onFetch;
   final double threshold;
+  final bool separated;
+  final Widget Function(BuildContext context, int index) separatorBuilder;
 
   const InfiniteList({
     Key key,
@@ -25,6 +28,8 @@ class InfiniteList<T> extends StatefulWidget {
     this.hasReachedMax = true,
     this.onFetch,
     this.threshold = 200,
+    this.separated = false,
+    this.separatorBuilder,
   })  : assert(hasReachedMax != null),
         super(key: key);
 
@@ -50,27 +55,54 @@ class _InfiniteListState<T> extends State<InfiniteList<T>> {
     final bottonCount = widget.botton?.length ?? 0;
     return Scrollbar(
       controller: _scrollController,
-      child: ListView.separated(
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemCount: !widget.hasReachedMax
-            ? widget.items.length + 1 + topCount + bottonCount
-            : widget.items.length + topCount + bottonCount,
-        itemBuilder: (context, index) {
-          if (index < topCount) {
-            return widget.top[index];
-          }
-          if (index >= topCount && index < widget.items.length + topCount) {
-            return widget.itemBuilder(context, widget.items[index - topCount]);
-          }
-          if (index >= widget.items.length + topCount &&
-              index < widget.items.length + topCount + bottonCount) {
-            return widget.botton[index - widget.items.length - topCount];
-          }
-          return BottomLoader();
-        },
-        separatorBuilder: (contexit, index) => Divider(),
-        controller: _scrollController,
-      ),
+      child: widget.separated
+          ? ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: !widget.hasReachedMax
+                  ? widget.items.length + 1 + topCount + bottonCount
+                  : widget.items.length + topCount + bottonCount,
+              itemBuilder: (context, index) {
+                if (index < topCount) {
+                  return widget.top[index];
+                }
+                if (index >= topCount &&
+                    index < widget.items.length + topCount) {
+                  return widget.itemBuilder(
+                      context, widget.items[index - topCount]);
+                }
+                if (index >= widget.items.length + topCount &&
+                    index < widget.items.length + topCount + bottonCount) {
+                  return widget.botton[index - widget.items.length - topCount];
+                }
+                return BottomLoader();
+              },
+              separatorBuilder: widget.separatorBuilder != null
+                  ? widget.separatorBuilder
+                  : (contexit, index) => Divider(),
+              controller: _scrollController,
+            )
+          : ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: !widget.hasReachedMax
+                  ? widget.items.length + 1 + topCount + bottonCount
+                  : widget.items.length + topCount + bottonCount,
+              itemBuilder: (context, index) {
+                if (index < topCount) {
+                  return widget.top[index];
+                }
+                if (index >= topCount &&
+                    index < widget.items.length + topCount) {
+                  return widget.itemBuilder(
+                      context, widget.items[index - topCount]);
+                }
+                if (index >= widget.items.length + topCount &&
+                    index < widget.items.length + topCount + bottonCount) {
+                  return widget.botton[index - widget.items.length - topCount];
+                }
+                return BottomLoader();
+              },
+              controller: _scrollController,
+            ),
     );
   }
 
