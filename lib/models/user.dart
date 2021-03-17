@@ -10,7 +10,7 @@ class User extends Equatable {
   final String username;
   final String email;
 
-  User({this.username, this.email});
+  User({required this.username, required this.email});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

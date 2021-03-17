@@ -4,7 +4,7 @@ abstract class RecycleBinState extends Equatable {
   const RecycleBinState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class RecycleBinInitial extends RecycleBinState {
@@ -18,12 +18,12 @@ class RecycleBinInProgress extends RecycleBinState {
 }
 
 class RecycleBinFailure extends RecycleBinState {
-  final String message;
+  final String? message;
 
   const RecycleBinFailure(this.message);
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 
   @override
   String toString() => 'RecycleBinFailure(message: $message)';
@@ -34,8 +34,8 @@ class RecycleBinSuccess extends RecycleBinState {
   final PageInfo pageInfo;
 
   const RecycleBinSuccess({
-    @required this.items,
-    @required this.pageInfo,
+    required this.items,
+    required this.pageInfo,
   });
 
   bool get hasReachedMax => !pageInfo.hasNextPage;

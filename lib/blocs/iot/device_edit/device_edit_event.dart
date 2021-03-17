@@ -13,9 +13,9 @@ class DeviceAdded extends DeviceEditEvent {
   final String location;
 
   const DeviceAdded({
-    @required this.name,
-    @required this.deviceType,
-    @required this.location,
+    required this.name,
+    required this.deviceType,
+    required this.location,
   });
 
   @override
@@ -32,10 +32,10 @@ class DeviceUpdated extends DeviceEditEvent {
   final String location;
 
   const DeviceUpdated({
-    @required this.id,
-    @required this.name,
-    @required this.deviceType,
-    @required this.location,
+    required this.id,
+    required this.name,
+    required this.deviceType,
+    required this.location,
   });
 
   @override
@@ -48,7 +48,7 @@ class DeviceUpdated extends DeviceEditEvent {
 class DeviceDeleted extends DeviceEditEvent {
   final Device device;
 
-  const DeviceDeleted({@required this.device});
+  const DeviceDeleted({required this.device});
 
   @override
   List<Object> get props => [device];
@@ -64,10 +64,10 @@ class DeviceSeted extends DeviceEditEvent {
   final String valueType;
 
   const DeviceSeted({
-    @required this.deviceId,
-    @required this.key,
-    @required this.value,
-    @required this.valueType,
+    required this.deviceId,
+    required this.key,
+    required this.value,
+    required this.valueType,
   });
 
   @override

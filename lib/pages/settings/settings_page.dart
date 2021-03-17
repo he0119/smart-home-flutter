@@ -27,7 +27,7 @@ class SettingsPage extends Page {
 }
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key key}) : super(key: key);
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class SettingsScreen extends StatelessWidget {
               tiles: [
                 SettingsTile(
                   title: '刷新间隔',
-                  subtitle: state.refreshInterval.toString() ?? '请单击输入',
+                  subtitle: state.refreshInterval.toString(),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => RefreshIntervalPage(),

@@ -4,24 +4,24 @@ abstract class TopicDetailEvent extends Equatable {
   const TopicDetailEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class TopicDetailFetched extends TopicDetailEvent {
-  final String topicId;
+  final String? topicId;
   final bool descending;
   final bool cache;
   final bool showInProgress;
 
   const TopicDetailFetched({
     this.topicId,
-    @required this.descending,
+    required this.descending,
     this.cache = true,
     this.showInProgress = true,
   });
 
   @override
-  List<Object> get props => [topicId, descending, cache, showInProgress];
+  List<Object?> get props => [topicId, descending, cache, showInProgress];
 
   @override
   String toString() =>

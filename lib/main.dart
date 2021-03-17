@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
 
 class MyMaterialApp extends StatefulWidget {
   const MyMaterialApp({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -131,7 +131,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 
   @override
   Widget build(BuildContext context) {
-    final AppConfig config = AppConfig.of(context);
+    final AppConfig config = AppConfig.of(context)!;
     return MaterialApp.router(
       scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(

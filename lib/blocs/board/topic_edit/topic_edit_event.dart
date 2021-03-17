@@ -12,8 +12,8 @@ class TopicAdded extends TopicEditEvent {
   final String description;
 
   const TopicAdded({
-    @required this.title,
-    @required this.description,
+    required this.title,
+    required this.description,
   });
 
   @override
@@ -29,9 +29,9 @@ class TopicUpdated extends TopicEditEvent {
   final String description;
 
   const TopicUpdated({
-    @required this.id,
-    @required this.title,
-    @required this.description,
+    required this.id,
+    required this.title,
+    required this.description,
   });
 
   @override
@@ -44,7 +44,7 @@ class TopicUpdated extends TopicEditEvent {
 class TopicDeleted extends TopicEditEvent {
   final Topic topic;
 
-  const TopicDeleted({@required this.topic});
+  const TopicDeleted({required this.topic});
 
   @override
   List<Object> get props => [topic];
@@ -56,7 +56,7 @@ class TopicDeleted extends TopicEditEvent {
 class TopicClosed extends TopicEditEvent {
   final Topic topic;
 
-  const TopicClosed({@required this.topic});
+  const TopicClosed({required this.topic});
 
   @override
   List<Object> get props => [topic];
@@ -68,7 +68,7 @@ class TopicClosed extends TopicEditEvent {
 class TopicReopened extends TopicEditEvent {
   final Topic topic;
 
-  const TopicReopened({@required this.topic});
+  const TopicReopened({required this.topic});
 
   @override
   List<Object> get props => [topic];
@@ -80,7 +80,7 @@ class TopicReopened extends TopicEditEvent {
 class TopicPinned extends TopicEditEvent {
   final Topic topic;
 
-  const TopicPinned({@required this.topic});
+  const TopicPinned({required this.topic});
 
   @override
   List<Object> get props => [topic];
@@ -92,7 +92,7 @@ class TopicPinned extends TopicEditEvent {
 class TopicUnpinned extends TopicEditEvent {
   final Topic topic;
 
-  const TopicUnpinned({@required this.topic});
+  const TopicUnpinned({required this.topic});
 
   @override
   List<Object> get props => [topic];

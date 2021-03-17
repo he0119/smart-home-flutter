@@ -5,7 +5,7 @@ import 'package:smarthome/blocs/core/blocs.dart';
 import 'package:smarthome/models/app_tab.dart';
 
 class DefaultPage extends StatelessWidget {
-  const DefaultPage({Key key}) : super(key: key);
+  const DefaultPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -22,8 +22,8 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   static const miPushEvent = const EventChannel('hehome.xyz/push/event');
 
   PushBloc({
-    @required this.pushRepository,
-    @required this.appPreferencesBloc,
+    required this.pushRepository,
+    required this.appPreferencesBloc,
   }) : super(PushInProgress());
 
   @override
@@ -35,16 +35,16 @@ class PushBloc extends Bloc<PushEvent, PushState> {
       if (!kIsWeb && Platform.isAndroid) {
         yield PushInProgress();
         MiPushKey miPushKey;
-        if (appPreferencesBloc.state.miPushAppId == null) {
+        String? miPushAppId = appPreferencesBloc.state.miPushAppId;
+        String? miPushAppKey = appPreferencesBloc.state.miPushAppKey;
+        if (miPushAppId != null && miPushAppKey != null) {
+          miPushKey = MiPushKey(appId: miPushAppId, appKey: miPushAppKey);
+        } else {
           miPushKey = await pushRepository.miPushKey();
           appPreferencesBloc.add(MiPushKeyChanged(
             miPushAppId: miPushKey.appId,
             miPushAppKey: miPushKey.appKey,
           ));
-        } else {
-          miPushKey = MiPushKey(
-              appId: appPreferencesBloc.state.miPushAppId,
-              appKey: appPreferencesBloc.state.miPushAppKey);
         }
         // 注册小米推送
         _log.fine('小米推送注册中');
@@ -55,14 +55,14 @@ class PushBloc extends Bloc<PushEvent, PushState> {
             if (call.method == 'ReceiveRegisterResult' &&
                 call.arguments != null) {
               _log.fine('小米推送注册成功');
-              final String regId = call.arguments;
+              final String? regId = call.arguments;
               add(PushUpdated(miPush: MiPush(regId: null)));
 
               if (regId != appPreferencesBloc.state.miPushRegId) {
                 MiPush mipush = await pushRepository.updateMiPush(regId: regId);
                 add(PushUpdated(miPush: mipush));
                 appPreferencesBloc
-                    .add(MiPushRegIdChanged(miPushRegId: mipush.regId));
+                    .add(MiPushRegIdChanged(miPushRegId: mipush.regId!));
                 _log.fine('小米推送注册标识符上传成功。');
               }
             }
@@ -79,7 +79,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
         MiPush mipush = await pushRepository.miPush();
         yield PushSuccess(miPush: mipush);
       } catch (e) {
-        yield PushError(e.message);
+        yield PushError(e.toString());
       }
     }
   }

@@ -16,13 +16,13 @@ import 'package:smarthome/utils/show_snack_bar.dart';
 
 class StorageDetailPage extends Page {
   final String storageName;
-  final String storageId;
+  final String? storageId;
   final int group;
 
   StorageDetailPage({
-    @required this.storageName,
+    required this.storageName,
     this.storageId,
-    @required this.group,
+    required this.group,
   }) : super(
           key: ValueKey('$group/$storageName'),
           name: '/storage/$group/$storageName',
@@ -58,12 +58,12 @@ class StorageDetailPage extends Page {
 
 class StorageDetailScreen extends StatelessWidget {
   final String storageName;
-  final String storageId;
+  final String? storageId;
 
   const StorageDetailScreen({
-    Key key,
-    @required this.storageName,
-    @required this.storageId,
+    Key? key,
+    required this.storageName,
+    required this.storageId,
   }) : super(key: key);
 
   @override
@@ -122,16 +122,16 @@ class StorageDetailScreen extends StatelessWidget {
       );
     }
     if (state is StorageDetailSuccess && state.storage != null) {
-      List<Storage> paths = state.storage.ancestors ?? [];
+      List<Storage?> paths = state.storage!.ancestors ?? [];
       if (!paths.contains(state.storage)) {
         // 防止重复添加相同名称的位置
         // 因为无限列表重新获取时，位置对象虽然名字不会变，但是内容改变
-        if (paths.isEmpty || paths.last.name != state.storage.name) {
+        if (paths.isEmpty || paths.last!.name != state.storage!.name) {
           paths.add(state.storage);
         }
       }
       return AppBar(
-        title: Text(state.storage.name),
+        title: Text(state.storage!.name),
         actions: <Widget>[
           AddStorageIconButton(
             storage: state.storage,
@@ -157,7 +157,7 @@ class StorageDetailScreen extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
-                    title: Text('删除 ${state.storage.name}'),
+                    title: Text('删除 ${state.storage!.name}'),
                     content: Text('你确认要删除该位置么？'),
                     actions: <Widget>[
                       TextButton(
@@ -170,7 +170,7 @@ class StorageDetailScreen extends StatelessWidget {
                         child: Text('是'),
                         onPressed: () {
                           BlocProvider.of<StorageEditBloc>(context).add(
-                            StorageDeleted(storage: state.storage),
+                            StorageDeleted(storage: state.storage!),
                           );
                           Navigator.pop(context);
                         },
@@ -220,7 +220,7 @@ class StorageDetailScreen extends StatelessWidget {
                               child: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  paths[index - 1].name,
+                                  paths[index - 1]!.name,
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ),
@@ -253,12 +253,12 @@ class StorageDetailScreen extends StatelessWidget {
             StorageDetailFetched(name: state.name, id: state.id),
           );
         },
-        message: state.message,
+        message: state.toString(),
       );
     }
     if (state is StorageDetailSuccess && state.storages != null) {
       return StorageItemList(
-        storages: state.storages.toList(),
+        storages: state.storages!.toList(),
         items: [],
         hasReachedMax: state.hasReachedMax,
         onFetch: () => BlocProvider.of<StorageDetailBloc>(context).add(
@@ -268,13 +268,13 @@ class StorageDetailScreen extends StatelessWidget {
     }
     if (state is StorageDetailSuccess && state.storage != null) {
       return StorageItemList(
-        items: state.storage.items.toList(),
-        storages: state.storage.children.toList(),
+        items: state.storage!.items!.toList(),
+        storages: state.storage!.children!.toList(),
         hasReachedMax: state.hasReachedMax,
         onFetch: () => BlocProvider.of<StorageDetailBloc>(context).add(
           StorageDetailFetched(
-            name: state.storage.name,
-            id: state.storage.id,
+            name: state.storage!.name,
+            id: state.storage!.id,
           ),
         ),
       );
@@ -282,7 +282,7 @@ class StorageDetailScreen extends StatelessWidget {
     return CenterLoadingIndicator();
   }
 
-  Widget _buildFloatingActionButton(
+  Widget? _buildFloatingActionButton(
       BuildContext context, StorageDetailState state) {
     if (state is StorageDetailSuccess && state.storage != null) {
       return FloatingActionButton(
@@ -314,8 +314,8 @@ class PathBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget child;
 
   PathBar({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
   }) : super(key: key);
 
   @override

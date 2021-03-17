@@ -23,7 +23,7 @@ class StorageEditFailure extends StorageEditState {
 class StorageAddSuccess extends StorageEditState {
   final Storage storage;
 
-  const StorageAddSuccess({@required this.storage});
+  const StorageAddSuccess({required this.storage});
 
   @override
   String toString() => 'StorageAddSuccess { storage: ${storage.name} }';
@@ -32,7 +32,7 @@ class StorageAddSuccess extends StorageEditState {
 class StorageUpdateSuccess extends StorageEditState {
   final Storage storage;
 
-  const StorageUpdateSuccess({@required this.storage});
+  const StorageUpdateSuccess({required this.storage});
 
   @override
   String toString() => 'StorageUpdateSuccess { storage: ${storage.name} }';
@@ -41,7 +41,7 @@ class StorageUpdateSuccess extends StorageEditState {
 class StorageDeleteSuccess extends StorageEditState {
   final Storage storage;
 
-  const StorageDeleteSuccess({@required this.storage});
+  const StorageDeleteSuccess({required this.storage});
 
   @override
   String toString() => 'StorageDeleteSuccess { storage: ${storage.name} }';

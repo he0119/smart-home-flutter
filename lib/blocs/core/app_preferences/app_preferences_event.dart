@@ -17,7 +17,7 @@ class AppStarted extends AppPreferencesEvent {
 class AppApiUrlChanged extends AppPreferencesEvent {
   final String apiUrl;
 
-  AppApiUrlChanged({@required this.apiUrl});
+  AppApiUrlChanged({required this.apiUrl});
 
   @override
   List<Object> get props => [apiUrl];
@@ -30,7 +30,7 @@ class AppApiUrlChanged extends AppPreferencesEvent {
 class AppIotRefreshIntervalChanged extends AppPreferencesEvent {
   final int interval;
 
-  AppIotRefreshIntervalChanged({@required this.interval});
+  AppIotRefreshIntervalChanged({required this.interval});
 
   @override
   List<Object> get props => [interval];
@@ -46,8 +46,8 @@ class AppBlogUrlChanged extends AppPreferencesEvent {
   final String blogAdminUrl;
 
   AppBlogUrlChanged({
-    @required this.blogUrl,
-    @required this.blogAdminUrl,
+    required this.blogUrl,
+    required this.blogAdminUrl,
   });
 
   @override
@@ -63,7 +63,7 @@ class DefaultPageChanged extends AppPreferencesEvent {
   final AppTab defaultPage;
 
   DefaultPageChanged({
-    @required this.defaultPage,
+    required this.defaultPage,
   });
 
   @override
@@ -79,7 +79,7 @@ class LoginUserChanged extends AppPreferencesEvent {
   final User loginUser;
 
   LoginUserChanged({
-    @required this.loginUser,
+    required this.loginUser,
   });
 
   @override
@@ -95,8 +95,8 @@ class MiPushKeyChanged extends AppPreferencesEvent {
   final String miPushAppKey;
 
   MiPushKeyChanged({
-    @required this.miPushAppId,
-    @required this.miPushAppKey,
+    required this.miPushAppId,
+    required this.miPushAppKey,
   });
 
   @override
@@ -111,7 +111,7 @@ class MiPushRegIdChanged extends AppPreferencesEvent {
   final String miPushRegId;
 
   MiPushRegIdChanged({
-    @required this.miPushRegId,
+    required this.miPushRegId,
   });
 
   @override
@@ -126,7 +126,7 @@ class CommentDescendingChanged extends AppPreferencesEvent {
   final bool descending;
 
   CommentDescendingChanged({
-    @required this.descending,
+    required this.descending,
   });
 
   @override

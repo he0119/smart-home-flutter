@@ -9,7 +9,7 @@ class UpdateInitial extends UpdateState {
 }
 
 class UpdateFailure extends UpdateState {
-  final String message;
+  final String? message;
 
   UpdateFailure(this.message);
 
@@ -19,10 +19,10 @@ class UpdateFailure extends UpdateState {
 
 class UpdateSuccess extends UpdateState {
   final bool needUpdate;
-  final String url;
-  final Version version;
+  final String? url;
+  final Version? version;
 
-  UpdateSuccess({this.needUpdate, this.url, this.version});
+  UpdateSuccess({required this.needUpdate, this.url, this.version});
 
   @override
   String toString() =>

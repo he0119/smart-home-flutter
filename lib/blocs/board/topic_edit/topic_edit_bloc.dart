@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smarthome/models/board.dart';
 import 'package:smarthome/repositories/board_repository.dart';
 
@@ -11,7 +10,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   final BoardRepository boardRepository;
 
   TopicEditBloc({
-    @required this.boardRepository,
+    required this.boardRepository,
   }) : super(TopicInProgress());
 
   @override
@@ -27,7 +26,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
         );
         yield TopicAddSuccess(topic: topic);
       } catch (e) {
-        yield TopicFailure(e.message);
+        yield TopicFailure(e.toString());
       }
     }
     if (event is TopicUpdated) {
@@ -40,7 +39,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
         );
         yield TopicUpdateSuccess(topic: topic);
       } catch (e) {
-        yield TopicFailure(e.message);
+        yield TopicFailure(e.toString());
       }
     }
     if (event is TopicDeleted) {
@@ -49,7 +48,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
         await boardRepository.deleteTopic(topicId: event.topic.id);
         yield TopicDeleteSuccess(topic: event.topic);
       } catch (e) {
-        yield TopicFailure(e.message);
+        yield TopicFailure(e.toString());
       }
     }
     if (event is TopicClosed) {
@@ -58,7 +57,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
         await boardRepository.closeTopic(topicId: event.topic.id);
         yield TopicCloseSuccess(topic: event.topic);
       } catch (e) {
-        yield TopicFailure(e.message);
+        yield TopicFailure(e.toString());
       }
     }
     if (event is TopicReopened) {
@@ -67,7 +66,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
         await boardRepository.reopenTopic(topicId: event.topic.id);
         yield TopicReopenSuccess(topic: event.topic);
       } catch (e) {
-        yield TopicFailure(e.message);
+        yield TopicFailure(e.toString());
       }
     }
     if (event is TopicPinned) {
@@ -76,7 +75,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
         await boardRepository.pinTopic(topicId: event.topic.id);
         yield TopicPinSuccess(topic: event.topic);
       } catch (e) {
-        yield TopicFailure(e.message);
+        yield TopicFailure(e.toString());
       }
     }
     if (event is TopicUnpinned) {
@@ -85,7 +84,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
         await boardRepository.unpinTopic(topicId: event.topic.id);
         yield TopicUnpinSuccess(topic: event.topic);
       } catch (e) {
-        yield TopicFailure(e.message);
+        yield TopicFailure(e.toString());
       }
     }
   }

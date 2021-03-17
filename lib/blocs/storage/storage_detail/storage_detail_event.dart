@@ -4,22 +4,22 @@ abstract class StorageDetailEvent extends Equatable {
   const StorageDetailEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class StorageDetailFetched extends StorageDetailEvent {
   final String name;
-  final String id;
+  final String? id;
   final bool cache;
 
   const StorageDetailFetched({
-    @required this.name,
+    required this.name,
     this.id,
     this.cache = true,
   });
 
   @override
-  List<Object> get props => [name, id, cache];
+  List<Object?> get props => [name, id, cache];
 
   @override
   String toString() =>

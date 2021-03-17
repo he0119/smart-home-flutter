@@ -15,7 +15,7 @@ class StorageHomeFetched extends StorageHomeEvent {
   final bool cache;
 
   const StorageHomeFetched({
-    @required this.itemType,
+    required this.itemType,
     this.cache = true,
   });
 

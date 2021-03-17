@@ -5,12 +5,12 @@ part 'relay.g.dart';
 @JsonSerializable()
 class PageInfo {
   final bool hasNextPage;
-  final bool hasPreviousPage;
-  final String startCursor;
-  final String endCursor;
+  final bool? hasPreviousPage;
+  final String? startCursor;
+  final String? endCursor;
 
   PageInfo({
-    this.hasNextPage,
+    required this.hasNextPage,
     this.hasPreviousPage,
     this.startCursor,
     this.endCursor,
@@ -18,7 +18,7 @@ class PageInfo {
 
   PageInfo copyWith(PageInfo pageInfo) {
     return PageInfo(
-      hasNextPage: pageInfo.hasNextPage ?? this.hasNextPage,
+      hasNextPage: pageInfo.hasNextPage,
       hasPreviousPage: pageInfo.hasPreviousPage ?? this.hasPreviousPage,
       startCursor: pageInfo.startCursor ?? this.startCursor,
       endCursor: pageInfo.endCursor ?? this.endCursor,

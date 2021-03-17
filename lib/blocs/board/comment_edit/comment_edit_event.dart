@@ -12,8 +12,8 @@ class CommentAdded extends CommentEditEvent {
   final String body;
 
   const CommentAdded({
-    @required this.topicId,
-    @required this.body,
+    required this.topicId,
+    required this.body,
   });
 
   @override
@@ -28,8 +28,8 @@ class CommentUpdated extends CommentEditEvent {
   final String body;
 
   const CommentUpdated({
-    @required this.id,
-    @required this.body,
+    required this.id,
+    required this.body,
   });
 
   @override
@@ -42,7 +42,7 @@ class CommentUpdated extends CommentEditEvent {
 class CommentDeleted extends CommentEditEvent {
   final Comment comment;
 
-  const CommentDeleted({@required this.comment});
+  const CommentDeleted({required this.comment});
 
   @override
   List<Object> get props => [comment];

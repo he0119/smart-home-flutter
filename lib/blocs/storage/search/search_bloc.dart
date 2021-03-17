@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
 
@@ -11,7 +10,7 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
   final StorageRepository storageRepository;
 
   StorageSearchBloc({
-    @required this.storageRepository,
+    required this.storageRepository,
   }) : super(StorageSearchInitial());
 
   @override
@@ -30,7 +29,7 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
           term: event.key,
         );
       } catch (e) {
-        yield StorageSearchFailure(e.message);
+        yield StorageSearchFailure(e.toString());
       }
     }
   }

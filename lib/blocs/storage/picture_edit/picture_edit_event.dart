@@ -4,30 +4,30 @@ abstract class PictureEditEvent extends Equatable {
   const PictureEditEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class PictureAdded extends PictureEditEvent {
-  final String itemId;
-  final String description;
-  final String picturePath;
+  final String? itemId;
+  final String? description;
+  final String? picturePath;
   final double boxX;
   final double boxY;
   final double boxH;
   final double boxW;
 
   const PictureAdded({
-    @required this.itemId,
-    @required this.picturePath,
-    @required this.boxX,
-    @required this.boxY,
-    @required this.boxH,
-    @required this.boxW,
+    required this.itemId,
+    required this.picturePath,
+    required this.boxX,
+    required this.boxY,
+    required this.boxH,
+    required this.boxW,
     this.description,
   });
 
   @override
-  List<Object> get props => [itemId, description, boxX, boxY, boxH, boxW];
+  List<Object?> get props => [itemId, description, boxX, boxY, boxH, boxW];
 
   @override
   String toString() => 'PictureAdded { description: $description }';
@@ -36,7 +36,7 @@ class PictureAdded extends PictureEditEvent {
 class PictureDeleted extends PictureEditEvent {
   final Picture picture;
 
-  const PictureDeleted({@required this.picture});
+  const PictureDeleted({required this.picture});
 
   @override
   List<Object> get props => [picture];
@@ -47,15 +47,15 @@ class PictureDeleted extends PictureEditEvent {
 
 class PictureUpdated extends PictureEditEvent {
   final String id;
-  final String description;
-  final String picturePath;
-  final double boxX;
-  final double boxY;
-  final double boxH;
-  final double boxW;
+  final String? description;
+  final String? picturePath;
+  final double? boxX;
+  final double? boxY;
+  final double? boxH;
+  final double? boxW;
 
   const PictureUpdated({
-    @required this.id,
+    required this.id,
     this.description,
     this.picturePath,
     this.boxX,
@@ -65,7 +65,7 @@ class PictureUpdated extends PictureEditEvent {
   });
 
   @override
-  List<Object> get props => [id, description, boxX, boxY, boxH, boxW];
+  List<Object?> get props => [id, description, boxX, boxY, boxH, boxW];
 
   @override
   String toString() => 'PictureUpdated { id: $id }';

@@ -4,7 +4,7 @@ import 'package:smarthome/blocs/core/blocs.dart';
 import 'package:smarthome/pages/settings/widgets/text_edit_page.dart';
 
 class ApiUrlPage extends StatelessWidget {
-  const ApiUrlPage({Key key}) : super(key: key);
+  const ApiUrlPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

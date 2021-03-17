@@ -4,22 +4,22 @@ abstract class StorageEditEvent extends Equatable {
   const StorageEditEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class StorageAdded extends StorageEditEvent {
   final String name;
-  final String parentId;
-  final String description;
+  final String? parentId;
+  final String? description;
 
   const StorageAdded({
-    @required this.name,
+    required this.name,
     this.parentId,
     this.description,
   });
 
   @override
-  List<Object> get props => [name, parentId, description];
+  List<Object?> get props => [name, parentId, description];
 
   @override
   String toString() => 'StorageAdded { name: $name }';
@@ -28,7 +28,7 @@ class StorageAdded extends StorageEditEvent {
 class StorageDeleted extends StorageEditEvent {
   final Storage storage;
 
-  const StorageDeleted({@required this.storage});
+  const StorageDeleted({required this.storage});
 
   @override
   List<Object> get props => [storage];
@@ -39,13 +39,13 @@ class StorageDeleted extends StorageEditEvent {
 
 class StorageUpdated extends StorageEditEvent {
   final String id;
-  final String name;
-  final String parentId;
-  final String oldParentId;
-  final String description;
+  final String? name;
+  final String? parentId;
+  final String? oldParentId;
+  final String? description;
 
   const StorageUpdated({
-    @required this.id,
+    required this.id,
     this.name,
     this.parentId,
     this.oldParentId,
@@ -53,7 +53,7 @@ class StorageUpdated extends StorageEditEvent {
   });
 
   @override
-  List<Object> get props => [id, name, parentId, oldParentId, description];
+  List<Object?> get props => [id, name, parentId, oldParentId, description];
 
   @override
   String toString() => 'StorageUpdated { id: $id }';

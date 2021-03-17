@@ -4,23 +4,23 @@ import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/gravatar.dart';
 
 class ItemTitle extends StatelessWidget {
-  final User user;
-  final DateTime editedAt;
-  final Function(Menu) onSelected;
+  final User? user;
+  final DateTime? editedAt;
+  final Function(Menu)? onSelected;
 
   const ItemTitle({
-    Key key,
-    @required this.user,
-    @required this.editedAt,
+    Key? key,
+    required this.user,
+    required this.editedAt,
     this.onSelected,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleGravatar(email: user.email),
-      title: Text(user.username),
-      subtitle: Text(editedAt.toLocalStr()),
+      leading: CircleGravatar(email: user!.email),
+      title: Text(user!.username),
+      subtitle: Text(editedAt!.toLocalStr()),
       trailing: (onSelected != null)
           ? PopupMenuButton(
               onSelected: onSelected,

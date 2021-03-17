@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/repositories.dart';
 
@@ -11,14 +10,14 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
   final BoardRepository boardRepository;
 
   BoardHomeBloc({
-    @required this.boardRepository,
+    required this.boardRepository,
   }) : super(BoardHomeInProgress());
 
   @override
   Stream<BoardHomeState> mapEventToState(
     BoardHomeEvent event,
   ) async* {
-    final currentState = state;
+    final BoardHomeState currentState = state;
     if (event is BoardHomeFetched) {
       try {
         // 如果需要刷新，则显示加载界面
@@ -50,7 +49,7 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
           );
         }
       } catch (e) {
-        yield BoardHomeFailure(e.message);
+        yield BoardHomeFailure(e.toString());
       }
     }
   }

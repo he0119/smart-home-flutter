@@ -10,19 +10,19 @@ class TopicItem extends StatelessWidget {
   final bool showBody;
 
   const TopicItem({
-    Key key,
-    @required this.topic,
+    Key? key,
+    required this.topic,
     this.showBody = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // 获取最近互动时间
-    DateTime activeAt = topic.editedAt;
+    DateTime? activeAt = topic.editedAt;
     if (topic.comments != null &&
-        topic.comments.isNotEmpty &&
-        activeAt.isBefore(topic.comments.last.createdAt)) {
-      activeAt = topic.comments.last.createdAt;
+        topic.comments!.isNotEmpty &&
+        activeAt!.isBefore(topic.comments!.last.createdAt!)) {
+      activeAt = topic.comments!.last.createdAt;
     }
     if (showBody) {
       return Container(
@@ -57,8 +57,8 @@ class TopicItem extends StatelessWidget {
     } else {
       // 依据话题添加标志
       String title = topic.title;
-      if (!topic.isOpen) title = '🔒' + title;
-      if (topic.isPin) title = '🔝' + title;
+      if (!topic.isOpen!) title = '🔒' + title;
+      if (topic.isPin!) title = '🔝' + title;
       return InkWell(
         child: Container(
           child: Column(

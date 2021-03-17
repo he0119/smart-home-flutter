@@ -9,9 +9,9 @@ part of 'relay.dart';
 PageInfo _$PageInfoFromJson(Map<String, dynamic> json) {
   return PageInfo(
     hasNextPage: json['hasNextPage'] as bool,
-    hasPreviousPage: json['hasPreviousPage'] as bool,
-    startCursor: json['startCursor'] as String,
-    endCursor: json['endCursor'] as String,
+    hasPreviousPage: json['hasPreviousPage'] as bool?,
+    startCursor: json['startCursor'] as String?,
+    endCursor: json['endCursor'] as String?,
   );
 }
 

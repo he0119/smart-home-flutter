@@ -11,7 +11,7 @@ part 'update_state.dart';
 class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
   VersionRepository versionRepository;
 
-  UpdateBloc({@required this.versionRepository}) : super(UpdateInitial());
+  UpdateBloc({required this.versionRepository}) : super(UpdateInitial());
 
   @override
   Stream<UpdateState> mapEventToState(UpdateEvent event) async* {
@@ -28,7 +28,7 @@ class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
           yield UpdateSuccess(needUpdate: needUpdate);
         }
       } catch (e) {
-        yield UpdateFailure(e.message);
+        yield UpdateFailure(e.toString());
       }
     }
   }

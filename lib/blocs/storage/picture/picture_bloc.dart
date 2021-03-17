@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
 
@@ -13,7 +12,7 @@ class PictureBloc extends Bloc<PictureEvent, PictureState> {
   final StorageRepository storageRepository;
 
   PictureBloc({
-    @required this.storageRepository,
+    required this.storageRepository,
   }) : super(PictureInProgress());
 
   @override
@@ -35,23 +34,25 @@ class PictureBloc extends Bloc<PictureEvent, PictureState> {
         yield PictureSuccess(picture: picture);
       } catch (e) {
         yield PictureFailure(
-          e.message,
+          e.toString(),
           id: event.id,
         );
       }
     }
-    final currentState = state;
+    final PictureState currentState = state;
     if (event is PictureRefreshed && currentState is PictureSuccess) {
       yield PictureInProgress();
       try {
-        Picture picture = await storageRepository.picture(
+        final picture = await storageRepository.picture(
           id: currentState.picture.id,
           cache: false,
         );
-        yield PictureSuccess(picture: picture);
+        if (picture != null) {
+          yield PictureSuccess(picture: picture);
+        }
       } catch (e) {
         yield PictureFailure(
-          e.message,
+          e.toString(),
           id: currentState.picture.id,
         );
       }

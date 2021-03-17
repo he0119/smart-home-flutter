@@ -18,7 +18,7 @@ class AuthenticationException implements Exception {
 
 class GraphQLApiClient {
   static final Logger _log = Logger('GraphQLApiClient');
-  static GraphQLClient _client;
+  static GraphQLClient? _client;
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   // ignore: close_sinks
@@ -26,13 +26,13 @@ class GraphQLApiClient {
 
   GraphQLApiClient();
 
-  GraphQLClient get client => _client;
+  GraphQLClient? get client => _client;
 
   /// 是否登录
   /// 通过判断是否拥有刷新令牌
   Future<bool> get isLogin async {
     final SharedPreferences prefs = await _prefs;
-    String token = prefs.getString('refreshToken');
+    String? token = prefs.getString('refreshToken');
     if (token == null || token == '') {
       return false;
     } else {
@@ -42,7 +42,7 @@ class GraphQLApiClient {
 
   Stream<bool> get loginStatus => _loginStatusControler.stream;
 
-  Future<String> get token async {
+  Future<String?> get token async {
     final SharedPreferences prefs = await _prefs;
     return prefs.getString('token');
   }
@@ -58,15 +58,15 @@ class GraphQLApiClient {
         }
       },
     );
-    QueryResult results = await _client.mutate(loginOptions);
+    QueryResult results = await _client!.mutate(loginOptions);
     if (results.hasException) {
-      if (results.exception.linkException != null) {
+      if (results.exception!.linkException != null) {
         throw Exception('网络异常，请稍后再试');
       }
       return false;
     } else {
-      String token = results.data['tokenAuth']['token'];
-      String refreshToken = results.data['tokenAuth']['refreshToken'];
+      String token = results.data!['tokenAuth']['token'];
+      String refreshToken = results.data!['tokenAuth']['refreshToken'];
       await _setToken(token);
       await _setRefreshToken(refreshToken);
       return true;
@@ -96,7 +96,7 @@ class GraphQLApiClient {
         ErrorLink(onGraphQLError: _handleTokenError);
     final Link _link = _tokenErrorLink.split((request) {
       for (var definition in request.operation.document.definitions) {
-        final String operationName = definition.span.text;
+        final String operationName = definition.span!.text;
         if (operationName == 'tokenAuth' || operationName == 'refreshToken') {
           return false;
         }
@@ -127,18 +127,18 @@ class GraphQLApiClient {
 
   /// 更改
   Future<QueryResult> mutate(MutationOptions options) async {
-    final results = await _client.mutate(options);
+    final results = await _client!.mutate(options);
     if (results.hasException) {
-      _handleException(results.exception);
+      _handleException(results.exception!);
     }
     return results;
   }
 
   /// 查询
   Future<QueryResult> query(QueryOptions options) async {
-    final results = await _client.query(options);
+    final results = await _client!.query(options);
     if (results.hasException) {
-      _handleException(results.exception);
+      _handleException(results.exception!);
     }
     return results;
   }
@@ -162,7 +162,7 @@ class GraphQLApiClient {
   /// 处理令牌相关的问题
   Stream<Response> _handleTokenError(
       Request request, forward, Response response) async* {
-    String message = response.errors[0].message.toLowerCase();
+    String message = response.errors![0].message.toLowerCase();
     if ([
       'signature has expired',
       'error decoding signature',
@@ -187,7 +187,7 @@ class GraphQLApiClient {
   Future<List<GraphQLError>> _refreshToken() async {
     final SharedPreferences prefs = await _prefs;
     _log.fine('refreshing token');
-    String refreshToken = prefs.getString('refreshToken');
+    String? refreshToken = prefs.getString('refreshToken');
     MutationOptions options = MutationOptions(
       document: gql(refreshTokenMutation),
       variables: {
@@ -196,13 +196,13 @@ class GraphQLApiClient {
         }
       },
     );
-    QueryResult results = await _client.mutate(options);
+    QueryResult results = await _client!.mutate(options);
 
     // 如果刷新令牌出错，则返回错误
-    if (results.hasException && results.exception.graphqlErrors.isNotEmpty) {
-      return results.exception.graphqlErrors;
+    if (results.hasException && results.exception!.graphqlErrors.isNotEmpty) {
+      return results.exception!.graphqlErrors;
     } else {
-      String token = results.data['refreshToken']['token'];
+      String token = results.data!['refreshToken']['token'];
       await _setToken(token);
       _log.fine('token refreshed');
       return [];

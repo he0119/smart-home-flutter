@@ -6,14 +6,14 @@ import 'package:smarthome/widgets/drawer.dart';
 import 'package:smarthome/widgets/tab_selector.dart';
 
 class MyHomePage extends StatelessWidget {
-  final List<Widget> actions;
+  final List<Widget>? actions;
   final Widget body;
-  final Widget floatingActionButton;
+  final Widget? floatingActionButton;
   final AppTab activeTab;
 
   const MyHomePage({
-    @required this.activeTab,
-    @required this.body,
+    required this.activeTab,
+    required this.body,
     this.actions,
     this.floatingActionButton,
   });

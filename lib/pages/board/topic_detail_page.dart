@@ -18,7 +18,7 @@ import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 
 class TopicDetailPage extends Page {
-  final String topicId;
+  final String? topicId;
 
   TopicDetailPage({
     this.topicId,
@@ -36,11 +36,11 @@ class TopicDetailPage extends Page {
 }
 
 class TopicDetailScreen extends StatelessWidget {
-  final String topicId;
+  final String? topicId;
 
   const TopicDetailScreen({
-    Key key,
-    @required this.topicId,
+    Key? key,
+    required this.topicId,
   }) : super(key: key);
 
   @override
@@ -67,7 +67,7 @@ class TopicDetailScreen extends StatelessWidget {
 
 class _DetailScreen extends StatelessWidget {
   const _DetailScreen({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -88,7 +88,7 @@ class _DetailScreen extends StatelessWidget {
                       topicId: state.topicId, descending: descending),
                 );
               },
-              message: state.message,
+              message: state.toString(),
             ),
           );
         }
@@ -207,7 +207,7 @@ class _DetailScreen extends StatelessWidget {
     BuildContext context,
     TopicDetailSuccess state,
     bool descending,
-    User loginUser,
+    User? loginUser,
   ) {
     return AppBar(
       actions: <Widget>[
@@ -365,22 +365,22 @@ class _DetailScreen extends StatelessWidget {
             }
           },
           itemBuilder: (context) => [
-            if (!state.topic.isPin)
+            if (!state.topic.isPin!)
               PopupMenuItem(
                 value: TopicDetailMenu.pin,
                 child: Text('置顶'),
               ),
-            if (state.topic.isPin)
+            if (state.topic.isPin!)
               PopupMenuItem(
                 value: TopicDetailMenu.unpin,
                 child: Text('取消置顶'),
               ),
-            if (state.topic.isOpen)
+            if (state.topic.isOpen!)
               PopupMenuItem(
                 value: TopicDetailMenu.close,
                 child: Text('关闭'),
               ),
-            if (!state.topic.isOpen)
+            if (!state.topic.isOpen!)
               PopupMenuItem(
                 value: TopicDetailMenu.reopen,
                 child: Text('开启'),
@@ -404,9 +404,9 @@ class _DetailScreen extends StatelessWidget {
 
 class CommentOrder extends StatelessWidget {
   const CommentOrder({
-    Key key,
-    @required this.topicId,
-    @required this.descending,
+    Key? key,
+    required this.topicId,
+    required this.descending,
   }) : super(key: key);
 
   final String topicId;
@@ -428,7 +428,7 @@ class CommentOrder extends StatelessWidget {
             icon: Icon(
               descending ? Icons.arrow_downward : Icons.arrow_upward,
             ),
-            onSelected: (value) {
+            onSelected: (dynamic value) {
               BlocProvider.of<AppPreferencesBloc>(context)
                   .add(CommentDescendingChanged(descending: value));
               BlocProvider.of<TopicDetailBloc>(context)

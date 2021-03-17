@@ -7,11 +7,11 @@ part 'push.g.dart';
 
 @JsonSerializable()
 class MiPush {
-  final User user;
-  final String regId;
-  final String deviceId;
-  final String model;
-  final bool enable;
+  final User? user;
+  final String? regId;
+  final String? deviceId;
+  final String? model;
+  final bool? enable;
 
   MiPush({this.user, this.regId, this.enable, this.deviceId, this.model});
 
@@ -25,7 +25,7 @@ class MiPushKey {
   final String appId;
   final String appKey;
 
-  MiPushKey({this.appId, this.appKey});
+  MiPushKey({required this.appId, required this.appKey});
 
   factory MiPushKey.fromJson(Map<String, dynamic> json) =>
       _$MiPushKeyFromJson(json);

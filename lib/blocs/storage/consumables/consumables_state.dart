@@ -4,7 +4,7 @@ abstract class ConsumablesState extends Equatable {
   const ConsumablesState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ConsumablesInProgress extends ConsumablesState {
@@ -13,12 +13,12 @@ class ConsumablesInProgress extends ConsumablesState {
 }
 
 class ConsumablesFailure extends ConsumablesState {
-  final String message;
+  final String? message;
 
   const ConsumablesFailure(this.message);
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 
   @override
   String toString() => 'ConsumablesFailure(message: $message)';
@@ -26,17 +26,17 @@ class ConsumablesFailure extends ConsumablesState {
 
 class ConsumablesSuccess extends ConsumablesState {
   final List<Item> items;
-  final PageInfo pageInfo;
+  final PageInfo? pageInfo;
 
   const ConsumablesSuccess({
-    @required this.items,
+    required this.items,
     this.pageInfo,
   });
 
-  bool get hasReachedMax => !pageInfo.hasNextPage;
+  bool get hasReachedMax => !pageInfo!.hasNextPage;
 
   @override
-  List<Object> get props => [items, pageInfo];
+  List<Object?> get props => [items, pageInfo];
 
   @override
   String toString() =>

@@ -12,17 +12,17 @@ class Topic extends Equatable {
   final String id;
   final String title;
   final String description;
-  final bool isOpen;
-  final bool isPin;
-  final User user;
-  final DateTime createdAt;
-  final DateTime editedAt;
-  final List<Comment> comments;
+  final bool? isOpen;
+  final bool? isPin;
+  final User? user;
+  final DateTime? createdAt;
+  final DateTime? editedAt;
+  final List<Comment>? comments;
 
   Topic({
-    this.id,
-    this.title,
-    this.description,
+    required this.id,
+    required this.title,
+    required this.description,
     this.isOpen,
     this.isPin,
     this.user,
@@ -36,7 +36,7 @@ class Topic extends Equatable {
   Map<String, dynamic> toJson() => _$TopicToJson(this);
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       title,
@@ -57,19 +57,19 @@ class Topic extends Equatable {
 @JsonSerializable()
 class Comment extends Equatable {
   final String id;
-  final Topic topic;
-  final User user;
+  final Topic? topic;
+  final User? user;
   final String body;
-  final DateTime createdAt;
-  final DateTime editedAt;
-  final Comment parent;
-  final User replyTo;
+  final DateTime? createdAt;
+  final DateTime? editedAt;
+  final Comment? parent;
+  final User? replyTo;
 
   Comment({
-    this.id,
+    required this.id,
     this.topic,
     this.user,
-    this.body,
+    required this.body,
     this.createdAt,
     this.editedAt,
     this.parent,
@@ -82,7 +82,7 @@ class Comment extends Equatable {
   Map<String, dynamic> toJson() => _$CommentToJson(this);
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       topic,

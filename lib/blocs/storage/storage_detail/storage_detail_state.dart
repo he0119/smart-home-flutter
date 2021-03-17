@@ -4,7 +4,7 @@ abstract class StorageDetailState extends Equatable {
   const StorageDetailState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class StorageDetailInProgress extends StorageDetailState {
@@ -15,16 +15,16 @@ class StorageDetailInProgress extends StorageDetailState {
 class StorageDetailFailure extends StorageDetailState {
   final String message;
   final String name;
-  final String id;
+  final String? id;
 
   const StorageDetailFailure(
     this.message, {
-    @required this.name,
+    required this.name,
     this.id,
   });
 
   @override
-  List<Object> get props => [message, name, id];
+  List<Object?> get props => [message, name, id];
 
   @override
   String toString() => 'StorageDetailFailure(message: $message)';
@@ -32,25 +32,25 @@ class StorageDetailFailure extends StorageDetailState {
 
 class StorageDetailSuccess extends StorageDetailState {
   /// 家 这个页面所需数据
-  final List<Storage> storages;
+  final List<Storage>? storages;
 
   /// 其他位置页面所需数据
-  final Storage storage;
+  final Storage? storage;
   final PageInfo itemPageInfo;
   final PageInfo storagePageInfo;
 
   const StorageDetailSuccess({
     this.storages,
     this.storage,
-    this.itemPageInfo,
-    this.storagePageInfo,
+    required this.itemPageInfo,
+    required this.storagePageInfo,
   }) : assert(storages != null || storage != null);
 
   bool get hasReachedMax =>
       !itemPageInfo.hasNextPage && !storagePageInfo.hasNextPage;
 
   @override
-  List<Object> get props => [storages, storage, itemPageInfo, storagePageInfo];
+  List<Object?> get props => [storages, storage, itemPageInfo, storagePageInfo];
 
   @override
   String toString() {

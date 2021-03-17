@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/repositories.dart';
 
@@ -11,7 +10,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
   final StorageRepository storageRepository;
 
   PictureEditBloc({
-    @required this.storageRepository,
+    required this.storageRepository,
   }) : super(PictureEditInitial());
 
   @override
@@ -32,7 +31,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
         );
         yield PictureUpdateSuccess(picture: picture);
       } catch (e) {
-        yield PictureEditFailure(e.message);
+        yield PictureEditFailure(e.toString());
       }
     }
     if (event is PictureAdded) {
@@ -40,7 +39,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
       try {
         Picture picture = await storageRepository.addPicture(
           itemId: event.itemId,
-          picturePath: event.picturePath,
+          picturePath: event.picturePath!,
           description: event.description,
           boxX: event.boxX,
           boxY: event.boxY,
@@ -49,7 +48,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
         );
         yield PictureAddSuccess(picture: picture);
       } catch (e) {
-        yield PictureEditFailure(e.message);
+        yield PictureEditFailure(e.toString());
       }
     }
     if (event is PictureDeleted) {
@@ -58,7 +57,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
         await storageRepository.deletePicture(pictureId: event.picture.id);
         yield PictureDeleteSuccess(picture: event.picture);
       } catch (e) {
-        yield PictureEditFailure(e.message);
+        yield PictureEditFailure(e.toString());
       }
     }
   }

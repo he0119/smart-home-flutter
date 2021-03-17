@@ -4,7 +4,7 @@ abstract class DeviceDataEvent extends Equatable {
   const DeviceDataEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class DeviceDataStarted extends DeviceDataEvent {
@@ -17,12 +17,12 @@ class DeviceDataStarted extends DeviceDataEvent {
 }
 
 class DeviceDataStoped extends DeviceDataEvent {
-  final String message;
+  final String? message;
 
   const DeviceDataStoped(this.message);
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 }
 
 class DeviceDataupdated extends DeviceDataEvent {

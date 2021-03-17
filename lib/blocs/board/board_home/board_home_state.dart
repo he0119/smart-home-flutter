@@ -29,8 +29,8 @@ class BoardHomeSuccess extends BoardHomeState {
   final PageInfo pageInfo;
 
   const BoardHomeSuccess({
-    @required this.topics,
-    @required this.pageInfo,
+    required this.topics,
+    required this.pageInfo,
   });
 
   bool get hasReachedMax => !pageInfo.hasNextPage;

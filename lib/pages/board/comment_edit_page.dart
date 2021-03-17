@@ -9,11 +9,11 @@ import 'package:smarthome/utils/show_snack_bar.dart';
 
 class CommentEditPage extends StatefulWidget {
   final bool isEditing;
-  final Comment comment;
+  final Comment? comment;
 
   const CommentEditPage({
-    Key key,
-    @required this.isEditing,
+    Key? key,
+    required this.isEditing,
     this.comment,
   }) : super(key: key);
 
@@ -29,7 +29,7 @@ class _CommentEditPageState extends State<CommentEditPage> {
   void initState() {
     super.initState();
     if (widget.isEditing) {
-      _bodyController.text = widget.comment.body;
+      _bodyController.text = widget.comment!.body;
     }
   }
 
@@ -69,11 +69,11 @@ class _CommentEditPageState extends State<CommentEditPage> {
                 child: IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () {
-                    if (_formKey.currentState.validate()) {
+                    if (_formKey.currentState!.validate()) {
                       if (widget.isEditing) {
                         BlocProvider.of<CommentEditBloc>(context)
                             .add(CommentUpdated(
-                          id: widget.comment.id,
+                          id: widget.comment!.id,
                           body: _bodyController.text,
                         ));
                       }
@@ -108,16 +108,16 @@ class _CommentEditPageState extends State<CommentEditPage> {
 
 class _EditPage extends StatelessWidget {
   final bool isEditing;
-  final Comment comment;
-  final TextEditingController bodyController;
+  final Comment? comment;
+  final TextEditingController? bodyController;
   final GlobalKey<FormState> formKey;
 
   const _EditPage({
-    Key key,
-    @required this.isEditing,
+    Key? key,
+    required this.isEditing,
     this.comment,
     this.bodyController,
-    @required this.formKey,
+    required this.formKey,
   }) : super(key: key);
 
   @override
@@ -138,7 +138,7 @@ class _EditPage extends StatelessWidget {
                   hintStyle: TextStyle(fontSize: 18),
                 ),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return '请填写内容';
                   }
                   return null;
@@ -154,10 +154,10 @@ class _EditPage extends StatelessWidget {
 }
 
 class _PreviewPage extends StatefulWidget {
-  final TextEditingController bodyController;
+  final TextEditingController? bodyController;
 
   const _PreviewPage({
-    Key key,
+    Key? key,
     this.bodyController,
   }) : super(key: key);
 
@@ -169,12 +169,12 @@ class __PreviewPageState extends State<_PreviewPage> {
   @override
   void initState() {
     super.initState();
-    widget.bodyController.addListener(_onChanged);
+    widget.bodyController!.addListener(_onChanged);
   }
 
   @override
   void dispose() {
-    widget.bodyController.removeListener(_onChanged);
+    widget.bodyController!.removeListener(_onChanged);
     super.dispose();
   }
 
@@ -189,8 +189,9 @@ class __PreviewPageState extends State<_PreviewPage> {
     return SingleChildScrollView(
       child: CommentItem(
         comment: Comment(
+          id: '',
           user: loginUser,
-          body: widget.bodyController.text,
+          body: widget.bodyController!.text,
           createdAt: DateTime.now(),
           editedAt: DateTime.now(),
         ),

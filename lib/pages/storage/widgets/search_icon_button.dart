@@ -3,7 +3,7 @@ import 'package:smarthome/pages/storage/search_page.dart';
 import 'package:smarthome/routers/delegate.dart';
 
 class SearchIconButton extends StatelessWidget {
-  const SearchIconButton({Key key}) : super(key: key);
+  const SearchIconButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -30,7 +30,7 @@ class StorageHomePage extends Page {
 }
 
 class StorageHomeScreen extends StatelessWidget {
-  const StorageHomeScreen({Key key}) : super(key: key);
+  const StorageHomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class StorageHomeScreen extends StatelessWidget {
 }
 
 class _StorageHomeBody extends StatelessWidget {
-  const _StorageHomeBody({Key key}) : super(key: key);
+  const _StorageHomeBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class _StorageHomeBody extends StatelessWidget {
                 ),
               );
             },
-            message: state.message,
+            message: state.toString(),
           );
         }
         if (state is StorageHomeSuccess) {
@@ -133,11 +133,11 @@ class _StorageHomeBody extends StatelessWidget {
 
   SliverList _buildSliverList(
     BuildContext context,
-    List<Item> items,
+    List<Item>? items,
     ItemType listType,
     ItemType currentType,
   ) {
-    String headerText;
+    late String headerText;
     switch (listType) {
       case ItemType.expired:
         headerText = '过期物品';
@@ -186,8 +186,8 @@ class _StorageHomeBody extends StatelessWidget {
                 ),
               )
             : _buildItemListItem(
-                context, items[index - 1], listType, currentType),
-        childCount: items.length + 1,
+                context, items![index - 1], listType, currentType),
+        childCount: items!.length + 1,
       ),
     );
   }
@@ -198,17 +198,17 @@ class _StorageHomeBody extends StatelessWidget {
     ItemType type,
     ItemType currentType,
   ) {
-    String differenceText;
+    String? differenceText;
     switch (type) {
       case ItemType.expired:
       case ItemType.nearExpired:
-        differenceText = '（${item.expiredAt.differenceFromNowStr()}）';
+        differenceText = '（${item.expiredAt!.differenceFromNowStr()}）';
         break;
       case ItemType.recentlyCreated:
-        differenceText = '（${item.createdAt.differenceFromNowStr()}）';
+        differenceText = '（${item.createdAt!.differenceFromNowStr()}）';
         break;
       case ItemType.recentlyEdited:
-        differenceText = '（${item.editedAt.differenceFromNowStr()}）';
+        differenceText = '（${item.editedAt!.differenceFromNowStr()}）';
         break;
       case ItemType.all:
         break;

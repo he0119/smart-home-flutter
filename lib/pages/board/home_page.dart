@@ -30,7 +30,7 @@ class BoardHomePage extends Page {
 
 class BoardHomeScreen extends StatelessWidget {
   const BoardHomeScreen({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -64,7 +64,7 @@ class BoardHomeScreen extends StatelessWidget {
 
 class _BoardHomeBody extends StatelessWidget {
   const _BoardHomeBody({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -77,7 +77,7 @@ class _BoardHomeBody extends StatelessWidget {
               BlocProvider.of<BoardHomeBloc>(context)
                   .add(BoardHomeFetched(cache: false));
             },
-            message: state.message,
+            message: state.toString(),
           );
         }
         if (state is BoardHomeSuccess) {
@@ -90,7 +90,7 @@ class _BoardHomeBody extends StatelessWidget {
             child: InfiniteList(
               items: state.topics,
               hasReachedMax: state.hasReachedMax,
-              itemBuilder: (context, item) => TopicItem(topic: item),
+              itemBuilder: (context, dynamic item) => TopicItem(topic: item),
               onFetch: () {
                 BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeFetched());
               },

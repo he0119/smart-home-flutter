@@ -10,7 +10,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
     _log.fine('parseRouteInformation: ${routeInformation.location}');
-    return parseUrl(routeInformation.location);
+    return parseUrl(routeInformation.location!);
   }
 
   @override
@@ -50,6 +50,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           return const RouteInformation(location: '/settings/iot');
         case AppSettings.blog:
           return const RouteInformation(location: '/settings/blog');
+        default:
       }
     }
     return const RouteInformation(location: '/');

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:smarthome/models/board.dart';
 import 'package:smarthome/repositories/board_repository.dart';
 
@@ -12,7 +11,7 @@ part 'comment_edit_state.dart';
 class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
   final BoardRepository boardRepository;
 
-  CommentEditBloc({@required this.boardRepository}) : super(CommentInitial());
+  CommentEditBloc({required this.boardRepository}) : super(CommentInitial());
 
   @override
   Stream<CommentEditState> mapEventToState(
@@ -27,7 +26,7 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
         );
         yield CommentAddSuccess(comment: comment);
       } catch (e) {
-        yield CommentFailure(e.message);
+        yield CommentFailure(e.toString());
       }
     }
     if (event is CommentUpdated) {
@@ -39,7 +38,7 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
         );
         yield CommentUpdateSuccess(comment: comment);
       } catch (e) {
-        yield CommentFailure(e.message);
+        yield CommentFailure(e.toString());
       }
     }
     if (event is CommentDeleted) {
@@ -48,7 +47,7 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
         await boardRepository.deleteComment(commentId: event.comment.id);
         yield CommentDeleteSuccess(comment: event.comment);
       } catch (e) {
-        yield CommentFailure(e.message);
+        yield CommentFailure(e.toString());
       }
     }
   }

@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
@@ -11,14 +10,14 @@ part 'storage_home_state.dart';
 class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
   final StorageRepository storageRepository;
 
-  StorageHomeBloc({@required this.storageRepository})
+  StorageHomeBloc({required this.storageRepository})
       : super(StorageHomeInProgress());
 
   @override
   Stream<StorageHomeState> mapEventToState(
     StorageHomeEvent event,
   ) async* {
-    final currentState = state;
+    final StorageHomeState currentState = state;
     if (event is StorageHomeFetched) {
       // 如果需要刷新，则显示加载界面
       // 因为需要请求网络最好提示用户
@@ -42,7 +41,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
                 cache: false,
               );
               yield StorageHomeSuccess(
-                expiredItems: currentState.expiredItems + results.item1,
+                expiredItems: currentState.expiredItems! + results.item1,
                 pageInfo: currentState.pageInfo.copyWith(results.item2),
                 itemType: ItemType.expired,
               );
@@ -53,7 +52,8 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
                 cache: false,
               );
               yield StorageHomeSuccess(
-                nearExpiredItems: currentState.nearExpiredItems + results.item1,
+                nearExpiredItems:
+                    currentState.nearExpiredItems! + results.item1,
                 pageInfo: currentState.pageInfo.copyWith(results.item2),
                 itemType: ItemType.nearExpired,
               );
@@ -65,7 +65,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               );
               yield StorageHomeSuccess(
                 recentlyCreatedItems:
-                    currentState.recentlyCreatedItems + results.item1,
+                    currentState.recentlyCreatedItems! + results.item1,
                 pageInfo: currentState.pageInfo.copyWith(results.item2),
                 itemType: ItemType.recentlyCreated,
               );
@@ -77,7 +77,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               );
               yield StorageHomeSuccess(
                 recentlyEditedItems:
-                    currentState.recentlyEditedItems + results.item1,
+                    currentState.recentlyEditedItems! + results.item1,
                 pageInfo: currentState.pageInfo.copyWith(results.item2),
                 itemType: ItemType.recentlyEdited,
               );
@@ -139,7 +139,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
         }
       } catch (e) {
         yield StorageHomeFailure(
-          e.message,
+          e.toString(),
           itemType: event.itemType,
         );
       }

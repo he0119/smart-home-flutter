@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/repositories.dart';
 
@@ -11,7 +10,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
   final StorageRepository storageRepository;
 
   StorageEditBloc({
-    @required this.storageRepository,
+    required this.storageRepository,
   }) : super(StorageEditInitial());
 
   @override
@@ -29,7 +28,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         );
         yield StorageUpdateSuccess(storage: storage);
       } catch (e) {
-        yield StorageEditFailure(e.message);
+        yield StorageEditFailure(e.toString());
       }
     }
     if (event is StorageAdded) {
@@ -42,7 +41,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         );
         yield StorageAddSuccess(storage: storage);
       } catch (e) {
-        yield StorageEditFailure(e.message);
+        yield StorageEditFailure(e.toString());
       }
     }
     if (event is StorageDeleted) {
@@ -51,7 +50,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
         await storageRepository.deleteStorage(storageId: event.storage.id);
         yield StorageDeleteSuccess(storage: event.storage);
       } catch (e) {
-        yield StorageEditFailure(e.message);
+        yield StorageEditFailure(e.toString());
       }
     }
   }

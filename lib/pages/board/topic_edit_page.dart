@@ -8,11 +8,11 @@ import 'package:smarthome/pages/board/widgets/topic_item.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 
 class TopicEditPage extends StatefulWidget {
-  final bool isEditing;
-  final Topic topic;
+  final bool? isEditing;
+  final Topic? topic;
 
   const TopicEditPage({
-    Key key,
+    Key? key,
     this.isEditing,
     this.topic,
   }) : super(key: key);
@@ -29,9 +29,9 @@ class _TopicEditPageState extends State<TopicEditPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.isEditing) {
-      _titleController.text = widget.topic.title;
-      _descriptionController.text = widget.topic.description;
+    if (widget.isEditing!) {
+      _titleController.text = widget.topic!.title;
+      _descriptionController.text = widget.topic!.description;
     }
   }
 
@@ -49,7 +49,7 @@ class _TopicEditPageState extends State<TopicEditPage> {
       listener: (context, state) {
         if (state is TopicAddSuccess || state is TopicUpdateSuccess) {
           Navigator.of(context).pop();
-          if (widget.isEditing) {
+          if (widget.isEditing!) {
             showInfoSnackBar('话题编辑成功');
           } else {
             BlocProvider.of<BoardHomeBloc>(context)
@@ -65,18 +65,18 @@ class _TopicEditPageState extends State<TopicEditPage> {
         length: tabs.length,
         child: Scaffold(
           appBar: AppBar(
-            title: widget.isEditing ? Text('编辑话题') : Text('新话题'),
+            title: widget.isEditing! ? Text('编辑话题') : Text('新话题'),
             actions: [
               Tooltip(
                 message: '提交',
                 child: IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () {
-                    if (_formKey.currentState.validate()) {
-                      if (widget.isEditing) {
+                    if (_formKey.currentState!.validate()) {
+                      if (widget.isEditing!) {
                         BlocProvider.of<TopicEditBloc>(context)
                             .add(TopicUpdated(
-                          id: widget.topic.id,
+                          id: widget.topic!.id,
                           title: _titleController.text,
                           description: _descriptionController.text,
                         ));
@@ -118,19 +118,19 @@ class _TopicEditPageState extends State<TopicEditPage> {
 }
 
 class _EditPage extends StatelessWidget {
-  final bool isEditing;
-  final Topic topic;
+  final bool? isEditing;
+  final Topic? topic;
   final TextEditingController titleController;
   final TextEditingController descriptionController;
   final GlobalKey<FormState> formKey;
 
   const _EditPage({
-    Key key,
-    @required this.isEditing,
+    Key? key,
+    required this.isEditing,
     this.topic,
-    @required this.titleController,
-    @required this.descriptionController,
-    @required this.formKey,
+    required this.titleController,
+    required this.descriptionController,
+    required this.formKey,
   }) : super(key: key);
 
   @override
@@ -150,7 +150,7 @@ class _EditPage extends StatelessWidget {
                   hintStyle: TextStyle(fontSize: 18),
                 ),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return '请填写标题';
                   }
                   return null;
@@ -166,7 +166,7 @@ class _EditPage extends StatelessWidget {
                   hintStyle: TextStyle(fontSize: 18),
                 ),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return '请填写内容';
                   }
                   return null;
@@ -186,9 +186,9 @@ class _PreviewPage extends StatefulWidget {
   final TextEditingController descriptionController;
 
   const _PreviewPage({
-    Key key,
-    @required this.titleController,
-    @required this.descriptionController,
+    Key? key,
+    required this.titleController,
+    required this.descriptionController,
   }) : super(key: key);
 
   @override
@@ -221,6 +221,7 @@ class __PreviewPageState extends State<_PreviewPage> {
     return SingleChildScrollView(
       child: TopicItem(
         topic: Topic(
+          id: '',
           user: loginUser,
           title: widget.titleController.text,
           description: widget.descriptionController.text,

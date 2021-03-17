@@ -9,21 +9,21 @@ class Device {
   final String id;
   final String name;
   final String deviceType;
-  final String location;
-  final DateTime createdAt;
-  final DateTime editedAt;
+  final String? location;
+  final DateTime? createdAt;
+  final DateTime? editedAt;
   final bool isOnline;
-  final DateTime onlineAt;
-  final DateTime offlineAt;
+  final DateTime? onlineAt;
+  final DateTime? offlineAt;
 
   Device({
-    this.id,
-    this.name,
-    this.deviceType,
+    required this.id,
+    required this.name,
+    required this.deviceType,
     this.location,
     this.createdAt,
     this.editedAt,
-    this.isOnline,
+    required this.isOnline,
     this.onlineAt,
     this.offlineAt,
   });
@@ -35,20 +35,20 @@ class Device {
 
 @JsonSerializable()
 class AutowateringData {
-  final String id;
-  final Device device;
-  final DateTime time;
-  final double temperature;
-  final double humidity;
-  final int wifiSignal;
-  final bool valve1;
-  final bool valve2;
-  final bool valve3;
-  final bool pump;
-  final int valve1Delay;
-  final int valve2Delay;
-  final int valve3Delay;
-  final int pumpDelay;
+  final String? id;
+  final Device? device;
+  final DateTime? time;
+  final double? temperature;
+  final double? humidity;
+  final int? wifiSignal;
+  final bool? valve1;
+  final bool? valve2;
+  final bool? valve3;
+  final bool? pump;
+  final int? valve1Delay;
+  final int? valve2Delay;
+  final int? valve3Delay;
+  final int? pumpDelay;
 
   AutowateringData({
     this.id,

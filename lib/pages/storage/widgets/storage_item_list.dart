@@ -5,30 +5,29 @@ import 'package:smarthome/widgets/infinite_list.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
 class StorageItemList extends StatelessWidget {
-  final List<Item> items;
-  final List<Storage> storages;
+  final List<Item>? items;
+  final List<Storage>? storages;
   final String term;
   final bool isHighlight;
   final bool hasReachedMax;
-  final VoidCallback onFetch;
+  final VoidCallback? onFetch;
 
   const StorageItemList({
-    Key key,
+    Key? key,
     this.items,
     this.storages,
     this.term = '',
     this.isHighlight = false,
     this.hasReachedMax = true,
     this.onFetch,
-  })  : assert(hasReachedMax != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> merged = List.from(storages)..addAll(items);
+    List<dynamic> merged = List.from(storages!)..addAll(items!);
     return InfiniteList(
       items: merged,
-      itemBuilder: (context, item) {
+      itemBuilder: (context, dynamic item) {
         if (isHighlight) {
           return _HighlightStorageItemListItem(
             item: item,
@@ -52,9 +51,9 @@ class _HighlightStorageItemListItem extends StatelessWidget {
   final String term;
 
   const _HighlightStorageItemListItem({
-    Key key,
-    @required this.item,
-    @required this.term,
+    Key? key,
+    required this.item,
+    required this.term,
   }) : super(key: key);
 
   @override
@@ -114,8 +113,8 @@ class _StorageItemListItem extends StatelessWidget {
   final dynamic item;
 
   const _StorageItemListItem({
-    Key key,
-    @required this.item,
+    Key? key,
+    required this.item,
   }) : super(key: key);
 
   @override

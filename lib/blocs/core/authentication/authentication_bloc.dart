@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smarthome/blocs/core/app_preferences/app_preferences_bloc.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/graphql_api_client.dart';
@@ -18,7 +17,7 @@ class AuthenticationBloc
   final AppPreferencesBloc appPreferencesBloc;
 
   // 监控登录状态
-  StreamSubscription<bool> _loginSubscription;
+  StreamSubscription<bool>? _loginSubscription;
 
   @override
   Future<void> close() {
@@ -27,9 +26,9 @@ class AuthenticationBloc
   }
 
   AuthenticationBloc({
-    @required this.userRepository,
-    @required this.graphqlApiClient,
-    @required this.appPreferencesBloc,
+    required this.userRepository,
+    required this.graphqlApiClient,
+    required this.appPreferencesBloc,
   }) : super(AuthenticationInitial());
 
   @override
@@ -55,8 +54,9 @@ class AuthenticationBloc
     try {
       // 检查是否登录
       if (await graphqlApiClient.isLogin) {
-        if (appPreferencesBloc.state.loginUser != null) {
-          yield AuthenticationSuccess(appPreferencesBloc.state.loginUser);
+        final loginUser = appPreferencesBloc.state.loginUser;
+        if (loginUser != null) {
+          yield AuthenticationSuccess(loginUser);
         } else {
           User user = await userRepository.currentUser();
           appPreferencesBloc.add(LoginUserChanged(loginUser: user));
@@ -66,7 +66,7 @@ class AuthenticationBloc
         yield AuthenticationFailure('未登录，请登录账户');
       }
     } catch (e) {
-      yield AuthenticationError(e.message);
+      yield AuthenticationError(e.toString());
     }
   }
 
@@ -84,7 +84,7 @@ class AuthenticationBloc
         yield AuthenticationFailure('用户名或密码错误');
       }
     } catch (e) {
-      yield AuthenticationFailure(e.message);
+      yield AuthenticationFailure(e.toString());
     }
   }
 

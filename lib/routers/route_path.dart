@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:smarthome/models/models.dart';
 
 abstract class RoutePath {}
@@ -8,7 +7,7 @@ class HomeRoutePath extends RoutePath {
   /// 主页
   ///
   /// 空则为默认主页
-  final AppTab appTab;
+  final AppTab? appTab;
 
   HomeRoutePath({
     this.appTab,
@@ -22,10 +21,10 @@ class HomeRoutePath extends RoutePath {
 class StorageRoutePath extends RoutePath {
   /// 位置名称，空字符串则为 家(/storage/)
   final String storageName;
-  final String storageId;
+  final String? storageId;
 
   StorageRoutePath({
-    @required this.storageName,
+    required this.storageName,
     this.storageId,
   });
 
@@ -36,10 +35,10 @@ class StorageRoutePath extends RoutePath {
 /// 物品相关的信息
 class ItemRoutePath extends RoutePath {
   final String itemName;
-  final String itemId;
+  final String? itemId;
 
   ItemRoutePath({
-    @required this.itemName,
+    required this.itemName,
     this.itemId,
   });
 
@@ -50,7 +49,7 @@ class ItemRoutePath extends RoutePath {
 /// 留言板相关的信息
 class TopicRoutePath extends RoutePath {
   /// 物品 ID，空则为 家(/storage/home)
-  final String topicId;
+  final String? topicId;
 
   TopicRoutePath({
     this.topicId,
@@ -77,7 +76,7 @@ class SettingsRoutePath extends RoutePath {
   /// 主页
   ///
   /// 空则为默认主页
-  final AppSettings appSettings;
+  final AppSettings? appSettings;
 
   SettingsRoutePath({
     this.appSettings,

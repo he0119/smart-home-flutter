@@ -11,10 +11,10 @@ MiPush _$MiPushFromJson(Map<String, dynamic> json) {
     user: json['user'] == null
         ? null
         : User.fromJson(json['user'] as Map<String, dynamic>),
-    regId: json['regId'] as String,
-    enable: json['enable'] as bool,
-    deviceId: json['deviceId'] as String,
-    model: json['model'] as String,
+    regId: json['regId'] as String?,
+    enable: json['enable'] as bool?,
+    deviceId: json['deviceId'] as String?,
+    model: json['model'] as String?,
   );
 }
 

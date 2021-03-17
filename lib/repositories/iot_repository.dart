@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 
 import 'package:smarthome/graphql/mutations/iot/mutations.dart';
@@ -10,15 +9,15 @@ class IotRepository {
   final GraphQLApiClient graphqlApiClient;
 
   IotRepository({
-    @required this.graphqlApiClient,
+    required this.graphqlApiClient,
   });
 
   /// 设备数据
   ///
   /// 永远不缓存
   Future<List<AutowateringData>> autowateringData({
-    @required String deviceId,
-    int number,
+    required String deviceId,
+    int? number,
   }) async {
     QueryOptions _options = QueryOptions(
       document: gql(deviceDataQuery),
@@ -26,7 +25,7 @@ class IotRepository {
     );
     QueryResult results = await graphqlApiClient.query(_options);
 
-    final List<dynamic> deviceData = results.data['autowateringData']['edges'];
+    final List<dynamic> deviceData = results.data!['autowateringData']['edges'];
     final List<AutowateringData> listofAutowateringData = deviceData
         .map((dynamic e) => AutowateringData.fromJson(e['node']))
         .toList();
@@ -34,9 +33,9 @@ class IotRepository {
   }
 
   Future<Device> addDevice({
-    @required String name,
-    @required String deviceType,
-    String location,
+    required String name,
+    required String deviceType,
+    String? location,
   }) async {
     final MutationOptions options = MutationOptions(
       document: gql(addDeviceMutation),
@@ -49,17 +48,17 @@ class IotRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data['addDevice']['device'];
+    final Map<String, dynamic> json = result.data!['addDevice']['device'];
     final Device deviceObject = Device.fromJson(json);
     return deviceObject;
   }
 
   Future<Device> setDevice({
-    @required String id,
-    @required String key,
-    @required String value,
-    @required String valueType,
-    String location,
+    required String id,
+    required String key,
+    required String value,
+    required String valueType,
+    String? location,
   }) async {
     final MutationOptions options = MutationOptions(
       document: gql(setDeviceMutation),
@@ -73,12 +72,12 @@ class IotRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data['setDevice']['device'];
+    final Map<String, dynamic> json = result.data!['setDevice']['device'];
     final Device deviceObject = Device.fromJson(json);
     return deviceObject;
   }
 
-  Future<String> deleteDevice({@required String deviceId}) async {
+  Future<String?> deleteDevice({required String deviceId}) async {
     final MutationOptions options = MutationOptions(
       document: gql(deleteDeviceMutation),
       variables: {
@@ -86,14 +85,14 @@ class IotRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    return result.data['deleteDevice']['deviceId'];
+    return result.data!['deleteDevice']['deviceId'];
   }
 
   Future<Device> updateDevice({
-    @required String id,
-    String name,
-    String deviceType,
-    String location,
+    required String id,
+    String? name,
+    String? deviceType,
+    String? location,
   }) async {
     final MutationOptions options = MutationOptions(
       document: gql(updateDeviceMutation),
@@ -107,7 +106,7 @@ class IotRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data['updateDevice']['device'];
+    final Map<String, dynamic> json = result.data!['updateDevice']['device'];
     final Device deviceObject = Device.fromJson(json);
     return deviceObject;
   }

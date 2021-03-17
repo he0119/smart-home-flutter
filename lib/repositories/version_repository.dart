@@ -6,30 +6,30 @@ import 'package:version/version.dart';
 
 class VersionRepository {
   static final Logger _log = Logger('VersionRepository');
-  Version _currentVersion;
-  Version _onlineVersion;
-  String _deviceAbi;
+  Version? _currentVersion;
+  Version? _onlineVersion;
+  String? _deviceAbi;
   bool _fileExist = false;
 
   Future<Version> get currentVersion async {
     if (_currentVersion == null) {
       _currentVersion = await _getCurrentVersion();
     }
-    return _currentVersion;
+    return _currentVersion!;
   }
 
   Future<String> get deviceAbi async {
     if (_deviceAbi == null) {
       _deviceAbi = await _getDeviceAbi();
     }
-    return _deviceAbi;
+    return _deviceAbi!;
   }
 
   Future<Version> get onlineVersion async {
     if (_onlineVersion == null) {
       _onlineVersion = await _getOnlineVersion();
     }
-    return _onlineVersion;
+    return _onlineVersion!;
   }
 
   /// 是否需要更新
@@ -89,11 +89,11 @@ class VersionRepository {
     try {
       var response = await http.get(Uri(path: url));
       _fileExist = response.body.contains(await filename);
-      final Match match = _versionRegex.firstMatch(response.body);
+      final Match? match = _versionRegex.firstMatch(response.body);
       if (match == null) {
         throw Exception('检查更新失败，请重试');
       } else {
-        String versionName = match.group(1);
+        String? versionName = match.group(1);
         _log.fine('最新的版本号为 { $versionName }');
         return Version.parse(versionName);
       }

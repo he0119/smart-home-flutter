@@ -12,7 +12,7 @@ class PushInProgress extends PushState {}
 class PushSuccess extends PushState {
   final MiPush miPush;
 
-  PushSuccess({this.miPush});
+  PushSuccess({required this.miPush});
 
   @override
   List<Object> get props => [miPush];

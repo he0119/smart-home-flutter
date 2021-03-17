@@ -4,7 +4,7 @@ abstract class StorageHomeState extends Equatable {
   const StorageHomeState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class StorageHomeInProgress extends StorageHomeState {
@@ -13,16 +13,16 @@ class StorageHomeInProgress extends StorageHomeState {
 }
 
 class StorageHomeFailure extends StorageHomeState {
-  final String message;
+  final String? message;
   final ItemType itemType;
 
   const StorageHomeFailure(
     this.message, {
-    @required this.itemType,
+    required this.itemType,
   });
 
   @override
-  List<Object> get props => [message, itemType];
+  List<Object?> get props => [message, itemType];
 
   @override
   String toString() =>
@@ -31,34 +31,34 @@ class StorageHomeFailure extends StorageHomeState {
 
 class StorageHomeSuccess extends StorageHomeState {
   final ItemType itemType;
-  final List<Item> recentlyCreatedItems;
-  final List<Item> recentlyEditedItems;
-  final List<Item> expiredItems;
-  final List<Item> nearExpiredItems;
+  final List<Item>? recentlyCreatedItems;
+  final List<Item>? recentlyEditedItems;
+  final List<Item>? expiredItems;
+  final List<Item>? nearExpiredItems;
   final PageInfo pageInfo;
 
   const StorageHomeSuccess({
-    @required this.itemType,
+    required this.itemType,
     this.recentlyCreatedItems,
     this.recentlyEditedItems,
     this.expiredItems,
     this.nearExpiredItems,
-    @required this.pageInfo,
+    required this.pageInfo,
   });
 
   bool get hasReachedMax => !pageInfo.hasNextPage;
 
   int get itemCount {
     int count = 0;
-    if (recentlyCreatedItems != null) count += recentlyCreatedItems.length;
-    if (recentlyEditedItems != null) count += recentlyEditedItems.length;
-    if (expiredItems != null) count += expiredItems.length;
-    if (nearExpiredItems != null) count += nearExpiredItems.length;
+    if (recentlyCreatedItems != null) count += recentlyCreatedItems!.length;
+    if (recentlyEditedItems != null) count += recentlyEditedItems!.length;
+    if (expiredItems != null) count += expiredItems!.length;
+    if (nearExpiredItems != null) count += nearExpiredItems!.length;
     return count;
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         recentlyCreatedItems,
         recentlyEditedItems,
         expiredItems,

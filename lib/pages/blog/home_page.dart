@@ -31,7 +31,7 @@ class BlogHomePage extends Page {
 
 /// 利用 WebView 实现的博客页面
 class BlogHomeScreen extends StatefulWidget {
-  const BlogHomeScreen({Key key}) : super(key: key);
+  const BlogHomeScreen({Key? key}) : super(key: key);
 
   @override
   _BlogHomeScreenState createState() => _BlogHomeScreenState();
@@ -59,7 +59,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                     if (kIsWeb) {
                       await launchUrl(state.blogAdminUrl);
                     } else if (controller.hasData) {
-                      controller.data.loadUrl(state.blogAdminUrl);
+                      controller.data!.loadUrl(state.blogAdminUrl);
                     }
                   } else {
                     MyRouterDelegate.of(context).push(BlogSettingsPage());
@@ -81,8 +81,8 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
               ? WillPopScope(
                   onWillPop: () async {
                     if (controller.hasData &&
-                        await controller.data.canGoBack()) {
-                      controller.data.goBack();
+                        await controller.data!.canGoBack()) {
+                      controller.data!.goBack();
                       return false;
                     }
                     return true;
@@ -110,7 +110,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                   tooltip: '使用浏览器打开',
                   child: Icon(Icons.open_in_new),
                   onPressed: () async {
-                    await launchUrl(await controller.data.currentUrl());
+                    await launchUrl(await (controller.data!.currentUrl() as FutureOr<String>));
                   },
                 )
               : null,
@@ -121,7 +121,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
 }
 
 class SettingButton extends StatelessWidget {
-  const SettingButton({Key key}) : super(key: key);
+  const SettingButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

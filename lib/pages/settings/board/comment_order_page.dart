@@ -4,7 +4,7 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:smarthome/blocs/core/blocs.dart';
 
 class CommentOrderPage extends StatelessWidget {
-  const CommentOrderPage({Key key}) : super(key: key);
+  const CommentOrderPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

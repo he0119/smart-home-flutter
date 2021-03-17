@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class RoundedRaisedButton extends StatelessWidget {
-  final Widget child;
-  final Function onPressed;
+  final Widget? child;
+  final Function? onPressed;
 
   const RoundedRaisedButton({
-    Key key,
+    Key? key,
     this.child,
     this.onPressed,
   }) : super(key: key);
@@ -18,7 +18,7 @@ class RoundedRaisedButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(18.0),
         ),
       ),
-      onPressed: onPressed,
+      onPressed: onPressed as void Function()?,
       child: child,
     );
   }

@@ -4,11 +4,11 @@ import 'package:smarthome/blocs/core/blocs.dart';
 import 'package:smarthome/models/push.dart';
 
 class MiPushPage extends StatelessWidget {
-  const MiPushPage({Key key}) : super(key: key);
+  const MiPushPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    MiPush miPush;
+    late MiPush miPush;
     return BlocBuilder<PushBloc, PushState>(builder: (context, state) {
       if (state is PushInProgress) {
         miPush = MiPush(regId: '正在获取数据');
@@ -17,7 +17,7 @@ class MiPushPage extends StatelessWidget {
         miPush = state.miPush;
       }
       if (state is PushError) {
-        miPush = MiPush(regId: state.message);
+        miPush = MiPush(regId: state.toString());
       }
       return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => Scaffold(

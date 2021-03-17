@@ -32,7 +32,7 @@ class IotHomePage extends Page {
 }
 
 class IotHomeScreen extends StatelessWidget {
-  const IotHomeScreen({Key key}) : super(key: key);
+  const IotHomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -76,28 +76,28 @@ class IotHomeScreen extends StatelessWidget {
 }
 
 class _IotHomeBody extends StatelessWidget {
-  const _IotHomeBody({Key key}) : super(key: key);
+  const _IotHomeBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DeviceDataBloc, DeviceDataState>(
       builder: (context, state) {
         if (state is DeviceDataSuccess) {
-          Device device = state.autowateringData.device;
+          Device? device = state.autowateringData.device;
           AutowateringData data = state.autowateringData;
           return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
             builder: (context, state) => ListView(
               children: [
                 ListTile(
-                  title: Text(device.name),
-                  subtitle: Text(data.time.toLocalStr()),
+                  title: Text(device!.name),
+                  subtitle: Text(data.time!.toLocalStr()),
                   trailing: Text(device.isOnline ? '在线' : '离线'),
                 ),
                 ListTile(title: Text('温度：' + data.temperature.toString())),
                 ListTile(title: Text('湿度：' + data.humidity.toString())),
                 SwitchListTile(
                   title: Text('树木'),
-                  value: data.valve1,
+                  value: data.valve1!,
                   onChanged: (value) {
                     BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
                       deviceId: device.id,
@@ -110,7 +110,7 @@ class _IotHomeBody extends StatelessWidget {
                 ),
                 SwitchListTile(
                   title: Text('菜地'),
-                  value: data.valve2,
+                  value: data.valve2!,
                   onChanged: (value) {
                     BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
                       deviceId: device.id,
@@ -123,7 +123,7 @@ class _IotHomeBody extends StatelessWidget {
                 ),
                 SwitchListTile(
                   title: Text('后花园'),
-                  value: data.valve3,
+                  value: data.valve3!,
                   onChanged: (value) {
                     BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
                       deviceId: device.id,
@@ -136,7 +136,7 @@ class _IotHomeBody extends StatelessWidget {
                 ),
                 SwitchListTile(
                   title: Text('水泵'),
-                  value: data.pump,
+                  value: data.pump!,
                   onChanged: (value) {
                     BlocProvider.of<DeviceEditBloc>(context).add(DeviceSeted(
                       deviceId: device.id,
@@ -259,11 +259,12 @@ class _IotHomeBody extends StatelessWidget {
         if (state is DeviceDataFailure) {
           return ErrorMessageButton(
             onPressed: () {
-              final appPreference = context.read<AppPreferencesBloc>().state;
+              final AppPreferencesState appPreference =
+                  context.read<AppPreferencesBloc>().state;
               BlocProvider.of<DeviceDataBloc>(context)
                   .add(DeviceDataStarted(appPreference.refreshInterval));
             },
-            message: state.message,
+            message: state.toString(),
           );
         }
         return CenterLoadingIndicator();

@@ -50,7 +50,7 @@ class RecycleBinScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is RecycleBinFailure) {
             return ErrorMessageButton(
-              message: state.message,
+              message: state.toString(),
               onPressed: () {
                 BlocProvider.of<RecycleBinBloc>(context)
                     .add(RecycleBinFetched(cache: false));
@@ -101,7 +101,7 @@ Widget _buildItem(BuildContext context, Item item) {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         TextSpan(
-          text: '（${item.deletedAt.differenceFromNowStr()}删除）',
+          text: '（${item.deletedAt!.differenceFromNowStr()}删除）',
         ),
       ],
     ),

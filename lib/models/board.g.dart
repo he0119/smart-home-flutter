@@ -11,8 +11,8 @@ Topic _$TopicFromJson(Map<String, dynamic> json) {
     id: json['id'] as String,
     title: json['title'] as String,
     description: json['description'] as String,
-    isOpen: json['isOpen'] as bool,
-    isPin: json['isPin'] as bool,
+    isOpen: json['isOpen'] as bool?,
+    isPin: json['isPin'] as bool?,
     user: json['user'] == null
         ? null
         : User.fromJson(json['user'] as Map<String, dynamic>),
@@ -22,10 +22,9 @@ Topic _$TopicFromJson(Map<String, dynamic> json) {
     editedAt: json['editedAt'] == null
         ? null
         : DateTime.parse(json['editedAt'] as String),
-    comments: (json['comments'] as List)
-        ?.map((e) =>
-            e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    comments: (json['comments'] as List<dynamic>?)
+        ?.map((e) => Comment.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 

@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:tuple/tuple.dart';
 
 part 'storage_detail_event.dart';
 part 'storage_detail_state.dart';
@@ -11,14 +12,14 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
   final StorageRepository storageRepository;
 
   StorageDetailBloc({
-    @required this.storageRepository,
+    required this.storageRepository,
   }) : super(StorageDetailInProgress());
 
   @override
   Stream<StorageDetailState> mapEventToState(
     StorageDetailEvent event,
   ) async* {
-    final currentState = state;
+    final StorageDetailState currentState = state;
     if (event is StorageDetailFetched) {
       try {
         // 如果需要刷新，则显示加载界面
@@ -37,15 +38,16 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
               cache: false,
             );
             yield StorageDetailSuccess(
-              storages: currentState.storages + results.item1,
+              storages: currentState.storages! + results.item1,
               storagePageInfo:
                   currentState.storagePageInfo.copyWith(results.item2),
               itemPageInfo: PageInfo(hasNextPage: false),
             );
           } else {
-            final results = await storageRepository.storage(
-              name: currentState.storage.name,
-              id: currentState.storage.id,
+            final Tuple3<Storage, PageInfo, PageInfo>? results =
+                await storageRepository.storage(
+              name: currentState.storage!.name,
+              id: currentState.storage!.id,
               itemCursor: currentState.itemPageInfo.endCursor,
               storageCursor: currentState.storagePageInfo.endCursor,
               cache: false,
@@ -53,8 +55,8 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             yield StorageDetailSuccess(
               storage: currentState.storage.copyWith(
                 children:
-                    currentState.storage.children + results.item1.children,
-                items: currentState.storage.items + results.item1.items,
+                    currentState.storage.children + results.item1.children!,
+                items: currentState.storage.items + results.item1.items!,
               ),
               storagePageInfo:
                   currentState.storagePageInfo.copyWith(results.item2),
@@ -72,11 +74,11 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
               itemPageInfo: PageInfo(hasNextPage: false),
             );
           } else {
-            final results = await storageRepository.storage(
+            final results = await (storageRepository.storage(
               name: event.name,
               id: event.id,
               cache: event.cache,
-            );
+            ) as FutureOr<Tuple3<Storage, PageInfo, PageInfo>>);
             if (results == null) {
               yield StorageDetailFailure(
                 '获取位置失败，位置不存在',
@@ -93,7 +95,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
         }
       } catch (e) {
         yield StorageDetailFailure(
-          e.message,
+          e.toString(),
           name: event.name,
           id: event.id,
         );

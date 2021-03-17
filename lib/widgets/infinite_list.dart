@@ -9,24 +9,23 @@ import 'package:smarthome/widgets/bottom_loader.dart';
 /// 使用的 [ListView.separated], 分隔为 [Divider]
 class InfiniteList<T> extends StatefulWidget {
   final List<T> items;
-  final List<Widget> top;
-  final List<Widget> botton;
+  final List<Widget>? top;
+  final List<Widget>? botton;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final bool hasReachedMax;
-  final VoidCallback onFetch;
+  final VoidCallback? onFetch;
   final double threshold;
 
   const InfiniteList({
-    Key key,
-    @required this.items,
+    Key? key,
+    required this.items,
     this.top,
     this.botton,
-    @required this.itemBuilder,
+    required this.itemBuilder,
     this.hasReachedMax = true,
     this.onFetch,
     this.threshold = 200,
-  })  : assert(hasReachedMax != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _InfiniteListState createState() => _InfiniteListState<T>();
@@ -57,14 +56,14 @@ class _InfiniteListState<T> extends State<InfiniteList<T>> {
             : widget.items.length + topCount + bottonCount,
         itemBuilder: (context, index) {
           if (index < topCount) {
-            return widget.top[index];
+            return widget.top![index];
           }
           if (index >= topCount && index < widget.items.length + topCount) {
             return widget.itemBuilder(context, widget.items[index - topCount]);
           }
           if (index >= widget.items.length + topCount &&
               index < widget.items.length + topCount + bottonCount) {
-            return widget.botton[index - widget.items.length - topCount];
+            return widget.botton![index - widget.items.length - topCount];
           }
           return BottomLoader();
         },
@@ -91,7 +90,7 @@ class _InfiniteListState<T> extends State<InfiniteList<T>> {
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= widget.threshold &&
         !widget.hasReachedMax) {
-      if (widget.onFetch != null && canFetch) widget.onFetch();
+      if (widget.onFetch != null && canFetch) widget.onFetch!();
     }
   }
 }
@@ -99,18 +98,18 @@ class _InfiniteListState<T> extends State<InfiniteList<T>> {
 class SliverInfiniteList<T> extends StatefulWidget {
   final List<Widget> slivers;
   final bool hasReachedMax;
-  final VoidCallback onFetch;
+  final VoidCallback? onFetch;
   final double threshold;
   final int itemCount;
 
   const SliverInfiniteList({
-    Key key,
-    @required this.slivers,
+    Key? key,
+    required this.slivers,
     this.hasReachedMax = true,
     this.onFetch,
     this.threshold = 200,
-    @required this.itemCount,
-  })  : assert(hasReachedMax != null),
+    required this.itemCount,
+  })   :
         super(key: key);
 
   @override
@@ -163,7 +162,7 @@ class _SliverInfiniteListState<T> extends State<SliverInfiniteList<T>> {
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= widget.threshold &&
         !widget.hasReachedMax) {
-      if (widget.onFetch != null && canFetch) widget.onFetch();
+      if (widget.onFetch != null && canFetch) widget.onFetch!();
     }
   }
 }

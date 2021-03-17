@@ -7,7 +7,7 @@ import 'package:smarthome/pages/storage/home_page.dart';
 /// IOT, 存储管理, 博客, 留言板
 enum AppTab { iot, storage, blog, board }
 
-extension AppTabExtension on AppTab {
+extension AppTabExtension on AppTab? {
   /// 底部导航栏显示的名称
   String get name {
     switch (this) {

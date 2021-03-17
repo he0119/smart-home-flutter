@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarthome/models/app_tab.dart';
@@ -27,17 +26,17 @@ class AppPreferencesBloc
     if (event is AppStarted) {
       try {
         final SharedPreferences prefs = await _prefs;
-        String apiUrl = prefs.getString('apiUrl');
-        String miPushAppId = prefs.getString('miPushAppId');
-        String miPushAppKey = prefs.getString('miPushAppKey');
-        String miPushRegId = prefs.getString('miPushRegId');
-        int refreshInterval = prefs.getInt('refreshInterval');
-        String blogUrl = prefs.getString('blogUrl');
-        String blogAdminUrl = prefs.getString('blogAdminUrl');
-        AppTab defaultPage = EnumToString.fromString(
-            AppTab.values, prefs.getString('defaultPage'));
-        String loginUserJsonString = prefs.getString('loginUser');
-        User loginUser = loginUserJsonString != null
+        String? apiUrl = prefs.getString('apiUrl');
+        String? miPushAppId = prefs.getString('miPushAppId');
+        String? miPushAppKey = prefs.getString('miPushAppKey');
+        String? miPushRegId = prefs.getString('miPushRegId');
+        int? refreshInterval = prefs.getInt('refreshInterval');
+        String? blogUrl = prefs.getString('blogUrl');
+        String? blogAdminUrl = prefs.getString('blogAdminUrl');
+        AppTab? defaultPage = EnumToString.fromString(
+            AppTab.values, prefs.getString('defaultPage')!);
+        String? loginUserJsonString = prefs.getString('loginUser');
+        User? loginUser = loginUserJsonString != null
             ? User.fromJson(jsonDecode(loginUserJsonString))
             : null;
         bool commentDescending =

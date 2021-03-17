@@ -4,7 +4,7 @@ import 'package:smarthome/models/models.dart';
 
 part 'tab_event.dart';
 
-class TabBloc extends Bloc<TabEvent, AppTab> {
+class TabBloc extends Bloc<TabEvent, AppTab?> {
   TabBloc() : super(null);
 
   @override
