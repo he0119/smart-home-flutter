@@ -7,14 +7,14 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "17.0.0"
+    version: "18.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   archive:
     dependency: transitive
     description:
@@ -442,7 +442,7 @@ packages:
       name: graphql
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.0.0-nullsafety.1+readmefix"
+    version: "5.0.0-nullsafety.2"
   graphs:
     dependency: transitive
     description:
@@ -570,7 +570,7 @@ packages:
       name: mocktail
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
   nested:
     dependency: transitive
     description:
@@ -789,7 +789,7 @@ packages:
       name: shared_preferences
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.3"
+    version: "2.0.5"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -892,7 +892,7 @@ packages:
       name: sqflite
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0+2"
+    version: "2.0.0+3"
   sqflite_common:
     dependency: transitive
     description:
@@ -1055,7 +1055,7 @@ packages:
       name: version
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0-nullsafety"
+    version: "2.0.0"
   vm_service:
     dependency: transitive
     description:
@@ -1097,7 +1097,7 @@ packages:
       name: win32
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.4"
   xdg_directories:
     dependency: transitive
     description:
