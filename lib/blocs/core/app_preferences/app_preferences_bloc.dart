@@ -33,8 +33,12 @@ class AppPreferencesBloc
         int? refreshInterval = prefs.getInt('refreshInterval');
         String? blogUrl = prefs.getString('blogUrl');
         String? blogAdminUrl = prefs.getString('blogAdminUrl');
-        AppTab? defaultPage = EnumToString.fromString(
-            AppTab.values, prefs.getString('defaultPage')!);
+        String? defaultPageString = prefs.getString('defaultPage');
+        AppTab? defaultPage;
+        if (defaultPageString != null) {
+          defaultPage =
+              EnumToString.fromString(AppTab.values, defaultPageString);
+        }
         String? loginUserJsonString = prefs.getString('loginUser');
         User? loginUser = loginUserJsonString != null
             ? User.fromJson(jsonDecode(loginUserJsonString))
