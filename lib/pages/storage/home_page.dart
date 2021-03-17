@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 import 'package:smarthome/blocs/storage/blocs.dart';
 import 'package:smarthome/models/models.dart';
@@ -114,28 +113,25 @@ class _StorageHomeBody extends StatelessWidget {
   List<Widget> _buildSlivers(BuildContext context, StorageHomeSuccess state) {
     List<Widget> listofWidget = [];
     if (state.expiredItems?.isNotEmpty ?? false) {
-      listofWidget.add(_buildSliverStickyHeader(
+      listofWidget.add(_buildSliverList(
           context, state.expiredItems, ItemType.expired, state.itemType));
     }
     if (state.nearExpiredItems?.isNotEmpty ?? false) {
-      listofWidget.add(_buildSliverStickyHeader(context, state.nearExpiredItems,
+      listofWidget.add(_buildSliverList(context, state.nearExpiredItems,
           ItemType.nearExpired, state.itemType));
     }
     if (state.recentlyEditedItems?.isNotEmpty ?? false) {
-      listofWidget.add(_buildSliverStickyHeader(context,
-          state.recentlyEditedItems, ItemType.recentlyEdited, state.itemType));
+      listofWidget.add(_buildSliverList(context, state.recentlyEditedItems,
+          ItemType.recentlyEdited, state.itemType));
     }
     if (state.recentlyCreatedItems?.isNotEmpty ?? false) {
-      listofWidget.add(_buildSliverStickyHeader(
-          context,
-          state.recentlyCreatedItems,
-          ItemType.recentlyCreated,
-          state.itemType));
+      listofWidget.add(_buildSliverList(context, state.recentlyCreatedItems,
+          ItemType.recentlyCreated, state.itemType));
     }
     return listofWidget;
   }
 
-  SliverStickyHeader _buildSliverStickyHeader(
+  SliverList _buildSliverList(
     BuildContext context,
     List<Item> items,
     ItemType listType,
@@ -158,41 +154,40 @@ class _StorageHomeBody extends StatelessWidget {
       case ItemType.all:
         break;
     }
-    return SliverStickyHeader(
-      header: Container(
-        height: 60.0,
-        color: Theme.of(context).primaryColor,
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        alignment: Alignment.centerLeft,
-        child: Row(
-          children: <Widget>[
-            Text(
-              headerText,
-              style: DefaultTextStyle.of(context).style,
-            ),
-            Spacer(),
-            IconButton(
-              icon: Icon(currentType == ItemType.all
-                  ? Icons.expand_more
-                  : Icons.expand_less),
-              onPressed: () {
-                BlocProvider.of<StorageHomeBloc>(context).add(
-                  StorageHomeFetched(
-                      itemType: currentType != ItemType.all
-                          ? ItemType.all
-                          : listType),
-                );
-              },
-            )
-          ],
-        ),
-      ),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) =>
-              _buildItemListItem(context, items[index], listType, currentType),
-          childCount: items.length,
-        ),
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) => index == 0
+            ? Container(
+                height: 60.0,
+                color: Theme.of(context).primaryColor,
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      headerText,
+                      style: DefaultTextStyle.of(context).style,
+                    ),
+                    Spacer(),
+                    IconButton(
+                      icon: Icon(currentType == ItemType.all
+                          ? Icons.expand_more
+                          : Icons.expand_less),
+                      onPressed: () {
+                        BlocProvider.of<StorageHomeBloc>(context).add(
+                          StorageHomeFetched(
+                              itemType: currentType != ItemType.all
+                                  ? ItemType.all
+                                  : listType),
+                        );
+                      },
+                    )
+                  ],
+                ),
+              )
+            : _buildItemListItem(
+                context, items[index - 1], listType, currentType),
+        childCount: items.length + 1,
       ),
     );
   }

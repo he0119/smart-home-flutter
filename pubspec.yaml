@@ -46,7 +46,6 @@ dependencies:
     git:
       url: https://github.com/he0119/substring_highlight.git
       ref: nullsafety
-  flutter_sticky_header: ^0.5.0
   flutter_markdown: ^0.6.0
   cached_network_image: ^3.0.0-nullsafety
   settings_ui:
