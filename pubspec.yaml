@@ -45,7 +45,6 @@ dependencies:
   webview_flutter: ^1.0.1
   datetime_picker_formfield: ^1.0.0
   substring_highlight: ^0.1.2
-  flutter_sticky_header: ^0.5.0
   flutter_markdown: ^0.5.0
   cached_network_image: ^2.4.1
   settings_ui:
