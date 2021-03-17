@@ -26,6 +26,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           return const RouteInformation(location: '/storage');
         case AppTab.board:
           return const RouteInformation(location: '/board');
+        default:
       }
     } else if (routePath is StorageRoutePath) {
       return RouteInformation(location: '/storage/${routePath.storageName}');

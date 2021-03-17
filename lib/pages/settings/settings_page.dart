@@ -81,7 +81,7 @@ class SettingsScreen extends StatelessWidget {
               tiles: [
                 SettingsTile(
                   title: '博客网址',
-                  subtitle: state.blogUrl ?? '请单击输入',
+                  subtitle: state.blogUrl,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => BlogUrlPage(),

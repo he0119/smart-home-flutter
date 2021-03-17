@@ -87,7 +87,7 @@ class VersionRepository {
     final String url =
         'https://hub.fastgit.org/he0119/smart-home-flutter/releases/latest';
     try {
-      var response = await http.get(Uri(path: url));
+      var response = await http.get(Uri.parse(url));
       _fileExist = response.body.contains(await filename);
       final Match? match = _versionRegex.firstMatch(response.body);
       if (match == null) {

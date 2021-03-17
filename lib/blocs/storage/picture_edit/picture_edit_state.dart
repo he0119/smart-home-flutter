@@ -12,7 +12,7 @@ class PictureEditInitial extends PictureEditState {}
 class PictureEditInProgress extends PictureEditState {}
 
 class PictureEditFailure extends PictureEditState {
-  final String? message;
+  final String message;
 
   const PictureEditFailure(this.message);
 

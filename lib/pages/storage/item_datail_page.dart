@@ -260,7 +260,7 @@ class _ItemDetailList extends StatelessWidget {
         if (item.price != null)
           ListTile(
             title: Text('价格'),
-            subtitle: SelectableText(item.price.toString() ?? ''),
+            subtitle: SelectableText(item.price.toString()),
           ),
         if (item.expiredAt != null)
           ListTile(

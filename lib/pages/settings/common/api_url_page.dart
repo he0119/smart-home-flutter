@@ -11,7 +11,7 @@ class ApiUrlPage extends StatelessWidget {
     return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
       builder: (context, state) => TextEditPage(
         title: '服务器网址',
-        initialValue: state.apiUrl,
+        initialValue: state.apiUrl ?? '请输入网址',
         onSubmit: (value) {
           BlocProvider.of<AppPreferencesBloc>(context).add(
             AppApiUrlChanged(apiUrl: value),

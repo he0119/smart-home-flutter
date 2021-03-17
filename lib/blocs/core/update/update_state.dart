@@ -9,7 +9,7 @@ class UpdateInitial extends UpdateState {
 }
 
 class UpdateFailure extends UpdateState {
-  final String? message;
+  final String message;
 
   UpdateFailure(this.message);
 

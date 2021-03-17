@@ -157,7 +157,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
                       return storages;
                     },
                     onChanged: (Storage data) {
-                      parentId = data?.id;
+                      parentId = data.id;
                     },
                     selectedItem: widget.isEditing
                         ? widget.storage!.parent

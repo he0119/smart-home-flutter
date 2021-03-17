@@ -74,7 +74,7 @@ class _TextEditPageState extends State<TextEditPage> {
                 autofocus: true,
                 validator: (value) {
                   if (widget.validator != null) {
-                    return widget.validator!(value);
+                    return widget.validator!(value ?? '');
                   }
                   return null;
                 },

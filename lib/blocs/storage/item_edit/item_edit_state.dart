@@ -12,7 +12,7 @@ class ItemEditInitial extends ItemEditState {}
 class ItemEditInProgress extends ItemEditState {}
 
 class ItemEditFailure extends ItemEditState {
-  final String? message;
+  final String message;
 
   const ItemEditFailure(this.message);
 

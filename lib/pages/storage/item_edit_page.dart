@@ -37,14 +37,14 @@ class ItemEditPage extends StatefulWidget {
 class _ItemEditPageState extends State<ItemEditPage> {
   String? storageId;
   DateTime? expiredAt;
-  TextEditingController? _nameController;
-  TextEditingController? _numberController;
-  TextEditingController? _descriptionController;
-  TextEditingController? _priceController;
-  FocusNode? _nameFocusNode;
-  FocusNode? _numberFocusNode;
-  FocusNode? _descriptionFocusNode;
-  FocusNode? _priceFocusNode;
+  late TextEditingController _nameController;
+  late TextEditingController _numberController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _priceController;
+  late FocusNode _nameFocusNode;
+  late FocusNode _numberFocusNode;
+  late FocusNode _descriptionFocusNode;
+  late FocusNode _priceFocusNode;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -101,7 +101,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       focusNode: _nameFocusNode,
                       onFieldSubmitted: (_) {
                         _fieldFocusChange(
-                            context, _nameFocusNode!, _numberFocusNode);
+                            context, _nameFocusNode, _numberFocusNode);
                       },
                     ),
                     TextFormField(
@@ -122,7 +122,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       focusNode: _numberFocusNode,
                       onFieldSubmitted: (_) {
                         _fieldFocusChange(
-                            context, _numberFocusNode!, _descriptionFocusNode);
+                            context, _numberFocusNode, _descriptionFocusNode);
                       },
                     ),
                     MyDropdownSearch<Storage>(
@@ -159,7 +159,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       focusNode: _descriptionFocusNode,
                       onFieldSubmitted: (_) {
                         _fieldFocusChange(
-                            context, _descriptionFocusNode!, _priceFocusNode);
+                            context, _descriptionFocusNode, _priceFocusNode);
                       },
                     ),
                     TextFormField(
@@ -239,10 +239,14 @@ class _ItemEditPageState extends State<ItemEditPage> {
 
   @override
   void dispose() {
-    _nameFocusNode!.dispose();
-    _numberFocusNode!.dispose();
-    _descriptionFocusNode!.dispose();
-    _priceFocusNode!.dispose();
+    _nameFocusNode.dispose();
+    _numberFocusNode.dispose();
+    _descriptionFocusNode.dispose();
+    _priceFocusNode.dispose();
+    _nameController.dispose();
+    _numberController.dispose();
+    _descriptionController.dispose();
+    _priceController.dispose();
 
     super.dispose();
   }
@@ -283,27 +287,27 @@ class _ItemEditPageState extends State<ItemEditPage> {
 
   void _onSubmitPressed() {
     double? _price;
-    if (_priceController!.text != null && _priceController!.text != '') {
-      _price = double.parse(_priceController!.text);
+    if (_priceController.text != '') {
+      _price = double.parse(_priceController.text);
     }
 
     if (widget.isEditing) {
       BlocProvider.of<ItemEditBloc>(context).add(ItemUpdated(
         id: widget.item!.id,
-        name: _nameController!.text,
-        number: int.parse(_numberController!.text),
+        name: _nameController.text,
+        number: int.parse(_numberController.text),
         storageId: storageId,
         oldStorageId: widget.item!.id,
-        description: _descriptionController!.text,
+        description: _descriptionController.text,
         price: _price,
         expiredAt: expiredAt?.toUtc(),
       ));
     } else {
       BlocProvider.of<ItemEditBloc>(context).add(ItemAdded(
-        name: _nameController!.text,
-        number: int.parse(_numberController!.text),
+        name: _nameController.text,
+        number: int.parse(_numberController.text),
         storageId: storageId,
-        description: _descriptionController!.text,
+        description: _descriptionController.text,
         price: _price,
         expiredAt: expiredAt?.toUtc(),
       ));

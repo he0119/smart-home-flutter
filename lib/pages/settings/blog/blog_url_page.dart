@@ -14,7 +14,8 @@ class BlogUrlPage extends StatelessWidget {
         initialValue: state.blogUrl,
         onSubmit: (value) {
           BlocProvider.of<AppPreferencesBloc>(context).add(
-            AppBlogUrlChanged(blogUrl: value, blogAdminUrl: state.blogAdminUrl),
+            AppBlogUrlChanged(
+                blogUrl: value, blogAdminUrl: state.blogAdminUrl ?? ''),
           );
         },
         description: '博客主页的网址',

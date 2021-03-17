@@ -55,11 +55,12 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
               child: IconButton(
                 icon: Icon(Icons.dvr),
                 onPressed: () async {
-                  if (state.blogAdminUrl != null) {
+                  final blogAdminUrl = state.blogAdminUrl;
+                  if (blogAdminUrl != null) {
                     if (kIsWeb) {
                       await launchUrl(state.blogAdminUrl);
                     } else if (controller.hasData) {
-                      controller.data!.loadUrl(state.blogAdminUrl);
+                      controller.data!.loadUrl(blogAdminUrl);
                     }
                   } else {
                     MyRouterDelegate.of(context).push(BlogSettingsPage());
@@ -87,30 +88,26 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                     }
                     return true;
                   },
-                  child: state.blogUrl != null
-                      ? WebView(
-                          initialUrl: state.blogUrl,
-                          javascriptMode: JavascriptMode.unrestricted,
-                          onWebViewCreated: (controller) {
-                            _controller.complete((controller));
-                          },
-                        )
-                      : SettingButton(),
-                )
-              : state.blogUrl != null
-                  ? Center(
-                      child: RoundedRaisedButton(
-                        onPressed: () => launchUrl(state.blogUrl),
-                        child: Text('博客'),
-                      ),
-                    )
-                  : SettingButton(),
+                  child: WebView(
+                    initialUrl: state.blogUrl,
+                    javascriptMode: JavascriptMode.unrestricted,
+                    onWebViewCreated: (controller) {
+                      _controller.complete((controller));
+                    },
+                  ))
+              : Center(
+                  child: RoundedRaisedButton(
+                    onPressed: () => launchUrl(state.blogUrl),
+                    child: Text('博客'),
+                  ),
+                ),
           floatingActionButton: controller.hasData
               ? FloatingActionButton(
                   tooltip: '使用浏览器打开',
                   child: Icon(Icons.open_in_new),
                   onPressed: () async {
-                    await launchUrl(await (controller.data!.currentUrl() as FutureOr<String>));
+                    await launchUrl(await (controller.data!.currentUrl()
+                        as FutureOr<String>));
                   },
                 )
               : null,

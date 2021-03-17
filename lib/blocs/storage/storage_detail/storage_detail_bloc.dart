@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
 import 'package:tuple/tuple.dart';
@@ -32,7 +31,8 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             !currentState.hasReachedMax) {
           // 如果不需要刷新，不是首次启动，或遇到错误，并且有下一页
           // 则获取下一页
-          if (currentState.storage == null) {
+          final storage = currentState.storage;
+          if (storage == null) {
             final results = await storageRepository.rootStorage(
               after: currentState.storagePageInfo.endCursor,
               cache: false,
@@ -46,17 +46,16 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           } else {
             final Tuple3<Storage, PageInfo, PageInfo>? results =
                 await storageRepository.storage(
-              name: currentState.storage!.name,
-              id: currentState.storage!.id,
+              name: storage.name,
+              id: storage.id,
               itemCursor: currentState.itemPageInfo.endCursor,
               storageCursor: currentState.storagePageInfo.endCursor,
               cache: false,
             );
             yield StorageDetailSuccess(
-              storage: currentState.storage.copyWith(
-                children:
-                    currentState.storage.children + results.item1.children!,
-                items: currentState.storage.items + results.item1.items!,
+              storage: storage.copyWith(
+                children: storage.children! + results!.item1.children!,
+                items: storage.items! + results.item1.items!,
               ),
               storagePageInfo:
                   currentState.storagePageInfo.copyWith(results.item2),
@@ -74,17 +73,18 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
               itemPageInfo: PageInfo(hasNextPage: false),
             );
           } else {
-            final results = await (storageRepository.storage(
+            final results = await storageRepository.storage(
               name: event.name,
               id: event.id,
               cache: event.cache,
-            ) as FutureOr<Tuple3<Storage, PageInfo, PageInfo>>);
+            );
             if (results == null) {
               yield StorageDetailFailure(
                 '获取位置失败，位置不存在',
                 name: event.name,
                 id: event.id,
               );
+              return;
             }
             yield StorageDetailSuccess(
               storage: results.item1,

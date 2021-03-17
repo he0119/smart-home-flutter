@@ -5,6 +5,8 @@ import 'package:smarthome/blocs/core/blocs.dart';
 import 'package:smarthome/pages/settings/common/mipush_page.dart';
 
 class MiPushSettingsTile extends SettingsTile {
+  MiPushSettingsTile() : super(title: '');
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PushBloc, PushState>(
