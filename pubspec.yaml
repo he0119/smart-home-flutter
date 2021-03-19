@@ -19,17 +19,17 @@ dependencies:
 
   # Dart
   logging: ^1.0.0
-  graphql: ^5.0.0-nullsafety.1+readmefix
+  graphql: ^5.0.0-nullsafety.3
   http: ^0.13.0
-  bloc: ^7.0.0-nullsafety.3
+  bloc: ^7.0.0
   equatable: ^2.0.0
   json_annotation: ^4.0.0
-  enum_to_string: ^2.0.0-nullsafety.1
+  enum_to_string: ^2.0.0
   version: ^2.0.0
   tuple: ^2.0.0-nullsafety.0
 
   # Flutter
-  flutter_bloc: ^7.0.0-nullsafety.3
+  flutter_bloc: ^7.0.0
   shared_preferences: ^2.0.5
   quick_actions: ^0.5.0
   device_info_plus: ^1.0.0
@@ -56,7 +56,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test: ^8.0.0-nullsafety.1
+  bloc_test: ^8.0.0
   build_runner: ^1.12.1
   json_serializable: ^4.0.0
   flutter_launcher_icons: ^0.9.0
