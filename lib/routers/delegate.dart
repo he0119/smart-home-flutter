@@ -22,6 +22,7 @@ import 'package:smarthome/pages/splash_page.dart';
 import 'package:smarthome/pages/storage/consumables_page.dart';
 import 'package:smarthome/pages/storage/home_page.dart';
 import 'package:smarthome/pages/storage/item_datail_page.dart';
+import 'package:smarthome/pages/storage/picture_page.dart';
 import 'package:smarthome/pages/storage/recycle_bin_page.dart';
 import 'package:smarthome/pages/storage/storage_datail_page.dart';
 import 'package:smarthome/repositories/repositories.dart';
@@ -205,6 +206,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         return SettingsRoutePath(appSettings: AppSettings.blog);
       } else if (pages.last is IotSettingsPage) {
         return SettingsRoutePath(appSettings: AppSettings.iot);
+      } else if (pages.last is PicturePage) {
+        return PictureRoutePath(pictureId: uri.pathSegments[1]);
       }
     }
     return HomeRoutePath();
@@ -215,14 +218,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     _log.fine('setNewRoutePath: $routePath');
     if (routePath is HomeRoutePath && routePath.appTab != null) {
       _pages = [routePath.appTab.page];
-    }
-    if (routePath is TopicRoutePath) {
+    } else if (routePath is TopicRoutePath) {
       _pages = [
         BoardHomePage(),
         TopicDetailPage(topicId: routePath.topicId),
       ];
-    }
-    if (routePath is ItemRoutePath) {
+    } else if (routePath is ItemRoutePath) {
       storageGroup = 0;
       itemCount = 1;
       _pages = [
@@ -233,8 +234,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           group: 1,
         ),
       ];
-    }
-    if (routePath is StorageRoutePath) {
+    } else if (routePath is StorageRoutePath) {
       storageGroup = 1;
       itemCount = 0;
       _pages = [
@@ -245,8 +245,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           group: 1,
         ),
       ];
-    }
-    if (routePath is AppRoutePath) {
+    } else if (routePath is AppRoutePath) {
       switch (routePath.appPage) {
         case AppPage.login:
           break;
@@ -263,8 +262,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           ];
           break;
       }
-    }
-    if (routePath is SettingsRoutePath) {
+    } else if (routePath is SettingsRoutePath) {
       switch (routePath.appSettings) {
         case AppSettings.home:
           _pages = [
@@ -285,6 +283,11 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           ];
           break;
       }
+    } else if (routePath is PictureRoutePath) {
+      _pages = [
+        StorageHomePage(),
+        PicturePage(pictureId: routePath.pictureId),
+      ];
     }
   }
 
