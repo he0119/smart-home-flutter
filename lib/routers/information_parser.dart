@@ -51,6 +51,8 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
         case AppSettings.blog:
           return const RouteInformation(location: '/settings/blog');
       }
+    } else if (routePath is PictureRoutePath) {
+      return RouteInformation(location: '/picture/${routePath.pictureId}');
     }
     return const RouteInformation(location: '/');
   }
@@ -91,6 +93,9 @@ RoutePath parseUrl(String location) {
           case 'blog':
             return SettingsRoutePath(appSettings: AppSettings.blog);
         }
+        break;
+      case 'picture':
+        return PictureRoutePath(pictureId: uri.pathSegments[1]);
     }
   }
   return HomeRoutePath(appTab: null);

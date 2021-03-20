@@ -47,6 +47,19 @@ class ItemRoutePath extends RoutePath {
   String toString() => 'ItemRoutePath(itemName: $itemName)';
 }
 
+/// 图片相关的信息
+class PictureRoutePath extends RoutePath {
+  /// 图片的 ID
+  final String pictureId;
+
+  PictureRoutePath({
+    @required this.pictureId,
+  });
+
+  @override
+  String toString() => 'PictureRoutePath(pictureId: $pictureId)';
+}
+
 /// 留言板相关的信息
 class TopicRoutePath extends RoutePath {
   /// 物品 ID，空则为 家(/storage/home)
