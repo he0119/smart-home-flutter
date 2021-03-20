@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:smarthome/blocs/storage/blocs.dart';
 import 'package:smarthome/models/popup_menu.dart';
 import 'package:smarthome/repositories/repositories.dart';
@@ -97,11 +98,13 @@ class PictureScreen extends StatelessWidget {
       );
     }
     if (state is PictureSuccess) {
-      return Center(
-        child: CachedNetworkImage(
-          placeholder: (context, url) => CircularProgressIndicator(),
-          imageUrl: state.picture.url,
+      return PhotoView(
+        loadingBuilder: (context, event) => CircularProgressIndicator(),
+        imageProvider: CachedNetworkImageProvider(
+          state.picture.url,
         ),
+        minScale: PhotoViewComputedScale.contained,
+        maxScale: PhotoViewComputedScale.covered * 5,
       );
     }
     return CenterLoadingIndicator();
