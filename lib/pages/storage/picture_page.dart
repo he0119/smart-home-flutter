@@ -98,13 +98,13 @@ class PictureScreen extends StatelessWidget {
       );
     }
     if (state is PictureSuccess) {
-      return Center(
-        child: PhotoView(
-          loadingBuilder: (context, event) => CircularProgressIndicator(),
-          imageProvider: CachedNetworkImageProvider(
-            state.picture.url,
-          ),
+      return PhotoView(
+        loadingBuilder: (context, event) => CircularProgressIndicator(),
+        imageProvider: CachedNetworkImageProvider(
+          state.picture.url,
         ),
+        minScale: PhotoViewComputedScale.contained,
+        maxScale: PhotoViewComputedScale.covered * 5,
       );
     }
     return CenterLoadingIndicator();
