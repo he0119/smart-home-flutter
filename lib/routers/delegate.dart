@@ -50,7 +50,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   bool isLogin = false;
 
   /// 默认主页
-  AppTab? defaultHomePage;
+  late AppTab defaultHomePage;
 
   List<Page> _pages = <Page>[];
 
@@ -213,16 +213,17 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   @override
   Future<void> setNewRoutePath(RoutePath? routePath) async {
     _log.fine('setNewRoutePath: $routePath');
-    if (routePath is HomeRoutePath && routePath.appTab != null) {
-      _pages = [routePath.appTab.page];
-    }
-    if (routePath is TopicRoutePath) {
+    if (routePath is HomeRoutePath) {
+      final appTab = routePath.appTab;
+      if (appTab != null) {
+        _pages = [appTab.page];
+      }
+    } else if (routePath is TopicRoutePath) {
       _pages = [
         BoardHomePage(),
         TopicDetailPage(topicId: routePath.topicId),
       ];
-    }
-    if (routePath is ItemRoutePath) {
+    } else if (routePath is ItemRoutePath) {
       storageGroup = 0;
       itemCount = 1;
       _pages = [
@@ -233,8 +234,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           group: 1,
         ),
       ];
-    }
-    if (routePath is StorageRoutePath) {
+    } else if (routePath is StorageRoutePath) {
       storageGroup = 1;
       itemCount = 0;
       _pages = [
@@ -245,8 +245,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           group: 1,
         ),
       ];
-    }
-    if (routePath is AppRoutePath) {
+    } else if (routePath is AppRoutePath) {
       switch (routePath.appPage) {
         case AppPage.login:
           break;
@@ -263,8 +262,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           ];
           break;
       }
-    }
-    if (routePath is SettingsRoutePath) {
+    } else if (routePath is SettingsRoutePath) {
       switch (routePath.appSettings) {
         case AppSettings.home:
           _pages = [
