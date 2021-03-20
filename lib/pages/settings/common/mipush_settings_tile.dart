@@ -21,7 +21,7 @@ class MiPushSettingsTile extends SettingsTile {
         return SettingsTile(
           title: '小米推送',
           subtitle: status,
-          onTap: () {
+          onPressed: (context) {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => MiPushPage(),

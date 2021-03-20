@@ -49,8 +49,7 @@ dependencies:
       ref: nullsafety
   flutter_markdown: ^0.6.0
   cached_network_image: ^3.0.0-nullsafety
-  settings_ui:
-    git: https://github.com/he0119/flutter-settings-ui.git
+  settings_ui: ^1.0.0-nullsafety.2
   dropdown_search:
     git: https://github.com/GaspardMerten/searchable_dropdown.git
 

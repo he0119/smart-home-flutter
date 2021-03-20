@@ -29,6 +29,8 @@ class BlogSettingsScreen extends StatelessWidget {
       ),
       body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => SettingsList(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          contentPadding: EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(
               title: '网址',
@@ -36,7 +38,7 @@ class BlogSettingsScreen extends StatelessWidget {
                 SettingsTile(
                   title: '博客网址',
                   subtitle: state.blogUrl,
-                  onTap: () {
+                  onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => BlogUrlPage(),
                     ));
@@ -45,7 +47,7 @@ class BlogSettingsScreen extends StatelessWidget {
                 SettingsTile(
                   title: '博客管理网址',
                   subtitle: state.blogAdminUrl ?? '请单击输入',
-                  onTap: () {
+                  onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => BlogAdminUrlPage(),
                     ));

@@ -28,6 +28,8 @@ class IotSettingsScreen extends StatelessWidget {
       ),
       body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => SettingsList(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          contentPadding: EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(
               title: '网络',
@@ -35,7 +37,7 @@ class IotSettingsScreen extends StatelessWidget {
                 SettingsTile(
                   title: '刷新间隔',
                   subtitle: state.refreshInterval.toString(),
-                  onTap: () {
+                  onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => RefreshIntervalPage(),
                     ));

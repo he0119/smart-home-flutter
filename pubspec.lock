@@ -784,12 +784,10 @@ packages:
   settings_ui:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: faa6e548d672421790e8058f3ad989c894240b99
-      url: "https://github.com/he0119/flutter-settings-ui.git"
-    source: git
-    version: "0.3.0"
+      name: settings_ui
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0-nullsafety.2"
   shared_preferences:
     dependency: "direct main"
     description:
