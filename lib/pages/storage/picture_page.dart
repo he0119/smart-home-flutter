@@ -99,7 +99,7 @@ class PictureScreen extends StatelessWidget {
     }
     if (state is PictureSuccess) {
       return PhotoView(
-        loadingBuilder: (context, event) => CircularProgressIndicator(),
+        loadingBuilder: (context, event) => CenterLoadingIndicator(),
         imageProvider: CachedNetworkImageProvider(
           state.picture.url,
         ),
