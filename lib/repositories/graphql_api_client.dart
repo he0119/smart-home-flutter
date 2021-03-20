@@ -8,6 +8,8 @@ import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarthome/graphql/mutations/mutations.dart';
+import 'package:gql_exec/gql_exec.dart';
+import 'package:gql/ast.dart';
 
 /// 认证出错
 class AuthenticationException implements Exception {
@@ -95,8 +97,11 @@ class GraphQLApiClient {
     final ErrorLink _tokenErrorLink =
         ErrorLink(onGraphQLError: _handleTokenError);
     final Link _link = _tokenErrorLink.split((request) {
-      for (var definition in request.operation.document.definitions) {
-        final String operationName = definition.span!.text;
+      final DefinitionNode definition =
+          request.operation.document.definitions.first;
+      if (definition.runtimeType == OperationDefinitionNode) {
+        String operationName = "";
+        operationName = (definition as OperationDefinitionNode).name!.value;
         if (operationName == 'tokenAuth' || operationName == 'refreshToken') {
           return false;
         }
