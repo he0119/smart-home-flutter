@@ -22,6 +22,7 @@ import 'package:smarthome/pages/splash_page.dart';
 import 'package:smarthome/pages/storage/consumables_page.dart';
 import 'package:smarthome/pages/storage/home_page.dart';
 import 'package:smarthome/pages/storage/item_datail_page.dart';
+import 'package:smarthome/pages/storage/picture_page.dart';
 import 'package:smarthome/pages/storage/recycle_bin_page.dart';
 import 'package:smarthome/pages/storage/storage_datail_page.dart';
 import 'package:smarthome/repositories/repositories.dart';
@@ -205,6 +206,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         return SettingsRoutePath(appSettings: AppSettings.blog);
       } else if (pages.last is IotSettingsPage) {
         return SettingsRoutePath(appSettings: AppSettings.iot);
+      } else if (pages.last is PicturePage) {
+        return PictureRoutePath(pictureId: uri.pathSegments[1]);
       }
     }
     return HomeRoutePath();
@@ -284,6 +287,11 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           break;
         default:
       }
+    } else if (routePath is PictureRoutePath) {
+      _pages = [
+        StorageHomePage(),
+        PicturePage(pictureId: routePath.pictureId),
+      ];
     }
   }
 
