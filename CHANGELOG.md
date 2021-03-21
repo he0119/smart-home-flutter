@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.7.3] - 2021-03-21
+
+### Added
+
+- feat(storage): 支持显示图片网址 @he0119 (#152)
+- feat(storage): 优化客户端的图片显示，支持放大缩小。 @he0119 (#151)
+
+### Changed
+
+- change: 重新创建项目，并修改了名称 @he0119 (#149)
+- improve(storage): 设置上传文件的 contentType，并直接传递图片地址 @he0119 (#147)
+
+### Fixed
+
+- fix: 修复通过 URL 访问物品详情页面出错的问题 @he0119 (#148)
+
 ## [0.7.2] - 2021-03-12
 
 ### Added
@@ -289,8 +305,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.7.2...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.7.3...HEAD
 
+[0.7.3]: https://github.com/he0119/smart-home-flutter/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/he0119/smart-home-flutter/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/he0119/smart-home-flutter/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/he0119/smart-home-flutter/compare/v0.6.1...v0.7.0
