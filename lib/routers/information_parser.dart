@@ -67,8 +67,8 @@ RoutePath parseUrl(String location) {
       return HomeRoutePath(appTab: AppTab.board);
     if (uri.pathSegments[0] == 'storage')
       return HomeRoutePath(appTab: AppTab.storage);
-    if (uri.pathSegments[0] == 'board')
-      return HomeRoutePath(appTab: AppTab.board);
+    if (uri.pathSegments[0] == 'blog')
+      return HomeRoutePath(appTab: AppTab.blog);
     if (uri.pathSegments[0] == 'consumables')
       return AppRoutePath(AppPage.consumables);
     if (uri.pathSegments[0] == 'login') return AppRoutePath(AppPage.login);
