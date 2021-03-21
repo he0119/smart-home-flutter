@@ -160,7 +160,7 @@ jobs:
     needs: web
     environment:
       name: dev
-      url: https://smart-test.hehome.xyz
+      url: https://test.hehome.xyz
     if: ${{ github.ref == 'refs/heads/dev' }}
     steps:
       - name: Download web files
