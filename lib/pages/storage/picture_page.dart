@@ -105,6 +105,8 @@ class PictureScreen extends StatelessWidget {
         ),
         minScale: PhotoViewComputedScale.contained,
         maxScale: PhotoViewComputedScale.covered * 5,
+        backgroundDecoration:
+            BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
       );
     }
     return CenterLoadingIndicator();
