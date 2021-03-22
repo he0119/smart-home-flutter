@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/repositories.dart';
+import 'package:smarthome/utils/exceptions.dart';
 import 'package:tuple/tuple.dart';
 
 part 'topic_detail_event.dart';
@@ -64,9 +65,9 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
             pageInfo: results.item3,
           );
         }
-      } catch (e) {
+      } on MyException catch (e) {
         yield TopicDetailFailure(
-          e.toString(),
+          e.message,
           topicId: event.topicId!,
         );
       }

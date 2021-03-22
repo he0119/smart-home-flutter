@@ -9,6 +9,7 @@ import 'package:smarthome/blocs/core/blocs.dart';
 import 'package:smarthome/models/push.dart';
 import 'package:smarthome/repositories/push_repository.dart';
 import 'package:flutter/services.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'push_event.dart';
 part 'push_state.dart';
@@ -78,8 +79,8 @@ class PushBloc extends Bloc<PushEvent, PushState> {
       try {
         MiPush mipush = await pushRepository.miPush();
         yield PushSuccess(miPush: mipush);
-      } catch (e) {
-        yield PushError(e.toString());
+      } on MyException catch (e) {
+        yield PushError(e.message);
       }
     }
   }

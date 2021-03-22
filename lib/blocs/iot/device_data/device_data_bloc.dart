@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/models/iot.dart';
 import 'package:smarthome/repositories/iot_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'device_data_event.dart';
 part 'device_data_state.dart';
@@ -66,8 +67,8 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
         List<AutowateringData> data =
             await iotRepository.autowateringData(deviceId: deviceId, number: 1);
         add(DeviceDataupdated(data[0]));
-      } catch (e) {
-        add(DeviceDataStoped(e.toString()));
+      } on MyException catch (e) {
+        add(DeviceDataStoped(e.message));
       }
     });
   }

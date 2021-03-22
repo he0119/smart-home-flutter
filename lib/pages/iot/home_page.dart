@@ -264,7 +264,7 @@ class _IotHomeBody extends StatelessWidget {
               BlocProvider.of<DeviceDataBloc>(context)
                   .add(DeviceDataStarted(appPreference.refreshInterval));
             },
-            message: state.toString(),
+            message: state.message,
           );
         }
         return CenterLoadingIndicator();

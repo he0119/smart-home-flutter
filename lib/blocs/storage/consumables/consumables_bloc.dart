@@ -4,6 +4,7 @@ import 'package:smarthome/models/models.dart';
 
 import 'package:smarthome/models/storage.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'consumables_event.dart';
 part 'consumables_state.dart';
@@ -50,8 +51,8 @@ class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
             pageInfo: results.item2,
           );
         }
-      } catch (e) {
-        yield ConsumablesFailure(e.toString());
+      } on MyException catch (e) {
+        yield ConsumablesFailure(e.message);
       }
     }
   }

@@ -50,7 +50,7 @@ class RecycleBinScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is RecycleBinFailure) {
             return ErrorMessageButton(
-              message: state.toString(),
+              message: state.message,
               onPressed: () {
                 BlocProvider.of<RecycleBinBloc>(context)
                     .add(RecycleBinFetched(cache: false));

@@ -17,7 +17,7 @@ class MiPushPage extends StatelessWidget {
         miPush = state.miPush;
       }
       if (state is PushError) {
-        miPush = MiPush(regId: state.toString());
+        miPush = MiPush(regId: state.message);
       }
       return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => Scaffold(

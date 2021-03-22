@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'item_detail_event.dart';
 part 'item_detail_state.dart';
@@ -32,9 +33,9 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
           return;
         }
         yield ItemDetailSuccess(item: item);
-      } catch (e) {
+      } on MyException catch (e) {
         yield ItemDetailFailure(
-          e.toString(),
+          e.message,
           name: event.name,
           id: event.id,
         );
@@ -58,9 +59,9 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
           return;
         }
         yield ItemDetailSuccess(item: item);
-      } catch (e) {
+      } on MyException catch (e) {
         yield ItemDetailFailure(
-          e.toString(),
+          e.message,
           name: currentState.item.name,
           id: currentState.item.id,
         );

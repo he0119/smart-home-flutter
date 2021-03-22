@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'picture_event.dart';
 part 'picture_state.dart';
@@ -32,9 +33,9 @@ class PictureBloc extends Bloc<PictureEvent, PictureState> {
           return;
         }
         yield PictureSuccess(picture: picture);
-      } catch (e) {
+      } on MyException catch (e) {
         yield PictureFailure(
-          e.toString(),
+          e.message,
           id: event.id,
         );
       }
@@ -50,9 +51,9 @@ class PictureBloc extends Bloc<PictureEvent, PictureState> {
         if (picture != null) {
           yield PictureSuccess(picture: picture);
         }
-      } catch (e) {
+      } on MyException catch (e) {
         yield PictureFailure(
-          e.toString(),
+          e.message,
           id: currentState.picture.id,
         );
       }

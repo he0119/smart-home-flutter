@@ -88,7 +88,7 @@ class _DetailScreen extends StatelessWidget {
                       topicId: state.topicId, descending: descending),
                 );
               },
-              message: state.toString(),
+              message: state.message,
             ),
           );
         }

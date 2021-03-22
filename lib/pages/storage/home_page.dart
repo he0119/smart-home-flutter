@@ -68,7 +68,7 @@ class _StorageHomeBody extends StatelessWidget {
                 ),
               );
             },
-            message: state.toString(),
+            message: state.message,
           );
         }
         if (state is StorageHomeSuccess) {

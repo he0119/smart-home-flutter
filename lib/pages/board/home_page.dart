@@ -77,7 +77,7 @@ class _BoardHomeBody extends StatelessWidget {
               BlocProvider.of<BoardHomeBloc>(context)
                   .add(BoardHomeFetched(cache: false));
             },
-            message: state.toString(),
+            message: state.message,
           );
         }
         if (state is BoardHomeSuccess) {

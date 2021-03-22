@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 import 'package:tuple/tuple.dart';
 
 part 'storage_detail_event.dart';
@@ -93,9 +94,9 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             );
           }
         }
-      } catch (e) {
+      } on MyException catch (e) {
         yield StorageDetailFailure(
-          e.toString(),
+          e.message,
           name: event.name,
           id: event.id,
         );

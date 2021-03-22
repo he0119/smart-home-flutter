@@ -253,7 +253,7 @@ class StorageDetailScreen extends StatelessWidget {
             StorageDetailFetched(name: state.name, id: state.id),
           );
         },
-        message: state.toString(),
+        message: state.message,
       );
     }
     if (state is StorageDetailSuccess && state.storages != null) {

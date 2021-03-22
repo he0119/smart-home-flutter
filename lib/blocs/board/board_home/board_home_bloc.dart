@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/repositories.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'board_home_event.dart';
 part 'board_home_state.dart';
@@ -48,8 +49,8 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
             pageInfo: results.item2,
           );
         }
-      } catch (e) {
-        yield BoardHomeFailure(e.toString());
+      } on MyException catch (e) {
+        yield BoardHomeFailure(e.message);
       }
     }
   }

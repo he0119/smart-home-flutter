@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'search_events.dart';
 part 'search_states.dart';
@@ -28,8 +29,8 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
           storages: results.item2,
           term: event.key,
         );
-      } catch (e) {
-        yield StorageSearchFailure(e.toString());
+      } on MyException catch (e) {
+        yield StorageSearchFailure(e.message);
       }
     }
   }

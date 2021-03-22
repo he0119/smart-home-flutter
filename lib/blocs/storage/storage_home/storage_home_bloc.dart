@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'storage_home_event.dart';
 part 'storage_home_state.dart';
@@ -137,9 +138,9 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               break;
           }
         }
-      } catch (e) {
+      } on MyException catch (e) {
         yield StorageHomeFailure(
-          e.toString(),
+          e.message,
           itemType: event.itemType,
         );
       }

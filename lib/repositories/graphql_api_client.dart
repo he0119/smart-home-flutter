@@ -3,20 +3,14 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:graphql/client.dart';
+import 'package:graphql/client.dart' hide NetworkException, ServerException;
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarthome/graphql/mutations/mutations.dart';
 import 'package:gql_exec/gql_exec.dart';
 import 'package:gql/ast.dart';
-
-/// 认证出错
-class AuthenticationException implements Exception {
-  final String message;
-
-  const AuthenticationException(this.message);
-}
+import 'package:smarthome/utils/exceptions.dart';
 
 class GraphQLApiClient {
   static final Logger _log = Logger('GraphQLApiClient');
@@ -63,7 +57,7 @@ class GraphQLApiClient {
     QueryResult results = await _client!.mutate(loginOptions);
     if (results.hasException) {
       if (results.exception!.linkException != null) {
-        throw Exception('网络异常，请稍后再试');
+        throw NetworkException('网络异常，请稍后再试');
       }
       return false;
     } else {
@@ -116,7 +110,7 @@ class GraphQLApiClient {
       );
       _log.fine('GraphQLClient initailized with url $url');
       return true;
-    } catch (e) {
+    } on MyException catch (e) {
       _log.severe(e);
       return false;
     }
@@ -157,11 +151,11 @@ class GraphQLApiClient {
         throw AuthenticationException('认证过期，请重新登录');
       }
       _log.warning(error.toString());
-      throw Exception(error.message);
+      throw ServerException(error.message);
     }
     if (exception.linkException != null) {
       _log.severe(exception.linkException.toString());
-      throw Exception('网络异常，请稍后再试');
+      throw NetworkException('网络异常，请稍后再试');
     }
   }
 

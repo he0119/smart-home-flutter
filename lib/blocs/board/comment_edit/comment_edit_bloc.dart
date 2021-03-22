@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/models/board.dart';
 import 'package:smarthome/repositories/board_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'comment_edit_event.dart';
 part 'comment_edit_state.dart';
@@ -25,8 +26,8 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
           body: event.body,
         );
         yield CommentAddSuccess(comment: comment);
-      } catch (e) {
-        yield CommentFailure(e.toString());
+      } on MyException catch (e) {
+        yield CommentFailure(e.message);
       }
     }
     if (event is CommentUpdated) {
@@ -37,8 +38,8 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
           body: event.body,
         );
         yield CommentUpdateSuccess(comment: comment);
-      } catch (e) {
-        yield CommentFailure(e.toString());
+      } on MyException catch (e) {
+        yield CommentFailure(e.message);
       }
     }
     if (event is CommentDeleted) {
@@ -46,8 +47,8 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
       try {
         await boardRepository.deleteComment(commentId: event.comment.id);
         yield CommentDeleteSuccess(comment: event.comment);
-      } catch (e) {
-        yield CommentFailure(e.toString());
+      } on MyException catch (e) {
+        yield CommentFailure(e.message);
       }
     }
   }

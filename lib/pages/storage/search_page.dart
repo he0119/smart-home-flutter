@@ -86,7 +86,7 @@ class _SearchScreenState extends State<SearchScreen> {
               return CenterLoadingIndicator();
             }
             if (state is StorageSearchFailure) {
-              return Center(child: Text(state.toString()));
+              return Center(child: Text(state.message));
             }
             if (state is StorageSearchSuccess) {
               if (state.items.isEmpty && state.storages.isEmpty) {

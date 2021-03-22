@@ -6,6 +6,7 @@ import 'package:smarthome/blocs/core/app_preferences/app_preferences_bloc.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/graphql_api_client.dart';
 import 'package:smarthome/repositories/user_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -65,8 +66,8 @@ class AuthenticationBloc
       } else {
         yield AuthenticationFailure('未登录，请登录账户');
       }
-    } catch (e) {
-      yield AuthenticationError(e.toString());
+    } on MyException catch (e) {
+      yield AuthenticationError(e.message);
     }
   }
 
@@ -83,8 +84,8 @@ class AuthenticationBloc
       } else {
         yield AuthenticationFailure('用户名或密码错误');
       }
-    } catch (e) {
-      yield AuthenticationFailure(e.toString());
+    } on MyException catch (e) {
+      yield AuthenticationFailure(e.message);
     }
   }
 

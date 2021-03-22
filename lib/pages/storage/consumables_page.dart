@@ -38,7 +38,7 @@ class ConsumablesScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is ConsumablesFailure) {
             return ErrorMessageButton(
-              message: state.toString(),
+              message: state.message,
               onPressed: () {
                 BlocProvider.of<ConsumablesBloc>(context)
                     .add(ConsumablesFetched(cache: false));
