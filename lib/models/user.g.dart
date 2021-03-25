@@ -9,7 +9,7 @@ part of user;
 User _$UserFromJson(Map<String, dynamic> json) {
   return User(
     username: json['username'] as String,
-    email: json['email'] as String,
+    email: json['email'] as String?,
   );
 }
 

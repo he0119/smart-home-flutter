@@ -8,7 +8,7 @@ part 'user.g.dart';
 @JsonSerializable()
 class User extends Equatable {
   final String username;
-  final String email;
+  final String? email;
 
   User({required this.username, required this.email});
 
@@ -17,5 +17,5 @@ class User extends Equatable {
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
   @override
-  List<Object> get props => [username, email];
+  List<Object?> get props => [username, email];
 }

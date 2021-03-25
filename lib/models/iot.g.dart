@@ -10,7 +10,7 @@ Device _$DeviceFromJson(Map<String, dynamic> json) {
   return Device(
     id: json['id'] as String,
     name: json['name'] as String,
-    deviceType: json['deviceType'] as String,
+    deviceType: json['deviceType'] as String?,
     location: json['location'] as String?,
     createdAt: json['createdAt'] == null
         ? null

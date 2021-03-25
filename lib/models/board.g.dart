@@ -9,8 +9,8 @@ part of board;
 Topic _$TopicFromJson(Map<String, dynamic> json) {
   return Topic(
     id: json['id'] as String,
-    title: json['title'] as String,
-    description: json['description'] as String,
+    title: json['title'] as String?,
+    description: json['description'] as String?,
     isOpen: json['isOpen'] as bool?,
     isPin: json['isPin'] as bool?,
     user: json['user'] == null
@@ -49,7 +49,7 @@ Comment _$CommentFromJson(Map<String, dynamic> json) {
     user: json['user'] == null
         ? null
         : User.fromJson(json['user'] as Map<String, dynamic>),
-    body: json['body'] as String,
+    body: json['body'] as String?,
     createdAt: json['createdAt'] == null
         ? null
         : DateTime.parse(json['createdAt'] as String),

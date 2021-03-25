@@ -29,7 +29,7 @@ class _CommentEditPageState extends State<CommentEditPage> {
   void initState() {
     super.initState();
     if (widget.isEditing) {
-      _bodyController.text = widget.comment!.body;
+      _bodyController.text = widget.comment!.body!;
     }
   }
 

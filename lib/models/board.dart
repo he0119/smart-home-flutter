@@ -10,8 +10,8 @@ part 'board.g.dart';
 @JsonSerializable()
 class Topic extends Equatable {
   final String id;
-  final String title;
-  final String description;
+  final String? title;
+  final String? description;
   final bool? isOpen;
   final bool? isPin;
   final User? user;
@@ -21,8 +21,8 @@ class Topic extends Equatable {
 
   Topic({
     required this.id,
-    required this.title,
-    required this.description,
+    this.title,
+    this.description,
     this.isOpen,
     this.isPin,
     this.user,
@@ -51,7 +51,7 @@ class Topic extends Equatable {
   }
 
   @override
-  String toString() => title;
+  String toString() => id;
 }
 
 @JsonSerializable()
@@ -59,7 +59,7 @@ class Comment extends Equatable {
   final String id;
   final Topic? topic;
   final User? user;
-  final String body;
+  final String? body;
   final DateTime? createdAt;
   final DateTime? editedAt;
   final Comment? parent;
@@ -69,7 +69,7 @@ class Comment extends Equatable {
     required this.id,
     this.topic,
     this.user,
-    required this.body,
+    this.body,
     this.createdAt,
     this.editedAt,
     this.parent,
@@ -96,5 +96,5 @@ class Comment extends Equatable {
   }
 
   @override
-  String toString() => body.substring(0, 20);
+  String toString() => id;
 }

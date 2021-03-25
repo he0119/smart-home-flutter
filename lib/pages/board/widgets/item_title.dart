@@ -18,7 +18,7 @@ class ItemTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleGravatar(email: user!.email),
+      leading: CircleGravatar(email: user!.email!),
       title: Text(user!.username),
       subtitle: Text(editedAt!.toLocalStr()),
       trailing: (onSelected != null)

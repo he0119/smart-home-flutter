@@ -8,7 +8,7 @@ part 'iot.g.dart';
 class Device {
   final String id;
   final String name;
-  final String deviceType;
+  final String? deviceType;
   final String? location;
   final DateTime? createdAt;
   final DateTime? editedAt;
@@ -19,7 +19,7 @@ class Device {
   Device({
     required this.id,
     required this.name,
-    required this.deviceType,
+    this.deviceType,
     this.location,
     this.createdAt,
     this.editedAt,

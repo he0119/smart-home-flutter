@@ -33,7 +33,7 @@ class TopicItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               child: SelectableText(
-                topic.title,
+                topic.title!,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 30,
@@ -47,7 +47,7 @@ class TopicItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
               child: MarkdownBody(
-                data: topic.description,
+                data: topic.description!,
                 selectable: true,
               ),
             ),
@@ -56,7 +56,7 @@ class TopicItem extends StatelessWidget {
       );
     } else {
       // 依据话题添加标志
-      String title = topic.title;
+      String title = topic.title!;
       if (!topic.isOpen!) title = '🔒' + title;
       if (topic.isPin!) title = '🔝' + title;
       return InkWell(

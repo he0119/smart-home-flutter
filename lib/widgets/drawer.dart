@@ -22,9 +22,9 @@ class MyDrawer extends StatelessWidget {
               if (state is AuthenticationSuccess)
                 UserAccountsDrawerHeader(
                   accountName: Text(state.currentUser.username),
-                  accountEmail: Text(state.currentUser.email),
+                  accountEmail: Text(state.currentUser.email!),
                   currentAccountPicture: CircleGravatar(
-                    email: state.currentUser.email,
+                    email: state.currentUser.email!,
                     size: 512,
                   ),
                 ),

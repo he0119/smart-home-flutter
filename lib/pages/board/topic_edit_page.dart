@@ -30,8 +30,8 @@ class _TopicEditPageState extends State<TopicEditPage> {
   void initState() {
     super.initState();
     if (widget.isEditing!) {
-      _titleController.text = widget.topic!.title;
-      _descriptionController.text = widget.topic!.description;
+      _titleController.text = widget.topic!.title!;
+      _descriptionController.text = widget.topic!.description!;
     }
   }
 
