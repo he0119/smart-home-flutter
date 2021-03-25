@@ -79,11 +79,15 @@ class GraphQLApiClient {
       // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
       Map<String, String> headers = {};
       if (!kIsWeb && Platform.isAndroid) {
-        final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-        final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-        headers['User-Agent'] =
-            'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
+        try {
+          final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+          AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+          final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+          headers['User-Agent'] =
+              'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
+        } catch (e) {
+          _log.severe('设置 User-Agent 失败 (${e.toString()})');
+        }
       }
       final HttpLink _httpLink = HttpLink(
         url,
