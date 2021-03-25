@@ -43,10 +43,6 @@ dependencies:
   # Widget
   webview_flutter: ^2.0.2
   datetime_picker_formfield: ^2.0.0
-  substring_highlight:
-    git:
-      url: https://github.com/he0119/substring_highlight.git
-      ref: nullsafety
   flutter_markdown: ^0.6.0
   cached_network_image: ^3.0.0-nullsafety
   settings_ui: ^1.0.0-nullsafety.2

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
-import 'package:substring_highlight/substring_highlight.dart';
+import 'package:smarthome/widgets/substring_highlight.dart';
 
 class StorageItemList extends StatelessWidget {
   final List<Item>? items;
@@ -58,8 +58,6 @@ class _HighlightStorageItemListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle style = DefaultTextStyle.of(context).style;
-    final TextStyle highlightStyle = style.merge(TextStyle(color: Colors.red));
     if (item is Item) {
       return ListTile(
         leading: const Icon(
@@ -69,14 +67,10 @@ class _HighlightStorageItemListItem extends StatelessWidget {
         title: SubstringHighlight(
           text: item.name,
           term: term,
-          textStyle: style,
-          textStyleHighlight: highlightStyle,
         ),
         subtitle: SubstringHighlight(
           text: item.description ?? '',
           term: term,
-          textStyle: style,
-          textStyleHighlight: highlightStyle,
         ),
         onTap: () {
           MyRouterDelegate.of(context).addItemPage(item: item);
@@ -91,14 +85,10 @@ class _HighlightStorageItemListItem extends StatelessWidget {
         title: SubstringHighlight(
           text: item.name,
           term: term,
-          textStyle: style,
-          textStyleHighlight: highlightStyle,
         ),
         subtitle: SubstringHighlight(
           text: item.description ?? '',
           term: term,
-          textStyle: style,
-          textStyleHighlight: highlightStyle,
         ),
         onTap: () async {
           MyRouterDelegate.of(context).addStorageGroup(storage: item);
