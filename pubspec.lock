@@ -256,11 +256,9 @@ packages:
   dropdown_search:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: bd134cb37616ef63fab3ca3399e6bbab49c8fb63
-      url: "https://github.com/GaspardMerten/searchable_dropdown.git"
-    source: git
+      name: dropdown_search
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "0.5.0"
   enum_to_string:
     dependency: "direct main"
