@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smarthome/models/board.dart';
 import 'package:smarthome/repositories/board_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'topic_edit_event.dart';
 part 'topic_edit_state.dart';
@@ -11,7 +11,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   final BoardRepository boardRepository;
 
   TopicEditBloc({
-    @required this.boardRepository,
+    required this.boardRepository,
   }) : super(TopicInProgress());
 
   @override
@@ -26,7 +26,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
           description: event.description,
         );
         yield TopicAddSuccess(topic: topic);
-      } catch (e) {
+      } on MyException catch (e) {
         yield TopicFailure(e.message);
       }
     }
@@ -39,7 +39,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
           description: event.description,
         );
         yield TopicUpdateSuccess(topic: topic);
-      } catch (e) {
+      } on MyException catch (e) {
         yield TopicFailure(e.message);
       }
     }
@@ -48,7 +48,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
       try {
         await boardRepository.deleteTopic(topicId: event.topic.id);
         yield TopicDeleteSuccess(topic: event.topic);
-      } catch (e) {
+      } on MyException catch (e) {
         yield TopicFailure(e.message);
       }
     }
@@ -57,7 +57,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
       try {
         await boardRepository.closeTopic(topicId: event.topic.id);
         yield TopicCloseSuccess(topic: event.topic);
-      } catch (e) {
+      } on MyException catch (e) {
         yield TopicFailure(e.message);
       }
     }
@@ -66,7 +66,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
       try {
         await boardRepository.reopenTopic(topicId: event.topic.id);
         yield TopicReopenSuccess(topic: event.topic);
-      } catch (e) {
+      } on MyException catch (e) {
         yield TopicFailure(e.message);
       }
     }
@@ -75,7 +75,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
       try {
         await boardRepository.pinTopic(topicId: event.topic.id);
         yield TopicPinSuccess(topic: event.topic);
-      } catch (e) {
+      } on MyException catch (e) {
         yield TopicFailure(e.message);
       }
     }
@@ -84,7 +84,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
       try {
         await boardRepository.unpinTopic(topicId: event.topic.id);
         yield TopicUnpinSuccess(topic: event.topic);
-      } catch (e) {
+      } on MyException catch (e) {
         yield TopicFailure(e.message);
       }
     }

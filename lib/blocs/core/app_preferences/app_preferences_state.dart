@@ -2,29 +2,29 @@ part of 'app_preferences_bloc.dart';
 
 class AppPreferencesState extends Equatable {
   final bool initialized;
-  final String apiUrl;
-  final String miPushAppId;
-  final String miPushAppKey;
-  final String miPushRegId;
+  final String? apiUrl;
+  final String? miPushAppId;
+  final String? miPushAppKey;
+  final String? miPushRegId;
   final int refreshInterval;
   final String blogUrl;
-  final String blogAdminUrl;
+  final String? blogAdminUrl;
   final AppTab defaultPage;
-  final User loginUser;
+  final User? loginUser;
   final bool commentDescending;
 
   const AppPreferencesState({
-    @required this.initialized,
-    @required this.apiUrl,
-    @required this.miPushAppId,
-    @required this.miPushAppKey,
-    @required this.miPushRegId,
-    @required this.refreshInterval,
-    @required this.blogUrl,
-    @required this.blogAdminUrl,
-    @required this.defaultPage,
-    @required this.loginUser,
-    @required this.commentDescending,
+    required this.initialized,
+    required this.apiUrl,
+    required this.miPushAppId,
+    required this.miPushAppKey,
+    required this.miPushRegId,
+    required this.refreshInterval,
+    required this.blogUrl,
+    required this.blogAdminUrl,
+    required this.defaultPage,
+    required this.loginUser,
+    required this.commentDescending,
   });
 
   factory AppPreferencesState.initial() {
@@ -44,17 +44,17 @@ class AppPreferencesState extends Equatable {
   }
 
   AppPreferencesState copyWith({
-    bool initialized,
-    String apiUrl,
-    String miPushAppId,
-    String miPushAppKey,
-    String miPushRegId,
-    int refreshInterval,
-    String blogUrl,
-    String blogAdminUrl,
-    AppTab defaultPage,
-    User loginUser,
-    bool commentDescending,
+    bool? initialized,
+    String? apiUrl,
+    String? miPushAppId,
+    String? miPushAppKey,
+    String? miPushRegId,
+    int? refreshInterval,
+    String? blogUrl,
+    String? blogAdminUrl,
+    AppTab? defaultPage,
+    User? loginUser,
+    bool? commentDescending,
   }) {
     return AppPreferencesState(
       initialized: initialized ?? this.initialized,
@@ -72,7 +72,7 @@ class AppPreferencesState extends Equatable {
   }
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       initialized,
       apiUrl,

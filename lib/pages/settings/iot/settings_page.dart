@@ -18,7 +18,7 @@ class IotSettingsPage extends Page {
 }
 
 class IotSettingsScreen extends StatelessWidget {
-  const IotSettingsScreen({Key key}) : super(key: key);
+  const IotSettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +28,16 @@ class IotSettingsScreen extends StatelessWidget {
       ),
       body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => SettingsList(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          contentPadding: EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(
               title: '网络',
               tiles: [
                 SettingsTile(
                   title: '刷新间隔',
-                  subtitle: state.refreshInterval.toString() ?? '请单击输入',
-                  onTap: () {
+                  subtitle: state.refreshInterval.toString(),
+                  onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => RefreshIntervalPage(),
                     ));

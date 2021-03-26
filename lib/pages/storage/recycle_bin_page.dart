@@ -101,7 +101,7 @@ Widget _buildItem(BuildContext context, Item item) {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         TextSpan(
-          text: '（${item.deletedAt.differenceFromNowStr()}删除）',
+          text: '（${item.deletedAt!.differenceFromNowStr()}删除）',
         ),
       ],
     ),

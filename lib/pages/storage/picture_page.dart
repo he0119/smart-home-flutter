@@ -16,7 +16,7 @@ class PicturePage extends Page {
   final String pictureId;
 
   PicturePage({
-    @required this.pictureId,
+    required this.pictureId,
   }) : super(
           key: ValueKey(pictureId),
           name: '/picture/$pictureId',
@@ -50,7 +50,7 @@ class PicturePage extends Page {
 }
 
 class PictureScreen extends StatelessWidget {
-  PictureScreen({Key key}) : super(key: key);
+  PictureScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class PictureScreen extends StatelessWidget {
                   tooltip: '在新标签页中打开',
                   child: Icon(Icons.open_in_new),
                   onPressed: () async {
-                    await launchUrl(state.picture.url);
+                    await launchUrl(state.picture.url!);
                   },
                 )
               : null,
@@ -101,7 +101,7 @@ class PictureScreen extends StatelessWidget {
       return PhotoView(
         loadingBuilder: (context, event) => CenterLoadingIndicator(),
         imageProvider: CachedNetworkImageProvider(
-          state.picture.url,
+          state.picture.url!,
         ),
         minScale: PhotoViewComputedScale.contained,
         maxScale: PhotoViewComputedScale.covered * 5,
@@ -116,8 +116,8 @@ class PictureScreen extends StatelessWidget {
     if (state is PictureSuccess) {
       return AppBar(
         title: state.picture.description.isNotEmpty
-            ? Text('${state.picture.item.name}（${state.picture.description}）')
-            : Text('${state.picture.item.name}（未命名）'),
+            ? Text('${state.picture.item!.name}（${state.picture.description}）')
+            : Text('${state.picture.item!.name}（未命名）'),
         actions: [
           PopupMenuButton<PictureMenu>(
             onSelected: (value) async {

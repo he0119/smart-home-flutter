@@ -18,7 +18,7 @@ class TopicDetailFailure extends TopicDetailState {
 
   const TopicDetailFailure(
     this.message, {
-    @required this.topicId,
+    required this.topicId,
   });
 
   @override
@@ -34,9 +34,9 @@ class TopicDetailSuccess extends TopicDetailState {
   final PageInfo pageInfo;
 
   const TopicDetailSuccess({
-    @required this.topic,
-    @required this.comments,
-    @required this.pageInfo,
+    required this.topic,
+    required this.comments,
+    required this.pageInfo,
   });
 
   bool get hasReachedMax => !pageInfo.hasNextPage;

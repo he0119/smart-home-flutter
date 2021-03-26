@@ -6,16 +6,16 @@ class TextEditPage extends StatefulWidget {
   final String initialValue;
   final String description;
   final ValueChanged<String> onSubmit;
-  final String Function(String value) validator;
-  final List<TextInputFormatter> inputFormatters;
-  final TextInputType keyboardType;
+  final String? Function(String value)? validator;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
 
   const TextEditPage({
-    Key key,
-    @required this.title,
-    @required this.initialValue,
-    @required this.description,
-    @required this.onSubmit,
+    Key? key,
+    required this.title,
+    required this.initialValue,
+    required this.description,
+    required this.onSubmit,
     this.validator,
     this.inputFormatters,
     this.keyboardType,
@@ -26,7 +26,7 @@ class TextEditPage extends StatefulWidget {
 }
 
 class _TextEditPageState extends State<TextEditPage> {
-  TextEditingController _textController;
+  late TextEditingController _textController;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -52,7 +52,7 @@ class _TextEditPageState extends State<TextEditPage> {
             child: IconButton(
               icon: Icon(Icons.check),
               onPressed: () {
-                if (_formKey.currentState.validate()) {
+                if (_formKey.currentState!.validate()) {
                   widget.onSubmit(_textController.text);
                   Navigator.of(context).pop();
                 }
@@ -74,7 +74,7 @@ class _TextEditPageState extends State<TextEditPage> {
                 autofocus: true,
                 validator: (value) {
                   if (widget.validator != null) {
-                    return widget.validator(value);
+                    return widget.validator!(value ?? '');
                   }
                   return null;
                 },

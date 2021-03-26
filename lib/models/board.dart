@@ -10,17 +10,17 @@ part 'board.g.dart';
 @JsonSerializable()
 class Topic extends Equatable {
   final String id;
-  final String title;
-  final String description;
-  final bool isOpen;
-  final bool isPin;
-  final User user;
-  final DateTime createdAt;
-  final DateTime editedAt;
-  final List<Comment> comments;
+  final String? title;
+  final String? description;
+  final bool? isOpen;
+  final bool? isPin;
+  final User? user;
+  final DateTime? createdAt;
+  final DateTime? editedAt;
+  final List<Comment>? comments;
 
   Topic({
-    this.id,
+    required this.id,
     this.title,
     this.description,
     this.isOpen,
@@ -36,7 +36,7 @@ class Topic extends Equatable {
   Map<String, dynamic> toJson() => _$TopicToJson(this);
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       title,
@@ -51,22 +51,22 @@ class Topic extends Equatable {
   }
 
   @override
-  String toString() => title;
+  String toString() => id;
 }
 
 @JsonSerializable()
 class Comment extends Equatable {
   final String id;
-  final Topic topic;
-  final User user;
-  final String body;
-  final DateTime createdAt;
-  final DateTime editedAt;
-  final Comment parent;
-  final User replyTo;
+  final Topic? topic;
+  final User? user;
+  final String? body;
+  final DateTime? createdAt;
+  final DateTime? editedAt;
+  final Comment? parent;
+  final User? replyTo;
 
   Comment({
-    this.id,
+    required this.id,
     this.topic,
     this.user,
     this.body,
@@ -82,7 +82,7 @@ class Comment extends Equatable {
   Map<String, dynamic> toJson() => _$CommentToJson(this);
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       topic,
@@ -96,5 +96,5 @@ class Comment extends Equatable {
   }
 
   @override
-  String toString() => body.substring(0, 20);
+  String toString() => id;
 }

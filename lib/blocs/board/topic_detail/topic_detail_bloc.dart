@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/repositories.dart';
+import 'package:smarthome/utils/exceptions.dart';
 import 'package:tuple/tuple.dart';
 
 part 'topic_detail_event.dart';
@@ -12,14 +12,14 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
   final BoardRepository boardRepository;
 
   TopicDetailBloc({
-    @required this.boardRepository,
+    required this.boardRepository,
   }) : super(TopicDetailInProgress());
 
   @override
   Stream<TopicDetailState> mapEventToState(
     TopicDetailEvent event,
   ) async* {
-    final currentState = state;
+    final TopicDetailState currentState = state;
     if (event is TopicDetailFetched) {
       try {
         // 如果需要刷新，则显示加载界面
@@ -65,10 +65,10 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
             pageInfo: results.item3,
           );
         }
-      } catch (e) {
+      } on MyException catch (e) {
         yield TopicDetailFailure(
           e.message,
-          topicId: event.topicId,
+          topicId: event.topicId!,
         );
       }
     }

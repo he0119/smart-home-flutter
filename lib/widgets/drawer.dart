@@ -10,7 +10,7 @@ import 'package:smarthome/widgets/gravatar.dart';
 import 'package:version/version.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({Key key}) : super(key: key);
+  const MyDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +22,9 @@ class MyDrawer extends StatelessWidget {
               if (state is AuthenticationSuccess)
                 UserAccountsDrawerHeader(
                   accountName: Text(state.currentUser.username),
-                  accountEmail: Text(state.currentUser.email),
+                  accountEmail: Text(state.currentUser.email!),
                   currentAccountPicture: CircleGravatar(
-                    email: state.currentUser.email,
+                    email: state.currentUser.email!,
                     size: 512,
                   ),
                 ),

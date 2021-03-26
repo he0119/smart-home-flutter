@@ -10,7 +10,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
     _log.fine('parseRouteInformation: ${routeInformation.location}');
-    return parseUrl(routeInformation.location);
+    return parseUrl(routeInformation.location!);
   }
 
   @override
@@ -26,6 +26,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           return const RouteInformation(location: '/storage');
         case AppTab.board:
           return const RouteInformation(location: '/board');
+        default:
       }
     } else if (routePath is StorageRoutePath) {
       return RouteInformation(location: '/storage/${routePath.storageName}');
@@ -50,6 +51,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           return const RouteInformation(location: '/settings/iot');
         case AppSettings.blog:
           return const RouteInformation(location: '/settings/blog');
+        default:
       }
     } else if (routePath is PictureRoutePath) {
       return RouteInformation(location: '/picture/${routePath.pictureId}');

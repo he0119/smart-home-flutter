@@ -12,8 +12,8 @@ class ConsumableEditPage extends StatefulWidget {
   final Item item;
 
   const ConsumableEditPage({
-    Key key,
-    @required this.item,
+    Key? key,
+    required this.item,
   }) : super(key: key);
 
   @override
@@ -21,8 +21,8 @@ class ConsumableEditPage extends StatefulWidget {
 }
 
 class _ConsumableEditPageState extends State<ConsumableEditPage> {
-  Item selectedItem;
-  Item current;
+  Item? selectedItem;
+  late Item current;
 
   @override
   void initState() {
@@ -57,11 +57,11 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
         builder: (context, state) => SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              if (current.consumables.isEmpty)
+              if (current.consumables!.isEmpty)
                 ListTile(
                   title: Text('无耗材'),
                 ),
-              for (Item consumable in current.consumables)
+              for (Item consumable in current.consumables!)
                 ListTile(
                   title: Text(consumable.name),
                   trailing: IconButton(
@@ -89,7 +89,7 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
                     return items;
                   },
                   showClearButton: true,
-                  onChanged: (value) {
+                  onChanged: (dynamic value) {
                     setState(() {
                       selectedItem = value;
                     });

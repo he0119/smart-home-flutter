@@ -24,7 +24,7 @@ class TopicFailure extends TopicEditState {
 class TopicAddSuccess extends TopicEditState {
   final Topic topic;
 
-  const TopicAddSuccess({@required this.topic});
+  const TopicAddSuccess({required this.topic});
 
   @override
   List<Object> get props => [topic];
@@ -36,7 +36,7 @@ class TopicAddSuccess extends TopicEditState {
 class TopicUpdateSuccess extends TopicEditState {
   final Topic topic;
 
-  const TopicUpdateSuccess({@required this.topic});
+  const TopicUpdateSuccess({required this.topic});
 
   @override
   List<Object> get props => [topic];
@@ -48,7 +48,7 @@ class TopicUpdateSuccess extends TopicEditState {
 class TopicDeleteSuccess extends TopicEditState {
   final Topic topic;
 
-  const TopicDeleteSuccess({@required this.topic});
+  const TopicDeleteSuccess({required this.topic});
 
   @override
   List<Object> get props => [topic];
@@ -60,7 +60,7 @@ class TopicDeleteSuccess extends TopicEditState {
 class TopicPinSuccess extends TopicEditState {
   final Topic topic;
 
-  const TopicPinSuccess({@required this.topic});
+  const TopicPinSuccess({required this.topic});
 
   @override
   List<Object> get props => [topic];
@@ -72,7 +72,7 @@ class TopicPinSuccess extends TopicEditState {
 class TopicUnpinSuccess extends TopicEditState {
   final Topic topic;
 
-  const TopicUnpinSuccess({@required this.topic});
+  const TopicUnpinSuccess({required this.topic});
 
   @override
   List<Object> get props => [topic];
@@ -84,7 +84,7 @@ class TopicUnpinSuccess extends TopicEditState {
 class TopicCloseSuccess extends TopicEditState {
   final Topic topic;
 
-  const TopicCloseSuccess({@required this.topic});
+  const TopicCloseSuccess({required this.topic});
 
   @override
   List<Object> get props => [topic];
@@ -96,7 +96,7 @@ class TopicCloseSuccess extends TopicEditState {
 class TopicReopenSuccess extends TopicEditState {
   final Topic topic;
 
-  const TopicReopenSuccess({@required this.topic});
+  const TopicReopenSuccess({required this.topic});
 
   @override
   List<Object> get props => [topic];

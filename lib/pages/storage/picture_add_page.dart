@@ -14,10 +14,10 @@ import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class PictureAddPage extends Page {
   /// 物品 ID
-  final String itemId;
+  final String? itemId;
 
   PictureAddPage({
-    @required this.itemId,
+    required this.itemId,
   }) : super(
           key: ValueKey(itemId),
           name: '/item/$itemId/picture/add',
@@ -41,11 +41,11 @@ class PictureAddPage extends Page {
 
 class PictureAddScreen extends StatefulWidget {
   /// 物品 ID
-  final String itemId;
+  final String? itemId;
 
   PictureAddScreen({
-    Key key,
-    @required this.itemId,
+    Key? key,
+    required this.itemId,
   }) : super(key: key);
 
   @override
@@ -53,14 +53,14 @@ class PictureAddScreen extends StatefulWidget {
 }
 
 class _PictureAddScreenState extends State<PictureAddScreen> {
-  TextEditingController _descriptionController;
-  String picturePath;
+  TextEditingController? _descriptionController;
+  String? picturePath;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    _descriptionController.dispose();
+    _descriptionController!.dispose();
     super.dispose();
   }
 
@@ -103,7 +103,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                     ],
                     textInputAction: TextInputAction.next,
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return '备注不能为空';
                       }
                       return null;
@@ -114,7 +114,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                           alignment: AlignmentDirectional.center,
                           children: <Widget>[
                             CircularProgressIndicator(),
-                            Image.file(File(picturePath)),
+                            Image.file(File(picturePath!)),
                             if (state is PictureEditInProgress)
                               CircularProgressIndicator(),
                           ],
@@ -149,7 +149,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                     onPressed:
                         (state is! PictureEditInProgress && picturePath != null)
                             ? () {
-                                if (_formKey.currentState.validate()) {
+                                if (_formKey.currentState!.validate()) {
                                   _onSubmitPressed();
                                 }
                               }
@@ -172,7 +172,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
       PictureAdded(
         itemId: widget.itemId,
         picturePath: picturePath,
-        description: _descriptionController.text,
+        description: _descriptionController!.text,
         boxX: 0.5,
         boxY: 0.5,
         boxH: 0.5,

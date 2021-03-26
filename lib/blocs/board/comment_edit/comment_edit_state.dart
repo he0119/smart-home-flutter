@@ -4,7 +4,7 @@ abstract class CommentEditState extends Equatable {
   const CommentEditState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class CommentInitial extends CommentEditState {}
@@ -17,7 +17,7 @@ class CommentFailure extends CommentEditState {
   const CommentFailure(this.message);
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 
   @override
   String toString() {
@@ -28,7 +28,7 @@ class CommentFailure extends CommentEditState {
 class CommentAddSuccess extends CommentEditState {
   final Comment comment;
 
-  const CommentAddSuccess({@required this.comment});
+  const CommentAddSuccess({required this.comment});
 
   @override
   List<Object> get props => [comment];
@@ -37,7 +37,7 @@ class CommentAddSuccess extends CommentEditState {
 class CommentUpdateSuccess extends CommentEditState {
   final Comment comment;
 
-  const CommentUpdateSuccess({@required this.comment});
+  const CommentUpdateSuccess({required this.comment});
 
   @override
   List<Object> get props => [comment];
@@ -46,7 +46,7 @@ class CommentUpdateSuccess extends CommentEditState {
 class CommentDeleteSuccess extends CommentEditState {
   final Comment comment;
 
-  const CommentDeleteSuccess({@required this.comment});
+  const CommentDeleteSuccess({required this.comment});
 
   @override
   List<Object> get props => [comment];

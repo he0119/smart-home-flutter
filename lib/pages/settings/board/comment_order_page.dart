@@ -4,7 +4,7 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:smarthome/blocs/core/blocs.dart';
 
 class CommentOrderPage extends StatelessWidget {
-  const CommentOrderPage({Key key}) : super(key: key);
+  const CommentOrderPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +12,15 @@ class CommentOrderPage extends StatelessWidget {
       builder: (context, state) => Scaffold(
         appBar: AppBar(title: Text('评论排序')),
         body: SettingsList(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          contentPadding: EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(
               tiles: [
                 SettingsTile(
                   title: '正序',
                   trailing: trailingWidget(false, state.commentDescending),
-                  onTap: () {
+                  onPressed: (context) {
                     BlocProvider.of<AppPreferencesBloc>(context)
                         .add(CommentDescendingChanged(descending: false));
                   },
@@ -26,7 +28,7 @@ class CommentOrderPage extends StatelessWidget {
                 SettingsTile(
                   title: '倒序',
                   trailing: trailingWidget(true, state.commentDescending),
-                  onTap: () {
+                  onPressed: (context) {
                     BlocProvider.of<AppPreferencesBloc>(context)
                         .add(CommentDescendingChanged(descending: true));
                   },

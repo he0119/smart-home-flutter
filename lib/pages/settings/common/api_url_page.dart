@@ -4,14 +4,14 @@ import 'package:smarthome/blocs/core/blocs.dart';
 import 'package:smarthome/pages/settings/widgets/text_edit_page.dart';
 
 class ApiUrlPage extends StatelessWidget {
-  const ApiUrlPage({Key key}) : super(key: key);
+  const ApiUrlPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
       builder: (context, state) => TextEditPage(
         title: '服务器网址',
-        initialValue: state.apiUrl,
+        initialValue: state.apiUrl ?? '请输入网址',
         onSubmit: (value) {
           BlocProvider.of<AppPreferencesBloc>(context).add(
             AppApiUrlChanged(apiUrl: value),

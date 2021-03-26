@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:smarthome/graphql/queries/viewer.dart';
 import 'package:smarthome/models/models.dart';
@@ -8,7 +7,7 @@ class UserRepository {
   // static final Logger _log = Logger('UserRepository');
   final GraphQLApiClient graphqlApiClient;
 
-  UserRepository({@required this.graphqlApiClient});
+  UserRepository({required this.graphqlApiClient});
 
   Future<User> currentUser() async {
     QueryOptions _options = QueryOptions(
@@ -16,7 +15,7 @@ class UserRepository {
       fetchPolicy: FetchPolicy.networkOnly,
     );
     QueryResult results = await graphqlApiClient.query(_options);
-    User user = User.fromJson(results.data['viewer']);
+    User user = User.fromJson(results.data!['viewer']);
     return user;
   }
 }

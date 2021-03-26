@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smarthome/repositories/version_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 import 'package:version/version.dart';
 
 part 'update_event.dart';
@@ -11,7 +12,7 @@ part 'update_state.dart';
 class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
   VersionRepository versionRepository;
 
-  UpdateBloc({@required this.versionRepository}) : super(UpdateInitial());
+  UpdateBloc({required this.versionRepository}) : super(UpdateInitial());
 
   @override
   Stream<UpdateState> mapEventToState(UpdateEvent event) async* {
@@ -27,7 +28,7 @@ class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
         } else {
           yield UpdateSuccess(needUpdate: needUpdate);
         }
-      } catch (e) {
+      } on MyException catch (e) {
         yield UpdateFailure(e.message);
       }
     }

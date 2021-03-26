@@ -9,8 +9,8 @@ class SliverCommentList extends StatelessWidget {
   final List<Comment> comments;
 
   const SliverCommentList({
-    Key key,
-    @required this.comments,
+    Key? key,
+    required this.comments,
   }) : super(key: key);
 
   @override

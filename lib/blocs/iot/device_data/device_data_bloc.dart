@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smarthome/models/iot.dart';
 import 'package:smarthome/repositories/iot_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'device_data_event.dart';
 part 'device_data_state.dart';
@@ -21,11 +21,11 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
   final IotRepository iotRepository;
   final String deviceId;
 
-  StreamSubscription<int> _dataSubscription;
+  StreamSubscription<int>? _dataSubscription;
 
   DeviceDataBloc({
-    @required this.iotRepository,
-    @required this.deviceId,
+    required this.iotRepository,
+    required this.deviceId,
   }) : super(DeviceDataInitial());
 
   @override
@@ -67,7 +67,7 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
         List<AutowateringData> data =
             await iotRepository.autowateringData(deviceId: deviceId, number: 1);
         add(DeviceDataupdated(data[0]));
-      } catch (e) {
+      } on MyException catch (e) {
         add(DeviceDataStoped(e.message));
       }
     });

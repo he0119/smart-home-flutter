@@ -9,16 +9,16 @@ abstract class ItemEditEvent extends Equatable {
 
 class ItemUpdated extends ItemEditEvent {
   final String id;
-  final String name;
-  final int number;
-  final String storageId;
-  final String oldStorageId;
-  final String description;
-  final double price;
-  final DateTime expiredAt;
+  final String? name;
+  final int? number;
+  final String? storageId;
+  final String? oldStorageId;
+  final String? description;
+  final double? price;
+  final DateTime? expiredAt;
 
   const ItemUpdated({
-    @required this.id,
+    required this.id,
     this.name,
     this.number,
     this.storageId,
@@ -35,15 +35,15 @@ class ItemUpdated extends ItemEditEvent {
 class ItemAdded extends ItemEditEvent {
   final String name;
   final int number;
-  final String storageId;
-  final String description;
-  final double price;
-  final DateTime expiredAt;
+  final String? storageId;
+  final String? description;
+  final double? price;
+  final DateTime? expiredAt;
 
   const ItemAdded({
-    @required this.name,
-    @required this.number,
-    @required this.storageId,
+    required this.name,
+    required this.number,
+    required this.storageId,
     this.description,
     this.price,
     this.expiredAt,
@@ -56,7 +56,7 @@ class ItemAdded extends ItemEditEvent {
 class ItemDeleted extends ItemEditEvent {
   final Item item;
 
-  const ItemDeleted({@required this.item});
+  const ItemDeleted({required this.item});
 
   @override
   String toString() => 'DeleteItem { name: ${item.name} }';
@@ -65,7 +65,7 @@ class ItemDeleted extends ItemEditEvent {
 class ItemRestored extends ItemEditEvent {
   final Item item;
 
-  const ItemRestored({@required this.item});
+  const ItemRestored({required this.item});
 
   @override
   String toString() => 'RestoreItem { name: ${item.name} }';
@@ -73,11 +73,11 @@ class ItemRestored extends ItemEditEvent {
 
 class ConsumableAdded extends ItemEditEvent {
   final Item item;
-  final List<Item> consumables;
+  final List<Item?> consumables;
 
   const ConsumableAdded({
-    @required this.item,
-    @required this.consumables,
+    required this.item,
+    required this.consumables,
   });
 
   @override
@@ -89,8 +89,8 @@ class ConsumableDeleted extends ItemEditEvent {
   final List<Item> consumables;
 
   const ConsumableDeleted({
-    @required this.item,
-    @required this.consumables,
+    required this.item,
+    required this.consumables,
   });
 
   @override

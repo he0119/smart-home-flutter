@@ -20,13 +20,13 @@ class ItemDetailPage extends Page {
   final String itemName;
 
   /// 物品 ID
-  final String itemId;
+  final String? itemId;
   final int group;
 
   ItemDetailPage({
-    @required this.itemName,
+    required this.itemName,
     this.itemId,
-    @required this.group,
+    required this.group,
   }) : super(
           key: ValueKey('$group/$itemName'),
           name: '/item/$itemName',
@@ -65,12 +65,12 @@ class ItemDetailPage extends Page {
 
 class ItemDetailScreen extends StatelessWidget {
   final String itemName;
-  final String itemId;
+  final String? itemId;
 
   const ItemDetailScreen({
-    Key key,
-    @required this.itemName,
-    @required this.itemId,
+    Key? key,
+    required this.itemName,
+    required this.itemId,
   }) : super(key: key);
 
   @override
@@ -228,7 +228,7 @@ class ItemDetailScreen extends StatelessWidget {
 class _ItemDetailList extends StatelessWidget {
   final Item item;
 
-  const _ItemDetailList({Key key, @required this.item}) : super(key: key);
+  const _ItemDetailList({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -238,16 +238,16 @@ class _ItemDetailList extends StatelessWidget {
           title: Text('数量'),
           subtitle: SelectableText(item.number.toString()),
         ),
-        if (item.description != null && item.description.isNotEmpty)
+        if (item.description != null && item.description!.isNotEmpty)
           ListTile(
             title: Text('备注'),
-            subtitle: SelectableText(item.description),
+            subtitle: SelectableText(item.description!),
           ),
         if (item.storage != null)
           ListTile(
             title: Text('属于'),
             subtitle: SelectableText(
-              item.storage.name,
+              item.storage!.name,
               onTap: () {
                 MyRouterDelegate.of(context)
                     .addStorageGroup(storage: item.storage);
@@ -260,19 +260,19 @@ class _ItemDetailList extends StatelessWidget {
         if (item.price != null)
           ListTile(
             title: Text('价格'),
-            subtitle: SelectableText(item.price.toString() ?? ''),
+            subtitle: SelectableText(item.price.toString()),
           ),
         if (item.expiredAt != null)
           ListTile(
             title: Text('有效期至'),
             subtitle: SelectableText(item.expiredAt?.toLocalStr() ?? ''),
           ),
-        if (item.consumables.isNotEmpty)
+        if (item.consumables!.isNotEmpty)
           ListTile(
             title: Text('耗材'),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: item.consumables
+              children: item.consumables!
                   .map(
                     (item) => SelectableText(
                       item.name,
@@ -290,7 +290,7 @@ class _ItemDetailList extends StatelessWidget {
         if (item.editedBy != null)
           ListTile(
             title: Text('修改人'),
-            subtitle: SelectableText(item.editedBy.username),
+            subtitle: SelectableText(item.editedBy!.username),
           ),
         ListTile(
           title: Text('修改时间'),
@@ -299,14 +299,14 @@ class _ItemDetailList extends StatelessWidget {
         if (item.createdBy != null)
           ListTile(
             title: Text('录入人'),
-            subtitle: SelectableText(item.createdBy.username),
+            subtitle: SelectableText(item.createdBy!.username),
           ),
         ListTile(
           title: Text('录入时间'),
           subtitle: SelectableText(item.createdAt?.toLocalStr() ?? ''),
         ),
-        if (item.pictures.isNotEmpty)
-          for (Picture picture in item.pictures)
+        if (item.pictures!.isNotEmpty)
+          for (Picture picture in item.pictures!)
             ListTile(
               title: picture.description.isNotEmpty
                   ? Text('图片（${picture.description}）')

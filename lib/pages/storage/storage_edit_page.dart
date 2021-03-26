@@ -12,12 +12,12 @@ import 'package:smarthome/utils/show_snack_bar.dart';
 
 class StorageEditPage extends StatefulWidget {
   final bool isEditing;
-  final Storage storage;
+  final Storage? storage;
 
   const StorageEditPage({
-    Key key,
-    @required this.isEditing,
-    @required this.storage,
+    Key? key,
+    required this.isEditing,
+    required this.storage,
   }) : super(key: key);
 
   @override
@@ -25,21 +25,21 @@ class StorageEditPage extends StatefulWidget {
 }
 
 class _StorageEditPageState extends State<StorageEditPage> {
-  String parentId;
-  TextEditingController _nameController;
-  TextEditingController _descriptionController;
-  FocusNode _nameFocusNode;
-  FocusNode _descriptionFocusNode;
+  String? parentId;
+  TextEditingController? _nameController;
+  TextEditingController? _descriptionController;
+  FocusNode? _nameFocusNode;
+  FocusNode? _descriptionFocusNode;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     if (widget.isEditing) {
-      _nameController = TextEditingController(text: widget.storage.name);
+      _nameController = TextEditingController(text: widget.storage!.name);
       _descriptionController =
-          TextEditingController(text: widget.storage.description);
-      parentId = widget.storage.parent?.id;
+          TextEditingController(text: widget.storage!.description);
+      parentId = widget.storage!.parent?.id;
     } else {
       _nameController = TextEditingController();
       _descriptionController = TextEditingController();
@@ -54,16 +54,16 @@ class _StorageEditPageState extends State<StorageEditPage> {
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _descriptionController.dispose();
-    _nameFocusNode.dispose();
-    _descriptionFocusNode.dispose();
+    _nameController!.dispose();
+    _descriptionController!.dispose();
+    _nameFocusNode!.dispose();
+    _descriptionFocusNode!.dispose();
 
     super.dispose();
   }
 
   void _fieldFocusChange(
-      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+      BuildContext context, FocusNode currentFocus, FocusNode? nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }
@@ -72,19 +72,19 @@ class _StorageEditPageState extends State<StorageEditPage> {
     if (widget.isEditing) {
       BlocProvider.of<StorageEditBloc>(context).add(
         StorageUpdated(
-          id: widget.storage.id,
-          name: _nameController.text,
+          id: widget.storage!.id,
+          name: _nameController!.text,
           parentId: parentId,
-          oldParentId: widget.storage.parent?.id,
-          description: _descriptionController.text,
+          oldParentId: widget.storage!.parent?.id,
+          description: _descriptionController!.text,
         ),
       );
     } else {
       BlocProvider.of<StorageEditBloc>(context).add(
         StorageAdded(
-          name: _nameController.text,
+          name: _nameController!.text,
           parentId: parentId,
-          description: _descriptionController.text,
+          description: _descriptionController!.text,
         ),
       );
     }
@@ -94,8 +94,9 @@ class _StorageEditPageState extends State<StorageEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            widget.isEditing ? Text('编辑 ${widget.storage.name}') : Text('添加位置'),
+        title: widget.isEditing
+            ? Text('编辑 ${widget.storage!.name}')
+            : Text('添加位置'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -133,7 +134,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
                     ],
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return '名称不能为空';
                       }
                       return null;
@@ -142,7 +143,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
                     focusNode: _nameFocusNode,
                     onFieldSubmitted: (_) {
                       _fieldFocusChange(
-                          context, _nameFocusNode, _descriptionFocusNode);
+                          context, _nameFocusNode!, _descriptionFocusNode);
                     },
                   ),
                   MyDropdownSearch<Storage>(
@@ -156,10 +157,10 @@ class _StorageEditPageState extends State<StorageEditPage> {
                       return storages;
                     },
                     onChanged: (Storage data) {
-                      parentId = data?.id;
+                      parentId = data.id;
                     },
                     selectedItem: widget.isEditing
-                        ? widget.storage.parent
+                        ? widget.storage!.parent
                         : widget.storage,
                   ),
                   TextFormField(
@@ -175,7 +176,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
                   RoundedRaisedButton(
                     onPressed: (state is! StorageEditInProgress)
                         ? () {
-                            if (_formKey.currentState.validate()) {
+                            if (_formKey.currentState!.validate()) {
                               _onSubmitPressed();
                             }
                           }

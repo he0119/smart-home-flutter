@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smarthome/models/models.dart';
 
 import 'package:smarthome/models/storage.dart';
 import 'package:smarthome/repositories/storage_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'recycle_bin_event.dart';
 part 'recycle_bin_state.dart';
@@ -13,14 +13,14 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
   final StorageRepository storageRepository;
 
   RecycleBinBloc({
-    @required this.storageRepository,
+    required this.storageRepository,
   }) : super(RecycleBinInProgress());
 
   @override
   Stream<RecycleBinState> mapEventToState(
     RecycleBinEvent event,
   ) async* {
-    final currentState = state;
+    final RecycleBinState currentState = state;
     if (event is RecycleBinFetched) {
       try {
         // 如果需要刷新，则显示加载界面
@@ -51,7 +51,7 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
             pageInfo: results.item2,
           );
         }
-      } catch (e) {
+      } on MyException catch (e) {
         yield RecycleBinFailure(e.message);
       }
     }

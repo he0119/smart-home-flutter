@@ -1,5 +1,4 @@
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
+import 'package:device_info/device_info.dart';
 import 'package:graphql/client.dart';
 
 import 'package:smarthome/graphql/mutations/push/mutations.dart';
@@ -11,7 +10,7 @@ class PushRepository {
   final GraphQLApiClient graphqlApiClient;
 
   PushRepository({
-    @required this.graphqlApiClient,
+    required this.graphqlApiClient,
   });
 
   /// MiPushKey
@@ -21,7 +20,7 @@ class PushRepository {
       fetchPolicy: FetchPolicy.networkOnly,
     );
     QueryResult results = await graphqlApiClient.query(_options);
-    final Map<String, dynamic> json = results.data['miPushKey'];
+    final Map<String, dynamic> json = results.data!['miPushKey'];
     final MiPushKey miPushKeyObject = MiPushKey.fromJson(json);
     return miPushKeyObject;
   }
@@ -39,14 +38,14 @@ class PushRepository {
       fetchPolicy: FetchPolicy.networkOnly,
     );
     QueryResult results = await graphqlApiClient.query(_options);
-    final Map<String, dynamic> json = results.data['miPush'];
+    final Map<String, dynamic> json = results.data!['miPush'];
     final MiPush miPushObject = MiPush.fromJson(json);
     return miPushObject;
   }
 
   /// 更新 MiPush 的 RegId
   Future<MiPush> updateMiPush({
-    @required String regId,
+    required String regId,
   }) async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
@@ -61,7 +60,7 @@ class PushRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data['updateMiPush']['miPush'];
+    final Map<String, dynamic> json = result.data!['updateMiPush']['miPush'];
     final MiPush miPushObject = MiPush.fromJson(json);
     return miPushObject;
   }

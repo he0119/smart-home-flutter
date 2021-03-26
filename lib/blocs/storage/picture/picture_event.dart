@@ -11,7 +11,7 @@ class PictureStarted extends PictureEvent {
   final String id;
 
   const PictureStarted({
-    @required this.id,
+    required this.id,
   });
 
   @override

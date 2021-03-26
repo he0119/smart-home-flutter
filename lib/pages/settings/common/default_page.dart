@@ -5,7 +5,7 @@ import 'package:smarthome/blocs/core/blocs.dart';
 import 'package:smarthome/models/app_tab.dart';
 
 class DefaultPage extends StatelessWidget {
-  const DefaultPage({Key key}) : super(key: key);
+  const DefaultPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +13,14 @@ class DefaultPage extends StatelessWidget {
       builder: (context, state) => Scaffold(
         appBar: AppBar(title: Text('默认主页')),
         body: SettingsList(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          contentPadding: EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(tiles: [
               SettingsTile(
                 title: AppTab.iot.name,
                 trailing: trailingWidget(AppTab.iot, state.defaultPage),
-                onTap: () {
+                onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
                       .add(DefaultPageChanged(defaultPage: AppTab.iot));
                 },
@@ -26,7 +28,7 @@ class DefaultPage extends StatelessWidget {
               SettingsTile(
                 title: AppTab.storage.name,
                 trailing: trailingWidget(AppTab.storage, state.defaultPage),
-                onTap: () {
+                onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
                       .add(DefaultPageChanged(defaultPage: AppTab.storage));
                 },
@@ -34,7 +36,7 @@ class DefaultPage extends StatelessWidget {
               SettingsTile(
                 title: AppTab.blog.name,
                 trailing: trailingWidget(AppTab.blog, state.defaultPage),
-                onTap: () {
+                onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
                       .add(DefaultPageChanged(defaultPage: AppTab.blog));
                 },
@@ -42,7 +44,7 @@ class DefaultPage extends StatelessWidget {
               SettingsTile(
                 title: AppTab.board.name,
                 trailing: trailingWidget(AppTab.board, state.defaultPage),
-                onTap: () {
+                onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
                       .add(DefaultPageChanged(defaultPage: AppTab.board));
                 },

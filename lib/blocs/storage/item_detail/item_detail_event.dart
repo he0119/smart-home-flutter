@@ -4,20 +4,20 @@ abstract class ItemDetailEvent extends Equatable {
   const ItemDetailEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ItemDetailStarted extends ItemDetailEvent {
   final String name;
-  final String id;
+  final String? id;
 
   const ItemDetailStarted({
-    @required this.name,
+    required this.name,
     this.id,
   });
 
   @override
-  List<Object> get props => [name, id];
+  List<Object?> get props => [name, id];
 
   @override
   String toString() => 'ItemDetailStarted(name: $name, id: $id)';

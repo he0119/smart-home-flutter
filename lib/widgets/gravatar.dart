@@ -7,11 +7,11 @@ import 'package:smarthome/utils/gravatar_url.dart';
 
 class CircleGravatar extends StatelessWidget {
   final String email;
-  final int size;
+  final int? size;
 
   const CircleGravatar({
-    Key key,
-    @required this.email,
+    Key? key,
+    required this.email,
     this.size,
   }) : super(key: key);
 

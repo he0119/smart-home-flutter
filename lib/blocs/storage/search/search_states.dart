@@ -35,9 +35,9 @@ class StorageSearchSuccess extends StorageSearchState {
   final String term;
 
   StorageSearchSuccess({
-    @required this.items,
-    @required this.storages,
-    @required this.term,
+    required this.items,
+    required this.storages,
+    required this.term,
   });
 
   @override

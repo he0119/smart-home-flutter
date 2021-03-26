@@ -19,8 +19,8 @@ class AuthenticationLogin extends AuthenticationEvent {
   final String password;
 
   const AuthenticationLogin({
-    @required this.username,
-    @required this.password,
+    required this.username,
+    required this.password,
   });
 
   @override

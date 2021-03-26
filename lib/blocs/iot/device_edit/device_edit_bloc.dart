@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:smarthome/models/iot.dart';
 import 'package:smarthome/repositories/iot_repository.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'device_edit_event.dart';
 part 'device_edit_state.dart';
@@ -12,7 +12,7 @@ part 'device_edit_state.dart';
 class DeviceEditBloc extends Bloc<DeviceEditEvent, DeviceEditState> {
   final IotRepository iotRepository;
 
-  DeviceEditBloc({@required this.iotRepository}) : super(DeviceEditInitial());
+  DeviceEditBloc({required this.iotRepository}) : super(DeviceEditInitial());
 
   @override
   Stream<DeviceEditState> mapEventToState(
@@ -27,7 +27,7 @@ class DeviceEditBloc extends Bloc<DeviceEditEvent, DeviceEditState> {
           location: event.location,
         );
         yield DeviceAddSuccess(device: device);
-      } catch (e) {
+      } on MyException catch (e) {
         yield DeviceFailure(e.message);
       }
     }
@@ -41,7 +41,7 @@ class DeviceEditBloc extends Bloc<DeviceEditEvent, DeviceEditState> {
           location: event.location,
         );
         yield DeviceUpdateSuccess(device: device);
-      } catch (e) {
+      } on MyException catch (e) {
         yield DeviceFailure(e.message);
       }
     }
@@ -50,7 +50,7 @@ class DeviceEditBloc extends Bloc<DeviceEditEvent, DeviceEditState> {
       try {
         await iotRepository.deleteDevice(deviceId: event.device.id);
         yield DeviceDeleteSuccess(device: event.device);
-      } catch (e) {
+      } on MyException catch (e) {
         yield DeviceFailure(e.message);
       }
     }
@@ -64,7 +64,7 @@ class DeviceEditBloc extends Bloc<DeviceEditEvent, DeviceEditState> {
           valueType: event.valueType,
         );
         yield DeviceSetSuccess(device: device);
-      } catch (e) {
+      } on MyException catch (e) {
         yield DeviceFailure(e.message);
       }
     }

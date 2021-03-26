@@ -23,7 +23,7 @@ class ItemEditFailure extends ItemEditState {
 class ItemAddSuccess extends ItemEditState {
   final Item item;
 
-  const ItemAddSuccess({@required this.item});
+  const ItemAddSuccess({required this.item});
 
   @override
   String toString() => 'ItemAddSuccess { item: ${item.name} }';
@@ -32,7 +32,7 @@ class ItemAddSuccess extends ItemEditState {
 class ItemUpdateSuccess extends ItemEditState {
   final Item item;
 
-  const ItemUpdateSuccess({@required this.item});
+  const ItemUpdateSuccess({required this.item});
 
   @override
   String toString() => 'ItemUpdateSuccess { item: ${item.name} }';
@@ -41,7 +41,7 @@ class ItemUpdateSuccess extends ItemEditState {
 class ItemDeleteSuccess extends ItemEditState {
   final Item item;
 
-  const ItemDeleteSuccess({@required this.item});
+  const ItemDeleteSuccess({required this.item});
 
   @override
   String toString() => 'ItemDeleteSuccess { item: ${item.name} }';
@@ -50,7 +50,7 @@ class ItemDeleteSuccess extends ItemEditState {
 class ItemRestoreSuccess extends ItemEditState {
   final Item item;
 
-  const ItemRestoreSuccess({@required this.item});
+  const ItemRestoreSuccess({required this.item});
 
   @override
   String toString() => 'ItemRestoreSuccess { item: ${item.name} }';
@@ -59,7 +59,7 @@ class ItemRestoreSuccess extends ItemEditState {
 class ConsumableAddSuccess extends ItemEditState {
   final Item item;
 
-  const ConsumableAddSuccess({@required this.item});
+  const ConsumableAddSuccess({required this.item});
 
   @override
   String toString() => 'ConsumableAddSuccess { item: ${item.name} }';
@@ -68,7 +68,7 @@ class ConsumableAddSuccess extends ItemEditState {
 class ConsumableDeleteSuccess extends ItemEditState {
   final Item item;
 
-  const ConsumableDeleteSuccess({@required this.item});
+  const ConsumableDeleteSuccess({required this.item});
 
   @override
   String toString() => 'ConsumableIdDeleteSuccess { item: ${item.name} }';

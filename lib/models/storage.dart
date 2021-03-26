@@ -13,15 +13,15 @@ enum ItemType { expired, nearExpired, recentlyCreated, recentlyEdited, all }
 class Storage extends Equatable {
   final String id;
   final String name;
-  final Storage parent;
-  final List<Storage> ancestors;
-  final String description;
-  final List<Storage> children;
-  final List<Item> items;
+  final Storage? parent;
+  final List<Storage>? ancestors;
+  final String? description;
+  final List<Storage>? children;
+  final List<Item>? items;
 
   Storage({
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
     this.parent,
     this.ancestors,
     this.description,
@@ -35,7 +35,7 @@ class Storage extends Equatable {
   Map<String, dynamic> toJson() => _$StorageToJson(this);
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       name,
@@ -48,13 +48,13 @@ class Storage extends Equatable {
   }
 
   Storage copyWith({
-    String id,
-    String name,
-    Storage parent,
-    List<Storage> ancestors,
-    String description,
-    List<Storage> children,
-    List<Item> items,
+    String? id,
+    String? name,
+    Storage? parent,
+    List<Storage>? ancestors,
+    String? description,
+    List<Storage>? children,
+    List<Item>? items,
   }) {
     return Storage(
       id: id ?? this.id,
@@ -74,20 +74,20 @@ class Storage extends Equatable {
 @JsonSerializable()
 class Picture extends Equatable {
   final String id;
-  final Item item;
-  final String name;
+  final Item? item;
+  final String? name;
   final String description;
-  final String url;
-  final double boxX;
-  final double boxY;
-  final double boxH;
-  final double boxW;
+  final String? url;
+  final double? boxX;
+  final double? boxY;
+  final double? boxH;
+  final double? boxW;
 
   Picture({
-    this.id,
+    required this.id,
     this.item,
     this.name,
-    this.description,
+    required this.description,
     this.url,
     this.boxX,
     this.boxY,
@@ -101,7 +101,7 @@ class Picture extends Equatable {
   Map<String, dynamic> toJson() => _$PictureToJson(this);
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       item,
@@ -123,23 +123,23 @@ class Picture extends Equatable {
 class Item extends Equatable {
   final String id;
   final String name;
-  final int number;
-  final Storage storage;
-  final String description;
-  final double price;
-  final DateTime expiredAt;
-  final DateTime editedAt;
-  final User editedBy;
-  final DateTime createdAt;
-  final User createdBy;
-  final bool isDeleted;
-  final DateTime deletedAt;
-  final List<Item> consumables;
-  final List<Picture> pictures;
+  final int? number;
+  final Storage? storage;
+  final String? description;
+  final double? price;
+  final DateTime? expiredAt;
+  final DateTime? editedAt;
+  final User? editedBy;
+  final DateTime? createdAt;
+  final User? createdBy;
+  final bool? isDeleted;
+  final DateTime? deletedAt;
+  final List<Item>? consumables;
+  final List<Picture>? pictures;
 
   Item({
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
     this.number,
     this.storage,
     this.description,
@@ -160,7 +160,7 @@ class Item extends Equatable {
   Map<String, dynamic> toJson() => _$ItemToJson(this);
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       name,

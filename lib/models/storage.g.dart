@@ -13,19 +13,16 @@ Storage _$StorageFromJson(Map<String, dynamic> json) {
     parent: json['parent'] == null
         ? null
         : Storage.fromJson(json['parent'] as Map<String, dynamic>),
-    ancestors: (json['ancestors'] as List)
-        ?.map((e) =>
-            e == null ? null : Storage.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    description: json['description'] as String,
-    children: (json['children'] as List)
-        ?.map((e) =>
-            e == null ? null : Storage.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    items: (json['items'] as List)
-        ?.map(
-            (e) => e == null ? null : Item.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    ancestors: (json['ancestors'] as List<dynamic>?)
+        ?.map((e) => Storage.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    description: json['description'] as String?,
+    children: (json['children'] as List<dynamic>?)
+        ?.map((e) => Storage.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    items: (json['items'] as List<dynamic>?)
+        ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -45,13 +42,13 @@ Picture _$PictureFromJson(Map<String, dynamic> json) {
     item: json['item'] == null
         ? null
         : Item.fromJson(json['item'] as Map<String, dynamic>),
-    name: json['name'] as String,
+    name: json['name'] as String?,
     description: json['description'] as String,
-    url: json['url'] as String,
-    boxX: (json['boxX'] as num)?.toDouble(),
-    boxY: (json['boxY'] as num)?.toDouble(),
-    boxH: (json['boxH'] as num)?.toDouble(),
-    boxW: (json['boxW'] as num)?.toDouble(),
+    url: json['url'] as String?,
+    boxX: (json['boxX'] as num?)?.toDouble(),
+    boxY: (json['boxY'] as num?)?.toDouble(),
+    boxH: (json['boxH'] as num?)?.toDouble(),
+    boxW: (json['boxW'] as num?)?.toDouble(),
   );
 }
 
@@ -71,12 +68,12 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
   return Item(
     id: json['id'] as String,
     name: json['name'] as String,
-    number: json['number'] as int,
+    number: json['number'] as int?,
     storage: json['storage'] == null
         ? null
         : Storage.fromJson(json['storage'] as Map<String, dynamic>),
-    description: json['description'] as String,
-    price: (json['price'] as num)?.toDouble(),
+    description: json['description'] as String?,
+    price: (json['price'] as num?)?.toDouble(),
     expiredAt: json['expiredAt'] == null
         ? null
         : DateTime.parse(json['expiredAt'] as String),
@@ -92,18 +89,16 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
     createdBy: json['createdBy'] == null
         ? null
         : User.fromJson(json['createdBy'] as Map<String, dynamic>),
-    isDeleted: json['isDeleted'] as bool,
+    isDeleted: json['isDeleted'] as bool?,
     deletedAt: json['deletedAt'] == null
         ? null
         : DateTime.parse(json['deletedAt'] as String),
-    consumables: (json['consumables'] as List)
-        ?.map(
-            (e) => e == null ? null : Item.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    pictures: (json['pictures'] as List)
-        ?.map((e) =>
-            e == null ? null : Picture.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    consumables: (json['consumables'] as List<dynamic>?)
+        ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    pictures: (json['pictures'] as List<dynamic>?)
+        ?.map((e) => Picture.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 

@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AppConfig appConfig = AppConfig.of(context);
+    AppConfig? appConfig = AppConfig.of(context);
     return Scaffold(
       body: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     });
                   })
                 : ApiUrlForm(
-                    apiUrl: state.apiUrl ?? appConfig.apiUrl,
+                    apiUrl: state.apiUrl ?? appConfig!.apiUrl,
                     onTapNext: () {
                       setState(() {
                         canLogin = true;
@@ -71,9 +71,9 @@ class ApiUrlForm extends StatefulWidget {
   final Function onTapNext;
 
   ApiUrlForm({
-    Key key,
-    @required this.apiUrl,
-    @required this.onTapNext,
+    Key? key,
+    required this.apiUrl,
+    required this.onTapNext,
   }) : super(key: key);
 
   @override
@@ -82,7 +82,7 @@ class ApiUrlForm extends StatefulWidget {
 
 class _ApiUrlFormState extends State<ApiUrlForm> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _controller;
+  TextEditingController? _controller;
 
   @override
   void initState() {
@@ -92,7 +92,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
@@ -117,7 +117,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
               ),
               controller: _controller,
               validator: (value) {
-                if (value.startsWith(RegExp(r'^https?://'))) {
+                if (value!.startsWith(RegExp(r'^https?://'))) {
                   return null;
                 }
                 return '网址必须为 http:// 或 https:// 开头，请输入正确的网址';
@@ -127,9 +127,9 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
           ),
           RoundedRaisedButton(
             onPressed: () {
-              if (_formKey.currentState.validate()) {
+              if (_formKey.currentState!.validate()) {
                 BlocProvider.of<AppPreferencesBloc>(context).add(
-                  AppApiUrlChanged(apiUrl: _controller.text),
+                  AppApiUrlChanged(apiUrl: _controller!.text),
                 );
                 widget.onTapNext();
               }
@@ -152,7 +152,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
 class LoginForm extends StatefulWidget {
   final Function onTapBack;
 
-  LoginForm({@required this.onTapBack});
+  LoginForm({required this.onTapBack});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -227,7 +227,7 @@ class _LoginFormState extends State<LoginForm> {
               child: Text('登录'),
             ),
             TextButton(
-              onPressed: widget.onTapBack,
+              onPressed: widget.onTapBack as void Function()?,
               child: Text('返回'),
             ),
           ],

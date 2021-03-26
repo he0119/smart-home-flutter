@@ -7,10 +7,10 @@ import 'package:smarthome/pages/storage/storage_edit_page.dart';
 import 'package:smarthome/repositories/repositories.dart';
 
 class AddStorageIconButton extends StatelessWidget {
-  final Storage storage;
+  final Storage? storage;
 
   const AddStorageIconButton({
-    Key key,
+    Key? key,
     this.storage,
   }) : super(key: key);
 

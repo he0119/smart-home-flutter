@@ -1,4 +1,4 @@
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:device_info/device_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -6,30 +6,30 @@ import 'package:version/version.dart';
 
 class VersionRepository {
   static final Logger _log = Logger('VersionRepository');
-  Version _currentVersion;
-  Version _onlineVersion;
-  String _deviceAbi;
+  Version? _currentVersion;
+  Version? _onlineVersion;
+  String? _deviceAbi;
   bool _fileExist = false;
 
   Future<Version> get currentVersion async {
     if (_currentVersion == null) {
       _currentVersion = await _getCurrentVersion();
     }
-    return _currentVersion;
+    return _currentVersion!;
   }
 
   Future<String> get deviceAbi async {
     if (_deviceAbi == null) {
       _deviceAbi = await _getDeviceAbi();
     }
-    return _deviceAbi;
+    return _deviceAbi!;
   }
 
   Future<Version> get onlineVersion async {
     if (_onlineVersion == null) {
       _onlineVersion = await _getOnlineVersion();
     }
-    return _onlineVersion;
+    return _onlineVersion!;
   }
 
   /// 是否需要更新
@@ -87,13 +87,13 @@ class VersionRepository {
     final String url =
         'https://hub.fastgit.org/he0119/smart-home-flutter/releases/latest';
     try {
-      var response = await http.get(url);
+      var response = await http.get(Uri.parse(url));
       _fileExist = response.body.contains(await filename);
-      final Match match = _versionRegex.firstMatch(response.body);
+      final Match? match = _versionRegex.firstMatch(response.body);
       if (match == null) {
         throw Exception('检查更新失败，请重试');
       } else {
-        String versionName = match.group(1);
+        String? versionName = match.group(1);
         _log.fine('最新的版本号为 { $versionName }');
         return Version.parse(versionName);
       }

@@ -7,11 +7,11 @@ import 'package:smarthome/utils/show_snack_bar.dart';
 
 class AddCommentButtonBar extends StatefulWidget {
   final Topic topic;
-  final VoidCallback onAddSuccess;
+  final VoidCallback? onAddSuccess;
 
   AddCommentButtonBar({
-    Key key,
-    @required this.topic,
+    Key? key,
+    required this.topic,
     this.onAddSuccess,
   }) : super(key: key);
 
@@ -47,7 +47,7 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
         if (state is CommentAddSuccess) {
           _controller.text = '';
           _foucsNode.unfocus();
-          if (widget.onAddSuccess != null) widget.onAddSuccess();
+          if (widget.onAddSuccess != null) widget.onAddSuccess!();
           showInfoSnackBar('评论成功');
         }
       },
@@ -62,7 +62,7 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
               maxLines: null,
               decoration: InputDecoration(hintText: '添加评论'),
               validator: (value) {
-                if (_foucsNode.hasFocus && value.isEmpty) {
+                if (_foucsNode.hasFocus && value!.isEmpty) {
                   return '评论不能为空';
                 }
                 return null;
@@ -73,7 +73,7 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
           trailing: OutlinedButton(
             onPressed: _foucsNode.hasFocus
                 ? () {
-                    if (_formKey.currentState.validate()) {
+                    if (_formKey.currentState!.validate()) {
                       showInfoSnackBar('正在发送...', duration: 1);
                       BlocProvider.of<CommentEditBloc>(context)
                           .add(CommentAdded(

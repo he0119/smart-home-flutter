@@ -17,8 +17,8 @@ extension AppTabExtension on AppTab {
         return '物品';
       case AppTab.blog:
         return '博客';
-      default:
-        return '留言';
+      case AppTab.board:
+        return '留言板';
     }
   }
 
@@ -31,7 +31,7 @@ extension AppTabExtension on AppTab {
         return Icon(Icons.storage);
       case AppTab.blog:
         return Icon(Icons.web);
-      default:
+      case AppTab.board:
         return Icon(Icons.chat);
     }
   }
@@ -45,7 +45,7 @@ extension AppTabExtension on AppTab {
         return '物品管理';
       case AppTab.blog:
         return '博客';
-      default:
+      case AppTab.board:
         return '留言板';
     }
   }
@@ -59,7 +59,7 @@ extension AppTabExtension on AppTab {
         return StorageHomePage();
       case AppTab.blog:
         return BlogHomePage();
-      default:
+      case AppTab.board:
         return BoardHomePage();
     }
   }

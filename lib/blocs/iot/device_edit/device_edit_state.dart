@@ -4,7 +4,7 @@ abstract class DeviceEditState extends Equatable {
   const DeviceEditState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class DeviceEditInitial extends DeviceEditState {}
@@ -12,12 +12,12 @@ class DeviceEditInitial extends DeviceEditState {}
 class DeviceInProgress extends DeviceEditState {}
 
 class DeviceFailure extends DeviceEditState {
-  final String message;
+  final String? message;
 
   const DeviceFailure(this.message);
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 
   @override
   String toString() {
@@ -28,7 +28,7 @@ class DeviceFailure extends DeviceEditState {
 class DeviceAddSuccess extends DeviceEditState {
   final Device device;
 
-  const DeviceAddSuccess({@required this.device});
+  const DeviceAddSuccess({required this.device});
 
   @override
   List<Object> get props => [device];
@@ -37,7 +37,7 @@ class DeviceAddSuccess extends DeviceEditState {
 class DeviceUpdateSuccess extends DeviceEditState {
   final Device device;
 
-  const DeviceUpdateSuccess({@required this.device});
+  const DeviceUpdateSuccess({required this.device});
 
   @override
   List<Object> get props => [device];
@@ -46,7 +46,7 @@ class DeviceUpdateSuccess extends DeviceEditState {
 class DeviceDeleteSuccess extends DeviceEditState {
   final Device device;
 
-  const DeviceDeleteSuccess({@required this.device});
+  const DeviceDeleteSuccess({required this.device});
 
   @override
   List<Object> get props => [device];
@@ -55,7 +55,7 @@ class DeviceDeleteSuccess extends DeviceEditState {
 class DeviceSetSuccess extends DeviceEditState {
   final Device device;
 
-  const DeviceSetSuccess({@required this.device});
+  const DeviceSetSuccess({required this.device});
 
   @override
   List<Object> get props => [device];

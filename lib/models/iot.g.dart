@@ -10,8 +10,8 @@ Device _$DeviceFromJson(Map<String, dynamic> json) {
   return Device(
     id: json['id'] as String,
     name: json['name'] as String,
-    deviceType: json['deviceType'] as String,
-    location: json['location'] as String,
+    deviceType: json['deviceType'] as String?,
+    location: json['location'] as String?,
     createdAt: json['createdAt'] == null
         ? null
         : DateTime.parse(json['createdAt'] as String),
@@ -42,22 +42,22 @@ Map<String, dynamic> _$DeviceToJson(Device instance) => <String, dynamic>{
 
 AutowateringData _$AutowateringDataFromJson(Map<String, dynamic> json) {
   return AutowateringData(
-    id: json['id'] as String,
+    id: json['id'] as String?,
     device: json['device'] == null
         ? null
         : Device.fromJson(json['device'] as Map<String, dynamic>),
     time: json['time'] == null ? null : DateTime.parse(json['time'] as String),
-    temperature: (json['temperature'] as num)?.toDouble(),
-    humidity: (json['humidity'] as num)?.toDouble(),
-    wifiSignal: json['wifiSignal'] as int,
-    valve1: json['valve1'] as bool,
-    valve2: json['valve2'] as bool,
-    valve3: json['valve3'] as bool,
-    pump: json['pump'] as bool,
-    valve1Delay: json['valve1Delay'] as int,
-    valve2Delay: json['valve2Delay'] as int,
-    valve3Delay: json['valve3Delay'] as int,
-    pumpDelay: json['pumpDelay'] as int,
+    temperature: (json['temperature'] as num?)?.toDouble(),
+    humidity: (json['humidity'] as num?)?.toDouble(),
+    wifiSignal: json['wifiSignal'] as int?,
+    valve1: json['valve1'] as bool?,
+    valve2: json['valve2'] as bool?,
+    valve3: json['valve3'] as bool?,
+    pump: json['pump'] as bool?,
+    valve1Delay: json['valve1Delay'] as int?,
+    valve2Delay: json['valve2Delay'] as int?,
+    valve3Delay: json['valve3Delay'] as int?,
+    pumpDelay: json['pumpDelay'] as int?,
   );
 }
 

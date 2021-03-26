@@ -23,7 +23,7 @@ class PictureEditFailure extends PictureEditState {
 class PictureAddSuccess extends PictureEditState {
   final Picture picture;
 
-  const PictureAddSuccess({@required this.picture});
+  const PictureAddSuccess({required this.picture});
 
   @override
   String toString() => 'PictureAddSuccess { Picture: ${picture.id} }';
@@ -32,7 +32,7 @@ class PictureAddSuccess extends PictureEditState {
 class PictureUpdateSuccess extends PictureEditState {
   final Picture picture;
 
-  const PictureUpdateSuccess({@required this.picture});
+  const PictureUpdateSuccess({required this.picture});
 
   @override
   String toString() => 'PictureUpdateSuccess { Picture: ${picture.id} }';
@@ -41,7 +41,7 @@ class PictureUpdateSuccess extends PictureEditState {
 class PictureDeleteSuccess extends PictureEditState {
   final Picture picture;
 
-  const PictureDeleteSuccess({@required this.picture});
+  const PictureDeleteSuccess({required this.picture});
 
   @override
   String toString() => 'PictureDeleteSuccess { Picture: ${picture.id} }';

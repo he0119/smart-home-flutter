@@ -15,16 +15,16 @@ class ItemDetailInProgress extends ItemDetailState {
 class ItemDetailFailure extends ItemDetailState {
   final String message;
   final String name;
-  final String id;
+  final String? id;
 
   const ItemDetailFailure(
     this.message, {
-    @required this.name,
-    @required this.id,
+    required this.name,
+    this.id,
   });
 
   @override
-  List<Object> get props => [message, name, id];
+  List<Object> get props => [message, name];
 
   @override
   String toString() => 'ItemDetailFailure(message: $message)';
@@ -33,7 +33,7 @@ class ItemDetailFailure extends ItemDetailState {
 class ItemDetailSuccess extends ItemDetailState {
   final Item item;
 
-  const ItemDetailSuccess({@required this.item});
+  const ItemDetailSuccess({required this.item});
 
   @override
   List<Object> get props => [item];

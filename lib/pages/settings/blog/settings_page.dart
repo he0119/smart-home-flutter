@@ -19,7 +19,7 @@ class BlogSettingsPage extends Page {
 }
 
 class BlogSettingsScreen extends StatelessWidget {
-  const BlogSettingsScreen({Key key}) : super(key: key);
+  const BlogSettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +29,16 @@ class BlogSettingsScreen extends StatelessWidget {
       ),
       body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => SettingsList(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          contentPadding: EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(
               title: '网址',
               tiles: [
                 SettingsTile(
                   title: '博客网址',
-                  subtitle: state.blogUrl ?? '请单击输入',
-                  onTap: () {
+                  subtitle: state.blogUrl,
+                  onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => BlogUrlPage(),
                     ));
@@ -45,7 +47,7 @@ class BlogSettingsScreen extends StatelessWidget {
                 SettingsTile(
                   title: '博客管理网址',
                   subtitle: state.blogAdminUrl ?? '请单击输入',
-                  onTap: () {
+                  onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => BlogAdminUrlPage(),
                     ));

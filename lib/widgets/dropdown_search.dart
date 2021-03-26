@@ -4,23 +4,23 @@ import 'package:flutter/material.dart';
 typedef Future<List<T>> DropdownSearchOnFind<T>(String text);
 
 class MyDropdownSearch<T> extends StatelessWidget {
-  final String label;
-  final DropdownSearchOnFind<T> onFind;
-  final ValueChanged<T> onChanged;
-  final T selectedItem;
+  final String? label;
+  final DropdownSearchOnFind<T>? onFind;
+  final ValueChanged<T>? onChanged;
+  final T? selectedItem;
   final bool showClearButton;
-  final String Function(T) validator;
+  final String? Function(T?)? validator;
   final AutovalidateMode autoValidateMode;
 
   const MyDropdownSearch({
-    Key key,
+    Key? key,
     this.label,
     this.onFind,
     this.onChanged,
     this.selectedItem,
     this.showClearButton = false,
     this.validator,
-    this.autoValidateMode,
+    this.autoValidateMode = AutovalidateMode.disabled,
   }) : super(key: key);
 
   @override

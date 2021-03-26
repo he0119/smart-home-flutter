@@ -77,13 +77,13 @@ Widget _buildItem(BuildContext context, Item item) {
           },
         ),
         if (item.consumables != null)
-          for (Item consumable in item.consumables)
+          for (Item consumable in item.consumables!)
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
               child: ListTile(
                 title: Text(consumable.name),
                 subtitle: consumable.expiredAt != null
-                    ? Text(consumable.expiredAt.differenceFromNowStr())
+                    ? Text(consumable.expiredAt!.differenceFromNowStr())
                     : null,
                 onTap: () {
                   MyRouterDelegate.of(context).addItemPage(item: consumable);

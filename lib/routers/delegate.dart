@@ -51,7 +51,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   bool isLogin = false;
 
   /// 默认主页
-  AppTab defaultHomePage;
+  late AppTab defaultHomePage;
 
   List<Page> _pages = <Page>[];
 
@@ -95,7 +95,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   int storageGroup = 0;
 
   /// 添加一组位置
-  void addStorageGroup({Storage storage}) {
+  void addStorageGroup({Storage? storage}) {
     storageGroup += 1;
     _pages.add(StorageDetailPage(
       storageName: storage?.name ?? '',
@@ -106,19 +106,19 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   /// 物品位置页面间的导航
-  void setStoragePage({Storage storage}) {
+  void setStoragePage({Storage? storage}) {
     // 先从最后开始删除当前的物品位置页面
     // 一直删除到这一组结束
     // 每次只删除一个 Group
     while (_pages.last is StorageDetailPage &&
-        _pages.last.name.startsWith('/storage/$storageGroup')) {
+        _pages.last.name!.startsWith('/storage/$storageGroup')) {
       _pages.removeLast();
     }
     // 再重新添加
     _pages.add(StorageDetailPage(storageName: '', group: storageGroup));
     if (storage != null) {
       if (storage.ancestors != null) {
-        for (Storage storage in storage.ancestors) {
+        for (Storage storage in storage.ancestors!) {
           _pages.add(StorageDetailPage(
             storageName: storage.name,
             storageId: storage.id,
@@ -138,7 +138,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   int itemCount = 0;
 
   /// 添加一个物品详情页面
-  void addItemPage({@required Item item}) {
+  void addItemPage({required Item item}) {
     itemCount += 1;
     _pages.add(ItemDetailPage(
       itemName: item.name,
@@ -160,12 +160,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       _log.fine('Pop ${route.settings.name}');
       _pages.remove(route.settings);
       // 每当一组位置全部 Pop，Group 计数减一
-      if (route.settings.name.startsWith('/storage')) {
-        if (!_pages.last.name.startsWith('/storage/$storageGroup')) {
+      if (route.settings.name!.startsWith('/storage')) {
+        if (!_pages.last.name!.startsWith('/storage/$storageGroup')) {
           storageGroup -= 1;
         }
       }
-      if (route.settings.name.startsWith('/item')) {
+      if (route.settings.name!.startsWith('/item')) {
         itemCount -= 1;
       }
       notifyListeners();
@@ -180,7 +180,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   /// 从当前显示页面倒推 RoutePath
   RoutePath get routePath {
     if (pages.last.name != null) {
-      final uri = Uri.parse(pages.last.name);
+      final uri = Uri.parse(pages.last.name!);
       if (pages.last is IotHomePage ||
           pages.last is BoardHomePage ||
           pages.last is BlogHomePage ||
@@ -214,10 +214,13 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   @override
-  Future<void> setNewRoutePath(RoutePath routePath) async {
+  Future<void> setNewRoutePath(RoutePath? routePath) async {
     _log.fine('setNewRoutePath: $routePath');
-    if (routePath is HomeRoutePath && routePath.appTab != null) {
-      _pages = [routePath.appTab.page];
+    if (routePath is HomeRoutePath) {
+      final appTab = routePath.appTab;
+      if (appTab != null) {
+        _pages = [appTab.page];
+      }
     } else if (routePath is TopicRoutePath) {
       _pages = [
         BoardHomePage(),
@@ -282,6 +285,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             BlogSettingsPage(),
           ];
           break;
+        default:
       }
     } else if (routePath is PictureRoutePath) {
       _pages = [
@@ -298,7 +302,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     _log.fine('Router rebuilded');
     _log.fine('pages $pages');
     final graphQLApiClient = RepositoryProvider.of<GraphQLApiClient>(context);
-    final AppConfig config = AppConfig.of(context);
+    final AppConfig? config = AppConfig.of(context);
     return MultiBlocListener(
       listeners: [
         BlocListener<AppPreferencesBloc, AppPreferencesState>(
@@ -314,7 +318,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           },
           listener: (context, state) async {
             // 如果软件配置中没有设置过 APIURL，则使用默认的 URL
-            await graphQLApiClient.initailize(state.apiUrl ?? config.apiUrl);
+            await graphQLApiClient.initailize(state.apiUrl ?? config!.apiUrl);
             if (state.initialized) {
               initialized = state.initialized;
               isLogin = state.loginUser != null;
@@ -372,7 +376,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             }
           },
         ),
-        BlocListener<TabBloc, AppTab>(
+        BlocListener<TabBloc, AppTab?>(
           listener: (context, state) {
             if (state != null) {
               setHomePage(state);
@@ -382,20 +386,20 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         BlocListener<UpdateBloc, UpdateState>(
           listener: (context, state) {
             if (state is UpdateSuccess && state.needUpdate) {
-              scaffoldMessengerKey.currentState.showSnackBar(
+              scaffoldMessengerKey.currentState!.showSnackBar(
                 SnackBar(
                   content: Text('发现新版本（${state.version}）'),
                   action: SnackBarAction(
                     label: '更新',
                     onPressed: () {
-                      launchUrl(state.url);
+                      launchUrl(state.url!);
                     },
                   ),
                 ),
               );
             }
             if (state is UpdateFailure) {
-              scaffoldMessengerKey.currentState.showSnackBar(
+              scaffoldMessengerKey.currentState!.showSnackBar(
                 SnackBar(
                   content: Text(state.message),
                   action: SnackBarAction(

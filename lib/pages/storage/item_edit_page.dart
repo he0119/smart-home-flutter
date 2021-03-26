@@ -17,14 +17,14 @@ class ItemEditPage extends StatefulWidget {
   final bool isEditing;
 
   /// 提供需要编辑的物品
-  final Item item;
+  final Item? item;
 
   /// 提供需要提供要添加到的位置
-  final Storage storage;
+  final Storage? storage;
 
   const ItemEditPage({
-    Key key,
-    @required this.isEditing,
+    Key? key,
+    required this.isEditing,
     this.item,
     this.storage,
   })  : assert(item != null || storage != null),
@@ -35,16 +35,16 @@ class ItemEditPage extends StatefulWidget {
 }
 
 class _ItemEditPageState extends State<ItemEditPage> {
-  String storageId;
-  DateTime expiredAt;
-  TextEditingController _nameController;
-  TextEditingController _numberController;
-  TextEditingController _descriptionController;
-  TextEditingController _priceController;
-  FocusNode _nameFocusNode;
-  FocusNode _numberFocusNode;
-  FocusNode _descriptionFocusNode;
-  FocusNode _priceFocusNode;
+  String? storageId;
+  DateTime? expiredAt;
+  late TextEditingController _nameController;
+  late TextEditingController _numberController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _priceController;
+  late FocusNode _nameFocusNode;
+  late FocusNode _numberFocusNode;
+  late FocusNode _descriptionFocusNode;
+  late FocusNode _priceFocusNode;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -52,7 +52,8 @@ class _ItemEditPageState extends State<ItemEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: widget.isEditing ? Text('编辑 ${widget.item.name}') : Text('添加物品'),
+        title:
+            widget.isEditing ? Text('编辑 ${widget.item!.name}') : Text('添加物品'),
       ),
       body: BlocListener<ItemEditBloc, ItemEditState>(
         listener: (context, state) {
@@ -91,7 +92,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       ],
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return '名称不能为空';
                         }
                         return null;
@@ -112,7 +113,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return '数量不能为空';
                         }
                         return null;
@@ -137,7 +138,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                           storageId = data.id;
                         },
                         selectedItem: widget.isEditing
-                            ? widget.item.storage
+                            ? widget.item!.storage
                             : widget.storage,
                         autoValidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
@@ -172,7 +173,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       ],
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
-                        if (value.isEmpty) return null;
+                        if (value!.isEmpty) return null;
                         final parts = value.split('.');
                         if (parts.length > 2) {
                           return '价格最多只能有两位小数且不超过一亿';
@@ -207,7 +208,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                         }
                       },
                       initialValue: widget.isEditing
-                          ? widget.item.expiredAt?.toLocal()
+                          ? widget.item!.expiredAt?.toLocal()
                           : null,
                       decoration: InputDecoration(
                         labelText: '有效期至',
@@ -219,7 +220,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                     RoundedRaisedButton(
                       onPressed: (state is! ItemEditInProgress)
                           ? () {
-                              if (_formKey.currentState.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 _onSubmitPressed();
                               }
                             }
@@ -242,6 +243,10 @@ class _ItemEditPageState extends State<ItemEditPage> {
     _numberFocusNode.dispose();
     _descriptionFocusNode.dispose();
     _priceFocusNode.dispose();
+    _nameController.dispose();
+    _numberController.dispose();
+    _descriptionController.dispose();
+    _priceController.dispose();
 
     super.dispose();
   }
@@ -249,21 +254,21 @@ class _ItemEditPageState extends State<ItemEditPage> {
   @override
   void initState() {
     if (widget.isEditing) {
-      _nameController = TextEditingController(text: widget.item.name);
+      _nameController = TextEditingController(text: widget.item!.name);
       _numberController =
-          TextEditingController(text: widget.item.number.toString());
+          TextEditingController(text: widget.item!.number.toString());
       _priceController =
-          TextEditingController(text: widget.item.price?.toString());
+          TextEditingController(text: widget.item!.price?.toString());
       _descriptionController =
-          TextEditingController(text: widget.item.description);
-      storageId = widget.item.storage?.id;
-      expiredAt = widget.item.expiredAt;
+          TextEditingController(text: widget.item!.description);
+      storageId = widget.item!.storage?.id;
+      expiredAt = widget.item!.expiredAt;
     } else {
       _nameController = TextEditingController();
       _numberController = TextEditingController(text: '1');
       _descriptionController = TextEditingController();
       _priceController = TextEditingController();
-      storageId = widget.storage.id;
+      storageId = widget.storage!.id;
     }
 
     _nameFocusNode = FocusNode();
@@ -275,24 +280,24 @@ class _ItemEditPageState extends State<ItemEditPage> {
   }
 
   void _fieldFocusChange(
-      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+      BuildContext context, FocusNode currentFocus, FocusNode? nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }
 
   void _onSubmitPressed() {
-    double _price;
-    if (_priceController.text != null && _priceController.text != '') {
+    double? _price;
+    if (_priceController.text != '') {
       _price = double.parse(_priceController.text);
     }
 
     if (widget.isEditing) {
       BlocProvider.of<ItemEditBloc>(context).add(ItemUpdated(
-        id: widget.item.id,
+        id: widget.item!.id,
         name: _nameController.text,
         number: int.parse(_numberController.text),
         storageId: storageId,
-        oldStorageId: widget.item.id,
+        oldStorageId: widget.item!.id,
         description: _descriptionController.text,
         price: _price,
         expiredAt: expiredAt?.toUtc(),

@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/repositories.dart';
+import 'package:smarthome/utils/exceptions.dart';
 
 part 'item_edit_event.dart';
 part 'item_edit_state.dart';
@@ -12,7 +12,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
   final StorageRepository storageRepository;
 
   ItemEditBloc({
-    @required this.storageRepository,
+    required this.storageRepository,
   }) : super(ItemEditInitial());
 
   @override
@@ -32,7 +32,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
           expiredAt: event.expiredAt,
         );
         yield ItemUpdateSuccess(item: item);
-      } catch (e) {
+      } on MyException catch (e) {
         yield ItemEditFailure(e.message);
       }
     }
@@ -49,7 +49,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
         );
 
         yield ItemAddSuccess(item: item);
-      } catch (e) {
+      } on MyException catch (e) {
         yield ItemEditFailure(e.message);
       }
     }
@@ -58,7 +58,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
       try {
         await storageRepository.deleteItem(itemId: event.item.id);
         yield ItemDeleteSuccess(item: event.item);
-      } catch (e) {
+      } on MyException catch (e) {
         yield ItemEditFailure(e.message);
       }
     }
@@ -67,7 +67,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
       try {
         await storageRepository.restoreItem(itemId: event.item.id);
         yield ItemRestoreSuccess(item: event.item);
-      } catch (e) {
+      } on MyException catch (e) {
         yield ItemEditFailure(e.message);
       }
     }
@@ -76,9 +76,9 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
       try {
         final item = await storageRepository.addConsumable(
             id: event.item.id,
-            consumableIds: event.consumables.map((e) => e.id).toList());
+            consumableIds: event.consumables.map((e) => e!.id).toList());
         yield ConsumableAddSuccess(item: item);
-      } catch (e) {
+      } on MyException catch (e) {
         yield ItemEditFailure(e.message);
       }
     }
@@ -89,7 +89,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
             id: event.item.id,
             consumableIds: event.consumables.map((e) => e.id).toList());
         yield ConsumableDeleteSuccess(item: item);
-      } catch (e) {
+      } on MyException catch (e) {
         yield ItemEditFailure(e.message);
       }
     }
