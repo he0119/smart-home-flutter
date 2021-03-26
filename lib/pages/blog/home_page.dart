@@ -58,7 +58,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                   final blogAdminUrl = state.blogAdminUrl;
                   if (blogAdminUrl != null) {
                     if (kIsWeb) {
-                      await launchUrl(state.blogAdminUrl);
+                      await launchUrl(blogAdminUrl);
                     } else if (controller.hasData) {
                       controller.data!.loadUrl(blogAdminUrl);
                     }
@@ -106,8 +106,10 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                   tooltip: '使用浏览器打开',
                   child: Icon(Icons.open_in_new),
                   onPressed: () async {
-                    await launchUrl(await (controller.data!.currentUrl()
-                        as FutureOr<String>));
+                    final currentUrl = await controller.data!.currentUrl();
+                    if (currentUrl != null) {
+                      await launchUrl(currentUrl);
+                    }
                   },
                 )
               : null,
