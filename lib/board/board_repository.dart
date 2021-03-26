@@ -1,6 +1,6 @@
 import 'package:graphql/client.dart';
-import 'package:smarthome/graphql/mutations/board/mutations.dart';
-import 'package:smarthome/graphql/queries/board/queries.dart';
+import 'package:smarthome/board/graphql/mutations/mutations.dart';
+import 'package:smarthome/board/graphql/queries/queries.dart';
 import 'package:smarthome/models/board.dart';
 import 'package:smarthome/models/models.dart';
 import 'package:smarthome/repositories/graphql_api_client.dart';

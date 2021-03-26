@@ -2,59 +2,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:smarthome/blocs/core/blocs.dart';
-import 'package:smarthome/blocs/board/blocs.dart';
+import 'package:smarthome/board/bloc/blocs.dart';
+import 'package:smarthome/board/view/widgets/topic_item.dart';
 import 'package:smarthome/models/board.dart';
-import 'package:smarthome/pages/board/widgets/comment_item.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 
-class CommentEditPage extends StatefulWidget {
-  final bool isEditing;
-  final Comment? comment;
+class TopicEditPage extends StatefulWidget {
+  final bool? isEditing;
+  final Topic? topic;
 
-  const CommentEditPage({
+  const TopicEditPage({
     Key? key,
-    required this.isEditing,
-    this.comment,
+    this.isEditing,
+    this.topic,
   }) : super(key: key);
 
   @override
-  _CommentEditPageState createState() => _CommentEditPageState();
+  _TopicEditPageState createState() => _TopicEditPageState();
 }
 
-class _CommentEditPageState extends State<CommentEditPage> {
-  final _bodyController = TextEditingController();
+class _TopicEditPageState extends State<TopicEditPage> {
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    if (widget.isEditing) {
-      _bodyController.text = widget.comment!.body!;
+    if (widget.isEditing!) {
+      _titleController.text = widget.topic!.title!;
+      _descriptionController.text = widget.topic!.description!;
     }
   }
 
   @override
   void dispose() {
-    _bodyController.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final List<String> tabs = ['编辑', '预览'];
-    return BlocListener<CommentEditBloc, CommentEditState>(
+    return BlocListener<TopicEditBloc, TopicEditState>(
       listener: (context, state) {
-        if (state is CommentAddSuccess || state is CommentUpdateSuccess) {
+        if (state is TopicAddSuccess || state is TopicUpdateSuccess) {
           Navigator.of(context).pop();
-          if (widget.isEditing) {
-            showInfoSnackBar('评论编辑成功');
+          if (widget.isEditing!) {
+            showInfoSnackBar('话题编辑成功');
           } else {
             BlocProvider.of<BoardHomeBloc>(context)
                 .add(BoardHomeFetched(cache: false));
-            showInfoSnackBar('评论添加成功');
+            showInfoSnackBar('话题添加成功');
           }
         }
-        if (state is CommentFailure) {
+        if (state is TopicFailure) {
           showErrorSnackBar(state.message);
         }
       },
@@ -62,7 +65,7 @@ class _CommentEditPageState extends State<CommentEditPage> {
         length: tabs.length,
         child: Scaffold(
           appBar: AppBar(
-            title: widget.isEditing ? Text('编辑评论') : Text('新评论'),
+            title: widget.isEditing! ? Text('编辑话题') : Text('新话题'),
             actions: [
               Tooltip(
                 message: '提交',
@@ -70,11 +73,17 @@ class _CommentEditPageState extends State<CommentEditPage> {
                   icon: Icon(Icons.send),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      if (widget.isEditing) {
-                        BlocProvider.of<CommentEditBloc>(context)
-                            .add(CommentUpdated(
-                          id: widget.comment!.id,
-                          body: _bodyController.text,
+                      if (widget.isEditing!) {
+                        BlocProvider.of<TopicEditBloc>(context)
+                            .add(TopicUpdated(
+                          id: widget.topic!.id,
+                          title: _titleController.text,
+                          description: _descriptionController.text,
+                        ));
+                      } else {
+                        BlocProvider.of<TopicEditBloc>(context).add(TopicAdded(
+                          title: _titleController.text,
+                          description: _descriptionController.text,
                         ));
                       }
                       showInfoSnackBar('正在提交...', duration: 1);
@@ -91,12 +100,14 @@ class _CommentEditPageState extends State<CommentEditPage> {
             children: [
               _EditPage(
                 isEditing: widget.isEditing,
-                comment: widget.comment,
+                topic: widget.topic,
                 formKey: _formKey,
-                bodyController: _bodyController,
+                titleController: _titleController,
+                descriptionController: _descriptionController,
               ),
               _PreviewPage(
-                bodyController: _bodyController,
+                titleController: _titleController,
+                descriptionController: _descriptionController,
               ),
             ],
           ),
@@ -107,16 +118,18 @@ class _CommentEditPageState extends State<CommentEditPage> {
 }
 
 class _EditPage extends StatelessWidget {
-  final bool isEditing;
-  final Comment? comment;
-  final TextEditingController? bodyController;
+  final bool? isEditing;
+  final Topic? topic;
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
   final GlobalKey<FormState> formKey;
 
   const _EditPage({
     Key? key,
     required this.isEditing,
-    this.comment,
-    this.bodyController,
+    this.topic,
+    required this.titleController,
+    required this.descriptionController,
     required this.formKey,
   }) : super(key: key);
 
@@ -130,7 +143,22 @@ class _EditPage extends StatelessWidget {
           child: Column(
             children: [
               TextFormField(
-                controller: bodyController,
+                controller: titleController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: '添加标题',
+                  hintStyle: TextStyle(fontSize: 18),
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return '请填写标题';
+                  }
+                  return null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+              ),
+              TextFormField(
+                controller: descriptionController,
                 maxLines: null,
                 decoration: InputDecoration(
                   border: InputBorder.none,
@@ -154,11 +182,13 @@ class _EditPage extends StatelessWidget {
 }
 
 class _PreviewPage extends StatefulWidget {
-  final TextEditingController? bodyController;
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
 
   const _PreviewPage({
     Key? key,
-    this.bodyController,
+    required this.titleController,
+    required this.descriptionController,
   }) : super(key: key);
 
   @override
@@ -169,12 +199,14 @@ class __PreviewPageState extends State<_PreviewPage> {
   @override
   void initState() {
     super.initState();
-    widget.bodyController!.addListener(_onChanged);
+    widget.titleController.addListener(_onChanged);
+    widget.descriptionController.addListener(_onChanged);
   }
 
   @override
   void dispose() {
-    widget.bodyController!.removeListener(_onChanged);
+    widget.titleController.removeListener(_onChanged);
+    widget.descriptionController.removeListener(_onChanged);
     super.dispose();
   }
 
@@ -187,15 +219,16 @@ class __PreviewPageState extends State<_PreviewPage> {
     final loginUser =
         context.select((AppPreferencesBloc b) => b.state.loginUser);
     return SingleChildScrollView(
-      child: CommentItem(
-        comment: Comment(
+      child: TopicItem(
+        topic: Topic(
           id: '',
           user: loginUser,
-          body: widget.bodyController!.text,
+          title: widget.titleController.text,
+          description: widget.descriptionController.text,
           createdAt: DateTime.now(),
           editedAt: DateTime.now(),
         ),
-        showMenu: false,
+        showBody: true,
       ),
     );
   }

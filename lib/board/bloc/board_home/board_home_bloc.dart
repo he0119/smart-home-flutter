@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:smarthome/board/board_repository.dart';
 import 'package:smarthome/models/models.dart';
-import 'package:smarthome/repositories/repositories.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 part 'board_home_event.dart';

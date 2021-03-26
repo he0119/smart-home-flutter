@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/models/board.dart';
-import 'package:smarthome/repositories/board_repository.dart';
+import 'package:smarthome/board/board_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 part 'comment_edit_event.dart';

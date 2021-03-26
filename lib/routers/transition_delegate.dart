@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smarthome/board/board.dart';
 import 'package:smarthome/pages/blog/home_page.dart';
-import 'package:smarthome/pages/board/home_page.dart';
 import 'package:smarthome/pages/iot/home_page.dart';
 import 'package:smarthome/pages/login_page.dart';
 import 'package:smarthome/pages/splash_page.dart';

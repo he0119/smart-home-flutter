@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:smarthome/blocs/board/blocs.dart';
+import 'package:smarthome/board/bloc/blocs.dart';
 import 'package:smarthome/models/board.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 
