@@ -45,7 +45,7 @@ class PushRepository {
 
   /// 更新 MiPush 的 RegId
   Future<MiPush> updateMiPush({
-    required String? regId,
+    required String regId,
   }) async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;

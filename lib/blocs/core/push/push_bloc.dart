@@ -56,7 +56,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
             if (call.method == 'ReceiveRegisterResult' &&
                 call.arguments != null) {
               _log.fine('小米推送注册成功');
-              final String? regId = call.arguments;
+              final String regId = call.arguments;
               add(PushUpdated(miPush: MiPush(regId: null)));
 
               if (regId != appPreferencesBloc.state.miPushRegId) {
