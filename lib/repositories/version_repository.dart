@@ -1,4 +1,4 @@
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:device_info/device_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';

@@ -211,48 +211,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
-  device_info_plus:
+  device_info:
     dependency: "direct main"
     description:
-      name: device_info_plus
+      name: device_info
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0"
-  device_info_plus_linux:
+    version: "2.0.0"
+  device_info_platform_interface:
     dependency: transitive
     description:
-      name: device_info_plus_linux
+      name: device_info_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0"
-  device_info_plus_macos:
-    dependency: transitive
-    description:
-      name: device_info_plus_macos
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.0"
-  device_info_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: device_info_plus_platform_interface
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.0"
-  device_info_plus_web:
-    dependency: transitive
-    description:
-      name: device_info_plus_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.0"
-  device_info_plus_windows:
-    dependency: transitive
-    description:
-      name: device_info_plus_windows
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.0"
+    version: "2.0.1"
   dropdown_search:
     dependency: "direct main"
     description:
