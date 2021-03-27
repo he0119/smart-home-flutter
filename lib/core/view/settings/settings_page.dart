@@ -4,15 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:smarthome/blog/blog.dart';
+import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/core/model/models.dart';
 import 'package:smarthome/core/view/settings/api_url_page.dart';
 import 'package:smarthome/core/view/settings/default_page.dart';
 import 'package:smarthome/core/view/settings/mipush_settings_tile.dart';
-import 'package:smarthome/blog/view/blog_admin_url_page.dart';
-import 'package:smarthome/blog/view/blog_url_page.dart';
-import 'package:smarthome/board/view/comment_order_page.dart';
-import 'package:smarthome/iot/view/refresh_interval_page.dart';
+import 'package:smarthome/iot/iot.dart';
 
 class SettingsPage extends Page {
   SettingsPage() : super(key: ValueKey('settings'), name: '/settings');
