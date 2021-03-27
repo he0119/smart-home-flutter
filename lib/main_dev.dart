@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:smarthome/app_config.dart';
-import 'package:smarthome/blocs/simple_bloc_observer.dart';
+import 'package:smarthome/app/app_config.dart';
+import 'package:smarthome/app/simple_bloc_observer.dart';
 
-import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
-import 'main.dart';
+import 'package:smarthome/app/configure_nonweb.dart'
+    if (dart.library.html) 'package:smarthome/app/configure_web.dart';
+import 'package:smarthome/app/main.dart';
 
 void main() {
   configureApp();

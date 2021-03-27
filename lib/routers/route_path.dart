@@ -1,4 +1,4 @@
-import 'package:smarthome/models/models.dart';
+import 'package:smarthome/core/core.dart';
 
 abstract class RoutePath {}
 

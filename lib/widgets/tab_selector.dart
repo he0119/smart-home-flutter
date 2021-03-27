@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smarthome/models/models.dart';
+import 'package:smarthome/core/core.dart';
 
 class TabSelector extends StatelessWidget {
   final AppTab activeTab;
