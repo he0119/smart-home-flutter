@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
-import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarthome/core/model/models.dart';
 import 'package:smarthome/user/user.dart';
@@ -14,7 +13,6 @@ part 'app_preferences_state.dart';
 
 class AppPreferencesBloc
     extends Bloc<AppPreferencesEvent, AppPreferencesState> {
-  static final Logger _log = Logger('AppPreferencesBloc');
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   AppPreferencesBloc() : super(AppPreferencesState.initial());
