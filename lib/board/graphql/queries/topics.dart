@@ -21,6 +21,7 @@ query topics($after: String) {
         comments(last: 1) {
           edges {
             node {
+              id
               createdAt
             }
           }
