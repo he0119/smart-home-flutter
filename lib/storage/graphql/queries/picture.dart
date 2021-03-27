@@ -4,6 +4,7 @@ query picture($id: ID!) {
   picture(id: $id) {
     id
     item {
+      id
       name
     }
     description
