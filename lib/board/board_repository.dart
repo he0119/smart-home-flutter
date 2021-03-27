@@ -1,9 +1,9 @@
 import 'package:graphql/client.dart';
+import 'package:smarthome/app/model/relay.dart';
 import 'package:smarthome/board/graphql/mutations/mutations.dart';
 import 'package:smarthome/board/graphql/queries/queries.dart';
-import 'package:smarthome/models/board.dart';
-import 'package:smarthome/models/models.dart';
-import 'package:smarthome/repositories/graphql_api_client.dart';
+import 'package:smarthome/app/graphql_api_client.dart';
+import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/utils/graphql_helper.dart';
 import 'package:tuple/tuple.dart';
 

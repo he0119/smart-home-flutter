@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smarthome/app_config.dart';
+import 'package:smarthome/app/app_config.dart';
 
-import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
-import 'main.dart';
+import 'package:smarthome/app/configure_nonweb.dart'
+    if (dart.library.html) 'package:smarthome/app/configure_web.dart';
+import 'package:smarthome/app/main.dart';
 
 void main() {
   configureApp();

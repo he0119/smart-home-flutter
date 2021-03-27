@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/blocs/core/blocs.dart';
+import 'package:smarthome/app/bloc/blocs.dart';
+import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
-import 'package:smarthome/models/board.dart';
-import 'package:smarthome/models/models.dart';
 
 class SliverCommentList extends StatelessWidget {
   final List<Comment> comments;

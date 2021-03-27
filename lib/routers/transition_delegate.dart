@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:smarthome/app/view/login_page.dart';
+import 'package:smarthome/app/view/splash_page.dart';
+import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
-import 'package:smarthome/pages/blog/home_page.dart';
-import 'package:smarthome/pages/iot/home_page.dart';
-import 'package:smarthome/pages/login_page.dart';
-import 'package:smarthome/pages/splash_page.dart';
-import 'package:smarthome/pages/storage/home_page.dart';
+import 'package:smarthome/iot/view/home_page.dart';
+import 'package:smarthome/storage/storage.dart';
 
 class MyTransitionDelegate extends TransitionDelegate<void> {
   final defaultTransitionDelegate = DefaultTransitionDelegate();
