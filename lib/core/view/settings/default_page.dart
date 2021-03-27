@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:smarthome/app/bloc/blocs.dart';
-import 'package:smarthome/app/model/app_tab.dart';
+import 'package:smarthome/core/bloc/blocs.dart';
+import 'package:smarthome/core/model/models.dart';
 
 class DefaultPage extends StatelessWidget {
   const DefaultPage({Key? key}) : super(key: key);

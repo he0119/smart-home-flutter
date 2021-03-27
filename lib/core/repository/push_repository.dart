@@ -1,9 +1,9 @@
 import 'package:device_info/device_info.dart';
 import 'package:graphql/client.dart';
-import 'package:smarthome/app/graphql/mutations/push/mutations.dart';
-import 'package:smarthome/app/graphql/queries/push/queries.dart';
-import 'package:smarthome/app/graphql_api_client.dart';
-import 'package:smarthome/app/model/push.dart';
+import 'package:smarthome/core/graphql/mutations/push/mutations.dart';
+import 'package:smarthome/core/graphql/queries/push/queries.dart';
+import 'package:smarthome/core/model/push.dart';
+import 'package:smarthome/core/repository/graphql_api_client.dart';
 
 class PushRepository {
   final GraphQLApiClient graphqlApiClient;

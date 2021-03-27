@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/app/bloc/blocs.dart';
-import 'package:smarthome/app/version_repository.dart';
-import 'package:smarthome/app/view/settings/settings_page.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/widgets/gravatar.dart';

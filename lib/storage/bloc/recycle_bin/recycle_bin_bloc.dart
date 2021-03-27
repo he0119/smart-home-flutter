@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:smarthome/app/model/relay.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/storage/storage_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';

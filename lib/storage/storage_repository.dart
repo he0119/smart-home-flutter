@@ -1,8 +1,7 @@
 import 'package:graphql/client.dart';
 import 'package:http/http.dart' show MultipartFile;
 import 'package:http_parser/http_parser.dart';
-import 'package:smarthome/app/graphql_api_client.dart';
-import 'package:smarthome/app/model/relay.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/graphql/mutations/mutations.dart';
 import 'package:smarthome/storage/graphql/queries/queries.dart';
 import 'package:smarthome/storage/model/storage.dart';

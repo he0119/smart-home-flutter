@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/app/bloc/blocs.dart';
-import 'package:smarthome/app/model/app_tab.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/drawer.dart';
 import 'package:smarthome/widgets/tab_selector.dart';
 

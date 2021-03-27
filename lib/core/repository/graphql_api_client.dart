@@ -9,7 +9,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gql_exec/gql_exec.dart';
 import 'package:gql/ast.dart';
-import 'package:smarthome/app/graphql/mutations/mutations.dart';
+import 'package:smarthome/core/graphql/mutations/mutations.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 class GraphQLApiClient {

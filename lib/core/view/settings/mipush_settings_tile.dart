@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:smarthome/app/bloc/blocs.dart';
-import 'package:smarthome/app/view/settings/mipush_page.dart';
+import 'package:smarthome/core/bloc/blocs.dart';
+import 'package:smarthome/core/view/settings/mipush_page.dart';
 
 class MiPushSettingsTile extends SettingsTile {
   MiPushSettingsTile() : super(title: '');

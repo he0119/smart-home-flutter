@@ -2,7 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smarthome/app/version_repository.dart';
+import 'package:smarthome/core/repository/repositories.dart';
 import 'package:smarthome/utils/exceptions.dart';
 import 'package:version/version.dart';
 

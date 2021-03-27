@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:smarthome/app/model/app_tab.dart';
+import 'package:smarthome/core/model/models.dart';
 
 part 'tab_event.dart';
 

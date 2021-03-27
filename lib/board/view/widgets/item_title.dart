@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smarthome/app/model/popup_menu.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/user/user.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/gravatar.dart';

@@ -1,5 +1,5 @@
 import 'package:graphql/client.dart';
-import 'package:smarthome/app/graphql_api_client.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/user/graphql/queries/viewer.dart';
 import 'package:smarthome/user/model/user.dart';
 

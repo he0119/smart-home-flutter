@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/app/bloc/blocs.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/text_edit_page.dart';
 
 class RefreshIntervalPage extends StatelessWidget {

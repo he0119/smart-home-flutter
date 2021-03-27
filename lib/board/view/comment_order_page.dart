@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:smarthome/app/bloc/blocs.dart';
+import 'package:smarthome/core/core.dart';
 
 class CommentOrderPage extends StatelessWidget {
   const CommentOrderPage({Key? key}) : super(key: key);

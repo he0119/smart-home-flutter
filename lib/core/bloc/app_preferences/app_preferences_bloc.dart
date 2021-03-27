@@ -6,7 +6,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smarthome/app/model/app_tab.dart';
+import 'package:smarthome/core/model/models.dart';
 import 'package:smarthome/user/user.dart';
 
 part 'app_preferences_event.dart';

@@ -5,9 +5,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
-import 'package:smarthome/app/bloc/blocs.dart';
-import 'package:smarthome/app/model/push.dart';
-import 'package:smarthome/app/push_repository.dart';
+import 'package:smarthome/core/bloc/blocs.dart';
+import 'package:smarthome/core/model/models.dart';
+import 'package:smarthome/core/repository/repositories.dart';
 import 'package:flutter/services.dart';
 import 'package:smarthome/utils/exceptions.dart';
 

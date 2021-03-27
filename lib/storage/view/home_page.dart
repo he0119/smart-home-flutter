@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/app/model/app_tab.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/model/storage.dart';
