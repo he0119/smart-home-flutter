@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/core/repository/repositories.dart';
 import 'package:smarthome/user/user.dart';
@@ -90,6 +91,8 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapLogoutToState() async* {
     yield AuthenticationFailure('已登出');
+    // 清除 Sentry 设置的用户
+    Sentry.configureScope((scope) => scope.user = null);
     await graphqlApiClient.logout();
   }
 }
