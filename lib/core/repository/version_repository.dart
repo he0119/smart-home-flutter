@@ -2,6 +2,7 @@ import 'package:device_info/device_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:smarthome/utils/exceptions.dart';
 import 'package:version/version.dart';
 
 class VersionRepository {
@@ -91,15 +92,15 @@ class VersionRepository {
       _fileExist = response.body.contains(await filename);
       final Match? match = _versionRegex.firstMatch(response.body);
       if (match == null) {
-        throw Exception('检查更新失败，请重试');
+        throw NetworkException('检查更新失败，请重试');
       } else {
         String? versionName = match.group(1);
         _log.fine('最新的版本号为 { $versionName }');
         return Version.parse(versionName);
       }
-    } catch (e) {
+    } on http.ClientException catch (e) {
       _log.warning(e);
-      throw Exception('检查更新失败，请重试');
+      throw NetworkException('检查更新失败，请重试');
     }
   }
 }
