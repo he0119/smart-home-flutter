@@ -98,51 +98,54 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/icon/icon.webp',
-            width: 100.0,
-            height: 100.0,
-            semanticLabel: 'icon',
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: TextFormField(
-              decoration: InputDecoration(
-                labelText: '服务器网址',
+    return Center(
+      child: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/icon/icon.webp',
+                width: 100.0,
+                height: 100.0,
+                semanticLabel: 'icon',
               ),
-              controller: _controller,
-              validator: (value) {
-                if (value!.startsWith(RegExp(r'^https?://'))) {
-                  return null;
-                }
-                return '网址必须为 http:// 或 https:// 开头，请输入正确的网址';
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-            ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: '服务器网址',
+                  ),
+                  controller: _controller,
+                  validator: (value) {
+                    if (value!.startsWith(RegExp(r'^https?://'))) {
+                      return null;
+                    }
+                    return '网址必须为 http:// 或 https:// 开头，请输入正确的网址';
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                ),
+              ),
+              RoundedRaisedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    BlocProvider.of<AppPreferencesBloc>(context).add(
+                      AppApiUrlChanged(apiUrl: _controller!.text),
+                    );
+                    widget.onTapNext();
+                  }
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('下一步'),
+                    Icon(Icons.chevron_right),
+                  ],
+                ),
+              ),
+            ],
           ),
-          RoundedRaisedButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                BlocProvider.of<AppPreferencesBloc>(context).add(
-                  AppApiUrlChanged(apiUrl: _controller!.text),
-                );
-                widget.onTapNext();
-              }
-            },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('下一步'),
-                Icon(Icons.chevron_right),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -187,50 +190,52 @@ class _LoginFormState extends State<LoginForm> {
         }
       },
       builder: (context, state) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/icon/icon.webp',
-              width: 100.0,
-              height: 100.0,
-              semanticLabel: 'icon',
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                child: AutofillGroup(
-                  child: Column(
-                    children: [
-                      TextFormField(
+        return Center(
+          child: SingleChildScrollView(
+            child: Form(
+              child: AutofillGroup(
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/icon/icon.webp',
+                      width: 100.0,
+                      height: 100.0,
+                      semanticLabel: 'icon',
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: TextFormField(
                         enableSuggestions: false,
                         decoration: InputDecoration(labelText: '用户名'),
                         controller: _usernameController,
                         autofillHints: <String>[AutofillHints.username],
                       ),
-                      TextFormField(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      child: TextFormField(
                         enableSuggestions: false,
                         decoration: InputDecoration(labelText: '密码'),
                         controller: _passwordController,
                         obscureText: true,
                         autofillHints: <String>[AutofillHints.password],
                       ),
-                    ],
-                  ),
+                    ),
+                    RoundedRaisedButton(
+                      onPressed: state is! AuthenticationInProgress
+                          ? _onLoginButtonPressed
+                          : null,
+                      child: Text('登录'),
+                    ),
+                    TextButton(
+                      onPressed: widget.onTapBack as void Function()?,
+                      child: Text('返回'),
+                    ),
+                  ],
                 ),
               ),
             ),
-            RoundedRaisedButton(
-              onPressed: state is! AuthenticationInProgress
-                  ? _onLoginButtonPressed
-                  : null,
-              child: Text('登录'),
-            ),
-            TextButton(
-              onPressed: widget.onTapBack as void Function()?,
-              child: Text('返回'),
-            ),
-          ],
+          ),
         );
       },
     );
