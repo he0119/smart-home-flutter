@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/storage/model/storage.dart';
+import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';

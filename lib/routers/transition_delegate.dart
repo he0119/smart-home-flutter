@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/iot/view/home_page.dart';
+import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/storage/storage.dart';
 
 class MyTransitionDelegate extends TransitionDelegate<void> {
