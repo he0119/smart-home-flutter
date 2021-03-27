@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:smarthome/iot/iot_repository.dart';
+import 'package:smarthome/iot/repository/iot_repository.dart';
 import 'package:smarthome/iot/model/iot.dart';
 import 'package:smarthome/utils/exceptions.dart';
 

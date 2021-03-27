@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/iot/bloc/blocs.dart';
-import 'package:smarthome/iot/iot_repository.dart';
+import 'package:smarthome/iot/repository/iot_repository.dart';
 import 'package:smarthome/iot/model/iot.dart';
 import 'package:smarthome/iot/view/settings/settings_page.dart';
 import 'package:smarthome/routers/delegate.dart';

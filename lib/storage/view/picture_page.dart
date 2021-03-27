@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
-import 'package:smarthome/storage/storage_repository.dart';
+import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';

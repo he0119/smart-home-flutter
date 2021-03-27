@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/storage.dart';
-import 'package:smarthome/storage/storage_repository.dart';
+import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/widgets/dropdown_search.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';

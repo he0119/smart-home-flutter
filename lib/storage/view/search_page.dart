@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
-import 'package:smarthome/storage/storage_repository.dart';
+import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/storage/view/widgets/storage_item_list.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 

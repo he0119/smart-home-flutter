@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/storage.dart';
-import 'package:smarthome/storage/storage_repository.dart';
+import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/storage/view/storage_edit_page.dart';
 
 class AddStorageIconButton extends StatelessWidget {

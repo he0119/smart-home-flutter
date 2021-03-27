@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/board/bloc/blocs.dart';
 import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
-import 'package:smarthome/board/board_repository.dart';
+import 'package:smarthome/board/repository/board_repository.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
