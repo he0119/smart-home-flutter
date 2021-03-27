@@ -5,7 +5,8 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart' hide NetworkException, ServerException;
 import 'package:logging/logging.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:package_info/package_info.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gql_exec/gql_exec.dart';
 import 'package:gql/ast.dart';
@@ -70,54 +71,52 @@ class GraphQLApiClient {
   }
 
   /// 初始化 GraphQL 客户端
-  Future<bool> initailize(String url) async {
-    try {
-      final AuthLink _authLink =
-          AuthLink(getToken: () async => 'JWT ${await token}');
-      // 用户代理设置为当前手机
-      // 暂时只支持 Android
-      // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
-      Map<String, String> headers = {};
-      if (!kIsWeb && Platform.isAndroid) {
-        try {
-          final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-          AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-          final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-          headers['User-Agent'] =
-              'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
-        } catch (e) {
-          _log.severe('设置 User-Agent 失败 (${e.toString()})');
+  Future<void> initailize(String url) async {
+    final AuthLink _authLink =
+        AuthLink(getToken: () async => 'JWT ${await token}');
+    // 用户代理设置为当前手机
+    // 暂时只支持 Android
+    // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
+    Map<String, String> headers = {};
+    if (!kIsWeb && Platform.isAndroid) {
+      try {
+        final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        headers['User-Agent'] =
+            'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
+      } catch (exception, stackTrace) {
+        await Sentry.captureException(
+          exception,
+          stackTrace: stackTrace,
+        );
+        _log.severe('设置 User-Agent 失败 (${exception.toString()})');
+      }
+    }
+    final HttpLink _httpLink = HttpLink(
+      url,
+      defaultHeaders: headers,
+    );
+    final ErrorLink _tokenErrorLink =
+        ErrorLink(onGraphQLError: _handleTokenError);
+    final Link _link = _tokenErrorLink.split((request) {
+      final DefinitionNode definition =
+          request.operation.document.definitions.first;
+      if (definition.runtimeType == OperationDefinitionNode) {
+        final String operationName =
+            (definition as OperationDefinitionNode).name!.value;
+        if (operationName == 'tokenAuth' || operationName == 'refreshToken') {
+          return false;
         }
       }
-      final HttpLink _httpLink = HttpLink(
-        url,
-        defaultHeaders: headers,
-      );
-      final ErrorLink _tokenErrorLink =
-          ErrorLink(onGraphQLError: _handleTokenError);
-      final Link _link = _tokenErrorLink.split((request) {
-        final DefinitionNode definition =
-            request.operation.document.definitions.first;
-        if (definition.runtimeType == OperationDefinitionNode) {
-          final String operationName =
-              (definition as OperationDefinitionNode).name!.value;
-          if (operationName == 'tokenAuth' || operationName == 'refreshToken') {
-            return false;
-          }
-        }
-        return true;
-      }, _authLink.concat(_httpLink), _httpLink);
-
-      _client = GraphQLClient(
-        cache: GraphQLCache(),
-        link: _link,
-      );
-      _log.fine('GraphQLClient initailized with url $url');
       return true;
-    } on MyException catch (e) {
-      _log.severe(e);
-      return false;
-    }
+    }, _authLink.concat(_httpLink), _httpLink);
+
+    _client = GraphQLClient(
+      cache: GraphQLCache(),
+      link: _link,
+    );
+    _log.fine('GraphQLClient initailized with url $url');
   }
 
   /// 登出

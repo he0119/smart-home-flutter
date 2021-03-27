@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:quick_actions/quick_actions.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:smarthome/app/app_config.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
@@ -358,6 +359,13 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
               isLogin = true;
               // 当登录成功时，开始初始化推送服务
               BlocProvider.of<PushBloc>(context).add(PushStarted());
+              // 设置 Sentry 用户
+              Sentry.configureScope(
+                (scope) => scope.user = SentryUser(
+                  id: state.currentUser.username,
+                  email: state.currentUser.email,
+                ),
+              );
               notifyListeners();
             }
           },
