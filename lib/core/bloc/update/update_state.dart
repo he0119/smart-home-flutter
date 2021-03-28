@@ -14,7 +14,7 @@ class UpdateFailure extends UpdateState {
   UpdateFailure(this.message);
 
   @override
-  String toString() => 'UpdateFailure { message: $message }';
+  String toString() => 'UpdateFailure(message: $message)';
 }
 
 class UpdateSuccess extends UpdateState {
@@ -26,5 +26,5 @@ class UpdateSuccess extends UpdateState {
 
   @override
   String toString() =>
-      'UpdateSuccess { needUpdate: $needUpdate, version: $version }';
+      'UpdateSuccess(needUpdate: $needUpdate, url: $url, version: $version)';
 }

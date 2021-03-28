@@ -29,4 +29,9 @@ class PageInfo {
       _$PageInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$PageInfoToJson(this);
+
+  @override
+  String toString() {
+    return 'PageInfo(hasNextPage: $hasNextPage)';
+  }
 }

@@ -7,7 +7,10 @@ abstract class PushState extends Equatable {
   List<Object> get props => [];
 }
 
-class PushInProgress extends PushState {}
+class PushInProgress extends PushState {
+  @override
+  String toString() => 'PushInProgress';
+}
 
 class PushSuccess extends PushState {
   final MiPush miPush;
@@ -18,7 +21,7 @@ class PushSuccess extends PushState {
   List<Object> get props => [miPush];
 
   @override
-  String toString() => 'PushSuccess { regId: ${miPush.regId} }';
+  String toString() => 'PushSuccess(miPush: $miPush)';
 }
 
 /// 网络错误
@@ -31,5 +34,5 @@ class PushError extends PushState {
   List<Object> get props => [message];
 
   @override
-  String toString() => 'PushError { error: $message }';
+  String toString() => 'PushError(message: $message)';
 }
