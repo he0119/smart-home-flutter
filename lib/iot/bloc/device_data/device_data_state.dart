@@ -7,9 +7,15 @@ abstract class DeviceDataState extends Equatable {
   List<Object?> get props => [];
 }
 
-class DeviceDataInitial extends DeviceDataState {}
+class DeviceDataInitial extends DeviceDataState {
+  @override
+  String toString() => 'DeviceDataInitial';
+}
 
-class DeviceDataInProgress extends DeviceDataState {}
+class DeviceDataInProgress extends DeviceDataState {
+  @override
+  String toString() => 'DeviceDataInProgress';
+}
 
 class DeviceDataSuccess extends DeviceDataState {
   final AutowateringData autowateringData;
@@ -23,14 +29,17 @@ class DeviceDataSuccess extends DeviceDataState {
       ];
 
   @override
-  String toString() => 'DeviceDataSuccess { time ${autowateringData.time} }';
+  String toString() => 'DeviceDataSuccess(autowateringData: $autowateringData)';
 }
 
 class DeviceDataFailure extends DeviceDataState {
-  final String? message;
+  final String message;
 
   const DeviceDataFailure(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object> get props => [message];
+
+  @override
+  String toString() => 'DeviceDataFailure(message: $message)';
 }
