@@ -3,6 +3,7 @@ mutation deleteConsumable($input: DeleteConsumableMutationInput!) {
   deleteConsumable(input: $input) {
     item {
       id
+      name
       consumables(isDeleted: false) {
         edges {
           node {

@@ -7,6 +7,7 @@ mutation updateStorage($input: UpdateStorageMutationInput!) {
       description
       parent {
         id
+        name
       }
     }
   }
