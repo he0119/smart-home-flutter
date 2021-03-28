@@ -38,7 +38,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   bool isLogin = false;
 
   /// 默认主页
-  late AppTab defaultHomePage;
+  AppTab defaultHomePage = AppTab.storage;
 
   List<Page> _pages = <Page>[];
 
