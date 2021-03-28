@@ -44,6 +44,6 @@ class StorageSearchSuccess extends StorageSearchState {
   List<Object> get props => [items, storages, term];
 
   @override
-  String toString() =>
-      'StorageSearchSuccess(items: $items, storages: $storages, term: $term)';
+  String toString() => 'StorageSearchSuccess'
+      '(items: ${items.length}, storages: ${storages.length}, term: $term)';
 }

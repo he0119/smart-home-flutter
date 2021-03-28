@@ -23,7 +23,7 @@ class CommentFailure extends CommentEditState {
   const CommentFailure(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object> get props => [message];
 
   @override
   String toString() => 'CommentFailure(message: $message)';

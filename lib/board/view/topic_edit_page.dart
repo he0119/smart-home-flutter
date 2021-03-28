@@ -7,12 +7,12 @@ import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 
 class TopicEditPage extends StatefulWidget {
-  final bool? isEditing;
+  final bool isEditing;
   final Topic? topic;
 
   const TopicEditPage({
     Key? key,
-    this.isEditing,
+    required this.isEditing,
     this.topic,
   }) : super(key: key);
 
@@ -28,7 +28,7 @@ class _TopicEditPageState extends State<TopicEditPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.isEditing!) {
+    if (widget.isEditing) {
       _titleController.text = widget.topic!.title!;
       _descriptionController.text = widget.topic!.description!;
     }
@@ -48,7 +48,7 @@ class _TopicEditPageState extends State<TopicEditPage> {
       listener: (context, state) {
         if (state is TopicAddSuccess || state is TopicUpdateSuccess) {
           Navigator.of(context).pop();
-          if (widget.isEditing!) {
+          if (widget.isEditing) {
             showInfoSnackBar('话题编辑成功');
           } else {
             BlocProvider.of<BoardHomeBloc>(context)
@@ -64,7 +64,7 @@ class _TopicEditPageState extends State<TopicEditPage> {
         length: tabs.length,
         child: Scaffold(
           appBar: AppBar(
-            title: widget.isEditing! ? const Text('编辑话题') : const Text('新话题'),
+            title: widget.isEditing ? const Text('编辑话题') : const Text('新话题'),
             actions: [
               Tooltip(
                 message: '提交',
@@ -72,7 +72,7 @@ class _TopicEditPageState extends State<TopicEditPage> {
                   icon: const Icon(Icons.send),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      if (widget.isEditing!) {
+                      if (widget.isEditing) {
                         BlocProvider.of<TopicEditBloc>(context)
                             .add(TopicUpdated(
                           id: widget.topic!.id,

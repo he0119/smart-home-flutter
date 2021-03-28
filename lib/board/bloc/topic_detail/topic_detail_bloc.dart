@@ -69,7 +69,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
       } on MyException catch (e) {
         yield TopicDetailFailure(
           e.message,
-          topicId: event.topicId!,
+          topicId: event.topicId,
         );
       }
     }

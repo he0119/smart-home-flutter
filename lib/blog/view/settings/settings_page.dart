@@ -7,7 +7,10 @@ import 'package:smarthome/core/core.dart';
 
 class BlogSettingsPage extends Page {
   BlogSettingsPage()
-      : super(key: const ValueKey('settings/blog'), name: '/settings/blog');
+      : super(
+          key: const ValueKey('settings/blog'),
+          name: '/settings/blog',
+        );
 
   @override
   Route createRoute(BuildContext context) {

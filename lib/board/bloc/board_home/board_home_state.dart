@@ -39,5 +39,6 @@ class BoardHomeSuccess extends BoardHomeState {
   List<Object> get props => [topics, pageInfo];
 
   @override
-  String toString() => 'BoardHomeSuccess(topics: $topics, pageInfo: $pageInfo)';
+  String toString() =>
+      'BoardHomeSuccess(topics: ${topics.length}, pageInfo: $pageInfo)';
 }
