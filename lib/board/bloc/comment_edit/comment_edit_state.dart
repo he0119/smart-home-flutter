@@ -7,9 +7,15 @@ abstract class CommentEditState extends Equatable {
   List<Object?> get props => [];
 }
 
-class CommentInitial extends CommentEditState {}
+class CommentInitial extends CommentEditState {
+  @override
+  String toString() => 'CommentInitial';
+}
 
-class CommentInProgress extends CommentEditState {}
+class CommentInProgress extends CommentEditState {
+  @override
+  String toString() => 'CommentInProgress';
+}
 
 class CommentFailure extends CommentEditState {
   final String message;
@@ -20,9 +26,7 @@ class CommentFailure extends CommentEditState {
   List<Object?> get props => [message];
 
   @override
-  String toString() {
-    return 'CommentFailure { $message }';
-  }
+  String toString() => 'CommentFailure(message: $message)';
 }
 
 class CommentAddSuccess extends CommentEditState {
@@ -32,6 +36,9 @@ class CommentAddSuccess extends CommentEditState {
 
   @override
   List<Object> get props => [comment];
+
+  @override
+  String toString() => 'CommentAddSuccess(comment: $comment)';
 }
 
 class CommentUpdateSuccess extends CommentEditState {
@@ -41,6 +48,9 @@ class CommentUpdateSuccess extends CommentEditState {
 
   @override
   List<Object> get props => [comment];
+
+  @override
+  String toString() => 'CommentUpdateSuccess(comment: $comment)';
 }
 
 class CommentDeleteSuccess extends CommentEditState {
@@ -50,4 +60,7 @@ class CommentDeleteSuccess extends CommentEditState {
 
   @override
   List<Object> get props => [comment];
+
+  @override
+  String toString() => 'CommentDeleteSuccess(comment: $comment)';
 }

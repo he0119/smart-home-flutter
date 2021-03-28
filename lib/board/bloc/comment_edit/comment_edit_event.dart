@@ -20,7 +20,7 @@ class CommentAdded extends CommentEditEvent {
   List<Object> get props => [topicId, body];
 
   @override
-  String toString() => 'CommentAdded { body: $body }';
+  String toString() => 'CommentAdded(topicId: $topicId, body: $body)';
 }
 
 class CommentUpdated extends CommentEditEvent {
@@ -36,7 +36,7 @@ class CommentUpdated extends CommentEditEvent {
   List<Object> get props => [id, body];
 
   @override
-  String toString() => 'CommentUpdated { id: $id }';
+  String toString() => 'CommentUpdated(id: $id)';
 }
 
 class CommentDeleted extends CommentEditEvent {
@@ -48,5 +48,5 @@ class CommentDeleted extends CommentEditEvent {
   List<Object> get props => [comment];
 
   @override
-  String toString() => 'CommentDeleted { id: ${comment.id} }';
+  String toString() => 'CommentDeleted(comment: $comment)';
 }

@@ -20,7 +20,7 @@ class TopicAdded extends TopicEditEvent {
   List<Object> get props => [title, description];
 
   @override
-  String toString() => 'TopicAdded { title: $title }';
+  String toString() => 'TopicAdded(title: $title, description: $description)';
 }
 
 class TopicUpdated extends TopicEditEvent {
@@ -38,7 +38,7 @@ class TopicUpdated extends TopicEditEvent {
   List<Object> get props => [id, title, description];
 
   @override
-  String toString() => 'TopicUpdated { id: $id }';
+  String toString() => 'TopicUpdated(id: $id)';
 }
 
 class TopicDeleted extends TopicEditEvent {
@@ -50,7 +50,7 @@ class TopicDeleted extends TopicEditEvent {
   List<Object> get props => [topic];
 
   @override
-  String toString() => 'TopicDeleted { name: ${topic.title} }';
+  String toString() => 'TopicDeleted(topic: $topic)';
 }
 
 class TopicClosed extends TopicEditEvent {
@@ -62,7 +62,7 @@ class TopicClosed extends TopicEditEvent {
   List<Object> get props => [topic];
 
   @override
-  String toString() => 'TopicClosed { name: ${topic.title} }';
+  String toString() => 'TopicClosed(topic: $topic)';
 }
 
 class TopicReopened extends TopicEditEvent {
@@ -74,7 +74,7 @@ class TopicReopened extends TopicEditEvent {
   List<Object> get props => [topic];
 
   @override
-  String toString() => 'TopicReopened { name: ${topic.title} }';
+  String toString() => 'TopicReopened(topic: $topic)';
 }
 
 class TopicPinned extends TopicEditEvent {
@@ -86,7 +86,7 @@ class TopicPinned extends TopicEditEvent {
   List<Object> get props => [topic];
 
   @override
-  String toString() => 'TopicPinned { name: ${topic.title} }';
+  String toString() => 'TopicPinned(topic: $topic)';
 }
 
 class TopicUnpinned extends TopicEditEvent {
@@ -98,5 +98,5 @@ class TopicUnpinned extends TopicEditEvent {
   List<Object> get props => [topic];
 
   @override
-  String toString() => 'TopicUnpinned { name: ${topic.title} }';
+  String toString() => 'TopicUnpinned(topic: $topic)';
 }
