@@ -14,7 +14,11 @@ import 'package:smarthome/core/view/settings/mipush_settings_tile.dart';
 import 'package:smarthome/iot/iot.dart';
 
 class SettingsPage extends Page {
-  SettingsPage() : super(key: const ValueKey('settings'), name: '/settings');
+  SettingsPage()
+      : super(
+          key: const ValueKey('settings'),
+          name: '/settings',
+        );
 
   @override
   Route createRoute(BuildContext context) {

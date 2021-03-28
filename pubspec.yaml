@@ -34,6 +34,7 @@ dependencies:
   quick_actions: ^0.5.0
   device_info: ^2.0.0
   package_info: ^2.0.0
+  package_info_plus: ^1.0.0
   url_launcher: ^6.0.2
   flutter_keyboard_visibility: ^5.0.0
   intent:
@@ -46,7 +47,8 @@ dependencies:
   datetime_picker_formfield: ^2.0.0
   flutter_markdown: ^0.6.0
   cached_network_image: ^3.0.0-nullsafety
-  settings_ui: ^1.0.0-nullsafety.2
+  settings_ui:
+    git: https://github.com/he0119/flutter-settings-ui.git
   dropdown_search: ^0.5.0
 
 dev_dependencies:
