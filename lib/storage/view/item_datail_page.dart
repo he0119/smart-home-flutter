@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/routers/delegate.dart';
@@ -146,8 +147,12 @@ class ItemDetailScreen extends StatelessWidget {
                 ));
               }
               if (value == ItemDetailMenu.addPicture) {
-                MyRouterDelegate.of(context)
-                    .push(PictureAddPage(itemId: state.item.id));
+                if (kIsWeb) {
+                  showInfoSnackBar('抱歉，暂时不支持通过网页添加图片');
+                } else {
+                  MyRouterDelegate.of(context)
+                      .push(PictureAddPage(itemId: state.item.id));
+                }
               }
               if (value == ItemDetailMenu.delete) {
                 await showDialog(
