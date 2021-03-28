@@ -4,7 +4,6 @@ import 'package:smarthome/user/graphql/queries/viewer.dart';
 import 'package:smarthome/user/model/user.dart';
 
 class UserRepository {
-  // static final Logger _log = Logger('UserRepository');
   final GraphQLApiClient graphqlApiClient;
 
   UserRepository({required this.graphqlApiClient});
