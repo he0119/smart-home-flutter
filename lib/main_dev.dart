@@ -37,6 +37,7 @@ Future<void> main() async {
 
     runApp(configuredApp);
   }, (exception, stackTrace) async {
+    print('$exception, $stackTrace');
     await Sentry.captureException(exception, stackTrace: stackTrace);
   });
 }

@@ -733,10 +733,12 @@ packages:
   settings_ui:
     dependency: "direct main"
     description:
-      name: settings_ui
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.0-nullsafety.2"
+      path: "."
+      ref: HEAD
+      resolved-ref: "8b23a84407a314efb39fc5f6520a1887cac4aa8c"
+      url: "https://github.com/he0119/flutter-settings-ui.git"
+    source: git
+    version: "1.0.0-nullsafety.1"
   shared_preferences:
     dependency: "direct main"
     description:
