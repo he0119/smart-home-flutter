@@ -1,4 +1,4 @@
-const String pinTopicMutation = r"""
+const String pinTopicMutation = r'''
 mutation pinTopic($input: PinTopicMutationInput!) {
   pinTopic(input: $input) {
     topic {
@@ -8,4 +8,4 @@ mutation pinTopic($input: PinTopicMutationInput!) {
     }
   }
 }
-""";
+''';

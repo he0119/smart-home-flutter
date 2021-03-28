@@ -20,7 +20,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
   Stream<TopicDetailState> mapEventToState(
     TopicDetailEvent event,
   ) async* {
-    final TopicDetailState currentState = state;
+    final currentState = state;
     if (event is TopicDetailFetched) {
       try {
         // 如果需要刷新，则显示加载界面
@@ -69,7 +69,7 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
       } on MyException catch (e) {
         yield TopicDetailFailure(
           e.message,
-          topicId: event.topicId!,
+          topicId: event.topicId,
         );
       }
     }

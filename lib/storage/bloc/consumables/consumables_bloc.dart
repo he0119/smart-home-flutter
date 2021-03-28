@@ -19,7 +19,7 @@ class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
   Stream<ConsumablesState> mapEventToState(
     ConsumablesEvent event,
   ) async* {
-    final ConsumablesState currentState = state;
+    final currentState = state;
     if (event is ConsumablesFetched) {
       try {
         // 如果需要刷新，则显示加载界面

@@ -18,12 +18,12 @@ class RecycleBinInProgress extends RecycleBinState {
 }
 
 class RecycleBinFailure extends RecycleBinState {
-  final String? message;
+  final String message;
 
   const RecycleBinFailure(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object> get props => [message];
 
   @override
   String toString() => 'RecycleBinFailure(message: $message)';
@@ -44,6 +44,6 @@ class RecycleBinSuccess extends RecycleBinState {
   List<Object> get props => [items, pageInfo];
 
   @override
-  String toString() =>
-      'RecycleBinSuccess(items: ${items.length}, hasReachedMax: $hasReachedMax)';
+  String toString() => 'RecycleBinSuccess'
+      '(items: ${items.length}, hasReachedMax: $hasReachedMax)';
 }

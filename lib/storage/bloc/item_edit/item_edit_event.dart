@@ -29,7 +29,7 @@ class ItemUpdated extends ItemEditEvent {
   });
 
   @override
-  String toString() => 'ItemUpdated { name: $name }';
+  String toString() => 'ItemUpdated(id: $id)';
 }
 
 class ItemAdded extends ItemEditEvent {
@@ -50,7 +50,7 @@ class ItemAdded extends ItemEditEvent {
   });
 
   @override
-  String toString() => 'ItemAdded { name: $name }';
+  String toString() => 'ItemAdded(name: $name, number: $number)';
 }
 
 class ItemDeleted extends ItemEditEvent {
@@ -59,7 +59,7 @@ class ItemDeleted extends ItemEditEvent {
   const ItemDeleted({required this.item});
 
   @override
-  String toString() => 'DeleteItem { name: ${item.name} }';
+  String toString() => 'ItemDeleted(item: $item)';
 }
 
 class ItemRestored extends ItemEditEvent {
@@ -68,7 +68,7 @@ class ItemRestored extends ItemEditEvent {
   const ItemRestored({required this.item});
 
   @override
-  String toString() => 'RestoreItem { name: ${item.name} }';
+  String toString() => 'ItemRestored(item: $item)';
 }
 
 class ConsumableAdded extends ItemEditEvent {
@@ -81,7 +81,7 @@ class ConsumableAdded extends ItemEditEvent {
   });
 
   @override
-  String toString() => 'ConsumableAdded { name: ${item.name} }';
+  String toString() => 'ConsumableAdded(item: $item)';
 }
 
 class ConsumableDeleted extends ItemEditEvent {
@@ -94,5 +94,5 @@ class ConsumableDeleted extends ItemEditEvent {
   });
 
   @override
-  String toString() => 'ConsumableDeleted { name: ${item.name} }';
+  String toString() => 'ConsumableDeleted(item: $item)';
 }

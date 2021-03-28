@@ -10,7 +10,7 @@ class SearchIconButton extends StatelessWidget {
     return Tooltip(
       message: '搜索',
       child: IconButton(
-        icon: Icon(Icons.search),
+        icon: const Icon(Icons.search),
         onPressed: () {
           MyRouterDelegate.of(context).push(SearchPage());
         },

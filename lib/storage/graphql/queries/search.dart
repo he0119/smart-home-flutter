@@ -1,4 +1,4 @@
-const String searchQuery = r"""
+const String searchQuery = r'''
 query search($isDeleted: Boolean, $key: String!) {
   itemName: items(isDeleted: $isDeleted, name_Icontains: $key) {
     edges {
@@ -37,4 +37,4 @@ query search($isDeleted: Boolean, $key: String!) {
     }
   }
 }
-""";
+''';

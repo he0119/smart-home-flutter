@@ -12,7 +12,7 @@ class Device {
   final String? location;
   final DateTime? createdAt;
   final DateTime? editedAt;
-  final bool isOnline;
+  final bool? isOnline;
   final DateTime? onlineAt;
   final DateTime? offlineAt;
 
@@ -31,6 +31,11 @@ class Device {
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
 
   Map<String, dynamic> toJson() => _$DeviceToJson(this);
+
+  @override
+  String toString() {
+    return 'Device(id: $id, name: $name)';
+  }
 }
 
 @JsonSerializable()
@@ -71,4 +76,9 @@ class AutowateringData {
       _$AutowateringDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$AutowateringDataToJson(this);
+
+  @override
+  String toString() {
+    return 'AutowateringData(id: $id, time: $time)';
+  }
 }

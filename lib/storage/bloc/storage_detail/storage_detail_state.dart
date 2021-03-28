@@ -54,6 +54,7 @@ class StorageDetailSuccess extends StorageDetailState {
 
   @override
   String toString() {
-    return 'StorageDetailSuccess(storage: $storage, hasReachedMax: $hasReachedMax)';
+    return 'StorageDetailSuccess'
+        '(storage: $storage, hasReachedMax: $hasReachedMax)';
   }
 }

@@ -7,12 +7,18 @@ abstract class DeviceEditState extends Equatable {
   List<Object?> get props => [];
 }
 
-class DeviceEditInitial extends DeviceEditState {}
+class DeviceEditInitial extends DeviceEditState {
+  @override
+  String toString() => 'DeviceEditInitial';
+}
 
-class DeviceInProgress extends DeviceEditState {}
+class DeviceInProgress extends DeviceEditState {
+  @override
+  String toString() => 'DeviceInProgress';
+}
 
 class DeviceFailure extends DeviceEditState {
-  final String? message;
+  final String message;
 
   const DeviceFailure(this.message);
 
@@ -20,9 +26,7 @@ class DeviceFailure extends DeviceEditState {
   List<Object?> get props => [message];
 
   @override
-  String toString() {
-    return 'DeviceFailure { $message }';
-  }
+  String toString() => 'DeviceFailure(message: $message)';
 }
 
 class DeviceAddSuccess extends DeviceEditState {
@@ -32,6 +36,9 @@ class DeviceAddSuccess extends DeviceEditState {
 
   @override
   List<Object> get props => [device];
+
+  @override
+  String toString() => 'DeviceAddSuccess(device: $device)';
 }
 
 class DeviceUpdateSuccess extends DeviceEditState {
@@ -41,6 +48,9 @@ class DeviceUpdateSuccess extends DeviceEditState {
 
   @override
   List<Object> get props => [device];
+
+  @override
+  String toString() => 'DeviceUpdateSuccess(device: $device)';
 }
 
 class DeviceDeleteSuccess extends DeviceEditState {
@@ -50,6 +60,9 @@ class DeviceDeleteSuccess extends DeviceEditState {
 
   @override
   List<Object> get props => [device];
+
+  @override
+  String toString() => 'DeviceDeleteSuccess(device: $device)';
 }
 
 class DeviceSetSuccess extends DeviceEditState {
@@ -59,4 +72,7 @@ class DeviceSetSuccess extends DeviceEditState {
 
   @override
   List<Object> get props => [device];
+
+  @override
+  String toString() => 'DeviceSetSuccess(device: $device)';
 }

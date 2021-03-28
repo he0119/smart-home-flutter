@@ -31,7 +31,7 @@ class ConsumablesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('耗材管理'),
+        title: const Text('耗材管理'),
       ),
       body: BlocBuilder<ConsumablesBloc, ConsumablesState>(
         builder: (context, state) {
@@ -58,7 +58,7 @@ class ConsumablesScreen extends StatelessWidget {
                       context.read<ConsumablesBloc>().add(ConsumablesFetched()),
                 ));
           }
-          return CenterLoadingIndicator();
+          return const CenterLoadingIndicator();
         },
       ),
     );

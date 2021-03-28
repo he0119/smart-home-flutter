@@ -10,10 +10,10 @@ class CommentOrderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
       builder: (context, state) => Scaffold(
-        appBar: AppBar(title: Text('评论排序')),
+        appBar: AppBar(title: const Text('评论排序')),
         body: SettingsList(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          contentPadding: EdgeInsets.symmetric(vertical: 20),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(
               tiles: [
@@ -43,7 +43,7 @@ class CommentOrderPage extends StatelessWidget {
 
   Widget trailingWidget(bool descending, bool current) {
     return (descending == current)
-        ? Icon(Icons.check, color: Colors.blue)
-        : Icon(null);
+        ? const Icon(Icons.check, color: Colors.blue)
+        : const Icon(null);
   }
 }

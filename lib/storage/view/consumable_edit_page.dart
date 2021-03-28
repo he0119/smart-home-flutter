@@ -33,7 +33,7 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('耗材编辑'),
+        title: const Text('耗材编辑'),
       ),
       body: BlocConsumer<ItemEditBloc, ItemEditState>(
         listener: (context, state) {
@@ -57,14 +57,14 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
           child: Column(
             children: <Widget>[
               if (current.consumables!.isEmpty)
-                ListTile(
+                const ListTile(
                   title: Text('无耗材'),
                 ),
               for (Item consumable in current.consumables!)
                 ListTile(
                   title: Text(consumable.name),
                   trailing: IconButton(
-                    icon: Icon(Icons.clear),
+                    icon: const Icon(Icons.clear),
                     onPressed: () {
                       BlocProvider.of<ItemEditBloc>(context).add(
                         ConsumableDeleted(
@@ -76,7 +76,7 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
                     },
                   ),
                 ),
-              Divider(),
+              const Divider(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 child: MyDropdownSearch(
@@ -108,7 +108,7 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
                             showInfoSnackBar('正在添加...', duration: 1);
                           }
                         : null,
-                child: Text('添加'),
+                child: const Text('添加'),
               ),
             ],
           ),

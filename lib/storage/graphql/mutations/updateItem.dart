@@ -1,4 +1,4 @@
-const String updateItemMutation = r"""
+const String updateItemMutation = r'''
 mutation updateItem($input: UpdateItemMutationInput!) {
   updateItem(input: $input) {
     item {
@@ -19,4 +19,4 @@ mutation updateItem($input: UpdateItemMutationInput!) {
     }
   }
 }
-""";
+''';

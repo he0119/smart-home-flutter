@@ -1,4 +1,4 @@
-const String updateMiPushMutation = r"""
+const String updateMiPushMutation = r'''
 mutation updateMiPush($input: UpdateMiPushMutationInput!) {
   updateMiPush(input: $input) {
     miPush {
@@ -8,4 +8,4 @@ mutation updateMiPush($input: UpdateMiPushMutationInput!) {
     }
   }
 }
-""";
+''';

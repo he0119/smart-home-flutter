@@ -21,7 +21,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
     if (event is StorageUpdated) {
       yield StorageEditInProgress();
       try {
-        Storage storage = await storageRepository.updateStorage(
+        final storage = await storageRepository.updateStorage(
           id: event.id,
           name: event.name,
           parentId: event.parentId,
@@ -35,7 +35,7 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
     if (event is StorageAdded) {
       yield StorageEditInProgress();
       try {
-        Storage storage = await storageRepository.addStorage(
+        final storage = await storageRepository.addStorage(
           name: event.name,
           parentId: event.parentId,
           description: event.description,

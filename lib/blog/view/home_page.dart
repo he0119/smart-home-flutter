@@ -15,7 +15,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class BlogHomePage extends Page {
   BlogHomePage()
       : super(
-          key: ValueKey('blog'),
+          key: const ValueKey('blog'),
           name: '/blog',
         );
 
@@ -23,7 +23,7 @@ class BlogHomePage extends Page {
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => BlogHomeScreen(),
+      builder: (context) => const BlogHomeScreen(),
     );
   }
 }
@@ -37,7 +37,8 @@ class BlogHomeScreen extends StatefulWidget {
 }
 
 class _BlogHomeScreenState extends State<BlogHomeScreen> {
-  Completer<WebViewController> _controller = Completer<WebViewController>();
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +53,14 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
             Tooltip(
               message: '进入管理页面',
               child: IconButton(
-                icon: Icon(Icons.dvr),
+                icon: const Icon(Icons.dvr),
                 onPressed: () async {
                   final blogAdminUrl = state.blogAdminUrl;
                   if (blogAdminUrl != null) {
                     if (kIsWeb) {
                       await launchUrl(blogAdminUrl);
                     } else if (controller.hasData) {
-                      controller.data!.loadUrl(blogAdminUrl);
+                      await controller.data!.loadUrl(blogAdminUrl);
                     }
                   } else {
                     MyRouterDelegate.of(context).push(BlogSettingsPage());
@@ -70,7 +71,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
             Tooltip(
               message: '设置',
               child: IconButton(
-                icon: Icon(Icons.settings),
+                icon: const Icon(Icons.settings),
                 onPressed: () {
                   MyRouterDelegate.of(context).push(BlogSettingsPage());
                 },
@@ -82,7 +83,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                   onWillPop: () async {
                     if (controller.hasData &&
                         await controller.data!.canGoBack()) {
-                      controller.data!.goBack();
+                      await controller.data!.goBack();
                       return false;
                     }
                     return true;
@@ -90,20 +91,18 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                   child: WebView(
                     initialUrl: state.blogUrl,
                     javascriptMode: JavascriptMode.unrestricted,
-                    onWebViewCreated: (controller) {
-                      _controller.complete((controller));
-                    },
+                    onWebViewCreated: _controller.complete,
                   ))
               : Center(
                   child: RoundedRaisedButton(
                     onPressed: () => launchUrl(state.blogUrl),
-                    child: Text('博客'),
+                    child: const Text('博客'),
                   ),
                 ),
           floatingActionButton: controller.hasData
               ? FloatingActionButton(
                   tooltip: '使用浏览器打开',
-                  child: Icon(Icons.open_in_new),
+                  child: const Icon(Icons.open_in_new),
                   onPressed: () async {
                     final currentUrl = await controller.data!.currentUrl();
                     if (currentUrl != null) {
@@ -128,7 +127,7 @@ class SettingButton extends StatelessWidget {
         onPressed: () {
           MyRouterDelegate.of(context).push(BlogSettingsPage());
         },
-        child: Text('设置博客网址'),
+        child: const Text('设置博客网址'),
       ),
     );
   }

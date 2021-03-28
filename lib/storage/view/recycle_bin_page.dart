@@ -43,7 +43,7 @@ class RecycleBinScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('回收站'),
+        title: const Text('回收站'),
       ),
       body: BlocBuilder<RecycleBinBloc, RecycleBinState>(
         builder: (context, state) {
@@ -83,7 +83,7 @@ class RecycleBinScreen extends StatelessWidget {
                   )),
             );
           }
-          return CenterLoadingIndicator();
+          return const CenterLoadingIndicator();
         },
       ),
     );
@@ -97,7 +97,7 @@ Widget _buildItem(BuildContext context, Item item) {
       children: <TextSpan>[
         TextSpan(
           text: item.name,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         TextSpan(
           text: '（${item.deletedAt!.differenceFromNowStr()}删除）',
@@ -114,22 +114,22 @@ Widget _buildItem(BuildContext context, Item item) {
     trailing: Tooltip(
       message: '恢复',
       child: IconButton(
-        icon: Icon(Icons.undo),
+        icon: const Icon(Icons.undo),
         onPressed: () async {
           await showDialog(
             context: context,
             builder: (_) => AlertDialog(
-              title: Text('恢复物品'),
-              content: Text('你确认要恢复该物品？'),
+              title: const Text('恢复物品'),
+              content: const Text('你确认要恢复该物品？'),
               actions: <Widget>[
                 TextButton(
-                  child: Text('否'),
+                  child: const Text('否'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 TextButton(
-                  child: Text('是'),
+                  child: const Text('是'),
                   onPressed: () {
                     BlocProvider.of<ItemEditBloc>(context)
                         .add(ItemRestored(item: item));

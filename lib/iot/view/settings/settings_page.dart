@@ -6,13 +6,13 @@ import 'package:smarthome/iot/view/settings/refresh_interval_page.dart';
 
 class IotSettingsPage extends Page {
   IotSettingsPage()
-      : super(key: ValueKey('settings/iot'), name: '/settings/iot');
+      : super(key: const ValueKey('settings/iot'), name: '/settings/iot');
 
   @override
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => IotSettingsScreen(),
+      builder: (context) => const IotSettingsScreen(),
     );
   }
 }
@@ -24,12 +24,12 @@ class IotSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('物联网'),
+        title: const Text('物联网'),
       ),
       body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => SettingsList(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          contentPadding: EdgeInsets.symmetric(vertical: 20),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(
               title: '网络',
@@ -39,7 +39,7 @@ class IotSettingsScreen extends StatelessWidget {
                   subtitle: state.refreshInterval.toString(),
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RefreshIntervalPage(),
+                      builder: (context) => const RefreshIntervalPage(),
                     ));
                   },
                 ),

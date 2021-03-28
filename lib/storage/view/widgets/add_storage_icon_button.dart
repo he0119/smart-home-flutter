@@ -19,9 +19,9 @@ class AddStorageIconButton extends StatelessWidget {
     return Tooltip(
       message: '添加位置',
       child: IconButton(
-        icon: Icon(Icons.add),
+        icon: const Icon(Icons.add),
         onPressed: () async {
-          Navigator.of(context).push(MaterialPageRoute(
+          await Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => BlocProvider<StorageEditBloc>(
               create: (_) => StorageEditBloc(
                 storageRepository:

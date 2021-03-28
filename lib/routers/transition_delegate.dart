@@ -6,7 +6,7 @@ import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/storage/storage.dart';
 
 class MyTransitionDelegate extends TransitionDelegate<void> {
-  final defaultTransitionDelegate = DefaultTransitionDelegate();
+  final defaultTransitionDelegate = const DefaultTransitionDelegate();
 
   @override
   Iterable<RouteTransitionRecord> resolve({
@@ -16,7 +16,7 @@ class MyTransitionDelegate extends TransitionDelegate<void> {
     Map<RouteTransitionRecord?, List<RouteTransitionRecord>>?
         pageRouteToPagelessRoutes,
   }) {
-    final List<RouteTransitionRecord> results = <RouteTransitionRecord>[];
+    final results = <RouteTransitionRecord>[];
     // 主页之间的切换，不需要动画
     // 从启动界面或者登录界面进入主页，也不需要动画
     if (newPageRouteHistory.length == 1 &&
@@ -35,8 +35,7 @@ class MyTransitionDelegate extends TransitionDelegate<void> {
               newRoute.route.settings is BoardHomePage)) {
         exitingRoute.markForRemove();
         newRoute.markForAdd();
-        results.add(exitingRoute);
-        results.add(newRoute);
+        results..add(exitingRoute)..add(newRoute);
         return results;
       }
     }

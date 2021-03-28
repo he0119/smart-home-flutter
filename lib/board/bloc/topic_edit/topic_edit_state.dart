@@ -7,7 +7,10 @@ abstract class TopicEditState extends Equatable {
   List<Object> get props => [];
 }
 
-class TopicInProgress extends TopicEditState {}
+class TopicInProgress extends TopicEditState {
+  @override
+  String toString() => 'TopicInProgress';
+}
 
 class TopicFailure extends TopicEditState {
   final String message;

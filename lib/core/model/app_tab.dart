@@ -26,13 +26,13 @@ extension AppTabExtension on AppTab {
   Icon get icon {
     switch (this) {
       case AppTab.iot:
-        return Icon(Icons.cloud);
+        return const Icon(Icons.cloud);
       case AppTab.storage:
-        return Icon(Icons.storage);
+        return const Icon(Icons.storage);
       case AppTab.blog:
-        return Icon(Icons.web);
+        return const Icon(Icons.web);
       case AppTab.board:
-        return Icon(Icons.chat);
+        return const Icon(Icons.chat);
     }
   }
 

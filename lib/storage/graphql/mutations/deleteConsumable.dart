@@ -1,4 +1,4 @@
-const String deleteConsumableMutation = r"""
+const String deleteConsumableMutation = r'''
 mutation deleteConsumable($input: DeleteConsumableMutationInput!) {
   deleteConsumable(input: $input) {
     item {
@@ -15,4 +15,4 @@ mutation deleteConsumable($input: DeleteConsumableMutationInput!) {
     }
   }
 }
-""";
+''';

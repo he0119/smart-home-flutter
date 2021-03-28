@@ -40,7 +40,7 @@ class PictureBloc extends Bloc<PictureEvent, PictureState> {
         );
       }
     }
-    final PictureState currentState = state;
+    final currentState = state;
     if (event is PictureRefreshed && currentState is PictureSuccess) {
       yield PictureInProgress();
       try {

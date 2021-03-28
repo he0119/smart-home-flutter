@@ -1,4 +1,4 @@
-const String closeTopicMutation = r"""
+const String closeTopicMutation = r'''
 mutation closeTopic($input: CloseTopicMutationInput!) {
   closeTopic(input: $input) {
     topic {
@@ -8,4 +8,4 @@ mutation closeTopic($input: CloseTopicMutationInput!) {
     }
   }
 }
-""";
+''';

@@ -18,4 +18,7 @@ class User extends Equatable {
 
   @override
   List<Object?> get props => [username, email];
+
+  @override
+  String toString() => username;
 }

@@ -21,7 +21,7 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
     if (event is CommentAdded) {
       yield CommentInProgress();
       try {
-        Comment comment = await boardRepository.addComment(
+        final comment = await boardRepository.addComment(
           topicId: event.topicId,
           body: event.body,
         );
@@ -33,7 +33,7 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
     if (event is CommentUpdated) {
       yield CommentInProgress();
       try {
-        Comment comment = await boardRepository.updateComment(
+        final comment = await boardRepository.updateComment(
           id: event.id,
           body: event.body,
         );

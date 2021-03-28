@@ -63,7 +63,7 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
                     controller: _controller,
                     focusNode: _foucsNode,
                     maxLines: null,
-                    decoration: InputDecoration(hintText: '添加评论'),
+                    decoration: const InputDecoration(hintText: '添加评论'),
                     validator: (value) {
                       if (_foucsNode.hasFocus && value!.isEmpty) {
                         return '评论不能为空';
@@ -87,9 +87,9 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
                         }
                       }
                     : null,
-                child: Text('发送'),
+                child: const Text('发送'),
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(style: BorderStyle.none),
+                  side: const BorderSide(style: BorderStyle.none),
                 ),
               ),
             ],

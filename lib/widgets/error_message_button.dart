@@ -4,7 +4,7 @@ import 'package:smarthome/widgets/rounded_raised_button.dart';
 /// 居中的可以显示错误提示的按钮
 class ErrorMessageButton extends StatelessWidget {
   final Function onPressed;
-  final String? message;
+  final String message;
 
   const ErrorMessageButton({
     Key? key,
@@ -18,9 +18,9 @@ class ErrorMessageButton extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(message!),
+          Text(message),
           RoundedRaisedButton(
-            child: Text('重试'),
+            child: const Text('重试'),
             onPressed: onPressed,
           ),
         ],

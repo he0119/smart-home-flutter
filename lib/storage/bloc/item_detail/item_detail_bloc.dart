@@ -20,7 +20,7 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
   ) async* {
     if (event is ItemDetailStarted) {
       try {
-        final Item? item = await storageRepository.item(
+        final item = await storageRepository.item(
           name: event.name,
           id: event.id,
         );
@@ -41,11 +41,11 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         );
       }
     }
-    final ItemDetailState currentState = state;
+    final currentState = state;
     if (event is ItemDetailRefreshed && currentState is ItemDetailSuccess) {
       yield ItemDetailInProgress();
       try {
-        Item? item = await storageRepository.item(
+        final item = await storageRepository.item(
           name: currentState.item.name,
           id: currentState.item.id,
           cache: false,

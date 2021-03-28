@@ -19,9 +19,9 @@ class PageInfo {
   PageInfo copyWith(PageInfo pageInfo) {
     return PageInfo(
       hasNextPage: pageInfo.hasNextPage,
-      hasPreviousPage: pageInfo.hasPreviousPage ?? this.hasPreviousPage,
-      startCursor: pageInfo.startCursor ?? this.startCursor,
-      endCursor: pageInfo.endCursor ?? this.endCursor,
+      hasPreviousPage: pageInfo.hasPreviousPage ?? hasPreviousPage,
+      startCursor: pageInfo.startCursor ?? startCursor,
+      endCursor: pageInfo.endCursor ?? endCursor,
     );
   }
 
@@ -29,4 +29,9 @@ class PageInfo {
       _$PageInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$PageInfoToJson(this);
+
+  @override
+  String toString() {
+    return 'PageInfo(hasNextPage: $hasNextPage)';
+  }
 }

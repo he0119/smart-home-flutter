@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SplashPage extends Page {
   SplashPage()
       : super(
-          key: ValueKey('splash'),
+          key: const ValueKey('splash'),
           name: '/splash',
         );
 
@@ -19,7 +19,7 @@ class SplashPage extends Page {
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),
       ),

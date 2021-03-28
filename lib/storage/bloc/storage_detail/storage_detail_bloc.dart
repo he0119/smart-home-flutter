@@ -4,7 +4,6 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';
-import 'package:tuple/tuple.dart';
 
 part 'storage_detail_event.dart';
 part 'storage_detail_state.dart';
@@ -20,7 +19,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
   Stream<StorageDetailState> mapEventToState(
     StorageDetailEvent event,
   ) async* {
-    final StorageDetailState currentState = state;
+    final currentState = state;
     if (event is StorageDetailFetched) {
       try {
         // 如果需要刷新，则显示加载界面
@@ -46,8 +45,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
               itemPageInfo: PageInfo(hasNextPage: false),
             );
           } else {
-            final Tuple3<Storage, PageInfo, PageInfo>? results =
-                await storageRepository.storage(
+            final results = await storageRepository.storage(
               name: storage.name,
               id: storage.id,
               itemCursor: currentState.itemPageInfo.endCursor,

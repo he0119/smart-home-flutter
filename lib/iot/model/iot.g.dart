@@ -18,7 +18,7 @@ Device _$DeviceFromJson(Map<String, dynamic> json) {
     editedAt: json['editedAt'] == null
         ? null
         : DateTime.parse(json['editedAt'] as String),
-    isOnline: json['isOnline'] as bool,
+    isOnline: json['isOnline'] as bool?,
     onlineAt: json['onlineAt'] == null
         ? null
         : DateTime.parse(json['onlineAt'] as String),

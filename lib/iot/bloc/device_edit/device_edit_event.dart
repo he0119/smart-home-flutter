@@ -22,7 +22,7 @@ class DeviceAdded extends DeviceEditEvent {
   List<Object> get props => [name, deviceType, location];
 
   @override
-  String toString() => 'DeviceAdded { name: $name }';
+  String toString() => 'DeviceAdded(name: $name)';
 }
 
 class DeviceUpdated extends DeviceEditEvent {
@@ -42,7 +42,9 @@ class DeviceUpdated extends DeviceEditEvent {
   List<Object> get props => [id, name, deviceType, location];
 
   @override
-  String toString() => 'DeviceUpdated { id: $id }';
+  String toString() {
+    return 'DeviceUpdated(id: $id)';
+  }
 }
 
 class DeviceDeleted extends DeviceEditEvent {
@@ -54,7 +56,7 @@ class DeviceDeleted extends DeviceEditEvent {
   List<Object> get props => [device];
 
   @override
-  String toString() => 'DeviceDeleted { name: ${device.name} }';
+  String toString() => 'DeviceDeleted(device: $device)';
 }
 
 class DeviceSeted extends DeviceEditEvent {
@@ -74,6 +76,7 @@ class DeviceSeted extends DeviceEditEvent {
   List<Object> get props => [deviceId];
 
   @override
-  String toString() =>
-      'DeviceSeted { id: $deviceId, key: $key, value: $value }';
+  String toString() {
+    return 'DeviceSeted(deviceId: $deviceId, key: $key, value: $value)';
+  }
 }

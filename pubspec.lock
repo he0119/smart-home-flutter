@@ -1001,6 +1001,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
+  very_good_analysis:
+    dependency: "direct dev"
+    description:
+      name: very_good_analysis
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   vm_service:
     dependency: transitive
     description:

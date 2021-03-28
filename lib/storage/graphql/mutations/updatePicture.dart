@@ -1,5 +1,4 @@
-const String updatePictureMutation =
-    r"""
+const String updatePictureMutation = r'''
 mutation updatePicture($input: UpdatePictureMutationInput!) {
   updatePicture(input: $input) {
     picture {
@@ -14,4 +13,4 @@ mutation updatePicture($input: UpdatePictureMutationInput!) {
     }
   }
 }
-""";
+''';

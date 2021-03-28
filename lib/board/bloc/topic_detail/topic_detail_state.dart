@@ -4,7 +4,7 @@ abstract class TopicDetailState extends Equatable {
   const TopicDetailState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class TopicDetailInProgress extends TopicDetailState {
@@ -14,7 +14,7 @@ class TopicDetailInProgress extends TopicDetailState {
 
 class TopicDetailFailure extends TopicDetailState {
   final String message;
-  final String topicId;
+  final String? topicId;
 
   const TopicDetailFailure(
     this.message, {
@@ -22,7 +22,7 @@ class TopicDetailFailure extends TopicDetailState {
   });
 
   @override
-  List<Object> get props => [message, topicId];
+  List<Object?> get props => [message, topicId];
 
   @override
   String toString() => 'TopicDetailFailure { message: $message }';
@@ -45,6 +45,5 @@ class TopicDetailSuccess extends TopicDetailState {
   List<Object> get props => [topic, comments, pageInfo];
 
   @override
-  String toString() =>
-      'TopicDetailSuccess { Topic: ${topic.title}, Comments: ${comments.length} }';
+  String toString() => 'TopicDetailSuccess(topic: $topic, comments: $comments)';
 }

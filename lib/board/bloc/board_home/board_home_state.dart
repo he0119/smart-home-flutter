@@ -40,5 +40,5 @@ class BoardHomeSuccess extends BoardHomeState {
 
   @override
   String toString() =>
-      'BoardHomeSuccess { topics: ${topics.length}, hasReachedMax: $hasReachedMax';
+      'BoardHomeSuccess(topics: ${topics.length}, pageInfo: $pageInfo)';
 }

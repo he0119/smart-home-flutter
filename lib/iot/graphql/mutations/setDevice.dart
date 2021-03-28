@@ -1,4 +1,4 @@
-const String setDeviceMutation = r"""
+const String setDeviceMutation = r'''
 mutation setDevice($input: SetDeviceMutationInput!) {
   setDevice(input: $input) {
     device {
@@ -7,4 +7,4 @@ mutation setDevice($input: SetDeviceMutationInput!) {
     }
   }
 }
-""";
+''';

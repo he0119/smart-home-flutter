@@ -7,9 +7,15 @@ abstract class StorageEditState extends Equatable {
   List<Object> get props => [];
 }
 
-class StorageEditInitial extends StorageEditState {}
+class StorageEditInitial extends StorageEditState {
+  @override
+  String toString() => 'StorageEditInitial';
+}
 
-class StorageEditInProgress extends StorageEditState {}
+class StorageEditInProgress extends StorageEditState {
+  @override
+  String toString() => 'StorageEditInProgress';
+}
 
 class StorageEditFailure extends StorageEditState {
   final String message;
@@ -17,7 +23,7 @@ class StorageEditFailure extends StorageEditState {
   const StorageEditFailure(this.message);
 
   @override
-  String toString() => 'StorageEditFailure { message: $message }';
+  String toString() => 'StorageEditFailure(message: $message)';
 }
 
 class StorageAddSuccess extends StorageEditState {
@@ -26,7 +32,7 @@ class StorageAddSuccess extends StorageEditState {
   const StorageAddSuccess({required this.storage});
 
   @override
-  String toString() => 'StorageAddSuccess { storage: ${storage.name} }';
+  String toString() => 'StorageAddSuccess(storage: $storage)';
 }
 
 class StorageUpdateSuccess extends StorageEditState {
@@ -35,7 +41,7 @@ class StorageUpdateSuccess extends StorageEditState {
   const StorageUpdateSuccess({required this.storage});
 
   @override
-  String toString() => 'StorageUpdateSuccess { storage: ${storage.name} }';
+  String toString() => 'StorageUpdateSuccess(storage: $storage)';
 }
 
 class StorageDeleteSuccess extends StorageEditState {
@@ -44,5 +50,5 @@ class StorageDeleteSuccess extends StorageEditState {
   const StorageDeleteSuccess({required this.storage});
 
   @override
-  String toString() => 'StorageDeleteSuccess { storage: ${storage.name} }';
+  String toString() => 'StorageDeleteSuccess(storage: $storage)';
 }

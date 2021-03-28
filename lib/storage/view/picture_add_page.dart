@@ -14,7 +14,7 @@ import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class PictureAddPage extends Page {
   /// 物品 ID
-  final String? itemId;
+  final String itemId;
 
   PictureAddPage({
     required this.itemId,
@@ -41,7 +41,7 @@ class PictureAddPage extends Page {
 
 class PictureAddScreen extends StatefulWidget {
   /// 物品 ID
-  final String? itemId;
+  final String itemId;
 
   PictureAddScreen({
     Key? key,
@@ -84,7 +84,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
       },
       builder: (context, state) => Scaffold(
         appBar: AppBar(
-          title: Text('添加图片'),
+          title: const Text('添加图片'),
         ),
         body: Form(
           key: _formKey,
@@ -95,7 +95,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                 children: [
                   TextFormField(
                     controller: _descriptionController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: '备注',
                     ),
                     inputFormatters: [
@@ -113,16 +113,16 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                       ? Stack(
                           alignment: AlignmentDirectional.center,
                           children: <Widget>[
-                            CircularProgressIndicator(),
+                            const CircularProgressIndicator(),
                             Image.file(File(picturePath!)),
                             if (state is PictureEditInProgress)
-                              CircularProgressIndicator(),
+                              const CircularProgressIndicator(),
                           ],
                         )
                       : SizedBox(
                           height: 300,
                           child: Container(
-                            child: Center(
+                            child: const Center(
                               child: Text('无图片'),
                             ),
                           ),
@@ -139,9 +139,9 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                               setState(() {
                                 picturePath = data[0];
                               });
-                            }, onError: (e) => print(e));
+                            }, onError: print);
                         },
-                        child: Text('拍照'),
+                        child: const Text('拍照'),
                       ),
                     ],
                   ),
@@ -154,7 +154,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                                 }
                               }
                             : null,
-                    child: Text('上传'),
+                    child: const Text('上传'),
                   ),
                 ],
               ),
@@ -171,7 +171,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
     BlocProvider.of<PictureEditBloc>(context).add(
       PictureAdded(
         itemId: widget.itemId,
-        picturePath: picturePath,
+        picturePath: picturePath!,
         description: _descriptionController!.text,
         boxX: 0.5,
         boxY: 0.5,

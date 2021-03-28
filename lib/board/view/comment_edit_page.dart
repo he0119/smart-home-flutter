@@ -40,7 +40,7 @@ class _CommentEditPageState extends State<CommentEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> tabs = ['编辑', '预览'];
+    final tabs = <String>['编辑', '预览'];
     return BlocListener<CommentEditBloc, CommentEditState>(
       listener: (context, state) {
         if (state is CommentAddSuccess || state is CommentUpdateSuccess) {
@@ -61,12 +61,12 @@ class _CommentEditPageState extends State<CommentEditPage> {
         length: tabs.length,
         child: Scaffold(
           appBar: AppBar(
-            title: widget.isEditing ? Text('编辑评论') : Text('新评论'),
+            title: widget.isEditing ? const Text('编辑评论') : const Text('新评论'),
             actions: [
               Tooltip(
                 message: '提交',
                 child: IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       if (widget.isEditing) {
@@ -131,7 +131,7 @@ class _EditPage extends StatelessWidget {
               TextFormField(
                 controller: bodyController,
                 maxLines: null,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: '想说点什么？',
                   hintStyle: TextStyle(fontSize: 18),

@@ -19,9 +19,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Intl.defaultLocale = 'zh';
-    GraphQLApiClient graphQLApiClient = GraphQLApiClient();
-    UserRepository userRepository =
-        UserRepository(graphqlApiClient: graphQLApiClient);
+    final graphQLApiClient = GraphQLApiClient();
+    final userRepository = UserRepository(graphqlApiClient: graphQLApiClient);
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<GraphQLApiClient>(
@@ -93,7 +92,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ],
-        child: MyMaterialApp(),
+        child: const MyMaterialApp(),
       ),
     );
   }
@@ -110,17 +109,17 @@ class MyMaterialApp extends StatefulWidget {
 
 class _MyMaterialAppState extends State<MyMaterialApp> {
   // 为了保存路由状态
-  MyRouterDelegate _delegate = MyRouterDelegate();
+  final MyRouterDelegate _delegate = MyRouterDelegate();
 
   @override
   void initState() {
     super.initState();
     // 仅在安卓上注册通道
     if (!kIsWeb && Platform.isAndroid) {
-      MethodChannel('hehome.xyz/route').setMethodCallHandler(
+      const MethodChannel('hehome.xyz/route').setMethodCallHandler(
         (call) async {
           if (call.method == 'RouteChanged' && call.arguments != null) {
-            _delegate.navigateNewPath(call.arguments);
+            await _delegate.navigateNewPath(call.arguments as String);
           }
         },
       );
@@ -129,22 +128,22 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 
   @override
   Widget build(BuildContext context) {
-    final AppConfig config = AppConfig.of(context)!;
+    final config = AppConfig.of(context);
     return MaterialApp.router(
       scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.white,
-        accentColor: Color(0xFF56CCF2),
-        iconTheme: IconThemeData(color: Color(0xFF255261)),
-        bottomNavigationBarTheme:
-            BottomNavigationBarThemeData(selectedItemColor: Color(0xFF2D9CDB)),
+        accentColor: const Color(0xFF56CCF2),
+        iconTheme: const IconThemeData(color: Color(0xFF255261)),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            selectedItemColor: Color(0xFF2D9CDB)),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        accentColor: Color(0xFF2F80ED),
-        bottomNavigationBarTheme:
-            BottomNavigationBarThemeData(selectedItemColor: Color(0xFF2D9CDB)),
+        accentColor: const Color(0xFF2F80ED),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            selectedItemColor: Color(0xFF2D9CDB)),
       ),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

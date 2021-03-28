@@ -1,4 +1,4 @@
-const String deviceDataQuery = r"""
+const String deviceDataQuery = r'''
 query autowateringData {
   autowateringData(first: 1, orderBy: "-time") {
     edges {
@@ -28,4 +28,4 @@ query autowateringData {
     }
   }
 }
-""";
+''';

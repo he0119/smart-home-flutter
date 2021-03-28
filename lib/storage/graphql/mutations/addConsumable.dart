@@ -1,4 +1,4 @@
-const String addConsumableMutation = r"""
+const String addConsumableMutation = r'''
 mutation addConsumable($input: AddConsumableMutationInput!) {
   addConsumable(input: $input) {
     item {
@@ -15,4 +15,4 @@ mutation addConsumable($input: AddConsumableMutationInput!) {
     }
   }
 }
-""";
+''';

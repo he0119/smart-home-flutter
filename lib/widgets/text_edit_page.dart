@@ -50,7 +50,7 @@ class _TextEditPageState extends State<TextEditPage> {
           Tooltip(
             message: '确认',
             child: IconButton(
-              icon: Icon(Icons.check),
+              icon: const Icon(Icons.check),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   widget.onSubmit(_textController.text);
@@ -83,7 +83,7 @@ class _TextEditPageState extends State<TextEditPage> {
                 keyboardType: widget.keyboardType,
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Text(widget.description),
           ],
         ),

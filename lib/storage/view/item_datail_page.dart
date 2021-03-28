@@ -107,7 +107,7 @@ class ItemDetailScreen extends StatelessWidget {
       return AppBar(
         title: Text(state.item.name),
         actions: <Widget>[
-          SearchIconButton(),
+          const SearchIconButton(),
           PopupMenuButton<ItemDetailMenu>(
             onSelected: (value) async {
               if (value == ItemDetailMenu.edit) {
@@ -147,23 +147,23 @@ class ItemDetailScreen extends StatelessWidget {
               }
               if (value == ItemDetailMenu.addPicture) {
                 MyRouterDelegate.of(context)
-                    .push(PictureAddPage(itemId: itemId));
+                    .push(PictureAddPage(itemId: state.item.id));
               }
               if (value == ItemDetailMenu.delete) {
-                showDialog(
+                await showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
                     title: Text('删除 ${state.item.name}'),
-                    content: Text('你确认要删除该物品么？'),
+                    content: const Text('你确认要删除该物品么？'),
                     actions: <Widget>[
                       TextButton(
-                        child: Text('否'),
+                        child: const Text('否'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                       ),
                       TextButton(
-                        child: Text('是'),
+                        child: const Text('是'),
                         onPressed: () {
                           BlocProvider.of<ItemEditBloc>(context).add(
                             ItemDeleted(item: state.item),
@@ -177,19 +177,19 @@ class ItemDetailScreen extends StatelessWidget {
               }
             },
             itemBuilder: (context) => [
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: ItemDetailMenu.edit,
                 child: Text('编辑'),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: ItemDetailMenu.addPicture,
                 child: Text('添加图片'),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: ItemDetailMenu.consumable,
                 child: Text('耗材编辑'),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: ItemDetailMenu.delete,
                 child: Text('删除'),
               ),
@@ -220,7 +220,7 @@ class ItemDetailScreen extends StatelessWidget {
     if (state is ItemDetailSuccess) {
       return _ItemDetailList(item: state.item);
     }
-    return CenterLoadingIndicator();
+    return const CenterLoadingIndicator();
   }
 }
 
@@ -234,41 +234,41 @@ class _ItemDetailList extends StatelessWidget {
     return ListView(
       children: <Widget>[
         ListTile(
-          title: Text('数量'),
+          title: const Text('数量'),
           subtitle: SelectableText(item.number.toString()),
         ),
         if (item.description != null && item.description!.isNotEmpty)
           ListTile(
-            title: Text('备注'),
+            title: const Text('备注'),
             subtitle: SelectableText(item.description!),
           ),
         if (item.storage != null)
           ListTile(
-            title: Text('属于'),
+            title: const Text('属于'),
             subtitle: SelectableText(
               item.storage!.name,
               onTap: () {
                 MyRouterDelegate.of(context)
                     .addStorageGroup(storage: item.storage);
               },
-              style: TextStyle(
+              style: const TextStyle(
                 decoration: TextDecoration.underline,
               ),
             ),
           ),
         if (item.price != null)
           ListTile(
-            title: Text('价格'),
+            title: const Text('价格'),
             subtitle: SelectableText(item.price.toString()),
           ),
         if (item.expiredAt != null)
           ListTile(
-            title: Text('有效期至'),
+            title: const Text('有效期至'),
             subtitle: SelectableText(item.expiredAt?.toLocalStr() ?? ''),
           ),
         if (item.consumables!.isNotEmpty)
           ListTile(
-            title: Text('耗材'),
+            title: const Text('耗材'),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: item.consumables!
@@ -278,7 +278,7 @@ class _ItemDetailList extends StatelessWidget {
                       onTap: () {
                         MyRouterDelegate.of(context).addItemPage(item: item);
                       },
-                      style: TextStyle(
+                      style: const TextStyle(
                         decoration: TextDecoration.underline,
                       ),
                     ),
@@ -288,20 +288,20 @@ class _ItemDetailList extends StatelessWidget {
           ),
         if (item.editedBy != null)
           ListTile(
-            title: Text('修改人'),
+            title: const Text('修改人'),
             subtitle: SelectableText(item.editedBy!.username),
           ),
         ListTile(
-          title: Text('修改时间'),
+          title: const Text('修改时间'),
           subtitle: SelectableText(item.editedAt?.toLocalStr() ?? ''),
         ),
         if (item.createdBy != null)
           ListTile(
-            title: Text('录入人'),
+            title: const Text('录入人'),
             subtitle: SelectableText(item.createdBy!.username),
           ),
         ListTile(
-          title: Text('录入时间'),
+          title: const Text('录入时间'),
           subtitle: SelectableText(item.createdAt?.toLocalStr() ?? ''),
         ),
         if (item.pictures!.isNotEmpty)
@@ -309,8 +309,8 @@ class _ItemDetailList extends StatelessWidget {
             ListTile(
               title: picture.description.isNotEmpty
                   ? Text('图片（${picture.description}）')
-                  : Text('图片（未命名）'),
-              subtitle: Text('单击查看'),
+                  : const Text('图片（未命名）'),
+              subtitle: const Text('单击查看'),
               onTap: () {
                 MyRouterDelegate.of(context)
                     .push(PicturePage(pictureId: picture.id));

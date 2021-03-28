@@ -47,11 +47,9 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapAuthenticationStartedToState(
       AuthenticationStarted event) async* {
     // 监听认证情况
-    if (_loginSubscription == null) {
-      _loginSubscription = graphqlApiClient.loginStatus.listen((event) {
-        if (!event) add(AuthenticationLogout());
-      });
-    }
+    _loginSubscription ??= graphqlApiClient.loginStatus.listen((event) {
+      if (!event) add(AuthenticationLogout());
+    });
     try {
       // 检查是否登录
       if (await graphqlApiClient.isLogin) {
@@ -59,12 +57,12 @@ class AuthenticationBloc
         if (loginUser != null) {
           yield AuthenticationSuccess(loginUser);
         } else {
-          User user = await userRepository.currentUser();
+          final user = await userRepository.currentUser();
           appPreferencesBloc.add(LoginUserChanged(loginUser: user));
           yield AuthenticationSuccess(user);
         }
       } else {
-        yield AuthenticationFailure('未登录，请登录账户');
+        yield const AuthenticationFailure('未登录，请登录账户');
       }
     } on MyException catch (e) {
       yield AuthenticationError(e.message);
@@ -75,14 +73,14 @@ class AuthenticationBloc
       AuthenticationLogin event) async* {
     yield AuthenticationInProgress();
     try {
-      bool result =
+      final result =
           await graphqlApiClient.authenticate(event.username, event.password);
       if (result) {
-        User user = await userRepository.currentUser();
+        final user = await userRepository.currentUser();
         appPreferencesBloc.add(LoginUserChanged(loginUser: user));
         yield AuthenticationSuccess(user);
       } else {
-        yield AuthenticationFailure('用户名或密码错误');
+        yield const AuthenticationFailure('用户名或密码错误');
       }
     } on MyException catch (e) {
       yield AuthenticationFailure(e.message);
@@ -90,7 +88,7 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapLogoutToState() async* {
-    yield AuthenticationFailure('已登出');
+    yield const AuthenticationFailure('已登出');
     // 清除 Sentry 设置的用户
     Sentry.configureScope((scope) => scope.user = null);
     await graphqlApiClient.logout();

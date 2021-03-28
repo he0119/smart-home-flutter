@@ -23,7 +23,7 @@ class AppApiUrlChanged extends AppPreferencesEvent {
   List<Object> get props => [apiUrl];
 
   @override
-  String toString() => 'AppApiUrlChanged { apiUrl: $apiUrl }';
+  String toString() => 'AppApiUrlChanged(apiUrl: $apiUrl)';
 }
 
 /// 更改物联网页面的刷新间隔
@@ -36,8 +36,7 @@ class AppIotRefreshIntervalChanged extends AppPreferencesEvent {
   List<Object> get props => [interval];
 
   @override
-  String toString() =>
-      'AppIotRefreshIntervalChanged { refreshInterval: $interval }';
+  String toString() => 'AppIotRefreshIntervalChanged(interval: $interval)';
 }
 
 /// 更改博客和博客后台网址
@@ -55,7 +54,7 @@ class AppBlogUrlChanged extends AppPreferencesEvent {
 
   @override
   String toString() =>
-      'AppBlogUrlChanged { blogUrl: $blogUrl, blogAdminUrl: $blogAdminUrl }';
+      'AppBlogUrlChanged(blogUrl: $blogUrl, blogAdminUrl: $blogAdminUrl)';
 }
 
 /// 更改默认主页
@@ -70,8 +69,7 @@ class DefaultPageChanged extends AppPreferencesEvent {
   List<Object> get props => [defaultPage];
 
   @override
-  String toString() =>
-      'DefaultPageChanged { defaultPage: ${defaultPage.name} }';
+  String toString() => 'DefaultPageChanged(defaultPage: $defaultPage)';
 }
 
 /// 更改登录用户
@@ -86,7 +84,7 @@ class LoginUserChanged extends AppPreferencesEvent {
   List<Object> get props => [loginUser];
 
   @override
-  String toString() => 'LoginUserChanged { loginUser: ${loginUser.username} }';
+  String toString() => 'LoginUserChanged(loginUser: $loginUser)';
 }
 
 /// 更改小米推送密钥
@@ -103,7 +101,8 @@ class MiPushKeyChanged extends AppPreferencesEvent {
   List<Object> get props => [miPushAppId, miPushAppKey];
 
   @override
-  String toString() => 'MiPushKeyChanged { miPushAppId: $miPushAppId }';
+  String toString() => 'MiPushKeyChanged(miPushAppId: $miPushAppId, '
+      'miPushAppKey: $miPushAppKey)';
 }
 
 /// 更改小米推送注册标识符
@@ -118,7 +117,7 @@ class MiPushRegIdChanged extends AppPreferencesEvent {
   List<Object> get props => [miPushRegId];
 
   @override
-  String toString() => 'MiPushRegIdChanged { miPushRegId: $miPushRegId }';
+  String toString() => 'MiPushRegIdChanged(miPushRegId: $miPushRegId)';
 }
 
 /// 更改评论排序方式

@@ -1,4 +1,4 @@
-const String homepageQuery = r"""
+const String homepageQuery = r'''
 query homepage($nearExpiredTime: DateTime!, $now: DateTime!) {
   recentlyCreatedItems: items(isDeleted: false, first:10, orderBy: "-created_at") {
     edges {
@@ -41,4 +41,4 @@ query homepage($nearExpiredTime: DateTime!, $now: DateTime!) {
     }
   }
 }
-""";
+''';

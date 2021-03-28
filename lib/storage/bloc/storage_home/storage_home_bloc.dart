@@ -18,7 +18,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
   Stream<StorageHomeState> mapEventToState(
     StorageHomeEvent event,
   ) async* {
-    final StorageHomeState currentState = state;
+    final currentState = state;
     if (event is StorageHomeFetched) {
       // 如果需要刷新，则显示加载界面
       // 因为需要请求网络最好提示用户
@@ -126,7 +126,7 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               );
               break;
             case ItemType.all:
-              Map<String, List<Item>> homepage =
+              final homepage =
                   await storageRepository.homePage(cache: event.cache);
               yield StorageHomeSuccess(
                   recentlyCreatedItems: homepage['recentlyCreatedItems'],

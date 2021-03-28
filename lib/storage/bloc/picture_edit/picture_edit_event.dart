@@ -8,9 +8,9 @@ abstract class PictureEditEvent extends Equatable {
 }
 
 class PictureAdded extends PictureEditEvent {
-  final String? itemId;
-  final String? description;
-  final String? picturePath;
+  final String itemId;
+  final String description;
+  final String picturePath;
   final double boxX;
   final double boxY;
   final double boxH;
@@ -19,18 +19,19 @@ class PictureAdded extends PictureEditEvent {
   const PictureAdded({
     required this.itemId,
     required this.picturePath,
+    required this.description,
     required this.boxX,
     required this.boxY,
     required this.boxH,
     required this.boxW,
-    this.description,
   });
 
   @override
-  List<Object?> get props => [itemId, description, boxX, boxY, boxH, boxW];
+  List<Object> get props => [itemId, description, boxX, boxY, boxH, boxW];
 
   @override
-  String toString() => 'PictureAdded { description: $description }';
+  String toString() =>
+      'PictureAdded(itemId: $itemId, description: $description)';
 }
 
 class PictureDeleted extends PictureEditEvent {
@@ -42,7 +43,7 @@ class PictureDeleted extends PictureEditEvent {
   List<Object> get props => [picture];
 
   @override
-  String toString() => 'PictureDeleted { id: ${picture.id} }';
+  String toString() => 'PictureDeleted(picture: $picture)';
 }
 
 class PictureUpdated extends PictureEditEvent {
@@ -68,5 +69,5 @@ class PictureUpdated extends PictureEditEvent {
   List<Object?> get props => [id, description, boxX, boxY, boxH, boxW];
 
   @override
-  String toString() => 'PictureUpdated { id: $id }';
+  String toString() => 'PictureUpdated(id: $id)';
 }

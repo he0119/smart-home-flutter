@@ -19,7 +19,7 @@ class StorageRepository {
     required String id,
     List<String>? consumableIds,
   }) async {
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(addConsumableMutation),
       variables: {
         'input': {
@@ -32,7 +32,7 @@ class StorageRepository {
     final Map<String, dynamic> itemJson =
         result.data!.flattenConnection['addConsumable']['item'];
 
-    final Item item = Item.fromJson(itemJson);
+    final item = Item.fromJson(itemJson);
     return item;
   }
 
@@ -44,7 +44,7 @@ class StorageRepository {
     double? price,
     DateTime? expiredAt,
   }) async {
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(addItemMutation),
       variables: {
         'input': {
@@ -59,7 +59,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> json = result.data!['addItem']['item'];
-    final Item itemObject = Item.fromJson(json);
+    final itemObject = Item.fromJson(json);
     return itemObject;
   }
 
@@ -78,7 +78,7 @@ class StorageRepository {
       contentType: MediaType('image', 'jpeg'),
     );
 
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(addPictureMutation),
       variables: {
         'input': {
@@ -94,7 +94,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> json = result.data!['addPicture']['picture'];
-    final Picture pictureObject = Picture.fromJson(json);
+    final pictureObject = Picture.fromJson(json);
     return pictureObject;
   }
 
@@ -103,19 +103,19 @@ class StorageRepository {
     String? parentId,
     String? description,
   }) async {
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(addStorageMutation),
       variables: {
         'input': {
           'name': name,
-          'parentId': parentId != null ? parentId : null,
+          'parentId': parentId,
           'description': description,
         }
       },
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> json = result.data!['addStorage']['storage'];
-    final Storage storageObject = Storage.fromJson(json);
+    final storageObject = Storage.fromJson(json);
     return storageObject;
   }
 
@@ -123,7 +123,7 @@ class StorageRepository {
     String? after,
     bool cache = true,
   }) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(consumablesQuery),
       variables: {
         'after': after,
@@ -137,7 +137,7 @@ class StorageRepository {
 
     final List<dynamic> consumablesJson =
         results.data!.flattenConnection['consumables'];
-    final List<Item> consumables =
+    final consumables =
         consumablesJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     return Tuple2(consumables, pageInfo);
@@ -147,7 +147,7 @@ class StorageRepository {
     required String id,
     List<String>? consumableIds,
   }) async {
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(deleteConsumableMutation),
       variables: {
         'input': {
@@ -160,13 +160,13 @@ class StorageRepository {
     final Map<String, dynamic> itemJson =
         result.data!.flattenConnection['deleteConsumable']['item'];
 
-    final Item item = Item.fromJson(itemJson);
+    final item = Item.fromJson(itemJson);
     return item;
   }
 
   Future<Tuple2<List<Item>, PageInfo>> deletedItems(
       {String? after, bool cache = true}) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(deletedItemsQuery),
       variables: {
         'after': after,
@@ -180,14 +180,14 @@ class StorageRepository {
 
     final List<dynamic> deletedItemsJson =
         results.data!.flattenConnection['deletedItems'];
-    final List<Item> deletedItems =
+    final deletedItems =
         deletedItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     return Tuple2(deletedItems, pageInfo);
   }
 
   Future<void> deleteItem({String? itemId}) async {
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(deleteItemMutation),
       variables: {
         'input': {
@@ -199,7 +199,7 @@ class StorageRepository {
   }
 
   Future<void> deletePicture({String? pictureId}) async {
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(deletePictureMutation),
       variables: {
         'input': {
@@ -211,7 +211,7 @@ class StorageRepository {
   }
 
   Future<void> deleteStorage({String? storageId}) async {
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(deleteStorageMutation),
       variables: {
         'input': {
@@ -226,7 +226,7 @@ class StorageRepository {
     String? after,
     bool cache = true,
   }) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(expiredItemsQuery),
       variables: {
         'after': after,
@@ -241,7 +241,7 @@ class StorageRepository {
 
     final List<dynamic> expiredItemsJson =
         results.data!.flattenConnection['expiredItems'];
-    final List<Item> expiredItems =
+    final expiredItems =
         expiredItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     return Tuple2(expiredItems, pageInfo);
@@ -250,12 +250,12 @@ class StorageRepository {
   /// 存储管理主页所需要的数据
   /// 过期，即将过期和最近录入，修改的物品
   Future<Map<String, List<Item>>> homePage({bool cache = true}) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(homepageQuery),
       variables: {
         'now': DateTime.now().toIso8601String(),
         'nearExpiredTime':
-            DateTime.now().add(Duration(days: 180)).toIso8601String(),
+            DateTime.now().add(const Duration(days: 180)).toIso8601String(),
       },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
@@ -264,19 +264,19 @@ class StorageRepository {
     final json = results.data!.flattenConnection;
 
     final List<dynamic> recentlyCreatedItemsJson = json['recentlyCreatedItems'];
-    final List<Item> recentlyCreatedItems =
+    final recentlyCreatedItems =
         recentlyCreatedItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     final List<dynamic> recentlyEditedItemsJson = json['recentlyEditedItems'];
-    final List<Item> recentlyEditedItems =
+    final recentlyEditedItems =
         recentlyEditedItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     final List<dynamic> expiredItemsJson = json['expiredItems'];
-    final List<Item> expiredItems =
+    final expiredItems =
         expiredItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     final List<dynamic> nearExpiredItemsJson = json['nearExpiredItems'];
-    final List<Item> nearExpiredItems =
+    final nearExpiredItems =
         nearExpiredItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     return {
@@ -296,7 +296,7 @@ class StorageRepository {
 
     if (id != null) {
       // 如果有 ID，则优先通过 ID 获取数据
-      final QueryOptions options = QueryOptions(
+      final options = QueryOptions(
         document: gql(itemQuery),
         variables: {
           'id': id,
@@ -308,7 +308,7 @@ class StorageRepository {
       itemJson = result.data!['item'];
     } else {
       // 通过名称获取数据
-      final QueryOptions options = QueryOptions(
+      final options = QueryOptions(
         document: gql(itemByNameQuery),
         variables: {
           'name': name,
@@ -324,8 +324,8 @@ class StorageRepository {
       itemJson = itemListJson['edges'][0]['node'];
     }
 
-    final Map<String, dynamic> json = itemJson!.flattenConnection;
-    final Item item = Item.fromJson(json);
+    final json = itemJson!.flattenConnection;
+    final item = Item.fromJson(json);
 
     return item;
   }
@@ -334,7 +334,7 @@ class StorageRepository {
     required String id,
     bool cache = true,
   }) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(pictureQuery),
       variables: {
         'id': id,
@@ -345,7 +345,7 @@ class StorageRepository {
 
     Map<String, dynamic> json = result.data!['picture'];
 
-    final Picture pictureObject = Picture.fromJson(json);
+    final pictureObject = Picture.fromJson(json);
 
     return pictureObject;
   }
@@ -354,7 +354,7 @@ class StorageRepository {
     String? key,
     bool cache = true,
   }) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(itemsQuery),
       variables: {
         'key': key,
@@ -364,8 +364,7 @@ class StorageRepository {
     final result = await graphqlApiClient.query(options);
 
     final List<dynamic> itemsJson = result.data!.flattenConnection['items'];
-    final List<Item> items =
-        itemsJson.map((dynamic e) => Item.fromJson(e)).toList();
+    final items = itemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     return items;
   }
@@ -374,13 +373,13 @@ class StorageRepository {
     String? after,
     bool cache = true,
   }) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(nearExpiredItemsQuery),
       variables: {
         'after': after,
         'now': DateTime.now().toIso8601String(),
         'nearExpiredTime':
-            DateTime.now().add(Duration(days: 180)).toIso8601String(),
+            DateTime.now().add(const Duration(days: 180)).toIso8601String(),
       },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
@@ -391,7 +390,7 @@ class StorageRepository {
 
     final List<dynamic> nearExpiredItemsJson =
         results.data!.flattenConnection['nearExpiredItems'];
-    final List<Item> nearExpiredItems =
+    final nearExpiredItems =
         nearExpiredItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     return Tuple2(nearExpiredItems, pageInfo);
@@ -399,7 +398,7 @@ class StorageRepository {
 
   Future<Tuple2<List<Item>, PageInfo>> recentlyCreatedItems(
       {String? after, bool cache = true}) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(recentlyCreatedItemsQuery),
       variables: {
         'after': after,
@@ -413,7 +412,7 @@ class StorageRepository {
 
     final List<dynamic> recentlyCreatedItemsJson =
         results.data!.flattenConnection['recentlyCreatedItems'];
-    final List<Item> recentlyCreatedItems =
+    final recentlyCreatedItems =
         recentlyCreatedItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     return Tuple2(recentlyCreatedItems, pageInfo);
@@ -421,7 +420,7 @@ class StorageRepository {
 
   Future<Tuple2<List<Item>, PageInfo>> recentlyEditedItems(
       {String? after, bool cache = true}) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(recentlyEditedItemsQuery),
       variables: {
         'after': after,
@@ -435,14 +434,14 @@ class StorageRepository {
 
     final List<dynamic> recentlyEditedItemsJson =
         results.data!.flattenConnection['recentlyEditedItems'];
-    final List<Item> recentlyEditedItems =
+    final recentlyEditedItems =
         recentlyEditedItemsJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     return Tuple2(recentlyEditedItems, pageInfo);
   }
 
   Future<void> restoreItem({String? itemId}) async {
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(restoreItemMutation),
       variables: {
         'input': {
@@ -457,7 +456,7 @@ class StorageRepository {
     String? after,
     bool cache = true,
   }) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(rootStorageQuery),
       variables: {
         'after': after,
@@ -471,7 +470,7 @@ class StorageRepository {
 
     final List<dynamic> storagesJson =
         results.data!.flattenConnection['rootStorage'];
-    final List<Storage> storages =
+    final storages =
         storagesJson.map((dynamic e) => Storage.fromJson(e)).toList();
 
     return Tuple2(storages, pageInfo);
@@ -479,7 +478,7 @@ class StorageRepository {
 
   Future<Tuple2<List<Item>, List<Storage>>> search(String key,
       {bool isDeleted = false}) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(searchQuery),
       variables: {
         'key': key,
@@ -496,19 +495,18 @@ class StorageRepository {
     final List<dynamic> itemNameJson = json['itemName'];
     final List<dynamic> itemDescriptionJson = json['itemDescription'];
 
-    final List<Storage> storagesName =
+    final storagesName =
         storageNameJson.map((dynamic e) => Storage.fromJson(e)).toList();
-    final List<Storage> storagesDescription =
+    final storagesDescription =
         storageDescriptionJson.map((dynamic e) => Storage.fromJson(e)).toList();
-    final List<Item> itemsName =
+    final itemsName =
         itemNameJson.map((dynamic e) => Item.fromJson(e)).toList();
-    final List<Item> itemsDescription =
+    final itemsDescription =
         itemDescriptionJson.map((dynamic e) => Item.fromJson(e)).toList();
 
     // 去重
-    final List<Storage> storages =
-        (storagesName + storagesDescription).toSet().toList();
-    final List<Item> items = (itemsName + itemsDescription).toSet().toList();
+    final storages = (storagesName + storagesDescription).toSet().toList();
+    final items = (itemsName + itemsDescription).toSet().toList();
 
     return Tuple2(items, storages);
   }
@@ -527,7 +525,7 @@ class StorageRepository {
 
     if (id != null) {
       // 如果有 ID，则优先通过 ID 获取数据
-      final QueryOptions options = QueryOptions(
+      final options = QueryOptions(
         document: gql(storageQuery),
         variables: {
           'id': id,
@@ -541,7 +539,7 @@ class StorageRepository {
       storageJson = result.data!['storage'];
     } else {
       // 通过名称来获取数据
-      final QueryOptions options = QueryOptions(
+      final options = QueryOptions(
         document: gql(storageByNameQuery),
         variables: {
           'name': name,
@@ -565,9 +563,9 @@ class StorageRepository {
     final itemPageInfo = PageInfo.fromJson(storageJson['items']['pageInfo']);
 
     // 位置详情
-    final Map<String, dynamic> json = storageJson.flattenConnection;
+    final json = storageJson.flattenConnection;
 
-    final Storage storage = Storage.fromJson(json);
+    final storage = Storage.fromJson(json);
 
     return Tuple3(storage, storagePageInfo, itemPageInfo);
   }
@@ -576,7 +574,7 @@ class StorageRepository {
     String? key,
     bool cache = true,
   }) async {
-    final QueryOptions options = QueryOptions(
+    final options = QueryOptions(
       document: gql(storagesQuery),
       variables: {
         'key': key,
@@ -587,7 +585,7 @@ class StorageRepository {
 
     final List<dynamic> storagesJson =
         result.data!.flattenConnection['storages'];
-    final List<Storage> storages =
+    final storages =
         storagesJson.map((dynamic e) => Storage.fromJson(e)).toList();
 
     return storages;
@@ -602,7 +600,7 @@ class StorageRepository {
     double? price,
     DateTime? expiredAt,
   }) async {
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(updateItemMutation),
       variables: {
         'input': {
@@ -619,7 +617,7 @@ class StorageRepository {
     final result = await graphqlApiClient.mutate(options);
 
     final Map<String, dynamic> itemJson = result.data!['updateItem']['item'];
-    final Item item = Item.fromJson(itemJson);
+    final item = Item.fromJson(itemJson);
 
     return item;
   }
@@ -642,7 +640,7 @@ class StorageRepository {
       );
     }
 
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(updatePictureMutation),
       variables: {
         'input': {
@@ -658,7 +656,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> json = result.data!['updatePicture']['picture'];
-    final Picture pictureObject = Picture.fromJson(json);
+    final pictureObject = Picture.fromJson(json);
     return pictureObject;
   }
 
@@ -668,13 +666,13 @@ class StorageRepository {
     String? parentId,
     String? description,
   }) async {
-    final MutationOptions options = MutationOptions(
+    final options = MutationOptions(
       document: gql(updateStorageMutation),
       variables: {
         'input': {
           'id': id,
           'name': name,
-          'parentId': parentId != null ? parentId : null,
+          'parentId': parentId,
           'description': description,
         }
       },
@@ -683,7 +681,7 @@ class StorageRepository {
 
     final Map<String, dynamic> storageJson =
         result.data!['updateStorage']['storage'];
-    final Storage storage = Storage.fromJson(storageJson);
+    final storage = Storage.fromJson(storageJson);
 
     return storage;
   }

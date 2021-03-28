@@ -7,9 +7,15 @@ abstract class AuthenticationState extends Equatable {
   List<Object> get props => [];
 }
 
-class AuthenticationInitial extends AuthenticationState {}
+class AuthenticationInitial extends AuthenticationState {
+  @override
+  String toString() => 'AuthenticationInitial';
+}
 
-class AuthenticationInProgress extends AuthenticationState {}
+class AuthenticationInProgress extends AuthenticationState {
+  @override
+  String toString() => 'AuthenticationInProgress';
+}
 
 /// 登陆成功
 class AuthenticationSuccess extends AuthenticationState {
@@ -21,8 +27,7 @@ class AuthenticationSuccess extends AuthenticationState {
   List<Object> get props => [currentUser];
 
   @override
-  String toString() =>
-      'AuthenticationSuccess(currentUser: ${currentUser.username})';
+  String toString() => 'AuthenticationSuccess(currentUser: $currentUser)';
 }
 
 /// 登陆失败
@@ -37,7 +42,7 @@ class AuthenticationFailure extends AuthenticationState {
   List<Object> get props => [message];
 
   @override
-  String toString() => 'AuthenticationFailure { message: $message }';
+  String toString() => 'AuthenticationFailure(message: $message)';
 }
 
 /// 网络错误
@@ -50,5 +55,5 @@ class AuthenticationError extends AuthenticationState {
   List<Object> get props => [message];
 
   @override
-  String toString() => 'AuthenticationError { error: $message }';
+  String toString() => 'AuthenticationError(message: $message)';
 }

@@ -11,10 +11,10 @@ class DefaultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
       builder: (context, state) => Scaffold(
-        appBar: AppBar(title: Text('默认主页')),
+        appBar: AppBar(title: const Text('默认主页')),
         body: SettingsList(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          contentPadding: EdgeInsets.symmetric(vertical: 20),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(tiles: [
               SettingsTile(
@@ -58,7 +58,7 @@ class DefaultPage extends StatelessWidget {
 
   Widget trailingWidget(AppTab appTab, AppTab current) {
     return (appTab == current)
-        ? Icon(Icons.check, color: Colors.blue)
-        : Icon(null);
+        ? const Icon(Icons.check, color: Colors.blue)
+        : const Icon(null);
   }
 }
