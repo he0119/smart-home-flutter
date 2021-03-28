@@ -7,9 +7,15 @@ abstract class ItemEditState extends Equatable {
   List<Object> get props => [];
 }
 
-class ItemEditInitial extends ItemEditState {}
+class ItemEditInitial extends ItemEditState {
+  @override
+  String toString() => 'ItemEditInitial';
+}
 
-class ItemEditInProgress extends ItemEditState {}
+class ItemEditInProgress extends ItemEditState {
+  @override
+  String toString() => 'ItemEditInProgress';
+}
 
 class ItemEditFailure extends ItemEditState {
   final String message;
@@ -17,7 +23,7 @@ class ItemEditFailure extends ItemEditState {
   const ItemEditFailure(this.message);
 
   @override
-  String toString() => 'ItemEditFailure { message: $message }';
+  String toString() => 'ItemEditFailure(message: $message)';
 }
 
 class ItemAddSuccess extends ItemEditState {
@@ -26,7 +32,7 @@ class ItemAddSuccess extends ItemEditState {
   const ItemAddSuccess({required this.item});
 
   @override
-  String toString() => 'ItemAddSuccess { item: ${item.name} }';
+  String toString() => 'ItemAddSuccess(item: $item)';
 }
 
 class ItemUpdateSuccess extends ItemEditState {
@@ -35,7 +41,7 @@ class ItemUpdateSuccess extends ItemEditState {
   const ItemUpdateSuccess({required this.item});
 
   @override
-  String toString() => 'ItemUpdateSuccess { item: ${item.name} }';
+  String toString() => 'ItemUpdateSuccess(item: $item)';
 }
 
 class ItemDeleteSuccess extends ItemEditState {
@@ -44,7 +50,7 @@ class ItemDeleteSuccess extends ItemEditState {
   const ItemDeleteSuccess({required this.item});
 
   @override
-  String toString() => 'ItemDeleteSuccess { item: ${item.name} }';
+  String toString() => 'ItemDeleteSuccess(item: $item)';
 }
 
 class ItemRestoreSuccess extends ItemEditState {
@@ -53,7 +59,7 @@ class ItemRestoreSuccess extends ItemEditState {
   const ItemRestoreSuccess({required this.item});
 
   @override
-  String toString() => 'ItemRestoreSuccess { item: ${item.name} }';
+  String toString() => 'ItemRestoreSuccess(item: $item)';
 }
 
 class ConsumableAddSuccess extends ItemEditState {
@@ -62,7 +68,7 @@ class ConsumableAddSuccess extends ItemEditState {
   const ConsumableAddSuccess({required this.item});
 
   @override
-  String toString() => 'ConsumableAddSuccess { item: ${item.name} }';
+  String toString() => 'ConsumableAddSuccess(item: $item)';
 }
 
 class ConsumableDeleteSuccess extends ItemEditState {
@@ -71,5 +77,5 @@ class ConsumableDeleteSuccess extends ItemEditState {
   const ConsumableDeleteSuccess({required this.item});
 
   @override
-  String toString() => 'ConsumableIdDeleteSuccess { item: ${item.name} }';
+  String toString() => 'ConsumableDeleteSuccess(item: $item)';
 }

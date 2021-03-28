@@ -147,7 +147,7 @@ class ItemDetailScreen extends StatelessWidget {
               }
               if (value == ItemDetailMenu.addPicture) {
                 MyRouterDelegate.of(context)
-                    .push(PictureAddPage(itemId: itemId));
+                    .push(PictureAddPage(itemId: state.item.id));
               }
               if (value == ItemDetailMenu.delete) {
                 await showDialog(

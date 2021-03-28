@@ -13,7 +13,7 @@ class PictureInProgress extends PictureState {
 }
 
 class PictureFailure extends PictureState {
-  final String? message;
+  final String message;
   final String id;
 
   const PictureFailure(
@@ -22,7 +22,7 @@ class PictureFailure extends PictureState {
   });
 
   @override
-  List<Object?> get props => [message, id];
+  List<Object> get props => [message, id];
 
   @override
   String toString() => 'PictureFailure(message: $message)';

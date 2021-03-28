@@ -7,9 +7,15 @@ abstract class PictureEditState extends Equatable {
   List<Object> get props => [];
 }
 
-class PictureEditInitial extends PictureEditState {}
+class PictureEditInitial extends PictureEditState {
+  @override
+  String toString() => 'PictureEditInitial';
+}
 
-class PictureEditInProgress extends PictureEditState {}
+class PictureEditInProgress extends PictureEditState {
+  @override
+  String toString() => 'PictureEditInProgress';
+}
 
 class PictureEditFailure extends PictureEditState {
   final String message;
@@ -17,7 +23,7 @@ class PictureEditFailure extends PictureEditState {
   const PictureEditFailure(this.message);
 
   @override
-  String toString() => 'PictureEditFailure { message: $message }';
+  String toString() => 'PictureEditFailure(message: $message)';
 }
 
 class PictureAddSuccess extends PictureEditState {
@@ -26,7 +32,7 @@ class PictureAddSuccess extends PictureEditState {
   const PictureAddSuccess({required this.picture});
 
   @override
-  String toString() => 'PictureAddSuccess { Picture: ${picture.id} }';
+  String toString() => 'PictureAddSuccess(picture: $picture)';
 }
 
 class PictureUpdateSuccess extends PictureEditState {
@@ -35,7 +41,7 @@ class PictureUpdateSuccess extends PictureEditState {
   const PictureUpdateSuccess({required this.picture});
 
   @override
-  String toString() => 'PictureUpdateSuccess { Picture: ${picture.id} }';
+  String toString() => 'PictureUpdateSuccess(picture: $picture)';
 }
 
 class PictureDeleteSuccess extends PictureEditState {
@@ -44,5 +50,5 @@ class PictureDeleteSuccess extends PictureEditState {
   const PictureDeleteSuccess({required this.picture});
 
   @override
-  String toString() => 'PictureDeleteSuccess { Picture: ${picture.id} }';
+  String toString() => 'PictureDeleteSuccess(picture: $picture)';
 }

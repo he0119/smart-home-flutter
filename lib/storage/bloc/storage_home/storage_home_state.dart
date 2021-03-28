@@ -13,7 +13,7 @@ class StorageHomeInProgress extends StorageHomeState {
 }
 
 class StorageHomeFailure extends StorageHomeState {
-  final String? message;
+  final String message;
   final ItemType itemType;
 
   const StorageHomeFailure(
@@ -22,7 +22,7 @@ class StorageHomeFailure extends StorageHomeState {
   });
 
   @override
-  List<Object?> get props => [message, itemType];
+  List<Object> get props => [message, itemType];
 
   @override
   String toString() =>
