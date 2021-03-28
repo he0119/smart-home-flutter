@@ -89,7 +89,7 @@ class _IotHomeBody extends StatelessWidget {
                 ListTile(
                   title: Text(device!.name),
                   subtitle: Text(data.time!.toLocalStr()),
-                  trailing: Text(device.isOnline ? '在线' : '离线'),
+                  trailing: Text(device.isOnline! ? '在线' : '离线'),
                 ),
                 ListTile(title: Text('温度：${data.temperature}')),
                 ListTile(title: Text('湿度：${data.humidity}')),

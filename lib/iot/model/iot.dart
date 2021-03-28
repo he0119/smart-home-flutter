@@ -12,7 +12,7 @@ class Device {
   final String? location;
   final DateTime? createdAt;
   final DateTime? editedAt;
-  final bool isOnline;
+  final bool? isOnline;
   final DateTime? onlineAt;
   final DateTime? offlineAt;
 
