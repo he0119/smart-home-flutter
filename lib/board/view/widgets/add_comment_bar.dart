@@ -51,41 +51,48 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
         }
       },
       child: Material(
-        child: ListTile(
-          title: Form(
-            key: _formKey,
-            child: TextFormField(
-              enabled: widget.topic.isOpen,
-              controller: _controller,
-              focusNode: _foucsNode,
-              maxLines: null,
-              decoration: InputDecoration(hintText: '添加评论'),
-              validator: (value) {
-                if (_foucsNode.hasFocus && value!.isEmpty) {
-                  return '评论不能为空';
-                }
-                return null;
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-            ),
-          ),
-          trailing: OutlinedButton(
-            onPressed: _foucsNode.hasFocus
-                ? () {
-                    if (_formKey.currentState!.validate()) {
-                      showInfoSnackBar('正在发送...', duration: 1);
-                      BlocProvider.of<CommentEditBloc>(context)
-                          .add(CommentAdded(
-                        topicId: widget.topic.id,
-                        body: _controller.text,
-                      ));
-                    }
-                  }
-                : null,
-            child: Text('发送'),
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(style: BorderStyle.none),
-            ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 8, 0),
+          child: Row(
+            children: [
+              Expanded(
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    enabled: widget.topic.isOpen,
+                    controller: _controller,
+                    focusNode: _foucsNode,
+                    maxLines: null,
+                    decoration: InputDecoration(hintText: '添加评论'),
+                    validator: (value) {
+                      if (_foucsNode.hasFocus && value!.isEmpty) {
+                        return '评论不能为空';
+                      }
+                      return null;
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
+                ),
+              ),
+              OutlinedButton(
+                onPressed: _foucsNode.hasFocus
+                    ? () {
+                        if (_formKey.currentState!.validate()) {
+                          showInfoSnackBar('正在发送...', duration: 1);
+                          BlocProvider.of<CommentEditBloc>(context)
+                              .add(CommentAdded(
+                            topicId: widget.topic.id,
+                            body: _controller.text,
+                          ));
+                        }
+                      }
+                    : null,
+                child: Text('发送'),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(style: BorderStyle.none),
+                ),
+              ),
+            ],
           ),
         ),
       ),
