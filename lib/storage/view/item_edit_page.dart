@@ -132,8 +132,10 @@ class _ItemEditPageState extends State<ItemEditPage> {
                                   .storages(key: filter);
                           return storages;
                         },
-                        onChanged: (Storage data) {
-                          storageId = data.id;
+                        onChanged: (Storage? data) {
+                          if (data != null) {
+                            storageId = data.id;
+                          }
                         },
                         selectedItem: widget.isEditing
                             ? widget.item!.storage
