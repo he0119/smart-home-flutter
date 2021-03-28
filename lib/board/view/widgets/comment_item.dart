@@ -36,20 +36,20 @@ class CommentItem extends StatelessWidget {
                 ? (Menu menu) async {
                     switch (menu) {
                       case Menu.delete:
-                        showDialog(
+                        await showDialog(
                           context: context,
                           builder: (_) => AlertDialog(
-                            title: Text('删除评论'),
-                            content: Text('你确认要删除该评论？'),
+                            title: const Text('删除评论'),
+                            content: const Text('你确认要删除该评论？'),
                             actions: <Widget>[
                               TextButton(
-                                child: Text('否'),
+                                child: const Text('否'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
                               ),
                               TextButton(
-                                child: Text('是'),
+                                child: const Text('是'),
                                 onPressed: () {
                                   showInfoSnackBar('正在删除...', duration: 1);
                                   BlocProvider.of<CommentEditBloc>(context)

@@ -1,4 +1,4 @@
-const String topicDetailQuery = r"""
+const String topicDetailQuery = r'''
 query topicDetail($topicId: ID!, $orderBy: String!, $after: String) {
   topic(id: $topicId) {
     id
@@ -38,4 +38,4 @@ query topicDetail($topicId: ID!, $orderBy: String!, $after: String) {
     }
   }
 }
-""";
+''';

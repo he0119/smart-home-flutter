@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:smarthome/board/bloc/blocs.dart';
+import 'package:smarthome/board/model/models.dart';
 import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
 import 'package:smarthome/board/repository/board_repository.dart';
@@ -14,7 +15,7 @@ import 'package:smarthome/widgets/infinite_list.dart';
 class BoardHomePage extends Page {
   BoardHomePage()
       : super(
-          key: ValueKey('board'),
+          key: const ValueKey('board'),
           name: '/board',
         );
 
@@ -23,7 +24,7 @@ class BoardHomePage extends Page {
     BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeFetched());
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => BoardHomeScreen(),
+      builder: (context) => const BoardHomeScreen(),
     );
   }
 }
@@ -37,10 +38,10 @@ class BoardHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MyHomePage(
       activeTab: AppTab.board,
-      body: _BoardHomeBody(),
+      body: const _BoardHomeBody(),
       floatingActionButton: FloatingActionButton(
         tooltip: '添加话题',
-        child: Icon(Icons.create),
+        child: const Icon(Icons.create),
         onPressed: () async {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -48,7 +49,7 @@ class BoardHomeScreen extends StatelessWidget {
                 create: (context) => TopicEditBloc(
                     boardRepository:
                         RepositoryProvider.of<BoardRepository>(context)),
-                child: TopicEditPage(
+                child: const TopicEditPage(
                   isEditing: false,
                 ),
               ),
@@ -87,17 +88,17 @@ class _BoardHomeBody extends StatelessWidget {
               BlocProvider.of<BoardHomeBloc>(context)
                   .add(BoardHomeFetched(cache: false));
             },
-            child: InfiniteList(
+            child: InfiniteList<Topic>(
               items: state.topics,
               hasReachedMax: state.hasReachedMax,
-              itemBuilder: (context, dynamic item) => TopicItem(topic: item),
+              itemBuilder: (context, item) => TopicItem(topic: item),
               onFetch: () {
                 BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeFetched());
               },
             ),
           );
         }
-        return CenterLoadingIndicator();
+        return const CenterLoadingIndicator();
       },
     );
   }

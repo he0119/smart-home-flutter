@@ -7,21 +7,15 @@ class MyException implements Exception {
 
 /// 认证异常
 class AuthenticationException extends MyException {
-  final String message;
-
-  const AuthenticationException(this.message) : super(message);
+  const AuthenticationException(String message) : super(message);
 }
 
 /// 服务器异常
 class ServerException extends MyException {
-  final String message;
-
-  const ServerException(this.message) : super(message);
+  const ServerException(String message) : super(message);
 }
 
 /// 网络异常
 class NetworkException extends MyException {
-  final String message;
-
-  const NetworkException(this.message) : super(message);
+  const NetworkException(String message) : super(message);
 }

@@ -7,13 +7,13 @@ import 'package:smarthome/core/core.dart';
 
 class BlogSettingsPage extends Page {
   BlogSettingsPage()
-      : super(key: ValueKey('settings/blog'), name: '/settings/blog');
+      : super(key: const ValueKey('settings/blog'), name: '/settings/blog');
 
   @override
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => BlogSettingsScreen(),
+      builder: (context) => const BlogSettingsScreen(),
     );
   }
 }
@@ -25,12 +25,12 @@ class BlogSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('博客'),
+        title: const Text('博客'),
       ),
       body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => SettingsList(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          contentPadding: EdgeInsets.symmetric(vertical: 20),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(
               title: '网址',
@@ -40,7 +40,7 @@ class BlogSettingsScreen extends StatelessWidget {
                   subtitle: state.blogUrl,
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BlogUrlPage(),
+                      builder: (context) => const BlogUrlPage(),
                     ));
                   },
                 ),
@@ -49,7 +49,7 @@ class BlogSettingsScreen extends StatelessWidget {
                   subtitle: state.blogAdminUrl ?? '请单击输入',
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BlogAdminUrlPage(),
+                      builder: (context) => const BlogAdminUrlPage(),
                     ));
                   },
                 ),

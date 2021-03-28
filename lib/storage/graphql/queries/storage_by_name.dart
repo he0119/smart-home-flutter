@@ -1,5 +1,5 @@
 /// 获取指定名称的物品
-const String storageByNameQuery = r"""
+const String storageByNameQuery = r'''
 query storageByName($name: String!, $itemCursor: String, $storageCursor: String) {
   storage: storages(name: $name) {
     edges {
@@ -65,4 +65,4 @@ query storageByName($name: String!, $itemCursor: String, $storageCursor: String)
     }
   }
 }
-""";
+''';

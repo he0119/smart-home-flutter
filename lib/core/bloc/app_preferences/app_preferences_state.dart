@@ -28,7 +28,7 @@ class AppPreferencesState extends Equatable {
   });
 
   factory AppPreferencesState.initial() {
-    return AppPreferencesState(
+    return const AppPreferencesState(
       initialized: false,
       apiUrl: null,
       miPushAppId: null,

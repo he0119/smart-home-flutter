@@ -6,7 +6,7 @@ extension FlattenConnection on Map<String, dynamic> {
 /// 去掉 GraphQL Connection 中的 Edges 与 Node
 Map<String, dynamic> flatten(Map<String, dynamic> json) {
   // 检查是否 Key 是列表
-  for (String key in json.keys) {
+  for (var key in json.keys) {
     if (json[key] is Map) {
       if (json[key].keys.contains('edges')) {
         final List<dynamic> items = json[key]['edges'];

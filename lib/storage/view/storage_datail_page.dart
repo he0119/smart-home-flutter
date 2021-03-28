@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
-import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
@@ -114,20 +113,20 @@ class StorageDetailScreen extends StatelessWidget {
   AppBar _buildAppBar(BuildContext context, StorageDetailState state) {
     if (state is StorageDetailSuccess && state.storages != null) {
       return AppBar(
-        title: Text('家'),
+        title: const Text('家'),
         actions: <Widget>[
-          AddStorageIconButton(),
-          SearchIconButton(),
+          const AddStorageIconButton(),
+          const SearchIconButton(),
         ],
       );
     }
     if (state is StorageDetailSuccess && state.storage != null) {
-      List<Storage?> paths = state.storage!.ancestors ?? [];
+      final paths = state.storage!.ancestors ?? [];
       if (!paths.contains(state.storage)) {
         // 防止重复添加相同名称的位置
         // 因为无限列表重新获取时，位置对象虽然名字不会变，但是内容改变
-        if (paths.isEmpty || paths.last!.name != state.storage!.name) {
-          paths.add(state.storage);
+        if (paths.isEmpty || paths.last.name != state.storage!.name) {
+          paths.add(state.storage!);
         }
       }
       return AppBar(
@@ -136,11 +135,11 @@ class StorageDetailScreen extends StatelessWidget {
           AddStorageIconButton(
             storage: state.storage,
           ),
-          SearchIconButton(),
+          const SearchIconButton(),
           PopupMenuButton<Menu>(
             onSelected: (value) async {
               if (value == Menu.edit) {
-                Navigator.of(context).push(MaterialPageRoute(
+                await Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<StorageEditBloc>(
                     create: (_) => StorageEditBloc(
                       storageRepository:
@@ -154,20 +153,20 @@ class StorageDetailScreen extends StatelessWidget {
                 ));
               }
               if (value == Menu.delete) {
-                showDialog(
+                await showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
                     title: Text('删除 ${state.storage!.name}'),
-                    content: Text('你确认要删除该位置么？'),
+                    content: const Text('你确认要删除该位置么？'),
                     actions: <Widget>[
                       TextButton(
-                        child: Text('否'),
+                        child: const Text('否'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                       ),
                       TextButton(
-                        child: Text('是'),
+                        child: const Text('是'),
                         onPressed: () {
                           BlocProvider.of<StorageEditBloc>(context).add(
                             StorageDeleted(storage: state.storage!),
@@ -181,11 +180,11 @@ class StorageDetailScreen extends StatelessWidget {
               }
             },
             itemBuilder: (context) => [
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: Menu.edit,
                 child: Text('编辑'),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: Menu.delete,
                 child: Text('删除'),
               ),
@@ -204,9 +203,9 @@ class StorageDetailScreen extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return index == 0
                       ? IconButton(
-                          icon: Icon(Icons.home),
+                          icon: const Icon(Icons.home),
                           onPressed: () {
-                            MyRouterDelegate.of(context)..setStoragePage();
+                            MyRouterDelegate.of(context).setStoragePage();
                           },
                         )
                       : InkWell(
@@ -218,10 +217,11 @@ class StorageDetailScreen extends StatelessWidget {
                             height: 40,
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  paths[index - 1]!.name,
-                                  style: TextStyle(fontSize: 16),
+                                  paths[index - 1].name,
+                                  style: const TextStyle(fontSize: 16),
                                 ),
                               ),
                             ),
@@ -229,7 +229,7 @@ class StorageDetailScreen extends StatelessWidget {
                         );
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return Icon(
+                  return const Icon(
                     Icons.arrow_forward_ios,
                     size: 12,
                   );
@@ -262,7 +262,7 @@ class StorageDetailScreen extends StatelessWidget {
         items: [],
         hasReachedMax: state.hasReachedMax,
         onFetch: () => BlocProvider.of<StorageDetailBloc>(context).add(
-          StorageDetailFetched(name: ''),
+          const StorageDetailFetched(name: ''),
         ),
       );
     }
@@ -279,7 +279,7 @@ class StorageDetailScreen extends StatelessWidget {
         ),
       );
     }
-    return CenterLoadingIndicator();
+    return const CenterLoadingIndicator();
   }
 
   Widget? _buildFloatingActionButton(
@@ -287,9 +287,9 @@ class StorageDetailScreen extends StatelessWidget {
     if (state is StorageDetailSuccess && state.storage != null) {
       return FloatingActionButton(
         tooltip: '添加物品',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () async {
-          Navigator.of(context).push(
+          await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => BlocProvider<ItemEditBloc>(
                 create: (_) => ItemEditBloc(
@@ -324,5 +324,5 @@ class PathBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(40.0);
+  Size get preferredSize => const Size.fromHeight(40.0);
 }

@@ -1,4 +1,4 @@
-const String consumablesQuery = r"""
+const String consumablesQuery = r'''
 query consumables($after: String) {
   consumables: items(isDeleted: false, consumables: true, after: $after) {
     pageInfo {
@@ -23,4 +23,4 @@ query consumables($after: String) {
     }
   }
 }
-""";
+''';

@@ -1,5 +1,5 @@
 /// 获取指定名称的物品
-const String itemByNameQuery = r"""
+const String itemByNameQuery = r'''
 query itemByName($name: String) {
   item: items(name: $name) {
     edges {
@@ -43,4 +43,4 @@ query itemByName($name: String) {
     }
   }
 }
-""";
+''';

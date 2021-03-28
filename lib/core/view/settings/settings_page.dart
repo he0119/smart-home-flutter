@@ -14,13 +14,13 @@ import 'package:smarthome/core/view/settings/mipush_settings_tile.dart';
 import 'package:smarthome/iot/iot.dart';
 
 class SettingsPage extends Page {
-  SettingsPage() : super(key: ValueKey('settings'), name: '/settings');
+  SettingsPage() : super(key: const ValueKey('settings'), name: '/settings');
 
   @override
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => SettingsScreen(),
+      builder: (context) => const SettingsScreen(),
     );
   }
 }
@@ -32,12 +32,12 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('设置'),
+        title: const Text('设置'),
       ),
       body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => SettingsList(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          contentPadding: EdgeInsets.symmetric(vertical: 20),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(
               title: '通用',
@@ -47,7 +47,7 @@ class SettingsScreen extends StatelessWidget {
                   subtitle: state.apiUrl ?? '请单击输入',
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ApiUrlPage(),
+                      builder: (context) => const ApiUrlPage(),
                     ));
                   },
                 ),
@@ -56,7 +56,7 @@ class SettingsScreen extends StatelessWidget {
                   subtitle: state.defaultPage.name,
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => DefaultPage(),
+                      builder: (context) => const DefaultPage(),
                     ));
                   },
                 ),
@@ -71,7 +71,7 @@ class SettingsScreen extends StatelessWidget {
                   subtitle: state.refreshInterval.toString(),
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RefreshIntervalPage(),
+                      builder: (context) => const RefreshIntervalPage(),
                     ));
                   },
                 ),
@@ -85,7 +85,7 @@ class SettingsScreen extends StatelessWidget {
                   subtitle: state.blogUrl,
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BlogUrlPage(),
+                      builder: (context) => const BlogUrlPage(),
                     ));
                   },
                 ),
@@ -94,7 +94,7 @@ class SettingsScreen extends StatelessWidget {
                   subtitle: state.blogAdminUrl ?? '请单击输入',
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BlogAdminUrlPage(),
+                      builder: (context) => const BlogAdminUrlPage(),
                     ));
                   },
                 ),
@@ -108,7 +108,7 @@ class SettingsScreen extends StatelessWidget {
                   subtitle: state.commentDescending ? '倒序' : '正序',
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CommentOrderPage(),
+                      builder: (context) => const CommentOrderPage(),
                     ));
                   },
                 ),

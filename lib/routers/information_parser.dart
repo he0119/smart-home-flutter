@@ -14,10 +14,10 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   }
 
   @override
-  RouteInformation restoreRouteInformation(RoutePath routePath) {
-    _log.fine('restoreRouteInformation: $routePath');
-    if (routePath is HomeRoutePath) {
-      switch (routePath.appTab) {
+  RouteInformation restoreRouteInformation(RoutePath configuration) {
+    _log.fine('restoreRouteInformation: $configuration');
+    if (configuration is HomeRoutePath) {
+      switch (configuration.appTab) {
         case AppTab.blog:
           return const RouteInformation(location: '/blog');
         case AppTab.iot:
@@ -28,14 +28,14 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           return const RouteInformation(location: '/board');
         default:
       }
-    } else if (routePath is StorageRoutePath) {
-      return RouteInformation(location: '/storage/${routePath.storageName}');
-    } else if (routePath is ItemRoutePath) {
-      return RouteInformation(location: '/item/${routePath.itemName}');
-    } else if (routePath is TopicRoutePath) {
-      return RouteInformation(location: '/topic/${routePath.topicId}');
-    } else if (routePath is AppRoutePath) {
-      switch (routePath.appPage) {
+    } else if (configuration is StorageRoutePath) {
+      return RouteInformation(location: '/storage/${configuration.storageName}');
+    } else if (configuration is ItemRoutePath) {
+      return RouteInformation(location: '/item/${configuration.itemName}');
+    } else if (configuration is TopicRoutePath) {
+      return RouteInformation(location: '/topic/${configuration.topicId}');
+    } else if (configuration is AppRoutePath) {
+      switch (configuration.appPage) {
         case AppPage.login:
           return const RouteInformation(location: '/login');
         case AppPage.consumables:
@@ -43,8 +43,8 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
         case AppPage.recycleBin:
           return const RouteInformation(location: '/recyclebin');
       }
-    } else if (routePath is SettingsRoutePath) {
-      switch (routePath.appSettings) {
+    } else if (configuration is SettingsRoutePath) {
+      switch (configuration.appSettings) {
         case AppSettings.home:
           return const RouteInformation(location: '/settings');
         case AppSettings.iot:
@@ -53,8 +53,8 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           return const RouteInformation(location: '/settings/blog');
         default:
       }
-    } else if (routePath is PictureRoutePath) {
-      return RouteInformation(location: '/picture/${routePath.pictureId}');
+    } else if (configuration is PictureRoutePath) {
+      return RouteInformation(location: '/picture/${configuration.pictureId}');
     }
     return const RouteInformation(location: '/');
   }

@@ -1,4 +1,4 @@
-const String updateCommentMutation = r"""
+const String updateCommentMutation = r'''
 mutation updateComment($input: UpdateCommentMutationInput!) {
   updateComment(input: $input) {
     comment {
@@ -8,4 +8,4 @@ mutation updateComment($input: UpdateCommentMutationInput!) {
     }
   }
 }
-""";
+''';

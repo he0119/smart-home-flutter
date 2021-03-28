@@ -14,17 +14,17 @@ import 'package:smarthome/widgets/infinite_list.dart';
 class StorageHomePage extends Page {
   StorageHomePage()
       : super(
-          key: ValueKey('storage'),
+          key: const ValueKey('storage'),
           name: '/storage',
         );
 
   @override
   Route createRoute(BuildContext context) {
     BlocProvider.of<StorageHomeBloc>(context)
-        .add(StorageHomeFetched(itemType: ItemType.all));
+        .add(const StorageHomeFetched(itemType: ItemType.all));
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => StorageHomeScreen(),
+      builder: (context) => const StorageHomeScreen(),
     );
   }
 }
@@ -37,12 +37,12 @@ class StorageHomeScreen extends StatelessWidget {
     return MyHomePage(
       activeTab: AppTab.storage,
       actions: <Widget>[
-        SearchIconButton(),
+        const SearchIconButton(),
       ],
-      body: _StorageHomeBody(),
+      body: const _StorageHomeBody(),
       floatingActionButton: FloatingActionButton(
         tooltip: '所有位置',
-        child: Icon(Icons.storage),
+        child: const Icon(Icons.storage),
         onPressed: () async {
           MyRouterDelegate.of(context).addStorageGroup();
         },
@@ -79,7 +79,7 @@ class _StorageHomeBody extends StatelessWidget {
                 return true;
               }
               BlocProvider.of<StorageHomeBloc>(context)
-                  .add(StorageHomeFetched(itemType: ItemType.all));
+                  .add(const StorageHomeFetched(itemType: ItemType.all));
               return false;
             },
             child: RefreshIndicator(
@@ -105,13 +105,13 @@ class _StorageHomeBody extends StatelessWidget {
             ),
           );
         }
-        return CenterLoadingIndicator();
+        return const CenterLoadingIndicator();
       },
     );
   }
 
   List<Widget> _buildSlivers(BuildContext context, StorageHomeSuccess state) {
-    List<Widget> listofWidget = [];
+    final listofWidget = <Widget>[];
     if (state.expiredItems?.isNotEmpty ?? false) {
       listofWidget.add(_buildSliverList(
           context, state.expiredItems, ItemType.expired, state.itemType));
@@ -160,7 +160,7 @@ class _StorageHomeBody extends StatelessWidget {
             ? Container(
                 height: 60.0,
                 color: Theme.of(context).primaryColor,
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: <Widget>[
@@ -168,7 +168,7 @@ class _StorageHomeBody extends StatelessWidget {
                       headerText,
                       style: DefaultTextStyle.of(context).style,
                     ),
-                    Spacer(),
+                    const Spacer(),
                     IconButton(
                       icon: Icon(currentType == ItemType.all
                           ? Icons.expand_more
@@ -219,7 +219,7 @@ class _StorageHomeBody extends StatelessWidget {
         children: <TextSpan>[
           TextSpan(
             text: item.name,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           TextSpan(
             text: differenceText,

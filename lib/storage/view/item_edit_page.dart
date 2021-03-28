@@ -50,8 +50,9 @@ class _ItemEditPageState extends State<ItemEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            widget.isEditing ? Text('编辑 ${widget.item!.name}') : Text('添加物品'),
+        title: widget.isEditing
+            ? Text('编辑 ${widget.item!.name}')
+            : const Text('添加物品'),
       ),
       body: BlocListener<ItemEditBloc, ItemEditState>(
         listener: (context, state) {
@@ -82,7 +83,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                   children: <Widget>[
                     TextFormField(
                       controller: _nameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: '名称',
                       ),
                       inputFormatters: [
@@ -104,7 +105,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                     ),
                     TextFormField(
                       controller: _numberController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: '数量',
                       ),
                       keyboardType: TextInputType.number,
@@ -149,7 +150,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                         }),
                     TextFormField(
                       controller: _descriptionController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: '备注',
                       ),
                       inputFormatters: [
@@ -164,7 +165,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                     ),
                     TextFormField(
                       controller: _priceController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: '价格',
                       ),
                       keyboardType: TextInputType.number,
@@ -210,7 +211,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       initialValue: widget.isEditing
                           ? widget.item!.expiredAt?.toLocal()
                           : null,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: '有效期至',
                       ),
                       onChanged: (value) {
@@ -225,7 +226,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                               }
                             }
                           : null,
-                      child: Text('提交'),
+                      child: const Text('提交'),
                     ),
                   ],
                 ),

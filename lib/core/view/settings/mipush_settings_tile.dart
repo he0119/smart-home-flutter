@@ -11,7 +11,7 @@ class MiPushSettingsTile extends SettingsTile {
   Widget build(BuildContext context) {
     return BlocBuilder<PushBloc, PushState>(
       builder: (context, state) {
-        String status = '注册中';
+        var status = '注册中';
         if (state is PushSuccess) {
           status = '已注册';
         }
@@ -24,7 +24,7 @@ class MiPushSettingsTile extends SettingsTile {
           onPressed: (context) {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => MiPushPage(),
+                builder: (context) => const MiPushPage(),
               ),
             );
           },

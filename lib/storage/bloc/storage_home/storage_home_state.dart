@@ -49,7 +49,7 @@ class StorageHomeSuccess extends StorageHomeState {
   bool get hasReachedMax => !pageInfo.hasNextPage;
 
   int get itemCount {
-    int count = 0;
+    var count = 0;
     if (recentlyCreatedItems != null) count += recentlyCreatedItems!.length;
     if (recentlyEditedItems != null) count += recentlyEditedItems!.length;
     if (expiredItems != null) count += expiredItems!.length;

@@ -44,6 +44,6 @@ class RecycleBinSuccess extends RecycleBinState {
   List<Object> get props => [items, pageInfo];
 
   @override
-  String toString() =>
-      'RecycleBinSuccess(items: ${items.length}, hasReachedMax: $hasReachedMax)';
+  String toString() => 'RecycleBinSuccess(items: ${items.length},'
+      ' hasReachedMax: $hasReachedMax)';
 }

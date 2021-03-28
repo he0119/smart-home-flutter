@@ -19,8 +19,8 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   final PushRepository pushRepository;
   final AppPreferencesBloc appPreferencesBloc;
 
-  static const miPushMethod = const MethodChannel('hehome.xyz/push/method');
-  static const miPushEvent = const EventChannel('hehome.xyz/push/event');
+  static const miPushMethod = MethodChannel('hehome.xyz/push/method');
+  static const miPushEvent = EventChannel('hehome.xyz/push/event');
 
   PushBloc({
     required this.pushRepository,
@@ -36,8 +36,8 @@ class PushBloc extends Bloc<PushEvent, PushState> {
       if (!kIsWeb && Platform.isAndroid) {
         yield PushInProgress();
         MiPushKey miPushKey;
-        String? miPushAppId = appPreferencesBloc.state.miPushAppId;
-        String? miPushAppKey = appPreferencesBloc.state.miPushAppKey;
+        final miPushAppId = appPreferencesBloc.state.miPushAppId;
+        final miPushAppKey = appPreferencesBloc.state.miPushAppKey;
         if (miPushAppId != null && miPushAppKey != null) {
           miPushKey = MiPushKey(appId: miPushAppId, appKey: miPushAppKey);
         } else {
@@ -49,7 +49,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
         }
         // 注册小米推送
         _log.fine('小米推送注册中');
-        miPushMethod.invokeMethod(
+        await miPushMethod.invokeMethod(
             'init', {'appId': miPushKey.appId, 'appKey': miPushKey.appKey});
         miPushMethod.setMethodCallHandler(
           (call) async {
@@ -60,7 +60,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
               add(PushUpdated(miPush: MiPush(regId: null)));
 
               if (regId != appPreferencesBloc.state.miPushRegId) {
-                MiPush mipush = await pushRepository.updateMiPush(regId: regId);
+                final mipush = await pushRepository.updateMiPush(regId: regId);
                 add(PushUpdated(miPush: mipush));
                 appPreferencesBloc
                     .add(MiPushRegIdChanged(miPushRegId: mipush.regId!));
@@ -77,7 +77,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     if (event is PushRefreshed) {
       yield PushInProgress();
       try {
-        MiPush mipush = await pushRepository.miPush();
+        final mipush = await pushRepository.miPush();
         yield PushSuccess(miPush: mipush);
       } on MyException catch (e) {
         yield PushError(e.message);

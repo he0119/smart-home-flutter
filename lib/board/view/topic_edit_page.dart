@@ -43,7 +43,7 @@ class _TopicEditPageState extends State<TopicEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> tabs = ['编辑', '预览'];
+    final tabs = <String>['编辑', '预览'];
     return BlocListener<TopicEditBloc, TopicEditState>(
       listener: (context, state) {
         if (state is TopicAddSuccess || state is TopicUpdateSuccess) {
@@ -64,12 +64,12 @@ class _TopicEditPageState extends State<TopicEditPage> {
         length: tabs.length,
         child: Scaffold(
           appBar: AppBar(
-            title: widget.isEditing! ? Text('编辑话题') : Text('新话题'),
+            title: widget.isEditing! ? const Text('编辑话题') : const Text('新话题'),
             actions: [
               Tooltip(
                 message: '提交',
                 child: IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       if (widget.isEditing!) {
@@ -143,7 +143,7 @@ class _EditPage extends StatelessWidget {
             children: [
               TextFormField(
                 controller: titleController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: '添加标题',
                   hintStyle: TextStyle(fontSize: 18),
@@ -159,7 +159,7 @@ class _EditPage extends StatelessWidget {
               TextFormField(
                 controller: descriptionController,
                 maxLines: null,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: '想说点什么？',
                   hintStyle: TextStyle(fontSize: 18),

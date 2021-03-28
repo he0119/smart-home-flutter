@@ -1,4 +1,4 @@
-const String updateStorageMutation = r"""
+const String updateStorageMutation = r'''
 mutation updateStorage($input: UpdateStorageMutationInput!) {
   updateStorage(input: $input) {
     storage {
@@ -11,4 +11,4 @@ mutation updateStorage($input: UpdateStorageMutationInput!) {
     }
   }
 }
-""";
+''';

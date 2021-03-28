@@ -21,7 +21,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
     if (event is PictureUpdated) {
       yield PictureEditInProgress();
       try {
-        Picture picture = await storageRepository.updatePicture(
+        final picture = await storageRepository.updatePicture(
           id: event.id,
           picturePath: event.picturePath,
           description: event.description,
@@ -38,7 +38,7 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
     if (event is PictureAdded) {
       yield PictureEditInProgress();
       try {
-        Picture picture = await storageRepository.addPicture(
+        final picture = await storageRepository.addPicture(
           itemId: event.itemId,
           picturePath: event.picturePath!,
           description: event.description,

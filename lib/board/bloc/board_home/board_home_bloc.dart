@@ -19,7 +19,7 @@ class BoardHomeBloc extends Bloc<BoardHomeEvent, BoardHomeState> {
   Stream<BoardHomeState> mapEventToState(
     BoardHomeEvent event,
   ) async* {
-    final BoardHomeState currentState = state;
+    final currentState = state;
     if (event is BoardHomeFetched) {
       try {
         // 如果需要刷新，则显示加载界面

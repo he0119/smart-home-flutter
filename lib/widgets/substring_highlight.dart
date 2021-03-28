@@ -17,16 +17,17 @@ class SubstringHighlight extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyle = DefaultTextStyle.of(context).style;
     // 高亮颜色为红色
-    final textHighlightStyle = textStyle.merge(TextStyle(color: Colors.red));
+    final textHighlightStyle =
+        textStyle.merge(const TextStyle(color: Colors.red));
 
     if (term.isEmpty) {
       return Text(text, style: textStyle);
     } else {
-      String termLC = term.toLowerCase();
+      final termLC = term.toLowerCase();
 
-      List<InlineSpan> children = [];
-      List<String> spanList = text.toLowerCase().split(termLC);
-      int i = 0;
+      final children = <InlineSpan>[];
+      final spanList = text.toLowerCase().split(termLC);
+      var i = 0;
       for (var v in spanList) {
         if (v.isNotEmpty) {
           children.add(TextSpan(

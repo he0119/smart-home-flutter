@@ -67,7 +67,7 @@ class _InfiniteListState<T> extends State<InfiniteList<T>> {
           }
           return BottomLoader();
         },
-        separatorBuilder: (contexit, index) => Divider(),
+        separatorBuilder: (contexit, index) => const Divider(),
         controller: _scrollController,
       ),
     );
@@ -109,8 +109,7 @@ class SliverInfiniteList<T> extends StatefulWidget {
     this.onFetch,
     this.threshold = 200,
     required this.itemCount,
-  })   :
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _SliverInfiniteListState createState() => _SliverInfiniteListState<T>();

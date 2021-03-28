@@ -1,4 +1,4 @@
-const String reopenTopicMutation = r"""
+const String reopenTopicMutation = r'''
 mutation reopenTopic($input: ReopenTopicMutationInput!) {
   reopenTopic(input: $input) {
     topic {
@@ -8,4 +8,4 @@ mutation reopenTopic($input: ReopenTopicMutationInput!) {
     }
   }
 }
-""";
+''';

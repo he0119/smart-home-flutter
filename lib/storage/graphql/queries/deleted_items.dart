@@ -1,4 +1,4 @@
-const String deletedItemsQuery = r"""
+const String deletedItemsQuery = r'''
 query deletedItems($after: String) {
   deletedItems: items(isDeleted: true, after: $after, orderBy: "-deleted_at") {
     pageInfo {
@@ -15,4 +15,4 @@ query deletedItems($after: String) {
     }
   }
 }
-""";
+''';

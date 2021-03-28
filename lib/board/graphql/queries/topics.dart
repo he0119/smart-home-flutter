@@ -1,4 +1,4 @@
-const String topicsQuery = r"""
+const String topicsQuery = r'''
 query topics($after: String) {
   topics(orderBy: "-is_pin,-is_open,-active_at", after: $after) {
     pageInfo {
@@ -30,4 +30,4 @@ query topics($after: String) {
     }
   }
 }
-""";
+''';

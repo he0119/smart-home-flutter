@@ -10,7 +10,7 @@ part 'device_data_event.dart';
 part 'device_data_state.dart';
 
 Stream<int> timedCounter(int interval) async* {
-  int i = 0;
+  var i = 0;
   while (true) {
     yield i++;
     await Future.delayed(Duration(seconds: interval));
@@ -54,17 +54,17 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
 
   Stream<DeviceDataState> _mapDeviceDataStopedToState(
       DeviceDataStoped event) async* {
-    _dataSubscription?.cancel();
+    await _dataSubscription?.cancel();
     yield DeviceDataFailure(event.message);
   }
 
   Stream<DeviceDataState> _mapDeviceDataStartedToState(
       DeviceDataStarted event) async* {
     yield DeviceDataInProgress();
-    _dataSubscription?.cancel();
+    await _dataSubscription?.cancel();
     _dataSubscription = timedCounter(event.refreshInterval).listen((x) async {
       try {
-        List<AutowateringData> data =
+        final data =
             await iotRepository.autowateringData(deviceId: deviceId, number: 1);
         add(DeviceDataupdated(data[0]));
       } on MyException catch (e) {

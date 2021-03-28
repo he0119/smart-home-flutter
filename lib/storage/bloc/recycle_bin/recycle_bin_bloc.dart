@@ -19,7 +19,7 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
   Stream<RecycleBinState> mapEventToState(
     RecycleBinEvent event,
   ) async* {
-    final RecycleBinState currentState = state;
+    final currentState = state;
     if (event is RecycleBinFetched) {
       try {
         // 如果需要刷新，则显示加载界面

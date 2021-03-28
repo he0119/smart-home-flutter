@@ -16,21 +16,22 @@ Future<void> main() async {
   Bloc.observer = SimpleBlocObserver();
   Logger.root.level = Level.ALL; // defaults to Level.INFO
   Logger.root.onRecord.listen((record) {
-    print(
-        '[${record.level.name}] ${record.loggerName} -- ${record.time} -- ${record.message}');
+    print('[${record.level.name}] ${record.loggerName}'
+        ' -- ${record.time} -- ${record.message}');
   });
-  var configuredApp = AppConfig(
+  final configuredApp = AppConfig(
     appName: '智慧家庭 DEV',
     flavorName: 'dev',
     apiUrl: 'https://test.hehome.xyz/graphql',
     child: MyApp(),
   );
-  runZonedGuarded(() async {
+  await runZonedGuarded(() async {
     await SentryFlutter.init(
       (options) {
-        options.dsn =
-            'https://dcc18c1b89d44e1894c4c712ea166c84@o480939.ingest.sentry.io/5685513';
-        options.environment = 'dev';
+        options
+          ..dsn =
+              'https://dcc18c1b89d44e1894c4c712ea166c84@o480939.ingest.sentry.io/5685513'
+          ..environment = 'dev';
       },
     );
 

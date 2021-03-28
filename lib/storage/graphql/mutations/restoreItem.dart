@@ -1,7 +1,7 @@
-const String restoreItemMutation = r"""
+const String restoreItemMutation = r'''
 mutation restoreItem($input: RestoreItemMutationInput!) {
   restoreItem(input: $input) {
     clientMutationId
   }
 }
-""";
+''';

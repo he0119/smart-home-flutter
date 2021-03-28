@@ -14,31 +14,31 @@ class PushRepository {
 
   /// MiPushKey
   Future<MiPushKey> miPushKey() async {
-    QueryOptions _options = QueryOptions(
+    final _options = QueryOptions(
       document: gql(miPushKeyQuery),
       fetchPolicy: FetchPolicy.networkOnly,
     );
-    QueryResult results = await graphqlApiClient.query(_options);
+    final results = await graphqlApiClient.query(_options);
     final Map<String, dynamic> json = results.data!['miPushKey'];
-    final MiPushKey miPushKeyObject = MiPushKey.fromJson(json);
+    final miPushKeyObject = MiPushKey.fromJson(json);
     return miPushKeyObject;
   }
 
   /// MiPush
   Future<MiPush> miPush() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    final deviceInfo = DeviceInfoPlugin();
+    final androidInfo = await deviceInfo.androidInfo;
 
-    QueryOptions _options = QueryOptions(
+    final _options = QueryOptions(
       document: gql(miPushQuery),
       variables: {
         'deviceId': androidInfo.androidId,
       },
       fetchPolicy: FetchPolicy.networkOnly,
     );
-    QueryResult results = await graphqlApiClient.query(_options);
+    final results = await graphqlApiClient.query(_options);
     final Map<String, dynamic> json = results.data!['miPush'];
-    final MiPush miPushObject = MiPush.fromJson(json);
+    final miPushObject = MiPush.fromJson(json);
     return miPushObject;
   }
 
@@ -46,9 +46,9 @@ class PushRepository {
   Future<MiPush> updateMiPush({
     required String regId,
   }) async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    final MutationOptions options = MutationOptions(
+    final deviceInfo = DeviceInfoPlugin();
+    final androidInfo = await deviceInfo.androidInfo;
+    final options = MutationOptions(
       document: gql(updateMiPushMutation),
       variables: {
         'input': {
@@ -60,7 +60,7 @@ class PushRepository {
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> json = result.data!['updateMiPush']['miPush'];
-    final MiPush miPushObject = MiPush.fromJson(json);
+    final miPushObject = MiPush.fromJson(json);
     return miPushObject;
   }
 }

@@ -39,6 +39,6 @@ class ConsumablesSuccess extends ConsumablesState {
   List<Object?> get props => [items, pageInfo];
 
   @override
-  String toString() =>
-      'ConsumablesSuccess(items: ${items.length}, hasReachedMax: $hasReachedMax)';
+  String toString() => 'ConsumablesSuccess(items: ${items.length},'
+      ' hasReachedMax: $hasReachedMax)';
 }

@@ -10,18 +10,19 @@ import 'package:smarthome/app/main.dart';
 
 Future<void> main() async {
   configureApp();
-  var configuredApp = AppConfig(
+  final configuredApp = AppConfig(
     appName: '智慧家庭',
     flavorName: 'prod',
     apiUrl: 'https://smart.hehome.xyz/graphql',
     child: MyApp(),
   );
-  runZonedGuarded(() async {
+  await runZonedGuarded(() async {
     await SentryFlutter.init(
       (options) {
-        options.dsn =
-            'https://dcc18c1b89d44e1894c4c712ea166c84@o480939.ingest.sentry.io/5685513';
-        options.environment = 'prod';
+        options
+          ..dsn =
+              'https://dcc18c1b89d44e1894c4c712ea166c84@o480939.ingest.sentry.io/5685513'
+          ..environment = 'prod';
       },
     );
 

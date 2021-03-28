@@ -19,10 +19,10 @@ class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
     // 暂时只支持 Android
     if (event is UpdateStarted && !kIsWeb && Platform.isAndroid) {
       try {
-        bool needUpdate = await versionRepository.needUpdate();
+        final needUpdate = await versionRepository.needUpdate();
         if (needUpdate) {
-          String url = await versionRepository.updateUrl();
-          Version version = await versionRepository.onlineVersion;
+          final url = await versionRepository.updateUrl();
+          final version = await versionRepository.onlineVersion;
           yield UpdateSuccess(
               needUpdate: needUpdate, url: url, version: version);
         } else {

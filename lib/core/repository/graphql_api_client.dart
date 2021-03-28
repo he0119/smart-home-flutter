@@ -16,7 +16,7 @@ import 'package:smarthome/utils/exceptions.dart';
 class GraphQLApiClient {
   static final Logger _log = Logger('GraphQLApiClient');
   static GraphQLClient? _client;
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   // ignore: close_sinks
   final _loginStatusControler = StreamController<bool>();
@@ -28,8 +28,8 @@ class GraphQLApiClient {
   /// 是否登录
   /// 通过判断是否拥有刷新令牌
   Future<bool> get isLogin async {
-    final SharedPreferences prefs = await _prefs;
-    String? token = prefs.getString('refreshToken');
+    final prefs = await _prefs;
+    final token = prefs.getString('refreshToken');
     if (token == null || token == '') {
       return false;
     } else {
@@ -40,13 +40,13 @@ class GraphQLApiClient {
   Stream<bool> get loginStatus => _loginStatusControler.stream;
 
   Future<String?> get token async {
-    final SharedPreferences prefs = await _prefs;
+    final prefs = await _prefs;
     return prefs.getString('token');
   }
 
   /// 登录
   Future<bool> authenticate(String username, String password) async {
-    MutationOptions loginOptions = MutationOptions(
+    final loginOptions = MutationOptions(
       document: gql(tokenAuth),
       variables: {
         'input': {
@@ -55,10 +55,10 @@ class GraphQLApiClient {
         }
       },
     );
-    QueryResult results = await _client!.mutate(loginOptions);
+    final results = await _client!.mutate(loginOptions);
     if (results.hasException) {
       if (results.exception!.linkException != null) {
-        throw NetworkException('网络异常，请稍后再试');
+        throw const NetworkException('网络异常，请稍后再试');
       }
       return false;
     } else {
@@ -72,17 +72,16 @@ class GraphQLApiClient {
 
   /// 初始化 GraphQL 客户端
   Future<void> initailize(String url) async {
-    final AuthLink _authLink =
-        AuthLink(getToken: () async => 'JWT ${await token}');
+    final _authLink = AuthLink(getToken: () async => 'JWT ${await token}');
     // 用户代理设置为当前手机
     // 暂时只支持 Android
     // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
-    Map<String, String> headers = {};
+    final headers = <String, String>{};
     if (!kIsWeb && Platform.isAndroid) {
       try {
-        final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-        final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        final deviceInfo = DeviceInfoPlugin();
+        final androidInfo = await deviceInfo.androidInfo;
+        final packageInfo = await PackageInfo.fromPlatform();
         headers['User-Agent'] =
             'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
       } catch (exception, stackTrace) {
@@ -93,17 +92,15 @@ class GraphQLApiClient {
         _log.severe('设置 User-Agent 失败 (${exception.toString()})');
       }
     }
-    final HttpLink _httpLink = HttpLink(
+    final _httpLink = HttpLink(
       url,
       defaultHeaders: headers,
     );
-    final ErrorLink _tokenErrorLink =
-        ErrorLink(onGraphQLError: _handleTokenError);
-    final Link _link = _tokenErrorLink.split((request) {
-      final DefinitionNode definition =
-          request.operation.document.definitions.first;
+    final _tokenErrorLink = ErrorLink(onGraphQLError: _handleTokenError);
+    final _link = _tokenErrorLink.split((request) {
+      final definition = request.operation.document.definitions.first;
       if (definition.runtimeType == OperationDefinitionNode) {
-        final String operationName =
+        final operationName =
             (definition as OperationDefinitionNode).name!.value;
         if (operationName == 'tokenAuth' || operationName == 'refreshToken') {
           return false;
@@ -121,7 +118,7 @@ class GraphQLApiClient {
 
   /// 登出
   Future logout() async {
-    final SharedPreferences prefs = await _prefs;
+    final prefs = await _prefs;
     await prefs.remove('token');
     await prefs.remove('refreshToken');
     await prefs.remove('loginUser');
@@ -151,21 +148,21 @@ class GraphQLApiClient {
       if (error.message.toLowerCase().contains('refresh token')) {
         // 通知认证 BLoC 登陆失败
         _loginStatusControler.sink.add(false);
-        throw AuthenticationException('认证过期，请重新登录');
+        throw const AuthenticationException('认证过期，请重新登录');
       }
       _log.warning(error.toString());
       throw ServerException(error.message);
     }
     if (exception.linkException != null) {
       _log.severe(exception.linkException.toString());
-      throw NetworkException('网络异常，请稍后再试');
+      throw const NetworkException('网络异常，请稍后再试');
     }
   }
 
   /// 处理令牌相关的问题
   Stream<Response> _handleTokenError(
       Request request, forward, Response response) async* {
-    String message = response.errors!.first.message.toLowerCase();
+    final message = response.errors!.first.message.toLowerCase();
     if ([
       'signature has expired',
       'error decoding signature',
@@ -188,10 +185,10 @@ class GraphQLApiClient {
 
   /// 刷新令牌
   Future<List<GraphQLError>> _refreshToken() async {
-    final SharedPreferences prefs = await _prefs;
+    final prefs = await _prefs;
     _log.fine('refreshing token');
-    String? refreshToken = prefs.getString('refreshToken');
-    MutationOptions options = MutationOptions(
+    final refreshToken = prefs.getString('refreshToken');
+    final options = MutationOptions(
       document: gql(refreshTokenMutation),
       variables: {
         'input': {
@@ -199,7 +196,7 @@ class GraphQLApiClient {
         }
       },
     );
-    QueryResult results = await _client!.mutate(options);
+    final results = await _client!.mutate(options);
 
     // 如果刷新令牌出错，则返回错误
     final exception = results.exception;
@@ -214,12 +211,12 @@ class GraphQLApiClient {
   }
 
   Future _setRefreshToken(String refreshToken) async {
-    final SharedPreferences prefs = await _prefs;
+    final prefs = await _prefs;
     await prefs.setString('refreshToken', refreshToken);
   }
 
   Future _setToken(String token) async {
-    final SharedPreferences prefs = await _prefs;
+    final prefs = await _prefs;
     await prefs.setString('token', token);
   }
 }

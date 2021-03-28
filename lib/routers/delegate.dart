@@ -105,7 +105,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     _pages.add(StorageDetailPage(storageName: '', group: storageGroup));
     if (storage != null) {
       if (storage.ancestors != null) {
-        for (Storage storage in storage.ancestors!) {
+        for (var storage in storage.ancestors!) {
           _pages.add(StorageDetailPage(
             storageName: storage.name,
             storageId: storage.id,
@@ -142,7 +142,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   bool _handlePopPage(Route<dynamic> route, dynamic result) {
-    final bool success = route.didPop(result);
+    final success = route.didPop(result);
     if (success) {
       _log.fine('Pop ${route.settings.name}');
       _pages.remove(route.settings);
@@ -201,42 +201,42 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   @override
-  Future<void> setNewRoutePath(RoutePath? routePath) async {
-    _log.fine('setNewRoutePath: $routePath');
-    if (routePath is HomeRoutePath) {
-      final appTab = routePath.appTab;
+  Future<void> setNewRoutePath(RoutePath? configuration) async {
+    _log.fine('setNewRoutePath: $configuration');
+    if (configuration is HomeRoutePath) {
+      final appTab = configuration.appTab;
       if (appTab != null) {
         _pages = [appTab.page];
       }
-    } else if (routePath is TopicRoutePath) {
+    } else if (configuration is TopicRoutePath) {
       _pages = [
         BoardHomePage(),
-        TopicDetailPage(topicId: routePath.topicId),
+        TopicDetailPage(topicId: configuration.topicId),
       ];
-    } else if (routePath is ItemRoutePath) {
+    } else if (configuration is ItemRoutePath) {
       storageGroup = 0;
       itemCount = 1;
       _pages = [
         StorageHomePage(),
         ItemDetailPage(
-          itemName: routePath.itemName,
-          itemId: routePath.itemId,
+          itemName: configuration.itemName,
+          itemId: configuration.itemId,
           group: 1,
         ),
       ];
-    } else if (routePath is StorageRoutePath) {
+    } else if (configuration is StorageRoutePath) {
       storageGroup = 1;
       itemCount = 0;
       _pages = [
         StorageHomePage(),
         StorageDetailPage(
-          storageName: routePath.storageName,
-          storageId: routePath.storageId,
+          storageName: configuration.storageName,
+          storageId: configuration.storageId,
           group: 1,
         ),
       ];
-    } else if (routePath is AppRoutePath) {
-      switch (routePath.appPage) {
+    } else if (configuration is AppRoutePath) {
+      switch (configuration.appPage) {
         case AppPage.login:
           break;
         case AppPage.consumables:
@@ -252,8 +252,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           ];
           break;
       }
-    } else if (routePath is SettingsRoutePath) {
-      switch (routePath.appSettings) {
+    } else if (configuration is SettingsRoutePath) {
+      switch (configuration.appSettings) {
         case AppSettings.home:
           _pages = [
             defaultHomePage.page,
@@ -274,10 +274,10 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           break;
         default:
       }
-    } else if (routePath is PictureRoutePath) {
+    } else if (configuration is PictureRoutePath) {
       _pages = [
         StorageHomePage(),
-        PicturePage(pictureId: routePath.pictureId),
+        PicturePage(pictureId: configuration.pictureId),
       ];
     }
   }
@@ -286,10 +286,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   @override
   Widget build(BuildContext context) {
-    _log.fine('Router rebuilded');
-    _log.fine('pages $pages');
+    _log..fine('Router rebuilded')..fine('pages $pages');
     final graphQLApiClient = RepositoryProvider.of<GraphQLApiClient>(context);
-    final AppConfig? config = AppConfig.of(context);
+    final config = AppConfig.of(context);
     return MultiBlocListener(
       listeners: [
         BlocListener<AppPreferencesBloc, AppPreferencesState>(
@@ -315,23 +314,23 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
                   .add(AuthenticationStarted());
               // 仅在客户端上注册 Shortcut
               if (!kIsWeb && !Platform.isWindows) {
-                final QuickActions quickActions = QuickActions();
-                quickActions.initialize((String shortcutType) async {
-                  if (shortcutType == 'action_iot') {
-                    BlocProvider.of<TabBloc>(context)
-                        .add(TabChanged(AppTab.iot));
-                  } else if (shortcutType == 'action_storage') {
-                    BlocProvider.of<TabBloc>(context)
-                        .add(TabChanged(AppTab.storage));
-                  } else if (shortcutType == 'action_blog') {
-                    BlocProvider.of<TabBloc>(context)
-                        .add(TabChanged(AppTab.blog));
-                  } else {
-                    BlocProvider.of<TabBloc>(context)
-                        .add(TabChanged(AppTab.board));
-                  }
-                });
-                quickActions.setShortcutItems(
+                final quickActions = QuickActions()
+                  ..initialize((String shortcutType) async {
+                    if (shortcutType == 'action_iot') {
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.iot));
+                    } else if (shortcutType == 'action_storage') {
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.storage));
+                    } else if (shortcutType == 'action_blog') {
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.blog));
+                    } else {
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.board));
+                    }
+                  });
+                await quickActions.setShortcutItems(
                   <ShortcutItem>[
                     // TODO: 给快捷方式添加图标
                     const ShortcutItem(

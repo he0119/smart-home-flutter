@@ -21,7 +21,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
     if (event is TopicAdded) {
       yield TopicInProgress();
       try {
-        Topic topic = await boardRepository.addTopic(
+        final topic = await boardRepository.addTopic(
           title: event.title,
           description: event.description,
         );
@@ -33,7 +33,7 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
     if (event is TopicUpdated) {
       yield TopicInProgress();
       try {
-        Topic topic = await boardRepository.updateTopic(
+        final topic = await boardRepository.updateTopic(
           id: event.id,
           title: event.title,
           description: event.description,

@@ -67,7 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         Icons.clear,
                         color: Theme.of(context).brightness == Brightness.dark
                             ? null
-                            : Color(0xFF255261),
+                            : const Color(0xFF255261),
                       ),
                       onPressed: () {
                         _textController.text = '';
@@ -83,14 +83,14 @@ class _SearchScreenState extends State<SearchScreen> {
         body: BlocBuilder<StorageSearchBloc, StorageSearchState>(
           builder: (BuildContext context, StorageSearchState state) {
             if (state is StorageSearchInProgress) {
-              return CenterLoadingIndicator();
+              return const CenterLoadingIndicator();
             }
             if (state is StorageSearchFailure) {
               return Center(child: Text(state.message));
             }
             if (state is StorageSearchSuccess) {
               if (state.items.isEmpty && state.storages.isEmpty) {
-                return Center(child: Text('无结果'));
+                return const Center(child: Text('无结果'));
               } else {
                 return StorageItemList(
                   items: state.items,

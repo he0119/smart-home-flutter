@@ -94,7 +94,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
       appBar: AppBar(
         title: widget.isEditing
             ? Text('编辑 ${widget.storage!.name}')
-            : Text('添加位置'),
+            : const Text('添加位置'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -124,7 +124,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
                 children: <Widget>[
                   TextFormField(
                     controller: _nameController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: '名称',
                     ),
                     inputFormatters: [
@@ -165,7 +165,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
                   ),
                   TextFormField(
                     controller: _descriptionController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: '备注',
                     ),
                     inputFormatters: [
@@ -181,7 +181,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
                             }
                           }
                         : null,
-                    child: Text('提交'),
+                    child: const Text('提交'),
                   ),
                 ],
               ),

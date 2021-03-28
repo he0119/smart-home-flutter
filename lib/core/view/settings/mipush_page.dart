@@ -22,12 +22,12 @@ class MiPushPage extends StatelessWidget {
       return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => Scaffold(
           appBar: AppBar(
-            title: Text('小米推送'),
+            title: const Text('小米推送'),
             actions: [
               Tooltip(
                 message: '同步',
                 child: IconButton(
-                    icon: Icon(Icons.sync),
+                    icon: const Icon(Icons.sync),
                     onPressed: () {
                       BlocProvider.of<AppPreferencesBloc>(context)
                           .add(MiPushRegIdChanged(miPushRegId: '正在同步注册标识符'));
@@ -39,11 +39,11 @@ class MiPushPage extends StatelessWidget {
           body: ListView(
             children: [
               ListTile(
-                title: Text('注册识别码（本地）'),
+                title: const Text('注册识别码（本地）'),
                 subtitle: Text(state.miPushRegId ?? ''),
               ),
               ListTile(
-                title: Text('注册识别码（服务器）'),
+                title: const Text('注册识别码（服务器）'),
                 subtitle: Text(miPush.regId ?? '单击获取服务器上数据'),
                 onTap: () {
                   BlocProvider.of<PushBloc>(context).add(PushRefreshed());

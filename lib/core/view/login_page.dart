@@ -8,7 +8,7 @@ import 'package:smarthome/utils/show_snack_bar.dart';
 class LoginPage extends Page {
   LoginPage()
       : super(
-          key: ValueKey('login'),
+          key: const ValueKey('login'),
           name: '/login',
         );
 
@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AppConfig? appConfig = AppConfig.of(context);
+    final appConfig = AppConfig.of(context);
     return Scaffold(
       body: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
@@ -113,7 +113,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: '服务器网址',
                   ),
                   controller: _controller,
@@ -138,8 +138,8 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('下一步'),
-                    Icon(Icons.chevron_right),
+                    const Text('下一步'),
+                    const Icon(Icons.chevron_right),
                   ],
                 ),
               ),
@@ -174,7 +174,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    _onLoginButtonPressed() {
+   void _onLoginButtonPressed() {
       BlocProvider.of<AuthenticationBloc>(context).add(
         AuthenticationLogin(
           username: _usernameController.text,
@@ -206,7 +206,7 @@ class _LoginFormState extends State<LoginForm> {
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                       child: TextFormField(
                         enableSuggestions: false,
-                        decoration: InputDecoration(labelText: '用户名'),
+                        decoration: const InputDecoration(labelText: '用户名'),
                         controller: _usernameController,
                         autofillHints: <String>[AutofillHints.username],
                       ),
@@ -215,7 +215,7 @@ class _LoginFormState extends State<LoginForm> {
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                       child: TextFormField(
                         enableSuggestions: false,
-                        decoration: InputDecoration(labelText: '密码'),
+                        decoration: const InputDecoration(labelText: '密码'),
                         controller: _passwordController,
                         obscureText: true,
                         autofillHints: <String>[AutofillHints.password],
@@ -225,11 +225,11 @@ class _LoginFormState extends State<LoginForm> {
                       onPressed: state is! AuthenticationInProgress
                           ? _onLoginButtonPressed
                           : null,
-                      child: Text('登录'),
+                      child: const Text('登录'),
                     ),
                     TextButton(
                       onPressed: widget.onTapBack as void Function()?,
-                      child: Text('返回'),
+                      child: const Text('返回'),
                     ),
                   ],
                 ),

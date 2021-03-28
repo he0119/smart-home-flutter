@@ -84,7 +84,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
       },
       builder: (context, state) => Scaffold(
         appBar: AppBar(
-          title: Text('添加图片'),
+          title: const Text('添加图片'),
         ),
         body: Form(
           key: _formKey,
@@ -95,7 +95,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                 children: [
                   TextFormField(
                     controller: _descriptionController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: '备注',
                     ),
                     inputFormatters: [
@@ -113,16 +113,16 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                       ? Stack(
                           alignment: AlignmentDirectional.center,
                           children: <Widget>[
-                            CircularProgressIndicator(),
+                            const CircularProgressIndicator(),
                             Image.file(File(picturePath!)),
                             if (state is PictureEditInProgress)
-                              CircularProgressIndicator(),
+                              const CircularProgressIndicator(),
                           ],
                         )
                       : SizedBox(
                           height: 300,
                           child: Container(
-                            child: Center(
+                            child: const Center(
                               child: Text('无图片'),
                             ),
                           ),
@@ -139,9 +139,9 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                               setState(() {
                                 picturePath = data[0];
                               });
-                            }, onError: (e) => print(e));
+                            }, onError: print);
                         },
-                        child: Text('拍照'),
+                        child: const Text('拍照'),
                       ),
                     ],
                   ),
@@ -154,7 +154,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                                 }
                               }
                             : null,
-                    child: Text('上传'),
+                    child: const Text('上传'),
                   ),
                 ],
               ),

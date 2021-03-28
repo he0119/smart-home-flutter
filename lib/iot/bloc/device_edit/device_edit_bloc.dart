@@ -21,7 +21,7 @@ class DeviceEditBloc extends Bloc<DeviceEditEvent, DeviceEditState> {
     if (event is DeviceAdded) {
       yield DeviceInProgress();
       try {
-        Device device = await iotRepository.addDevice(
+        final device = await iotRepository.addDevice(
           name: event.name,
           deviceType: event.deviceType,
           location: event.location,
@@ -34,7 +34,7 @@ class DeviceEditBloc extends Bloc<DeviceEditEvent, DeviceEditState> {
     if (event is DeviceUpdated) {
       yield DeviceInProgress();
       try {
-        Device device = await iotRepository.updateDevice(
+        final device = await iotRepository.updateDevice(
           id: event.id,
           name: event.name,
           deviceType: event.deviceType,
@@ -57,7 +57,7 @@ class DeviceEditBloc extends Bloc<DeviceEditEvent, DeviceEditState> {
     if (event is DeviceSeted) {
       yield DeviceInProgress();
       try {
-        Device device = await iotRepository.setDevice(
+        final device = await iotRepository.setDevice(
           id: event.deviceId,
           key: event.key,
           value: event.value,

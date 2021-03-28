@@ -59,7 +59,7 @@ class TopicDetailScreen extends StatelessWidget {
           ),
         )
       ],
-      child: _DetailScreen(),
+      child: const _DetailScreen(),
     );
   }
 }
@@ -175,7 +175,7 @@ class _DetailScreen extends StatelessWidget {
                   ),
                   bottomNavigationBar: Transform.translate(
                     offset: MediaQuery.of(context).viewInsets.bottom == 0
-                        ? Offset(0.0, 0.0)
+                        ? const Offset(0.0, 0.0)
                         : Offset(
                             0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
                     child: AddCommentButtonBar(
@@ -196,7 +196,7 @@ class _DetailScreen extends StatelessWidget {
         }
         return Scaffold(
           appBar: AppBar(),
-          body: CenterLoadingIndicator(),
+          body: const CenterLoadingIndicator(),
         );
       },
     );
@@ -233,20 +233,20 @@ class _DetailScreen extends StatelessWidget {
               ));
             }
             if (value == TopicDetailMenu.delete) {
-              showDialog(
+              await showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
-                  title: Text('删除话题'),
-                  content: Text('你确认要删除该话题？'),
+                  title: const Text('删除话题'),
+                  content: const Text('你确认要删除该话题？'),
                   actions: <Widget>[
                     TextButton(
-                      child: Text('否'),
+                      child: const Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
                     TextButton(
-                      child: Text('是'),
+                      child: const Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在删除...', duration: 1);
                         BlocProvider.of<TopicEditBloc>(context)
@@ -259,20 +259,20 @@ class _DetailScreen extends StatelessWidget {
               );
             }
             if (value == TopicDetailMenu.pin) {
-              showDialog(
+              await showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
-                  title: Text('置顶话题'),
-                  content: Text('你确认要置顶该话题？'),
+                  title: const Text('置顶话题'),
+                  content: const Text('你确认要置顶该话题？'),
                   actions: <Widget>[
                     TextButton(
-                      child: Text('否'),
+                      child: const Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
                     TextButton(
-                      child: Text('是'),
+                      child: const Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在置顶...', duration: 1);
                         BlocProvider.of<TopicEditBloc>(context)
@@ -285,20 +285,20 @@ class _DetailScreen extends StatelessWidget {
               );
             }
             if (value == TopicDetailMenu.unpin) {
-              showDialog(
+              await showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
-                  title: Text('取消置顶'),
-                  content: Text('你确认要取消该话题的置顶？'),
+                  title: const Text('取消置顶'),
+                  content: const Text('你确认要取消该话题的置顶？'),
                   actions: <Widget>[
                     TextButton(
-                      child: Text('否'),
+                      child: const Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
                     TextButton(
-                      child: Text('是'),
+                      child: const Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在取消...', duration: 1);
                         BlocProvider.of<TopicEditBloc>(context)
@@ -311,20 +311,20 @@ class _DetailScreen extends StatelessWidget {
               );
             }
             if (value == TopicDetailMenu.close) {
-              showDialog(
+              await showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
-                  title: Text('关闭话题'),
-                  content: Text('你确认要关闭该话题？'),
+                  title: const Text('关闭话题'),
+                  content: const Text('你确认要关闭该话题？'),
                   actions: <Widget>[
                     TextButton(
-                      child: Text('否'),
+                      child: const Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
                     TextButton(
-                      child: Text('是'),
+                      child: const Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在关闭...', duration: 1);
                         BlocProvider.of<TopicEditBloc>(context)
@@ -337,20 +337,20 @@ class _DetailScreen extends StatelessWidget {
               );
             }
             if (value == TopicDetailMenu.reopen) {
-              showDialog(
+              await showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
-                  title: Text('开启话题'),
-                  content: Text('你确认要重新开启该话题？'),
+                  title: const Text('开启话题'),
+                  content: const Text('你确认要重新开启该话题？'),
                   actions: <Widget>[
                     TextButton(
-                      child: Text('否'),
+                      child: const Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
                     TextButton(
-                      child: Text('是'),
+                      child: const Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在开启...', duration: 1);
                         BlocProvider.of<TopicEditBloc>(context)
@@ -365,32 +365,32 @@ class _DetailScreen extends StatelessWidget {
           },
           itemBuilder: (context) => [
             if (!state.topic.isPin!)
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: TopicDetailMenu.pin,
                 child: Text('置顶'),
               ),
             if (state.topic.isPin!)
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: TopicDetailMenu.unpin,
                 child: Text('取消置顶'),
               ),
             if (state.topic.isOpen!)
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: TopicDetailMenu.close,
                 child: Text('关闭'),
               ),
             if (!state.topic.isOpen!)
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: TopicDetailMenu.reopen,
                 child: Text('开启'),
               ),
             if (loginUser == state.topic.user)
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: TopicDetailMenu.edit,
                 child: Text('编辑'),
               ),
             if (loginUser == state.topic.user)
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: TopicDetailMenu.delete,
                 child: Text('删除'),
               ),
@@ -417,11 +417,11 @@ class CommentOrder extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: Row(
         children: <Widget>[
-          Text(
+          const Text(
             '全部评论',
             style: TextStyle(fontSize: 20),
           ),
-          Spacer(),
+          const Spacer(),
           PopupMenuButton(
             tooltip: '评论排序',
             icon: Icon(
@@ -434,11 +434,11 @@ class CommentOrder extends StatelessWidget {
                   .add(TopicDetailFetched(topicId: topicId, descending: value));
             },
             itemBuilder: (context) => <PopupMenuItem<bool>>[
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: false,
                 child: Text('正序'),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: true,
                 child: Text('倒序'),
               ),

@@ -21,7 +21,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
     if (event is ItemUpdated) {
       yield ItemEditInProgress();
       try {
-        Item item = await storageRepository.updateItem(
+        final item = await storageRepository.updateItem(
           id: event.id,
           name: event.name,
           number: event.number,
@@ -38,7 +38,7 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
     if (event is ItemAdded) {
       yield ItemEditInProgress();
       try {
-        Item item = await storageRepository.addItem(
+        final item = await storageRepository.addItem(
           name: event.name,
           number: event.number,
           storageId: event.storageId,
