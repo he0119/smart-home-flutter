@@ -128,7 +128,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 
   @override
   Widget build(BuildContext context) {
-    final config = AppConfig.of(context)!;
+    final config = AppConfig.of(context);
     return MaterialApp.router(
       scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(

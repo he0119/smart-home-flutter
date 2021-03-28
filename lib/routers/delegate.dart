@@ -304,7 +304,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           },
           listener: (context, state) async {
             // 如果软件配置中没有设置过 APIURL，则使用默认的 URL
-            await graphQLApiClient.initailize(state.apiUrl ?? config!.apiUrl);
+            await graphQLApiClient.initailize(state.apiUrl ?? config.apiUrl);
             if (state.initialized) {
               initialized = state.initialized;
               isLogin = state.loginUser != null;

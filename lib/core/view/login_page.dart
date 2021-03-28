@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     });
                   })
                 : ApiUrlForm(
-                    apiUrl: state.apiUrl ?? appConfig!.apiUrl,
+                    apiUrl: state.apiUrl ?? appConfig.apiUrl,
                     onTapNext: () {
                       setState(() {
                         canLogin = true;
@@ -174,7 +174,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-   void _onLoginButtonPressed() {
+    void _onLoginButtonPressed() {
       BlocProvider.of<AuthenticationBloc>(context).add(
         AuthenticationLogin(
           username: _usernameController.text,

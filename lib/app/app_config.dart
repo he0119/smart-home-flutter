@@ -15,7 +15,7 @@ class AppConfig extends InheritedWidget {
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => false;
 
-  static AppConfig? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AppConfig>();
+  static AppConfig of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<AppConfig>()!;
   }
 }
