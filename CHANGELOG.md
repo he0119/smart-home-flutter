@@ -7,6 +7,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.7.4] - 2021-03-29
+
+### Added
+
+- 集成 Sentry @he0119 (#157)
+- 切换到空安全 @he0119 (#150)
+
+### Changed
+
+- 调整项目结构 @he0119 (#156)
+- 图片背景颜色跟随系统
+
+### Fixed
+
+- 修复网页版无法正常显示的问题 @he0119 (#160)
+- 根据 `very_good_analysis` 规则修复代码 @he0119 (#159)
+- 修复添加评论的文本框无法使用回车换行的问题 @he0119 (#158)
+- 修复登录界面 `RenderFlex overflowed` 问题
+- 修复无法通过网址转跳到博客页面的问题
+
+## [0.7.3] - 2021-03-21
+
+### Added
+
+- feat(storage): 支持显示图片网址 @he0119 (#152)
+- feat(storage): 优化客户端的图片显示，支持放大缩小。 @he0119 (#151)
+
+### Changed
+
+- change: 重新创建项目，并修改了名称 @he0119 (#149)
+- improve(storage): 设置上传文件的 contentType，并直接传递图片地址 @he0119 (#147)
+
+### Fixed
+
+- fix: 修复通过 URL 访问物品详情页面出错的问题 @he0119 (#148)
+
+## [0.7.2] - 2021-03-12
+
+### Added
+
+- 支持上传物品照片
+
+## [0.7.1] - 2021-03-05
+
+### Changed
+
+- 升级至 Flutter 2.0.0
+- 更换安卓应用 ID
+- 优化 Android 应用链接
+
+### Fixed
+
+- 修复刷新令牌失效后无法正常登出的问题
+- 修复请求不必要数据的问题
+
 ## [0.7.0] - 2021-01-11
 
 ### Added
@@ -270,8 +325,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.7.4...HEAD
 
+[0.7.4]: https://github.com/he0119/smart-home-flutter/compare/v0.7.3...v0.7.4
+[0.7.3]: https://github.com/he0119/smart-home-flutter/compare/v0.7.2...v0.7.3
+[0.7.2]: https://github.com/he0119/smart-home-flutter/compare/v0.7.1...v0.7.2
+[0.7.1]: https://github.com/he0119/smart-home-flutter/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/he0119/smart-home-flutter/compare/v0.6.1...v0.7.0
 [0.6.1]: https://github.com/he0119/smart-home-flutter/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/he0119/smart-home-flutter/compare/v0.5.11...v0.6.0

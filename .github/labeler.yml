@@ -1,11 +1,11 @@
 # https://github.com/actions/labeler
 board:
-  - '**/board/**/*'
+  - lib/board/**/*
 iot:
-  - '**/iot/**/*'
-push:
-  - '**/push/**/*'
+  - lib/iot/**/*
 storage:
-  - '**/storage/**/*'
+  - lib/storage/**/*
+blog:
+  - lib/blog/**/*
 ci:
   - .github/**/*

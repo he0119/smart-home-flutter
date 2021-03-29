@@ -9,18 +9,18 @@ extension LocalDatetimeExtension on DateTime {
 
   /// 转换成本地时间，包含时分秒（24小时制）
   String toLocalStr() {
-    return localFormat.format(this.toLocal());
+    return localFormat.format(toLocal());
   }
 
   /// 获得本地习惯的时间差距表示
   String differenceStr(DateTime other) {
-    DateTime localNow = this.toLocal();
-    DateTime localOther = other.toLocal();
+    final localNow = toLocal();
+    final localOther = other.toLocal();
     // 同是一天，显示小时，或者分钟
     if (localNow.day == localOther.day &&
         localNow.month == localOther.month &&
         localNow.year == localOther.year) {
-      Duration difference = localNow.difference(localOther);
+      final difference = localNow.difference(localOther);
       assert(difference.inDays == 0);
       if (difference.inHours == 0 && difference.inMinutes > 0) {
         return '${difference.inMinutes} 分钟前';
@@ -39,10 +39,10 @@ extension LocalDatetimeExtension on DateTime {
       }
     }
     // 不在同一天
-    DateTime nowDay = DateTime(localNow.year, localNow.month, localNow.day);
-    DateTime otherDay =
+    final nowDay = DateTime(localNow.year, localNow.month, localNow.day);
+    final otherDay =
         DateTime(localOther.year, localOther.month, localOther.day);
-    int differenceDay = nowDay.difference(otherDay).inDays;
+    final differenceDay = nowDay.difference(otherDay).inDays;
     assert(differenceDay != 0);
     if (differenceDay == 1) {
       return '昨天';

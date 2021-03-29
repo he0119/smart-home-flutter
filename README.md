@@ -4,17 +4,14 @@
 
 ## Requirements
 
-- Flutter (Channel dev, 1.26.0-8.0.pre)
+- Flutter (Channel stable, 2.0.3)
 
-## Setup
+## Create
 
-启用 Web 和 Windows 功能
+生成项目的方法
 
 ```shell
-flutter channel dev
-flutter upgrade
-flutter config --enable-web
-flutter config --enable-windows-desktop
+flutter create --org xyz.hehome --platforms=android,web smarthome
 ```
 
 ## Run
@@ -34,7 +31,3 @@ flutter run -t ./lib/main_dev.dart
 ## Web
 
 使用 `flutter build web -t ./lib/main_prod.dart` 编译网页版。
-
-## Windows
-
-使用 `flutter build windows -t ./lib/main_prod.dart` 编译 Windows 版。

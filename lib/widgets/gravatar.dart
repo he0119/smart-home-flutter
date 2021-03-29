@@ -3,15 +3,15 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_home/utils/gravatar_url.dart';
+import 'package:smarthome/utils/gravatar_url.dart';
 
 class CircleGravatar extends StatelessWidget {
   final String email;
-  final int size;
+  final int? size;
 
   const CircleGravatar({
-    Key key,
-    @required this.email,
+    Key? key,
+    required this.email,
     this.size,
   }) : super(key: key);
 
@@ -24,8 +24,8 @@ class CircleGravatar extends StatelessWidget {
         imageBuilder: (context, imageProvider) => CircleAvatar(
           backgroundImage: imageProvider,
         ),
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
+        placeholder: (context, url) => const CircularProgressIndicator(),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
       );
     } else {
       return CircleAvatar(

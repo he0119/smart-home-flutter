@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_home/models/models.dart';
+import 'package:smarthome/core/core.dart';
 
 class TabSelector extends StatelessWidget {
   final AppTab activeTab;
   final Function(AppTab) onTabSelected;
 
   TabSelector({
-    Key key,
-    @required this.activeTab,
-    @required this.onTabSelected,
+    Key? key,
+    required this.activeTab,
+    required this.onTabSelected,
   }) : super(key: key);
 
   @override

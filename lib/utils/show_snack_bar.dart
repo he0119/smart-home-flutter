@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_home/models/grobal_keys.dart';
+import 'package:smarthome/core/core.dart';
 
 /// 显示消息条
 ///
@@ -8,7 +8,7 @@ void showInfoSnackBar(
   String message, {
   int duration = 4,
 }) {
-  scaffoldMessengerKey.currentState.showSnackBar(
+  scaffoldMessengerKey.currentState!.showSnackBar(
     SnackBar(
       content: Text(message),
       duration: Duration(seconds: duration),
@@ -23,7 +23,7 @@ void showErrorSnackBar(
   String message, {
   int duration = 4,
 }) {
-  scaffoldMessengerKey.currentState.showSnackBar(
+  scaffoldMessengerKey.currentState!.showSnackBar(
     SnackBar(
       content: Text(message),
       duration: Duration(seconds: duration),

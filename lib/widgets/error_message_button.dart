@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_home/widgets/rounded_raised_button.dart';
+import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 /// 居中的可以显示错误提示的按钮
 class ErrorMessageButton extends StatelessWidget {
@@ -7,9 +7,9 @@ class ErrorMessageButton extends StatelessWidget {
   final String message;
 
   const ErrorMessageButton({
-    Key key,
-    @required this.onPressed,
-    @required this.message,
+    Key? key,
+    required this.onPressed,
+    required this.message,
   }) : super(key: key);
 
   @override
@@ -20,7 +20,7 @@ class ErrorMessageButton extends StatelessWidget {
         children: [
           Text(message),
           RoundedRaisedButton(
-            child: Text('重试'),
+            child: const Text('重试'),
             onPressed: onPressed,
           ),
         ],

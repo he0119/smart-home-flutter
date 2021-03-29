@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:smart_home/models/app_tab.dart';
-import 'package:smart_home/routers/route_path.dart';
+import 'package:smarthome/core/core.dart';
+import 'package:smarthome/routers/route_path.dart';
 
 class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   static final Logger _log = Logger('InformationParser');
@@ -10,14 +10,14 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
     _log.fine('parseRouteInformation: ${routeInformation.location}');
-    return parseUrl(routeInformation.location);
+    return parseUrl(routeInformation.location!);
   }
 
   @override
-  RouteInformation restoreRouteInformation(RoutePath routePath) {
-    _log.fine('restoreRouteInformation: $routePath');
-    if (routePath is HomeRoutePath) {
-      switch (routePath.appTab) {
+  RouteInformation restoreRouteInformation(RoutePath configuration) {
+    _log.fine('restoreRouteInformation: $configuration');
+    if (configuration is HomeRoutePath) {
+      switch (configuration.appTab) {
         case AppTab.blog:
           return const RouteInformation(location: '/blog');
         case AppTab.iot:
@@ -26,15 +26,16 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
           return const RouteInformation(location: '/storage');
         case AppTab.board:
           return const RouteInformation(location: '/board');
+        default:
       }
-    } else if (routePath is StorageRoutePath) {
-      return RouteInformation(location: '/storage/${routePath.storageName}');
-    } else if (routePath is ItemRoutePath) {
-      return RouteInformation(location: '/item/${routePath.itemName}');
-    } else if (routePath is TopicRoutePath) {
-      return RouteInformation(location: '/topic/${routePath.topicId}');
-    } else if (routePath is AppRoutePath) {
-      switch (routePath.appPage) {
+    } else if (configuration is StorageRoutePath) {
+      return RouteInformation(location: '/storage/${configuration.storageName}');
+    } else if (configuration is ItemRoutePath) {
+      return RouteInformation(location: '/item/${configuration.itemName}');
+    } else if (configuration is TopicRoutePath) {
+      return RouteInformation(location: '/topic/${configuration.topicId}');
+    } else if (configuration is AppRoutePath) {
+      switch (configuration.appPage) {
         case AppPage.login:
           return const RouteInformation(location: '/login');
         case AppPage.consumables:
@@ -42,15 +43,18 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
         case AppPage.recycleBin:
           return const RouteInformation(location: '/recyclebin');
       }
-    } else if (routePath is SettingsRoutePath) {
-      switch (routePath.appSettings) {
+    } else if (configuration is SettingsRoutePath) {
+      switch (configuration.appSettings) {
         case AppSettings.home:
           return const RouteInformation(location: '/settings');
         case AppSettings.iot:
           return const RouteInformation(location: '/settings/iot');
         case AppSettings.blog:
           return const RouteInformation(location: '/settings/blog');
+        default:
       }
+    } else if (configuration is PictureRoutePath) {
+      return RouteInformation(location: '/picture/${configuration.pictureId}');
     }
     return const RouteInformation(location: '/');
   }
@@ -65,8 +69,8 @@ RoutePath parseUrl(String location) {
       return HomeRoutePath(appTab: AppTab.board);
     if (uri.pathSegments[0] == 'storage')
       return HomeRoutePath(appTab: AppTab.storage);
-    if (uri.pathSegments[0] == 'board')
-      return HomeRoutePath(appTab: AppTab.board);
+    if (uri.pathSegments[0] == 'blog')
+      return HomeRoutePath(appTab: AppTab.blog);
     if (uri.pathSegments[0] == 'consumables')
       return AppRoutePath(AppPage.consumables);
     if (uri.pathSegments[0] == 'login') return AppRoutePath(AppPage.login);
@@ -91,6 +95,9 @@ RoutePath parseUrl(String location) {
           case 'blog':
             return SettingsRoutePath(appSettings: AppSettings.blog);
         }
+        break;
+      case 'picture':
+        return PictureRoutePath(pictureId: uri.pathSegments[1]);
     }
   }
   return HomeRoutePath(appTab: null);

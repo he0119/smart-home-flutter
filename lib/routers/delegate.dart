@@ -6,29 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:quick_actions/quick_actions.dart';
-import 'package:smart_home/app_config.dart';
-import 'package:smart_home/blocs/core/blocs.dart';
-import 'package:smart_home/models/grobal_keys.dart';
-import 'package:smart_home/models/models.dart';
-import 'package:smart_home/pages/blog/home_page.dart';
-import 'package:smart_home/pages/board/home_page.dart';
-import 'package:smart_home/pages/board/topic_detail_page.dart';
-import 'package:smart_home/pages/iot/home_page.dart';
-import 'package:smart_home/pages/login_page.dart';
-import 'package:smart_home/pages/settings/blog/settings_page.dart';
-import 'package:smart_home/pages/settings/iot/settings_page.dart';
-import 'package:smart_home/pages/settings/settings_page.dart';
-import 'package:smart_home/pages/splash_page.dart';
-import 'package:smart_home/pages/storage/consumables_page.dart';
-import 'package:smart_home/pages/storage/home_page.dart';
-import 'package:smart_home/pages/storage/item_datail_page.dart';
-import 'package:smart_home/pages/storage/recycle_bin_page.dart';
-import 'package:smart_home/pages/storage/storage_datail_page.dart';
-import 'package:smart_home/repositories/repositories.dart';
-import 'package:smart_home/routers/information_parser.dart';
-import 'package:smart_home/routers/route_path.dart';
-import 'package:smart_home/routers/transition_delegate.dart';
-import 'package:smart_home/utils/launch_url.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:smarthome/app/app_config.dart';
+import 'package:smarthome/blog/blog.dart';
+import 'package:smarthome/board/board.dart';
+import 'package:smarthome/core/core.dart';
+import 'package:smarthome/iot/iot.dart';
+import 'package:smarthome/routers/information_parser.dart';
+import 'package:smarthome/routers/route_path.dart';
+import 'package:smarthome/routers/transition_delegate.dart';
+import 'package:smarthome/storage/storage.dart';
+import 'package:smarthome/utils/launch_url.dart';
 
 class MyRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
@@ -50,7 +38,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   bool isLogin = false;
 
   /// 默认主页
-  AppTab defaultHomePage;
+  AppTab defaultHomePage = AppTab.storage;
 
   List<Page> _pages = <Page>[];
 
@@ -94,7 +82,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   int storageGroup = 0;
 
   /// 添加一组位置
-  void addStorageGroup({Storage storage}) {
+  void addStorageGroup({Storage? storage}) {
     storageGroup += 1;
     _pages.add(StorageDetailPage(
       storageName: storage?.name ?? '',
@@ -105,19 +93,19 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   /// 物品位置页面间的导航
-  void setStoragePage({Storage storage}) {
+  void setStoragePage({Storage? storage}) {
     // 先从最后开始删除当前的物品位置页面
     // 一直删除到这一组结束
     // 每次只删除一个 Group
     while (_pages.last is StorageDetailPage &&
-        _pages.last.name.startsWith('/storage/$storageGroup')) {
+        _pages.last.name!.startsWith('/storage/$storageGroup')) {
       _pages.removeLast();
     }
     // 再重新添加
     _pages.add(StorageDetailPage(storageName: '', group: storageGroup));
     if (storage != null) {
       if (storage.ancestors != null) {
-        for (Storage storage in storage.ancestors) {
+        for (var storage in storage.ancestors!) {
           _pages.add(StorageDetailPage(
             storageName: storage.name,
             storageId: storage.id,
@@ -137,7 +125,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   int itemCount = 0;
 
   /// 添加一个物品详情页面
-  void addItemPage({@required Item item}) {
+  void addItemPage({required Item item}) {
     itemCount += 1;
     _pages.add(ItemDetailPage(
       itemName: item.name,
@@ -154,17 +142,17 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   bool _handlePopPage(Route<dynamic> route, dynamic result) {
-    final bool success = route.didPop(result);
+    final success = route.didPop(result);
     if (success) {
       _log.fine('Pop ${route.settings.name}');
       _pages.remove(route.settings);
       // 每当一组位置全部 Pop，Group 计数减一
-      if (route.settings.name.startsWith('/storage')) {
-        if (!_pages.last.name.startsWith('/storage/$storageGroup')) {
+      if (route.settings.name!.startsWith('/storage')) {
+        if (!_pages.last.name!.startsWith('/storage/$storageGroup')) {
           storageGroup -= 1;
         }
       }
-      if (route.settings.name.startsWith('/item')) {
+      if (route.settings.name!.startsWith('/item')) {
         itemCount -= 1;
       }
       notifyListeners();
@@ -179,7 +167,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   /// 从当前显示页面倒推 RoutePath
   RoutePath get routePath {
     if (pages.last.name != null) {
-      final uri = Uri.parse(pages.last.name);
+      final uri = Uri.parse(pages.last.name!);
       if (pages.last is IotHomePage ||
           pages.last is BoardHomePage ||
           pages.last is BlogHomePage ||
@@ -205,49 +193,50 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         return SettingsRoutePath(appSettings: AppSettings.blog);
       } else if (pages.last is IotSettingsPage) {
         return SettingsRoutePath(appSettings: AppSettings.iot);
+      } else if (pages.last is PicturePage) {
+        return PictureRoutePath(pictureId: uri.pathSegments[1]);
       }
     }
     return HomeRoutePath();
   }
 
   @override
-  Future<void> setNewRoutePath(RoutePath routePath) async {
-    _log.fine('setNewRoutePath: $routePath');
-    if (routePath is HomeRoutePath && routePath.appTab != null) {
-      _pages = [routePath.appTab.page];
-    }
-    if (routePath is TopicRoutePath) {
+  Future<void> setNewRoutePath(RoutePath? configuration) async {
+    _log.fine('setNewRoutePath: $configuration');
+    if (configuration is HomeRoutePath) {
+      final appTab = configuration.appTab;
+      if (appTab != null) {
+        _pages = [appTab.page];
+      }
+    } else if (configuration is TopicRoutePath) {
       _pages = [
         BoardHomePage(),
-        TopicDetailPage(topicId: routePath.topicId),
+        TopicDetailPage(topicId: configuration.topicId),
       ];
-    }
-    if (routePath is ItemRoutePath) {
+    } else if (configuration is ItemRoutePath) {
       storageGroup = 0;
       itemCount = 1;
       _pages = [
         StorageHomePage(),
         ItemDetailPage(
-          itemName: routePath.itemName,
-          itemId: routePath.itemId,
+          itemName: configuration.itemName,
+          itemId: configuration.itemId,
           group: 1,
         ),
       ];
-    }
-    if (routePath is StorageRoutePath) {
+    } else if (configuration is StorageRoutePath) {
       storageGroup = 1;
       itemCount = 0;
       _pages = [
         StorageHomePage(),
         StorageDetailPage(
-          storageName: routePath.storageName,
-          storageId: routePath.storageId,
+          storageName: configuration.storageName,
+          storageId: configuration.storageId,
           group: 1,
         ),
       ];
-    }
-    if (routePath is AppRoutePath) {
-      switch (routePath.appPage) {
+    } else if (configuration is AppRoutePath) {
+      switch (configuration.appPage) {
         case AppPage.login:
           break;
         case AppPage.consumables:
@@ -263,9 +252,8 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           ];
           break;
       }
-    }
-    if (routePath is SettingsRoutePath) {
-      switch (routePath.appSettings) {
+    } else if (configuration is SettingsRoutePath) {
+      switch (configuration.appSettings) {
         case AppSettings.home:
           _pages = [
             defaultHomePage.page,
@@ -284,7 +272,13 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             BlogSettingsPage(),
           ];
           break;
+        default:
       }
+    } else if (configuration is PictureRoutePath) {
+      _pages = [
+        StorageHomePage(),
+        PicturePage(pictureId: configuration.pictureId),
+      ];
     }
   }
 
@@ -292,10 +286,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   @override
   Widget build(BuildContext context) {
-    _log.fine('Router rebuilded');
-    _log.fine('pages $pages');
+    _log..fine('Router rebuilded')..fine('pages $pages');
     final graphQLApiClient = RepositoryProvider.of<GraphQLApiClient>(context);
-    final AppConfig config = AppConfig.of(context);
+    final config = AppConfig.of(context);
     return MultiBlocListener(
       listeners: [
         BlocListener<AppPreferencesBloc, AppPreferencesState>(
@@ -321,23 +314,23 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
                   .add(AuthenticationStarted());
               // 仅在客户端上注册 Shortcut
               if (!kIsWeb && !Platform.isWindows) {
-                final QuickActions quickActions = QuickActions();
-                quickActions.initialize((String shortcutType) async {
-                  if (shortcutType == 'action_iot') {
-                    BlocProvider.of<TabBloc>(context)
-                        .add(TabChanged(AppTab.iot));
-                  } else if (shortcutType == 'action_storage') {
-                    BlocProvider.of<TabBloc>(context)
-                        .add(TabChanged(AppTab.storage));
-                  } else if (shortcutType == 'action_blog') {
-                    BlocProvider.of<TabBloc>(context)
-                        .add(TabChanged(AppTab.blog));
-                  } else {
-                    BlocProvider.of<TabBloc>(context)
-                        .add(TabChanged(AppTab.board));
-                  }
-                });
-                quickActions.setShortcutItems(
+                final quickActions = QuickActions()
+                  ..initialize((String shortcutType) async {
+                    if (shortcutType == 'action_iot') {
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.iot));
+                    } else if (shortcutType == 'action_storage') {
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.storage));
+                    } else if (shortcutType == 'action_blog') {
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.blog));
+                    } else {
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.board));
+                    }
+                  });
+                await quickActions.setShortcutItems(
                   <ShortcutItem>[
                     // TODO: 给快捷方式添加图标
                     const ShortcutItem(
@@ -365,11 +358,18 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
               isLogin = true;
               // 当登录成功时，开始初始化推送服务
               BlocProvider.of<PushBloc>(context).add(PushStarted());
+              // 设置 Sentry 用户
+              Sentry.configureScope(
+                (scope) => scope.user = SentryUser(
+                  id: state.currentUser.username,
+                  email: state.currentUser.email,
+                ),
+              );
               notifyListeners();
             }
           },
         ),
-        BlocListener<TabBloc, AppTab>(
+        BlocListener<TabBloc, AppTab?>(
           listener: (context, state) {
             if (state != null) {
               setHomePage(state);
@@ -379,20 +379,20 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         BlocListener<UpdateBloc, UpdateState>(
           listener: (context, state) {
             if (state is UpdateSuccess && state.needUpdate) {
-              scaffoldMessengerKey.currentState.showSnackBar(
+              scaffoldMessengerKey.currentState!.showSnackBar(
                 SnackBar(
                   content: Text('发现新版本（${state.version}）'),
                   action: SnackBarAction(
                     label: '更新',
                     onPressed: () {
-                      launchUrl(state.url);
+                      launchUrl(state.url!);
                     },
                   ),
                 ),
               );
             }
             if (state is UpdateFailure) {
-              scaffoldMessengerKey.currentState.showSnackBar(
+              scaffoldMessengerKey.currentState!.showSnackBar(
                 SnackBar(
                   content: Text(state.message),
                   action: SnackBarAction(

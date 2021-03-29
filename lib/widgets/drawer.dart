@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_home/blocs/core/blocs.dart';
-import 'package:smart_home/pages/settings/settings_page.dart';
-import 'package:smart_home/pages/storage/consumables_page.dart';
-import 'package:smart_home/pages/storage/recycle_bin_page.dart';
-import 'package:smart_home/repositories/repositories.dart';
-import 'package:smart_home/routers/delegate.dart';
-import 'package:smart_home/widgets/gravatar.dart';
-import 'package:version/version.dart';
+import 'package:smarthome/core/core.dart';
+import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/storage/storage.dart';
+import 'package:smarthome/widgets/gravatar.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({Key key}) : super(key: key);
+  const MyDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,40 +18,40 @@ class MyDrawer extends StatelessWidget {
               if (state is AuthenticationSuccess)
                 UserAccountsDrawerHeader(
                   accountName: Text(state.currentUser.username),
-                  accountEmail: Text(state.currentUser.email),
+                  accountEmail: Text(state.currentUser.email!),
                   currentAccountPicture: CircleGravatar(
-                    email: state.currentUser.email,
+                    email: state.currentUser.email!,
                     size: 512,
                   ),
                 ),
               ListTile(
-                title: Text('耗材管理'),
+                title: const Text('耗材管理'),
                 onTap: () {
                   MyRouterDelegate.of(context).push(ConsumablesPage());
                 },
               ),
               ListTile(
-                title: Text('回收站'),
+                title: const Text('回收站'),
                 onTap: () {
                   MyRouterDelegate.of(context).push(RecycleBinPage());
                 },
               ),
               ListTile(
-                title: Text('设置'),
+                title: const Text('设置'),
                 onTap: () {
                   MyRouterDelegate.of(context).push(SettingsPage());
                 },
               ),
               ListTile(
-                title: Text('关于'),
+                title: const Text('关于'),
                 onTap: () async {
-                  Version currentVersion =
+                  final currentVersion =
                       await RepositoryProvider.of<VersionRepository>(context)
                           .currentVersion;
                   showAboutDialog(
                     context: context,
                     applicationVersion: currentVersion.toString(),
-                    applicationIcon: ImageIcon(
+                    applicationIcon: const ImageIcon(
                       AssetImage('assets/icon/icon.webp'),
                       color: Color(0xFFF15713),
                     ),
@@ -64,22 +60,22 @@ class MyDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
-                title: Text('登出'),
+                title: const Text('登出'),
                 onTap: () {
                   showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
-                      title: Text('登出'),
-                      content: Text('确认登出账户？'),
+                      title: const Text('登出'),
+                      content: const Text('确认登出账户？'),
                       actions: <Widget>[
-                        FlatButton(
-                          child: Text('否'),
+                        TextButton(
+                          child: const Text('否'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
                         ),
-                        FlatButton(
-                          child: Text('是'),
+                        TextButton(
+                          child: const Text('是'),
                           onPressed: () {
                             BlocProvider.of<AuthenticationBloc>(context)
                                 .add(AuthenticationLogout());
