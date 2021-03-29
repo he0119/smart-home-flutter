@@ -4,13 +4,11 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:smart_home/blocs/core/tab/tab_bloc.dart';
-import 'package:smart_home/models/app_tab.dart';
+import 'package:smarthome/core/core.dart';
 
 void main() {
   group('TabBloc', () {
-    // ignore: close_sinks
-    TabBloc tabBloc;
+    late TabBloc tabBloc;
 
     setUp(() {
       tabBloc = TabBloc();
@@ -20,15 +18,16 @@ void main() {
       expect(tabBloc.state, null);
     });
 
-    blocTest<TabBloc, AppTab>(
+    blocTest<TabBloc, AppTab?>(
       'should update the AppTab',
       build: () => tabBloc,
       act: (TabBloc bloc) async {
-        bloc.add(TabChanged(AppTab.board));
-        bloc.add(TabChanged(AppTab.iot));
-        bloc.add(TabChanged(AppTab.iot));
+        bloc
+          ..add(const TabChanged(AppTab.board))
+          ..add(const TabChanged(AppTab.iot))
+          ..add(const TabChanged(AppTab.iot));
       },
-      expect: <AppTab>[
+      expect: () => <AppTab>[
         AppTab.board,
         AppTab.iot,
       ],
@@ -36,7 +35,7 @@ void main() {
   });
   group('TabBlocToString', () {
     test('TabEvent', () {
-      expect(TabChanged(AppTab.board).toString(),
+      expect(const TabChanged(AppTab.board).toString(),
           'TabChanged(tab: ${AppTab.board})');
     });
   });
