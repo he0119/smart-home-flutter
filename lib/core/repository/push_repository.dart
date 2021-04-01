@@ -1,4 +1,4 @@
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:graphql/client.dart';
 import 'package:smarthome/core/graphql/mutations/push/mutations.dart';
 import 'package:smarthome/core/graphql/queries/push/queries.dart';

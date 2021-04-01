@@ -314,22 +314,27 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
                   .add(AuthenticationStarted());
               // 仅在客户端上注册 Shortcut
               if (!kIsWeb && !Platform.isWindows) {
-                final quickActions = QuickActions()
-                  ..initialize((String shortcutType) async {
-                    if (shortcutType == 'action_iot') {
+                final quickActions = QuickActions();
+                await quickActions.initialize((String shortcutType) {
+                  switch (shortcutType) {
+                    case 'action_iot':
                       BlocProvider.of<TabBloc>(context)
                           .add(const TabChanged(AppTab.iot));
-                    } else if (shortcutType == 'action_storage') {
+                      break;
+                    case 'action_storage':
                       BlocProvider.of<TabBloc>(context)
                           .add(const TabChanged(AppTab.storage));
-                    } else if (shortcutType == 'action_blog') {
+                      break;
+                    case 'action_blog':
                       BlocProvider.of<TabBloc>(context)
                           .add(const TabChanged(AppTab.blog));
-                    } else {
+                      break;
+                    case 'action_board':
                       BlocProvider.of<TabBloc>(context)
                           .add(const TabChanged(AppTab.board));
-                    }
-                  });
+                      break;
+                  }
+                });
                 await quickActions.setShortcutItems(
                   <ShortcutItem>[
                     // TODO: 给快捷方式添加图标

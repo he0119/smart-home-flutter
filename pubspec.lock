@@ -7,14 +7,14 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "18.0.0"
+    version: "19.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.0"
+    version: "1.3.0"
   archive:
     dependency: transitive
     description:
@@ -119,7 +119,7 @@ packages:
       name: cached_network_image
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.0-nullsafety"
+    version: "3.0.0"
   characters:
     dependency: transitive
     description:
@@ -211,20 +211,48 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
-  device_info:
+  device_info_plus:
     dependency: "direct main"
     description:
-      name: device_info
+      name: device_info_plus
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
-  device_info_platform_interface:
+    version: "1.0.0"
+  device_info_plus_linux:
     dependency: transitive
     description:
-      name: device_info_platform_interface
+      name: device_info_plus_linux
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1"
+    version: "1.0.0"
+  device_info_plus_macos:
+    dependency: transitive
+    description:
+      name: device_info_plus_macos
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
+  device_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: device_info_plus_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.1"
+  device_info_plus_web:
+    dependency: transitive
+    description:
+      name: device_info_plus_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
+  device_info_plus_windows:
+    dependency: transitive
+    description:
+      name: device_info_plus_windows
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
   dropdown_search:
     dependency: "direct main"
     description:
@@ -292,14 +320,14 @@ packages:
       name: flutter_blurhash
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.5.4-nullsafety.0"
+    version: "0.6.0"
   flutter_cache_manager:
     dependency: transitive
     description:
       name: flutter_cache_manager
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.0-nullsafety.2"
+    version: "3.0.1"
   flutter_keyboard_visibility:
     dependency: "direct main"
     description:
@@ -356,7 +384,7 @@ packages:
       name: glob
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   gql:
     dependency: transitive
     description:
@@ -398,7 +426,7 @@ packages:
       name: gql_link
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.0-nullsafety.2"
+    version: "0.4.0-nullsafety.3"
   gql_transform_link:
     dependency: transitive
     description:
@@ -426,7 +454,7 @@ packages:
       name: hive
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.2"
   http:
     dependency: "direct main"
     description:
@@ -505,7 +533,7 @@ packages:
       name: logging
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   markdown:
     dependency: transitive
     description:
@@ -561,25 +589,18 @@ packages:
       name: normalize
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.5.0-nullsafety.0"
+    version: "0.5.1-0.1.nullsafety.0"
   octo_image:
     dependency: transitive
     description:
       name: octo_image
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0-nullsafety.1"
+    version: "1.0.0"
   package_config:
     dependency: transitive
     description:
       name: package_config
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0"
-  package_info:
-    dependency: transitive
-    description:
-      name: package_info
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
@@ -715,7 +736,7 @@ packages:
       name: process
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.1.1"
+    version: "4.2.1"
   provider:
     dependency: transitive
     description:
@@ -743,7 +764,14 @@ packages:
       name: quick_actions
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.5.0"
+    version: "0.6.0"
+  quick_actions_platform_interface:
+    dependency: transitive
+    description:
+      name: quick_actions_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
   quiver:
     dependency: transitive
     description:
@@ -764,14 +792,14 @@ packages:
       name: sentry
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.1.0-nullsafety.1"
+    version: "5.0.0"
   sentry_flutter:
     dependency: "direct main"
     description:
       name: sentry_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.1.0-nullsafety.1"
+    version: "5.0.0"
   settings_ui:
     dependency: "direct main"
     description:
@@ -988,7 +1016,7 @@ packages:
       name: url_launcher
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.2"
+    version: "6.0.3"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -1030,7 +1058,7 @@ packages:
       name: uuid
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.2"
+    version: "3.0.3"
   vector_math:
     dependency: transitive
     description:
@@ -1058,7 +1086,7 @@ packages:
       name: vm_service
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.1.0+1"
+    version: "6.2.0"
   watcher:
     dependency: transitive
     description:
@@ -1093,7 +1121,7 @@ packages:
       name: win32
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   xdg_directories:
     dependency: transitive
     description:
