@@ -22,6 +22,10 @@ class LoginPage extends Page {
 }
 
 class LoginScreen extends StatefulWidget {
+  LoginScreen({
+    Key? key,
+  }) : super(key: key);
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -68,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
 /// 选择服务器网址的界面
 class ApiUrlForm extends StatefulWidget {
   final String apiUrl;
-  final Function onTapNext;
+  final VoidCallback onTapNext;
 
   ApiUrlForm({
     Key? key,
@@ -155,7 +159,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
 class LoginForm extends StatefulWidget {
   final Function onTapBack;
 
-  LoginForm({required this.onTapBack});
+  LoginForm({Key? key, required this.onTapBack}) : super(key: key);
 
   @override
   State<LoginForm> createState() => _LoginFormState();

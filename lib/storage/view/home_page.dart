@@ -42,10 +42,10 @@ class StorageHomeScreen extends StatelessWidget {
       body: const _StorageHomeBody(),
       floatingActionButton: FloatingActionButton(
         tooltip: '所有位置',
-        child: const Icon(Icons.storage),
         onPressed: () async {
           MyRouterDelegate.of(context).addStorageGroup();
         },
+        child: const Icon(Icons.storage),
       ),
     );
   }

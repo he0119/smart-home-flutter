@@ -87,10 +87,10 @@ class _AddCommentButtonBarState extends State<AddCommentButtonBar> {
                         }
                       }
                     : null,
-                child: const Text('发送'),
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(style: BorderStyle.none),
                 ),
+                child: const Text('发送'),
               ),
             ],
           ),

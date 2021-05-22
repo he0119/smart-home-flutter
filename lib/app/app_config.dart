@@ -5,6 +5,7 @@ class AppConfig extends InheritedWidget {
   final String flavorName;
   final String apiUrl;
 
+  // ignore: use_key_in_widget_constructors
   AppConfig({
     required this.appName,
     required this.flavorName,

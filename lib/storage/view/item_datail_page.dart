@@ -162,19 +162,19 @@ class ItemDetailScreen extends StatelessWidget {
                     content: const Text('你确认要删除该物品么？'),
                     actions: <Widget>[
                       TextButton(
-                        child: const Text('否'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
+                        child: const Text('否'),
                       ),
                       TextButton(
-                        child: const Text('是'),
                         onPressed: () {
                           BlocProvider.of<ItemEditBloc>(context).add(
                             ItemDeleted(item: state.item),
                           );
                           Navigator.pop(context);
                         },
+                        child: const Text('是'),
                       ),
                     ],
                   ),

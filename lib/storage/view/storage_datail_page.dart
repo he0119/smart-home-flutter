@@ -160,19 +160,19 @@ class StorageDetailScreen extends StatelessWidget {
                     content: const Text('你确认要删除该位置么？'),
                     actions: <Widget>[
                       TextButton(
-                        child: const Text('否'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
+                        child: const Text('否'),
                       ),
                       TextButton(
-                        child: const Text('是'),
                         onPressed: () {
                           BlocProvider.of<StorageEditBloc>(context).add(
                             StorageDeleted(storage: state.storage!),
                           );
                           Navigator.pop(context);
                         },
+                        child: const Text('是'),
                       ),
                     ],
                   ),
@@ -287,7 +287,6 @@ class StorageDetailScreen extends StatelessWidget {
     if (state is StorageDetailSuccess && state.storage != null) {
       return FloatingActionButton(
         tooltip: '添加物品',
-        child: const Icon(Icons.add),
         onPressed: () async {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -304,6 +303,7 @@ class StorageDetailScreen extends StatelessWidget {
             ),
           );
         },
+        child: const Icon(Icons.add),
       );
     }
     return null;

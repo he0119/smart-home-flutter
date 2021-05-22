@@ -60,6 +60,9 @@ class TopicItem extends StatelessWidget {
       if (!topic.isOpen!) title = '🔒$title';
       if (topic.isPin!) title = '🔝$title';
       return InkWell(
+        onTap: () async {
+          MyRouterDelegate.of(context).push(TopicDetailPage(topicId: topic.id));
+        },
         child: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -73,9 +76,6 @@ class TopicItem extends StatelessWidget {
             ],
           ),
         ),
-        onTap: () async {
-          MyRouterDelegate.of(context).push(TopicDetailPage(topicId: topic.id));
-        },
       );
     }
   }

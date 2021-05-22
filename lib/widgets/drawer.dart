@@ -69,18 +69,18 @@ class MyDrawer extends StatelessWidget {
                       content: const Text('确认登出账户？'),
                       actions: <Widget>[
                         TextButton(
-                          child: const Text('否'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
+                          child: const Text('否'),
                         ),
                         TextButton(
-                          child: const Text('是'),
                           onPressed: () {
                             BlocProvider.of<AuthenticationBloc>(context)
                                 .add(AuthenticationLogout());
                             Navigator.pop(context);
                           },
+                          child: const Text('是'),
                         ),
                       ],
                     ),

@@ -240,19 +240,19 @@ class _DetailScreen extends StatelessWidget {
                   content: const Text('你确认要删除该话题？'),
                   actions: <Widget>[
                     TextButton(
-                      child: const Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
+                      child: const Text('否'),
                     ),
                     TextButton(
-                      child: const Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在删除...', duration: 1);
                         BlocProvider.of<TopicEditBloc>(context)
                             .add(TopicDeleted(topic: state.topic));
                         Navigator.pop(context);
                       },
+                      child: const Text('是'),
                     ),
                   ],
                 ),
@@ -266,19 +266,19 @@ class _DetailScreen extends StatelessWidget {
                   content: const Text('你确认要置顶该话题？'),
                   actions: <Widget>[
                     TextButton(
-                      child: const Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
+                      child: const Text('否'),
                     ),
                     TextButton(
-                      child: const Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在置顶...', duration: 1);
                         BlocProvider.of<TopicEditBloc>(context)
                             .add(TopicPinned(topic: state.topic));
                         Navigator.pop(context);
                       },
+                      child: const Text('是'),
                     ),
                   ],
                 ),
@@ -292,19 +292,19 @@ class _DetailScreen extends StatelessWidget {
                   content: const Text('你确认要取消该话题的置顶？'),
                   actions: <Widget>[
                     TextButton(
-                      child: const Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
+                      child: const Text('否'),
                     ),
                     TextButton(
-                      child: const Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在取消...', duration: 1);
                         BlocProvider.of<TopicEditBloc>(context)
                             .add(TopicUnpinned(topic: state.topic));
                         Navigator.pop(context);
                       },
+                      child: const Text('是'),
                     ),
                   ],
                 ),
@@ -318,19 +318,19 @@ class _DetailScreen extends StatelessWidget {
                   content: const Text('你确认要关闭该话题？'),
                   actions: <Widget>[
                     TextButton(
-                      child: const Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
+                      child: const Text('否'),
                     ),
                     TextButton(
-                      child: const Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在关闭...', duration: 1);
                         BlocProvider.of<TopicEditBloc>(context)
                             .add(TopicClosed(topic: state.topic));
                         Navigator.pop(context);
                       },
+                      child: const Text('是'),
                     ),
                   ],
                 ),
@@ -344,19 +344,19 @@ class _DetailScreen extends StatelessWidget {
                   content: const Text('你确认要重新开启该话题？'),
                   actions: <Widget>[
                     TextButton(
-                      child: const Text('否'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
+                      child: const Text('否'),
                     ),
                     TextButton(
-                      child: const Text('是'),
                       onPressed: () {
                         showInfoSnackBar('正在开启...', duration: 1);
                         BlocProvider.of<TopicEditBloc>(context)
                             .add(TopicReopened(topic: state.topic));
                         Navigator.pop(context);
                       },
+                      child: const Text('是'),
                     ),
                   ],
                 ),
