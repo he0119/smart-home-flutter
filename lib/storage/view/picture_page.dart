@@ -73,10 +73,10 @@ class PictureScreen extends StatelessWidget {
           floatingActionButton: (state is PictureSuccess && kIsWeb)
               ? FloatingActionButton(
                   tooltip: '在新标签页中打开',
-                  child: const Icon(Icons.open_in_new),
                   onPressed: () async {
                     await launchUrl(state.picture.url!);
                   },
+                  child: const Icon(Icons.open_in_new),
                 )
               : null,
         );
@@ -129,13 +129,12 @@ class PictureScreen extends StatelessWidget {
                     content: const Text('你确认要删除该图片么？'),
                     actions: <Widget>[
                       TextButton(
-                        child: const Text('否'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
+                        child: const Text('否'),
                       ),
                       TextButton(
-                        child: const Text('是'),
                         onPressed: () {
                           showInfoSnackBar('正在删除...', duration: 1);
                           BlocProvider.of<PictureEditBloc>(context).add(
@@ -143,6 +142,7 @@ class PictureScreen extends StatelessWidget {
                           );
                           Navigator.pop(context);
                         },
+                        child: const Text('是'),
                       ),
                     ],
                   ),

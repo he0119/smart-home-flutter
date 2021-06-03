@@ -11,11 +11,12 @@ class MyHomePage extends StatelessWidget {
   final AppTab activeTab;
 
   const MyHomePage({
+    Key? key,
     required this.activeTab,
     required this.body,
     this.actions,
     this.floatingActionButton,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

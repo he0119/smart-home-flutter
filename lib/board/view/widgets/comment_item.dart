@@ -43,19 +43,19 @@ class CommentItem extends StatelessWidget {
                             content: const Text('你确认要删除该评论？'),
                             actions: <Widget>[
                               TextButton(
-                                child: const Text('否'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
+                                child: const Text('否'),
                               ),
                               TextButton(
-                                child: const Text('是'),
                                 onPressed: () {
                                   showInfoSnackBar('正在删除...', duration: 1);
                                   BlocProvider.of<CommentEditBloc>(context)
                                       .add(CommentDeleted(comment: comment));
                                   Navigator.pop(context);
                                 },
+                                child: const Text('是'),
                               ),
                             ],
                           ),

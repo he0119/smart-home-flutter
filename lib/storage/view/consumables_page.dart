@@ -27,6 +27,10 @@ class ConsumablesPage extends Page {
 }
 
 class ConsumablesScreen extends StatelessWidget {
+  ConsumablesScreen({
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

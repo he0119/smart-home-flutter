@@ -15,6 +15,7 @@ import 'package:smarthome/routers/information_parser.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/user/user.dart';
 
+// ignore: use_key_in_widget_constructors
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

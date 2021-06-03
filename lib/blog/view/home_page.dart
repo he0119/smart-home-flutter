@@ -102,13 +102,13 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
           floatingActionButton: controller.hasData
               ? FloatingActionButton(
                   tooltip: '使用浏览器打开',
-                  child: const Icon(Icons.open_in_new),
                   onPressed: () async {
                     final currentUrl = await controller.data!.currentUrl();
                     if (currentUrl != null) {
                       await launchUrl(currentUrl);
                     }
                   },
+                  child: const Icon(Icons.open_in_new),
                 )
               : null,
         ),

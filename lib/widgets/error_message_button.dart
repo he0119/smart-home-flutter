@@ -20,8 +20,8 @@ class ErrorMessageButton extends StatelessWidget {
         children: [
           Text(message),
           RoundedRaisedButton(
-            child: const Text('重试'),
             onPressed: onPressed,
+            child: const Text('重试'),
           ),
         ],
       ),

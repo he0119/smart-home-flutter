@@ -41,7 +41,6 @@ class BoardHomeScreen extends StatelessWidget {
       body: const _BoardHomeBody(),
       floatingActionButton: FloatingActionButton(
         tooltip: '添加话题',
-        child: const Icon(Icons.create),
         onPressed: () async {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -58,6 +57,7 @@ class BoardHomeScreen extends StatelessWidget {
           BlocProvider.of<BoardHomeBloc>(context)
               .add(BoardHomeFetched(cache: false));
         },
+        child: const Icon(Icons.create),
       ),
     );
   }

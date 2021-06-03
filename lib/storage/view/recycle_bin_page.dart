@@ -39,6 +39,10 @@ class RecycleBinPage extends Page {
 }
 
 class RecycleBinScreen extends StatelessWidget {
+  RecycleBinScreen({
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,19 +127,19 @@ Widget _buildItem(BuildContext context, Item item) {
               content: const Text('你确认要恢复该物品？'),
               actions: <Widget>[
                 TextButton(
-                  child: const Text('否'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
+                  child: const Text('否'),
                 ),
                 TextButton(
-                  child: const Text('是'),
                   onPressed: () {
                     BlocProvider.of<ItemEditBloc>(context)
                         .add(ItemRestored(item: item));
                     showInfoSnackBar('正在恢复...', duration: 1);
                     Navigator.pop(context);
                   },
+                  child: const Text('是'),
                 ),
               ],
             ),
