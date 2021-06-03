@@ -7,23 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Changed
+
+- 升级至 Flutter 2.2
+
 ## [0.7.4] - 2021-03-29
 
 ### Added
 
-- 集成 Sentry @he0119 (#157)
-- 切换到空安全 @he0119 (#150)
+- 集成 Sentry
+- 切换到空安全
 
 ### Changed
 
-- 调整项目结构 @he0119 (#156)
+- 调整项目结构
 - 图片背景颜色跟随系统
 
 ### Fixed
 
-- 修复网页版无法正常显示的问题 @he0119 (#160)
-- 根据 `very_good_analysis` 规则修复代码 @he0119 (#159)
-- 修复添加评论的文本框无法使用回车换行的问题 @he0119 (#158)
+- 修复网页版无法正常显示的问题
+- 根据 `very_good_analysis` 规则修复代码
+- 修复添加评论的文本框无法使用回车换行的问题
 - 修复登录界面 `RenderFlex overflowed` 问题
 - 修复无法通过网址转跳到博客页面的问题
 
@@ -31,17 +35,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ### Added
 
-- feat(storage): 支持显示图片网址 @he0119 (#152)
-- feat(storage): 优化客户端的图片显示，支持放大缩小。 @he0119 (#151)
+- 支持显示图片网址
+- 优化客户端的图片显示，支持放大缩小
 
 ### Changed
 
-- change: 重新创建项目，并修改了名称 @he0119 (#149)
-- improve(storage): 设置上传文件的 contentType，并直接传递图片地址 @he0119 (#147)
+- 重新创建项目，并修改了名称
+- 设置上传文件的 contentType，并直接传递图片地址
 
 ### Fixed
 
-- fix: 修复通过 URL 访问物品详情页面出错的问题 @he0119 (#148)
+- 修复通过 URL 访问物品详情页面出错的问题
 
 ## [0.7.2] - 2021-03-12
 
