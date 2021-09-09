@@ -35,7 +35,7 @@ jobs:
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
       - name: Install flutter
-        uses: subosito/flutter-action@v1.4.0
+        uses: subosito/flutter-action@v1
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
@@ -78,7 +78,7 @@ jobs:
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
       - name: Install flutter
-        uses: subosito/flutter-action@v1.4.0
+        uses: subosito/flutter-action@v1
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
@@ -107,7 +107,7 @@ jobs:
         env:
           COMMIT_ID: ${{ needs.test.outputs.commit_id }}
       - name: Install flutter
-        uses: subosito/flutter-action@v1.4.0
+        uses: subosito/flutter-action@v1
         with:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
@@ -137,7 +137,7 @@ jobs:
   #       env:
   #         COMMIT_ID: ${{ needs.test.outputs.commit_id }}
   #     - name: Install flutter
-  #       uses: subosito/flutter-action@v1.4.0
+  #       uses: subosito/flutter-action@v1
   #       with:
   #         channel: ${{ env.flutter_channel }}
   #         flutter-version: ${{ env.flutter_version }}
