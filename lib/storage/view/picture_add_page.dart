@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intent/action.dart' as android_action;
-import 'package:intent/intent.dart' as android_intent;
+import 'package:image_picker/image_picker.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
@@ -55,6 +54,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
   TextEditingController? _descriptionController;
   String? picturePath;
 
+  final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -130,15 +130,22 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       RoundedRaisedButton(
-                        onPressed: () {
-                          android_intent.Intent()
-                            ..setAction(
-                                android_action.Action.ACTION_IMAGE_CAPTURE)
-                            ..startActivityForResult().then((data) {
-                              setState(() {
-                                picturePath = data[0];
-                              });
-                            }, onError: print);
+                        onPressed: () async {
+                          final image = await _picker.pickImage(
+                              source: ImageSource.gallery);
+                          setState(() {
+                            picturePath = image?.path;
+                          });
+                        },
+                        child: const Text('相册'),
+                      ),
+                      RoundedRaisedButton(
+                        onPressed: () async {
+                          final photo = await _picker.pickImage(
+                              source: ImageSource.camera);
+                          setState(() {
+                            picturePath = photo?.path;
+                          });
                         },
                         child: const Text('拍照'),
                       ),
