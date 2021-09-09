@@ -139,6 +139,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                         },
                         child: const Text('相册'),
                       ),
+                      const SizedBox(width: 20),
                       RoundedRaisedButton(
                         onPressed: () async {
                           final photo = await _picker.pickImage(
