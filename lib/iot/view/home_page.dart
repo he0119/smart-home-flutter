@@ -7,11 +7,11 @@ import 'package:smarthome/iot/bloc/blocs.dart';
 import 'package:smarthome/iot/repository/iot_repository.dart';
 import 'package:smarthome/iot/view/settings/settings_page.dart';
 import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/utils/date_format_extension.dart';
+import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
-import 'package:smarthome/utils/show_snack_bar.dart';
-import 'package:smarthome/utils/date_format_extension.dart';
 
 class IotHomePage extends Page {
   IotHomePage()

@@ -135,16 +135,22 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.white,
-        accentColor: const Color(0xFF56CCF2),
         iconTheme: const IconThemeData(color: Color(0xFF255261)),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             selectedItemColor: Color(0xFF2D9CDB)),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          brightness: Brightness.light,
+          secondary: const Color(0xFF56CCF2),
+        ),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        accentColor: const Color(0xFF2F80ED),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             selectedItemColor: Color(0xFF2D9CDB)),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          brightness: Brightness.dark,
+          secondary: const Color(0xFF2F80ED),
+        ),
       ),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

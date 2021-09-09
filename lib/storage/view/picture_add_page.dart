@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intent/intent.dart' as android_intent;
 import 'package:intent/action.dart' as android_action;
-
+import 'package:intent/intent.dart' as android_intent;
+import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
-import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 

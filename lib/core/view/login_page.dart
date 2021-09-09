@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/app/app_config.dart';
 import 'package:smarthome/core/bloc/blocs.dart';
-import 'package:smarthome/widgets/rounded_raised_button.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
+import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class LoginPage extends Page {
   LoginPage()
