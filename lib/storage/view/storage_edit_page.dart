@@ -147,7 +147,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
                   MyDropdownSearch<Storage>(
                     label: '属于',
                     showClearButton: true,
-                    onFind: (String filter) async {
+                    onFind: (String? filter) async {
                       final storages =
                           await RepositoryProvider.of<StorageRepository>(
                                   context)

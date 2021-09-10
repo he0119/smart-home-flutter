@@ -286,7 +286,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   @override
   Widget build(BuildContext context) {
-    _log..fine('Router rebuilded')..fine('pages $pages');
+    _log
+      ..fine('Router rebuilded')
+      ..fine('pages $pages');
     final graphQLApiClient = RepositoryProvider.of<GraphQLApiClient>(context);
     final config = AppConfig.of(context);
     return MultiBlocListener(
@@ -314,7 +316,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
                   .add(AuthenticationStarted());
               // 仅在客户端上注册 Shortcut
               if (!kIsWeb && !Platform.isWindows) {
-                final quickActions = QuickActions();
+                final quickActions = const QuickActions();
                 await quickActions.initialize((String shortcutType) {
                   switch (shortcutType) {
                     case 'action_iot':

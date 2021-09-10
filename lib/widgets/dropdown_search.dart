@@ -1,7 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
-typedef DropdownSearchOnFind<T> = Future<List<T>> Function(String text);
+typedef DropdownSearchOnFind<T> = Future<List<T>> Function(String? text);
 
 class MyDropdownSearch<T> extends StatelessWidget {
   final String? label;
@@ -34,9 +34,11 @@ class MyDropdownSearch<T> extends StatelessWidget {
       dropdownSearchDecoration: const InputDecoration(
         contentPadding: EdgeInsets.zero,
       ),
-      searchBoxDecoration: const InputDecoration(
-        labelText: '搜索',
-        contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+      searchFieldProps: TextFieldProps(
+        decoration: const InputDecoration(
+          labelText: '搜索',
+          contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+        ),
       ),
       emptyBuilder: (context, searchEntry) => const Center(
         child: Text('无结果'),
