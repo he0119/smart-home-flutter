@@ -15,7 +15,6 @@ import 'package:smarthome/routers/information_parser.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/user/user.dart';
 
-// ignore: use_key_in_widget_constructors
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -135,22 +134,9 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.white,
-        iconTheme: const IconThemeData(color: Color(0xFF255261)),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            selectedItemColor: Color(0xFF2D9CDB)),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          brightness: Brightness.light,
-          secondary: const Color(0xFF56CCF2),
-        ),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            selectedItemColor: Color(0xFF2D9CDB)),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          brightness: Brightness.dark,
-          secondary: const Color(0xFF2F80ED),
-        ),
       ),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
