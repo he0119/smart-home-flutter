@@ -9,3 +9,9 @@ blog:
   - lib/blog/**/*
 ci:
   - .github/**/*
+android:
+  - android/**/*
+web:
+  - web/**/*
+windows:
+  - windows/**/*
