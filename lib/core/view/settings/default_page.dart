@@ -19,7 +19,8 @@ class DefaultPage extends StatelessWidget {
             SettingsSection(tiles: [
               SettingsTile(
                 title: AppTab.iot.name,
-                trailing: trailingWidget(AppTab.iot, state.defaultPage),
+                trailing:
+                    trailingWidget(context, AppTab.iot, state.defaultPage),
                 onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
                       .add(DefaultPageChanged(defaultPage: AppTab.iot));
@@ -27,7 +28,8 @@ class DefaultPage extends StatelessWidget {
               ),
               SettingsTile(
                 title: AppTab.storage.name,
-                trailing: trailingWidget(AppTab.storage, state.defaultPage),
+                trailing:
+                    trailingWidget(context, AppTab.storage, state.defaultPage),
                 onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
                       .add(DefaultPageChanged(defaultPage: AppTab.storage));
@@ -35,7 +37,8 @@ class DefaultPage extends StatelessWidget {
               ),
               SettingsTile(
                 title: AppTab.blog.name,
-                trailing: trailingWidget(AppTab.blog, state.defaultPage),
+                trailing:
+                    trailingWidget(context, AppTab.blog, state.defaultPage),
                 onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
                       .add(DefaultPageChanged(defaultPage: AppTab.blog));
@@ -43,7 +46,8 @@ class DefaultPage extends StatelessWidget {
               ),
               SettingsTile(
                 title: AppTab.board.name,
-                trailing: trailingWidget(AppTab.board, state.defaultPage),
+                trailing:
+                    trailingWidget(context, AppTab.board, state.defaultPage),
                 onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
                       .add(DefaultPageChanged(defaultPage: AppTab.board));
@@ -56,9 +60,9 @@ class DefaultPage extends StatelessWidget {
     );
   }
 
-  Widget trailingWidget(AppTab appTab, AppTab current) {
+  Widget trailingWidget(BuildContext context, AppTab appTab, AppTab current) {
     return (appTab == current)
-        ? const Icon(Icons.check, color: Colors.blue)
+        ? Icon(Icons.check, color: Theme.of(context).colorScheme.secondary)
         : const Icon(null);
   }
 }

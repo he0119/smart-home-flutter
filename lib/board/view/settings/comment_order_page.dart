@@ -19,7 +19,8 @@ class CommentOrderPage extends StatelessWidget {
               tiles: [
                 SettingsTile(
                   title: '正序',
-                  trailing: trailingWidget(false, state.commentDescending),
+                  trailing:
+                      trailingWidget(context, false, state.commentDescending),
                   onPressed: (context) {
                     BlocProvider.of<AppPreferencesBloc>(context)
                         .add(CommentDescendingChanged(descending: false));
@@ -27,7 +28,8 @@ class CommentOrderPage extends StatelessWidget {
                 ),
                 SettingsTile(
                   title: '倒序',
-                  trailing: trailingWidget(true, state.commentDescending),
+                  trailing:
+                      trailingWidget(context, true, state.commentDescending),
                   onPressed: (context) {
                     BlocProvider.of<AppPreferencesBloc>(context)
                         .add(CommentDescendingChanged(descending: true));
@@ -41,9 +43,9 @@ class CommentOrderPage extends StatelessWidget {
     );
   }
 
-  Widget trailingWidget(bool descending, bool current) {
+  Widget trailingWidget(BuildContext context, bool descending, bool current) {
     return (descending == current)
-        ? const Icon(Icons.check, color: Colors.blue)
+        ? Icon(Icons.check, color: Theme.of(context).colorScheme.secondary)
         : const Icon(null);
   }
 }

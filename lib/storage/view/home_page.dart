@@ -159,7 +159,7 @@ class _StorageHomeBody extends StatelessWidget {
         (BuildContext context, int index) => index == 0
             ? Container(
                 height: 60.0,
-                color: Theme.of(context).primaryColor,
+                color: DefaultTextStyle.of(context).style.backgroundColor,
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 alignment: Alignment.centerLeft,
                 child: Row(
