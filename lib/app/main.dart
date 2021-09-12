@@ -133,7 +133,6 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
       scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(
         brightness: Brightness.light,
-        primaryColor: Colors.white,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
