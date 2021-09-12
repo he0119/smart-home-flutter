@@ -123,36 +123,36 @@ jobs:
           name: web
           path: ${{ github.workspace }}/build/web
 
-  # windows:
-  #   name: Windows
-  #   runs-on: windows-latest
-  #   needs: test
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #     - name: Set dev version name
-  #       if: ${{ github.event_name != 'release' || github.event.action != 'published' }}
-  #       run: |
-  #         sed -ri "s#version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)#version: \1-git.${env:COMMIT_ID}+\2#g" pubspec.yaml
-  #       env:
-  #         COMMIT_ID: ${{ needs.test.outputs.commit_id }}
-  #     - name: Install flutter
-  #       uses: subosito/flutter-action@v1
-  #       with:
-  #         channel: ${{ env.flutter_channel }}
-  #         flutter-version: ${{ env.flutter_version }}
-  #     - name: Build windows version
-  #       run: |
-  #         flutter config --enable-windows-desktop
-  #         flutter build windows -t ./lib/main_${env:VERSION}.dart
-  #       env:
-  #         VERSION: ${{ needs.test.outputs.version }}
-  #     - name: Upload windows version
-  #       uses: actions/upload-artifact@v2
-  #       if: github.event_name != 'pull_request'
-  #       with:
-  #         name: windows
-  #         path: ${{ github.workspace }}/build/windows/runner/Release
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set dev version name
+        if: ${{ github.event_name != 'release' || github.event.action != 'published' }}
+        run: |
+          sed -ri "s#version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)#version: \1-git.${env:COMMIT_ID}+\2#g" pubspec.yaml
+        env:
+          COMMIT_ID: ${{ needs.test.outputs.commit_id }}
+      - name: Install flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: ${{ env.flutter_channel }}
+          flutter-version: ${{ env.flutter_version }}
+      - name: Build windows version
+        run: |
+          flutter config --enable-windows-desktop
+          flutter build windows -t ./lib/main_${env:VERSION}.dart
+        env:
+          VERSION: ${{ needs.test.outputs.version }}
+      - name: Upload windows version
+        uses: actions/upload-artifact@v2
+        if: github.event_name != 'pull_request'
+        with:
+          name: windows
+          path: ${{ github.workspace }}/build/windows/runner/Release
 
   deploy_web_dev:
     name: Deploy Web Dev
