@@ -11,7 +11,7 @@
 生成项目的方法
 
 ```shell
-flutter create --org xyz.hehome --platforms=android,web smarthome
+flutter create --org xyz.hehome --platforms=android,web,windows smarthome
 ```
 
 ## Run
@@ -31,3 +31,7 @@ flutter run -t ./lib/main_dev.dart
 ## Web
 
 使用 `flutter build web -t ./lib/main_prod.dart` 编译网页版。
+
+## Windows
+
+使用 `flutter build windows -t ./lib/main_prod.dart` 编译 Windows 版。
