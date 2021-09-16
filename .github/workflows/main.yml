@@ -113,7 +113,7 @@ jobs:
           flutter-version: ${{ env.flutter_version }}
       - name: Build web version
         run: |
-          flutter build web -t ./lib/main_$VERSION.dart
+          flutter build web --web-renderer=html -t ./lib/main_$VERSION.dart
         env:
           VERSION: ${{ needs.test.outputs.version }}
       - name: Upload web version
