@@ -237,13 +237,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          asset_paths: "["android/*.apk", "web.tar.gz", "windows.tar.gz"]"
+          asset_paths: '["android/*.apk", "web.tar.gz", "windows.tar.gz"]'
 
   sentry_release:
     name: Sentry Release
     runs-on: ubuntu-latest
     needs: [android, web, windows]
-    if: github.event_name != 'pull_request'
+    if: github.event_name != "pull_request"
     steps:
       - name: Create Sentry release
         uses: getsentry/action-release@v1
