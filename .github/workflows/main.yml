@@ -3,35 +3,43 @@ name: CI
 on:
   push:
     branches:
-      - 'master'
-      - 'dev'
+      - "master"
+      - "dev"
   pull_request:
   release:
     types: [published]
 
 env:
-  flutter_channel: 'stable'
-  flutter_version: '2.5.0'
+  flutter_channel: "stable"
+  flutter_version: "2.5.2"
 
 jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
     outputs:
+      environment: ${{ steps.setVersion.outputs.environment }}
       version: ${{ steps.setVersion.outputs.version }}
-      commit_id: ${{ steps.setVersion.outputs.commit_id }}
+      release: ${{ steps.setVersion.outputs.release }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Set build version
         id: setVersion
         run: |
+          VERSION_STRING=$(cat pubspec.yaml | grep -oP "^version: .+" | cut -d" " -f2)
+          VERSION=$(echo $VERSION_STRING | cut -d"+" -f1)
+          BUILD_NUMBER=$(echo $VERSION_STRING | cut -d"+" -f2)
+          COMMIT_ID=$(git rev-parse --short HEAD)
           if [[ "${{github.event_name}}" == "release" && "${{github.event.action}}" == "published" ]]; then
-            echo "::set-output name=version::prod"
+            echo "::set-output name=environment::prod"
+            echo "::set-output name=version::$VERSION+$BUILD_NUMBER"
+            echo "::set-output name=release::xyz.hehome.smarthome@$VERSION+$BUILD_NUMBER"
           else
-            echo "::set-output name=version::dev"
+            echo "::set-output name=environment::dev"
+            echo "::set-output name=version::$VERSION-git.$COMMIT_ID+$BUILD_NUMBER"
+            echo "::set-output name=release::xyz.hehome.smarthome.dev@$VERSION-git.$COMMIT_ID+$BUILD_NUMBER"
           fi
-          echo "::set-output name=commit_id::$(git rev-parse --short HEAD)"
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
       - name: Install flutter
@@ -67,12 +75,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set dev version name
-        if: ${{ github.event_name != 'release' || github.event.action != 'published' }}
+      - name: Set version name
         run: |
-          sed -ri "s#version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)#version: \1-git.$COMMIT_ID+\2#g" pubspec.yaml
+          sed -ri "s#version: .+#version: $VERSION#g" pubspec.yaml
+          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" ./lib/main_$ENVIRONMENT.dart
+          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" ./lib/main_$ENVIRONMENT.dart
         env:
-          COMMIT_ID: ${{ needs.test.outputs.commit_id }}
+          VERSION: ${{ needs.test.outputs.version }}
+          ENVIRONMENT: ${{ needs.test.outputs.environment }}
+          RELEASE: ${{ needs.test.outputs.release }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Decrypt large secret
         run: ./.github/scripts/decrypt_secret.sh
         env:
@@ -83,15 +95,15 @@ jobs:
           channel: ${{ env.flutter_channel }}
           flutter-version: ${{ env.flutter_version }}
       - name: Build split-per-abi apks
-        run: flutter build apk --split-per-abi -t ./lib/main_$VERSION.dart --flavor $VERSION
+        run: flutter build apk --split-per-abi -t ./lib/main_$ENVIRONMENT.dart --flavor $ENVIRONMENT
         env:
-          VERSION: ${{ needs.test.outputs.version }}
+          ENVIRONMENT: ${{ needs.test.outputs.environment }}
       - name: Upload split-per-abi apks
         uses: actions/upload-artifact@v2
-        if: github.event_name != 'pull_request'
+        if: github.event_name != "pull_request"
         with:
           name: android
-          path: ${{ github.workspace }}/build/app/outputs/apk/${{ needs.test.outputs.version }}/release/*.apk
+          path: ${{ github.workspace }}/build/app/outputs/apk/${{ needs.test.outputs.environment }}/release/*.apk
 
   web:
     name: Web
@@ -100,12 +112,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set dev version name
-        if: ${{ github.event_name != 'release' || github.event.action != 'published' }}
+      - name: Set version name
         run: |
-          sed -ri "s#version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)#version: \1-git.$COMMIT_ID+\2#g" pubspec.yaml
+          sed -ri "s#version: .+#version: $VERSION#g" pubspec.yaml
+          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" ./lib/main_$ENVIRONMENT.dart
+          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" ./lib/main_$ENVIRONMENT.dart
         env:
-          COMMIT_ID: ${{ needs.test.outputs.commit_id }}
+          VERSION: ${{ needs.test.outputs.version }}
+          ENVIRONMENT: ${{ needs.test.outputs.environment }}
+          RELEASE: ${{ needs.test.outputs.release }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Install flutter
         uses: subosito/flutter-action@v1
         with:
@@ -113,12 +129,12 @@ jobs:
           flutter-version: ${{ env.flutter_version }}
       - name: Build web version
         run: |
-          flutter build web --web-renderer=html -t ./lib/main_$VERSION.dart
+          flutter build web --web-renderer=html -t ./lib/main_$ENVIRONMENT.dart
         env:
-          VERSION: ${{ needs.test.outputs.version }}
+          ENVIRONMENT: ${{ needs.test.outputs.environment }}
       - name: Upload web version
         uses: actions/upload-artifact@v2
-        if: github.event_name != 'pull_request'
+        if: github.event_name != "pull_request"
         with:
           name: web
           path: ${{ github.workspace }}/build/web
@@ -130,12 +146,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set dev version name
-        if: ${{ github.event_name != 'release' || github.event.action != 'published' }}
+      - name: Set version name
         run: |
-          sed -ri "s#version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)#version: \1-git.${env:COMMIT_ID}+\2#g" pubspec.yaml
+          sed -ri "s#version: .+#version: $VERSION#g" pubspec.yaml
+          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" ./lib/main_$ENVIRONMENT.dart
+          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" ./lib/main_$ENVIRONMENT.dart
         env:
-          COMMIT_ID: ${{ needs.test.outputs.commit_id }}
+          VERSION: ${{ needs.test.outputs.version }}
+          ENVIRONMENT: ${{ needs.test.outputs.environment }}
+          RELEASE: ${{ needs.test.outputs.release }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Install flutter
         uses: subosito/flutter-action@v1
         with:
@@ -144,12 +164,12 @@ jobs:
       - name: Build windows version
         run: |
           flutter config --enable-windows-desktop
-          flutter build windows -t ./lib/main_${env:VERSION}.dart
+          flutter build windows -t ./lib/main_${env:ENVIRONMENT}.dart
         env:
-          VERSION: ${{ needs.test.outputs.version }}
+          ENVIRONMENT: ${{ needs.test.outputs.environment }}
       - name: Upload windows version
         uses: actions/upload-artifact@v2
-        if: github.event_name != 'pull_request'
+        if: github.event_name != "pull_request"
         with:
           name: windows
           path: ${{ github.workspace }}/build/windows/runner/Release
@@ -161,7 +181,7 @@ jobs:
     environment:
       name: dev
       url: https://test.hehome.xyz
-    if: ${{ github.ref == 'refs/heads/dev' }}
+    if: ${{ github.ref == "refs/heads/dev" }}
     steps:
       - name: Download web files
         uses: actions/download-artifact@v2
@@ -184,7 +204,7 @@ jobs:
     environment:
       name: prod
       url: https://smart.hehome.xyz
-    if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+    if: ${{ github.event_name == "release" && github.event.action == "published" }}
     steps:
       - name: Download web files
         uses: actions/download-artifact@v2
@@ -204,7 +224,7 @@ jobs:
     name: Deploy Github
     runs-on: ubuntu-latest
     needs: [android, web, windows]
-    if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+    if: ${{ github.event_name == "release" && github.event.action == "published" }}
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v2
@@ -217,4 +237,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          asset_paths: '["android/*.apk", "web.tar.gz", "windows.tar.gz"]'
+          asset_paths: "["android/*.apk", "web.tar.gz", "windows.tar.gz"]"
+
+  sentry_release:
+    name: Sentry Release
+    runs-on: ubuntu-latest
+    needs: [android, web, windows]
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          environment: ${{ needs.test.outputs.environment }}
+          version: ${{ needs.test.outputs.version }}
