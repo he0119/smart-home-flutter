@@ -20,9 +20,9 @@ Future<void> main() async {
     await SentryFlutter.init(
       (options) {
         options
-          ..dsn =
-              'https://dcc18c1b89d44e1894c4c712ea166c84@o480939.ingest.sentry.io/5685513'
-          ..environment = 'prod';
+          ..dsn = ''
+          ..environment = 'prod'
+          ..release = 'release';
       },
     );
 
