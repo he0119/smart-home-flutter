@@ -26,13 +26,13 @@ class MyDropdownSearch<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<T>(
-      label: label,
       mode: Mode.MENU,
       showSearchBox: true,
       showClearButton: showClearButton,
       isFilteredOnline: true,
-      dropdownSearchDecoration: const InputDecoration(
+      dropdownSearchDecoration: InputDecoration(
         contentPadding: EdgeInsets.zero,
+        labelText: label,
       ),
       searchFieldProps: TextFieldProps(
         decoration: const InputDecoration(
