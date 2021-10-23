@@ -69,9 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ? IconButton(
                       icon: Icon(
                         Icons.clear,
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? null
-                            : const Color(0xFF255261),
+                        color: Theme.of(context).colorScheme.onBackground,
                       ),
                       onPressed: () {
                         _textController.text = '';

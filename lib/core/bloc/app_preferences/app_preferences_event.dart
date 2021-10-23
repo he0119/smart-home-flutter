@@ -134,3 +134,18 @@ class CommentDescendingChanged extends AppPreferencesEvent {
   @override
   String toString() => 'CommentDescendingChanged(descending: $descending)';
 }
+
+/// 更改主题
+class ThemeModeChanged extends AppPreferencesEvent {
+  final ThemeMode themeMode;
+
+  ThemeModeChanged({
+    required this.themeMode,
+  });
+
+  @override
+  List<Object> get props => [themeMode];
+
+  @override
+  String toString() => 'ThemeModeChanged(themeMode: $themeMode)';
+}
