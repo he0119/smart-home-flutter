@@ -129,11 +129,12 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
   @override
   Widget build(BuildContext context) {
     final config = AppConfig.of(context);
+    final themeMode = context.watch<AppPreferencesBloc>().state.themeMode;
     return MaterialApp.router(
       scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: themeMode,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
