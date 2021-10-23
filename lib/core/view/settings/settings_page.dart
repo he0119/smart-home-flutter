@@ -11,7 +11,9 @@ import 'package:smarthome/core/model/models.dart';
 import 'package:smarthome/core/view/settings/api_url_page.dart';
 import 'package:smarthome/core/view/settings/default_page.dart';
 import 'package:smarthome/core/view/settings/mipush_settings_tile.dart';
+import 'package:smarthome/core/view/settings/theme_mode.dart';
 import 'package:smarthome/iot/iot.dart';
+import 'package:smarthome/utils/theme_mode_extension.dart';
 
 class SettingsPage extends Page {
   SettingsPage()
@@ -46,6 +48,15 @@ class SettingsScreen extends StatelessWidget {
             SettingsSection(
               title: '通用',
               tiles: [
+                SettingsTile(
+                  title: '主题',
+                  subtitle: state.themeMode.toReadable(),
+                  onPressed: (context) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ThemeModePage(),
+                    ));
+                  },
+                ),
                 SettingsTile(
                   title: '服务器网址',
                   subtitle: state.apiUrl ?? '请单击输入',
