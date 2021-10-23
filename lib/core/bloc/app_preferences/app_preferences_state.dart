@@ -12,6 +12,7 @@ class AppPreferencesState extends Equatable {
   final AppTab defaultPage;
   final User? loginUser;
   final bool commentDescending;
+  final ThemeMode themeMode;
 
   const AppPreferencesState({
     required this.initialized,
@@ -25,6 +26,7 @@ class AppPreferencesState extends Equatable {
     required this.defaultPage,
     required this.loginUser,
     required this.commentDescending,
+    required this.themeMode,
   });
 
   factory AppPreferencesState.initial() {
@@ -40,6 +42,7 @@ class AppPreferencesState extends Equatable {
       defaultPage: AppTab.storage,
       loginUser: null,
       commentDescending: false,
+      themeMode: ThemeMode.system,
     );
   }
 
@@ -55,6 +58,7 @@ class AppPreferencesState extends Equatable {
     AppTab? defaultPage,
     User? loginUser,
     bool? commentDescending,
+    ThemeMode? themeMode,
   }) {
     return AppPreferencesState(
       initialized: initialized ?? this.initialized,
@@ -68,6 +72,7 @@ class AppPreferencesState extends Equatable {
       defaultPage: defaultPage ?? this.defaultPage,
       loginUser: loginUser ?? this.loginUser,
       commentDescending: commentDescending ?? this.commentDescending,
+      themeMode: themeMode ?? this.themeMode,
     );
   }
 
@@ -85,6 +90,7 @@ class AppPreferencesState extends Equatable {
       defaultPage,
       loginUser,
       commentDescending,
+      themeMode,
     ];
   }
 }

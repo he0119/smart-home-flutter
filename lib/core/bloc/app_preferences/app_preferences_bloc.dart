@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarthome/core/model/models.dart';
 import 'package:smarthome/user/user.dart';
@@ -31,9 +32,14 @@ class AppPreferencesBloc
       final blogUrl = prefs.getString('blogUrl');
       final blogAdminUrl = prefs.getString('blogAdminUrl');
       final defaultPageString = prefs.getString('defaultPage');
+      final themeModeString = prefs.getString('themeMode');
       AppTab? defaultPage;
       if (defaultPageString != null) {
         defaultPage = EnumToString.fromString(AppTab.values, defaultPageString);
+      }
+      ThemeMode? themeMode;
+      if (themeModeString != null) {
+        themeMode = EnumToString.fromString(ThemeMode.values, themeModeString);
       }
       final loginUserJsonString = prefs.getString('loginUser');
       final loginUser = loginUserJsonString != null
@@ -53,6 +59,7 @@ class AppPreferencesBloc
         defaultPage: defaultPage,
         loginUser: loginUser,
         commentDescending: commentDescending,
+        themeMode: themeMode,
       );
     }
     if (event is AppApiUrlChanged) {
@@ -112,6 +119,16 @@ class AppPreferencesBloc
       await prefs.setString('commentDescending', event.descending.toString());
       yield state.copyWith(
         commentDescending: event.descending,
+      );
+    }
+    if (event is ThemeModeChanged) {
+      final prefs = await _prefs;
+      await prefs.setString(
+        'themeMode',
+        EnumToString.convertToString(event.themeMode),
+      );
+      yield state.copyWith(
+        themeMode: event.themeMode,
       );
     }
   }
