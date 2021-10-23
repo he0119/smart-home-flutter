@@ -135,7 +135,7 @@ class CommentDescendingChanged extends AppPreferencesEvent {
   String toString() => 'CommentDescendingChanged(descending: $descending)';
 }
 
-/// 更改主题模式
+/// 更改主题
 class ThemeModeChanged extends AppPreferencesEvent {
   final ThemeMode themeMode;
 
