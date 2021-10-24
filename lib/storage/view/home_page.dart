@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
+import 'package:smarthome/storage/repository/storage_repository.dart';
+import 'package:smarthome/storage/view/item_edit_page.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
@@ -41,11 +44,23 @@ class StorageHomeScreen extends StatelessWidget {
       ],
       body: const _StorageHomeBody(),
       floatingActionButton: FloatingActionButton(
-        tooltip: '所有位置',
+        tooltip: '添加物品',
         onPressed: () async {
-          MyRouterDelegate.of(context).addStorageGroup();
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => BlocProvider<ItemEditBloc>(
+                create: (_) => ItemEditBloc(
+                  storageRepository:
+                      RepositoryProvider.of<StorageRepository>(context),
+                ),
+                child: const ItemEditPage(
+                  isEditing: false,
+                ),
+              ),
+            ),
+          );
         },
-        child: const Icon(Icons.storage),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -111,29 +126,56 @@ class _StorageHomeBody extends StatelessWidget {
   }
 
   List<Widget> _buildSlivers(BuildContext context, StorageHomeSuccess state) {
-    final listofWidget = <Widget>[];
+    List<Widget> listofWidget = [];
+
+    listofWidget.add(SliverToBoxAdapter(
+      child: InkWell(
+        onTap: () {
+          MyRouterDelegate.of(context).addStorageGroup();
+        },
+        child: Card(
+          color: Theme.of(context).colorScheme.secondary,
+          child: ListTile(
+            title: Text(
+              '所有位置',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+            ),
+            trailing: Icon(
+              Icons.storage,
+              color: Theme.of(context).colorScheme.onSecondary,
+            ),
+          ),
+        ),
+      ),
+    ));
+
     if (state.expiredItems?.isNotEmpty ?? false) {
-      listofWidget.add(_buildSliverList(
-          context, state.expiredItems, ItemType.expired, state.itemType));
+      listofWidget.add(_buildSliverStickyHeader(
+          context, state.expiredItems!, ItemType.expired, state.itemType));
     }
     if (state.nearExpiredItems?.isNotEmpty ?? false) {
-      listofWidget.add(_buildSliverList(context, state.nearExpiredItems,
-          ItemType.nearExpired, state.itemType));
+      listofWidget.add(_buildSliverStickyHeader(context,
+          state.nearExpiredItems!, ItemType.nearExpired, state.itemType));
     }
     if (state.recentlyEditedItems?.isNotEmpty ?? false) {
-      listofWidget.add(_buildSliverList(context, state.recentlyEditedItems,
-          ItemType.recentlyEdited, state.itemType));
+      listofWidget.add(_buildSliverStickyHeader(context,
+          state.recentlyEditedItems!, ItemType.recentlyEdited, state.itemType));
     }
     if (state.recentlyCreatedItems?.isNotEmpty ?? false) {
-      listofWidget.add(_buildSliverList(context, state.recentlyCreatedItems,
-          ItemType.recentlyCreated, state.itemType));
+      listofWidget.add(_buildSliverStickyHeader(
+          context,
+          state.recentlyCreatedItems!,
+          ItemType.recentlyCreated,
+          state.itemType));
     }
     return listofWidget;
   }
 
-  SliverList _buildSliverList(
+  SliverStickyHeader _buildSliverStickyHeader(
     BuildContext context,
-    List<Item>? items,
+    List<Item> items,
     ItemType listType,
     ItemType currentType,
   ) {
@@ -154,40 +196,38 @@ class _StorageHomeBody extends StatelessWidget {
       case ItemType.all:
         break;
     }
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) => index == 0
-            ? Container(
-                height: 60.0,
-                color: DefaultTextStyle.of(context).style.backgroundColor,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      headerText,
-                      style: DefaultTextStyle.of(context).style,
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      icon: Icon(currentType == ItemType.all
-                          ? Icons.expand_more
-                          : Icons.expand_less),
-                      onPressed: () {
-                        BlocProvider.of<StorageHomeBloc>(context).add(
-                          StorageHomeFetched(
-                              itemType: currentType != ItemType.all
-                                  ? ItemType.all
-                                  : listType),
-                        );
-                      },
-                    )
-                  ],
-                ),
-              )
-            : _buildItemListItem(
-                context, items![index - 1], listType, currentType),
-        childCount: items!.length + 1,
+    return SliverStickyHeader(
+      header: Container(
+        height: 60.0,
+        color: Theme.of(context).colorScheme.surface,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: <Widget>[
+            Text(headerText),
+            const Spacer(),
+            IconButton(
+              icon: Icon(currentType == ItemType.all
+                  ? Icons.expand_more
+                  : Icons.expand_less),
+              onPressed: () {
+                BlocProvider.of<StorageHomeBloc>(context).add(
+                  StorageHomeFetched(
+                      itemType: currentType != ItemType.all
+                          ? ItemType.all
+                          : listType),
+                );
+              },
+            )
+          ],
+        ),
+      ),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) =>
+              _buildItemListItem(context, items[index], listType, currentType),
+          childCount: items.length,
+        ),
       ),
     );
   }
