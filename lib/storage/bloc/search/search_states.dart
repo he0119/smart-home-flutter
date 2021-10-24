@@ -34,7 +34,7 @@ class StorageSearchSuccess extends StorageSearchState {
   final List<Storage> storages;
   final String term;
 
-  StorageSearchSuccess({
+  const StorageSearchSuccess({
     required this.items,
     required this.storages,
     required this.term,

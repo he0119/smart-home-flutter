@@ -5,7 +5,7 @@ import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/core/view/settings/mipush_page.dart';
 
 class MiPushSettingsTile extends SettingsTile {
-  MiPushSettingsTile({
+  const MiPushSettingsTile({
     Key? key,
   }) : super(key: key, title: '');
 

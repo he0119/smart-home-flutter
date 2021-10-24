@@ -14,7 +14,7 @@ import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
 class IotHomePage extends Page {
-  IotHomePage()
+  const IotHomePage()
       : super(
           key: const ValueKey('iot'),
           name: '/iot',
@@ -61,7 +61,7 @@ class IotHomeScreen extends StatelessWidget {
                 child: IconButton(
                   icon: const Icon(Icons.settings),
                   onPressed: () {
-                    MyRouterDelegate.of(context).push(IotSettingsPage());
+                    MyRouterDelegate.of(context).push(const IotSettingsPage());
                   },
                 ),
               ),

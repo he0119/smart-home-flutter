@@ -8,7 +8,7 @@ class AddCommentButtonBar extends StatefulWidget {
   final Topic topic;
   final VoidCallback? onAddSuccess;
 
-  AddCommentButtonBar({
+  const AddCommentButtonBar({
     Key? key,
     required this.topic,
     this.onAddSuccess,

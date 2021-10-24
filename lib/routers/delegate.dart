@@ -45,11 +45,11 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   List<Page> get pages {
     // 未初始化时显示加载页面
     if (!initialized) {
-      return [SplashPage()];
+      return [const SplashPage()];
     }
     // 未登录时显示登陆界面
     if (!isLogin) {
-      return [LoginPage()];
+      return [const LoginPage()];
     }
     // 未设置主页时显示默认主页
     if (_pages.isEmpty) {
@@ -210,14 +210,14 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       }
     } else if (configuration is TopicRoutePath) {
       _pages = [
-        BoardHomePage(),
+        const BoardHomePage(),
         TopicDetailPage(topicId: configuration.topicId),
       ];
     } else if (configuration is ItemRoutePath) {
       storageGroup = 0;
       itemCount = 1;
       _pages = [
-        StorageHomePage(),
+        const StorageHomePage(),
         ItemDetailPage(
           itemName: configuration.itemName,
           itemId: configuration.itemId,
@@ -228,7 +228,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       storageGroup = 1;
       itemCount = 0;
       _pages = [
-        StorageHomePage(),
+        const StorageHomePage(),
         StorageDetailPage(
           storageName: configuration.storageName,
           storageId: configuration.storageId,
@@ -241,13 +241,13 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           break;
         case AppPage.consumables:
           _pages = [
-            StorageHomePage(),
+            const StorageHomePage(),
             ConsumablesPage(),
           ];
           break;
         case AppPage.recycleBin:
           _pages = [
-            StorageHomePage(),
+            const StorageHomePage(),
             RecycleBinPage(),
           ];
           break;
@@ -257,26 +257,26 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         case AppSettings.home:
           _pages = [
             defaultHomePage.page,
-            SettingsPage(),
+            const SettingsPage(),
           ];
           break;
         case AppSettings.iot:
           _pages = [
-            IotHomePage(),
-            IotSettingsPage(),
+            const IotHomePage(),
+            const IotSettingsPage(),
           ];
           break;
         case AppSettings.blog:
           _pages = [
-            BlogHomePage(),
-            BlogSettingsPage(),
+            const BlogHomePage(),
+            const BlogSettingsPage(),
           ];
           break;
         default:
       }
     } else if (configuration is PictureRoutePath) {
       _pages = [
-        StorageHomePage(),
+        const StorageHomePage(),
         PicturePage(pictureId: configuration.pictureId),
       ];
     }
@@ -316,7 +316,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
                   .add(AuthenticationStarted());
               // 仅在客户端上注册 Shortcut
               if (!kIsWeb && !Platform.isWindows) {
-                final quickActions = const QuickActions();
+                const quickActions = QuickActions();
                 await quickActions.initialize((String shortcutType) {
                   switch (shortcutType) {
                     case 'action_iot':

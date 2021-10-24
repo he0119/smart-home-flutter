@@ -10,7 +10,7 @@ abstract class BoardHomeEvent extends Equatable {
 class BoardHomeFetched extends BoardHomeEvent {
   final bool cache;
 
-  BoardHomeFetched({
+  const BoardHomeFetched({
     this.cache = true,
   });
 

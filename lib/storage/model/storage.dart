@@ -18,7 +18,7 @@ class Storage extends Equatable {
   final List<Storage>? children;
   final List<Item>? items;
 
-  Storage({
+  const Storage({
     required this.id,
     required this.name,
     this.parent,
@@ -82,7 +82,7 @@ class Picture extends Equatable {
   final double? boxH;
   final double? boxW;
 
-  Picture({
+  const Picture({
     required this.id,
     this.item,
     this.name,
@@ -136,7 +136,7 @@ class Item extends Equatable {
   final List<Item>? consumables;
   final List<Picture>? pictures;
 
-  Item({
+  const Item({
     required this.id,
     required this.name,
     this.number,

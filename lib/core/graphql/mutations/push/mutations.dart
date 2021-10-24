@@ -1,1 +1,1 @@
-export 'updateMiPush.dart';
+export 'update_mi_push.dart';

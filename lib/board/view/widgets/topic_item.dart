@@ -25,34 +25,32 @@ class TopicItem extends StatelessWidget {
       activeAt = topic.comments!.last.createdAt;
     }
     if (showBody) {
-      return Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: SelectableText(
-                topic.title!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                ),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: SelectableText(
+              topic.title!,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
               ),
             ),
-            ItemTitle(
-              user: topic.user,
-              editedAt: topic.editedAt,
+          ),
+          ItemTitle(
+            user: topic.user,
+            editedAt: topic.editedAt,
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            child: MarkdownBody(
+              data: topic.description!,
+              selectable: true,
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-              child: MarkdownBody(
-                data: topic.description!,
-                selectable: true,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       );
     } else {
       // 依据话题添加标志
@@ -63,18 +61,16 @@ class TopicItem extends StatelessWidget {
         onTap: () async {
           MyRouterDelegate.of(context).push(TopicDetailPage(topicId: topic.id));
         },
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ItemTitle(
-                user: topic.user,
-                editedAt: activeAt,
-              ),
-              ListTile(title: Text(title)),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ItemTitle(
+              user: topic.user,
+              editedAt: activeAt,
+            ),
+            ListTile(title: Text(title)),
+          ],
         ),
       );
     }

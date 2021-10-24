@@ -23,7 +23,7 @@ class ThemeModePage extends StatelessWidget {
                     trailingWidget(context, ThemeMode.system, state.themeMode),
                 onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
-                      .add(ThemeModeChanged(themeMode: ThemeMode.system));
+                      .add(const ThemeModeChanged(themeMode: ThemeMode.system));
                 },
               ),
               SettingsTile(
@@ -32,7 +32,7 @@ class ThemeModePage extends StatelessWidget {
                     trailingWidget(context, ThemeMode.light, state.themeMode),
                 onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
-                      .add(ThemeModeChanged(themeMode: ThemeMode.light));
+                      .add(const ThemeModeChanged(themeMode: ThemeMode.light));
                 },
               ),
               SettingsTile(
@@ -41,7 +41,7 @@ class ThemeModePage extends StatelessWidget {
                     trailingWidget(context, ThemeMode.dark, state.themeMode),
                 onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
-                      .add(ThemeModeChanged(themeMode: ThemeMode.dark));
+                      .add(const ThemeModeChanged(themeMode: ThemeMode.dark));
                 },
               ),
             ]),

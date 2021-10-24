@@ -7,7 +7,7 @@ abstract class ConsumablesEvent extends Equatable {
 class ConsumablesFetched extends ConsumablesEvent {
   final bool cache;
 
-  ConsumablesFetched({
+  const ConsumablesFetched({
     this.cache = true,
   });
 

@@ -43,14 +43,14 @@ class PicturePage extends Page {
             ),
           ),
         ],
-        child: PictureScreen(),
+        child: const PictureScreen(),
       ),
     );
   }
 }
 
 class PictureScreen extends StatelessWidget {
-  PictureScreen({Key? key}) : super(key: key);
+  const PictureScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

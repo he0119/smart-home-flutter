@@ -65,19 +65,25 @@ RoutePath parseUrl(String location) {
   final uri = Uri.parse(location);
   if (uri.pathSegments.length == 1) {
     if (uri.pathSegments[0] == 'iot') return HomeRoutePath(appTab: AppTab.iot);
-    if (uri.pathSegments[0] == 'board')
+    if (uri.pathSegments[0] == 'board') {
       return HomeRoutePath(appTab: AppTab.board);
-    if (uri.pathSegments[0] == 'storage')
+    }
+    if (uri.pathSegments[0] == 'storage') {
       return HomeRoutePath(appTab: AppTab.storage);
-    if (uri.pathSegments[0] == 'blog')
+    }
+    if (uri.pathSegments[0] == 'blog') {
       return HomeRoutePath(appTab: AppTab.blog);
-    if (uri.pathSegments[0] == 'consumables')
+    }
+    if (uri.pathSegments[0] == 'consumables') {
       return AppRoutePath(AppPage.consumables);
+    }
     if (uri.pathSegments[0] == 'login') return AppRoutePath(AppPage.login);
-    if (uri.pathSegments[0] == 'recyclebin')
+    if (uri.pathSegments[0] == 'recyclebin') {
       return AppRoutePath(AppPage.recycleBin);
-    if (uri.pathSegments[0] == 'settings')
+    }
+    if (uri.pathSegments[0] == 'settings') {
       return SettingsRoutePath(appSettings: AppSettings.home);
+    }
   }
   if (uri.pathSegments.length == 2) {
     switch (uri.pathSegments[0]) {

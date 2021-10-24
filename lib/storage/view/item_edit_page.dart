@@ -170,7 +170,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       ),
                       keyboardType: TextInputType.number,
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp('[0-9\.]'))
+                        FilteringTextInputFormatter.allow(RegExp('[0-9.]'))
                       ],
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {

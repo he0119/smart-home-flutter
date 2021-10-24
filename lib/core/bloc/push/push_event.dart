@@ -15,7 +15,7 @@ class PushStarted extends PushEvent {
 class PushUpdated extends PushEvent {
   final MiPush miPush;
 
-  PushUpdated({required this.miPush});
+  const PushUpdated({required this.miPush});
 
   @override
   List<Object> get props => [miPush];

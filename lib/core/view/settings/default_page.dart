@@ -23,7 +23,7 @@ class DefaultPage extends StatelessWidget {
                     trailingWidget(context, AppTab.iot, state.defaultPage),
                 onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
-                      .add(DefaultPageChanged(defaultPage: AppTab.iot));
+                      .add(const DefaultPageChanged(defaultPage: AppTab.iot));
                 },
               ),
               SettingsTile(
@@ -31,8 +31,8 @@ class DefaultPage extends StatelessWidget {
                 trailing:
                     trailingWidget(context, AppTab.storage, state.defaultPage),
                 onPressed: (context) {
-                  BlocProvider.of<AppPreferencesBloc>(context)
-                      .add(DefaultPageChanged(defaultPage: AppTab.storage));
+                  BlocProvider.of<AppPreferencesBloc>(context).add(
+                      const DefaultPageChanged(defaultPage: AppTab.storage));
                 },
               ),
               SettingsTile(
@@ -41,7 +41,7 @@ class DefaultPage extends StatelessWidget {
                     trailingWidget(context, AppTab.blog, state.defaultPage),
                 onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
-                      .add(DefaultPageChanged(defaultPage: AppTab.blog));
+                      .add(const DefaultPageChanged(defaultPage: AppTab.blog));
                 },
               ),
               SettingsTile(
@@ -50,7 +50,7 @@ class DefaultPage extends StatelessWidget {
                     trailingWidget(context, AppTab.board, state.defaultPage),
                 onPressed: (context) {
                   BlocProvider.of<AppPreferencesBloc>(context)
-                      .add(DefaultPageChanged(defaultPage: AppTab.board));
+                      .add(const DefaultPageChanged(defaultPage: AppTab.board));
                 },
               ),
             ]),

@@ -29,8 +29,8 @@ class MiPushPage extends StatelessWidget {
                 child: IconButton(
                     icon: const Icon(Icons.sync),
                     onPressed: () {
-                      BlocProvider.of<AppPreferencesBloc>(context)
-                          .add(MiPushRegIdChanged(miPushRegId: '正在同步注册标识符'));
+                      BlocProvider.of<AppPreferencesBloc>(context).add(
+                          const MiPushRegIdChanged(miPushRegId: '正在同步注册标识符'));
                       BlocProvider.of<PushBloc>(context).add(PushStarted());
                     }),
               ),

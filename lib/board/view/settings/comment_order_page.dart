@@ -23,7 +23,7 @@ class CommentOrderPage extends StatelessWidget {
                       trailingWidget(context, false, state.commentDescending),
                   onPressed: (context) {
                     BlocProvider.of<AppPreferencesBloc>(context)
-                        .add(CommentDescendingChanged(descending: false));
+                        .add(const CommentDescendingChanged(descending: false));
                   },
                 ),
                 SettingsTile(
@@ -32,7 +32,7 @@ class CommentOrderPage extends StatelessWidget {
                       trailingWidget(context, true, state.commentDescending),
                   onPressed: (context) {
                     BlocProvider.of<AppPreferencesBloc>(context)
-                        .add(CommentDescendingChanged(descending: true));
+                        .add(const CommentDescendingChanged(descending: true));
                   },
                 ),
               ],

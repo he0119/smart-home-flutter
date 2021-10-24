@@ -18,14 +18,14 @@ class SearchPage extends Page {
         create: (context) => StorageSearchBloc(
           storageRepository: RepositoryProvider.of<StorageRepository>(context),
         ),
-        child: SearchScreen(),
+        child: const SearchScreen(),
       ),
     );
   }
 }
 
 class SearchScreen extends StatefulWidget {
-  SearchScreen({
+  const SearchScreen({
     Key? key,
   }) : super(key: key);
 

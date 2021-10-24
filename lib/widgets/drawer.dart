@@ -39,7 +39,7 @@ class MyDrawer extends StatelessWidget {
               ListTile(
                 title: const Text('设置'),
                 onTap: () {
-                  MyRouterDelegate.of(context).push(SettingsPage());
+                  MyRouterDelegate.of(context).push(const SettingsPage());
                 },
               ),
               ListTile(

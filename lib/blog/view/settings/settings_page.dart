@@ -6,7 +6,7 @@ import 'package:smarthome/blog/view/settings/blog_url_page.dart';
 import 'package:smarthome/core/core.dart';
 
 class BlogSettingsPage extends Page {
-  BlogSettingsPage()
+  const BlogSettingsPage()
       : super(
           key: const ValueKey('settings/blog'),
           name: '/settings/blog',

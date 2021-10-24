@@ -18,7 +18,7 @@ class Topic extends Equatable {
   final DateTime? editedAt;
   final List<Comment>? comments;
 
-  Topic({
+  const Topic({
     required this.id,
     this.title,
     this.description,
@@ -64,7 +64,7 @@ class Comment extends Equatable {
   final Comment? parent;
   final User? replyTo;
 
-  Comment({
+  const Comment({
     required this.id,
     this.topic,
     this.user,

@@ -7,7 +7,7 @@ abstract class RecycleBinEvent extends Equatable {
 class RecycleBinFetched extends RecycleBinEvent {
   final bool cache;
 
-  RecycleBinFetched({
+  const RecycleBinFetched({
     this.cache = true,
   });
 

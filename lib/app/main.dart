@@ -16,6 +16,8 @@ import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/user/user.dart';
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Intl.defaultLocale = 'zh';
@@ -135,12 +137,12 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
       themeMode: themeMode,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
+      supportedLocales: const [
+        Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
       ],
       title: config.appName,
       routeInformationParser: MyRouteInformationParser(),

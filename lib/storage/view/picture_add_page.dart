@@ -41,7 +41,7 @@ class PictureAddScreen extends StatefulWidget {
   /// 物品 ID
   final String itemId;
 
-  PictureAddScreen({
+  const PictureAddScreen({
     Key? key,
     required this.itemId,
   }) : super(key: key);
@@ -118,12 +118,10 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                               const CircularProgressIndicator(),
                           ],
                         )
-                      : SizedBox(
+                      : const SizedBox(
                           height: 300,
-                          child: Container(
-                            child: const Center(
-                              child: Text('无图片'),
-                            ),
+                          child: Center(
+                            child: Text('无图片'),
                           ),
                         ),
                   Row(

@@ -65,7 +65,7 @@ class _InfiniteListState<T> extends State<InfiniteList<T>> {
               index < widget.items.length + topCount + bottonCount) {
             return widget.botton![index - widget.items.length - topCount];
           }
-          return BottomLoader();
+          return const BottomLoader();
         },
         separatorBuilder: (contexit, index) => const Divider(),
         controller: _scrollController,
@@ -136,7 +136,7 @@ class _SliverInfiniteListState<T> extends State<SliverInfiniteList<T>> {
         slivers: [
           ...widget.slivers,
           if (!widget.hasReachedMax)
-            SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: BottomLoader(),
             ),
         ],

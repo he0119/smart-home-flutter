@@ -12,7 +12,7 @@ import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 
 class StorageHomePage extends Page {
-  StorageHomePage()
+  const StorageHomePage()
       : super(
           key: const ValueKey('storage'),
           name: '/storage',
@@ -36,8 +36,8 @@ class StorageHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MyHomePage(
       activeTab: AppTab.storage,
-      actions: <Widget>[
-        const SearchIconButton(),
+      actions: const <Widget>[
+        SearchIconButton(),
       ],
       body: const _StorageHomeBody(),
       floatingActionButton: FloatingActionButton(

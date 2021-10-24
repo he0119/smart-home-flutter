@@ -5,7 +5,7 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/iot/view/settings/refresh_interval_page.dart';
 
 class IotSettingsPage extends Page {
-  IotSettingsPage()
+  const IotSettingsPage()
       : super(key: const ValueKey('settings/iot'), name: '/settings/iot');
 
   @override

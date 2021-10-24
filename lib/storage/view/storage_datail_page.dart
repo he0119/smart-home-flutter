@@ -114,9 +114,9 @@ class StorageDetailScreen extends StatelessWidget {
     if (state is StorageDetailSuccess && state.storages != null) {
       return AppBar(
         title: const Text('家'),
-        actions: <Widget>[
-          const AddStorageIconButton(),
-          const SearchIconButton(),
+        actions: const <Widget>[
+          AddStorageIconButton(),
+          SearchIconButton(),
         ],
       );
     }
@@ -192,7 +192,7 @@ class StorageDetailScreen extends StatelessWidget {
           )
         ],
         bottom: PathBar(
-          child: Container(
+          child: SizedBox(
             height: 40,
             child: Align(
               alignment: Alignment.centerLeft,
@@ -213,7 +213,7 @@ class StorageDetailScreen extends StatelessWidget {
                             MyRouterDelegate.of(context)
                                 .setStoragePage(storage: paths[index - 1]);
                           },
-                          child: Container(
+                          child: SizedBox(
                             height: 40,
                             child: Center(
                               child: Padding(
@@ -259,7 +259,7 @@ class StorageDetailScreen extends StatelessWidget {
     if (state is StorageDetailSuccess && state.storages != null) {
       return StorageItemList(
         storages: state.storages!.toList(),
-        items: [],
+        items: const [],
         hasReachedMax: state.hasReachedMax,
         onFetch: () => BlocProvider.of<StorageDetailBloc>(context).add(
           const StorageDetailFetched(name: ''),
@@ -313,7 +313,7 @@ class StorageDetailScreen extends StatelessWidget {
 class PathBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget child;
 
-  PathBar({
+  const PathBar({
     Key? key,
     required this.child,
   }) : super(key: key);

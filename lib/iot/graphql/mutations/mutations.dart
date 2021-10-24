@@ -1,4 +1,4 @@
-export 'addDevice.dart';
-export 'deleteDevice.dart';
-export 'setDevice.dart';
-export 'updateDevice.dart';
+export 'add_device.dart';
+export 'delete_device.dart';
+export 'set_device.dart';
+export 'update_device.dart';

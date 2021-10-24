@@ -17,7 +17,7 @@ class AppStarted extends AppPreferencesEvent {
 class AppApiUrlChanged extends AppPreferencesEvent {
   final String apiUrl;
 
-  AppApiUrlChanged({required this.apiUrl});
+  const AppApiUrlChanged({required this.apiUrl});
 
   @override
   List<Object> get props => [apiUrl];
@@ -30,7 +30,7 @@ class AppApiUrlChanged extends AppPreferencesEvent {
 class AppIotRefreshIntervalChanged extends AppPreferencesEvent {
   final int interval;
 
-  AppIotRefreshIntervalChanged({required this.interval});
+  const AppIotRefreshIntervalChanged({required this.interval});
 
   @override
   List<Object> get props => [interval];
@@ -44,7 +44,7 @@ class AppBlogUrlChanged extends AppPreferencesEvent {
   final String blogUrl;
   final String blogAdminUrl;
 
-  AppBlogUrlChanged({
+  const AppBlogUrlChanged({
     required this.blogUrl,
     required this.blogAdminUrl,
   });
@@ -61,7 +61,7 @@ class AppBlogUrlChanged extends AppPreferencesEvent {
 class DefaultPageChanged extends AppPreferencesEvent {
   final AppTab defaultPage;
 
-  DefaultPageChanged({
+  const DefaultPageChanged({
     required this.defaultPage,
   });
 
@@ -76,7 +76,7 @@ class DefaultPageChanged extends AppPreferencesEvent {
 class LoginUserChanged extends AppPreferencesEvent {
   final User loginUser;
 
-  LoginUserChanged({
+  const LoginUserChanged({
     required this.loginUser,
   });
 
@@ -92,7 +92,7 @@ class MiPushKeyChanged extends AppPreferencesEvent {
   final String miPushAppId;
   final String miPushAppKey;
 
-  MiPushKeyChanged({
+  const MiPushKeyChanged({
     required this.miPushAppId,
     required this.miPushAppKey,
   });
@@ -109,7 +109,7 @@ class MiPushKeyChanged extends AppPreferencesEvent {
 class MiPushRegIdChanged extends AppPreferencesEvent {
   final String miPushRegId;
 
-  MiPushRegIdChanged({
+  const MiPushRegIdChanged({
     required this.miPushRegId,
   });
 
@@ -124,7 +124,7 @@ class MiPushRegIdChanged extends AppPreferencesEvent {
 class CommentDescendingChanged extends AppPreferencesEvent {
   final bool descending;
 
-  CommentDescendingChanged({
+  const CommentDescendingChanged({
     required this.descending,
   });
 
@@ -139,7 +139,7 @@ class CommentDescendingChanged extends AppPreferencesEvent {
 class ThemeModeChanged extends AppPreferencesEvent {
   final ThemeMode themeMode;
 
-  ThemeModeChanged({
+  const ThemeModeChanged({
     required this.themeMode,
   });
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BottomLoader extends StatelessWidget {
-  BottomLoader({
+  const BottomLoader({
     Key? key,
   }) : super(key: key);
 

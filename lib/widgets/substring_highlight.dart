@@ -8,7 +8,7 @@ class SubstringHighlight extends StatelessWidget {
   /// 高亮文本
   final String term;
 
-  SubstringHighlight({
+  const SubstringHighlight({
     Key? key,
     required this.text,
     required this.term,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SplashPage extends Page {
-  SplashPage()
+  const SplashPage()
       : super(
           key: const ValueKey('splash'),
           name: '/splash',
@@ -11,13 +11,13 @@ class SplashPage extends Page {
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => SplashScreen(),
+      builder: (context) => const SplashScreen(),
     );
   }
 }
 
 class SplashScreen extends StatelessWidget {
-  SplashScreen({
+  const SplashScreen({
     Key? key,
   }) : super(key: key);
 

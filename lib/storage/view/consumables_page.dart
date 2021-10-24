@@ -19,15 +19,15 @@ class ConsumablesPage extends Page {
       builder: (context) => BlocProvider<ConsumablesBloc>(
         create: (context) => ConsumablesBloc(
           storageRepository: RepositoryProvider.of<StorageRepository>(context),
-        )..add(ConsumablesFetched()),
-        child: ConsumablesScreen(),
+        )..add(const ConsumablesFetched()),
+        child: const ConsumablesScreen(),
       ),
     );
   }
 }
 
 class ConsumablesScreen extends StatelessWidget {
-  ConsumablesScreen({
+  const ConsumablesScreen({
     Key? key,
   }) : super(key: key);
 
@@ -44,7 +44,7 @@ class ConsumablesScreen extends StatelessWidget {
               message: state.message,
               onPressed: () {
                 BlocProvider.of<ConsumablesBloc>(context)
-                    .add(ConsumablesFetched(cache: false));
+                    .add(const ConsumablesFetched(cache: false));
               },
             );
           }
@@ -52,14 +52,15 @@ class ConsumablesScreen extends StatelessWidget {
             return RefreshIndicator(
                 onRefresh: () async {
                   BlocProvider.of<ConsumablesBloc>(context)
-                      .add(ConsumablesFetched(cache: false));
+                      .add(const ConsumablesFetched(cache: false));
                 },
                 child: InfiniteList(
                   itemBuilder: _buildItem,
                   items: state.items,
                   hasReachedMax: state.hasReachedMax,
-                  onFetch: () =>
-                      context.read<ConsumablesBloc>().add(ConsumablesFetched()),
+                  onFetch: () => context
+                      .read<ConsumablesBloc>()
+                      .add(const ConsumablesFetched()),
                 ));
           }
           return const CenterLoadingIndicator();

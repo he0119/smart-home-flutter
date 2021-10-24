@@ -9,7 +9,7 @@ export 'near_expired_items.dart';
 export 'picture.dart';
 export 'recently_created_items.dart';
 export 'recently_edited_items.dart';
-export 'rootStorage.dart';
+export 'root_storage.dart';
 export 'search.dart';
 export 'storage.dart';
 export 'storage_by_name.dart';

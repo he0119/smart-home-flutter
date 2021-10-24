@@ -16,7 +16,7 @@ import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/utils/theme_mode_extension.dart';
 
 class SettingsPage extends Page {
-  SettingsPage()
+  const SettingsPage()
       : super(
           key: const ValueKey('settings'),
           name: '/settings',
@@ -75,7 +75,7 @@ class SettingsScreen extends StatelessWidget {
                     ));
                   },
                 ),
-                if (!kIsWeb && Platform.isAndroid) MiPushSettingsTile(),
+                if (!kIsWeb && Platform.isAndroid) const MiPushSettingsTile(),
               ],
             ),
             SettingsSection(

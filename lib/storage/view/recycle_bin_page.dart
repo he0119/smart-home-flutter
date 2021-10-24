@@ -23,7 +23,7 @@ class RecycleBinPage extends Page {
             create: (context) => RecycleBinBloc(
               storageRepository:
                   RepositoryProvider.of<StorageRepository>(context),
-            )..add(RecycleBinFetched()),
+            )..add(const RecycleBinFetched()),
           ),
           BlocProvider<ItemEditBloc>(
             create: (context) => ItemEditBloc(
@@ -32,14 +32,14 @@ class RecycleBinPage extends Page {
             ),
           )
         ],
-        child: RecycleBinScreen(),
+        child: const RecycleBinScreen(),
       ),
     );
   }
 }
 
 class RecycleBinScreen extends StatelessWidget {
-  RecycleBinScreen({
+  const RecycleBinScreen({
     Key? key,
   }) : super(key: key);
 
@@ -56,7 +56,7 @@ class RecycleBinScreen extends StatelessWidget {
               message: state.message,
               onPressed: () {
                 BlocProvider.of<RecycleBinBloc>(context)
-                    .add(RecycleBinFetched(cache: false));
+                    .add(const RecycleBinFetched(cache: false));
               },
             );
           }
@@ -64,7 +64,7 @@ class RecycleBinScreen extends StatelessWidget {
             return RefreshIndicator(
               onRefresh: () async {
                 BlocProvider.of<RecycleBinBloc>(context)
-                    .add(RecycleBinFetched(cache: false));
+                    .add(const RecycleBinFetched(cache: false));
               },
               child: BlocListener<ItemEditBloc, ItemEditState>(
                   listener: (context, state) {
@@ -82,8 +82,9 @@ class RecycleBinScreen extends StatelessWidget {
                     itemBuilder: _buildItem,
                     items: state.items,
                     hasReachedMax: state.hasReachedMax,
-                    onFetch: () =>
-                        context.read<RecycleBinBloc>().add(RecycleBinFetched()),
+                    onFetch: () => context
+                        .read<RecycleBinBloc>()
+                        .add(const RecycleBinFetched()),
                   )),
             );
           }
@@ -145,7 +146,7 @@ Widget _buildItem(BuildContext context, Item item) {
             ),
           );
           BlocProvider.of<RecycleBinBloc>(context)
-              .add(RecycleBinFetched(cache: false));
+              .add(const RecycleBinFetched(cache: false));
         },
       ),
     ),

@@ -54,13 +54,13 @@ extension AppTabExtension on AppTab {
   Page get page {
     switch (this) {
       case AppTab.iot:
-        return IotHomePage();
+        return const IotHomePage();
       case AppTab.storage:
-        return StorageHomePage();
+        return const StorageHomePage();
       case AppTab.blog:
-        return BlogHomePage();
+        return const BlogHomePage();
       case AppTab.board:
-        return BoardHomePage();
+        return const BoardHomePage();
     }
   }
 }

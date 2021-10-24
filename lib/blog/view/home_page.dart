@@ -13,7 +13,7 @@ import 'package:smarthome/widgets/rounded_raised_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BlogHomePage extends Page {
-  BlogHomePage()
+  const BlogHomePage()
       : super(
           key: const ValueKey('blog'),
           name: '/blog',
@@ -63,7 +63,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                       await controller.data!.loadUrl(blogAdminUrl);
                     }
                   } else {
-                    MyRouterDelegate.of(context).push(BlogSettingsPage());
+                    MyRouterDelegate.of(context).push(const BlogSettingsPage());
                   }
                 },
               ),
@@ -73,7 +73,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
               child: IconButton(
                 icon: const Icon(Icons.settings),
                 onPressed: () {
-                  MyRouterDelegate.of(context).push(BlogSettingsPage());
+                  MyRouterDelegate.of(context).push(const BlogSettingsPage());
                 },
               ),
             ),
@@ -125,7 +125,7 @@ class SettingButton extends StatelessWidget {
     return Center(
       child: RoundedRaisedButton(
         onPressed: () {
-          MyRouterDelegate.of(context).push(BlogSettingsPage());
+          MyRouterDelegate.of(context).push(const BlogSettingsPage());
         },
         child: const Text('设置博客网址'),
       ),

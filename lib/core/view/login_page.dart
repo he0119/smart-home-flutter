@@ -6,7 +6,7 @@ import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class LoginPage extends Page {
-  LoginPage()
+  const LoginPage()
       : super(
           key: const ValueKey('login'),
           name: '/login',
@@ -16,13 +16,13 @@ class LoginPage extends Page {
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => LoginScreen(),
+      builder: (context) => const LoginScreen(),
     );
   }
 }
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({
+  const LoginScreen({
     Key? key,
   }) : super(key: key);
 
@@ -74,7 +74,7 @@ class ApiUrlForm extends StatefulWidget {
   final String apiUrl;
   final VoidCallback onTapNext;
 
-  ApiUrlForm({
+  const ApiUrlForm({
     Key? key,
     required this.apiUrl,
     required this.onTapNext,
@@ -141,9 +141,9 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text('下一步'),
-                    const Icon(Icons.chevron_right),
+                  children: const [
+                    Text('下一步'),
+                    Icon(Icons.chevron_right),
                   ],
                 ),
               ),
@@ -159,7 +159,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
 class LoginForm extends StatefulWidget {
   final Function onTapBack;
 
-  LoginForm({Key? key, required this.onTapBack}) : super(key: key);
+  const LoginForm({Key? key, required this.onTapBack}) : super(key: key);
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -212,7 +212,7 @@ class _LoginFormState extends State<LoginForm> {
                         enableSuggestions: false,
                         decoration: const InputDecoration(labelText: '用户名'),
                         controller: _usernameController,
-                        autofillHints: <String>[AutofillHints.username],
+                        autofillHints: const <String>[AutofillHints.username],
                       ),
                     ),
                     Padding(
@@ -222,7 +222,7 @@ class _LoginFormState extends State<LoginForm> {
                         decoration: const InputDecoration(labelText: '密码'),
                         controller: _passwordController,
                         obscureText: true,
-                        autofillHints: <String>[AutofillHints.password],
+                        autofillHints: const <String>[AutofillHints.password],
                       ),
                     ),
                     RoundedRaisedButton(

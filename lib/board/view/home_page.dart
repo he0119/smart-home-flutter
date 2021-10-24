@@ -12,7 +12,7 @@ import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 
 class BoardHomePage extends Page {
-  BoardHomePage()
+  const BoardHomePage()
       : super(
           key: const ValueKey('board'),
           name: '/board',
@@ -20,7 +20,7 @@ class BoardHomePage extends Page {
 
   @override
   Route createRoute(BuildContext context) {
-    BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeFetched());
+    BlocProvider.of<BoardHomeBloc>(context).add(const BoardHomeFetched());
     return MaterialPageRoute(
       settings: this,
       builder: (context) => const BoardHomeScreen(),
@@ -54,7 +54,7 @@ class BoardHomeScreen extends StatelessWidget {
             ),
           );
           BlocProvider.of<BoardHomeBloc>(context)
-              .add(BoardHomeFetched(cache: false));
+              .add(const BoardHomeFetched(cache: false));
         },
         child: const Icon(Icons.create),
       ),
@@ -75,7 +75,7 @@ class _BoardHomeBody extends StatelessWidget {
           return ErrorMessageButton(
             onPressed: () {
               BlocProvider.of<BoardHomeBloc>(context)
-                  .add(BoardHomeFetched(cache: false));
+                  .add(const BoardHomeFetched(cache: false));
             },
             message: state.message,
           );
@@ -85,14 +85,15 @@ class _BoardHomeBody extends StatelessWidget {
           return RefreshIndicator(
             onRefresh: () async {
               BlocProvider.of<BoardHomeBloc>(context)
-                  .add(BoardHomeFetched(cache: false));
+                  .add(const BoardHomeFetched(cache: false));
             },
             child: InfiniteList<Topic>(
               items: state.topics,
               hasReachedMax: state.hasReachedMax,
               itemBuilder: (context, item) => TopicItem(topic: item),
               onFetch: () {
-                BlocProvider.of<BoardHomeBloc>(context).add(BoardHomeFetched());
+                BlocProvider.of<BoardHomeBloc>(context)
+                    .add(const BoardHomeFetched());
               },
             ),
           );

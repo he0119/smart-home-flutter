@@ -10,7 +10,7 @@ import 'package:smarthome/app/main.dart';
 
 Future<void> main() async {
   configureApp();
-  final configuredApp = AppConfig(
+  const configuredApp = AppConfig(
     appName: '智慧家庭',
     flavorName: 'prod',
     apiUrl: 'https://smart.hehome.xyz/graphql',

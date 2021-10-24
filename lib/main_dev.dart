@@ -15,10 +15,11 @@ Future<void> main() async {
   Bloc.observer = SimpleBlocObserver();
   Logger.root.level = Level.ALL; // defaults to Level.INFO
   Logger.root.onRecord.listen((record) {
+    // ignore: avoid_print
     print('[${record.level.name}] ${record.loggerName}'
         ' -- ${record.time} -- ${record.message}');
   });
-  final configuredApp = AppConfig(
+  const configuredApp = AppConfig(
     appName: '智慧家庭 DEV',
     flavorName: 'dev',
     apiUrl: 'https://test.hehome.xyz/graphql',
@@ -36,6 +37,7 @@ Future<void> main() async {
 
     runApp(configuredApp);
   }, (exception, stackTrace) async {
+    // ignore: avoid_print
     print('$exception, $stackTrace');
     await Sentry.captureException(exception, stackTrace: stackTrace);
   });
