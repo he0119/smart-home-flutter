@@ -25,7 +25,7 @@ class ItemEditPage extends StatefulWidget {
     required this.isEditing,
     this.item,
     this.storage,
-  })  : assert(item != null || storage != null),
+  })  : assert(item != null || !isEditing),
         super(key: key);
 
   @override
@@ -269,7 +269,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
       _numberController = TextEditingController(text: '1');
       _descriptionController = TextEditingController();
       _priceController = TextEditingController();
-      storageId = widget.storage!.id;
+      storageId = widget.storage?.id;
     }
 
     _nameFocusNode = FocusNode();
