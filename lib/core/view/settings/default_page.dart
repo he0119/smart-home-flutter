@@ -14,7 +14,6 @@ class DefaultPage extends StatelessWidget {
         appBar: AppBar(title: const Text('默认主页')),
         body: SettingsList(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          contentPadding: const EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(tiles: [
               SettingsTile(

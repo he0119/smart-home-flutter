@@ -13,7 +13,6 @@ class CommentOrderPage extends StatelessWidget {
         appBar: AppBar(title: const Text('评论排序')),
         body: SettingsList(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          contentPadding: const EdgeInsets.symmetric(vertical: 20),
           sections: [
             SettingsSection(
               tiles: [

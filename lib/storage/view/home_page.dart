@@ -128,28 +128,33 @@ class _StorageHomeBody extends StatelessWidget {
   List<Widget> _buildSlivers(BuildContext context, StorageHomeSuccess state) {
     List<Widget> listofWidget = [];
 
-    listofWidget.add(SliverToBoxAdapter(
-      child: InkWell(
-        onTap: () {
-          MyRouterDelegate.of(context).addStorageGroup();
-        },
-        child: Card(
-          color: Theme.of(context).colorScheme.secondary,
-          child: ListTile(
-            title: Text(
-              '所有位置',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondary,
+    listofWidget.add(
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+          child: InkWell(
+            onTap: () {
+              MyRouterDelegate.of(context).addStorageGroup();
+            },
+            child: Card(
+              color: Theme.of(context).colorScheme.secondary,
+              child: ListTile(
+                title: Text(
+                  '所有位置',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
+                ),
+                trailing: Icon(
+                  Icons.storage,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
               ),
-            ),
-            trailing: Icon(
-              Icons.storage,
-              color: Theme.of(context).colorScheme.onSecondary,
             ),
           ),
         ),
       ),
-    ));
+    );
 
     if (state.expiredItems?.isNotEmpty ?? false) {
       listofWidget.add(_buildSliverStickyHeader(
