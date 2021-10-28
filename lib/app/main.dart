@@ -134,7 +134,9 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
     final themeMode = context.watch<AppPreferencesBloc>().state.themeMode;
     return MaterialApp.router(
       scaffoldMessengerKey: scaffoldMessengerKey,
-      theme: ThemeData(),
+      theme: ThemeData(
+        primaryColor: Colors.white,
+      ),
       darkTheme: ThemeData.dark(),
       themeMode: themeMode,
       localizationsDelegates: const [
