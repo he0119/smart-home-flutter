@@ -1,9 +1,11 @@
+import 'dart:async';
+
+import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';
-
 part 'search_events.dart';
 part 'search_states.dart';
 
@@ -13,6 +15,14 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
   StorageSearchBloc({
     required this.storageRepository,
   }) : super(StorageSearchInitial());
+
+  @override
+  Stream<Transition<StorageSearchEvent, StorageSearchState>> transformEvents(
+      events, transitionFn) {
+    return events
+        .debounceTime(const Duration(milliseconds: 300))
+        .switchMap(transitionFn);
+  }
 
   @override
   Stream<StorageSearchState> mapEventToState(StorageSearchEvent event) async* {
