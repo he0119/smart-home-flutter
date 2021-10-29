@@ -29,26 +29,31 @@ class StorageDetailPage extends Page {
 
   @override
   Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: this,
-      builder: (context) => MultiBlocProvider(
-        providers: [
-          BlocProvider<StorageDetailBloc>(
-            create: (context) => StorageDetailBloc(
-              storageRepository:
-                  RepositoryProvider.of<StorageRepository>(context),
-            )..add(StorageDetailFetched(name: storageName, id: storageId)),
-          ),
-          BlocProvider<StorageEditBloc>(
-            create: (context) => StorageEditBloc(
-              storageRepository:
-                  RepositoryProvider.of<StorageRepository>(context),
+      pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) =>
+          FadeTransition(
+        opacity: animation,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<StorageDetailBloc>(
+              create: (context) => StorageDetailBloc(
+                storageRepository:
+                    RepositoryProvider.of<StorageRepository>(context),
+              )..add(StorageDetailFetched(name: storageName, id: storageId)),
             ),
-          )
-        ],
-        child: StorageDetailScreen(
-          storageName: storageName,
-          storageId: storageId,
+            BlocProvider<StorageEditBloc>(
+              create: (context) => StorageEditBloc(
+                storageRepository:
+                    RepositoryProvider.of<StorageRepository>(context),
+              ),
+            )
+          ],
+          child: StorageDetailScreen(
+            storageName: storageName,
+            storageId: storageId,
+          ),
         ),
       ),
     );
