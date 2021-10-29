@@ -215,8 +215,12 @@ class StorageDetailScreen extends StatelessWidget {
                         )
                       : InkWell(
                           onTap: () {
-                            MyRouterDelegate.of(context)
-                                .setStoragePage(storage: paths[index - 1]);
+                            // 单击当前位置的时候，不做任何转跳
+                            // 禁止原地 TP
+                            if (index != paths.length) {
+                              MyRouterDelegate.of(context)
+                                  .setStoragePage(storage: paths[index - 1]);
+                            }
                           },
                           child: SizedBox(
                             height: 40,
