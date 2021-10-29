@@ -104,11 +104,12 @@ class _StorageHomeBody extends StatelessWidget {
             },
             child: RefreshIndicator(
               onRefresh: () async {
-                BlocProvider.of<StorageHomeBloc>(context)
-                    .add(StorageHomeFetched(
-                  itemType: state.itemType,
-                  cache: false,
-                ));
+                BlocProvider.of<StorageHomeBloc>(context).add(
+                  StorageHomeFetched(
+                    itemType: state.itemType,
+                    cache: false,
+                  ),
+                );
               },
               child: SliverInfiniteList<List<Item>>(
                 key: ValueKey(state.itemType),
@@ -116,10 +117,11 @@ class _StorageHomeBody extends StatelessWidget {
                 hasReachedMax: state.hasReachedMax,
                 itemCount: state.itemCount,
                 onFetch: () {
-                  BlocProvider.of<StorageHomeBloc>(context)
-                      .add(StorageHomeFetched(
-                    itemType: state.itemType,
-                  ));
+                  BlocProvider.of<StorageHomeBloc>(context).add(
+                    StorageHomeFetched(
+                      itemType: state.itemType,
+                    ),
+                  );
                 },
               ),
             ),
@@ -133,33 +135,36 @@ class _StorageHomeBody extends StatelessWidget {
   List<Widget> _buildSlivers(BuildContext context, StorageHomeSuccess state) {
     List<Widget> listofWidget = [];
 
-    listofWidget.add(
-      SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-          child: InkWell(
-            onTap: () {
-              MyRouterDelegate.of(context).addStorageGroup();
-            },
-            child: Card(
-              color: Theme.of(context).colorScheme.secondary,
-              child: ListTile(
-                title: Text(
-                  '所有位置',
-                  style: TextStyle(
+    // 仅在主界面添加所有位置按钮
+    if (state.itemType == ItemType.all) {
+      listofWidget.add(
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+            child: InkWell(
+              onTap: () {
+                MyRouterDelegate.of(context).addStorageGroup();
+              },
+              child: Card(
+                color: Theme.of(context).colorScheme.secondary,
+                child: ListTile(
+                  title: Text(
+                    '所有位置',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                  ),
+                  trailing: Icon(
+                    Icons.storage,
                     color: Theme.of(context).colorScheme.onSecondary,
                   ),
-                ),
-                trailing: Icon(
-                  Icons.storage,
-                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
 
     if (state.expiredItems?.isNotEmpty ?? false) {
       listofWidget.add(_buildSliverStickyHeader(
