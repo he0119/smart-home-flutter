@@ -25,9 +25,14 @@ class StorageHomePage extends Page {
   Route createRoute(BuildContext context) {
     BlocProvider.of<StorageHomeBloc>(context)
         .add(const StorageHomeFetched(itemType: ItemType.all));
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: this,
-      builder: (context) => const StorageHomeScreen(),
+      pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) =>
+          FadeTransition(
+        opacity: animation,
+        child: StorageHomeScreen(),
+      ),
     );
   }
 }
