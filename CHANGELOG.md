@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.7.5] - 2021-10-29
+
+### Added
+
+- 添加主题设置
+- 上传界面支持从图库中选择图片
+
 ### Changed
 
 - 升级至 Flutter 2.2
+- 优化物品界面，总是显示添加物品的按钮
+- 优化搜索体验，去除抖动
 
 ## [0.7.4] - 2021-03-29
 
@@ -329,8 +338,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.7.4...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.7.5...HEAD
 
+[0.7.5]: https://github.com/he0119/smart-home-flutter/compare/v0.7.4...v0.7.5
 [0.7.4]: https://github.com/he0119/smart-home-flutter/compare/v0.7.3...v0.7.4
 [0.7.3]: https://github.com/he0119/smart-home-flutter/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/he0119/smart-home-flutter/compare/v0.7.1...v0.7.2
