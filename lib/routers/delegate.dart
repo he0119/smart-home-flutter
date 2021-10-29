@@ -14,7 +14,6 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/routers/information_parser.dart';
 import 'package:smarthome/routers/route_path.dart';
-import 'package:smarthome/routers/transition_delegate.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/utils/launch_url.dart';
 
@@ -282,13 +281,11 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     }
   }
 
-  TransitionDelegate transitionDelegate = MyTransitionDelegate();
+  // TransitionDelegate transitionDelegate = MyTransitionDelegate();
 
   @override
   Widget build(BuildContext context) {
-    _log
-      ..fine('Router rebuilded')
-      ..fine('pages $pages');
+    _log..fine('Router rebuilded')..fine('pages $pages');
     final graphQLApiClient = RepositoryProvider.of<GraphQLApiClient>(context);
     final config = AppConfig.of(context);
     return MultiBlocListener(
@@ -418,7 +415,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         key: navigatorKey,
         pages: pages,
         onPopPage: _handlePopPage,
-        transitionDelegate: transitionDelegate,
+        // transitionDelegate: transitionDelegate,
       ),
     );
   }
