@@ -25,10 +25,15 @@ class TopicDetailPage extends Page {
 
   @override
   Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: this,
-      builder: (context) => TopicDetailScreen(
-        topicId: topicId,
+      pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) =>
+          FadeTransition(
+        opacity: animation,
+        child: TopicDetailScreen(
+          topicId: topicId,
+        ),
       ),
     );
   }
