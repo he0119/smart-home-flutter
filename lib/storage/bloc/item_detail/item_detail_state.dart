@@ -14,17 +14,15 @@ class ItemDetailInProgress extends ItemDetailState {
 
 class ItemDetailFailure extends ItemDetailState {
   final String message;
-  final String name;
-  final String? id;
+  final String id;
 
   const ItemDetailFailure(
     this.message, {
-    required this.name,
-    this.id,
+    required this.id,
   });
 
   @override
-  List<Object> get props => [message, name];
+  List<Object> get props => [message, id];
 
   @override
   String toString() => 'ItemDetailFailure(message: $message)';

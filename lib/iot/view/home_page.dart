@@ -22,9 +22,14 @@ class IotHomePage extends Page {
 
   @override
   Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: this,
-      builder: (context) => const IotHomeScreen(),
+      pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) =>
+          FadeTransition(
+        opacity: animation,
+        child: IotHomeScreen(),
+      ),
     );
   }
 }

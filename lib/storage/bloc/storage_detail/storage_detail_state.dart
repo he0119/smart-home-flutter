@@ -14,17 +14,15 @@ class StorageDetailInProgress extends StorageDetailState {
 
 class StorageDetailFailure extends StorageDetailState {
   final String message;
-  final String name;
-  final String? id;
+  final String id;
 
   const StorageDetailFailure(
     this.message, {
-    required this.name,
-    this.id,
+    required this.id,
   });
 
   @override
-  List<Object?> get props => [message, name, id];
+  List<Object?> get props => [message, id];
 
   @override
   String toString() => 'StorageDetailFailure(message: $message)';
