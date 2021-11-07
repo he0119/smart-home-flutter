@@ -83,11 +83,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   /// 添加一组位置
   void addStorageGroup({Storage? storage}) {
     storageGroup += 1;
-    _pages.add(StorageDetailPage(
-      storageName: storage?.name ?? '',
-      storageId: storage?.id,
-      group: storageGroup,
-    ));
+    _pages.add(
+      StorageDetailPage(
+        storageId: storage?.id ?? '',
+        group: storageGroup,
+      ),
+    );
     notifyListeners();
   }
 
@@ -101,22 +102,24 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       _pages.removeLast();
     }
     // 再重新添加
-    _pages.add(StorageDetailPage(storageName: '', group: storageGroup));
+    _pages.add(StorageDetailPage(storageId: '', group: storageGroup));
     if (storage != null) {
       if (storage.ancestors != null) {
         for (var storage in storage.ancestors!) {
-          _pages.add(StorageDetailPage(
-            storageName: storage.name,
-            storageId: storage.id,
-            group: storageGroup,
-          ));
+          _pages.add(
+            StorageDetailPage(
+              storageId: storage.id,
+              group: storageGroup,
+            ),
+          );
         }
       }
-      _pages.add(StorageDetailPage(
-        storageName: storage.name,
-        storageId: storage.id,
-        group: storageGroup,
-      ));
+      _pages.add(
+        StorageDetailPage(
+          storageId: storage.id,
+          group: storageGroup,
+        ),
+      );
     }
     notifyListeners();
   }
@@ -126,11 +129,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   /// 添加一个物品详情页面
   void addItemPage({required Item item}) {
     itemCount += 1;
-    _pages.add(ItemDetailPage(
-      itemName: item.name,
-      itemId: item.id,
-      group: itemCount,
-    ));
+    _pages.add(
+      ItemDetailPage(
+        itemId: item.id,
+        group: itemCount,
+      ),
+    );
     notifyListeners();
   }
 
@@ -175,9 +179,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           appTab: EnumToString.fromString(AppTab.values, uri.pathSegments[0]),
         );
       } else if (pages.last is StorageDetailPage) {
-        return StorageRoutePath(storageName: uri.pathSegments[2]);
+        return StorageRoutePath(storageId: uri.pathSegments[2]);
       } else if (pages.last is ItemDetailPage) {
-        return ItemRoutePath(itemName: uri.pathSegments[1]);
+        return ItemRoutePath(itemId: uri.pathSegments[1]);
       } else if (pages.last is TopicDetailPage) {
         return TopicRoutePath(topicId: uri.pathSegments[1]);
       } else if (pages.last is LoginPage) {
@@ -218,7 +222,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       _pages = [
         const StorageHomePage(),
         ItemDetailPage(
-          itemName: configuration.itemName,
           itemId: configuration.itemId,
           group: 1,
         ),
@@ -229,7 +232,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       _pages = [
         const StorageHomePage(),
         StorageDetailPage(
-          storageName: configuration.storageName,
           storageId: configuration.storageId,
           group: 1,
         ),

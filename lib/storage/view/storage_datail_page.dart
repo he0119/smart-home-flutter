@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
+import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
 import 'package:smarthome/storage/view/storage_edit_page.dart';
@@ -14,17 +15,15 @@ import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
 
 class StorageDetailPage extends Page {
-  final String storageName;
-  final String? storageId;
+  final String storageId;
   final int group;
 
   StorageDetailPage({
-    required this.storageName,
-    this.storageId,
+    required this.storageId,
     required this.group,
   }) : super(
-          key: ValueKey('$group/$storageName'),
-          name: '/storage/$group/$storageName',
+          key: ValueKey('$group/$storageId'),
+          name: '/storage/$group/$storageId',
         );
 
   @override
@@ -39,19 +38,16 @@ class StorageDetailPage extends Page {
           providers: [
             BlocProvider<StorageDetailBloc>(
               create: (context) => StorageDetailBloc(
-                storageRepository:
-                    RepositoryProvider.of<StorageRepository>(context),
-              )..add(StorageDetailFetched(name: storageName, id: storageId)),
+                storageRepository: context.read<StorageRepository>(),
+              )..add(StorageDetailFetched(id: storageId)),
             ),
             BlocProvider<StorageEditBloc>(
               create: (context) => StorageEditBloc(
-                storageRepository:
-                    RepositoryProvider.of<StorageRepository>(context),
+                storageRepository: context.read<StorageRepository>(),
               ),
             )
           ],
           child: StorageDetailScreen(
-            storageName: storageName,
             storageId: storageId,
           ),
         ),
@@ -60,15 +56,27 @@ class StorageDetailPage extends Page {
   }
 }
 
-class StorageDetailScreen extends StatelessWidget {
-  final String storageName;
-  final String? storageId;
+class StorageDetailScreen extends StatefulWidget {
+  final String storageId;
 
   const StorageDetailScreen({
     Key? key,
-    required this.storageName,
     required this.storageId,
   }) : super(key: key);
+
+  @override
+  _StorageDetailScreenState createState() => _StorageDetailScreenState();
+}
+
+class _StorageDetailScreenState extends State<StorageDetailScreen> {
+  String storageName = '';
+  List<Storage> paths = [];
+
+  @override
+  void initState() {
+    super.initState();
+    storageName = widget.storageId == '' ? '家' : '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,21 +87,19 @@ class StorageDetailScreen extends StatelessWidget {
           body: RefreshIndicator(
             onRefresh: () async {
               if (state is StorageDetailSuccess) {
-                BlocProvider.of<StorageDetailBloc>(context).add(
-                  StorageDetailFetched(
-                    name: state.storage?.name ?? '',
-                    id: state.storage?.id,
-                    cache: false,
-                  ),
-                );
+                context.read<StorageDetailBloc>().add(
+                      StorageDetailFetched(
+                        id: state.storage?.id ?? '',
+                        cache: false,
+                      ),
+                    );
               } else {
-                BlocProvider.of<StorageDetailBloc>(context).add(
-                  StorageDetailFetched(
-                    name: storageName,
-                    id: storageId,
-                    cache: false,
-                  ),
-                );
+                context.read<StorageDetailBloc>().add(
+                      StorageDetailFetched(
+                        id: widget.storageId,
+                        cache: false,
+                      ),
+                    );
               }
             },
             child: BlocListener<StorageEditBloc, StorageEditState>(
@@ -134,8 +140,9 @@ class StorageDetailScreen extends StatelessWidget {
           paths.add(state.storage!);
         }
       }
+      storageName = state.storage!.name;
       return AppBar(
-        title: Text(state.storage!.name),
+        title: Text(storageName),
         actions: <Widget>[
           AddStorageIconButton(
             storage: state.storage,
@@ -147,8 +154,7 @@ class StorageDetailScreen extends StatelessWidget {
                 await Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<StorageEditBloc>(
                     create: (_) => StorageEditBloc(
-                      storageRepository:
-                          RepositoryProvider.of<StorageRepository>(context),
+                      storageRepository: context.read<StorageRepository>(),
                     ),
                     child: StorageEditPage(
                       isEditing: true,
@@ -172,9 +178,9 @@ class StorageDetailScreen extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
-                          BlocProvider.of<StorageEditBloc>(context).add(
-                            StorageDeleted(storage: state.storage!),
-                          );
+                          context.read<StorageEditBloc>().add(
+                                StorageDeleted(storage: state.storage!),
+                              );
                           Navigator.pop(context);
                         },
                         child: const Text('是'),
@@ -250,7 +256,7 @@ class StorageDetailScreen extends StatelessWidget {
       );
     }
     return AppBar(
-      title: Text(storageName != '' ? storageName : '家'),
+      title: Text(storageName),
     );
   }
 
@@ -258,9 +264,9 @@ class StorageDetailScreen extends StatelessWidget {
     if (state is StorageDetailFailure) {
       return ErrorMessageButton(
         onPressed: () {
-          BlocProvider.of<StorageDetailBloc>(context).add(
-            StorageDetailFetched(name: state.name, id: state.id),
-          );
+          context.read<StorageDetailBloc>().add(
+                StorageDetailFetched(id: widget.storageId),
+              );
         },
         message: state.message,
       );
@@ -270,9 +276,9 @@ class StorageDetailScreen extends StatelessWidget {
         storages: state.storages!.toList(),
         items: const [],
         hasReachedMax: state.hasReachedMax,
-        onFetch: () => BlocProvider.of<StorageDetailBloc>(context).add(
-          const StorageDetailFetched(name: ''),
-        ),
+        onFetch: () => context.read<StorageDetailBloc>().add(
+              const StorageDetailFetched(id: ''),
+            ),
       );
     }
     if (state is StorageDetailSuccess && state.storage != null) {
@@ -280,12 +286,11 @@ class StorageDetailScreen extends StatelessWidget {
         items: state.storage!.items!.toList(),
         storages: state.storage!.children!.toList(),
         hasReachedMax: state.hasReachedMax,
-        onFetch: () => BlocProvider.of<StorageDetailBloc>(context).add(
-          StorageDetailFetched(
-            name: state.storage!.name,
-            id: state.storage!.id,
-          ),
-        ),
+        onFetch: () => context.read<StorageDetailBloc>().add(
+              StorageDetailFetched(
+                id: state.storage!.id,
+              ),
+            ),
       );
     }
     return const CenterLoadingIndicator();
@@ -301,8 +306,7 @@ class StorageDetailScreen extends StatelessWidget {
             MaterialPageRoute(
               builder: (_) => BlocProvider<ItemEditBloc>(
                 create: (_) => ItemEditBloc(
-                  storageRepository:
-                      RepositoryProvider.of<StorageRepository>(context),
+                  storageRepository: context.read<StorageRepository>(),
                 ),
                 child: ItemEditPage(
                   isEditing: false,

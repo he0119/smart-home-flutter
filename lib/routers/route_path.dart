@@ -19,31 +19,27 @@ class HomeRoutePath extends RoutePath {
 
 /// 位置相关的信息
 class StorageRoutePath extends RoutePath {
-  /// 位置名称，空字符串则为 家(/storage/)
-  final String storageName;
-  final String? storageId;
+  /// 空字符串则为 家(/storage/)
+  final String storageId;
 
   StorageRoutePath({
-    required this.storageName,
-    this.storageId,
+    required this.storageId,
   });
 
   @override
-  String toString() => 'StorageRoutePath(storageName: $storageName)';
+  String toString() => 'StorageRoutePath(storageId: $storageId)';
 }
 
 /// 物品相关的信息
 class ItemRoutePath extends RoutePath {
-  final String itemName;
-  final String? itemId;
+  final String itemId;
 
   ItemRoutePath({
-    required this.itemName,
-    this.itemId,
+    required this.itemId,
   });
 
   @override
-  String toString() => 'ItemRoutePath(itemName: $itemName)';
+  String toString() => 'ItemRoutePath(itemId: $itemId)';
 }
 
 /// 图片相关的信息

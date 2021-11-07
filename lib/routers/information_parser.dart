@@ -29,9 +29,9 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
         default:
       }
     } else if (configuration is StorageRoutePath) {
-      return RouteInformation(location: '/storage/${configuration.storageName}');
+      return RouteInformation(location: '/storage/${configuration.storageId}');
     } else if (configuration is ItemRoutePath) {
-      return RouteInformation(location: '/item/${configuration.itemName}');
+      return RouteInformation(location: '/item/${configuration.itemId}');
     } else if (configuration is TopicRoutePath) {
       return RouteInformation(location: '/topic/${configuration.topicId}');
     } else if (configuration is AppRoutePath) {
@@ -88,11 +88,11 @@ RoutePath parseUrl(String location) {
   if (uri.pathSegments.length == 2) {
     switch (uri.pathSegments[0]) {
       case 'item':
-        return ItemRoutePath(itemName: uri.pathSegments[1]);
+        return ItemRoutePath(itemId: uri.pathSegments[1]);
       case 'topic':
         return TopicRoutePath(topicId: uri.pathSegments[1]);
       case 'storage':
-        return StorageRoutePath(storageName: uri.pathSegments[1]);
+        return StorageRoutePath(storageId: uri.pathSegments[1]);
       case 'settings':
         // 单独的设置界面
         switch (uri.pathSegments[1]) {

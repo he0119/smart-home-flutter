@@ -46,7 +46,6 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             );
           } else {
             final results = await storageRepository.storage(
-              name: storage.name,
               id: storage.id,
               itemCursor: currentState.itemPageInfo.endCursor,
               storageCursor: currentState.storagePageInfo.endCursor,
@@ -64,7 +63,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
           }
         } else {
           // 其他情况根据设置看是否需要打开缓存，并获取第一页
-          if (event.name == '') {
+          if (event.id == '') {
             final results =
                 await storageRepository.rootStorage(cache: event.cache);
             yield StorageDetailSuccess(
@@ -74,14 +73,12 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
             );
           } else {
             final results = await storageRepository.storage(
-              name: event.name,
               id: event.id,
               cache: event.cache,
             );
             if (results == null) {
               yield StorageDetailFailure(
                 '获取位置失败，位置不存在',
-                name: event.name,
                 id: event.id,
               );
               return;
@@ -96,7 +93,6 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       } on MyException catch (e) {
         yield StorageDetailFailure(
           e.message,
-          name: event.name,
           id: event.id,
         );
       }
