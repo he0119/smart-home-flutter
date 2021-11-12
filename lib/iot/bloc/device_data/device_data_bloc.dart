@@ -66,7 +66,11 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
       try {
         final data =
             await iotRepository.autowateringData(deviceId: deviceId, number: 1);
-        add(DeviceDataupdated(data[0]));
+        if (data.isNotEmpty) {
+          add(DeviceDataupdated(data.first));
+        } else {
+          add(DeviceDataStoped('无数据'));
+        }
       } on MyException catch (e) {
         add(DeviceDataStoped(e.message));
       }
