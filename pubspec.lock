@@ -862,7 +862,7 @@ packages:
     source: hosted
     version: "0.26.0"
   sentry:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sentry
       url: "https://pub.flutter-io.cn"

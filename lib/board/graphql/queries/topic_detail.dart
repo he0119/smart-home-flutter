@@ -8,7 +8,7 @@ query topicDetail($topicId: ID!, $orderBy: String!, $after: String) {
     isPin
     user {
       username
-      email
+      avatarUrl
     }
     createdAt
     editedAt
@@ -24,7 +24,7 @@ query topicDetail($topicId: ID!, $orderBy: String!, $after: String) {
         body
         user {
           username
-          email
+          avatarUrl
         }
         createdAt
         editedAt
