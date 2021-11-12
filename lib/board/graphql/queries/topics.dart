@@ -17,6 +17,7 @@ query topics($after: String) {
         user {
           username
           email
+          avatarUrl
         }
         comments(last: 1) {
           edges {

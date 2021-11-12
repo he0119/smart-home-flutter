@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/storage.dart';
-import 'package:smarthome/widgets/gravatar.dart';
+import 'package:smarthome/widgets/avatar.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({Key? key}) : super(key: key);
@@ -19,9 +19,8 @@ class MyDrawer extends StatelessWidget {
                 UserAccountsDrawerHeader(
                   accountName: Text(state.currentUser.username),
                   accountEmail: Text(state.currentUser.email!),
-                  currentAccountPicture: CircleGravatar(
-                    email: state.currentUser.email!,
-                    size: 512,
+                  currentAccountPicture: MyCircleAvatar(
+                    avatarUrl: state.currentUser.avatarUrl,
                   ),
                 ),
               ListTile(

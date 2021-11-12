@@ -9,6 +9,7 @@ query topicDetail($topicId: ID!, $orderBy: String!, $after: String) {
     user {
       username
       email
+      avatarUrl
     }
     createdAt
     editedAt
@@ -25,6 +26,7 @@ query topicDetail($topicId: ID!, $orderBy: String!, $after: String) {
         user {
           username
           email
+          avatarUrl
         }
         createdAt
         editedAt

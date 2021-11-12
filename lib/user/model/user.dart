@@ -9,15 +9,16 @@ part 'user.g.dart';
 class User extends Equatable {
   final String username;
   final String? email;
+  final String? avatarUrl;
 
-  const User({required this.username, required this.email});
+  const User({required this.username, required this.email, this.avatarUrl});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
   @override
-  List<Object?> get props => [username, email];
+  List<Object?> get props => [username, email, avatarUrl];
 
   @override
   String toString() => username;

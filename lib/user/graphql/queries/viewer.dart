@@ -3,6 +3,7 @@ query viewer {
   viewer {
     username
     email
+    avatarUrl
   }
 }
 ''';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/user/user.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
-import 'package:smarthome/widgets/gravatar.dart';
+import 'package:smarthome/widgets/avatar.dart';
 
 class ItemTitle extends StatelessWidget {
   final User? user;
@@ -19,7 +19,7 @@ class ItemTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleGravatar(email: user!.email!),
+      leading: MyCircleAvatar(avatarUrl: user?.avatarUrl),
       title: Text(user!.username),
       subtitle: Text(editedAt!.toLocalStr()),
       trailing: (onSelected != null)
