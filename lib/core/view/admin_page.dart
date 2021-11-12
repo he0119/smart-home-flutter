@@ -53,7 +53,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 return true;
               },
               child: WebView(
-                initialUrl: state.blogUrl,
+                initialUrl: state.adminUrl,
                 javascriptMode: JavascriptMode.unrestricted,
                 onWebViewCreated: _controller.complete,
               )),

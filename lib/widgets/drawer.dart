@@ -15,6 +15,7 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final adminUrl = context.watch<AppPreferencesBloc>().state.adminUrl;
     return Drawer(
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
@@ -41,11 +42,13 @@ class MyDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
-                title: const Text('后台管理'),
+                title: const Text('管理'),
                 onTap: () {
                   if (!kIsWeb && !Platform.isWindows) {
                     MyRouterDelegate.of(context).push(const AdminPage());
-                  } else {}
+                  } else {
+                    launchUrl(adminUrl);
+                  }
                 },
               ),
               ListTile(

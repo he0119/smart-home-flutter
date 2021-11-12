@@ -39,7 +39,22 @@ class AppIotRefreshIntervalChanged extends AppPreferencesEvent {
   String toString() => 'AppIotRefreshIntervalChanged(interval: $interval)';
 }
 
-/// 更改博客和博客后台网址
+/// 更改管理网址
+class AppAdminUrlChanged extends AppPreferencesEvent {
+  final String adminUrl;
+
+  const AppAdminUrlChanged({
+    required this.adminUrl,
+  });
+
+  @override
+  List<Object> get props => [adminUrl];
+
+  @override
+  String toString() => 'AppAdminUrlChanged(adminUrl: $adminUrl)';
+}
+
+// 更改博客和博客后台网址
 class AppBlogUrlChanged extends AppPreferencesEvent {
   final String blogUrl;
   final String blogAdminUrl;

@@ -8,6 +8,7 @@ import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/core/model/models.dart';
+import 'package:smarthome/core/view/settings/admin_url_page.dart';
 import 'package:smarthome/core/view/settings/api_url_page.dart';
 import 'package:smarthome/core/view/settings/default_page.dart';
 import 'package:smarthome/core/view/settings/mipush_settings_tile.dart';
@@ -62,6 +63,15 @@ class SettingsScreen extends StatelessWidget {
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const ApiUrlPage(),
+                    ));
+                  },
+                ),
+                SettingsTile(
+                  title: '管理网址',
+                  subtitle: state.adminUrl,
+                  onPressed: (context) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const AdminUrlPage(),
                     ));
                   },
                 ),
