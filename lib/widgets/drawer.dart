@@ -41,17 +41,17 @@ class MyDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
-                title: const Text('设置'),
-                onTap: () {
-                  MyRouterDelegate.of(context).push(const SettingsPage());
-                },
-              ),
-              ListTile(
                 title: const Text('后台管理'),
                 onTap: () {
                   if (!kIsWeb && !Platform.isWindows) {
                     MyRouterDelegate.of(context).push(const AdminPage());
                   } else {}
+                },
+              ),
+              ListTile(
+                title: const Text('设置'),
+                onTap: () {
+                  MyRouterDelegate.of(context).push(const SettingsPage());
                 },
               ),
               ListTile(
