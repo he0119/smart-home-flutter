@@ -27,7 +27,7 @@ class BlogHomePage extends Page {
               Animation<double> secondaryAnimation) =>
           FadeTransition(
         opacity: animation,
-        child: BlogHomeScreen(),
+        child: const BlogHomeScreen(),
       ),
     );
   }

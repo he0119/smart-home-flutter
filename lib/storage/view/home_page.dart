@@ -31,7 +31,7 @@ class StorageHomePage extends Page {
               Animation<double> secondaryAnimation) =>
           FadeTransition(
         opacity: animation,
-        child: StorageHomeScreen(),
+        child: const StorageHomeScreen(),
       ),
     );
   }
@@ -79,7 +79,7 @@ class _StorageHomeBody extends StatelessWidget {
     return BlocBuilder<StorageHomeBloc, StorageHomeState>(
       builder: (context, state) {
         return AnimatedSwitcher(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           child: _buildBody(state, context),
         );
       },

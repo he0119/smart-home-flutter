@@ -27,7 +27,7 @@ class BoardHomePage extends Page {
               Animation<double> secondaryAnimation) =>
           FadeTransition(
         opacity: animation,
-        child: BoardHomeScreen(),
+        child: const BoardHomeScreen(),
       ),
     );
   }
