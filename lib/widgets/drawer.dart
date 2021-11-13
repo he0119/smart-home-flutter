@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/core/view/admin_page.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/storage.dart';
+import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/widgets/avatar.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -10,6 +15,7 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final adminUrl = context.watch<AppPreferencesBloc>().state.adminUrl;
     return Drawer(
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
@@ -33,6 +39,16 @@ class MyDrawer extends StatelessWidget {
                 title: const Text('回收站'),
                 onTap: () {
                   MyRouterDelegate.of(context).push(RecycleBinPage());
+                },
+              ),
+              ListTile(
+                title: const Text('管理'),
+                onTap: () {
+                  if (!kIsWeb && !Platform.isWindows) {
+                    MyRouterDelegate.of(context).push(const AdminPage());
+                  } else {
+                    launchUrl(adminUrl);
+                  }
                 },
               ),
               ListTile(
