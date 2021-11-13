@@ -52,10 +52,13 @@ class _AdminScreenState extends State<AdminScreen> {
                 }
                 return true;
               },
-              child: WebView(
-                initialUrl: state.adminUrl,
-                javascriptMode: JavascriptMode.unrestricted,
-                onWebViewCreated: _controller.complete,
+              child: SafeArea(
+                child: WebView(
+                  initialUrl: state.adminUrl,
+                  javascriptMode: JavascriptMode.unrestricted,
+                  onWebViewCreated: _controller.complete,
+                  // TODO: 同步软件的认证，这样就不需要再输入密码
+                ),
               )),
           floatingActionButton: controller.hasData
               ? FloatingActionButton(
