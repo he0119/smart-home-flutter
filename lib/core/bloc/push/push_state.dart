@@ -17,15 +17,15 @@ class PushSuccess extends PushState {
   final String local;
 
   /// 服务器上的推送 RegId
-  final String server;
+  final String? server;
 
   const PushSuccess({
     required this.local,
-    required this.server,
+    this.server,
   });
 
   @override
-  List<Object> get props => [local, server];
+  List<Object> get props => [local];
 
   @override
   String toString() => 'PushSuccess(local: $local, server: $server)';

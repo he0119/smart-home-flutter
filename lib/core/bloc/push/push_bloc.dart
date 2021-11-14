@@ -68,16 +68,32 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     if (event is PushUpdated) {
       yield PushInProgress();
       try {
-        // 获取服务器上的推送设置
-        final mipush = await pushRepository.miPush();
-        if (event.regId != mipush.regId) {
-          yield* updateMiPush(event.regId);
+        // 获取本地保存的 regId
+        final regId = appPreferencesBloc.state.miPushRegId;
+        // 如果新注册的 regId 与之前的不同，则更新
+        if (event.regId != regId) {
+          yield* _updateMiPush(event.regId);
         } else {
-          yield PushSuccess(local: event.regId, server: mipush.regId!);
+          yield PushSuccess(local: event.regId);
         }
       } on MyException catch (e) {
+        yield PushError(e.message);
+      }
+    }
+    if (event is PushRefreshed) {
+      yield PushInProgress();
+      try {
+        // 获取服务器上的 regId，如果与本地不同，则更新
+        final mipush = await pushRepository.miPush();
+        if (event.regId != mipush.regId) {
+          yield* _updateMiPush(event.regId);
+        } else {
+          yield PushSuccess(local: event.regId, server: mipush.regId);
+        }
+      } on MyException catch (e) {
+        // 如果服务器上的数据被删除，则还是更新
         if (e.message == '推送未绑定') {
-          yield* updateMiPush(event.regId);
+          yield* _updateMiPush(event.regId);
         } else {
           yield PushError(e.message);
         }
@@ -85,9 +101,10 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     }
   }
 
-  Stream<PushState> updateMiPush(String regId) async* {
+  Stream<PushState> _updateMiPush(String regId) async* {
     final mipush = await pushRepository.updateMiPush(regId: regId);
     _log.fine('小米推送注册标识符上传成功。');
+    appPreferencesBloc.add(MiPushRegIdChanged(miPushRegId: mipush.regId!));
     yield PushSuccess(local: regId, server: mipush.regId!);
   }
 }

@@ -25,6 +25,10 @@ class PushUpdated extends PushEvent {
 }
 
 class PushRefreshed extends PushEvent {
+  final String regId;
+
+  const PushRefreshed({required this.regId});
+
   @override
-  String toString() => 'PushRefreshed';
+  String toString() => 'PushRefreshed(regId: $regId)';
 }
