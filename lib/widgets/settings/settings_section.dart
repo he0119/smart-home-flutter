@@ -27,7 +27,7 @@ class SettingsSection extends StatelessWidget {
             ),
           ),
         ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: tiles.length,
           itemBuilder: (context, index) {

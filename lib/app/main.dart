@@ -136,7 +136,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
       scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(
         primaryColor: Colors.white,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,
         ),
