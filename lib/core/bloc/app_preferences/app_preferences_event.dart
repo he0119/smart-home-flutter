@@ -120,6 +120,21 @@ class MiPushKeyChanged extends AppPreferencesEvent {
       'miPushAppKey: $miPushAppKey)';
 }
 
+/// 更改小米推送注册标识符
+class MiPushRegIdChanged extends AppPreferencesEvent {
+  final String miPushRegId;
+
+  const MiPushRegIdChanged({
+    required this.miPushRegId,
+  });
+
+  @override
+  List<Object> get props => [miPushRegId];
+
+  @override
+  String toString() => 'MiPushRegIdChanged(miPushRegId: $miPushRegId)';
+}
+
 /// 更改评论排序方式
 class CommentDescendingChanged extends AppPreferencesEvent {
   final bool descending;
