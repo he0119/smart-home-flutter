@@ -90,10 +90,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
-
-    lintOptions {
-        checkReleaseBuilds false
-    }
 }
 
 flutter {
