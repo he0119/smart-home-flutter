@@ -16,7 +16,7 @@ class MyCircleAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = avatarUrl;
     if (url == null) {
-      return CircleAvatar(
+      return const CircleAvatar(
         backgroundColor: Colors.grey,
         child: Text('?', style: TextStyle(fontSize: 24)),
       );

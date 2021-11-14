@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -435,8 +434,8 @@ class CommentOrder extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Icon(Icons.sort),
-                  SizedBox(width: 4),
+                  const Icon(Icons.sort),
+                  const SizedBox(width: 4),
                   Text(descending ? '倒序' : '正序'),
                 ],
               ),

@@ -6,25 +6,23 @@ part of storage;
 // JsonSerializableGenerator
 // **************************************************************************
 
-Storage _$StorageFromJson(Map<String, dynamic> json) {
-  return Storage(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    parent: json['parent'] == null
-        ? null
-        : Storage.fromJson(json['parent'] as Map<String, dynamic>),
-    ancestors: (json['ancestors'] as List<dynamic>?)
-        ?.map((e) => Storage.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    description: json['description'] as String?,
-    children: (json['children'] as List<dynamic>?)
-        ?.map((e) => Storage.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    items: (json['items'] as List<dynamic>?)
-        ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+Storage _$StorageFromJson(Map<String, dynamic> json) => Storage(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      parent: json['parent'] == null
+          ? null
+          : Storage.fromJson(json['parent'] as Map<String, dynamic>),
+      ancestors: (json['ancestors'] as List<dynamic>?)
+          ?.map((e) => Storage.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      description: json['description'] as String?,
+      children: (json['children'] as List<dynamic>?)
+          ?.map((e) => Storage.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      items: (json['items'] as List<dynamic>?)
+          ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$StorageToJson(Storage instance) => <String, dynamic>{
       'id': instance.id,
@@ -36,21 +34,19 @@ Map<String, dynamic> _$StorageToJson(Storage instance) => <String, dynamic>{
       'items': instance.items,
     };
 
-Picture _$PictureFromJson(Map<String, dynamic> json) {
-  return Picture(
-    id: json['id'] as String,
-    item: json['item'] == null
-        ? null
-        : Item.fromJson(json['item'] as Map<String, dynamic>),
-    name: json['name'] as String?,
-    description: json['description'] as String,
-    url: json['url'] as String?,
-    boxX: (json['boxX'] as num?)?.toDouble(),
-    boxY: (json['boxY'] as num?)?.toDouble(),
-    boxH: (json['boxH'] as num?)?.toDouble(),
-    boxW: (json['boxW'] as num?)?.toDouble(),
-  );
-}
+Picture _$PictureFromJson(Map<String, dynamic> json) => Picture(
+      id: json['id'] as String,
+      item: json['item'] == null
+          ? null
+          : Item.fromJson(json['item'] as Map<String, dynamic>),
+      name: json['name'] as String?,
+      description: json['description'] as String,
+      url: json['url'] as String?,
+      boxX: (json['boxX'] as num?)?.toDouble(),
+      boxY: (json['boxY'] as num?)?.toDouble(),
+      boxH: (json['boxH'] as num?)?.toDouble(),
+      boxW: (json['boxW'] as num?)?.toDouble(),
+    );
 
 Map<String, dynamic> _$PictureToJson(Picture instance) => <String, dynamic>{
       'id': instance.id,
@@ -64,43 +60,41 @@ Map<String, dynamic> _$PictureToJson(Picture instance) => <String, dynamic>{
       'boxW': instance.boxW,
     };
 
-Item _$ItemFromJson(Map<String, dynamic> json) {
-  return Item(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    number: json['number'] as int?,
-    storage: json['storage'] == null
-        ? null
-        : Storage.fromJson(json['storage'] as Map<String, dynamic>),
-    description: json['description'] as String?,
-    price: (json['price'] as num?)?.toDouble(),
-    expiredAt: json['expiredAt'] == null
-        ? null
-        : DateTime.parse(json['expiredAt'] as String),
-    editedAt: json['editedAt'] == null
-        ? null
-        : DateTime.parse(json['editedAt'] as String),
-    editedBy: json['editedBy'] == null
-        ? null
-        : User.fromJson(json['editedBy'] as Map<String, dynamic>),
-    createdAt: json['createdAt'] == null
-        ? null
-        : DateTime.parse(json['createdAt'] as String),
-    createdBy: json['createdBy'] == null
-        ? null
-        : User.fromJson(json['createdBy'] as Map<String, dynamic>),
-    isDeleted: json['isDeleted'] as bool?,
-    deletedAt: json['deletedAt'] == null
-        ? null
-        : DateTime.parse(json['deletedAt'] as String),
-    consumables: (json['consumables'] as List<dynamic>?)
-        ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    pictures: (json['pictures'] as List<dynamic>?)
-        ?.map((e) => Picture.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+Item _$ItemFromJson(Map<String, dynamic> json) => Item(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      number: json['number'] as int?,
+      storage: json['storage'] == null
+          ? null
+          : Storage.fromJson(json['storage'] as Map<String, dynamic>),
+      description: json['description'] as String?,
+      price: (json['price'] as num?)?.toDouble(),
+      expiredAt: json['expiredAt'] == null
+          ? null
+          : DateTime.parse(json['expiredAt'] as String),
+      editedAt: json['editedAt'] == null
+          ? null
+          : DateTime.parse(json['editedAt'] as String),
+      editedBy: json['editedBy'] == null
+          ? null
+          : User.fromJson(json['editedBy'] as Map<String, dynamic>),
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      createdBy: json['createdBy'] == null
+          ? null
+          : User.fromJson(json['createdBy'] as Map<String, dynamic>),
+      isDeleted: json['isDeleted'] as bool?,
+      deletedAt: json['deletedAt'] == null
+          ? null
+          : DateTime.parse(json['deletedAt'] as String),
+      consumables: (json['consumables'] as List<dynamic>?)
+          ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      pictures: (json['pictures'] as List<dynamic>?)
+          ?.map((e) => Picture.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
       'id': instance.id,

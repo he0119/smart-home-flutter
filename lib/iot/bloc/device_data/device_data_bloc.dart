@@ -69,7 +69,7 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
         if (data.isNotEmpty) {
           add(DeviceDataupdated(data.first));
         } else {
-          add(DeviceDataStoped('无数据'));
+          add(const DeviceDataStoped('无数据'));
         }
       } on MyException catch (e) {
         add(DeviceDataStoped(e.message));

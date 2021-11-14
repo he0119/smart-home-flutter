@@ -11,7 +11,7 @@ class SettingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      separatorBuilder: (context, index) => Divider(height: 1),
+      separatorBuilder: (context, index) => const Divider(height: 1),
       itemCount: sections.length,
       itemBuilder: (context, index) {
         return sections[index];
