@@ -130,9 +130,11 @@ class SettingsScreen extends StatelessWidget {
                   title: '评论排序',
                   subtitle: state.commentDescending ? '倒序' : '正序',
                   onPressed: (context) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const CommentOrderPage(),
-                    ));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const CommentOrderPage(),
+                      ),
+                    );
                   },
                 ),
               ],
