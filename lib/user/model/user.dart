@@ -18,7 +18,7 @@ class User extends Equatable {
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
   @override
-  List<Object?> get props => [username, email, avatarUrl];
+  List<Object?> get props => [username];
 
   @override
   String toString() => username;
