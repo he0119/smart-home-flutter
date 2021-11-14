@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:settings_ui/settings_ui.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/iot/view/settings/refresh_interval_page.dart';
+import 'package:smarthome/widgets/settings/settings.dart';
 
 class IotSettingsPage extends Page {
   const IotSettingsPage()
@@ -28,7 +28,6 @@ class IotSettingsScreen extends StatelessWidget {
       ),
       body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => SettingsList(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           sections: [
             SettingsSection(
               title: '网络',

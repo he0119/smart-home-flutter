@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:settings_ui/settings_ui.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/bloc/blocs.dart';
@@ -15,6 +14,7 @@ import 'package:smarthome/core/view/settings/mipush_settings_tile.dart';
 import 'package:smarthome/core/view/settings/theme_mode.dart';
 import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/utils/theme_mode_extension.dart';
+import 'package:smarthome/widgets/settings/settings.dart';
 
 class SettingsPage extends Page {
   const SettingsPage()
@@ -43,7 +43,6 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => SettingsList(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           sections: [
             SettingsSection(
               title: '通用',

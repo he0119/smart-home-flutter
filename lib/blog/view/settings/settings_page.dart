@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:settings_ui/settings_ui.dart';
 import 'package:smarthome/blog/view/settings/blog_admin_url_page.dart';
 import 'package:smarthome/blog/view/settings/blog_url_page.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/widgets/settings/settings.dart';
 
 class BlogSettingsPage extends Page {
   const BlogSettingsPage()
@@ -32,7 +32,6 @@ class BlogSettingsScreen extends StatelessWidget {
       ),
       body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
         builder: (context, state) => SettingsList(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           sections: [
             SettingsSection(
               title: '网址',
