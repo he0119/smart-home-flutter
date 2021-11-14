@@ -27,7 +27,6 @@ class AppPreferencesBloc
       final apiUrl = prefs.getString('apiUrl');
       final miPushAppId = prefs.getString('miPushAppId');
       final miPushAppKey = prefs.getString('miPushAppKey');
-      final miPushRegId = prefs.getString('miPushRegId');
       final refreshInterval = prefs.getInt('refreshInterval');
       final adminUrl = prefs.getString('adminUrl');
       final blogUrl = prefs.getString('blogUrl');
@@ -53,7 +52,6 @@ class AppPreferencesBloc
         apiUrl: apiUrl,
         miPushAppId: miPushAppId,
         miPushAppKey: miPushAppKey,
-        miPushRegId: miPushRegId,
         refreshInterval: refreshInterval,
         adminUrl: adminUrl,
         blogUrl: blogUrl,
@@ -114,13 +112,6 @@ class AppPreferencesBloc
       yield state.copyWith(
         miPushAppId: event.miPushAppId,
         miPushAppKey: event.miPushAppKey,
-      );
-    }
-    if (event is MiPushRegIdChanged) {
-      final prefs = await _prefs;
-      await prefs.setString('miPushRegId', event.miPushRegId);
-      yield state.copyWith(
-        miPushRegId: event.miPushRegId,
       );
     }
     if (event is CommentDescendingChanged) {
