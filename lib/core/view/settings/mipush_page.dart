@@ -7,11 +7,11 @@ class MiPushPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? localRegId;
-    String? serverRegId;
-    String status = '未知';
     return BlocBuilder<PushBloc, PushState>(
       builder: (context, state) {
+        String status = '未知';
+        String? localRegId;
+        String? serverRegId;
         if (state is PushInProgress) {
           status = '注册中';
         }
@@ -32,10 +32,8 @@ class MiPushPage extends StatelessWidget {
                 child: IconButton(
                   icon: const Icon(Icons.sync),
                   onPressed: () {
-                    final local = localRegId;
-                    if (local != null) {
-                      context.read<PushBloc>().add(PushStarted());
-                    }
+                    // 重新初始化小米推送以同步本地与服务器的注册状态
+                    context.read<PushBloc>().add(PushStarted());
                   },
                 ),
               ),
@@ -44,7 +42,7 @@ class MiPushPage extends StatelessWidget {
           body: ListView(
             children: [
               ListTile(
-                title: const Text('推送状态'),
+                title: const Text('状态'),
                 subtitle: Text(status),
               ),
               ListTile(

@@ -9,9 +9,9 @@ class MiPushSettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var status = '未知';
     return BlocBuilder<PushBloc, PushState>(
       builder: (context, state) {
+        var status = '未知';
         if (state is PushInProgress) {
           status = '注册中';
         }

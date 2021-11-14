@@ -13,17 +13,19 @@ class PushInProgress extends PushState {
 }
 
 class PushSuccess extends PushState {
-  /// 本地获取的推送
+  /// 本地获取的推送 RegId
   final String local;
-  final String? server;
+
+  /// 服务器上的推送 RegId
+  final String server;
 
   const PushSuccess({
     required this.local,
-    this.server,
+    required this.server,
   });
 
   @override
-  List<Object> get props => [local];
+  List<Object> get props => [local, server];
 
   @override
   String toString() => 'PushSuccess(local: $local, server: $server)';

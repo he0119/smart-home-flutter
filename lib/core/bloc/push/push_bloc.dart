@@ -73,7 +73,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
         if (event.regId != mipush.regId) {
           yield* updateMiPush(event.regId);
         } else {
-          yield PushSuccess(local: event.regId, server: mipush.regId);
+          yield PushSuccess(local: event.regId, server: mipush.regId!);
         }
       } on MyException catch (e) {
         if (e.message == '推送未绑定') {
@@ -88,6 +88,6 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   Stream<PushState> updateMiPush(String regId) async* {
     final mipush = await pushRepository.updateMiPush(regId: regId);
     _log.fine('小米推送注册标识符上传成功。');
-    yield PushSuccess(local: regId, server: mipush.regId);
+    yield PushSuccess(local: regId, server: mipush.regId!);
   }
 }
