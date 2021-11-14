@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:settings_ui/settings_ui.dart';
 import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/core/model/models.dart';
+import 'package:smarthome/widgets/settings/settings.dart';
 
 class DefaultPage extends StatelessWidget {
   const DefaultPage({Key? key}) : super(key: key);
@@ -13,7 +13,6 @@ class DefaultPage extends StatelessWidget {
       builder: (context, state) => Scaffold(
         appBar: AppBar(title: const Text('默认主页')),
         body: SettingsList(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           sections: [
             SettingsSection(tiles: [
               SettingsTile(
