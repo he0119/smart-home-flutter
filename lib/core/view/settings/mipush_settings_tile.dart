@@ -9,14 +9,17 @@ class MiPushSettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var status = '未知';
     return BlocBuilder<PushBloc, PushState>(
       builder: (context, state) {
-        var status = '注册中';
+        if (state is PushInProgress) {
+          status = '注册中';
+        }
         if (state is PushSuccess) {
           status = '已注册';
         }
         if (state is PushError) {
-          status = '注册失败';
+          status = state.message;
         }
         return SettingsTile(
           title: '小米推送',

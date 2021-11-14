@@ -50,38 +50,44 @@ class PushBloc extends Bloc<PushEvent, PushState> {
         // 注册小米推送
         _log.fine('小米推送注册中');
         await miPushMethod.invokeMethod(
-            'init', {'appId': miPushKey.appId, 'appKey': miPushKey.appKey});
+          'init',
+          {'appId': miPushKey.appId, 'appKey': miPushKey.appKey},
+        );
         miPushMethod.setMethodCallHandler(
           (call) async {
             if (call.method == 'ReceiveRegisterResult' &&
                 call.arguments != null) {
               _log.fine('小米推送注册成功');
               final String regId = call.arguments;
-              add(PushUpdated(miPush: MiPush(regId: null)));
-
-              if (regId != appPreferencesBloc.state.miPushRegId) {
-                final mipush = await pushRepository.updateMiPush(regId: regId);
-                add(PushUpdated(miPush: mipush));
-                appPreferencesBloc
-                    .add(MiPushRegIdChanged(miPushRegId: mipush.regId!));
-                _log.fine('小米推送注册标识符上传成功。');
-              }
+              add(PushUpdated(regId: regId));
             }
           },
         );
       }
     }
     if (event is PushUpdated) {
-      yield PushSuccess(miPush: event.miPush);
-    }
-    if (event is PushRefreshed) {
       yield PushInProgress();
       try {
+        // 获取服务器上的推送设置
         final mipush = await pushRepository.miPush();
-        yield PushSuccess(miPush: mipush);
+        if (event.regId != mipush.regId) {
+          yield* updateMiPush(event.regId);
+        } else {
+          yield PushSuccess(local: event.regId, server: mipush.regId);
+        }
       } on MyException catch (e) {
-        yield PushError(e.message);
+        if (e.message == '推送未绑定') {
+          yield* updateMiPush(event.regId);
+        } else {
+          yield PushError(e.message);
+        }
       }
     }
+  }
+
+  Stream<PushState> updateMiPush(String regId) async* {
+    final mipush = await pushRepository.updateMiPush(regId: regId);
+    _log.fine('小米推送注册标识符上传成功。');
+    yield PushSuccess(local: regId, server: mipush.regId);
   }
 }

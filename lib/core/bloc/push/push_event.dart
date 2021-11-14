@@ -13,15 +13,15 @@ class PushStarted extends PushEvent {
 }
 
 class PushUpdated extends PushEvent {
-  final MiPush miPush;
+  final String regId;
 
-  const PushUpdated({required this.miPush});
-
-  @override
-  List<Object> get props => [miPush];
+  const PushUpdated({required this.regId});
 
   @override
-  String toString() => 'PushUpdated(miPush: $miPush)';
+  List<Object> get props => [regId];
+
+  @override
+  String toString() => 'PushUpdated(regId: $regId)';
 }
 
 class PushRefreshed extends PushEvent {
