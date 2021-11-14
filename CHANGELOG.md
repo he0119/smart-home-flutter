@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.8.0] - 2021-11-14
+
+### Added
+
+- 添加页面转跳动画
+- 添加直接从软件访问 Django Admin 的功能
+
+### Changed
+
+- 升级至 Flutter 2.5
+- 使用服务器提供的头像
+
+### Fixed
+
+- 修复无设备数据时的报错
+- 修复小米推送注册的问题
+
 ## [0.7.5] - 2021-10-29
 
 ### Added
@@ -338,8 +355,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.7.5...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.8.0...HEAD
 
+[0.8.0]: https://github.com/he0119/smart-home-flutter/compare/v0.7.5...v0.8.0
 [0.7.5]: https://github.com/he0119/smart-home-flutter/compare/v0.7.4...v0.7.5
 [0.7.4]: https://github.com/he0119/smart-home-flutter/compare/v0.7.3...v0.7.4
 [0.7.3]: https://github.com/he0119/smart-home-flutter/compare/v0.7.2...v0.7.3
