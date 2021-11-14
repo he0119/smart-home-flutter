@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:settings_ui/settings_ui.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/widgets/settings/settings.dart';
 
 class CommentOrderPage extends StatelessWidget {
   const CommentOrderPage({Key? key}) : super(key: key);
@@ -12,7 +12,6 @@ class CommentOrderPage extends StatelessWidget {
       builder: (context, state) => Scaffold(
         appBar: AppBar(title: const Text('评论排序')),
         body: SettingsList(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           sections: [
             SettingsSection(
               tiles: [
