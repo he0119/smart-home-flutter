@@ -20,7 +20,7 @@ class SettingsSection extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16, top: 16),
             child: Text(
               title!,
-              style: Theme.of(context).textTheme.subtitle1?.copyWith(
+              style: Theme.of(context).textTheme.subtitle2?.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                     fontWeight: FontWeight.bold,
                   ),
