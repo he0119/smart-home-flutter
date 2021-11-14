@@ -33,7 +33,7 @@ class MiPushPage extends StatelessWidget {
                 child: IconButton(
                   icon: const Icon(Icons.sync),
                   onPressed: () {
-                    // 重新同步本地与服务器的注册状态
+                    // 重新同步本地与服务器的注册数据
                     final local = localRegId;
                     if (local != null) {
                       context.read<PushBloc>().add(PushRefreshed(regId: local));
@@ -57,7 +57,7 @@ class MiPushPage extends StatelessWidget {
               ),
               ListTile(
                 title: const Text('注册识别码（服务器）'),
-                subtitle: Text(serverRegId ?? ''),
+                subtitle: Text(serverRegId ?? '单击同步按钮获取并同步服务器数据'),
               ),
             ],
           ),
