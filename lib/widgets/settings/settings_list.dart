@@ -10,10 +10,11 @@ class SettingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
+      separatorBuilder: (context, index) => Divider(height: 1),
       itemCount: sections.length,
       itemBuilder: (context, index) {
-        return Card(child: sections[index]);
+        return sections[index];
       },
     );
   }
