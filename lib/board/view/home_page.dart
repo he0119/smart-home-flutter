@@ -21,9 +21,14 @@ class BoardHomePage extends Page {
   @override
   Route createRoute(BuildContext context) {
     BlocProvider.of<BoardHomeBloc>(context).add(const BoardHomeFetched());
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: this,
-      builder: (context) => const BoardHomeScreen(),
+      pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) =>
+          FadeTransition(
+        opacity: animation,
+        child: const BoardHomeScreen(),
+      ),
     );
   }
 }

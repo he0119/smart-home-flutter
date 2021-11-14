@@ -1,58 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/core/bloc/blocs.dart';
-import 'package:smarthome/core/model/models.dart';
 
 class MiPushPage extends StatelessWidget {
   const MiPushPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    late MiPush miPush;
-    return BlocBuilder<PushBloc, PushState>(builder: (context, state) {
-      if (state is PushInProgress) {
-        miPush = MiPush(regId: '正在获取数据');
-      }
-      if (state is PushSuccess) {
-        miPush = state.miPush;
-      }
-      if (state is PushError) {
-        miPush = MiPush(regId: state.message);
-      }
-      return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-        builder: (context, state) => Scaffold(
+    return BlocBuilder<PushBloc, PushState>(
+      builder: (context, state) {
+        final localRegId =
+            context.watch<AppPreferencesBloc>().state.miPushRegId;
+        String? serverRegId;
+
+        String status = '未知';
+        if (state is PushInProgress) {
+          status = '注册中';
+        }
+        if (state is PushSuccess) {
+          serverRegId = state.server;
+          status = '已注册';
+        }
+        if (state is PushError) {
+          status = state.message;
+        }
+        return Scaffold(
           appBar: AppBar(
             title: const Text('小米推送'),
             actions: [
               Tooltip(
                 message: '同步',
                 child: IconButton(
-                    icon: const Icon(Icons.sync),
-                    onPressed: () {
-                      BlocProvider.of<AppPreferencesBloc>(context).add(
-                          const MiPushRegIdChanged(miPushRegId: '正在同步注册标识符'));
-                      BlocProvider.of<PushBloc>(context).add(PushStarted());
-                    }),
+                  icon: const Icon(Icons.sync),
+                  onPressed: () {
+                    // 重新同步本地与服务器的注册数据
+                    final local = localRegId;
+                    if (local != null) {
+                      context.read<PushBloc>().add(PushRefreshed(regId: local));
+                    } else {
+                      context.read<PushBloc>().add(PushStarted());
+                    }
+                  },
+                ),
               ),
             ],
           ),
           body: ListView(
             children: [
               ListTile(
+                title: const Text('状态'),
+                subtitle: Text(status),
+              ),
+              ListTile(
                 title: const Text('注册识别码（本地）'),
-                subtitle: Text(state.miPushRegId ?? ''),
+                subtitle: Text(localRegId ?? ''),
               ),
               ListTile(
                 title: const Text('注册识别码（服务器）'),
-                subtitle: Text(miPush.regId ?? '单击获取服务器上数据'),
-                onTap: () {
-                  BlocProvider.of<PushBloc>(context).add(PushRefreshed());
-                },
+                subtitle: Text(serverRegId ?? '单击同步按钮获取并同步服务器数据'),
               ),
             ],
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

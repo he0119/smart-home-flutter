@@ -1,6 +1,7 @@
 library push;
 
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:smarthome/user/user.dart';
 
 part 'push.g.dart';
@@ -18,6 +19,11 @@ class MiPush {
   factory MiPush.fromJson(Map<String, dynamic> json) => _$MiPushFromJson(json);
 
   Map<String, dynamic> toJson() => _$MiPushToJson(this);
+
+  @override
+  String toString() {
+    return 'MiPush(regId: $regId)';
+  }
 }
 
 @JsonSerializable()

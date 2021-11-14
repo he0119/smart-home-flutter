@@ -3,24 +3,28 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smarthome/utils/gravatar_url.dart';
 
-class CircleGravatar extends StatelessWidget {
-  final String email;
-  final int? size;
+class MyCircleAvatar extends StatelessWidget {
+  final String? avatarUrl;
 
-  const CircleGravatar({
+  const MyCircleAvatar({
     Key? key,
-    required this.email,
-    this.size,
+    required this.avatarUrl,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final url = avatarUrl;
+    if (url == null) {
+      return const CircleAvatar(
+        backgroundColor: Colors.grey,
+        child: Text('?', style: TextStyle(fontSize: 24)),
+      );
+    }
     // CachedNetworkImage 暂时不支持 Windows
     if (kIsWeb || !Platform.isWindows) {
       return CachedNetworkImage(
-        imageUrl: getGravatarUrl(email: email, size: size),
+        imageUrl: url,
         imageBuilder: (context, imageProvider) => CircleAvatar(
           backgroundImage: imageProvider,
         ),
@@ -29,7 +33,7 @@ class CircleGravatar extends StatelessWidget {
       );
     } else {
       return CircleAvatar(
-        backgroundImage: NetworkImage(getGravatarUrl(email: email, size: size)),
+        backgroundImage: NetworkImage(url),
       );
     }
   }

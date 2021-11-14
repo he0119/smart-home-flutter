@@ -21,14 +21,12 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
     if (event is ItemDetailStarted) {
       try {
         final item = await storageRepository.item(
-          name: event.name,
           id: event.id,
         );
         if (item == null) {
           yield ItemDetailFailure(
             '获取物品失败，物品不存在',
-            name: event.name,
-            id: event.id!,
+            id: event.id,
           );
           return;
         }
@@ -36,7 +34,6 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
       } on MyException catch (e) {
         yield ItemDetailFailure(
           e.message,
-          name: event.name,
           id: event.id,
         );
       }
@@ -46,14 +43,12 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
       yield ItemDetailInProgress();
       try {
         final item = await storageRepository.item(
-          name: currentState.item.name,
           id: currentState.item.id,
           cache: false,
         );
         if (item == null) {
           yield ItemDetailFailure(
             '获取物品失败，物品不存在',
-            name: currentState.item.name,
             id: currentState.item.id,
           );
           return;
@@ -62,7 +57,6 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
       } on MyException catch (e) {
         yield ItemDetailFailure(
           e.message,
-          name: currentState.item.name,
           id: currentState.item.id,
         );
       }

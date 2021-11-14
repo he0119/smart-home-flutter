@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gql/ast.dart';
-import 'package:gql_exec/gql_exec.dart';
 import 'package:graphql/client.dart' hide NetworkException, ServerException;
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';

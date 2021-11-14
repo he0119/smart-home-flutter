@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -25,10 +24,15 @@ class TopicDetailPage extends Page {
 
   @override
   Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: this,
-      builder: (context) => TopicDetailScreen(
-        topicId: topicId,
+      pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) =>
+          FadeTransition(
+        opacity: animation,
+        child: TopicDetailScreen(
+          topicId: topicId,
+        ),
       ),
     );
   }
@@ -50,12 +54,12 @@ class TopicDetailScreen extends StatelessWidget {
       providers: [
         BlocProvider<TopicDetailBloc>(
           create: (context) => TopicDetailBloc(
-            boardRepository: RepositoryProvider.of<BoardRepository>(context),
+            boardRepository: context.read<BoardRepository>(),
           )..add(TopicDetailFetched(topicId: topicId, descending: descending)),
         ),
         BlocProvider<TopicEditBloc>(
           create: (context) => TopicEditBloc(
-            boardRepository: RepositoryProvider.of<BoardRepository>(context),
+            boardRepository: context.read<BoardRepository>(),
           ),
         )
       ],
@@ -82,10 +86,10 @@ class _DetailScreen extends StatelessWidget {
             appBar: AppBar(),
             body: ErrorMessageButton(
               onPressed: () {
-                BlocProvider.of<TopicDetailBloc>(context).add(
-                  TopicDetailFetched(
-                      topicId: state.topicId, descending: descending),
-                );
+                context.read<TopicDetailBloc>().add(
+                      TopicDetailFetched(
+                          topicId: state.topicId, descending: descending),
+                    );
               },
               message: state.message,
             ),
@@ -94,7 +98,7 @@ class _DetailScreen extends StatelessWidget {
         if (state is TopicDetailSuccess) {
           return BlocProvider(
             create: (context) => CommentEditBloc(
-              boardRepository: RepositoryProvider.of<BoardRepository>(context),
+              boardRepository: context.read<BoardRepository>(),
             ),
             child: MultiBlocListener(
               listeners: [
@@ -124,11 +128,10 @@ class _DetailScreen extends StatelessWidget {
                 BlocListener<CommentEditBloc, CommentEditState>(
                   listener: (context, state) {
                     if (state is CommentDeleteSuccess) {
-                      BlocProvider.of<TopicDetailBloc>(context)
-                          .add(TopicDetailFetched(
-                        descending: descending,
-                        cache: false,
-                      ));
+                      context.read<TopicDetailBloc>().add(TopicDetailFetched(
+                            descending: descending,
+                            cache: false,
+                          ));
                       showInfoSnackBar('评论删除成功');
                     }
                     if (state is CommentFailure) {
@@ -142,11 +145,10 @@ class _DetailScreen extends StatelessWidget {
                   appBar: _buildAppBar(context, state, descending, loginUser),
                   body: RefreshIndicator(
                     onRefresh: () async {
-                      BlocProvider.of<TopicDetailBloc>(context)
-                          .add(TopicDetailFetched(
-                        descending: descending,
-                        cache: false,
-                      ));
+                      context.read<TopicDetailBloc>().add(TopicDetailFetched(
+                            descending: descending,
+                            cache: false,
+                          ));
                     },
                     child: InfiniteList<Comment>(
                       items: state.comments,
@@ -218,8 +220,7 @@ class _DetailScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (_) => BlocProvider(
                     create: (context) => TopicEditBloc(
-                        boardRepository:
-                            RepositoryProvider.of<BoardRepository>(context)),
+                        boardRepository: context.read<BoardRepository>()),
                     child: TopicEditPage(
                       isEditing: true,
                       topic: state.topic,
@@ -227,10 +228,10 @@ class _DetailScreen extends StatelessWidget {
                   ),
                 ),
               );
-              BlocProvider.of<TopicDetailBloc>(context).add(TopicDetailFetched(
-                descending: descending,
-                cache: false,
-              ));
+              context.read<TopicDetailBloc>().add(TopicDetailFetched(
+                    descending: descending,
+                    cache: false,
+                  ));
             }
             if (value == TopicDetailMenu.delete) {
               await showDialog(
@@ -248,7 +249,8 @@ class _DetailScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         showInfoSnackBar('正在删除...', duration: 1);
-                        BlocProvider.of<TopicEditBloc>(context)
+                        context
+                            .read<TopicEditBloc>()
                             .add(TopicDeleted(topic: state.topic));
                         Navigator.pop(context);
                       },
@@ -274,7 +276,8 @@ class _DetailScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         showInfoSnackBar('正在置顶...', duration: 1);
-                        BlocProvider.of<TopicEditBloc>(context)
+                        context
+                            .read<TopicEditBloc>()
                             .add(TopicPinned(topic: state.topic));
                         Navigator.pop(context);
                       },
@@ -300,7 +303,8 @@ class _DetailScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         showInfoSnackBar('正在取消...', duration: 1);
-                        BlocProvider.of<TopicEditBloc>(context)
+                        context
+                            .read<TopicEditBloc>()
                             .add(TopicUnpinned(topic: state.topic));
                         Navigator.pop(context);
                       },
@@ -326,7 +330,8 @@ class _DetailScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         showInfoSnackBar('正在关闭...', duration: 1);
-                        BlocProvider.of<TopicEditBloc>(context)
+                        context
+                            .read<TopicEditBloc>()
                             .add(TopicClosed(topic: state.topic));
                         Navigator.pop(context);
                       },
@@ -352,7 +357,8 @@ class _DetailScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         showInfoSnackBar('正在开启...', duration: 1);
-                        BlocProvider.of<TopicEditBloc>(context)
+                        context
+                            .read<TopicEditBloc>()
                             .add(TopicReopened(topic: state.topic));
                         Navigator.pop(context);
                       },
@@ -424,14 +430,23 @@ class CommentOrder extends StatelessWidget {
           const Spacer(),
           PopupMenuButton(
             tooltip: '评论排序',
-            icon: Icon(
-              descending ? Icons.arrow_downward : Icons.arrow_upward,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  const Icon(Icons.sort),
+                  const SizedBox(width: 4),
+                  Text(descending ? '倒序' : '正序'),
+                ],
+              ),
             ),
             onSelected: (dynamic value) {
-              BlocProvider.of<AppPreferencesBloc>(context)
-                  .add(CommentDescendingChanged(descending: value));
-              BlocProvider.of<TopicDetailBloc>(context)
-                  .add(TopicDetailFetched(topicId: topicId, descending: value));
+              context.read<AppPreferencesBloc>().add(
+                    CommentDescendingChanged(descending: value),
+                  );
+              context.read<TopicDetailBloc>().add(
+                    TopicDetailFetched(topicId: topicId, descending: value),
+                  );
             },
             itemBuilder: (context) => <PopupMenuItem<bool>>[
               const PopupMenuItem(

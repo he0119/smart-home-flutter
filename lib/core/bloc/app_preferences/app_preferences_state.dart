@@ -7,6 +7,7 @@ class AppPreferencesState extends Equatable {
   final String? miPushAppKey;
   final String? miPushRegId;
   final int refreshInterval;
+  final String adminUrl;
   final String blogUrl;
   final String? blogAdminUrl;
   final AppTab defaultPage;
@@ -21,6 +22,7 @@ class AppPreferencesState extends Equatable {
     required this.miPushAppKey,
     required this.miPushRegId,
     required this.refreshInterval,
+    required this.adminUrl,
     required this.blogUrl,
     required this.blogAdminUrl,
     required this.defaultPage,
@@ -37,6 +39,7 @@ class AppPreferencesState extends Equatable {
       miPushAppKey: null,
       miPushRegId: null,
       refreshInterval: 10,
+      adminUrl: 'https://smart.hehome.xyz/admin/',
       blogUrl: 'https://hehome.xyz',
       blogAdminUrl: null,
       defaultPage: AppTab.storage,
@@ -53,6 +56,7 @@ class AppPreferencesState extends Equatable {
     String? miPushAppKey,
     String? miPushRegId,
     int? refreshInterval,
+    String? adminUrl,
     String? blogUrl,
     String? blogAdminUrl,
     AppTab? defaultPage,
@@ -67,6 +71,7 @@ class AppPreferencesState extends Equatable {
       miPushAppKey: miPushAppKey ?? this.miPushAppKey,
       miPushRegId: miPushRegId ?? this.miPushRegId,
       refreshInterval: refreshInterval ?? this.refreshInterval,
+      adminUrl: adminUrl ?? this.adminUrl,
       blogUrl: blogUrl ?? this.blogUrl,
       blogAdminUrl: blogAdminUrl ?? this.blogAdminUrl,
       defaultPage: defaultPage ?? this.defaultPage,
@@ -85,6 +90,7 @@ class AppPreferencesState extends Equatable {
       miPushAppKey,
       miPushRegId,
       refreshInterval,
+      adminUrl,
       blogUrl,
       blogAdminUrl,
       defaultPage,

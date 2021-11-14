@@ -25,9 +25,14 @@ class StorageHomePage extends Page {
   Route createRoute(BuildContext context) {
     BlocProvider.of<StorageHomeBloc>(context)
         .add(const StorageHomeFetched(itemType: ItemType.all));
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: this,
-      builder: (context) => const StorageHomeScreen(),
+      pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) =>
+          FadeTransition(
+        opacity: animation,
+        child: const StorageHomeScreen(),
+      ),
     );
   }
 }
@@ -73,88 +78,100 @@ class _StorageHomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<StorageHomeBloc, StorageHomeState>(
       builder: (context, state) {
-        if (state is StorageHomeFailure) {
-          return ErrorMessageButton(
-            onPressed: () {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: _buildBody(state, context),
+        );
+      },
+    );
+  }
+
+  Widget _buildBody(StorageHomeState state, BuildContext context) {
+    if (state is StorageHomeFailure) {
+      return ErrorMessageButton(
+        onPressed: () {
+          BlocProvider.of<StorageHomeBloc>(context).add(
+            StorageHomeFetched(
+              itemType: state.itemType,
+              cache: false,
+            ),
+          );
+        },
+        message: state.message,
+      );
+    }
+    if (state is StorageHomeSuccess) {
+      // 从各种类型详情页返回
+      return WillPopScope(
+        onWillPop: () async {
+          if (state.itemType == ItemType.all) {
+            return true;
+          }
+          BlocProvider.of<StorageHomeBloc>(context)
+              .add(const StorageHomeFetched(itemType: ItemType.all));
+          return false;
+        },
+        child: RefreshIndicator(
+          onRefresh: () async {
+            BlocProvider.of<StorageHomeBloc>(context).add(
+              StorageHomeFetched(
+                itemType: state.itemType,
+                cache: false,
+              ),
+            );
+          },
+          child: SliverInfiniteList<List<Item>>(
+            key: ValueKey(state.itemType),
+            slivers: _buildSlivers(context, state),
+            hasReachedMax: state.hasReachedMax,
+            itemCount: state.itemCount,
+            onFetch: () {
               BlocProvider.of<StorageHomeBloc>(context).add(
                 StorageHomeFetched(
                   itemType: state.itemType,
-                  cache: false,
                 ),
               );
             },
-            message: state.message,
-          );
-        }
-        if (state is StorageHomeSuccess) {
-          // 从各种类型详情页返回
-          return WillPopScope(
-            onWillPop: () async {
-              if (state.itemType == ItemType.all) {
-                return true;
-              }
-              BlocProvider.of<StorageHomeBloc>(context)
-                  .add(const StorageHomeFetched(itemType: ItemType.all));
-              return false;
-            },
-            child: RefreshIndicator(
-              onRefresh: () async {
-                BlocProvider.of<StorageHomeBloc>(context)
-                    .add(StorageHomeFetched(
-                  itemType: state.itemType,
-                  cache: false,
-                ));
-              },
-              child: SliverInfiniteList<List<Item>>(
-                key: ValueKey(state.itemType),
-                slivers: _buildSlivers(context, state),
-                hasReachedMax: state.hasReachedMax,
-                itemCount: state.itemCount,
-                onFetch: () {
-                  BlocProvider.of<StorageHomeBloc>(context)
-                      .add(StorageHomeFetched(
-                    itemType: state.itemType,
-                  ));
-                },
-              ),
-            ),
-          );
-        }
-        return const CenterLoadingIndicator();
-      },
-    );
+          ),
+        ),
+      );
+    }
+    return const CenterLoadingIndicator();
   }
 
   List<Widget> _buildSlivers(BuildContext context, StorageHomeSuccess state) {
     List<Widget> listofWidget = [];
 
-    listofWidget.add(
-      SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-          child: InkWell(
-            onTap: () {
-              MyRouterDelegate.of(context).addStorageGroup();
-            },
-            child: Card(
-              color: Theme.of(context).colorScheme.secondary,
-              child: ListTile(
-                title: Text(
-                  '所有位置',
-                  style: TextStyle(
+    // 仅在主界面添加所有位置按钮
+    if (state.itemType == ItemType.all) {
+      listofWidget.add(
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+            child: InkWell(
+              onTap: () {
+                MyRouterDelegate.of(context).addStorageGroup();
+              },
+              child: Card(
+                color: Theme.of(context).colorScheme.secondary,
+                child: ListTile(
+                  title: Text(
+                    '所有位置',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                  ),
+                  trailing: Icon(
+                    Icons.storage,
                     color: Theme.of(context).colorScheme.onSecondary,
                   ),
-                ),
-                trailing: Icon(
-                  Icons.storage,
-                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
 
     if (state.expiredItems?.isNotEmpty ?? false) {
       listofWidget.add(_buildSliverStickyHeader(

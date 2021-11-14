@@ -16,62 +16,63 @@ import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
 
 class ItemDetailPage extends Page {
-  /// 物品名称
-  final String itemName;
-
-  /// 物品 ID
-  final String? itemId;
+  final String itemId;
   final int group;
 
   ItemDetailPage({
-    required this.itemName,
-    this.itemId,
+    required this.itemId,
     required this.group,
   }) : super(
-          key: ValueKey('$group/$itemName'),
-          name: '/item/$itemName',
+          key: ValueKey('$group/$itemId'),
+          name: '/item/$itemId',
         );
 
   @override
   Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: this,
-      builder: (context) => MultiBlocProvider(
-        providers: [
-          BlocProvider<ItemDetailBloc>(
-            create: (context) => ItemDetailBloc(
-              storageRepository:
-                  RepositoryProvider.of<StorageRepository>(context),
-            )..add(ItemDetailStarted(
-                name: itemName,
-                id: itemId,
-              )),
-          ),
-          BlocProvider<ItemEditBloc>(
-            create: (context) => ItemEditBloc(
-              storageRepository:
-                  RepositoryProvider.of<StorageRepository>(context),
+      pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) =>
+          FadeTransition(
+        opacity: animation,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<ItemDetailBloc>(
+              create: (context) => ItemDetailBloc(
+                storageRepository: context.read<StorageRepository>(),
+              )..add(ItemDetailStarted(
+                  id: itemId,
+                )),
             ),
+            BlocProvider<ItemEditBloc>(
+              create: (context) => ItemEditBloc(
+                storageRepository: context.read<StorageRepository>(),
+              ),
+            ),
+          ],
+          child: ItemDetailScreen(
+            itemId: itemId,
           ),
-        ],
-        child: ItemDetailScreen(
-          itemName: itemName,
-          itemId: itemId,
         ),
       ),
     );
   }
 }
 
-class ItemDetailScreen extends StatelessWidget {
-  final String itemName;
-  final String? itemId;
+class ItemDetailScreen extends StatefulWidget {
+  final String itemId;
 
   const ItemDetailScreen({
     Key? key,
-    required this.itemName,
     required this.itemId,
   }) : super(key: key);
+
+  @override
+  _ItemDetailScreenState createState() => _ItemDetailScreenState();
+}
+
+class _ItemDetailScreenState extends State<ItemDetailScreen> {
+  String itemName = '';
 
   @override
   Widget build(BuildContext context) {
@@ -81,9 +82,9 @@ class ItemDetailScreen extends StatelessWidget {
           appBar: _buildAppBar(context, state),
           body: RefreshIndicator(
             onRefresh: () async {
-              BlocProvider.of<ItemDetailBloc>(context).add(
-                ItemDetailRefreshed(),
-              );
+              context.read<ItemDetailBloc>().add(
+                    ItemDetailRefreshed(),
+                  );
             },
             child: BlocListener<ItemEditBloc, ItemEditState>(
               listener: (context, state) {
@@ -105,8 +106,9 @@ class ItemDetailScreen extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context, ItemDetailState state) {
     if (state is ItemDetailSuccess) {
+      itemName = state.item.name;
       return AppBar(
-        title: Text(state.item.name),
+        title: Text(itemName),
         actions: <Widget>[
           const SearchIconButton(),
           PopupMenuButton<ItemDetailMenu>(
@@ -115,8 +117,7 @@ class ItemDetailScreen extends StatelessWidget {
                 await Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<ItemEditBloc>(
                     create: (_) => ItemEditBloc(
-                      storageRepository:
-                          RepositoryProvider.of<StorageRepository>(context),
+                      storageRepository: context.read<StorageRepository>(),
                     ),
                     child: ItemEditPage(
                       isEditing: true,
@@ -124,27 +125,28 @@ class ItemDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ));
-                BlocProvider.of<ItemDetailBloc>(context).add(ItemDetailStarted(
-                  name: state.item.name,
-                  id: state.item.id,
-                ));
+                context.read<ItemDetailBloc>().add(
+                      ItemDetailStarted(
+                        id: state.item.id,
+                      ),
+                    );
               }
               if (value == ItemDetailMenu.consumable) {
                 await Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<ItemEditBloc>(
                     create: (_) => ItemEditBloc(
-                      storageRepository:
-                          RepositoryProvider.of<StorageRepository>(context),
+                      storageRepository: context.read<StorageRepository>(),
                     ),
                     child: ConsumableEditPage(
                       item: state.item,
                     ),
                   ),
                 ));
-                BlocProvider.of<ItemDetailBloc>(context).add(ItemDetailStarted(
-                  name: state.item.name,
-                  id: state.item.id,
-                ));
+                context.read<ItemDetailBloc>().add(
+                      ItemDetailStarted(
+                        id: state.item.id,
+                      ),
+                    );
               }
               if (value == ItemDetailMenu.addPicture) {
                 if (kIsWeb) {
@@ -169,9 +171,9 @@ class ItemDetailScreen extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
-                          BlocProvider.of<ItemEditBloc>(context).add(
-                            ItemDeleted(item: state.item),
-                          );
+                          context.read<ItemEditBloc>().add(
+                                ItemDeleted(item: state.item),
+                              );
                           Navigator.pop(context);
                         },
                         child: const Text('是'),
@@ -212,12 +214,9 @@ class ItemDetailScreen extends StatelessWidget {
     if (state is ItemDetailFailure) {
       return ErrorMessageButton(
         onPressed: () {
-          BlocProvider.of<ItemDetailBloc>(context).add(
-            ItemDetailStarted(
-              name: state.name,
-              id: state.id,
-            ),
-          );
+          context.read<ItemDetailBloc>().add(
+                ItemDetailStarted(id: state.id),
+              );
         },
         message: state.message,
       );

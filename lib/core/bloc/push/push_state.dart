@@ -13,15 +13,32 @@ class PushInProgress extends PushState {
 }
 
 class PushSuccess extends PushState {
-  final MiPush miPush;
+  /// 本地获取的推送 RegId
+  final String local;
 
-  const PushSuccess({required this.miPush});
+  /// 服务器上的推送 RegId
+  final String? server;
+
+  const PushSuccess({
+    required this.local,
+    this.server,
+  });
 
   @override
-  List<Object> get props => [miPush];
+  List<Object> get props => [local];
 
   @override
-  String toString() => 'PushSuccess(miPush: $miPush)';
+  String toString() => 'PushSuccess(local: $local, server: $server)';
+
+  PushSuccess copyWith({
+    String? local,
+    String? server,
+  }) {
+    return PushSuccess(
+      local: local ?? this.local,
+      server: server ?? this.server,
+    );
+  }
 }
 
 /// 网络错误
