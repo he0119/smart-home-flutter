@@ -287,7 +287,7 @@ packages:
       name: dropdown_search
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "1.0.4"
   enum_to_string:
     dependency: "direct main"
     description:
@@ -874,7 +874,7 @@ packages:
       name: sentry_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.1"
+    version: "6.1.1"
   shared_preferences:
     dependency: "direct main"
     description:
