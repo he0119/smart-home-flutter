@@ -53,14 +53,10 @@ class AuthenticationBloc
     try {
       // 检查是否登录
       if (await graphqlApiClient.isLogin) {
-        final loginUser = appPreferencesBloc.state.loginUser;
-        if (loginUser != null) {
-          yield AuthenticationSuccess(loginUser);
-        } else {
-          final user = await userRepository.currentUser();
-          appPreferencesBloc.add(LoginUserChanged(loginUser: user));
-          yield AuthenticationSuccess(user);
-        }
+        // 每次启动时都获取当前用户信息，并更新本地缓存
+        final user = await userRepository.currentUser();
+        appPreferencesBloc.add(LoginUserChanged(loginUser: user));
+        yield AuthenticationSuccess(user);
       } else {
         yield const AuthenticationFailure('未登录，请登录账户');
       }
