@@ -26,7 +26,11 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
   DeviceDataBloc({
     required this.iotRepository,
     required this.deviceId,
-  }) : super(DeviceDataInitial());
+  }) : super(DeviceDataInitial()) {
+    on<DeviceDataStarted>(_onDeviceDataStarted);
+    on<DeviceDataupdated>(_onDeviceDataupdated);
+    on<DeviceDataStoped>(_onDeviceDataStoped);
+  }
 
   @override
   Future<void> close() {
@@ -34,33 +38,9 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
     return super.close();
   }
 
-  @override
-  Stream<DeviceDataState> mapEventToState(
-    DeviceDataEvent event,
-  ) async* {
-    if (event is DeviceDataStarted) {
-      yield* _mapDeviceDataStartedToState(event);
-    } else if (event is DeviceDataupdated) {
-      yield* _mapDeviceDataupdatedToState(event);
-    } else if (event is DeviceDataStoped) {
-      yield* _mapDeviceDataStopedToState(event);
-    }
-  }
-
-  Stream<DeviceDataState> _mapDeviceDataupdatedToState(
-      DeviceDataupdated event) async* {
-    yield DeviceDataSuccess(event.autowateringData);
-  }
-
-  Stream<DeviceDataState> _mapDeviceDataStopedToState(
-      DeviceDataStoped event) async* {
-    await _dataSubscription?.cancel();
-    yield DeviceDataFailure(event.message);
-  }
-
-  Stream<DeviceDataState> _mapDeviceDataStartedToState(
-      DeviceDataStarted event) async* {
-    yield DeviceDataInProgress();
+  FutureOr<void> _onDeviceDataStarted(
+      DeviceDataStarted event, Emitter<DeviceDataState> emit) async {
+    emit(DeviceDataInProgress());
     await _dataSubscription?.cancel();
     _dataSubscription = timedCounter(event.refreshInterval).listen((x) async {
       try {
@@ -75,5 +55,16 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
         add(DeviceDataStoped(e.message));
       }
     });
+  }
+
+  FutureOr<void> _onDeviceDataupdated(
+      DeviceDataupdated event, Emitter<DeviceDataState> emit) async {
+    emit(DeviceDataSuccess(event.autowateringData));
+  }
+
+  FutureOr<void> _onDeviceDataStoped(
+      DeviceDataStoped event, Emitter<DeviceDataState> emit) async {
+    await _dataSubscription?.cancel();
+    emit(DeviceDataFailure(event.message));
   }
 }
