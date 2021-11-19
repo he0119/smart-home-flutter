@@ -14,48 +14,51 @@ class PictureBloc extends Bloc<PictureEvent, PictureState> {
 
   PictureBloc({
     required this.storageRepository,
-  }) : super(PictureInProgress());
+  }) : super(PictureInProgress()) {
+    on<PictureStarted>(_onPictureStarted);
+    on<PictureRefreshed>(_onPictureRefreshed);
+  }
 
-  @override
-  Stream<PictureState> mapEventToState(
-    PictureEvent event,
-  ) async* {
-    if (event is PictureStarted) {
-      try {
-        final picture = await storageRepository.picture(
+  FutureOr<void> _onPictureStarted(
+      PictureStarted event, Emitter<PictureState> emit) async {
+    try {
+      final picture = await storageRepository.picture(
+        id: event.id,
+      );
+      if (picture == null) {
+        emit(PictureFailure(
+          '获取图片失败，图片不存在',
           id: event.id,
-        );
-        if (picture == null) {
-          yield PictureFailure(
-            '获取图片失败，图片不存在',
-            id: event.id,
-          );
-          return;
-        }
-        yield PictureSuccess(picture: picture);
-      } on MyException catch (e) {
-        yield PictureFailure(
-          e.message,
-          id: event.id,
-        );
+        ));
+        return;
       }
+      emit(PictureSuccess(picture: picture));
+    } on MyException catch (e) {
+      emit(PictureFailure(
+        e.message,
+        id: event.id,
+      ));
     }
+  }
+
+  FutureOr<void> _onPictureRefreshed(
+      PictureRefreshed event, Emitter<PictureState> emit) async {
     final currentState = state;
-    if (event is PictureRefreshed && currentState is PictureSuccess) {
-      yield PictureInProgress();
+    if (currentState is PictureSuccess) {
+      emit(PictureInProgress());
       try {
         final picture = await storageRepository.picture(
           id: currentState.picture.id,
           cache: false,
         );
         if (picture != null) {
-          yield PictureSuccess(picture: picture);
+          emit(PictureSuccess(picture: picture));
         }
       } on MyException catch (e) {
-        yield PictureFailure(
+        emit(PictureFailure(
           e.message,
           id: currentState.picture.id,
-        );
+        ));
       }
     }
   }
