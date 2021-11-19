@@ -12,44 +12,48 @@ part 'comment_edit_state.dart';
 class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
   final BoardRepository boardRepository;
 
-  CommentEditBloc({required this.boardRepository}) : super(CommentInitial());
+  CommentEditBloc({required this.boardRepository}) : super(CommentInitial()) {
+    on<CommentAdded>(_onCommentAdded);
+    on<CommentUpdated>(_onCommentUpdated);
+    on<CommentDeleted>(_onCommentDeleted);
+  }
 
-  @override
-  Stream<CommentEditState> mapEventToState(
-    CommentEditEvent event,
-  ) async* {
-    if (event is CommentAdded) {
-      yield CommentInProgress();
-      try {
-        final comment = await boardRepository.addComment(
-          topicId: event.topicId,
-          body: event.body,
-        );
-        yield CommentAddSuccess(comment: comment);
-      } on MyException catch (e) {
-        yield CommentFailure(e.message);
-      }
+  FutureOr<void> _onCommentAdded(
+      CommentAdded event, Emitter<CommentEditState> emit) async {
+    emit(CommentInProgress());
+    try {
+      final comment = await boardRepository.addComment(
+        topicId: event.topicId,
+        body: event.body,
+      );
+      emit(CommentAddSuccess(comment: comment));
+    } on MyException catch (e) {
+      emit(CommentFailure(e.message));
     }
-    if (event is CommentUpdated) {
-      yield CommentInProgress();
-      try {
-        final comment = await boardRepository.updateComment(
-          id: event.id,
-          body: event.body,
-        );
-        yield CommentUpdateSuccess(comment: comment);
-      } on MyException catch (e) {
-        yield CommentFailure(e.message);
-      }
+  }
+
+  FutureOr<void> _onCommentUpdated(
+      CommentUpdated event, Emitter<CommentEditState> emit) async {
+    emit(CommentInProgress());
+    try {
+      final comment = await boardRepository.updateComment(
+        id: event.id,
+        body: event.body,
+      );
+      emit(CommentUpdateSuccess(comment: comment));
+    } on MyException catch (e) {
+      emit(CommentFailure(e.message));
     }
-    if (event is CommentDeleted) {
-      yield CommentInProgress();
-      try {
-        await boardRepository.deleteComment(commentId: event.comment.id);
-        yield CommentDeleteSuccess(comment: event.comment);
-      } on MyException catch (e) {
-        yield CommentFailure(e.message);
-      }
+  }
+
+  FutureOr<void> _onCommentDeleted(
+      CommentDeleted event, Emitter<CommentEditState> emit) async {
+    emit(CommentInProgress());
+    try {
+      await boardRepository.deleteComment(commentId: event.comment.id);
+      emit(CommentDeleteSuccess(comment: event.comment));
+    } on MyException catch (e) {
+      emit(CommentFailure(e.message));
     }
   }
 }
