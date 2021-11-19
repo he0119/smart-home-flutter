@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/core/core.dart';
+import 'package:provider/provider.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/widgets/text_edit_page.dart';
 
 class RefreshIntervalPage extends StatelessWidget {
@@ -9,14 +10,14 @@ class RefreshIntervalPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-      builder: (context, state) => TextEditPage(
+    return Consumer<SettingsController>(
+      builder: (context, settings, child) => TextEditPage(
         title: '刷新间隔',
-        initialValue: state.refreshInterval.toString(),
+        initialValue: settings.refreshInterval.toString(),
         onSubmit: (value) {
-          BlocProvider.of<AppPreferencesBloc>(context).add(
-            AppIotRefreshIntervalChanged(interval: int.parse(value)),
-          );
+          context
+              .read<SettingsController>()
+              .updateRefreshInterval(int.parse(value));
         },
         description: '物联网数据的刷新间隔，单位为秒',
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],

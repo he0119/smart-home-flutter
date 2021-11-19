@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/user/model/user.dart';
 
@@ -13,6 +14,13 @@ import 'package:smarthome/user/model/user.dart';
 /// you'd like to store settings on a web server, use the http package.
 class SettingsService {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final String defaultApiUrl;
+  final String defaultAdminUrl;
+
+  SettingsService({
+    required this.defaultApiUrl,
+    required this.defaultAdminUrl,
+  });
 
   Future<ThemeMode> themeMode() async {
     final prefs = await _prefs;
@@ -26,9 +34,9 @@ class SettingsService {
     prefs.setString('themeMode', EnumToString.convertToString(theme));
   }
 
-  Future<String?> apiUrl() async {
+  Future<String> apiUrl() async {
     final prefs = await _prefs;
-    return prefs.getString('apiUrl');
+    return prefs.getString('apiUrl') ?? defaultApiUrl;
   }
 
   Future<void> updateApiUrl(String url) async {
@@ -76,9 +84,9 @@ class SettingsService {
     prefs.setInt('refreshInterval', interval);
   }
 
-  Future<String?> adminUrl() async {
+  Future<String> adminUrl() async {
     final prefs = await _prefs;
-    return prefs.getString('adminUrl');
+    return prefs.getString('adminUrl') ?? defaultAdminUrl;
   }
 
   Future<void> updateAdminUrl(String url) async {
@@ -118,9 +126,12 @@ class SettingsService {
     prefs.setString('defaultPage', EnumToString.convertToString(page));
   }
 
-  Future<User> loginUser() async {
+  Future<User?> loginUser() async {
     final prefs = await _prefs;
-    final String userString = prefs.getString('loginUser') ?? '';
+    final String? userString = prefs.getString('loginUser');
+    if (userString == null) {
+      return null;
+    }
     return User.fromJson(jsonDecode(userString));
   }
 

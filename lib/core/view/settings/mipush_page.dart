@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/core/bloc/blocs.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 
 class MiPushPage extends StatelessWidget {
   const MiPushPage({Key? key}) : super(key: key);
@@ -9,8 +10,7 @@ class MiPushPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PushBloc, PushState>(
       builder: (context, state) {
-        final localRegId =
-            context.watch<AppPreferencesBloc>().state.miPushRegId;
+        final localRegId = context.watch<SettingsController>().miPushRegId;
         String? serverRegId;
 
         String status = '未知';

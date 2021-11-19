@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 import 'package:smarthome/app/app_config.dart';
 import 'package:smarthome/board/board.dart';
@@ -22,14 +23,15 @@ class MyApp extends StatelessWidget {
   const MyApp({
     Key? key,
     required this.settingsController,
+    required this.graphQLApiClient,
   }) : super(key: key);
 
   final SettingsController settingsController;
+  final GraphQLApiClient graphQLApiClient;
 
   @override
   Widget build(BuildContext context) {
     Intl.defaultLocale = 'zh';
-    final graphQLApiClient = GraphQLApiClient();
     final userRepository = UserRepository(graphqlApiClient: graphQLApiClient);
     return ChangeNotifierProvider(
       create: (_) => settingsController,
@@ -63,18 +65,13 @@ class MyApp extends StatelessWidget {
         ],
         child: MultiBlocProvider(
           providers: [
-            BlocProvider<AppPreferencesBloc>(
-              create: (BuildContext context) =>
-                  AppPreferencesBloc()..add(AppStarted()),
-            ),
             BlocProvider<AuthenticationBloc>(
               create: (context) => AuthenticationBloc(
                 userRepository: RepositoryProvider.of<UserRepository>(context),
                 graphqlApiClient:
                     RepositoryProvider.of<GraphQLApiClient>(context),
-                appPreferencesBloc:
-                    RepositoryProvider.of<AppPreferencesBloc>(context),
-              ),
+                settingsController: settingsController,
+              )..add(AuthenticationStarted()),
             ),
             BlocProvider<TabBloc>(
               create: (context) => TabBloc(),
@@ -88,8 +85,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<PushBloc>(
               create: (context) => PushBloc(
                 pushRepository: RepositoryProvider.of<PushRepository>(context),
-                appPreferencesBloc:
-                    RepositoryProvider.of<AppPreferencesBloc>(context),
+                settingsController: settingsController,
               ),
             ),
             BlocProvider<StorageHomeBloc>(
@@ -105,7 +101,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ],
-          child: const MyMaterialApp(),
+          child: MyMaterialApp(settingsController: settingsController),
         ),
       ),
     );
@@ -113,18 +109,22 @@ class MyApp extends StatelessWidget {
 }
 
 class MyMaterialApp extends StatefulWidget {
-  const MyMaterialApp({
+  final SettingsController settingsController;
+  // 为了保存路由状态
+  late final MyRouterDelegate _delegate;
+
+  MyMaterialApp({
     Key? key,
-  }) : super(key: key);
+    required this.settingsController,
+  }) : super(key: key) {
+    _delegate = MyRouterDelegate(settingsController: settingsController);
+  }
 
   @override
   _MyMaterialAppState createState() => _MyMaterialAppState();
 }
 
 class _MyMaterialAppState extends State<MyMaterialApp> {
-  // 为了保存路由状态
-  final MyRouterDelegate _delegate = MyRouterDelegate();
-
   @override
   void initState() {
     super.initState();
@@ -133,9 +133,41 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
       const MethodChannel('hehome.xyz/route').setMethodCallHandler(
         (call) async {
           if (call.method == 'RouteChanged' && call.arguments != null) {
-            await _delegate.navigateNewPath(call.arguments as String);
+            await widget._delegate.navigateNewPath(call.arguments as String);
           }
         },
+      );
+    }
+    // 仅在客户端上注册 Shortcut
+    if (!kIsWeb && !Platform.isWindows) {
+      const quickActions = QuickActions();
+      quickActions.initialize((String shortcutType) {
+        switch (shortcutType) {
+          case 'action_iot':
+            BlocProvider.of<TabBloc>(context).add(const TabChanged(AppTab.iot));
+            break;
+          case 'action_storage':
+            BlocProvider.of<TabBloc>(context)
+                .add(const TabChanged(AppTab.storage));
+            break;
+          case 'action_blog':
+            BlocProvider.of<TabBloc>(context)
+                .add(const TabChanged(AppTab.blog));
+            break;
+          case 'action_board':
+            BlocProvider.of<TabBloc>(context)
+                .add(const TabChanged(AppTab.board));
+            break;
+        }
+      });
+      quickActions.setShortcutItems(
+        <ShortcutItem>[
+          // TODO: 给快捷方式添加图标
+          const ShortcutItem(type: 'action_iot', localizedTitle: 'IOT'),
+          const ShortcutItem(type: 'action_storage', localizedTitle: '物品'),
+          const ShortcutItem(type: 'action_blog', localizedTitle: '博客'),
+          const ShortcutItem(type: 'action_board', localizedTitle: '留言'),
+        ],
       );
     }
   }
@@ -164,7 +196,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
       ],
       title: config.appName,
       routeInformationParser: MyRouteInformationParser(),
-      routerDelegate: _delegate,
+      routerDelegate: widget._delegate,
     );
   }
 }

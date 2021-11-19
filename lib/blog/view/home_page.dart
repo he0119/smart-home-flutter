@@ -3,9 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:smarthome/blog/view/settings/settings_page.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/widgets/home_page.dart';
@@ -47,8 +48,8 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-      builder: (context, state) => FutureBuilder(
+    return Consumer<SettingsController>(
+      builder: (context, settings, child) => FutureBuilder(
         future: _controller.future,
         builder: (BuildContext context,
                 AsyncSnapshot<WebViewController> controller) =>
@@ -60,7 +61,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
               child: IconButton(
                 icon: const Icon(Icons.dvr),
                 onPressed: () async {
-                  final blogAdminUrl = state.blogAdminUrl;
+                  final blogAdminUrl = settings.blogAdminUrl;
                   if (blogAdminUrl != null) {
                     if (kIsWeb) {
                       await launchUrl(blogAdminUrl);
@@ -94,13 +95,13 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                     return true;
                   },
                   child: WebView(
-                    initialUrl: state.blogUrl,
+                    initialUrl: settings.blogUrl,
                     javascriptMode: JavascriptMode.unrestricted,
                     onWebViewCreated: _controller.complete,
                   ))
               : Center(
                   child: RoundedRaisedButton(
-                    onPressed: () => launchUrl(state.blogUrl),
+                    onPressed: () => launchUrl(settings.blogUrl),
                     child: const Text('博客'),
                   ),
                 ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/core/core.dart';
+import 'package:provider/provider.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/iot/view/settings/refresh_interval_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
@@ -26,15 +26,15 @@ class IotSettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('物联网'),
       ),
-      body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-        builder: (context, state) => SettingsList(
+      body: Consumer<SettingsController>(
+        builder: (context, settings, child) => SettingsList(
           sections: [
             SettingsSection(
               title: '网络',
               tiles: [
                 SettingsTile(
                   title: '刷新间隔',
-                  subtitle: state.refreshInterval.toString(),
+                  subtitle: settings.refreshInterval.toString(),
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const RefreshIntervalPage(),

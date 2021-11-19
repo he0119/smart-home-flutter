@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
-import 'package:smarthome/core/core.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 
 class SliverCommentList extends StatelessWidget {
   final List<Comment> comments;
@@ -14,8 +14,7 @@ class SliverCommentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginUser =
-        context.select((AppPreferencesBloc b) => b.state.loginUser);
+    final loginUser = context.watch<SettingsController>().loginUser;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {

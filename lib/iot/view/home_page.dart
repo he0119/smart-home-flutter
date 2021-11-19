@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/iot/bloc/blocs.dart';
 import 'package:smarthome/iot/repository/iot_repository.dart';
 import 'package:smarthome/iot/view/settings/settings_page.dart';
@@ -38,17 +40,17 @@ class IotHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-      builder: (context, state) {
+    return Consumer<SettingsController>(
+      builder: (context, settings, child) {
         return MultiBlocProvider(
-          key: ValueKey(state.refreshInterval),
+          key: ValueKey(settings.refreshInterval),
           providers: [
             BlocProvider<DeviceDataBloc>(
               // 因为只有一个设备就先写死
               create: (context) => DeviceDataBloc(
                 iotRepository: RepositoryProvider.of<IotRepository>(context),
                 deviceId: '1',
-              )..add(DeviceDataStarted(state.refreshInterval)),
+              )..add(DeviceDataStarted(settings.refreshInterval)),
             ),
             BlocProvider<DeviceEditBloc>(
               create: (context) => DeviceEditBloc(
@@ -87,8 +89,8 @@ class _IotHomeBody extends StatelessWidget {
         if (state is DeviceDataSuccess) {
           final device = state.autowateringData.device;
           final data = state.autowateringData;
-          return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-            builder: (context, state) => ListView(
+          return Consumer<SettingsController>(
+            builder: (context, settings, child) => ListView(
               children: [
                 ListTile(
                   title: Text(device!.name),
@@ -261,9 +263,10 @@ class _IotHomeBody extends StatelessWidget {
         if (state is DeviceDataFailure) {
           return ErrorMessageButton(
             onPressed: () {
-              final appPreference = context.read<AppPreferencesBloc>().state;
+              final refreshInterval =
+                  context.read<SettingsController>().refreshInterval;
               BlocProvider.of<DeviceDataBloc>(context)
-                  .add(DeviceDataStarted(appPreference.refreshInterval));
+                  .add(DeviceDataStarted(refreshInterval));
             },
             message: state.message,
           );

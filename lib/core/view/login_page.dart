@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/app/app_config.dart';
+import 'package:provider/provider.dart';
 import 'package:smarthome/core/bloc/blocs.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
@@ -35,7 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final appConfig = AppConfig.of(context);
     return Scaffold(
       body: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
@@ -43,11 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
             showErrorSnackBar(state.message);
           }
         },
-        child: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-          builder: (context, state) {
-            if (state.apiUrl == null) {
-              canLogin = false;
-            }
+        child: Consumer<SettingsController>(
+          builder: (context, settings, child) {
             return canLogin
                 ? LoginForm(onTapBack: () {
                     setState(() {
@@ -55,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     });
                   })
                 : ApiUrlForm(
-                    apiUrl: state.apiUrl ?? appConfig.apiUrl,
+                    apiUrl: settings.apiUrl,
                     onTapNext: () {
                       setState(() {
                         canLogin = true;
@@ -133,9 +130,9 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
               RoundedRaisedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    BlocProvider.of<AppPreferencesBloc>(context).add(
-                      AppApiUrlChanged(apiUrl: _controller!.text),
-                    );
+                    context
+                        .read<SettingsController>()
+                        .updateApiUrl(_controller!.text);
                     widget.onTapNext();
                   }
                 },

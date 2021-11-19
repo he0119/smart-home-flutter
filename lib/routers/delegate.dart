@@ -1,16 +1,13 @@
-import 'dart:io';
-
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:quick_actions/quick_actions.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:smarthome/app/app_config.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/routers/information_parser.dart';
 import 'package:smarthome/routers/route_path.dart';
@@ -21,6 +18,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
   static final Logger _log = Logger('RouterDelegate');
 
+  final SettingsController settingsController;
+
+  MyRouterDelegate({
+    required this.settingsController,
+  });
+
   static MyRouterDelegate of(BuildContext context) {
     final delegate = Router.of(context).routerDelegate;
     assert(delegate is MyRouterDelegate, 'Delegate type must match');
@@ -30,24 +33,14 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   @override
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  /// 是否初始化
-  bool initialized = false;
-
-  /// 是否登录
-  bool isLogin = false;
-
   /// 默认主页
   AppTab defaultHomePage = AppTab.storage;
 
   List<Page> _pages = <Page>[];
 
   List<Page> get pages {
-    // 未初始化时显示加载页面
-    if (!initialized) {
-      return [const SplashPage()];
-    }
     // 未登录时显示登陆界面
-    if (!isLogin) {
+    if (settingsController.loginUser == null) {
       return [const LoginPage()];
     }
     // 未设置主页时显示默认主页
@@ -287,81 +280,18 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   @override
   Widget build(BuildContext context) {
-    _log..fine('Router rebuilded')..fine('pages $pages');
-    final graphQLApiClient = RepositoryProvider.of<GraphQLApiClient>(context);
-    final config = AppConfig.of(context);
+    _log
+      ..fine('Router rebuilded')
+      ..fine('pages $pages');
+
     return MultiBlocListener(
       listeners: [
-        BlocListener<AppPreferencesBloc, AppPreferencesState>(
-          listenWhen: (previous, current) {
-            // 如果 APIURL 发生变化则初始化 GraphQL 客户端
-            // 如果客户端还未初始化，也自动初始化
-            if (previous.apiUrl != current.apiUrl ||
-                graphQLApiClient.client == null) {
-              return true;
-            } else {
-              return false;
-            }
-          },
-          listener: (context, state) async {
-            // 如果软件配置中没有设置过 APIURL，则使用默认的 URL
-            await graphQLApiClient.initailize(state.apiUrl ?? config.apiUrl);
-            if (state.initialized) {
-              initialized = state.initialized;
-              isLogin = state.loginUser != null;
-              defaultHomePage = state.defaultPage;
-              // GraphQL 客户端初始化后，开始认证用户
-              BlocProvider.of<AuthenticationBloc>(context)
-                  .add(AuthenticationStarted());
-              // 仅在客户端上注册 Shortcut
-              if (!kIsWeb && !Platform.isWindows) {
-                const quickActions = QuickActions();
-                await quickActions.initialize((String shortcutType) {
-                  switch (shortcutType) {
-                    case 'action_iot':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.iot));
-                      break;
-                    case 'action_storage':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.storage));
-                      break;
-                    case 'action_blog':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.blog));
-                      break;
-                    case 'action_board':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.board));
-                      break;
-                  }
-                });
-                await quickActions.setShortcutItems(
-                  <ShortcutItem>[
-                    // TODO: 给快捷方式添加图标
-                    const ShortcutItem(
-                        type: 'action_iot', localizedTitle: 'IOT'),
-                    const ShortcutItem(
-                        type: 'action_storage', localizedTitle: '物品'),
-                    const ShortcutItem(
-                        type: 'action_blog', localizedTitle: '博客'),
-                    const ShortcutItem(
-                        type: 'action_board', localizedTitle: '留言'),
-                  ],
-                );
-              }
-              notifyListeners();
-            }
-          },
-        ),
         BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
             if (state is AuthenticationFailure) {
-              isLogin = false;
               notifyListeners();
             }
             if (state is AuthenticationSuccess) {
-              isLogin = true;
               // 当登录成功时，开始初始化推送服务
               BlocProvider.of<PushBloc>(context).add(PushStarted());
               // 设置 Sentry 用户

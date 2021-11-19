@@ -7,6 +7,7 @@ import 'package:smarthome/board/repository/board_repository.dart';
 import 'package:smarthome/board/view/comment_edit_page.dart';
 import 'package:smarthome/board/view/widgets/item_title.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 
 class CommentItem extends StatelessWidget {
@@ -21,8 +22,7 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final descending =
-        context.select((AppPreferencesBloc b) => b.state.commentDescending);
+    final descending = context.watch<SettingsController>().commentDescending;
     return Container(
       key: ValueKey(comment.id),
       child: Column(

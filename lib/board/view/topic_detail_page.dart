@@ -8,7 +8,7 @@ import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/add_comment_bar.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
-import 'package:smarthome/core/core.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/user/user.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
@@ -48,8 +48,7 @@ class TopicDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final descending =
-        context.select((AppPreferencesBloc b) => b.state.commentDescending);
+    final descending = context.watch<SettingsController>().commentDescending;
     return MultiBlocProvider(
       providers: [
         BlocProvider<TopicDetailBloc>(
@@ -75,10 +74,8 @@ class _DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginUser =
-        context.select((AppPreferencesBloc b) => b.state.loginUser);
-    final descending =
-        context.select((AppPreferencesBloc b) => b.state.commentDescending);
+    final loginUser = context.watch<SettingsController>().loginUser;
+    final descending = context.watch<SettingsController>().commentDescending;
     return BlocBuilder<TopicDetailBloc, TopicDetailState>(
       builder: (context, state) {
         if (state is TopicDetailFailure) {
@@ -441,9 +438,7 @@ class CommentOrder extends StatelessWidget {
               ),
             ),
             onSelected: (dynamic value) {
-              context.read<AppPreferencesBloc>().add(
-                    CommentDescendingChanged(descending: value),
-                  );
+              context.read<SettingsController>().updateCommentDescending(value);
               context.read<TopicDetailBloc>().add(
                     TopicDetailFetched(topicId: topicId, descending: value),
                   );

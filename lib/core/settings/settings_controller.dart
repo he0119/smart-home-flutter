@@ -18,28 +18,28 @@ class SettingsController with ChangeNotifier {
 
   // Make ThemeMode a private variable so it is not updated directly without
   // also persisting the changes with the SettingsService.
-  late ThemeMode _themeMode;
   late User? _loginUser;
-  late String? _apiUrl;
+  late ThemeMode _themeMode;
+  late AppTab _defaultPage;
+  late String _apiUrl;
+  late String _adminUrl;
+  late String _blogUrl;
+  late String? _blogAdminUrl;
   late String? _miPushAppId;
   late String? _miPushAppKey;
   late String? _miPushRegId;
   late int _refreshInterval;
-  late String? _adminUrl;
-  late String _blogUrl;
-  late String? _blogAdminUrl;
-  late AppTab _defaultPage;
   late bool _commentDescending;
 
   // Allow Widgets to read the user's preferred ThemeMode.
   ThemeMode get themeMode => _themeMode;
   User? get loginUser => _loginUser;
-  String? get apiUrl => _apiUrl;
+  String get apiUrl => _apiUrl;
   String? get miPushAppId => _miPushAppId;
   String? get miPushAppKey => _miPushAppKey;
   String? get miPushRegId => _miPushRegId;
   int get refreshInterval => _refreshInterval;
-  String? get adminUrl => _adminUrl;
+  String get adminUrl => _adminUrl;
   String get blogUrl => _blogUrl;
   String? get blogAdminUrl => _blogAdminUrl;
   AppTab get defaultPage => _defaultPage;

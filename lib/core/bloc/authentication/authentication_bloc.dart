@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/core/repository/repositories.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/user/user.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
@@ -15,7 +15,7 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final UserRepository userRepository;
   final GraphQLApiClient graphqlApiClient;
-  final AppPreferencesBloc appPreferencesBloc;
+  final SettingsController settingsController;
 
   // 监控登录状态
   StreamSubscription<bool>? _loginSubscription;
@@ -29,7 +29,7 @@ class AuthenticationBloc
   AuthenticationBloc({
     required this.userRepository,
     required this.graphqlApiClient,
-    required this.appPreferencesBloc,
+    required this.settingsController,
   }) : super(AuthenticationInitial()) {
     on<AuthenticationStarted>(_onAuthenticationStarted);
     on<AuthenticationLogin>(_onAuthenticationLogin);
@@ -47,7 +47,7 @@ class AuthenticationBloc
       if (await graphqlApiClient.isLogin) {
         // 每次启动时都获取当前用户信息，并更新本地缓存
         final user = await userRepository.currentUser();
-        appPreferencesBloc.add(LoginUserChanged(loginUser: user));
+        await settingsController.updateLoginUser(user);
         emit(AuthenticationSuccess(user));
       } else {
         emit(const AuthenticationFailure('未登录，请登录账户'));
@@ -65,7 +65,7 @@ class AuthenticationBloc
           await graphqlApiClient.authenticate(event.username, event.password);
       if (result) {
         final user = await userRepository.currentUser();
-        appPreferencesBloc.add(LoginUserChanged(loginUser: user));
+        await settingsController.updateLoginUser(user);
         emit(AuthenticationSuccess(user));
       } else {
         emit(const AuthenticationFailure('用户名或密码错误'));

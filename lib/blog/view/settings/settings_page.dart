@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:smarthome/blog/view/settings/blog_admin_url_page.dart';
 import 'package:smarthome/blog/view/settings/blog_url_page.dart';
-import 'package:smarthome/core/core.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class BlogSettingsPage extends Page {
@@ -30,15 +30,15 @@ class BlogSettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('博客'),
       ),
-      body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-        builder: (context, state) => SettingsList(
+      body: Consumer<SettingsController>(
+        builder: (context, settings, child) => SettingsList(
           sections: [
             SettingsSection(
               title: '网址',
               tiles: [
                 SettingsTile(
                   title: '博客网址',
-                  subtitle: state.blogUrl,
+                  subtitle: settings.blogUrl,
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const BlogUrlPage(),
@@ -47,11 +47,13 @@ class BlogSettingsScreen extends StatelessWidget {
                 ),
                 SettingsTile(
                   title: '博客管理网址',
-                  subtitle: state.blogAdminUrl ?? '请单击输入',
+                  subtitle: settings.blogAdminUrl ?? '请单击输入',
                   onPressed: (context) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const BlogAdminUrlPage(),
-                    ));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const BlogAdminUrlPage(),
+                      ),
+                    );
                   },
                 ),
               ],
