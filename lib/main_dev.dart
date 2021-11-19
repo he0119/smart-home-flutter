@@ -12,7 +12,6 @@ import 'package:smarthome/app/simple_bloc_observer.dart';
 
 Future<void> main() async {
   configureApp();
-  Bloc.observer = SimpleBlocObserver();
   Logger.root.level = Level.ALL; // defaults to Level.INFO
   Logger.root.onRecord.listen((record) {
     // ignore: avoid_print
@@ -25,20 +24,27 @@ Future<void> main() async {
     apiUrl: 'https://test.hehome.xyz/graphql',
     child: MyApp(),
   );
-  await runZonedGuarded(() async {
-    await SentryFlutter.init(
-      (options) {
-        options
-          ..dsn = ''
-          ..environment = 'dev'
-          ..release = 'release';
-      },
-    );
-
-    runApp(configuredApp);
-  }, (exception, stackTrace) async {
-    // ignore: avoid_print
-    print('$exception, $stackTrace');
-    await Sentry.captureException(exception, stackTrace: stackTrace);
-  });
+  await runZonedGuarded(
+    () async {
+      await SentryFlutter.init(
+        (options) {
+          options
+            ..dsn = ''
+            ..environment = 'dev'
+            ..release = 'release';
+        },
+      );
+      BlocOverrides.runZoned(
+        () {
+          runApp(configuredApp);
+        },
+        blocObserver: SimpleBlocObserver(),
+      );
+    },
+    (exception, stackTrace) async {
+      // ignore: avoid_print
+      print('$exception, $stackTrace');
+      await Sentry.captureException(exception, stackTrace: stackTrace);
+    },
+  );
 }
