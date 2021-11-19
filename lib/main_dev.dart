@@ -9,8 +9,11 @@ import 'package:smarthome/app/configure_nonweb.dart'
     if (dart.library.html) 'package:smarthome/app/configure_web.dart';
 import 'package:smarthome/app/main.dart';
 import 'package:smarthome/app/simple_bloc_observer.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
+import 'package:smarthome/core/settings/settings_service.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   configureApp();
   Logger.root.level = Level.ALL; // defaults to Level.INFO
   Logger.root.onRecord.listen((record) {
@@ -18,11 +21,19 @@ Future<void> main() async {
     print('[${record.level.name}] ${record.loggerName}'
         ' -- ${record.time} -- ${record.message}');
   });
-  const configuredApp = AppConfig(
+  // Set up the SettingsController, which will glue user settings to multiple
+  // Flutter Widgets.
+  final settingsController = SettingsController(SettingsService());
+  // Load the user's preferred theme while the splash screen is displayed.
+  // This prevents a sudden theme change when the app is first displayed.
+  await settingsController.loadSettings();
+  final configuredApp = AppConfig(
     appName: '智慧家庭 DEV',
     flavorName: 'dev',
     apiUrl: 'https://test.hehome.xyz/graphql',
-    child: MyApp(),
+    child: MyApp(
+      settingsController: settingsController,
+    ),
   );
   await runZonedGuarded(
     () async {
