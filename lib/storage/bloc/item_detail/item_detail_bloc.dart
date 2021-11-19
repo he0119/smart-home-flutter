@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/storage/model/storage.dart';
@@ -12,53 +14,56 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
 
   ItemDetailBloc({
     required this.storageRepository,
-  }) : super(ItemDetailInProgress());
+  }) : super(ItemDetailInProgress()) {
+    on<ItemDetailStarted>(_onItemDetailStarted);
+    on<ItemDetailRefreshed>(_onItemDetailRefreshed);
+  }
 
-  @override
-  Stream<ItemDetailState> mapEventToState(
-    ItemDetailEvent event,
-  ) async* {
-    if (event is ItemDetailStarted) {
-      try {
-        final item = await storageRepository.item(
+  FutureOr<void> _onItemDetailStarted(
+      ItemDetailStarted event, Emitter<ItemDetailState> emit) async {
+    try {
+      final item = await storageRepository.item(
+        id: event.id,
+      );
+      if (item == null) {
+        emit(ItemDetailFailure(
+          '获取物品失败，物品不存在',
           id: event.id,
-        );
-        if (item == null) {
-          yield ItemDetailFailure(
-            '获取物品失败，物品不存在',
-            id: event.id,
-          );
-          return;
-        }
-        yield ItemDetailSuccess(item: item);
-      } on MyException catch (e) {
-        yield ItemDetailFailure(
-          e.message,
-          id: event.id,
-        );
+        ));
+        return;
       }
+      emit(ItemDetailSuccess(item: item));
+    } on MyException catch (e) {
+      emit(ItemDetailFailure(
+        e.message,
+        id: event.id,
+      ));
     }
+  }
+
+  FutureOr<void> _onItemDetailRefreshed(
+      ItemDetailRefreshed event, Emitter<ItemDetailState> emit) async {
     final currentState = state;
-    if (event is ItemDetailRefreshed && currentState is ItemDetailSuccess) {
-      yield ItemDetailInProgress();
+    if (currentState is ItemDetailSuccess) {
+      emit(ItemDetailInProgress());
       try {
         final item = await storageRepository.item(
           id: currentState.item.id,
           cache: false,
         );
         if (item == null) {
-          yield ItemDetailFailure(
+          emit(ItemDetailFailure(
             '获取物品失败，物品不存在',
             id: currentState.item.id,
-          );
+          ));
           return;
         }
-        yield ItemDetailSuccess(item: item);
+        emit(ItemDetailSuccess(item: item));
       } on MyException catch (e) {
-        yield ItemDetailFailure(
+        emit(ItemDetailFailure(
           e.message,
           id: currentState.item.id,
-        );
+        ));
       }
     }
   }
