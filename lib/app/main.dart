@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
     required this.graphQLApiClient,
   }) : super(key: key) {
     // 在应用最开始用设置里的 API URL 初始化 GraphQLClient
-    graphQLApiClient.initailize(settingsController.apiUrl);
+    graphQLApiClient.initailize(settingsController.apiUrl ??
+        settingsController.appConfig.defaultApiUrl);
   }
 
   final SettingsController settingsController;

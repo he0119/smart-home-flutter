@@ -29,7 +29,7 @@ class SettingsController with ChangeNotifier {
   late User? _loginUser;
   late ThemeMode _themeMode;
   late AppTab _defaultPage;
-  late String _apiUrl;
+  late String? _apiUrl;
   late String _adminUrl;
   late String _blogUrl;
   late String? _blogAdminUrl;
@@ -46,7 +46,7 @@ class SettingsController with ChangeNotifier {
   User? get loginUser => _loginUser;
   ThemeMode get themeMode => _themeMode;
   AppTab get defaultPage => _defaultPage;
-  String get apiUrl => _apiUrl;
+  String? get apiUrl => _apiUrl;
   String get adminUrl => _adminUrl;
   String get blogUrl => _blogUrl;
   String? get blogAdminUrl => _blogAdminUrl;
@@ -63,7 +63,7 @@ class SettingsController with ChangeNotifier {
     _loginUser = await _settingsService.loginUser();
     _themeMode = await _settingsService.themeMode();
     _defaultPage = await _settingsService.defaultPage();
-    _apiUrl = await _settingsService.apiUrl() ?? appConfig.defaultApiUrl;
+    _apiUrl = await _settingsService.apiUrl();
     _adminUrl = await _settingsService.adminUrl() ?? appConfig.defaultAdminUrl;
     _blogUrl = await _settingsService.blogUrl();
     _blogAdminUrl = await _settingsService.blogAdminUrl();

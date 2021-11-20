@@ -13,7 +13,7 @@ class ApiUrlPage extends StatelessWidget {
     return Consumer<SettingsController>(
       builder: (context, settings, child) => TextEditPage(
         title: '服务器网址',
-        initialValue: settings.apiUrl,
+        initialValue: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
         onSubmit: (value) {
           context.read<GraphQLApiClient>().initailize(value);
           context.read<SettingsController>().updateApiUrl(value);

@@ -46,6 +46,9 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         child: Consumer<SettingsController>(
           builder: (context, settings, child) {
+            if (settings.apiUrl == null) {
+              canLogin = false;
+            }
             return canLogin
                 ? LoginForm(onTapBack: () {
                     setState(() {
@@ -53,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     });
                   })
                 : ApiUrlForm(
-                    apiUrl: settings.apiUrl,
+                    apiUrl: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
                     onTapNext: () {
                       setState(() {
                         canLogin = true;
