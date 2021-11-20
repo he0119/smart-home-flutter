@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/widgets/text_edit_page.dart';
 
@@ -14,6 +15,7 @@ class ApiUrlPage extends StatelessWidget {
         title: '服务器网址',
         initialValue: settings.apiUrl,
         onSubmit: (value) {
+          context.read<GraphQLApiClient>().initailize(value);
           context.read<SettingsController>().updateApiUrl(value);
         },
         description: '要连接的服务器网址',

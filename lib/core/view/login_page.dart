@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:smarthome/core/bloc/blocs.dart';
+import 'package:smarthome/core/repository/graphql_api_client.dart';
 import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
@@ -130,6 +131,9 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
               RoundedRaisedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    context
+                        .read<GraphQLApiClient>()
+                        .initailize(_controller!.text);
                     context
                         .read<SettingsController>()
                         .updateApiUrl(_controller!.text);

@@ -19,11 +19,14 @@ import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/user/user.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({
+  MyApp({
     Key? key,
     required this.settingsController,
     required this.graphQLApiClient,
-  }) : super(key: key);
+  }) : super(key: key) {
+    // 在应用最开始用设置里的 API URL 初始化 GraphQLClient
+    graphQLApiClient.initailize(settingsController.apiUrl);
+  }
 
   final SettingsController settingsController;
   final GraphQLApiClient graphQLApiClient;
@@ -32,85 +35,78 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Intl.defaultLocale = 'zh';
     return ChangeNotifierProvider.value(
-        value: settingsController,
-        builder: (context, child) {
-          // 每当 URL 变化时，更新 GraphQLApiClient
-          final apiUrl =
-              context.select((SettingsController settings) => settings.apiUrl);
-          graphQLApiClient.initailize(apiUrl);
-          return MultiRepositoryProvider(
-            providers: [
-              RepositoryProvider<GraphQLApiClient>.value(
-                value: graphQLApiClient,
-              ),
-              RepositoryProvider<UserRepository>(
-                create: (context) =>
-                    UserRepository(graphqlApiClient: graphQLApiClient),
-              ),
-              RepositoryProvider<VersionRepository>(
-                create: (context) => VersionRepository(),
-              ),
-              RepositoryProvider<PushRepository>(
-                create: (context) =>
-                    PushRepository(graphqlApiClient: graphQLApiClient),
-              ),
-              RepositoryProvider<StorageRepository>(
-                create: (context) =>
-                    StorageRepository(graphqlApiClient: graphQLApiClient),
-              ),
-              RepositoryProvider<BoardRepository>(
-                create: (context) =>
-                    BoardRepository(graphqlApiClient: graphQLApiClient),
-              ),
-              RepositoryProvider<IotRepository>(
-                create: (context) =>
-                    IotRepository(graphqlApiClient: graphQLApiClient),
-              ),
-            ],
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<AuthenticationBloc>(
-                  create: (context) => AuthenticationBloc(
-                    userRepository:
-                        RepositoryProvider.of<UserRepository>(context),
-                    graphqlApiClient:
-                        RepositoryProvider.of<GraphQLApiClient>(context),
-                    settingsController: settingsController,
-                  )..add(AuthenticationStarted()),
-                ),
-                BlocProvider<TabBloc>(
-                  create: (context) => TabBloc(),
-                ),
-                BlocProvider<UpdateBloc>(
-                  create: (context) => UpdateBloc(
-                    versionRepository:
-                        RepositoryProvider.of<VersionRepository>(context),
-                  )..add(UpdateStarted()),
-                ),
-                BlocProvider<PushBloc>(
-                  create: (context) => PushBloc(
-                    pushRepository:
-                        RepositoryProvider.of<PushRepository>(context),
-                    settingsController: settingsController,
-                  ),
-                ),
-                BlocProvider<StorageHomeBloc>(
-                  create: (context) => StorageHomeBloc(
-                    storageRepository:
-                        RepositoryProvider.of<StorageRepository>(context),
-                  ),
-                ),
-                BlocProvider<BoardHomeBloc>(
-                  create: (context) => BoardHomeBloc(
-                    boardRepository:
-                        RepositoryProvider.of<BoardRepository>(context),
-                  ),
-                ),
-              ],
-              child: MyMaterialApp(settingsController: settingsController),
+      value: settingsController,
+      child: MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider<GraphQLApiClient>.value(
+            value: graphQLApiClient,
+          ),
+          RepositoryProvider<UserRepository>(
+            create: (context) =>
+                UserRepository(graphqlApiClient: graphQLApiClient),
+          ),
+          RepositoryProvider<VersionRepository>(
+            create: (context) => VersionRepository(),
+          ),
+          RepositoryProvider<PushRepository>(
+            create: (context) =>
+                PushRepository(graphqlApiClient: graphQLApiClient),
+          ),
+          RepositoryProvider<StorageRepository>(
+            create: (context) =>
+                StorageRepository(graphqlApiClient: graphQLApiClient),
+          ),
+          RepositoryProvider<BoardRepository>(
+            create: (context) =>
+                BoardRepository(graphqlApiClient: graphQLApiClient),
+          ),
+          RepositoryProvider<IotRepository>(
+            create: (context) =>
+                IotRepository(graphqlApiClient: graphQLApiClient),
+          ),
+        ],
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<AuthenticationBloc>(
+              create: (context) => AuthenticationBloc(
+                userRepository: RepositoryProvider.of<UserRepository>(context),
+                graphqlApiClient:
+                    RepositoryProvider.of<GraphQLApiClient>(context),
+                settingsController: settingsController,
+              )..add(AuthenticationStarted()),
             ),
-          );
-        });
+            BlocProvider<TabBloc>(
+              create: (context) => TabBloc(),
+            ),
+            BlocProvider<UpdateBloc>(
+              create: (context) => UpdateBloc(
+                versionRepository:
+                    RepositoryProvider.of<VersionRepository>(context),
+              )..add(UpdateStarted()),
+            ),
+            BlocProvider<PushBloc>(
+              create: (context) => PushBloc(
+                pushRepository: RepositoryProvider.of<PushRepository>(context),
+                settingsController: settingsController,
+              ),
+            ),
+            BlocProvider<StorageHomeBloc>(
+              create: (context) => StorageHomeBloc(
+                storageRepository:
+                    RepositoryProvider.of<StorageRepository>(context),
+              ),
+            ),
+            BlocProvider<BoardHomeBloc>(
+              create: (context) => BoardHomeBloc(
+                boardRepository:
+                    RepositoryProvider.of<BoardRepository>(context),
+              ),
+            ),
+          ],
+          child: MyMaterialApp(settingsController: settingsController),
+        ),
+      ),
+    );
   }
 }
 
