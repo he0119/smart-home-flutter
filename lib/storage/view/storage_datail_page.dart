@@ -55,7 +55,7 @@ class StorageDetailPage extends Page {
   }
 }
 
-class StorageDetailScreen extends StatefulWidget {
+class StorageDetailScreen extends StatelessWidget {
   final String storageId;
 
   const StorageDetailScreen({
@@ -63,11 +63,6 @@ class StorageDetailScreen extends StatefulWidget {
     required this.storageId,
   }) : super(key: key);
 
-  @override
-  _StorageDetailScreenState createState() => _StorageDetailScreenState();
-}
-
-class _StorageDetailScreenState extends State<StorageDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StorageDetailBloc, StorageDetailState>(
@@ -86,7 +81,7 @@ class _StorageDetailScreenState extends State<StorageDetailScreen> {
               } else {
                 context.read<StorageDetailBloc>().add(
                       StorageDetailFetched(
-                        id: widget.storageId,
+                        id: storageId,
                         cache: false,
                       ),
                     );
@@ -242,7 +237,7 @@ class _StorageDetailScreenState extends State<StorageDetailScreen> {
       return ErrorMessageButton(
         onPressed: () {
           context.read<StorageDetailBloc>().add(
-                StorageDetailFetched(id: widget.storageId),
+                StorageDetailFetched(id: storageId),
               );
         },
         message: state.error,
