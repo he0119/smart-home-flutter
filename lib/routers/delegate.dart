@@ -289,6 +289,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
             if (state is AuthenticationFailure) {
+              // 清除 Sentry 设置的用户
+              Sentry.configureScope((scope) => scope.user = null);
+              // 登录状态变化，通知页面更新
               notifyListeners();
             }
             if (state is AuthenticationSuccess) {

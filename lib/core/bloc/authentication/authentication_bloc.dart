@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:smarthome/core/repository/repositories.dart';
 import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/user/user.dart';
@@ -16,15 +15,6 @@ class AuthenticationBloc
   final UserRepository userRepository;
   final GraphQLApiClient graphqlApiClient;
   final SettingsController settingsController;
-
-  // 监控登录状态
-  StreamSubscription<bool>? _loginSubscription;
-
-  @override
-  Future<void> close() {
-    _loginSubscription?.cancel();
-    return super.close();
-  }
 
   AuthenticationBloc({
     required this.userRepository,
@@ -73,9 +63,7 @@ class AuthenticationBloc
 
   FutureOr<void> _onAuthenticationLogout(
       AuthenticationLogout event, Emitter<AuthenticationState> emit) async {
+    await settingsController.updateLoginUser(null);
     emit(const AuthenticationFailure('已登出'));
-    settingsController.updateLoginUser(null);
-    // 清除 Sentry 设置的用户
-    Sentry.configureScope((scope) => scope.user = null);
   }
 }
