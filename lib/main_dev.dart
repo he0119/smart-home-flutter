@@ -38,7 +38,7 @@ Future<void> main() async {
   await settingsController.loadSettings();
   // 初始化 GraphQL API Client
   final graphQLApiClient = GraphQLApiClient(settingsController);
-  await graphQLApiClient.initailize(settingsController.apiUrl);
+  await graphQLApiClient.loadSettings();
 
   await runZonedGuarded(
     () async {

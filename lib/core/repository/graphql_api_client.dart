@@ -16,6 +16,7 @@ import 'package:smarthome/utils/exceptions.dart';
 
 class GraphQLApiClient {
   static final Logger _log = Logger('GraphQLApiClient');
+  static Map<String, String> headers = {};
   static GraphQLClient? _client;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final SettingsController settingsController;
@@ -58,27 +59,8 @@ class GraphQLApiClient {
   }
 
   /// 初始化 GraphQL 客户端
-  Future<void> initailize(String url) async {
+  void initailize(String url) {
     final _authLink = AuthLink(getToken: () async => 'JWT ${await token}');
-    // 用户代理设置为当前手机
-    // 暂时只支持 Android
-    // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
-    final headers = <String, String>{};
-    if (!kIsWeb && Platform.isAndroid) {
-      try {
-        final deviceInfo = DeviceInfoPlugin();
-        final androidInfo = await deviceInfo.androidInfo;
-        final packageInfo = await PackageInfo.fromPlatform();
-        headers['User-Agent'] =
-            'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
-      } catch (exception, stackTrace) {
-        await Sentry.captureException(
-          exception,
-          stackTrace: stackTrace,
-        );
-        _log.severe('设置 User-Agent 失败 (${exception.toString()})');
-      }
-    }
     final _httpLink = HttpLink(
       url,
       defaultHeaders: headers,
@@ -101,6 +83,29 @@ class GraphQLApiClient {
       link: _link,
     );
     _log.fine('GraphQLClient initailized with url $url');
+  }
+
+  /// 加载配置，比如用户代理
+  /// 这些需要在最开始就加载，因为后面的操作需要用到
+  Future<void> loadSettings() async {
+    // 用户代理设置为当前手机
+    // 暂时只支持 Android
+    // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
+    if (!kIsWeb && Platform.isAndroid) {
+      try {
+        final deviceInfo = DeviceInfoPlugin();
+        final androidInfo = await deviceInfo.androidInfo;
+        final packageInfo = await PackageInfo.fromPlatform();
+        headers['User-Agent'] =
+            'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
+      } catch (exception, stackTrace) {
+        await Sentry.captureException(
+          exception,
+          stackTrace: stackTrace,
+        );
+        _log.severe('设置 User-Agent 失败 (${exception.toString()})');
+      }
+    }
   }
 
   /// 更改
