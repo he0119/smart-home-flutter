@@ -132,6 +132,9 @@ class SettingsService {
     final prefs = await _prefs;
     if (user == null) {
       prefs.remove('loginUser');
+      // 同时删除 Token
+      prefs.remove('token');
+      prefs.remove('refreshToken');
     } else {
       prefs.setString('loginUser', jsonEncode(user.toJson()));
     }
