@@ -33,9 +33,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   @override
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  /// 默认主页
-  AppTab defaultHomePage = AppTab.storage;
-
   List<Page> _pages = <Page>[];
 
   List<Page> get pages {
@@ -46,7 +43,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     // 未设置主页时显示默认主页
     if (_pages.isEmpty) {
       _pages = [
-        defaultHomePage.page,
+        settingsController.defaultPage.page,
       ];
     }
     return List.unmodifiable(_pages);
@@ -250,7 +247,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       switch (configuration.appSettings) {
         case AppSettings.home:
           _pages = [
-            defaultHomePage.page,
+            settingsController.defaultPage.page,
             const SettingsPage(),
           ];
           break;
