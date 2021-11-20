@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smarthome/app/settings/settings_service.dart';
-
 import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/model/app_tab.dart';
 import 'package:smarthome/user/model/user.dart';

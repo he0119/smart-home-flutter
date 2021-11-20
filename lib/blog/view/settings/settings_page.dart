@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/blog/view/settings/blog_admin_url_page.dart';
 import 'package:smarthome/blog/view/settings/blog_url_page.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class BlogSettingsPage extends Page {
