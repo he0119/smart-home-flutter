@@ -14,7 +14,8 @@ class SliverCommentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginUser = context.watch<SettingsController>().loginUser;
+    final loginUser =
+        context.select((SettingsController settings) => settings.loginUser);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {

@@ -48,7 +48,8 @@ class TopicDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final descending = context.watch<SettingsController>().commentDescending;
+    final descending = context
+        .select((SettingsController settings) => settings.commentDescending);
     return MultiBlocProvider(
       providers: [
         BlocProvider<TopicDetailBloc>(
@@ -74,8 +75,10 @@ class _DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginUser = context.watch<SettingsController>().loginUser;
-    final descending = context.watch<SettingsController>().commentDescending;
+    final loginUser =
+        context.select((SettingsController settings) => settings.loginUser);
+    final descending = context
+        .select((SettingsController settings) => settings.commentDescending);
     return BlocBuilder<TopicDetailBloc, TopicDetailState>(
       builder: (context, state) {
         if (state is TopicDetailFailure) {

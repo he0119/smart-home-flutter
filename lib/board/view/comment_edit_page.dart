@@ -183,7 +183,8 @@ class __PreviewPageState extends State<_PreviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final loginUser = context.watch<SettingsController>().loginUser;
+    final loginUser =
+        context.select((SettingsController settings) => settings.loginUser);
     return SingleChildScrollView(
       child: CommentItem(
         comment: Comment(

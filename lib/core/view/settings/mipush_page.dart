@@ -10,7 +10,8 @@ class MiPushPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PushBloc, PushState>(
       builder: (context, state) {
-        final localRegId = context.watch<SettingsController>().miPushRegId;
+        final localRegId = context
+            .select((SettingsController settings) => settings.miPushRegId);
         String? serverRegId;
 
         String status = '未知';

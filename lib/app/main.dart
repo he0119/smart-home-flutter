@@ -173,8 +173,9 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = context.watch<SettingsController>().themeMode;
-    final appName = context.watch<SettingsController>().appConfig.appName;
+    final themeMode =
+        context.select((SettingsController settings) => settings.themeMode);
+    final appName = context.read<SettingsController>().appConfig.appName;
     return MaterialApp.router(
       scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(

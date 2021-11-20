@@ -16,7 +16,8 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final adminUrl = context.watch<SettingsController>().adminUrl;
+    final adminUrl =
+        context.select((SettingsController settings) => settings.adminUrl);
     return Drawer(
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {

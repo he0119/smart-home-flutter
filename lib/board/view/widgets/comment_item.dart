@@ -22,7 +22,8 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final descending = context.watch<SettingsController>().commentDescending;
+    final descending = context
+        .select((SettingsController settings) => settings.commentDescending);
     return Container(
       key: ValueKey(comment.id),
       child: Column(
