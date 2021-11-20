@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/model/models.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/core/view/settings/admin_url_page.dart';
 import 'package:smarthome/core/view/settings/api_url_page.dart';
 import 'package:smarthome/core/view/settings/default_page.dart';
@@ -58,7 +58,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 SettingsTile(
                   title: '服务器网址',
-                  subtitle: settings.apiUrl,
+                  subtitle: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const ApiUrlPage(),
