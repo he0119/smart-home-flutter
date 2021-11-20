@@ -38,13 +38,9 @@ class AuthenticationBloc
 
   FutureOr<void> _onAuthenticationStarted(
       AuthenticationStarted event, Emitter<AuthenticationState> emit) async {
-    // 监听认证情况
-    _loginSubscription ??= graphqlApiClient.loginStatus.listen((event) {
-      if (!event) add(AuthenticationLogout());
-    });
     try {
       // 检查是否登录
-      if (await graphqlApiClient.isLogin) {
+      if (settingsController.loginUser != null) {
         // 每次启动时都获取当前用户信息，并更新本地缓存
         final user = await userRepository.currentUser();
         await settingsController.updateLoginUser(user);
@@ -78,8 +74,8 @@ class AuthenticationBloc
   FutureOr<void> _onAuthenticationLogout(
       AuthenticationLogout event, Emitter<AuthenticationState> emit) async {
     emit(const AuthenticationFailure('已登出'));
+    settingsController.updateLoginUser(null);
     // 清除 Sentry 设置的用户
     Sentry.configureScope((scope) => scope.user = null);
-    await graphqlApiClient.logout();
   }
 }

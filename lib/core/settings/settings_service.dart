@@ -14,13 +14,6 @@ import 'package:smarthome/user/model/user.dart';
 /// you'd like to store settings on a web server, use the http package.
 class SettingsService {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  final String defaultApiUrl;
-  final String defaultAdminUrl;
-
-  SettingsService({
-    required this.defaultApiUrl,
-    required this.defaultAdminUrl,
-  });
 
   Future<ThemeMode> themeMode() async {
     final prefs = await _prefs;
@@ -34,9 +27,9 @@ class SettingsService {
     prefs.setString('themeMode', EnumToString.convertToString(theme));
   }
 
-  Future<String> apiUrl() async {
+  Future<String?> apiUrl() async {
     final prefs = await _prefs;
-    return prefs.getString('apiUrl') ?? defaultApiUrl;
+    return prefs.getString('apiUrl');
   }
 
   Future<void> updateApiUrl(String url) async {
@@ -84,9 +77,9 @@ class SettingsService {
     prefs.setInt('refreshInterval', interval);
   }
 
-  Future<String> adminUrl() async {
+  Future<String?> adminUrl() async {
     final prefs = await _prefs;
-    return prefs.getString('adminUrl') ?? defaultAdminUrl;
+    return prefs.getString('adminUrl');
   }
 
   Future<void> updateAdminUrl(String url) async {
@@ -135,9 +128,13 @@ class SettingsService {
     return User.fromJson(jsonDecode(userString));
   }
 
-  Future<void> updateLoginUser(User user) async {
+  Future<void> updateLoginUser(User? user) async {
     final prefs = await _prefs;
-    prefs.setString('loginUser', jsonEncode(user.toJson()));
+    if (user == null) {
+      prefs.remove('loginUser');
+    } else {
+      prefs.setString('loginUser', jsonEncode(user.toJson()));
+    }
   }
 
   Future<bool> commentDescending() async {

@@ -9,34 +9,22 @@ import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:smarthome/core/graphql/mutations/mutations.dart';
+import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 class GraphQLApiClient {
   static final Logger _log = Logger('GraphQLApiClient');
   static GraphQLClient? _client;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final SettingsController settingsController;
 
-  // ignore: close_sinks
-  final _loginStatusControler = StreamController<bool>();
-
-  GraphQLApiClient();
+  GraphQLApiClient(
+    this.settingsController,
+  );
 
   GraphQLClient? get client => _client;
-
-  /// 是否登录
-  /// 通过判断是否拥有刷新令牌
-  Future<bool> get isLogin async {
-    final prefs = await _prefs;
-    final token = prefs.getString('refreshToken');
-    if (token == null || token == '') {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  Stream<bool> get loginStatus => _loginStatusControler.stream;
 
   Future<String?> get token async {
     final prefs = await _prefs;
@@ -115,15 +103,6 @@ class GraphQLApiClient {
     _log.fine('GraphQLClient initailized with url $url');
   }
 
-  /// 登出
-  Future logout() async {
-    final prefs = await _prefs;
-    await prefs.remove('token');
-    await prefs.remove('refreshToken');
-    await prefs.remove('loginUser');
-    _log.fine('clear refresh token');
-  }
-
   /// 更改
   Future<QueryResult> mutate(MutationOptions options) async {
     final results = await _client!.mutate(options);
@@ -145,8 +124,7 @@ class GraphQLApiClient {
   void _handleException(OperationException exception) {
     for (var error in exception.graphqlErrors) {
       if (error.message.toLowerCase().contains('refresh token')) {
-        // 通知认证 BLoC 登陆失败
-        _loginStatusControler.sink.add(false);
+        settingsController.updateLoginUser(null);
         throw const AuthenticationException('认证过期，请重新登录');
       }
       _log.warning(error.toString());

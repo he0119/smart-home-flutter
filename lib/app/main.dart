@@ -9,7 +9,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:quick_actions/quick_actions.dart';
 
-import 'package:smarthome/app/app_config.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/settings/settings_controller.dart';
@@ -174,8 +173,8 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 
   @override
   Widget build(BuildContext context) {
-    final config = AppConfig.of(context);
     final themeMode = context.watch<SettingsController>().themeMode;
+    final appName = context.watch<SettingsController>().appConfig.appName;
     return MaterialApp.router(
       scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(
@@ -194,7 +193,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
       supportedLocales: const [
         Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
       ],
-      title: config.appName,
+      title: appName,
       routeInformationParser: MyRouteInformationParser(),
       routerDelegate: widget._delegate,
     );

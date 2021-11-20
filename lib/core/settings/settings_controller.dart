@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/model/app_tab.dart';
 import 'package:smarthome/user/model/user.dart';
 
@@ -11,10 +13,16 @@ import 'settings_service.dart';
 /// Controllers glue Data Services to Flutter Widgets. The SettingsController
 /// uses the SettingsService to store and retrieve user settings.
 class SettingsController with ChangeNotifier {
-  SettingsController(this._settingsService);
+  SettingsController(
+    this._settingsService,
+    this.appConfig,
+  );
 
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
+
+  // 应用的默认配置
+  final AppConfig appConfig;
 
   // Make ThemeMode a private variable so it is not updated directly without
   // also persisting the changes with the SettingsService.
@@ -31,35 +39,35 @@ class SettingsController with ChangeNotifier {
   late int _refreshInterval;
   late bool _commentDescending;
 
-  // Allow Widgets to read the user's preferred ThemeMode.
-  ThemeMode get themeMode => _themeMode;
+  // Allow Widgets to read the user's settings.
   User? get loginUser => _loginUser;
+  ThemeMode get themeMode => _themeMode;
+  AppTab get defaultPage => _defaultPage;
   String get apiUrl => _apiUrl;
+  String get adminUrl => _adminUrl;
+  String get blogUrl => _blogUrl;
+  String? get blogAdminUrl => _blogAdminUrl;
   String? get miPushAppId => _miPushAppId;
   String? get miPushAppKey => _miPushAppKey;
   String? get miPushRegId => _miPushRegId;
   int get refreshInterval => _refreshInterval;
-  String get adminUrl => _adminUrl;
-  String get blogUrl => _blogUrl;
-  String? get blogAdminUrl => _blogAdminUrl;
-  AppTab get defaultPage => _defaultPage;
   bool get commentDescending => _commentDescending;
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
   Future<void> loadSettings() async {
-    _themeMode = await _settingsService.themeMode();
     _loginUser = await _settingsService.loginUser();
-    _apiUrl = await _settingsService.apiUrl();
+    _themeMode = await _settingsService.themeMode();
+    _defaultPage = await _settingsService.defaultPage();
+    _apiUrl = await _settingsService.apiUrl() ?? appConfig.defaultApiUrl;
+    _adminUrl = await _settingsService.adminUrl() ?? appConfig.defaultAdminUrl;
+    _blogUrl = await _settingsService.blogUrl();
+    _blogAdminUrl = await _settingsService.blogAdminUrl();
     _miPushAppId = await _settingsService.miPushAppId();
     _miPushAppKey = await _settingsService.miPushAppKey();
     _miPushRegId = await _settingsService.miPushRegId();
     _refreshInterval = await _settingsService.refreshInterval();
-    _adminUrl = await _settingsService.adminUrl();
-    _blogUrl = await _settingsService.blogUrl();
-    _blogAdminUrl = await _settingsService.blogAdminUrl();
-    _defaultPage = await _settingsService.defaultPage();
     _commentDescending = await _settingsService.commentDescending();
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -83,7 +91,7 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateThemeMode(newThemeMode);
   }
 
-  Future<void> updateLoginUser(User newLoginUser) async {
+  Future<void> updateLoginUser(User? newLoginUser) async {
     if (newLoginUser == _loginUser) return;
 
     _loginUser = newLoginUser;
@@ -141,7 +149,9 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateMiPushRegId(newMiPushRegId);
   }
 
-  Future<void> updateRefreshInterval(int newRefreshInterval) async {
+  Future<void> updateRefreshInterval(int? newRefreshInterval) async {
+    if (newRefreshInterval == null) return;
+
     if (newRefreshInterval == _refreshInterval) return;
 
     _refreshInterval = newRefreshInterval;
@@ -163,7 +173,9 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateAdminUrl(newAdminUrl);
   }
 
-  Future<void> updateBlogUrl(String newBlogUrl) async {
+  Future<void> updateBlogUrl(String? newBlogUrl) async {
+    if (newBlogUrl == null) return;
+
     if (newBlogUrl == _blogUrl) return;
 
     _blogUrl = newBlogUrl;
@@ -185,7 +197,9 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateBlogAdminUrl(newBlogAdminUrl);
   }
 
-  Future<void> updateDefaultPage(AppTab newDefaultPage) async {
+  Future<void> updateDefaultPage(AppTab? newDefaultPage) async {
+    if (newDefaultPage == null) return;
+
     if (newDefaultPage == _defaultPage) return;
 
     _defaultPage = newDefaultPage;
@@ -195,7 +209,9 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateDefaultPage(newDefaultPage);
   }
 
-  Future<void> updateCommentDescending(bool newCommentDescending) async {
+  Future<void> updateCommentDescending(bool? newCommentDescending) async {
+    if (newCommentDescending == null) return;
+
     if (newCommentDescending == _commentDescending) return;
 
     _commentDescending = newCommentDescending;
