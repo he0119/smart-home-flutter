@@ -219,6 +219,8 @@ class SettingsController with ChangeNotifier {
 
     _commentDescending = newCommentDescending;
 
+    notifyListeners();
+
     await _settingsService.updateCommentDescending(newCommentDescending);
   }
 }
