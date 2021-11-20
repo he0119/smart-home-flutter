@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
-import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
 import 'package:smarthome/storage/view/storage_edit_page.dart';
@@ -69,15 +68,6 @@ class StorageDetailScreen extends StatefulWidget {
 }
 
 class _StorageDetailScreenState extends State<StorageDetailScreen> {
-  String storageName = '';
-  List<Storage> paths = [];
-
-  @override
-  void initState() {
-    super.initState();
-    storageName = widget.storageId == '' ? '家' : '';
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StorageDetailBloc, StorageDetailState>(
@@ -86,10 +76,10 @@ class _StorageDetailScreenState extends State<StorageDetailScreen> {
           appBar: _buildAppBar(context, state),
           body: RefreshIndicator(
             onRefresh: () async {
-              if (state is StorageDetailSuccess) {
+              if (state.status == StorageDetailStatus.success) {
                 context.read<StorageDetailBloc>().add(
                       StorageDetailFetched(
-                        id: state.storage?.id ?? '',
+                        id: state.storage.id,
                         cache: false,
                       ),
                     );
@@ -122,173 +112,150 @@ class _StorageDetailScreenState extends State<StorageDetailScreen> {
   }
 
   AppBar _buildAppBar(BuildContext context, StorageDetailState state) {
-    if (state is StorageDetailSuccess && state.storages != null) {
-      return AppBar(
-        title: const Text('家'),
-        actions: const <Widget>[
-          AddStorageIconButton(),
-          SearchIconButton(),
-        ],
-      );
-    }
-    if (state is StorageDetailSuccess && state.storage != null) {
-      final paths = state.storage!.ancestors ?? [];
-      if (!paths.contains(state.storage)) {
-        // 防止重复添加相同名称的位置
-        // 因为无限列表重新获取时，位置对象虽然名字不会变，但是内容改变
-        if (paths.isEmpty || paths.last.name != state.storage!.name) {
-          paths.add(state.storage!);
-        }
+    final paths = state.storage.ancestors ?? [];
+    if (!paths.contains(state.storage) && state.storage.id != '') {
+      // 防止重复添加相同名称的位置
+      // 因为无限列表重新获取时，位置对象虽然名字不会变，但是内容改变
+      if (paths.isEmpty || paths.last.name != state.storage.name) {
+        paths.add(state.storage);
       }
-      storageName = state.storage!.name;
-      return AppBar(
-        title: Text(storageName),
-        actions: <Widget>[
-          AddStorageIconButton(
-            storage: state.storage,
-          ),
-          const SearchIconButton(),
-          PopupMenuButton<Menu>(
-            onSelected: (value) async {
-              if (value == Menu.edit) {
-                await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => BlocProvider<StorageEditBloc>(
-                    create: (_) => StorageEditBloc(
-                      storageRepository: context.read<StorageRepository>(),
-                    ),
-                    child: StorageEditPage(
-                      isEditing: true,
-                      storage: state.storage,
-                    ),
-                  ),
-                ));
-              }
-              if (value == Menu.delete) {
-                await showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text('删除 ${state.storage!.name}'),
-                    content: const Text('你确认要删除该位置么？'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('否'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          context.read<StorageEditBloc>().add(
-                                StorageDeleted(storage: state.storage!),
-                              );
-                          Navigator.pop(context);
-                        },
-                        child: const Text('是'),
-                      ),
-                    ],
-                  ),
-                );
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: Menu.edit,
-                child: Text('编辑'),
-              ),
-              const PopupMenuItem(
-                value: Menu.delete,
-                child: Text('删除'),
-              ),
-            ],
-          )
-        ],
-        bottom: PathBar(
-          child: SizedBox(
-            height: 40,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: paths.length + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  return index == 0
-                      ? IconButton(
-                          icon: const Icon(Icons.home),
-                          onPressed: () {
-                            MyRouterDelegate.of(context).setStoragePage();
-                          },
-                        )
-                      : InkWell(
-                          onTap: () {
-                            // 单击当前位置的时候，不做任何转跳
-                            // 禁止原地 TP
-                            if (index != paths.length) {
-                              MyRouterDelegate.of(context)
-                                  .setStoragePage(storage: paths[index - 1]);
-                            }
-                          },
-                          child: SizedBox(
-                            height: 40,
-                            child: Center(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                child: Text(
-                                  paths[index - 1].name,
-                                  style: const TextStyle(fontSize: 16),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 12,
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-      );
     }
     return AppBar(
-      title: Text(storageName),
+      title: Text(state.storage.name),
+      actions: <Widget>[
+        AddStorageIconButton(
+          storage: state.storage,
+        ),
+        const SearchIconButton(),
+        PopupMenuButton<Menu>(
+          onSelected: (value) async {
+            if (value == Menu.edit) {
+              await Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => BlocProvider<StorageEditBloc>(
+                  create: (_) => StorageEditBloc(
+                    storageRepository: context.read<StorageRepository>(),
+                  ),
+                  child: StorageEditPage(
+                    isEditing: true,
+                    storage: state.storage,
+                  ),
+                ),
+              ));
+            }
+            if (value == Menu.delete) {
+              await showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Text('删除 ${state.storage.name}'),
+                  content: const Text('你确认要删除该位置么？'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('否'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.read<StorageEditBloc>().add(
+                              StorageDeleted(storage: state.storage),
+                            );
+                        Navigator.pop(context);
+                      },
+                      child: const Text('是'),
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: Menu.edit,
+              child: Text('编辑'),
+            ),
+            const PopupMenuItem(
+              value: Menu.delete,
+              child: Text('删除'),
+            ),
+          ],
+        )
+      ],
+      bottom: paths.isEmpty
+          ? null
+          : PathBar(
+              child: SizedBox(
+                height: 40,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: paths.length + 1,
+                    itemBuilder: (BuildContext context, int index) {
+                      return index == 0
+                          ? IconButton(
+                              icon: const Icon(Icons.home),
+                              onPressed: () {
+                                MyRouterDelegate.of(context).setStoragePage();
+                              },
+                            )
+                          : InkWell(
+                              onTap: () {
+                                // 单击当前位置的时候，不做任何转跳
+                                // 禁止原地 TP
+                                if (index != paths.length) {
+                                  MyRouterDelegate.of(context).setStoragePage(
+                                      storage: paths[index - 1]);
+                                }
+                              },
+                              child: SizedBox(
+                                height: 40,
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
+                                    child: Text(
+                                      paths[index - 1].name,
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 12,
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
     );
   }
 
   Widget _buildBody(BuildContext context, StorageDetailState state) {
-    if (state is StorageDetailFailure) {
+    if (state.status == StorageDetailStatus.failure) {
       return ErrorMessageButton(
         onPressed: () {
           context.read<StorageDetailBloc>().add(
                 StorageDetailFetched(id: widget.storageId),
               );
         },
-        message: state.message,
+        message: state.error,
       );
     }
-    if (state is StorageDetailSuccess && state.storages != null) {
+    if (state.status == StorageDetailStatus.success) {
       return StorageItemList(
-        storages: state.storages!.toList(),
-        items: const [],
-        hasReachedMax: state.hasReachedMax,
-        onFetch: () => context.read<StorageDetailBloc>().add(
-              const StorageDetailFetched(id: ''),
-            ),
-      );
-    }
-    if (state is StorageDetailSuccess && state.storage != null) {
-      return StorageItemList(
-        items: state.storage!.items!.toList(),
-        storages: state.storage!.children!.toList(),
+        items: state.storage.items!.toList(),
+        storages: state.storage.children!.toList(),
         hasReachedMax: state.hasReachedMax,
         onFetch: () => context.read<StorageDetailBloc>().add(
               StorageDetailFetched(
-                id: state.storage!.id,
+                id: state.storage.id,
               ),
             ),
       );
@@ -298,7 +265,7 @@ class _StorageDetailScreenState extends State<StorageDetailScreen> {
 
   Widget? _buildFloatingActionButton(
       BuildContext context, StorageDetailState state) {
-    if (state is StorageDetailSuccess) {
+    if (state.status == StorageDetailStatus.success) {
       return FloatingActionButton(
         tooltip: '添加物品',
         onPressed: () async {
