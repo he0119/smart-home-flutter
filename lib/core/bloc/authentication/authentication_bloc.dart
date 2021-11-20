@@ -35,8 +35,6 @@ class AuthenticationBloc
         final user = await userRepository.currentUser();
         await settingsController.updateLoginUser(user);
         emit(AuthenticationSuccess(user));
-      } else {
-        emit(const AuthenticationFailure('未登录，请登录账户'));
       }
     } on MyException catch (e) {
       emit(AuthenticationError(e.message));

@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:quick_actions/quick_actions.dart';
 
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
@@ -141,46 +140,10 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
         },
       );
     }
-    // 仅在客户端上注册 Shortcut
-    if (!kIsWeb && !Platform.isWindows) {
-      const quickActions = QuickActions();
-      Future.microtask(() async {
-        await quickActions.initialize((String shortcutType) {
-          switch (shortcutType) {
-            case 'action_iot':
-              BlocProvider.of<TabBloc>(context)
-                  .add(const TabChanged(AppTab.iot));
-              break;
-            case 'action_storage':
-              BlocProvider.of<TabBloc>(context)
-                  .add(const TabChanged(AppTab.storage));
-              break;
-            case 'action_blog':
-              BlocProvider.of<TabBloc>(context)
-                  .add(const TabChanged(AppTab.blog));
-              break;
-            case 'action_board':
-              BlocProvider.of<TabBloc>(context)
-                  .add(const TabChanged(AppTab.board));
-              break;
-          }
-        });
-        await quickActions.setShortcutItems(
-          <ShortcutItem>[
-            // TODO: 给快捷方式添加图标
-            const ShortcutItem(type: 'action_iot', localizedTitle: 'IOT'),
-            const ShortcutItem(type: 'action_storage', localizedTitle: '物品'),
-            const ShortcutItem(type: 'action_blog', localizedTitle: '博客'),
-            const ShortcutItem(type: 'action_board', localizedTitle: '留言'),
-          ],
-        );
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final appName = context.read<SettingsController>().appConfig.appName;
     final themeMode =
         context.select((SettingsController settings) => settings.themeMode);
     return MaterialApp.router(
@@ -201,7 +164,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
       supportedLocales: const [
         Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
       ],
-      title: appName,
+      title: widget.settingsController.appConfig.appName,
       routeInformationParser: MyRouteInformationParser(),
       routerDelegate: widget._delegate,
     );

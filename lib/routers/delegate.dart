@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
@@ -13,6 +15,7 @@ import 'package:smarthome/routers/information_parser.dart';
 import 'package:smarthome/routers/route_path.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/utils/launch_url.dart';
+import 'package:smarthome/utils/show_snack_bar.dart';
 
 class MyRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
@@ -287,24 +290,50 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {
-            if (state is AuthenticationFailure) {
-              // 清除 Sentry 设置的用户
-              Sentry.configureScope((scope) => scope.user = null);
-              // 登录状态变化，通知页面更新
-              notifyListeners();
-            }
+          listener: (context, state) async {
             if (state is AuthenticationSuccess) {
               // 当登录成功时，开始初始化推送服务
               BlocProvider.of<PushBloc>(context).add(PushStarted());
-              // 设置 Sentry 用户
-              Sentry.configureScope(
-                (scope) => scope.user = SentryUser(
-                  id: state.currentUser.username,
-                  email: state.currentUser.email,
-                ),
-              );
-              notifyListeners();
+              // 仅在客户端上注册 Shortcut
+              if (!kIsWeb && !Platform.isWindows) {
+                const quickActions = QuickActions();
+                await quickActions.initialize((String shortcutType) {
+                  switch (shortcutType) {
+                    case 'action_iot':
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.iot));
+                      break;
+                    case 'action_storage':
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.storage));
+                      break;
+                    case 'action_blog':
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.blog));
+                      break;
+                    case 'action_board':
+                      BlocProvider.of<TabBloc>(context)
+                          .add(const TabChanged(AppTab.board));
+                      break;
+                  }
+                });
+                await quickActions.setShortcutItems(
+                  <ShortcutItem>[
+                    // TODO: 给快捷方式添加图标
+                    const ShortcutItem(
+                        type: 'action_iot', localizedTitle: 'IOT'),
+                    const ShortcutItem(
+                        type: 'action_storage', localizedTitle: '物品'),
+                    const ShortcutItem(
+                        type: 'action_blog', localizedTitle: '博客'),
+                    const ShortcutItem(
+                        type: 'action_board', localizedTitle: '留言'),
+                  ],
+                );
+              }
+            }
+            if (state is AuthenticationError) {
+              showErrorSnackBar(state.message);
             }
           },
         ),

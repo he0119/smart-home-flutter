@@ -32,7 +32,7 @@ class AuthenticationSuccess extends AuthenticationState {
 
 /// 登陆失败
 ///
-/// 用户名密码错误，或登录失效
+/// 用户名密码错误
 class AuthenticationFailure extends AuthenticationState {
   final String message;
 

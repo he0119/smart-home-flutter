@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:smarthome/core/core.dart';
@@ -135,8 +136,17 @@ class SettingsService {
       // 同时删除 Token
       prefs.remove('token');
       prefs.remove('refreshToken');
+      // 清除 Sentry 设置的用户
+      Sentry.configureScope((scope) => scope.user = null);
     } else {
       prefs.setString('loginUser', jsonEncode(user.toJson()));
+      // 设置 Sentry 用户
+      Sentry.configureScope(
+        (scope) => scope.user = SentryUser(
+          id: user.username,
+          email: user.email,
+        ),
+      );
     }
   }
 
