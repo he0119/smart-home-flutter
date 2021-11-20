@@ -281,6 +281,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       ..fine('Router rebuilded')
       ..fine('pages $pages');
 
+    // 如果登录用户变化，则触发组件重新构建
+    context.select((SettingsController settings) => settings.loginUser);
+
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthenticationBloc, AuthenticationState>(
