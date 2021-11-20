@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/core/bloc/blocs.dart';
+import 'package:provider/provider.dart';
+import 'package:smarthome/core/core.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/widgets/text_edit_page.dart';
 
 class ApiUrlPage extends StatelessWidget {
@@ -8,14 +10,13 @@ class ApiUrlPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-      builder: (context, state) => TextEditPage(
+    return Consumer<SettingsController>(
+      builder: (context, settings, child) => TextEditPage(
         title: '服务器网址',
-        initialValue: state.apiUrl ?? '请输入网址',
+        initialValue: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
         onSubmit: (value) {
-          BlocProvider.of<AppPreferencesBloc>(context).add(
-            AppApiUrlChanged(apiUrl: value),
-          );
+          context.read<GraphQLApiClient>().initailize(value);
+          context.read<SettingsController>().updateApiUrl(value);
         },
         description: '要连接的服务器网址',
         validator: (value) {

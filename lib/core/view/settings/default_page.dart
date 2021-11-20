@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/core/bloc/blocs.dart';
+import 'package:provider/provider.dart';
 import 'package:smarthome/core/model/models.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class DefaultPage extends StatelessWidget {
@@ -9,8 +10,8 @@ class DefaultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-      builder: (context, state) => Scaffold(
+    return Consumer<SettingsController>(
+      builder: (context, settings, child) => Scaffold(
         appBar: AppBar(title: const Text('默认主页')),
         body: SettingsList(
           sections: [
@@ -18,37 +19,41 @@ class DefaultPage extends StatelessWidget {
               SettingsTile(
                 title: AppTab.iot.name,
                 trailing:
-                    trailingWidget(context, AppTab.iot, state.defaultPage),
+                    trailingWidget(context, AppTab.iot, settings.defaultPage),
                 onPressed: (context) {
-                  BlocProvider.of<AppPreferencesBloc>(context)
-                      .add(const DefaultPageChanged(defaultPage: AppTab.iot));
+                  context
+                      .read<SettingsController>()
+                      .updateDefaultPage(AppTab.iot);
                 },
               ),
               SettingsTile(
                 title: AppTab.storage.name,
-                trailing:
-                    trailingWidget(context, AppTab.storage, state.defaultPage),
+                trailing: trailingWidget(
+                    context, AppTab.storage, settings.defaultPage),
                 onPressed: (context) {
-                  BlocProvider.of<AppPreferencesBloc>(context).add(
-                      const DefaultPageChanged(defaultPage: AppTab.storage));
+                  context
+                      .read<SettingsController>()
+                      .updateDefaultPage(AppTab.storage);
                 },
               ),
               SettingsTile(
                 title: AppTab.blog.name,
                 trailing:
-                    trailingWidget(context, AppTab.blog, state.defaultPage),
+                    trailingWidget(context, AppTab.blog, settings.defaultPage),
                 onPressed: (context) {
-                  BlocProvider.of<AppPreferencesBloc>(context)
-                      .add(const DefaultPageChanged(defaultPage: AppTab.blog));
+                  context
+                      .read<SettingsController>()
+                      .updateDefaultPage(AppTab.blog);
                 },
               ),
               SettingsTile(
                 title: AppTab.board.name,
                 trailing:
-                    trailingWidget(context, AppTab.board, state.defaultPage),
+                    trailingWidget(context, AppTab.board, settings.defaultPage),
                 onPressed: (context) {
-                  BlocProvider.of<AppPreferencesBloc>(context)
-                      .add(const DefaultPageChanged(defaultPage: AppTab.board));
+                  context
+                      .read<SettingsController>()
+                      .updateDefaultPage(AppTab.board);
                 },
               ),
             ]),

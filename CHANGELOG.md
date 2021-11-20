@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Changed
+
+- 优化了应用启动流程
+- 使用 SettingsController 来管理设置
+
 ### Fixed
 
+- 修复头像无法显示的问题
 - 修复在 Android 11(API 级别 30) 中无法在浏览器中打开网页的问题
 
 ## [0.8.1] - 2021-11-14

@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
-import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/core/model/models.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/core/view/settings/admin_url_page.dart';
 import 'package:smarthome/core/view/settings/api_url_page.dart';
 import 'package:smarthome/core/view/settings/default_page.dart';
@@ -41,15 +41,15 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('设置'),
       ),
-      body: BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-        builder: (context, state) => SettingsList(
+      body: Consumer<SettingsController>(
+        builder: (context, settings, child) => SettingsList(
           sections: [
             SettingsSection(
               title: '通用',
               tiles: [
                 SettingsTile(
                   title: '主题',
-                  subtitle: state.themeMode.toReadable(),
+                  subtitle: settings.themeMode.toReadable(),
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const ThemeModePage(),
@@ -58,7 +58,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 SettingsTile(
                   title: '服务器网址',
-                  subtitle: state.apiUrl ?? '请单击输入',
+                  subtitle: settings.apiUrl,
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const ApiUrlPage(),
@@ -67,7 +67,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 SettingsTile(
                   title: '管理网址',
-                  subtitle: state.adminUrl,
+                  subtitle: settings.adminUrl,
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const AdminUrlPage(),
@@ -76,7 +76,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 SettingsTile(
                   title: '默认主页',
-                  subtitle: state.defaultPage.name,
+                  subtitle: settings.defaultPage.name,
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const DefaultPage(),
@@ -91,7 +91,7 @@ class SettingsScreen extends StatelessWidget {
               tiles: [
                 SettingsTile(
                   title: '刷新间隔',
-                  subtitle: state.refreshInterval.toString(),
+                  subtitle: settings.refreshInterval.toString(),
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const RefreshIntervalPage(),
@@ -105,7 +105,7 @@ class SettingsScreen extends StatelessWidget {
               tiles: [
                 SettingsTile(
                   title: '博客网址',
-                  subtitle: state.blogUrl,
+                  subtitle: settings.blogUrl,
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const BlogUrlPage(),
@@ -114,7 +114,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 SettingsTile(
                   title: '博客管理网址',
-                  subtitle: state.blogAdminUrl ?? '请单击输入',
+                  subtitle: settings.blogAdminUrl ?? '请单击输入',
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const BlogAdminUrlPage(),
@@ -128,7 +128,7 @@ class SettingsScreen extends StatelessWidget {
               tiles: [
                 SettingsTile(
                   title: '评论排序',
-                  subtitle: state.commentDescending ? '倒序' : '正序',
+                  subtitle: settings.commentDescending ? '倒序' : '正序',
                   onPressed: (context) {
                     Navigator.of(context).push(
                       MaterialPageRoute(

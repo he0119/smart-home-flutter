@@ -6,9 +6,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
-import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/core/model/models.dart';
 import 'package:smarthome/core/repository/repositories.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 part 'push_event.dart';
@@ -17,15 +17,13 @@ part 'push_state.dart';
 class PushBloc extends Bloc<PushEvent, PushState> {
   static final Logger _log = Logger('PushBloc');
   final PushRepository pushRepository;
-  final AppPreferencesBloc appPreferencesBloc;
+  final SettingsController settingsController;
 
   static const miPushMethod = MethodChannel('hehome.xyz/push/method');
   static const miPushEvent = EventChannel('hehome.xyz/push/event');
 
-  PushBloc({
-    required this.pushRepository,
-    required this.appPreferencesBloc,
-  }) : super(PushInProgress()) {
+  PushBloc({required this.pushRepository, required this.settingsController})
+      : super(PushInProgress()) {
     on<PushStarted>(_onPushStarted);
     on<PushUpdated>(_onPushUpdated);
     on<PushRefreshed>(_onPushRefreshed);
@@ -37,16 +35,14 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     if (!kIsWeb && Platform.isAndroid) {
       emit(PushInProgress());
       MiPushKey miPushKey;
-      final miPushAppId = appPreferencesBloc.state.miPushAppId;
-      final miPushAppKey = appPreferencesBloc.state.miPushAppKey;
+      final miPushAppId = settingsController.miPushAppId;
+      final miPushAppKey = settingsController.miPushAppKey;
       if (miPushAppId != null && miPushAppKey != null) {
         miPushKey = MiPushKey(appId: miPushAppId, appKey: miPushAppKey);
       } else {
         miPushKey = await pushRepository.miPushKey();
-        appPreferencesBloc.add(MiPushKeyChanged(
-          miPushAppId: miPushKey.appId,
-          miPushAppKey: miPushKey.appKey,
-        ));
+        settingsController.updateMiPushAppId(miPushKey.appId);
+        settingsController.updateMiPushAppKey(miPushKey.appKey);
       }
       // 注册小米推送
       _log.fine('小米推送注册中');
@@ -72,7 +68,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     emit(PushInProgress());
     try {
       // 获取本地保存的 regId
-      final regId = appPreferencesBloc.state.miPushRegId;
+      final regId = settingsController.miPushRegId;
       // 如果新注册的 regId 与之前的不同，则更新
       if (event.regId != regId) {
         await _updateMiPush(emit, event.regId);
@@ -108,7 +104,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   FutureOr<void> _updateMiPush(Emitter<PushState> emit, String regId) async {
     final mipush = await pushRepository.updateMiPush(regId: regId);
     _log.fine('小米推送注册标识符上传成功。');
-    appPreferencesBloc.add(MiPushRegIdChanged(miPushRegId: mipush.regId!));
+    settingsController.updateMiPushRegId(regId);
     emit(PushSuccess(local: regId, server: mipush.regId!));
   }
 }

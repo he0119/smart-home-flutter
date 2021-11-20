@@ -9,34 +9,23 @@ import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:smarthome/core/graphql/mutations/mutations.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 class GraphQLApiClient {
   static final Logger _log = Logger('GraphQLApiClient');
+  static Map<String, String> headers = {};
   static GraphQLClient? _client;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final SettingsController settingsController;
 
-  // ignore: close_sinks
-  final _loginStatusControler = StreamController<bool>();
-
-  GraphQLApiClient();
+  GraphQLApiClient(
+    this.settingsController,
+  );
 
   GraphQLClient? get client => _client;
-
-  /// 是否登录
-  /// 通过判断是否拥有刷新令牌
-  Future<bool> get isLogin async {
-    final prefs = await _prefs;
-    final token = prefs.getString('refreshToken');
-    if (token == null || token == '') {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  Stream<bool> get loginStatus => _loginStatusControler.stream;
 
   Future<String?> get token async {
     final prefs = await _prefs;
@@ -70,27 +59,8 @@ class GraphQLApiClient {
   }
 
   /// 初始化 GraphQL 客户端
-  Future<void> initailize(String url) async {
+  void initailize(String url) {
     final _authLink = AuthLink(getToken: () async => 'JWT ${await token}');
-    // 用户代理设置为当前手机
-    // 暂时只支持 Android
-    // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
-    final headers = <String, String>{};
-    if (!kIsWeb && Platform.isAndroid) {
-      try {
-        final deviceInfo = DeviceInfoPlugin();
-        final androidInfo = await deviceInfo.androidInfo;
-        final packageInfo = await PackageInfo.fromPlatform();
-        headers['User-Agent'] =
-            'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
-      } catch (exception, stackTrace) {
-        await Sentry.captureException(
-          exception,
-          stackTrace: stackTrace,
-        );
-        _log.severe('设置 User-Agent 失败 (${exception.toString()})');
-      }
-    }
     final _httpLink = HttpLink(
       url,
       defaultHeaders: headers,
@@ -115,13 +85,27 @@ class GraphQLApiClient {
     _log.fine('GraphQLClient initailized with url $url');
   }
 
-  /// 登出
-  Future logout() async {
-    final prefs = await _prefs;
-    await prefs.remove('token');
-    await prefs.remove('refreshToken');
-    await prefs.remove('loginUser');
-    _log.fine('clear refresh token');
+  /// 加载配置，比如用户代理
+  /// 这些需要在最开始就加载，因为后面的操作需要用到
+  Future<void> loadSettings() async {
+    // 用户代理设置为当前手机
+    // 暂时只支持 Android
+    // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
+    if (!kIsWeb && Platform.isAndroid) {
+      try {
+        final deviceInfo = DeviceInfoPlugin();
+        final androidInfo = await deviceInfo.androidInfo;
+        final packageInfo = await PackageInfo.fromPlatform();
+        headers['User-Agent'] =
+            'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
+      } catch (exception, stackTrace) {
+        await Sentry.captureException(
+          exception,
+          stackTrace: stackTrace,
+        );
+        _log.severe('设置 User-Agent 失败 (${exception.toString()})');
+      }
+    }
   }
 
   /// 更改
@@ -145,8 +129,7 @@ class GraphQLApiClient {
   void _handleException(OperationException exception) {
     for (var error in exception.graphqlErrors) {
       if (error.message.toLowerCase().contains('refresh token')) {
-        // 通知认证 BLoC 登陆失败
-        _loginStatusControler.sink.add(false);
+        settingsController.updateLoginUser(null);
         throw const AuthenticationException('认证过期，请重新登录');
       }
       _log.warning(error.toString());
