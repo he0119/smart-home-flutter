@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smarthome/core/settings/settings_controller.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/iot/view/settings/refresh_interval_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 

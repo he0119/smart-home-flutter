@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/core/settings/settings_controller.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/iot/bloc/blocs.dart';
 import 'package:smarthome/iot/repository/iot_repository.dart';
 import 'package:smarthome/iot/view/settings/settings_page.dart';

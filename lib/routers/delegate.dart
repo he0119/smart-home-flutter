@@ -9,7 +9,7 @@ import 'package:quick_actions/quick_actions.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/core/settings/settings_controller.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/routers/information_parser.dart';
 import 'package:smarthome/routers/route_path.dart';

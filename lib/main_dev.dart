@@ -7,11 +7,11 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:smarthome/app/configure_nonweb.dart'
     if (dart.library.html) 'package:smarthome/app/configure_web.dart';
 import 'package:smarthome/app/main.dart';
+import 'package:smarthome/app/settings/settings_service.dart';
 import 'package:smarthome/app/simple_bloc_observer.dart';
 import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/repository/graphql_api_client.dart';
-import 'package:smarthome/core/settings/settings_controller.dart';
-import 'package:smarthome/core/settings/settings_service.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

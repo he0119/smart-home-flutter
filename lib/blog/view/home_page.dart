@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smarthome/blog/view/settings/settings_page.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/core/settings/settings_controller.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/widgets/home_page.dart';

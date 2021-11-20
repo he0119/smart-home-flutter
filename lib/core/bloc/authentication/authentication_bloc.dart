@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/core/repository/repositories.dart';
-import 'package:smarthome/core/settings/settings_controller.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/user/user.dart';
 import 'package:smarthome/utils/exceptions.dart';
 

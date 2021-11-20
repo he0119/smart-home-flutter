@@ -7,10 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/core/settings/settings_controller.dart';
 import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/routers/information_parser.dart';

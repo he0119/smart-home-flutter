@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:smarthome/app/settings/settings_service.dart';
 
 import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/model/app_tab.dart';
 import 'package:smarthome/user/model/user.dart';
-
-import 'settings_service.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
 /// user settings, or listen to user settings changes.

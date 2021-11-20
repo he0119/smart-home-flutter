@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:smarthome/core/model/models.dart';
 import 'package:smarthome/core/repository/repositories.dart';
-import 'package:smarthome/core/settings/settings_controller.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 part 'push_event.dart';
