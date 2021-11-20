@@ -9,12 +9,14 @@ import 'package:smarthome/utils/exceptions.dart';
 part 'item_detail_event.dart';
 part 'item_detail_state.dart';
 
+enum ItemDetailStatus { initial, loading, success, failure }
+
 class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
   final StorageRepository storageRepository;
 
   ItemDetailBloc({
     required this.storageRepository,
-  }) : super(ItemDetailInProgress()) {
+  }) : super(const ItemDetailState()) {
     on<ItemDetailStarted>(_onItemDetailStarted);
     on<ItemDetailRefreshed>(_onItemDetailRefreshed);
   }
@@ -26,44 +28,61 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         id: event.id,
       );
       if (item == null) {
-        emit(ItemDetailFailure(
-          '获取物品失败，物品不存在',
-          id: event.id,
-        ));
+        emit(
+          state.copyWith(
+            status: ItemDetailStatus.failure,
+            error: '获取物品失败，物品不存在',
+          ),
+        );
         return;
       }
-      emit(ItemDetailSuccess(item: item));
+      emit(
+        state.copyWith(
+          status: ItemDetailStatus.success,
+          item: item,
+        ),
+      );
     } on MyException catch (e) {
-      emit(ItemDetailFailure(
-        e.message,
-        id: event.id,
-      ));
+      emit(
+        state.copyWith(
+          status: ItemDetailStatus.failure,
+          error: e.message,
+        ),
+      );
     }
   }
 
   FutureOr<void> _onItemDetailRefreshed(
       ItemDetailRefreshed event, Emitter<ItemDetailState> emit) async {
-    final currentState = state;
-    if (currentState is ItemDetailSuccess) {
-      emit(ItemDetailInProgress());
+    if (state.status == ItemDetailStatus.success) {
+      emit(state.copyWith(status: ItemDetailStatus.loading));
       try {
         final item = await storageRepository.item(
-          id: currentState.item.id,
+          id: state.item.id,
           cache: false,
         );
         if (item == null) {
-          emit(ItemDetailFailure(
-            '获取物品失败，物品不存在',
-            id: currentState.item.id,
-          ));
+          emit(
+            state.copyWith(
+              status: ItemDetailStatus.failure,
+              error: '获取物品失败，物品不存在',
+            ),
+          );
           return;
         }
-        emit(ItemDetailSuccess(item: item));
+        emit(
+          state.copyWith(
+            status: ItemDetailStatus.success,
+            item: item,
+          ),
+        );
       } on MyException catch (e) {
-        emit(ItemDetailFailure(
-          e.message,
-          id: currentState.item.id,
-        ));
+        emit(
+          state.copyWith(
+            status: ItemDetailStatus.failure,
+            error: e.message,
+          ),
+        );
       }
     }
   }

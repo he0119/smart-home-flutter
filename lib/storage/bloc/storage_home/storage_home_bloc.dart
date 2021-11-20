@@ -42,46 +42,55 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
               after: currentState.pageInfo.endCursor,
               cache: false,
             );
-            emit(StorageHomeSuccess(
-              expiredItems: currentState.expiredItems! + results.item1,
-              pageInfo: currentState.pageInfo.copyWith(results.item2),
-              itemType: ItemType.expired,
-            ));
+            emit(
+              StorageHomeSuccess(
+                expiredItems: currentState.expiredItems! + results.item1,
+                pageInfo: currentState.pageInfo.copyWith(results.item2),
+                itemType: ItemType.expired,
+              ),
+            );
             break;
           case ItemType.nearExpired:
             final results = await storageRepository.nearExpiredItems(
               after: currentState.pageInfo.endCursor,
               cache: false,
             );
-            emit(StorageHomeSuccess(
-              nearExpiredItems: currentState.nearExpiredItems! + results.item1,
-              pageInfo: currentState.pageInfo.copyWith(results.item2),
-              itemType: ItemType.nearExpired,
-            ));
+            emit(
+              StorageHomeSuccess(
+                nearExpiredItems:
+                    currentState.nearExpiredItems! + results.item1,
+                pageInfo: currentState.pageInfo.copyWith(results.item2),
+                itemType: ItemType.nearExpired,
+              ),
+            );
             break;
           case ItemType.recentlyCreated:
             final results = await storageRepository.recentlyCreatedItems(
               after: currentState.pageInfo.endCursor,
               cache: false,
             );
-            emit(StorageHomeSuccess(
-              recentlyCreatedItems:
-                  currentState.recentlyCreatedItems! + results.item1,
-              pageInfo: currentState.pageInfo.copyWith(results.item2),
-              itemType: ItemType.recentlyCreated,
-            ));
+            emit(
+              StorageHomeSuccess(
+                recentlyCreatedItems:
+                    currentState.recentlyCreatedItems! + results.item1,
+                pageInfo: currentState.pageInfo.copyWith(results.item2),
+                itemType: ItemType.recentlyCreated,
+              ),
+            );
             break;
           case ItemType.recentlyEdited:
             final results = await storageRepository.recentlyEditedItems(
               after: currentState.pageInfo.endCursor,
               cache: false,
             );
-            emit(StorageHomeSuccess(
-              recentlyEditedItems:
-                  currentState.recentlyEditedItems! + results.item1,
-              pageInfo: currentState.pageInfo.copyWith(results.item2),
-              itemType: ItemType.recentlyEdited,
-            ));
+            emit(
+              StorageHomeSuccess(
+                recentlyEditedItems:
+                    currentState.recentlyEditedItems! + results.item1,
+                pageInfo: currentState.pageInfo.copyWith(results.item2),
+                itemType: ItemType.recentlyEdited,
+              ),
+            );
             break;
           case ItemType.all:
             break;
@@ -92,57 +101,70 @@ class StorageHomeBloc extends Bloc<StorageHomeEvent, StorageHomeState> {
           case ItemType.expired:
             final results =
                 await storageRepository.expiredItems(cache: event.cache);
-            emit(StorageHomeSuccess(
-              expiredItems: results.item1,
-              pageInfo: results.item2,
-              itemType: ItemType.expired,
-            ));
+            emit(
+              StorageHomeSuccess(
+                expiredItems: results.item1,
+                pageInfo: results.item2,
+                itemType: ItemType.expired,
+              ),
+            );
             break;
           case ItemType.nearExpired:
             final results =
                 await storageRepository.nearExpiredItems(cache: event.cache);
-            emit(StorageHomeSuccess(
-              nearExpiredItems: results.item1,
-              pageInfo: results.item2,
-              itemType: ItemType.nearExpired,
-            ));
+            emit(
+              StorageHomeSuccess(
+                nearExpiredItems: results.item1,
+                pageInfo: results.item2,
+                itemType: ItemType.nearExpired,
+              ),
+            );
             break;
           case ItemType.recentlyCreated:
             final results = await storageRepository.recentlyCreatedItems(
                 cache: event.cache);
-            emit(StorageHomeSuccess(
-              recentlyCreatedItems: results.item1,
-              pageInfo: results.item2,
-              itemType: ItemType.recentlyCreated,
-            ));
+            emit(
+              StorageHomeSuccess(
+                recentlyCreatedItems: results.item1,
+                pageInfo: results.item2,
+                itemType: ItemType.recentlyCreated,
+              ),
+            );
             break;
           case ItemType.recentlyEdited:
             final results =
                 await storageRepository.recentlyEditedItems(cache: event.cache);
-            emit(StorageHomeSuccess(
-              recentlyEditedItems: results.item1,
-              pageInfo: results.item2,
-              itemType: ItemType.recentlyEdited,
-            ));
+            emit(
+              StorageHomeSuccess(
+                recentlyEditedItems: results.item1,
+                pageInfo: results.item2,
+                itemType: ItemType.recentlyEdited,
+              ),
+            );
             break;
           case ItemType.all:
             final homepage =
                 await storageRepository.homePage(cache: event.cache);
-            emit(StorageHomeSuccess(
+            emit(
+              StorageHomeSuccess(
                 recentlyCreatedItems: homepage['recentlyCreatedItems'],
                 recentlyEditedItems: homepage['recentlyEditedItems'],
                 expiredItems: homepage['expiredItems'],
                 nearExpiredItems: homepage['nearExpiredItems'],
                 itemType: ItemType.all,
-                pageInfo: PageInfo(hasNextPage: false)));
+                pageInfo: const PageInfo(hasNextPage: false),
+              ),
+            );
             break;
         }
       }
     } on MyException catch (e) {
-      emit(StorageHomeFailure(
-        e.message,
-        itemType: event.itemType,
-      ));
+      emit(
+        StorageHomeFailure(
+          e.message,
+          itemType: event.itemType,
+        ),
+      );
     }
   }
 }

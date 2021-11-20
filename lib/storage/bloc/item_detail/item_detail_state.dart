@@ -1,41 +1,35 @@
 part of 'item_detail_bloc.dart';
 
-abstract class ItemDetailState extends Equatable {
-  const ItemDetailState();
+class ItemDetailState extends Equatable {
+  /// 当前状态
+  final ItemDetailStatus status;
 
-  @override
-  List<Object> get props => [];
-}
+  /// 错误信息
+  final String error;
 
-class ItemDetailInProgress extends ItemDetailState {
-  @override
-  String toString() => 'ItemDetailInProgress';
-}
+  final Item item;
 
-class ItemDetailFailure extends ItemDetailState {
-  final String message;
-  final String id;
-
-  const ItemDetailFailure(
-    this.message, {
-    required this.id,
+  const ItemDetailState({
+    this.status = ItemDetailStatus.initial,
+    this.error = '',
+    this.item = const Item(id: '', name: ''),
   });
 
   @override
-  List<Object> get props => [message, id];
+  List<Object> get props => [status, error, item];
 
   @override
-  String toString() => 'ItemDetailFailure(message: $message)';
-}
+  bool get stringify => true;
 
-class ItemDetailSuccess extends ItemDetailState {
-  final Item item;
-
-  const ItemDetailSuccess({required this.item});
-
-  @override
-  List<Object> get props => [item];
-
-  @override
-  String toString() => 'ItemDetailSuccess(item: $item)';
+  ItemDetailState copyWith({
+    ItemDetailStatus? status,
+    String? error,
+    Item? item,
+  }) {
+    return ItemDetailState(
+      status: status ?? this.status,
+      error: error ?? this.error,
+      item: item ?? this.item,
+    );
+  }
 }
