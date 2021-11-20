@@ -39,6 +39,9 @@ class SettingsController with ChangeNotifier {
   late int _refreshInterval;
   late bool _commentDescending;
 
+  // 判断是否登录
+  bool get isLogin => _loginUser != null;
+
   // Allow Widgets to read the user's settings.
   User? get loginUser => _loginUser;
   ThemeMode get themeMode => _themeMode;

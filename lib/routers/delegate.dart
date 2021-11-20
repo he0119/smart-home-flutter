@@ -40,7 +40,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   List<Page> get pages {
     // 未登录时显示登陆界面
-    if (settingsController.loginUser == null) {
+    if (!settingsController.isLogin) {
       return [const LoginPage()];
     }
     // 未设置主页时显示默认主页

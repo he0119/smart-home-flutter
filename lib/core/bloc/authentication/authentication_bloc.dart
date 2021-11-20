@@ -30,7 +30,7 @@ class AuthenticationBloc
       AuthenticationStarted event, Emitter<AuthenticationState> emit) async {
     try {
       // 检查是否登录
-      if (settingsController.loginUser != null) {
+      if (settingsController.isLogin) {
         // 每次启动时都获取当前用户信息，并更新本地缓存
         final user = await userRepository.currentUser();
         await settingsController.updateLoginUser(user);
