@@ -31,16 +31,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Intl.defaultLocale = 'zh';
-    final userRepository = UserRepository(graphqlApiClient: graphQLApiClient);
-    return ChangeNotifierProvider(
-      create: (_) => settingsController,
+    return ChangeNotifierProvider.value(
+      value: settingsController,
       child: MultiRepositoryProvider(
         providers: [
-          RepositoryProvider<GraphQLApiClient>(
-            create: (context) => graphQLApiClient,
+          RepositoryProvider<GraphQLApiClient>.value(
+            value: graphQLApiClient,
           ),
           RepositoryProvider<UserRepository>(
-            create: (context) => userRepository,
+            create: (context) =>
+                UserRepository(graphqlApiClient: graphQLApiClient),
           ),
           RepositoryProvider<VersionRepository>(
             create: (context) => VersionRepository(),
@@ -140,34 +140,37 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
     // 仅在客户端上注册 Shortcut
     if (!kIsWeb && !Platform.isWindows) {
       const quickActions = QuickActions();
-      quickActions.initialize((String shortcutType) {
-        switch (shortcutType) {
-          case 'action_iot':
-            BlocProvider.of<TabBloc>(context).add(const TabChanged(AppTab.iot));
-            break;
-          case 'action_storage':
-            BlocProvider.of<TabBloc>(context)
-                .add(const TabChanged(AppTab.storage));
-            break;
-          case 'action_blog':
-            BlocProvider.of<TabBloc>(context)
-                .add(const TabChanged(AppTab.blog));
-            break;
-          case 'action_board':
-            BlocProvider.of<TabBloc>(context)
-                .add(const TabChanged(AppTab.board));
-            break;
-        }
+      Future.microtask(() async {
+        await quickActions.initialize((String shortcutType) {
+          switch (shortcutType) {
+            case 'action_iot':
+              BlocProvider.of<TabBloc>(context)
+                  .add(const TabChanged(AppTab.iot));
+              break;
+            case 'action_storage':
+              BlocProvider.of<TabBloc>(context)
+                  .add(const TabChanged(AppTab.storage));
+              break;
+            case 'action_blog':
+              BlocProvider.of<TabBloc>(context)
+                  .add(const TabChanged(AppTab.blog));
+              break;
+            case 'action_board':
+              BlocProvider.of<TabBloc>(context)
+                  .add(const TabChanged(AppTab.board));
+              break;
+          }
+        });
+        await quickActions.setShortcutItems(
+          <ShortcutItem>[
+            // TODO: 给快捷方式添加图标
+            const ShortcutItem(type: 'action_iot', localizedTitle: 'IOT'),
+            const ShortcutItem(type: 'action_storage', localizedTitle: '物品'),
+            const ShortcutItem(type: 'action_blog', localizedTitle: '博客'),
+            const ShortcutItem(type: 'action_board', localizedTitle: '留言'),
+          ],
+        );
       });
-      quickActions.setShortcutItems(
-        <ShortcutItem>[
-          // TODO: 给快捷方式添加图标
-          const ShortcutItem(type: 'action_iot', localizedTitle: 'IOT'),
-          const ShortcutItem(type: 'action_storage', localizedTitle: '物品'),
-          const ShortcutItem(type: 'action_blog', localizedTitle: '博客'),
-          const ShortcutItem(type: 'action_board', localizedTitle: '留言'),
-        ],
-      );
     }
   }
 
