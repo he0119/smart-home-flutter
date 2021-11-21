@@ -69,7 +69,14 @@ class SettingsService {
 
   Future<int> refreshInterval() async {
     final prefs = await _prefs;
-    return prefs.getInt('refreshInterval') ?? 10;
+    try {
+      final refreshInterval = prefs.getInt('refreshInterval') ?? 10;
+      return refreshInterval;
+    } on TypeError {
+      // 如果读取出错则删除原来的项目
+      prefs.remove('refreshInterval');
+      return 10;
+    }
   }
 
   Future<void> updateRefreshInterval(int interval) async {
@@ -125,7 +132,13 @@ class SettingsService {
     if (userString == null) {
       return null;
     }
-    return User.fromJson(jsonDecode(userString));
+    try {
+      final user = User.fromJson(json.decode(userString));
+      return user;
+    } on FormatException {
+      prefs.remove('loginUser');
+      return null;
+    }
   }
 
   Future<void> updateLoginUser(User? user) async {
@@ -151,7 +164,13 @@ class SettingsService {
 
   Future<bool> commentDescending() async {
     final prefs = await _prefs;
-    return prefs.getBool('commentDescending') ?? false;
+    try {
+      final commentDescending = prefs.getBool('commentDescending') ?? false;
+      return commentDescending;
+    } on TypeError {
+      prefs.remove('commentDescending');
+      return false;
+    }
   }
 
   Future<void> updateCommentDescending(bool descending) async {
