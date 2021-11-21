@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -113,7 +114,9 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                           alignment: AlignmentDirectional.center,
                           children: <Widget>[
                             const CircularProgressIndicator(),
-                            Image.file(File(picturePath!)),
+                            kIsWeb
+                                ? Image.network(picturePath!)
+                                : Image.file(File(picturePath!)),
                             if (state is PictureEditInProgress)
                               const CircularProgressIndicator(),
                           ],
@@ -137,17 +140,18 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                         },
                         child: const Text('相册'),
                       ),
-                      const SizedBox(width: 20),
-                      RoundedRaisedButton(
-                        onPressed: () async {
-                          final photo = await _picker.pickImage(
-                              source: ImageSource.camera);
-                          setState(() {
-                            picturePath = photo?.path;
-                          });
-                        },
-                        child: const Text('拍照'),
-                      ),
+                      if (!kIsWeb) const SizedBox(width: 20),
+                      if (!kIsWeb)
+                        RoundedRaisedButton(
+                          onPressed: () async {
+                            final photo = await _picker.pickImage(
+                                source: ImageSource.camera);
+                            setState(() {
+                              picturePath = photo?.path;
+                            });
+                          },
+                          child: const Text('拍照'),
+                        ),
                     ],
                   ),
                   RoundedRaisedButton(

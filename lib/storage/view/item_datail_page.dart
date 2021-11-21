@@ -140,12 +140,8 @@ class ItemDetailScreen extends StatelessWidget {
                   );
             }
             if (value == ItemDetailMenu.addPicture) {
-              if (kIsWeb) {
-                showInfoSnackBar('抱歉，暂时不支持通过网页添加图片');
-              } else {
-                MyRouterDelegate.of(context)
-                    .push(PictureAddPage(itemId: state.item.id));
-              }
+              MyRouterDelegate.of(context)
+                  .push(PictureAddPage(itemId: state.item.id));
             }
             if (value == ItemDetailMenu.delete) {
               await showDialog(

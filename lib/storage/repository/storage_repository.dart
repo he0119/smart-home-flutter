@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:graphql/client.dart';
 import 'package:http/http.dart' show MultipartFile;
+import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/graphql/mutations/mutations.dart';
@@ -72,11 +74,7 @@ class StorageRepository {
     required double boxW,
     String? description,
   }) async {
-    final myFile = await MultipartFile.fromPath(
-      '',
-      picturePath,
-      contentType: MediaType('image', 'jpeg'),
-    );
+    final myFile = await _getMultipartFile(picturePath);
 
     final options = MutationOptions(
       document: gql(addPictureMutation),
@@ -599,11 +597,7 @@ class StorageRepository {
   }) async {
     MultipartFile? myFile;
     if (picturePath != null) {
-      myFile = await MultipartFile.fromPath(
-        '',
-        picturePath,
-        contentType: MediaType('image', 'jpeg'),
-      );
+      myFile = await _getMultipartFile(picturePath);
     }
 
     final options = MutationOptions(
@@ -650,5 +644,25 @@ class StorageRepository {
     final storage = Storage.fromJson(storageJson);
 
     return storage;
+  }
+
+  /// 通过 Path 获取 MultipartFile
+  Future<MultipartFile> _getMultipartFile(String picturePath) async {
+    if (kIsWeb) {
+      // 网页需要先下载再转换
+      final response = await http.get(Uri.parse(picturePath));
+      return MultipartFile.fromBytes(
+        '',
+        response.bodyBytes,
+        filename: picturePath.split('/').last,
+        contentType: MediaType('image', 'jpeg'),
+      );
+    } else {
+      return await MultipartFile.fromPath(
+        '',
+        picturePath,
+        contentType: MediaType('image', 'jpeg'),
+      );
+    }
   }
 }
