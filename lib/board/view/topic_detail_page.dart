@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/board/bloc/blocs.dart';
 import 'package:smarthome/board/model/models.dart';
 import 'package:smarthome/board/repository/board_repository.dart';
@@ -9,6 +8,7 @@ import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/add_comment_bar.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/user/user.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
@@ -153,7 +153,6 @@ class _DetailScreen extends StatelessWidget {
                     child: InfiniteList<Comment>(
                       items: state.comments,
                       itemBuilder: (context, item) => CommentItem(
-                        key: ValueKey(item.id),
                         comment: item,
                         showMenu: loginUser == item.user,
                       ),
