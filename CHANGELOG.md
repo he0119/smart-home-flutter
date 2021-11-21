@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ### Fixed
 
+- 修复留言板切换评论排序时无法加载的问题
 - 修复路由在重载时无法保存状态的问题
 
 ## [0.8.2] - 2021-11-21
