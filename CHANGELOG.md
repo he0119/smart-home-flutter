@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.8.2] - 2021-11-21
+
+### Added
+
+- 支持从网页上传图片
+
+### Changed
+
+- 优化了应用启动流程
+- 使用 SettingsController 来管理设置
+
+### Fixed
+
+- 修复头像无法显示的问题
+- 修复在 Android 11(API 级别 30) 中无法在浏览器中打开网页的问题
+
 ## [0.8.1] - 2021-11-14
 
 ### Fixed
@@ -361,8 +377,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.8.2...HEAD
 
+[0.8.2]: https://github.com/he0119/smart-home-flutter/compare/v0.8.1...v0.8.2
 [0.8.1]: https://github.com/he0119/smart-home-flutter/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/he0119/smart-home-flutter/compare/v0.7.5...v0.8.0
 [0.7.5]: https://github.com/he0119/smart-home-flutter/compare/v0.7.4...v0.7.5

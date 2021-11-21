@@ -27,15 +27,16 @@ class MyTransitionDelegate extends TransitionDelegate<void> {
               exitingRoute.route.settings is BlogHomePage ||
               exitingRoute.route.settings is StorageHomePage ||
               exitingRoute.route.settings is BoardHomePage ||
-              exitingRoute.route.settings is LoginPage ||
-              exitingRoute.route.settings is SplashPage) &&
+              exitingRoute.route.settings is LoginPage) &&
           (newRoute.route.settings is IotHomePage ||
               newRoute.route.settings is BlogHomePage ||
               newRoute.route.settings is StorageHomePage ||
               newRoute.route.settings is BoardHomePage)) {
         exitingRoute.markForRemove();
         newRoute.markForAdd();
-        results..add(exitingRoute)..add(newRoute);
+        results
+          ..add(exitingRoute)
+          ..add(newRoute);
         return results;
       }
     }

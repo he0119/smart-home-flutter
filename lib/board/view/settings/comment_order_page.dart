@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/core/core.dart';
+import 'package:provider/provider.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class CommentOrderPage extends StatelessWidget {
@@ -8,8 +8,8 @@ class CommentOrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-      builder: (context, state) => Scaffold(
+    return Consumer<SettingsController>(
+      builder: (context, settings, child) => Scaffold(
         appBar: AppBar(title: const Text('评论排序')),
         body: SettingsList(
           sections: [
@@ -17,20 +17,22 @@ class CommentOrderPage extends StatelessWidget {
               tiles: [
                 SettingsTile(
                   title: '正序',
-                  trailing:
-                      trailingWidget(context, false, state.commentDescending),
+                  trailing: trailingWidget(
+                      context, false, settings.commentDescending),
                   onPressed: (context) {
-                    BlocProvider.of<AppPreferencesBloc>(context)
-                        .add(const CommentDescendingChanged(descending: false));
+                    context
+                        .read<SettingsController>()
+                        .updateCommentDescending(false);
                   },
                 ),
                 SettingsTile(
                   title: '倒序',
                   trailing:
-                      trailingWidget(context, true, state.commentDescending),
+                      trailingWidget(context, true, settings.commentDescending),
                   onPressed: (context) {
-                    BlocProvider.of<AppPreferencesBloc>(context)
-                        .add(const CommentDescendingChanged(descending: true));
+                    context
+                        .read<SettingsController>()
+                        .updateCommentDescending(true);
                   },
                 ),
               ],

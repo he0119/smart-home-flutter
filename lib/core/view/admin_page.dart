@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/core/bloc/app_preferences/app_preferences_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -37,8 +37,8 @@ class _AdminScreenState extends State<AdminScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-      builder: (context, state) => FutureBuilder(
+    return Consumer<SettingsController>(
+      builder: (context, settings, child) => FutureBuilder(
         future: _controller.future,
         builder: (BuildContext context,
                 AsyncSnapshot<WebViewController> controller) =>
@@ -53,7 +53,7 @@ class _AdminScreenState extends State<AdminScreen> {
               },
               child: SafeArea(
                 child: WebView(
-                  initialUrl: state.adminUrl,
+                  initialUrl: settings.adminUrl,
                   javascriptMode: JavascriptMode.unrestricted,
                   onWebViewCreated: _controller.complete,
                   // TODO: 同步软件的认证，这样就不需要再输入密码

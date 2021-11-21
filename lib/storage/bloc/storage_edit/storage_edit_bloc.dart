@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smarthome/storage/model/storage.dart';
@@ -12,47 +14,51 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
 
   StorageEditBloc({
     required this.storageRepository,
-  }) : super(StorageEditInitial());
+  }) : super(StorageEditInitial()) {
+    on<StorageUpdated>(_onStorageUpdated);
+    on<StorageAdded>(_onStorageAdded);
+    on<StorageDeleted>(_onStorageDeleted);
+  }
 
-  @override
-  Stream<StorageEditState> mapEventToState(
-    StorageEditEvent event,
-  ) async* {
-    if (event is StorageUpdated) {
-      yield StorageEditInProgress();
-      try {
-        final storage = await storageRepository.updateStorage(
-          id: event.id,
-          name: event.name,
-          parentId: event.parentId,
-          description: event.description,
-        );
-        yield StorageUpdateSuccess(storage: storage);
-      } on MyException catch (e) {
-        yield StorageEditFailure(e.message);
-      }
+  FutureOr<void> _onStorageUpdated(
+      StorageUpdated event, Emitter<StorageEditState> emit) async {
+    emit(StorageEditInProgress());
+    try {
+      final storage = await storageRepository.updateStorage(
+        id: event.id,
+        name: event.name,
+        parentId: event.parentId,
+        description: event.description,
+      );
+      emit(StorageUpdateSuccess(storage: storage));
+    } on MyException catch (e) {
+      emit(StorageEditFailure(e.message));
     }
-    if (event is StorageAdded) {
-      yield StorageEditInProgress();
-      try {
-        final storage = await storageRepository.addStorage(
-          name: event.name,
-          parentId: event.parentId,
-          description: event.description,
-        );
-        yield StorageAddSuccess(storage: storage);
-      } on MyException catch (e) {
-        yield StorageEditFailure(e.message);
-      }
+  }
+
+  FutureOr<void> _onStorageAdded(
+      StorageAdded event, Emitter<StorageEditState> emit) async {
+    emit(StorageEditInProgress());
+    try {
+      final storage = await storageRepository.addStorage(
+        name: event.name,
+        parentId: event.parentId,
+        description: event.description,
+      );
+      emit(StorageAddSuccess(storage: storage));
+    } on MyException catch (e) {
+      emit(StorageEditFailure(e.message));
     }
-    if (event is StorageDeleted) {
-      yield StorageEditInProgress();
-      try {
-        await storageRepository.deleteStorage(storageId: event.storage.id);
-        yield StorageDeleteSuccess(storage: event.storage);
-      } on MyException catch (e) {
-        yield StorageEditFailure(e.message);
-      }
+  }
+
+  FutureOr<void> _onStorageDeleted(
+      StorageDeleted event, Emitter<StorageEditState> emit) async {
+    emit(StorageEditInProgress());
+    try {
+      await storageRepository.deleteStorage(storageId: event.storage.id);
+      emit(StorageDeleteSuccess(storage: event.storage));
+    } on MyException catch (e) {
+      emit(StorageEditFailure(e.message));
     }
   }
 }

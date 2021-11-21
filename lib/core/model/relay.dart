@@ -9,7 +9,7 @@ class PageInfo {
   final String? startCursor;
   final String? endCursor;
 
-  PageInfo({
+  const PageInfo({
     required this.hasNextPage,
     this.hasPreviousPage,
     this.startCursor,

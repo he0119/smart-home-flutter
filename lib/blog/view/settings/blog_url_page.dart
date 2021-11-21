@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/core/core.dart';
+import 'package:provider/provider.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/widgets/text_edit_page.dart';
 
 class BlogUrlPage extends StatelessWidget {
@@ -8,15 +8,12 @@ class BlogUrlPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-      builder: (context, state) => TextEditPage(
+    return Consumer<SettingsController>(
+      builder: (context, settings, child) => TextEditPage(
         title: '博客网址',
-        initialValue: state.blogUrl,
+        initialValue: settings.blogUrl,
         onSubmit: (value) {
-          BlocProvider.of<AppPreferencesBloc>(context).add(
-            AppBlogUrlChanged(
-                blogUrl: value, blogAdminUrl: state.blogAdminUrl ?? ''),
-          );
+          context.read<SettingsController>().updateBlogUrl(value);
         },
         description: '博客主页的网址',
         validator: (value) {

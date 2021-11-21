@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:quick_actions/quick_actions.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:smarthome/app/app_config.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
@@ -16,10 +15,17 @@ import 'package:smarthome/routers/information_parser.dart';
 import 'package:smarthome/routers/route_path.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/utils/launch_url.dart';
+import 'package:smarthome/utils/show_snack_bar.dart';
 
 class MyRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
   static final Logger _log = Logger('RouterDelegate');
+
+  final SettingsController settingsController;
+
+  MyRouterDelegate({
+    required this.settingsController,
+  });
 
   static MyRouterDelegate of(BuildContext context) {
     final delegate = Router.of(context).routerDelegate;
@@ -30,30 +36,17 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   @override
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  /// 是否初始化
-  bool initialized = false;
-
-  /// 是否登录
-  bool isLogin = false;
-
-  /// 默认主页
-  AppTab defaultHomePage = AppTab.storage;
-
   List<Page> _pages = <Page>[];
 
   List<Page> get pages {
-    // 未初始化时显示加载页面
-    if (!initialized) {
-      return [const SplashPage()];
-    }
     // 未登录时显示登陆界面
-    if (!isLogin) {
+    if (!settingsController.isLogin) {
       return [const LoginPage()];
     }
     // 未设置主页时显示默认主页
     if (_pages.isEmpty) {
       _pages = [
-        defaultHomePage.page,
+        settingsController.defaultPage.page,
       ];
     }
     return List.unmodifiable(_pages);
@@ -257,7 +250,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       switch (configuration.appSettings) {
         case AppSettings.home:
           _pages = [
-            defaultHomePage.page,
+            settingsController.defaultPage.page,
             const SettingsPage(),
           ];
           break;
@@ -287,32 +280,20 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   @override
   Widget build(BuildContext context) {
-    _log..fine('Router rebuilded')..fine('pages $pages');
-    final graphQLApiClient = RepositoryProvider.of<GraphQLApiClient>(context);
-    final config = AppConfig.of(context);
+    _log
+      ..fine('Router rebuilded')
+      ..fine('pages $pages');
+
+    // 如果登录用户变化，则触发组件重新构建
+    context.select((SettingsController settings) => settings.loginUser);
+
     return MultiBlocListener(
       listeners: [
-        BlocListener<AppPreferencesBloc, AppPreferencesState>(
-          listenWhen: (previous, current) {
-            // 如果 APIURL 发生变化则初始化 GraphQL 客户端
-            // 如果客户端还未初始化，也自动初始化
-            if (previous.apiUrl != current.apiUrl ||
-                graphQLApiClient.client == null) {
-              return true;
-            } else {
-              return false;
-            }
-          },
+        BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) async {
-            // 如果软件配置中没有设置过 APIURL，则使用默认的 URL
-            await graphQLApiClient.initailize(state.apiUrl ?? config.apiUrl);
-            if (state.initialized) {
-              initialized = state.initialized;
-              isLogin = state.loginUser != null;
-              defaultHomePage = state.defaultPage;
-              // GraphQL 客户端初始化后，开始认证用户
-              BlocProvider.of<AuthenticationBloc>(context)
-                  .add(AuthenticationStarted());
+            if (state is AuthenticationSuccess) {
+              // 当登录成功时，开始初始化推送服务
+              BlocProvider.of<PushBloc>(context).add(PushStarted());
               // 仅在客户端上注册 Shortcut
               if (!kIsWeb && !Platform.isWindows) {
                 const quickActions = QuickActions();
@@ -350,28 +331,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
                   ],
                 );
               }
-              notifyListeners();
             }
-          },
-        ),
-        BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {
-            if (state is AuthenticationFailure) {
-              isLogin = false;
-              notifyListeners();
-            }
-            if (state is AuthenticationSuccess) {
-              isLogin = true;
-              // 当登录成功时，开始初始化推送服务
-              BlocProvider.of<PushBloc>(context).add(PushStarted());
-              // 设置 Sentry 用户
-              Sentry.configureScope(
-                (scope) => scope.user = SentryUser(
-                  id: state.currentUser.username,
-                  email: state.currentUser.email,
-                ),
-              );
-              notifyListeners();
+            if (state is AuthenticationError) {
+              showErrorSnackBar(state.message);
             }
           },
         ),

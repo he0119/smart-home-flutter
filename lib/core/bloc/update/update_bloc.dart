@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:bloc/bloc.dart';
@@ -12,24 +13,26 @@ part 'update_state.dart';
 class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
   VersionRepository versionRepository;
 
-  UpdateBloc({required this.versionRepository}) : super(UpdateInitial());
+  UpdateBloc({required this.versionRepository}) : super(UpdateInitial()) {
+    on<UpdateStarted>(_onUpdateStarted);
+  }
 
-  @override
-  Stream<UpdateState> mapEventToState(UpdateEvent event) async* {
+  FutureOr<void> _onUpdateStarted(
+      UpdateStarted event, Emitter<UpdateState> emit) async {
     // 暂时只支持 Android
-    if (event is UpdateStarted && !kIsWeb && Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       try {
         final needUpdate = await versionRepository.needUpdate();
         if (needUpdate) {
           final url = await versionRepository.updateUrl();
           final version = await versionRepository.onlineVersion;
-          yield UpdateSuccess(
-              needUpdate: needUpdate, url: url, version: version);
+          emit(UpdateSuccess(
+              needUpdate: needUpdate, url: url, version: version));
         } else {
-          yield UpdateSuccess(needUpdate: needUpdate);
+          emit(UpdateSuccess(needUpdate: needUpdate));
         }
       } on MyException catch (e) {
-        yield UpdateFailure(e.message);
+        emit(UpdateFailure(e.message));
       }
     }
   }

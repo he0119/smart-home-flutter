@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/board/bloc/blocs.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
-import 'package:smarthome/core/bloc/blocs.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 
 class TopicEditPage extends StatefulWidget {
@@ -216,7 +216,7 @@ class __PreviewPageState extends State<_PreviewPage> {
   @override
   Widget build(BuildContext context) {
     final loginUser =
-        context.select((AppPreferencesBloc b) => b.state.loginUser);
+        context.select((SettingsController settings) => settings.loginUser);
     return SingleChildScrollView(
       child: TopicItem(
         topic: Topic(

@@ -1,58 +1,49 @@
 part of 'storage_detail_bloc.dart';
 
-abstract class StorageDetailState extends Equatable {
-  const StorageDetailState();
+class StorageDetailState extends Equatable {
+  /// 当前状态
+  final StorageDetailStatus status;
 
-  @override
-  List<Object?> get props => [];
-}
+  /// 错误信息
+  final String error;
 
-class StorageDetailInProgress extends StorageDetailState {
-  @override
-  String toString() => 'StorageDetailInProgress';
-}
-
-class StorageDetailFailure extends StorageDetailState {
-  final String message;
-  final String id;
-
-  const StorageDetailFailure(
-    this.message, {
-    required this.id,
-  });
-
-  @override
-  List<Object?> get props => [message, id];
-
-  @override
-  String toString() => 'StorageDetailFailure(message: $message)';
-}
-
-class StorageDetailSuccess extends StorageDetailState {
-  /// 家 这个页面所需数据
-  final List<Storage>? storages;
-
-  /// 其他位置页面所需数据
-  final Storage? storage;
+  /// 位置页面所需数据
+  final Storage storage;
   final PageInfo itemPageInfo;
   final PageInfo storagePageInfo;
 
-  const StorageDetailSuccess({
-    this.storages,
-    this.storage,
-    required this.itemPageInfo,
-    required this.storagePageInfo,
-  }) : assert(storages != null || storage != null);
+  const StorageDetailState({
+    this.status = StorageDetailStatus.initial,
+    this.error = '',
+    // 初始为空值
+    this.storage = const Storage(id: '', name: ''),
+    this.storagePageInfo = const PageInfo(hasNextPage: false),
+    this.itemPageInfo = const PageInfo(hasNextPage: false),
+  });
 
   bool get hasReachedMax =>
       !itemPageInfo.hasNextPage && !storagePageInfo.hasNextPage;
 
   @override
-  List<Object?> get props => [storages, storage, itemPageInfo, storagePageInfo];
+  List<Object?> get props =>
+      [status, error, storage, itemPageInfo, storagePageInfo];
 
   @override
-  String toString() {
-    return 'StorageDetailSuccess'
-        '(storage: $storage, hasReachedMax: $hasReachedMax)';
+  bool get stringify => true;
+
+  StorageDetailState copyWith({
+    StorageDetailStatus? status,
+    String? error,
+    Storage? storage,
+    PageInfo? itemPageInfo,
+    PageInfo? storagePageInfo,
+  }) {
+    return StorageDetailState(
+      status: status ?? this.status,
+      error: error ?? this.error,
+      storage: storage ?? this.storage,
+      itemPageInfo: itemPageInfo ?? this.itemPageInfo,
+      storagePageInfo: storagePageInfo ?? this.storagePageInfo,
+    );
   }
 }

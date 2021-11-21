@@ -1,4 +1,6 @@
 {
-  "dart.showTodos": false,
-  "github-actions.workflows.pinned.workflows": [".github/workflows/main.yml"]
+    "dart.showTodos": false,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
 }

@@ -2,9 +2,6 @@ part of 'storage_detail_bloc.dart';
 
 abstract class StorageDetailEvent extends Equatable {
   const StorageDetailEvent();
-
-  @override
-  List<Object?> get props => [];
 }
 
 class StorageDetailFetched extends StorageDetailEvent {

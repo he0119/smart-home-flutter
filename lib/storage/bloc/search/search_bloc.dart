@@ -14,34 +14,32 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
 
   StorageSearchBloc({
     required this.storageRepository,
-  }) : super(StorageSearchInitial());
-
-  @override
-  Stream<Transition<StorageSearchEvent, StorageSearchState>> transformEvents(
-      events, transitionFn) {
-    return events
-        .debounceTime(const Duration(milliseconds: 300))
-        .switchMap(transitionFn);
+  }) : super(StorageSearchInitial()) {
+    on<StorageSearchChanged>(_onStorageSearchChanged,
+        transformer: debounce(const Duration(milliseconds: 300)));
   }
 
-  @override
-  Stream<StorageSearchState> mapEventToState(StorageSearchEvent event) async* {
-    if (event is StorageSearchChanged) {
-      if (event.key.isEmpty) {
-        yield StorageSearchInitial();
-        return;
-      }
-      yield StorageSearchInProgress();
-      try {
-        final results = await storageRepository.search(event.key);
-        yield StorageSearchSuccess(
-          items: results.item1,
-          storages: results.item2,
-          term: event.key,
-        );
-      } on MyException catch (e) {
-        yield StorageSearchFailure(e.message);
-      }
+  FutureOr<void> _onStorageSearchChanged(
+      StorageSearchChanged event, Emitter<StorageSearchState> emit) async {
+    if (event.key.isEmpty) {
+      emit(StorageSearchInitial());
+      return;
     }
+    emit(StorageSearchInProgress());
+    try {
+      final results = await storageRepository.search(event.key);
+      emit(StorageSearchSuccess(
+        items: results.item1,
+        storages: results.item2,
+        term: event.key,
+      ));
+    } on MyException catch (e) {
+      emit(StorageSearchFailure(e.message));
+    }
+  }
+
+  EventTransformer<StorageSearchEvent> debounce<StorageSearchEvent>(
+      Duration duration) {
+    return (events, mapper) => events.debounceTime(duration).switchMap(mapper);
   }
 }

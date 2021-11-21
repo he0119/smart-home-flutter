@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/core/bloc/blocs.dart';
+import 'package:provider/provider.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/widgets/text_edit_page.dart';
 
 class AdminUrlPage extends StatelessWidget {
@@ -8,14 +9,12 @@ class AdminUrlPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppPreferencesBloc, AppPreferencesState>(
-      builder: (context, state) => TextEditPage(
+    return Consumer<SettingsController>(
+      builder: (context, settings, child) => TextEditPage(
         title: '管理网址',
-        initialValue: state.adminUrl,
+        initialValue: settings.adminUrl,
         onSubmit: (value) {
-          BlocProvider.of<AppPreferencesBloc>(context).add(
-            AppAdminUrlChanged(adminUrl: value),
-          );
+          context.read<SettingsController>().updateAdminUrl(value);
         },
         description: '管理的网址',
         validator: (value) {
