@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.8.3] - 2021-11-21
+
+### Fixed
+
+- 修复更新登录用户信息的失败的错误
+
 ## [0.8.2] - 2021-11-21
 
 ### Added
@@ -17,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 优化了应用启动流程
 - 使用 SettingsController 来管理设置
+- 优化出错和刷新时的体验
 
 ### Fixed
 
@@ -377,8 +384,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.8.2...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.8.3...HEAD
 
+[0.8.3]: https://github.com/he0119/smart-home-flutter/compare/v0.8.2...v0.8.3
 [0.8.2]: https://github.com/he0119/smart-home-flutter/compare/v0.8.1...v0.8.2
 [0.8.1]: https://github.com/he0119/smart-home-flutter/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/he0119/smart-home-flutter/compare/v0.7.5...v0.8.0
