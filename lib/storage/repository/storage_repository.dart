@@ -3,6 +3,7 @@ import 'package:graphql/client.dart';
 import 'package:http/http.dart' show MultipartFile;
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/graphql/mutations/mutations.dart';
 import 'package:smarthome/storage/graphql/queries/queries.dart';
@@ -651,17 +652,20 @@ class StorageRepository {
     if (kIsWeb) {
       // 网页需要先下载再转换
       final response = await http.get(Uri.parse(picturePath));
+      final mime = lookupMimeType(picturePath, headerBytes: response.bodyBytes)
+          ?.split('/');
       return MultipartFile.fromBytes(
         '',
         response.bodyBytes,
-        filename: picturePath.split('/').last,
-        contentType: MediaType('image', 'jpeg'),
+        filename: 'picture.${mime?.last}',
+        contentType: mime != null ? MediaType(mime.first, mime.last) : null,
       );
     } else {
+      final mime = lookupMimeType(picturePath)?.split('/');
       return await MultipartFile.fromPath(
         '',
         picturePath,
-        contentType: MediaType('image', 'jpeg'),
+        contentType: mime != null ? MediaType(mime.first, mime.last) : null,
       );
     }
   }
