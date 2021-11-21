@@ -1,11 +1,11 @@
 name: smarthome
 description: 智慧家庭
-version: 0.8.1+7
+version: 0.8.2+7
 homepage: https://github.com/he0119/smart-home-flutter
 publish_to: none
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
