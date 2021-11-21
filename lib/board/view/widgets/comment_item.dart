@@ -48,7 +48,8 @@ class CommentItem extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 showInfoSnackBar('正在删除...', duration: 1);
-                                BlocProvider.of<CommentEditBloc>(context)
+                                context
+                                    .read<CommentEditBloc>()
                                     .add(CommentDeleted(comment: comment));
                                 Navigator.pop(context);
                               },
