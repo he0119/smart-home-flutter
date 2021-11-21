@@ -93,8 +93,6 @@ class SettingsController with ChangeNotifier {
   }
 
   Future<void> updateLoginUser(User? newLoginUser) async {
-    if (newLoginUser == _loginUser) return;
-
     _loginUser = newLoginUser;
 
     notifyListeners();
