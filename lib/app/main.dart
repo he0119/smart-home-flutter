@@ -111,30 +111,30 @@ class MyApp extends StatelessWidget {
 
 class MyMaterialApp extends StatefulWidget {
   final SettingsController settingsController;
-  // 为了保存路由状态
-  late final MyRouterDelegate _delegate;
 
-  MyMaterialApp({
+  const MyMaterialApp({
     Key? key,
     required this.settingsController,
-  }) : super(key: key) {
-    _delegate = MyRouterDelegate(settingsController: settingsController);
-  }
+  }) : super(key: key);
 
   @override
   _MyMaterialAppState createState() => _MyMaterialAppState();
 }
 
 class _MyMaterialAppState extends State<MyMaterialApp> {
+  // 为了保存路由状态
+  late final MyRouterDelegate _delegate;
+
   @override
   void initState() {
     super.initState();
+    _delegate = MyRouterDelegate(settingsController: widget.settingsController);
     // 仅在安卓上注册通道
     if (!kIsWeb && Platform.isAndroid) {
       const MethodChannel('hehome.xyz/route').setMethodCallHandler(
         (call) async {
           if (call.method == 'RouteChanged' && call.arguments != null) {
-            await widget._delegate.navigateNewPath(call.arguments as String);
+            await _delegate.navigateNewPath(call.arguments as String);
           }
         },
       );
@@ -165,7 +165,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
       ],
       title: widget.settingsController.appConfig.appName,
       routeInformationParser: MyRouteInformationParser(),
-      routerDelegate: widget._delegate,
+      routerDelegate: _delegate,
     );
   }
 }
