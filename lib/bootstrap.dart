@@ -14,7 +14,7 @@ import 'package:smarthome/core/repository/graphql_api_client.dart';
 
 Future<void> bootstrap(AppConfig appConfig) async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureApp();
+  await configureApp();
   // Set up the SettingsController, which will glue user settings to multiple
   // Flutter Widgets.
   final settingsController = SettingsController(SettingsService(), appConfig);
