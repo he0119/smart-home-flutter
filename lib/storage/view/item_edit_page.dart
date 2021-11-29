@@ -4,10 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
-import 'package:smarthome/storage/repository/storage_repository.dart';
+import 'package:smarthome/storage/view/widgets/storage_picker.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
-import 'package:smarthome/widgets/dropdown_search.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class ItemEditPage extends StatefulWidget {
@@ -124,24 +123,16 @@ class _ItemEditPageState extends State<ItemEditPage> {
                             context, _numberFocusNode, _descriptionFocusNode);
                       },
                     ),
-                    MyDropdownSearch<Storage>(
+                    StoragePicker(
                         label: '属于',
-                        onFind: (String? filter) async {
-                          final storages =
-                              await RepositoryProvider.of<StorageRepository>(
-                                      context)
-                                  .storages(key: filter);
-                          return storages;
-                        },
-                        onChanged: (Storage? data) {
+                        onSaved: (Storage? data) {
                           if (data != null) {
                             storageId = data.id;
                           }
                         },
-                        selectedItem: widget.isEditing
+                        initialValue: widget.isEditing
                             ? widget.item!.storage
                             : widget.storage,
-                        autoValidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value == null) {
                             return '请选择一个存放位置';

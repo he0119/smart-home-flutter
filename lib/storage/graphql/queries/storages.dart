@@ -6,6 +6,10 @@ query storages($key: String) {
       node {
         id
         name
+        parent {
+          id
+          name
+        }
       }
     }
   }
