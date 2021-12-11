@@ -54,19 +54,25 @@ jobs:
           flutter pub global activate junitreport
           flutter pub global run junitreport:tojunit --input example.jsonl --output TEST-report.xml
           python lcov_cobertura.py coverage/lcov.info
-      - name: Publish unit test results
-        uses: EnricoMi/publish-unit-test-result-action@v1.5
+      - name: Upload Test Results
         if: always()
+        uses: actions/upload-artifact@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          files: "**/TEST-*.xml"
-          comment_on_pr: false
+          name: Unit Test Results
+          path: |
+            **/TEST-*.xml
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
-          flags: unittests
+        uses: codecov/codecov-action@v2
+
+  event_file:
+    name: "Event File"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: Event File
+        path: ${{ github.event_path }}
 
   android:
     name: Android
