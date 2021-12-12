@@ -10,7 +10,6 @@ on:
     types: [published]
 
 env:
-  flutter_channel: "stable"
   flutter_version: "2.5.3"
 
 jobs:
@@ -42,11 +41,10 @@ jobs:
           fi
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
-      - name: Install flutter
-        uses: subosito/flutter-action@v1
+      - name: Setup Flutter
+        uses: hrishikesh-kadam/setup-flutter@v1
         with:
-          channel: ${{ env.flutter_channel }}
-          flutter-version: ${{ env.flutter_version }}
+          ref: ${{ env.flutter_version }}
       - name: Flutter test
         run: |
           flutter pub get
@@ -95,11 +93,10 @@ jobs:
         run: ./.github/scripts/decrypt_secret.sh
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
-      - name: Install flutter
-        uses: subosito/flutter-action@v1
+      - name: Setup Flutter
+        uses: hrishikesh-kadam/setup-flutter@v1
         with:
-          channel: ${{ env.flutter_channel }}
-          flutter-version: ${{ env.flutter_version }}
+          ref: ${{ env.flutter_version }}
       - name: Build split-per-abi apks
         run: flutter build apk --split-per-abi -t ./lib/main_$ENVIRONMENT.dart --flavor $ENVIRONMENT
         env:
@@ -128,11 +125,10 @@ jobs:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
           RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      - name: Install flutter
-        uses: subosito/flutter-action@v1
+      - name: Setup Flutter
+        uses: hrishikesh-kadam/setup-flutter@v1
         with:
-          channel: ${{ env.flutter_channel }}
-          flutter-version: ${{ env.flutter_version }}
+          ref: ${{ env.flutter_version }}
       - name: Build web version
         run: |
           flutter build web --web-renderer=html -t ./lib/main_$ENVIRONMENT.dart
@@ -162,11 +158,10 @@ jobs:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
           RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      - name: Install flutter
-        uses: subosito/flutter-action@v1
+      - name: Setup Flutter
+        uses: hrishikesh-kadam/setup-flutter@v1
         with:
-          channel: ${{ env.flutter_channel }}
-          flutter-version: ${{ env.flutter_version }}
+          ref: ${{ env.flutter_version }}
       - name: Build windows version
         run: |
           flutter config --enable-windows-desktop
