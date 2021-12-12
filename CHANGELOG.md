@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Changed
+
+- 升级至 Flutter 2.8
+
 ## [0.8.4] - 2021-11-21
 
 ### Fixed
