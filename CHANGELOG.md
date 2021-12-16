@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Fixed
+
+- 修复无法更改博客管理网址的问题
+
 ### Changed
 
 - 升级至 Flutter 2.8
