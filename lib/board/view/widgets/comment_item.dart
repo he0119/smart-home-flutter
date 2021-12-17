@@ -27,8 +27,9 @@ class CommentItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ItemTitle(
-          user: comment.user,
-          editedAt: comment.editedAt,
+          user: comment.user!,
+          createdAt: comment.createdAt!,
+          editedAt: comment.editedAt!,
           onSelected: showMenu
               ? (Menu menu) async {
                   switch (menu) {
