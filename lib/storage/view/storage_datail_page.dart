@@ -15,14 +15,12 @@ import 'package:smarthome/widgets/error_message_button.dart';
 
 class StorageDetailPage extends Page {
   final String storageId;
-  final int group;
 
   StorageDetailPage({
     required this.storageId,
-    required this.group,
   }) : super(
-          key: ValueKey('$group/$storageId'),
-          name: '/storage/$group/$storageId',
+          key: UniqueKey(),
+          name: '/storage/$storageId',
         );
 
   @override
@@ -125,17 +123,20 @@ class StorageDetailScreen extends StatelessWidget {
         PopupMenuButton<Menu>(
           onSelected: (value) async {
             if (value == Menu.edit) {
-              await Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => BlocProvider<StorageEditBloc>(
-                  create: (_) => StorageEditBloc(
-                    storageRepository: context.read<StorageRepository>(),
-                  ),
-                  child: StorageEditPage(
-                    isEditing: true,
-                    storage: state.storage,
+              final r = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider<StorageEditBloc>(
+                    create: (_) => StorageEditBloc(
+                      storageRepository: context.read<StorageRepository>(),
+                    ),
+                    child: StorageEditPage(
+                      isEditing: true,
+                      storage: state.storage,
+                    ),
                   ),
                 ),
-              ));
+              );
+              if (r != null) {}
             }
             if (value == Menu.delete) {
               await showDialog(

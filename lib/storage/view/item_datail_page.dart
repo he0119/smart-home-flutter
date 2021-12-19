@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
-import 'package:smarthome/storage/repository/storage_repository.dart';
+import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/consumable_edit_page.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
 import 'package:smarthome/storage/view/picture_add_page.dart';
-import 'package:smarthome/storage/view/picture_page.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
@@ -16,13 +14,11 @@ import 'package:smarthome/widgets/error_message_button.dart';
 
 class ItemDetailPage extends Page {
   final String itemId;
-  final int group;
 
   ItemDetailPage({
     required this.itemId,
-    required this.group,
   }) : super(
-          key: ValueKey('$group/$itemId'),
+          key: UniqueKey(),
           name: '/item/$itemId',
         );
 
@@ -235,7 +231,7 @@ class _ItemDetailList extends StatelessWidget {
               item.storage!.name,
               onTap: () {
                 MyRouterDelegate.of(context)
-                    .addStorageGroup(storage: item.storage);
+                    .push(StorageDetailPage(storageId: item.storage!.id));
               },
               style: const TextStyle(
                 decoration: TextDecoration.underline,
@@ -262,7 +258,8 @@ class _ItemDetailList extends StatelessWidget {
                     (item) => SelectableText(
                       item.name,
                       onTap: () {
-                        MyRouterDelegate.of(context).addItemPage(item: item);
+                        MyRouterDelegate.of(context)
+                            .push(ItemDetailPage(itemId: item.id));
                       },
                       style: const TextStyle(
                         decoration: TextDecoration.underline,

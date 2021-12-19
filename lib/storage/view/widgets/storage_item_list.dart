@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/storage/model/storage.dart';
+import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 import 'package:smarthome/widgets/substring_highlight.dart';
 
@@ -73,7 +73,7 @@ class _HighlightStorageItemListItem extends StatelessWidget {
           term: term,
         ),
         onTap: () {
-          MyRouterDelegate.of(context).addItemPage(item: item);
+          MyRouterDelegate.of(context).push(ItemDetailPage(itemId: item.id));
         },
       );
     } else {
@@ -91,7 +91,8 @@ class _HighlightStorageItemListItem extends StatelessWidget {
           term: term,
         ),
         onTap: () async {
-          MyRouterDelegate.of(context).addStorageGroup(storage: item);
+          MyRouterDelegate.of(context)
+              .push(StorageDetailPage(storageId: item.id));
         },
       );
     }
@@ -118,7 +119,7 @@ class _StorageItemListItem extends StatelessWidget {
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
         onTap: () {
-          MyRouterDelegate.of(context).addItemPage(item: item);
+          MyRouterDelegate.of(context).push(ItemDetailPage(itemId: item.id));
         },
       );
     } else {

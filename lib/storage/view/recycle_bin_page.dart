@@ -4,6 +4,7 @@ import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
+import 'package:smarthome/storage/view/item_datail_page.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
@@ -114,7 +115,7 @@ Widget _buildItem(BuildContext context, Item item) {
     title: text,
     subtitle: Text(item.description ?? ''),
     onTap: () {
-      MyRouterDelegate.of(context).addItemPage(item: item);
+      MyRouterDelegate.of(context).push(ItemDetailPage(itemId: item.id));
     },
     trailing: Tooltip(
       message: '恢复',
