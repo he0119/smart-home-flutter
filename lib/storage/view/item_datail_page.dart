@@ -78,7 +78,7 @@ class ItemDetailScreen extends StatelessWidget {
               listener: (context, state) {
                 if (state is ItemDeleteSuccess) {
                   showInfoSnackBar('物品 ${state.item.name} 删除成功');
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
                 }
                 if (state is ItemEditFailure) {
                   showErrorSnackBar(state.message);
@@ -156,7 +156,7 @@ class ItemDetailScreen extends StatelessWidget {
                         context.read<ItemEditBloc>().add(
                               ItemDeleted(item: state.item),
                             );
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),

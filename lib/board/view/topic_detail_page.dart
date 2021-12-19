@@ -177,8 +177,7 @@ class _DetailScreen extends StatelessWidget {
                   tooltip: '添加评论',
                   child: const Icon(Icons.add_comment),
                   onPressed: () async {
-                    await Navigator.push(
-                      context,
+                    final r = await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => BlocProvider(
                           create: (context) => CommentEditBloc(
@@ -190,12 +189,14 @@ class _DetailScreen extends StatelessWidget {
                         ),
                       ),
                     );
-                    context.read<TopicDetailBloc>().add(
-                          TopicDetailFetched(
-                            descending: descending,
-                            cache: false,
-                          ),
-                        );
+                    if (r) {
+                      context.read<TopicDetailBloc>().add(
+                            TopicDetailFetched(
+                              descending: descending,
+                              cache: false,
+                            ),
+                          );
+                    }
                   },
                 ),
               ),
@@ -221,8 +222,7 @@ class _DetailScreen extends StatelessWidget {
         PopupMenuButton<TopicDetailMenu>(
           onSelected: (value) async {
             if (value == TopicDetailMenu.edit) {
-              await Navigator.push(
-                context,
+              final r = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => BlocProvider(
                     create: (context) => TopicEditBloc(
@@ -234,10 +234,14 @@ class _DetailScreen extends StatelessWidget {
                   ),
                 ),
               );
-              context.read<TopicDetailBloc>().add(TopicDetailFetched(
-                    descending: descending,
-                    cache: false,
-                  ));
+              if (r) {
+                context.read<TopicDetailBloc>().add(
+                      TopicDetailFetched(
+                        descending: descending,
+                        cache: false,
+                      ),
+                    );
+              }
             }
             if (value == TopicDetailMenu.delete) {
               await showDialog(
@@ -258,7 +262,7 @@ class _DetailScreen extends StatelessWidget {
                         context
                             .read<TopicEditBloc>()
                             .add(TopicDeleted(topic: state.topic));
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),
@@ -285,7 +289,7 @@ class _DetailScreen extends StatelessWidget {
                         context
                             .read<TopicEditBloc>()
                             .add(TopicPinned(topic: state.topic));
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),
@@ -312,7 +316,7 @@ class _DetailScreen extends StatelessWidget {
                         context
                             .read<TopicEditBloc>()
                             .add(TopicUnpinned(topic: state.topic));
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),
@@ -339,7 +343,7 @@ class _DetailScreen extends StatelessWidget {
                         context
                             .read<TopicEditBloc>()
                             .add(TopicClosed(topic: state.topic));
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),
@@ -366,7 +370,7 @@ class _DetailScreen extends StatelessWidget {
                         context
                             .read<TopicEditBloc>()
                             .add(TopicReopened(topic: state.topic));
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),

@@ -52,7 +52,7 @@ class CommentItem extends StatelessWidget {
                                 context
                                     .read<CommentEditBloc>()
                                     .add(CommentDeleted(comment: comment));
-                                Navigator.pop(context);
+                                Navigator.of(context).pop();
                               },
                               child: const Text('是'),
                             ),

@@ -89,7 +89,7 @@ class StorageDetailScreen extends StatelessWidget {
               listener: (context, state) {
                 if (state is StorageDeleteSuccess) {
                   showInfoSnackBar('位置 ${state.storage.name} 删除成功');
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
                 }
                 if (state is StorageEditFailure) {
                   showErrorSnackBar(state.message);
@@ -156,7 +156,7 @@ class StorageDetailScreen extends StatelessWidget {
                         context.read<StorageEditBloc>().add(
                               StorageDeleted(storage: state.storage),
                             );
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),

@@ -139,7 +139,7 @@ Widget _buildItem(BuildContext context, Item item) {
                     BlocProvider.of<ItemEditBloc>(context)
                         .add(ItemRestored(item: item));
                     showInfoSnackBar('正在恢复...', duration: 1);
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   },
                   child: const Text('是'),
                 ),
