@@ -131,7 +131,8 @@ class _StorageItemListItem extends StatelessWidget {
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
         onTap: () {
-          MyRouterDelegate.of(context).setStoragePage(storage: item);
+          MyRouterDelegate.of(context)
+              .push(StorageDetailPage(storageId: item.id));
         },
       );
     }
