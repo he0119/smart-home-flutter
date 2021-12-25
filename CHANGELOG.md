@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Fixed
+
+- 修复无法更改博客管理网址的问题
+
+### Changed
+
+- 升级至 Flutter 2.8
+- 使用 FloatingActionButton 来添加评论
+- 默认显示创建时间
+
 ## [0.8.4] - 2021-11-21
 
 ### Fixed

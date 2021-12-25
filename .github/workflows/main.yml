@@ -10,8 +10,7 @@ on:
     types: [published]
 
 env:
-  flutter_channel: "stable"
-  flutter_version: "2.5.3"
+  flutter_version: "2.8.0"
 
 jobs:
   test:
@@ -42,11 +41,10 @@ jobs:
           fi
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
-      - name: Install flutter
-        uses: subosito/flutter-action@v1
+      - name: Setup Flutter
+        uses: hrishikesh-kadam/setup-flutter@v1
         with:
-          channel: ${{ env.flutter_channel }}
-          flutter-version: ${{ env.flutter_version }}
+          ref: ${{ env.flutter_version }}
       - name: Flutter test
         run: |
           flutter pub get
@@ -54,19 +52,25 @@ jobs:
           flutter pub global activate junitreport
           flutter pub global run junitreport:tojunit --input example.jsonl --output TEST-report.xml
           python lcov_cobertura.py coverage/lcov.info
-      - name: Publish unit test results
-        uses: EnricoMi/publish-unit-test-result-action@v1.5
+      - name: Upload Test Results
         if: always()
+        uses: actions/upload-artifact@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          files: "**/TEST-*.xml"
-          comment_on_pr: false
+          name: Unit Test Results
+          path: |
+            **/TEST-*.xml
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
-          flags: unittests
+        uses: codecov/codecov-action@v2
+
+  event_file:
+    name: "Event File"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: Event File
+        path: ${{ github.event_path }}
 
   android:
     name: Android
@@ -78,8 +82,8 @@ jobs:
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
-          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" ./lib/main_$ENVIRONMENT.dart
-          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" ./lib/main_$ENVIRONMENT.dart
+          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" ./lib/bootstrap.dart
+          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" ./lib/bootstrap.dart
         env:
           VERSION: ${{ needs.test.outputs.version }}
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
@@ -89,11 +93,10 @@ jobs:
         run: ./.github/scripts/decrypt_secret.sh
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
-      - name: Install flutter
-        uses: subosito/flutter-action@v1
+      - name: Setup Flutter
+        uses: hrishikesh-kadam/setup-flutter@v1
         with:
-          channel: ${{ env.flutter_channel }}
-          flutter-version: ${{ env.flutter_version }}
+          ref: ${{ env.flutter_version }}
       - name: Build split-per-abi apks
         run: flutter build apk --split-per-abi -t ./lib/main_$ENVIRONMENT.dart --flavor $ENVIRONMENT
         env:
@@ -115,18 +118,17 @@ jobs:
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
-          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" ./lib/main_$ENVIRONMENT.dart
-          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" ./lib/main_$ENVIRONMENT.dart
+          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" ./lib/bootstrap.dart
+          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" ./lib/bootstrap.dart
         env:
           VERSION: ${{ needs.test.outputs.version }}
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
           RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      - name: Install flutter
-        uses: subosito/flutter-action@v1
+      - name: Setup Flutter
+        uses: hrishikesh-kadam/setup-flutter@v1
         with:
-          channel: ${{ env.flutter_channel }}
-          flutter-version: ${{ env.flutter_version }}
+          ref: ${{ env.flutter_version }}
       - name: Build web version
         run: |
           flutter build web --web-renderer=html -t ./lib/main_$ENVIRONMENT.dart
@@ -149,18 +151,17 @@ jobs:
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
-          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" .\lib\main_$env:ENVIRONMENT.dart
-          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" .\lib/main_$env:ENVIRONMENT.dart
+          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" .\lib\bootstrap.dart
+          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" .\lib/bootstrap.dart
         env:
           VERSION: ${{ needs.test.outputs.version }}
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
           RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      - name: Install flutter
-        uses: subosito/flutter-action@v1
+      - name: Setup Flutter
+        uses: hrishikesh-kadam/setup-flutter@v1
         with:
-          channel: ${{ env.flutter_channel }}
-          flutter-version: ${{ env.flutter_version }}
+          ref: ${{ env.flutter_version }}
       - name: Build windows version
         run: |
           flutter config --enable-windows-desktop

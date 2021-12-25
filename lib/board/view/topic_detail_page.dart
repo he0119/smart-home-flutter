@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/board/bloc/blocs.dart';
 import 'package:smarthome/board/model/models.dart';
 import 'package:smarthome/board/repository/board_repository.dart';
+import 'package:smarthome/board/view/comment_edit_page.dart';
 import 'package:smarthome/board/view/topic_edit_page.dart';
-import 'package:smarthome/board/view/widgets/add_comment_bar.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/user/user.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
@@ -140,57 +139,65 @@ class _DetailScreen extends StatelessWidget {
                   },
                 ),
               ],
-              child: KeyboardDismissOnTap(
-                child: Scaffold(
-                  appBar: _buildAppBar(context, state, descending, loginUser),
-                  body: RefreshIndicator(
-                    onRefresh: () async {
+              child: Scaffold(
+                appBar: _buildAppBar(context, state, descending, loginUser),
+                body: RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<TopicDetailBloc>().add(TopicDetailFetched(
+                          descending: descending,
+                          cache: false,
+                        ));
+                  },
+                  child: InfiniteList<Comment>(
+                    items: state.comments,
+                    itemBuilder: (context, item) => CommentItem(
+                      comment: item,
+                      showMenu: loginUser == item.user,
+                    ),
+                    onFetch: () {
                       context.read<TopicDetailBloc>().add(TopicDetailFetched(
+                            topicId: state.topic.id,
                             descending: descending,
-                            cache: false,
                           ));
                     },
-                    child: InfiniteList<Comment>(
-                      items: state.comments,
-                      itemBuilder: (context, item) => CommentItem(
-                        comment: item,
-                        showMenu: loginUser == item.user,
+                    hasReachedMax: state.hasReachedMax,
+                    top: [
+                      TopicItem(
+                        topic: state.topic,
+                        showBody: true,
                       ),
-                      onFetch: () {
-                        context.read<TopicDetailBloc>().add(TopicDetailFetched(
-                              topicId: state.topic.id,
+                      CommentOrder(
+                        topicId: state.topic.id,
+                        descending: descending,
+                      ),
+                    ],
+                  ),
+                ),
+                floatingActionButton: FloatingActionButton(
+                  tooltip: '添加评论',
+                  child: const Icon(Icons.add_comment),
+                  onPressed: () async {
+                    final r = await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider(
+                          create: (context) => CommentEditBloc(
+                              boardRepository: context.read<BoardRepository>()),
+                          child: CommentEditPage(
+                            isEditing: false,
+                            topic: state.topic,
+                          ),
+                        ),
+                      ),
+                    );
+                    if (r == true) {
+                      context.read<TopicDetailBloc>().add(
+                            TopicDetailFetched(
                               descending: descending,
-                            ));
-                      },
-                      hasReachedMax: state.hasReachedMax,
-                      top: [
-                        TopicItem(
-                          topic: state.topic,
-                          showBody: true,
-                        ),
-                        CommentOrder(
-                          topicId: state.topic.id,
-                          descending: descending,
-                        ),
-                      ],
-                    ),
-                  ),
-                  bottomNavigationBar: Transform.translate(
-                    offset: MediaQuery.of(context).viewInsets.bottom == 0
-                        ? const Offset(0.0, 0.0)
-                        : Offset(
-                            0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
-                    child: AddCommentButtonBar(
-                      topic: state.topic,
-                      onAddSuccess: () => context
-                          .read<TopicDetailBloc>()
-                          .add(TopicDetailFetched(
-                            descending: descending,
-                            cache: false,
-                            showInProgress: false,
-                          )),
-                    ),
-                  ),
+                              cache: false,
+                            ),
+                          );
+                    }
+                  },
                 ),
               ),
             ),
@@ -215,8 +222,7 @@ class _DetailScreen extends StatelessWidget {
         PopupMenuButton<TopicDetailMenu>(
           onSelected: (value) async {
             if (value == TopicDetailMenu.edit) {
-              await Navigator.push(
-                context,
+              final r = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => BlocProvider(
                     create: (context) => TopicEditBloc(
@@ -228,10 +234,14 @@ class _DetailScreen extends StatelessWidget {
                   ),
                 ),
               );
-              context.read<TopicDetailBloc>().add(TopicDetailFetched(
-                    descending: descending,
-                    cache: false,
-                  ));
+              if (r == true) {
+                context.read<TopicDetailBloc>().add(
+                      TopicDetailFetched(
+                        descending: descending,
+                        cache: false,
+                      ),
+                    );
+              }
             }
             if (value == TopicDetailMenu.delete) {
               await showDialog(
@@ -252,7 +262,7 @@ class _DetailScreen extends StatelessWidget {
                         context
                             .read<TopicEditBloc>()
                             .add(TopicDeleted(topic: state.topic));
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),
@@ -279,7 +289,7 @@ class _DetailScreen extends StatelessWidget {
                         context
                             .read<TopicEditBloc>()
                             .add(TopicPinned(topic: state.topic));
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),
@@ -306,7 +316,7 @@ class _DetailScreen extends StatelessWidget {
                         context
                             .read<TopicEditBloc>()
                             .add(TopicUnpinned(topic: state.topic));
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),
@@ -333,7 +343,7 @@ class _DetailScreen extends StatelessWidget {
                         context
                             .read<TopicEditBloc>()
                             .add(TopicClosed(topic: state.topic));
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),
@@ -360,7 +370,7 @@ class _DetailScreen extends StatelessWidget {
                         context
                             .read<TopicEditBloc>()
                             .add(TopicReopened(topic: state.topic));
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),

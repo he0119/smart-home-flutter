@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/core/core.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/view/admin_page.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/storage.dart';
@@ -96,7 +96,7 @@ class MyDrawer extends StatelessWidget {
                         context
                             .read<AuthenticationBloc>()
                             .add(AuthenticationLogout());
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),

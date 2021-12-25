@@ -40,8 +40,9 @@ class TopicItem extends StatelessWidget {
             ),
           ),
           ItemTitle(
-            user: topic.user,
-            editedAt: topic.editedAt,
+            user: topic.user!,
+            createdAt: topic.createdAt!,
+            editedAt: topic.editedAt!,
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -66,7 +67,8 @@ class TopicItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ItemTitle(
-              user: topic.user,
+              user: topic.user!,
+              createdAt: activeAt!,
               editedAt: activeAt,
             ),
             ListTile(title: Text(title)),

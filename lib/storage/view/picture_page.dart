@@ -62,7 +62,7 @@ class PictureScreen extends StatelessWidget {
             listener: (context, state) {
               if (state is PictureDeleteSuccess) {
                 showInfoSnackBar('图片 ${state.picture.description} 删除成功');
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               }
               if (state is PictureEditFailure) {
                 showErrorSnackBar(state.message);
@@ -140,7 +140,7 @@ class PictureScreen extends StatelessWidget {
                           BlocProvider.of<PictureEditBloc>(context).add(
                             PictureDeleted(picture: state.picture),
                           );
-                          Navigator.pop(context);
+                          Navigator.of(context).pop();
                         },
                         child: const Text('是'),
                       ),

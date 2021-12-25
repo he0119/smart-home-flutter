@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/board/bloc/blocs.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 
 class CommentEditPage extends StatefulWidget {
   final bool isEditing;
   final Comment? comment;
+  final Topic? topic;
 
   const CommentEditPage({
     Key? key,
     required this.isEditing,
     this.comment,
+    this.topic,
   }) : super(key: key);
 
   @override
@@ -44,14 +46,13 @@ class _CommentEditPageState extends State<CommentEditPage> {
     return BlocListener<CommentEditBloc, CommentEditState>(
       listener: (context, state) {
         if (state is CommentAddSuccess || state is CommentUpdateSuccess) {
-          Navigator.of(context).pop();
           if (widget.isEditing) {
             showInfoSnackBar('评论编辑成功');
           } else {
-            BlocProvider.of<BoardHomeBloc>(context)
-                .add(const BoardHomeFetched(cache: false));
             showInfoSnackBar('评论添加成功');
           }
+          // 通知评论列表刷新
+          Navigator.of(context).pop(true);
         }
         if (state is CommentFailure) {
           showErrorSnackBar(state.message);
@@ -70,11 +71,19 @@ class _CommentEditPageState extends State<CommentEditPage> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       if (widget.isEditing) {
-                        BlocProvider.of<CommentEditBloc>(context)
-                            .add(CommentUpdated(
-                          id: widget.comment!.id,
-                          body: _bodyController.text,
-                        ));
+                        context.read<CommentEditBloc>().add(
+                              CommentUpdated(
+                                id: widget.comment!.id,
+                                body: _bodyController.text,
+                              ),
+                            );
+                      } else {
+                        context.read<CommentEditBloc>().add(
+                              CommentAdded(
+                                topicId: widget.topic!.id,
+                                body: _bodyController.text,
+                              ),
+                            );
                       }
                       showInfoSnackBar('正在提交...', duration: 1);
                     }
