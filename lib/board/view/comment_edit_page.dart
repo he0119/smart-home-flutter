@@ -46,14 +46,13 @@ class _CommentEditPageState extends State<CommentEditPage> {
     return BlocListener<CommentEditBloc, CommentEditState>(
       listener: (context, state) {
         if (state is CommentAddSuccess || state is CommentUpdateSuccess) {
-          Navigator.of(context).pop();
           if (widget.isEditing) {
             showInfoSnackBar('评论编辑成功');
           } else {
-            BlocProvider.of<BoardHomeBloc>(context)
-                .add(const BoardHomeFetched(cache: false));
             showInfoSnackBar('评论添加成功');
           }
+          // 通知评论列表刷新
+          Navigator.of(context).pop(true);
         }
         if (state is CommentFailure) {
           showErrorSnackBar(state.message);

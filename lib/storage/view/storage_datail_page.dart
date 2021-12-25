@@ -15,14 +15,12 @@ import 'package:smarthome/widgets/error_message_button.dart';
 
 class StorageDetailPage extends Page {
   final String storageId;
-  final int group;
 
   StorageDetailPage({
     required this.storageId,
-    required this.group,
   }) : super(
-          key: ValueKey('$group/$storageId'),
-          name: '/storage/$group/$storageId',
+          key: UniqueKey(),
+          name: '/storage/$storageId',
         );
 
   @override
@@ -91,7 +89,7 @@ class StorageDetailScreen extends StatelessWidget {
               listener: (context, state) {
                 if (state is StorageDeleteSuccess) {
                   showInfoSnackBar('位置 ${state.storage.name} 删除成功');
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
                 }
                 if (state is StorageEditFailure) {
                   showErrorSnackBar(state.message);
@@ -125,17 +123,27 @@ class StorageDetailScreen extends StatelessWidget {
         PopupMenuButton<Menu>(
           onSelected: (value) async {
             if (value == Menu.edit) {
-              await Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => BlocProvider<StorageEditBloc>(
-                  create: (_) => StorageEditBloc(
-                    storageRepository: context.read<StorageRepository>(),
-                  ),
-                  child: StorageEditPage(
-                    isEditing: true,
-                    storage: state.storage,
+              final r = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider<StorageEditBloc>(
+                    create: (_) => StorageEditBloc(
+                      storageRepository: context.read<StorageRepository>(),
+                    ),
+                    child: StorageEditPage(
+                      isEditing: true,
+                      storage: state.storage,
+                    ),
                   ),
                 ),
-              ));
+              );
+              if (r == true) {
+                context.read<StorageDetailBloc>().add(
+                      StorageDetailFetched(
+                        id: storageId,
+                        cache: false,
+                      ),
+                    );
+              }
             }
             if (value == Menu.delete) {
               await showDialog(
@@ -155,7 +163,7 @@ class StorageDetailScreen extends StatelessWidget {
                         context.read<StorageEditBloc>().add(
                               StorageDeleted(storage: state.storage),
                             );
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       child: const Text('是'),
                     ),
@@ -264,7 +272,7 @@ class StorageDetailScreen extends StatelessWidget {
       return FloatingActionButton(
         tooltip: '添加物品',
         onPressed: () async {
-          await Navigator.of(context).push(
+          final r = await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => BlocProvider<ItemEditBloc>(
                 create: (_) => ItemEditBloc(
@@ -277,6 +285,14 @@ class StorageDetailScreen extends StatelessWidget {
               ),
             ),
           );
+          if (r == true) {
+            context.read<StorageDetailBloc>().add(
+                  StorageDetailFetched(
+                    id: storageId,
+                    cache: false,
+                  ),
+                );
+          }
         },
         child: const Icon(Icons.add),
       );

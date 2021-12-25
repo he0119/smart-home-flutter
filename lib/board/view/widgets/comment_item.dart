@@ -52,7 +52,7 @@ class CommentItem extends StatelessWidget {
                                 context
                                     .read<CommentEditBloc>()
                                     .add(CommentDeleted(comment: comment));
-                                Navigator.pop(context);
+                                Navigator.of(context).pop();
                               },
                               child: const Text('是'),
                             ),
@@ -61,8 +61,7 @@ class CommentItem extends StatelessWidget {
                       );
                       break;
                     case Menu.edit:
-                      await Navigator.push(
-                        context,
+                      final r = await Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => BlocProvider(
                             create: (context) => CommentEditBloc(
@@ -76,14 +75,17 @@ class CommentItem extends StatelessWidget {
                           ),
                         ),
                       );
-                      final descending =
-                          context.read<SettingsController>().commentDescending;
-                      context.read<TopicDetailBloc>().add(
-                            TopicDetailFetched(
-                              descending: descending,
-                              cache: false,
-                            ),
-                          );
+                      if (r == true) {
+                        final descending = context
+                            .read<SettingsController>()
+                            .commentDescending;
+                        context.read<TopicDetailBloc>().add(
+                              TopicDetailFetched(
+                                descending: descending,
+                                cache: false,
+                              ),
+                            );
+                      }
                       break;
                   }
                 }

@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/storage/bloc/blocs.dart';
-import 'package:smarthome/storage/model/models.dart';
-import 'package:smarthome/storage/repository/storage_repository.dart';
+import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
@@ -150,7 +148,8 @@ class _StorageHomeBody extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
             child: InkWell(
               onTap: () {
-                MyRouterDelegate.of(context).addStorageGroup();
+                MyRouterDelegate.of(context)
+                    .push(StorageDetailPage(storageId: ''));
               },
               child: Card(
                 color: Theme.of(context).colorScheme.secondary,
@@ -293,7 +292,7 @@ class _StorageHomeBody extends StatelessWidget {
       title: text,
       subtitle: Text(item.description ?? ''),
       onTap: () async {
-        MyRouterDelegate.of(context).addItemPage(item: item);
+        MyRouterDelegate.of(context).push(ItemDetailPage(itemId: item.id));
       },
     );
   }
