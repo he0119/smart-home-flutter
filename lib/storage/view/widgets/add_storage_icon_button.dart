@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
@@ -21,18 +20,28 @@ class AddStorageIconButton extends StatelessWidget {
       child: IconButton(
         icon: const Icon(Icons.add),
         onPressed: () async {
-          await Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => BlocProvider<StorageEditBloc>(
-              create: (_) => StorageEditBloc(
-                storageRepository:
-                    RepositoryProvider.of<StorageRepository>(context),
-              ),
-              child: StorageEditPage(
-                isEditing: false,
-                storage: storage,
+          final r = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => BlocProvider<StorageEditBloc>(
+                create: (_) => StorageEditBloc(
+                  storageRepository:
+                      RepositoryProvider.of<StorageRepository>(context),
+                ),
+                child: StorageEditPage(
+                  isEditing: false,
+                  storage: storage,
+                ),
               ),
             ),
-          ));
+          );
+          if (r == true) {
+            context.read<StorageDetailBloc>().add(
+                  StorageDetailFetched(
+                    id: storage?.id ?? '',
+                    cache: false,
+                  ),
+                );
+          }
         },
       ),
     );

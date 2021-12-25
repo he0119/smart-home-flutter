@@ -114,7 +114,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
             }
             // 位置添加和修改成功过后自动返回位置详情界面
             if (state is StorageAddSuccess || state is StorageUpdateSuccess) {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(true);
             }
           },
           builder: (context, state) => Form(

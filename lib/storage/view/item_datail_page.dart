@@ -100,34 +100,40 @@ class ItemDetailScreen extends StatelessWidget {
         PopupMenuButton<ItemDetailMenu>(
           onSelected: (value) async {
             if (value == ItemDetailMenu.edit) {
-              await Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => BlocProvider<ItemEditBloc>(
-                  create: (_) => ItemEditBloc(
-                    storageRepository: context.read<StorageRepository>(),
-                  ),
-                  child: ItemEditPage(
-                    isEditing: true,
-                    item: state.item,
+              final r = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider<ItemEditBloc>(
+                    create: (_) => ItemEditBloc(
+                      storageRepository: context.read<StorageRepository>(),
+                    ),
+                    child: ItemEditPage(
+                      isEditing: true,
+                      item: state.item,
+                    ),
                   ),
                 ),
-              ));
-              context.read<ItemDetailBloc>().add(
-                    ItemDetailStarted(
-                      id: state.item.id,
-                    ),
-                  );
+              );
+              if (r == true) {
+                context.read<ItemDetailBloc>().add(
+                      ItemDetailStarted(
+                        id: state.item.id,
+                      ),
+                    );
+              }
             }
             if (value == ItemDetailMenu.consumable) {
-              await Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => BlocProvider<ItemEditBloc>(
-                  create: (_) => ItemEditBloc(
-                    storageRepository: context.read<StorageRepository>(),
-                  ),
-                  child: ConsumableEditPage(
-                    item: state.item,
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider<ItemEditBloc>(
+                    create: (_) => ItemEditBloc(
+                      storageRepository: context.read<StorageRepository>(),
+                    ),
+                    child: ConsumableEditPage(
+                      item: state.item,
+                    ),
                   ),
                 ),
-              ));
+              );
               context.read<ItemDetailBloc>().add(
                     ItemDetailStarted(
                       id: state.item.id,

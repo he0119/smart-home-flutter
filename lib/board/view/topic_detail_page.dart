@@ -189,7 +189,7 @@ class _DetailScreen extends StatelessWidget {
                         ),
                       ),
                     );
-                    if (r) {
+                    if (r == true) {
                       context.read<TopicDetailBloc>().add(
                             TopicDetailFetched(
                               descending: descending,
@@ -234,7 +234,7 @@ class _DetailScreen extends StatelessWidget {
                   ),
                 ),
               );
-              if (r) {
+              if (r == true) {
                 context.read<TopicDetailBloc>().add(
                       TopicDetailFetched(
                         descending: descending,

@@ -70,7 +70,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
           }
           // 物品添加和修改成功过后自动返回物品详情界面
           if (state is ItemAddSuccess || state is ItemUpdateSuccess) {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(true);
           }
         },
         child: Padding(

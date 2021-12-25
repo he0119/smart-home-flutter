@@ -136,7 +136,14 @@ class StorageDetailScreen extends StatelessWidget {
                   ),
                 ),
               );
-              if (r != null) {}
+              if (r == true) {
+                context.read<StorageDetailBloc>().add(
+                      StorageDetailFetched(
+                        id: storageId,
+                        cache: false,
+                      ),
+                    );
+              }
             }
             if (value == Menu.delete) {
               await showDialog(
@@ -265,7 +272,7 @@ class StorageDetailScreen extends StatelessWidget {
       return FloatingActionButton(
         tooltip: '添加物品',
         onPressed: () async {
-          await Navigator.of(context).push(
+          final r = await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => BlocProvider<ItemEditBloc>(
                 create: (_) => ItemEditBloc(
@@ -278,6 +285,14 @@ class StorageDetailScreen extends StatelessWidget {
               ),
             ),
           );
+          if (r == true) {
+            context.read<StorageDetailBloc>().add(
+                  StorageDetailFetched(
+                    id: storageId,
+                    cache: false,
+                  ),
+                );
+          }
         },
         child: const Icon(Icons.add),
       );

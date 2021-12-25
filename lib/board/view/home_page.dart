@@ -58,7 +58,7 @@ class BoardHomeScreen extends StatelessWidget {
               ),
             ),
           );
-          if (r) {
+          if (r == true) {
             BlocProvider.of<BoardHomeBloc>(context)
                 .add(const BoardHomeFetched(cache: false));
           }

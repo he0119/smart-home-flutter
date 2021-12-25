@@ -75,7 +75,7 @@ class CommentItem extends StatelessWidget {
                           ),
                         ),
                       );
-                      if (r) {
+                      if (r == true) {
                         final descending = context
                             .read<SettingsController>()
                             .commentDescending;
