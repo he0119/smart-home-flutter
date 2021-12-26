@@ -63,12 +63,11 @@ class StorageFormField extends FormField<Storage> {
   StorageFormField({
     // From super
     Key? key,
-    FormFieldSetter<Storage>? onSaved,
     FormFieldValidator<Storage>? validator,
     Storage? initialValue,
     AutovalidateMode? autovalidateMode,
     bool enabled = true,
-    String? label,
+    InputDecoration? decoration = const InputDecoration(),
     this.onChanged,
   }) : super(
           key: key,
@@ -76,16 +75,23 @@ class StorageFormField extends FormField<Storage> {
           initialValue: initialValue,
           enabled: enabled,
           validator: validator,
-          onSaved: onSaved,
           builder: (field) {
             final _StorageFieldState state = field as _StorageFieldState;
+            final InputDecoration effectiveDecoration = (decoration ??
+                    const InputDecoration())
+                .applyDefaults(Theme.of(field.context).inputDecorationTheme);
             return TextField(
               focusNode: state._focusNode,
               controller: state._controller,
-              decoration: InputDecoration(
-                label: label != null ? Text(label) : null,
+              decoration: effectiveDecoration.copyWith(
                 errorText: state.errorText,
-              ).applyDefaults(Theme.of(field.context).inputDecorationTheme),
+                suffixIcon: state.shouldShowClearIcon(effectiveDecoration)
+                    ? IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: state.clear,
+                      )
+                    : null,
+              ),
               readOnly: true,
             );
           },
@@ -118,10 +124,17 @@ class _StorageFieldState extends FormFieldState<Storage> {
 
   @override
   void dispose() {
+    _focusNode.removeListener(_handleFocusChanged);
     _controller.dispose();
     _focusNode.dispose();
-    _focusNode.removeListener(_handleFocusChanged);
     super.dispose();
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    _controller.text = widget.initialValue?.name ?? '';
+    didChange(widget.initialValue);
   }
 
   @override
@@ -164,4 +177,15 @@ class _StorageFieldState extends FormFieldState<Storage> {
       }
     }
   }
+
+  void clear() async {
+    _hideKeyboard();
+    setState(() {
+      _controller.clear();
+      didChange(null);
+    });
+  }
+
+  bool shouldShowClearIcon([InputDecoration? decoration]) =>
+      (_controller.text != '' || hasFocus) && decoration?.suffixIcon == null;
 }

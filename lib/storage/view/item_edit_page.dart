@@ -124,7 +124,9 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       },
                     ),
                     StorageFormField(
-                      label: '属于',
+                      decoration: const InputDecoration(
+                        labelText: '属于',
+                      ),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       onChanged: (Storage? value) {
                         if (value != null) {
