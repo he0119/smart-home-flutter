@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
-import 'package:smarthome/storage/view/widgets/storage_picker.dart';
+import 'package:smarthome/storage/view/widgets/storage_picker_formfield.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
@@ -123,22 +123,24 @@ class _ItemEditPageState extends State<ItemEditPage> {
                             context, _numberFocusNode, _descriptionFocusNode);
                       },
                     ),
-                    StoragePicker(
-                        label: '属于',
-                        onSaved: (Storage? data) {
-                          if (data != null) {
-                            storageId = data.id;
-                          }
-                        },
-                        initialValue: widget.isEditing
-                            ? widget.item!.storage
-                            : widget.storage,
-                        validator: (value) {
-                          if (value == null) {
-                            return '请选择一个存放位置';
-                          }
-                          return null;
-                        }),
+                    StorageFormField(
+                      label: '属于',
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      onChanged: (Storage? value) {
+                        if (value != null) {
+                          storageId = value.id;
+                        }
+                      },
+                      initialValue: widget.isEditing
+                          ? widget.item!.storage
+                          : widget.storage,
+                      validator: (value) {
+                        if (value == null) {
+                          return '请选择一个存放位置';
+                        }
+                        return null;
+                      },
+                    ),
                     TextFormField(
                       controller: _descriptionController,
                       decoration: const InputDecoration(
