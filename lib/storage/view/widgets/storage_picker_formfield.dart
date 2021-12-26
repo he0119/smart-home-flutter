@@ -11,6 +11,7 @@ List<Node> childrenNode(String? key, List<Storage> storages) {
           (child) => Node(
             key: child.id,
             label: child.name,
+            expanded: true,
             children: childrenNode(child.id, storages),
           ),
         )
@@ -47,6 +48,13 @@ class _StorageDialogState extends State<StorageDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       child: TreeView(
+        shrinkWrap: true,
+        nodeBuilder: (BuildContext context, Node node) {
+          return Container(
+            padding: const EdgeInsets.all(16),
+            child: Text(node.label),
+          );
+        },
         controller: _treeViewController,
         allowParentSelect: true,
         onNodeTap: (node) {
