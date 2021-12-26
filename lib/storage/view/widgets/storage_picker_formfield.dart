@@ -21,6 +21,27 @@ List<Node> childrenNode(String? key, List<Storage> storages) {
   return [];
 }
 
+List<Node> generateNodes(List<Storage> storages) {
+  List<Node> nodes = [];
+  for (final storage in storages) {
+    // 排除父节点在列表中的位置
+    // 因为从父节点找下来的时候自然会找到这个位置
+    final storageIndex =
+        storages.indexWhere((element) => element.id == storage.parent?.id);
+    if (storageIndex == -1) {
+      nodes.add(
+        Node(
+          key: storage.id,
+          label: storage.name,
+          expanded: true,
+          children: childrenNode(storage.id, storages),
+        ),
+      );
+    }
+  }
+  return nodes;
+}
+
 class StorageDialog extends StatefulWidget {
   final List<Storage> storages;
 
@@ -34,35 +55,64 @@ class StorageDialog extends StatefulWidget {
 }
 
 class _StorageDialogState extends State<StorageDialog> {
-  late List<Node> _nodes;
-  late TreeViewController _treeViewController;
+  List<Storage> storages = [];
+  String searchKey = '';
 
   @override
   void initState() {
-    _nodes = childrenNode(null, widget.storages);
-    _treeViewController = TreeViewController(children: _nodes);
     super.initState();
+    storages = widget.storages;
   }
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: TreeView(
-        shrinkWrap: true,
-        nodeBuilder: (BuildContext context, Node node) {
-          return Container(
-            padding: const EdgeInsets.all(16),
-            child: Text(node.label),
-          );
-        },
-        controller: _treeViewController,
-        allowParentSelect: true,
-        onNodeTap: (node) {
-          final storage =
-              widget.storages.firstWhere((storage) => storage.id == node);
-          Navigator.of(context).pop(storage);
-        },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            decoration: const InputDecoration(
+              labelText: '搜索',
+              contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+            ),
+            onChanged: (value) async {
+              final newStorages = widget.storages
+                  .where((element) => element.name.contains(value))
+                  .toList();
+              setState(() {
+                searchKey = value;
+                storages = newStorages;
+              });
+            },
+          ),
+          if (storages.isNotEmpty)
+            buildTreeView()
+          else
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Center(child: Text('无结果')),
+            )
+        ],
       ),
+    );
+  }
+
+  TreeView buildTreeView() {
+    return TreeView(
+      key: ValueKey(searchKey),
+      shrinkWrap: true,
+      nodeBuilder: (BuildContext context, Node node) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          child: Text(node.label),
+        );
+      },
+      controller: TreeViewController(children: generateNodes(storages)),
+      allowParentSelect: true,
+      onNodeTap: (node) {
+        final storage = storages.firstWhere((storage) => storage.id == node);
+        Navigator.of(context).pop(storage);
+      },
     );
   }
 }
@@ -169,7 +219,7 @@ class _StorageFieldState extends FormFieldState<Storage> {
     if (!isShowingDialog) {
       isShowingDialog = true;
       final storages = await RepositoryProvider.of<StorageRepository>(context)
-          .storages(key: '');
+          .storages(key: '', cache: false);
       final newValue = await showDialog<Storage>(
         context: context,
         builder: (context) {
