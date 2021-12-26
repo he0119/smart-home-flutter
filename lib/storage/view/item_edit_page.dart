@@ -139,6 +139,8 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       validator: (value) {
                         if (value == null) {
                           return '请选择一个存放位置';
+                        } else if (value.id == '') {
+                          return '家不能作为存放位置';
                         }
                         return null;
                       },
