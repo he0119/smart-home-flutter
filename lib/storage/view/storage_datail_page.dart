@@ -268,7 +268,7 @@ class StorageDetailScreen extends StatelessWidget {
 
   Widget? _buildFloatingActionButton(
       BuildContext context, StorageDetailState state) {
-    if (state.status == StorageDetailStatus.success) {
+    if (state.status == StorageDetailStatus.success && state.storage.id != '') {
       return FloatingActionButton(
         tooltip: '添加物品',
         onPressed: () async {
