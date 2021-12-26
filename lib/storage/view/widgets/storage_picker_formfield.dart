@@ -86,7 +86,7 @@ class _StorageDialogState extends State<StorageDialog> {
             },
           ),
           if (storages.isNotEmpty)
-            buildTreeView()
+            Expanded(child: buildTreeView())
           else
             const Padding(
               padding: EdgeInsets.all(16.0),
