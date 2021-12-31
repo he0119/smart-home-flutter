@@ -43,10 +43,12 @@ List<Node> generateNodes(List<Storage> storages) {
 }
 
 class StorageDialog extends StatefulWidget {
+  final Storage? storage;
   final List<Storage> storages;
 
   const StorageDialog({
     Key? key,
+    this.storage,
     required this.storages,
   }) : super(key: key);
 
@@ -86,11 +88,17 @@ class _StorageDialogState extends State<StorageDialog> {
             },
           ),
           if (storages.isNotEmpty)
-            Expanded(child: buildTreeView())
+            SizedBox(
+              height: 400,
+              child: buildTreeView(),
+            )
           else
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Center(child: Text('无结果')),
+            const SizedBox(
+              height: 400,
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Center(child: Text('无结果')),
+              ),
             )
         ],
       ),
@@ -107,7 +115,13 @@ class _StorageDialogState extends State<StorageDialog> {
           child: Text(node.label),
         );
       },
-      controller: TreeViewController(children: generateNodes(storages)),
+      theme: TreeViewTheme(
+        colorScheme: Theme.of(context).colorScheme,
+      ),
+      controller: TreeViewController(
+        children: generateNodes(storages),
+        selectedKey: widget.storage?.id,
+      ),
       allowParentSelect: true,
       onNodeTap: (node) {
         final storage = storages.firstWhere((storage) => storage.id == node);
@@ -224,6 +238,7 @@ class _StorageFieldState extends FormFieldState<Storage> {
         context: context,
         builder: (context) {
           return StorageDialog(
+            storage: value,
             storages: storages,
           );
         },
