@@ -41,6 +41,7 @@ dependencies:
   photo_view: ^0.13.0
   image_picker: ^0.8.4
   sentry_flutter: ^6.0.0
+  flutter_treeview: ^1.0.6+1
 
   # Widget
   webview_flutter: ^3.0.0
