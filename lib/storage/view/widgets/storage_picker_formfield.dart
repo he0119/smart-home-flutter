@@ -57,13 +57,16 @@ class StorageDialog extends StatefulWidget {
 }
 
 class _StorageDialogState extends State<StorageDialog> {
-  List<Storage> storages = [];
-  String searchKey = '';
+  ValueKey _searchKey = const ValueKey('');
+  late TreeViewController _controller;
 
   @override
   void initState() {
     super.initState();
-    storages = widget.storages;
+    _controller = TreeViewController(
+      children: generateNodes(widget.storages),
+      selectedKey: widget.storage?.id,
+    );
   }
 
   @override
@@ -82,51 +85,38 @@ class _StorageDialogState extends State<StorageDialog> {
                   .where((element) => element.name.contains(value))
                   .toList();
               setState(() {
-                searchKey = value;
-                storages = newStorages;
+                _searchKey = ValueKey(value);
+                _controller = TreeViewController(
+                  children: generateNodes(newStorages),
+                  selectedKey: widget.storage?.id,
+                );
               });
             },
           ),
-          if (storages.isNotEmpty)
-            SizedBox(
-              height: 400,
-              child: buildTreeView(),
-            )
-          else
-            const SizedBox(
-              height: 400,
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Center(child: Text('无结果')),
+          Expanded(
+            child: TreeView(
+              key: _searchKey,
+              controller: _controller,
+              shrinkWrap: true,
+              nodeBuilder: (BuildContext context, Node node) {
+                return Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(node.label),
+                );
+              },
+              theme: TreeViewTheme(
+                colorScheme: Theme.of(context).colorScheme,
               ),
-            )
+              allowParentSelect: true,
+              onNodeTap: (node) {
+                final storage =
+                    widget.storages.firstWhere((storage) => storage.id == node);
+                Navigator.of(context).pop(storage);
+              },
+            ),
+          )
         ],
       ),
-    );
-  }
-
-  TreeView buildTreeView() {
-    return TreeView(
-      key: ValueKey(searchKey),
-      shrinkWrap: true,
-      nodeBuilder: (BuildContext context, Node node) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          child: Text(node.label),
-        );
-      },
-      theme: TreeViewTheme(
-        colorScheme: Theme.of(context).colorScheme,
-      ),
-      controller: TreeViewController(
-        children: generateNodes(storages),
-        selectedKey: widget.storage?.id,
-      ),
-      allowParentSelect: true,
-      onNodeTap: (node) {
-        final storage = storages.firstWhere((storage) => storage.id == node);
-        Navigator.of(context).pop(storage);
-      },
     );
   }
 }
