@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_treeview/flutter_treeview.dart';
 import 'package:smarthome/storage/storage.dart';
+import 'package:smarthome/widgets/substring_highlight.dart';
 
 List<Node> childrenNode(String? key, List<Storage> storages) {
   final children = storages.where((storage) => storage.parent?.id == key);
@@ -57,7 +58,7 @@ class StorageDialog extends StatefulWidget {
 }
 
 class _StorageDialogState extends State<StorageDialog> {
-  ValueKey _searchKey = const ValueKey('');
+  String _searchTerm = '';
   late TreeViewController _controller;
 
   @override
@@ -85,7 +86,7 @@ class _StorageDialogState extends State<StorageDialog> {
                   .where((element) => element.name.contains(value))
                   .toList();
               setState(() {
-                _searchKey = ValueKey(value);
+                _searchTerm = value;
                 _controller = TreeViewController(
                   children: generateNodes(newStorages),
                   selectedKey: widget.storage?.id,
@@ -95,13 +96,14 @@ class _StorageDialogState extends State<StorageDialog> {
           ),
           Expanded(
             child: TreeView(
-              key: _searchKey,
+              key: ValueKey(_searchTerm),
               controller: _controller,
               shrinkWrap: true,
               nodeBuilder: (BuildContext context, Node node) {
                 return Container(
                   padding: const EdgeInsets.all(16),
-                  child: Text(node.label),
+                  child:
+                      SubstringHighlight(text: node.label, term: _searchTerm),
                 );
               },
               theme: TreeViewTheme(
