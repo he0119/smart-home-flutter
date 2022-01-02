@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/board/bloc/blocs.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 
 class TopicEditPage extends StatefulWidget {
@@ -47,14 +47,12 @@ class _TopicEditPageState extends State<TopicEditPage> {
     return BlocListener<TopicEditBloc, TopicEditState>(
       listener: (context, state) {
         if (state is TopicAddSuccess || state is TopicUpdateSuccess) {
-          Navigator.of(context).pop();
           if (widget.isEditing) {
             showInfoSnackBar('话题编辑成功');
           } else {
-            BlocProvider.of<BoardHomeBloc>(context)
-                .add(const BoardHomeFetched(cache: false));
             showInfoSnackBar('话题添加成功');
           }
+          Navigator.of(context).pop(true);
         }
         if (state is TopicFailure) {
           showErrorSnackBar(state.message);

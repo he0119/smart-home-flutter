@@ -52,12 +52,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     return List.unmodifiable(_pages);
   }
 
-  void push(Page newPage) {
+  void push<T extends Object?>(Page newPage) {
     _pages.add(newPage);
     notifyListeners();
   }
 
-  void pop() {
+  void pop<T extends Object?>([T? result]) {
     if (_pages.isNotEmpty) {
       _pages.remove(_pages.last);
     }
@@ -70,64 +70,25 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     notifyListeners();
   }
 
-  // 记录当前位置组的数量
-  int storageGroup = 0;
-
-  /// 添加一组位置
-  void addStorageGroup({Storage? storage}) {
-    storageGroup += 1;
-    _pages.add(
-      StorageDetailPage(
-        storageId: storage?.id ?? '',
-        group: storageGroup,
-      ),
-    );
-    notifyListeners();
-  }
-
   /// 物品位置页面间的导航
   void setStoragePage({Storage? storage}) {
     // 先从最后开始删除当前的物品位置页面
-    // 一直删除到这一组结束
-    // 每次只删除一个 Group
+    // 一直删除到不是位置页面
     while (_pages.last is StorageDetailPage &&
-        _pages.last.name!.startsWith('/storage/$storageGroup')) {
+        _pages.last.name != '/storage/${storage?.id ?? ""}') {
       _pages.removeLast();
     }
-    // 再重新添加
-    _pages.add(StorageDetailPage(storageId: '', group: storageGroup));
-    if (storage != null) {
-      if (storage.ancestors != null) {
+    // 如果移除之后的页面不是位置页面
+    // 说明是从主页外直接进入位置界面的，需要重新添加
+    if (_pages.last is! StorageDetailPage) {
+      _pages.add(StorageDetailPage(storageId: ''));
+      if (storage != null && storage.ancestors != null) {
         for (var storage in storage.ancestors!) {
-          _pages.add(
-            StorageDetailPage(
-              storageId: storage.id,
-              group: storageGroup,
-            ),
-          );
+          _pages.add(StorageDetailPage(storageId: storage.id));
         }
+        _pages.add(StorageDetailPage(storageId: storage.id));
       }
-      _pages.add(
-        StorageDetailPage(
-          storageId: storage.id,
-          group: storageGroup,
-        ),
-      );
     }
-    notifyListeners();
-  }
-
-  int itemCount = 0;
-
-  /// 添加一个物品详情页面
-  void addItemPage({required Item item}) {
-    itemCount += 1;
-    _pages.add(
-      ItemDetailPage(
-        itemId: item.id,
-        group: itemCount,
-      ),
-    );
     notifyListeners();
   }
 
@@ -142,15 +103,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     if (success) {
       _log.fine('Pop ${route.settings.name}');
       _pages.remove(route.settings);
-      // 每当一组位置全部 Pop，Group 计数减一
-      if (route.settings.name!.startsWith('/storage')) {
-        if (!_pages.last.name!.startsWith('/storage/$storageGroup')) {
-          storageGroup -= 1;
-        }
-      }
-      if (route.settings.name!.startsWith('/item')) {
-        itemCount -= 1;
-      }
       notifyListeners();
     }
     return success;
@@ -172,7 +124,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           appTab: EnumToString.fromString(AppTab.values, uri.pathSegments[0]),
         );
       } else if (pages.last is StorageDetailPage) {
-        return StorageRoutePath(storageId: uri.pathSegments[2]);
+        return StorageRoutePath(storageId: uri.pathSegments[1]);
       } else if (pages.last is ItemDetailPage) {
         return ItemRoutePath(itemId: uri.pathSegments[1]);
       } else if (pages.last is TopicDetailPage) {
@@ -210,24 +162,14 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         TopicDetailPage(topicId: configuration.topicId),
       ];
     } else if (configuration is ItemRoutePath) {
-      storageGroup = 0;
-      itemCount = 1;
       _pages = [
         const StorageHomePage(),
-        ItemDetailPage(
-          itemId: configuration.itemId,
-          group: 1,
-        ),
+        ItemDetailPage(itemId: configuration.itemId),
       ];
     } else if (configuration is StorageRoutePath) {
-      storageGroup = 1;
-      itemCount = 0;
       _pages = [
         const StorageHomePage(),
-        StorageDetailPage(
-          storageId: configuration.storageId,
-          group: 1,
-        ),
+        StorageDetailPage(storageId: configuration.storageId),
       ];
     } else if (configuration is AppRoutePath) {
       switch (configuration.appPage) {

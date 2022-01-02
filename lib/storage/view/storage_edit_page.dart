@@ -3,9 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
-import 'package:smarthome/storage/repository/storage_repository.dart';
+import 'package:smarthome/storage/view/widgets/storage_picker_formfield.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
-import 'package:smarthome/widgets/dropdown_search.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class StorageEditPage extends StatefulWidget {
@@ -114,7 +113,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
             }
             // 位置添加和修改成功过后自动返回位置详情界面
             if (state is StorageAddSuccess || state is StorageUpdateSuccess) {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(true);
             }
           },
           builder: (context, state) => Form(
@@ -144,24 +143,26 @@ class _StorageEditPageState extends State<StorageEditPage> {
                           context, _nameFocusNode!, _descriptionFocusNode);
                     },
                   ),
-                  MyDropdownSearch<Storage>(
-                    label: '属于',
-                    showClearButton: true,
-                    onFind: (String? filter) async {
-                      final storages =
-                          await RepositoryProvider.of<StorageRepository>(
-                                  context)
-                              .storages(key: filter);
-                      return storages;
-                    },
-                    onChanged: (Storage? data) {
-                      if (data != null) {
-                        parentId = data.id;
+                  // FIXME: 无法选择 家 这个位置
+                  StorageFormField(
+                    decoration: const InputDecoration(
+                      labelText: '属于',
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    onChanged: (Storage? value) {
+                      if (value != null) {
+                        parentId = value.id;
                       }
                     },
-                    selectedItem: widget.isEditing
+                    initialValue: widget.isEditing
                         ? widget.storage!.parent
                         : widget.storage,
+                    validator: (value) {
+                      if (value == null) {
+                        return '请选择一个位置';
+                      }
+                      return null;
+                    },
                   ),
                   TextFormField(
                     controller: _descriptionController,

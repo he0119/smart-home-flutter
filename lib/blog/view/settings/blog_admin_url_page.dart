@@ -13,7 +13,7 @@ class BlogAdminUrlPage extends StatelessWidget {
         title: '博客管理网址',
         initialValue: settings.blogAdminUrl ?? '',
         onSubmit: (value) {
-          context.read<SettingsController>().updateAdminUrl(value);
+          context.read<SettingsController>().updateBlogAdminUrl(value);
         },
         description: '博客管理页面的网址',
         validator: (value) {

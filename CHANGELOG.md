@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.8.5] - 2022-01-02
+
+### Fixed
+
+- 修复无法更改博客管理网址的问题
+
+### Changed
+
+- 升级至 Flutter 2.8
+- 使用 FloatingActionButton 来添加评论
+- 默认显示创建时间
+- 优化位置选择界面（显示层级）
+
 ## [0.8.4] - 2021-11-21
 
 ### Fixed
@@ -391,7 +404,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.8.4...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.8.5...HEAD
+[0.8.5]: https://github.com/he0119/smart-home-flutter/compare/v0.8.4...v0.8.5
 [0.8.4]: https://github.com/he0119/smart-home-flutter/compare/v0.8.3...v0.8.4
 [0.8.3]: https://github.com/he0119/smart-home-flutter/compare/v0.8.2...v0.8.3
 [0.8.2]: https://github.com/he0119/smart-home-flutter/compare/v0.8.1...v0.8.2

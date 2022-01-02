@@ -4,7 +4,7 @@
 
 ## Requirements
 
-- Flutter (Channel stable, 2.5.3)
+- Flutter (Channel stable, 2.8.1)
 
 ## Create
 

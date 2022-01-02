@@ -1,0 +1,7 @@
+{
+  "@@locale": "zh",
+  "storageAppBarName": "物品管理",
+  "@storageAppBarName": {
+    "description": "物品管理主页的标题"
+  }
+}

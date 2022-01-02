@@ -4,6 +4,7 @@ import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
+import 'package:smarthome/storage/view/item_datail_page.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
@@ -77,7 +78,7 @@ Widget _buildItem(BuildContext context, Item item) {
         ListTile(
           title: Text(item.name),
           onTap: () {
-            MyRouterDelegate.of(context).addItemPage(item: item);
+            MyRouterDelegate.of(context).push(ItemDetailPage(itemId: item.id));
           },
         ),
         if (item.consumables != null)
@@ -90,7 +91,9 @@ Widget _buildItem(BuildContext context, Item item) {
                     ? Text(consumable.expiredAt!.differenceFromNowStr())
                     : null,
                 onTap: () {
-                  MyRouterDelegate.of(context).addItemPage(item: consumable);
+                  MyRouterDelegate.of(context).push(
+                    ItemDetailPage(itemId: consumable.id),
+                  );
                 },
                 trailing: Text(consumable.number.toString()),
               ),
