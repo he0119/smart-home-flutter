@@ -21,12 +21,12 @@ autolabeler:
   - label: 'iot'
     files:
       - lib/iot/**/*
-  - label: 'storage'
+  - label: 'blog'
     files:
       - lib/blog/**/*
-  - label: 'xiaoai'
+  - label: 'storage'
     files:
-      - home/xiaoai/**/*
+      - lib/storage/**/*
   - label: 'ci'
     files:
       - .github/**/*
