@@ -1,5 +1,44 @@
 name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
+autolabeler:
+  - label: 'bug'
+    branch:
+      - '/fix\/.+/'
+  - label: 'change'
+    branch:
+      - '/change\/.+/'
+  - label: 'enhancement'
+    branch:
+      - '/feature\/.+/'
+      - '/feat\/.+/'
+      - '/improve\/.+/'
+  - label: 'docs'
+    branch:
+      - '/docs\/.+/'
+  - label: 'board'
+    files:
+      - lib/board/**/*
+  - label: 'iot'
+    files:
+      - lib/iot/**/*
+  - label: 'storage'
+    files:
+      - lib/blog/**/*
+  - label: 'xiaoai'
+    files:
+      - home/xiaoai/**/*
+  - label: 'ci'
+    files:
+      - .github/**/*
+  - label: 'android'
+    files:
+      - android/**/*
+  - label: 'web'
+    files:
+      - web/**/*
+  - label: 'windows'
+    files:
+      - windows/**/*
 categories:
   - title: 'Added'
     labels:
