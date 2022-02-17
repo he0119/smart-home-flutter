@@ -162,7 +162,7 @@ jobs:
     environment:
       name: dev
       url: https://test.hehome.xyz
-    if: ${{ github.ref == 'refs/heads/dev' }}
+    if: github.event_name != 'pull_request'
     steps:
       - name: Download web files
         uses: actions/download-artifact@v2
