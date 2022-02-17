@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - "master"
-      - "dev"
   pull_request:
   release:
     types: [published]
@@ -48,29 +47,10 @@ jobs:
       - name: Flutter test
         run: |
           flutter pub get
-          flutter test --coverage --machine > example.jsonl
-          flutter pub global activate junitreport
-          flutter pub global run junitreport:tojunit --input example.jsonl --output TEST-report.xml
+          flutter test --coverage
           python lcov_cobertura.py coverage/lcov.info
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: Unit Test Results
-          path: |
-            **/TEST-*.xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
-
-  event_file:
-    name: "Event File"
-    runs-on: ubuntu-latest
-    steps:
-    - name: Upload
-      uses: actions/upload-artifact@v2
-      with:
-        name: Event File
-        path: ${{ github.event_path }}
 
   android:
     name: Android
@@ -182,7 +162,7 @@ jobs:
     environment:
       name: dev
       url: https://test.hehome.xyz
-    if: ${{ github.ref == 'refs/heads/dev' }}
+    if: github.event_name != 'pull_request'
     steps:
       - name: Download web files
         uses: actions/download-artifact@v2
