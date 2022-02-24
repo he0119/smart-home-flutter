@@ -3,8 +3,5 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": true
     },
-    "terminal.integrated.env.windows": {
-        "http_proxy": null,
-        "https_proxy": null,
-    },
+    "dart.embedDevTools": false,
 }
