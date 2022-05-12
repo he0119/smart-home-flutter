@@ -116,7 +116,7 @@ class MyMaterialApp extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MyMaterialAppState createState() => _MyMaterialAppState();
+  State<MyMaterialApp> createState() => _MyMaterialAppState();
 }
 
 class _MyMaterialAppState extends State<MyMaterialApp> {

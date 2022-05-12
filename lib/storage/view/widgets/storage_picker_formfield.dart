@@ -164,7 +164,7 @@ class StorageFormField extends FormField<Storage> {
   final void Function(Storage? value)? onChanged;
 
   @override
-  _StorageFieldState createState() => _StorageFieldState();
+  FormFieldState<Storage> createState() => _StorageFieldState();
 }
 
 class _StorageFieldState extends FormFieldState<Storage> {

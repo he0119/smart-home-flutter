@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/core/repository/graphql_api_client.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
@@ -29,7 +29,7 @@ class LoginScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -82,7 +82,7 @@ class ApiUrlForm extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ApiUrlFormState createState() => _ApiUrlFormState();
+  State<ApiUrlForm> createState() => _ApiUrlFormState();
 }
 
 class _ApiUrlFormState extends State<ApiUrlForm> {

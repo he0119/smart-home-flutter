@@ -28,7 +28,7 @@ class ItemEditPage extends StatefulWidget {
         super(key: key);
 
   @override
-  _ItemEditPageState createState() => _ItemEditPageState();
+  State<ItemEditPage> createState() => _ItemEditPageState();
 }
 
 class _ItemEditPageState extends State<ItemEditPage> {

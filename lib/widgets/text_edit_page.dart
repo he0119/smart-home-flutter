@@ -22,7 +22,7 @@ class TextEditPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _TextEditPageState createState() => _TextEditPageState();
+  State<TextEditPage> createState() => _TextEditPageState();
 }
 
 class _TextEditPageState extends State<TextEditPage> {
