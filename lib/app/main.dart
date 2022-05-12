@@ -149,7 +149,9 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
         primaryColor: Colors.white,
         useMaterial3: true,
       ),
-      darkTheme: ThemeData.dark(),
+      darkTheme: ThemeData.dark().copyWith(
+        useMaterial3: true,
+      ),
       themeMode: themeMode,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

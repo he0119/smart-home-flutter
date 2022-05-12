@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ### Changed
 
-- 升级至 Flutter 2.10
+- 升级至 Flutter 3.0
 
 ## [0.8.5] - 2022-01-02
 
