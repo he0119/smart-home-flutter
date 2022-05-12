@@ -9,9 +9,8 @@ import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:smarthome/core/graphql/mutations/mutations.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
+import 'package:smarthome/core/graphql/mutations/mutations.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 class GraphQLApiClient {

@@ -1,7 +1,6 @@
 {
-    "dart.showTodos": false,
     "editor.codeActionsOnSave": {
         "source.organizeImports": true
     },
-    "dart.embedDevTools": false,
+    "dart.showTodos": false,
 }
