@@ -77,14 +77,14 @@ class VersionRepository {
   /// 网上的版本
   /// 通过 GitHub Releases 页面获取最新的版本号
   Future<Version> _getOnlineVersion() async {
-    final _versionRegex = RegExp(
+    final versionRegex = RegExp(
         r'releases/tag/v([\d.]+)(-([0-9A-Za-z\-.]+))?(\+([0-9A-Za-z\-.]+))?');
     const url =
         'https://hub.fastgit.org/he0119/smart-home-flutter/releases/latest';
     try {
       final response = await http.get(Uri.parse(url));
       _fileExist = response.body.contains(await filename);
-      final Match? match = _versionRegex.firstMatch(response.body);
+      final Match? match = versionRegex.firstMatch(response.body);
       if (match == null) {
         throw const NetworkException('检查更新失败，请重试');
       } else {

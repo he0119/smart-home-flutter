@@ -14,11 +14,11 @@ class PushRepository {
 
   /// MiPushKey
   Future<MiPushKey> miPushKey() async {
-    final _options = QueryOptions(
+    final options = QueryOptions(
       document: gql(miPushKeyQuery),
       fetchPolicy: FetchPolicy.networkOnly,
     );
-    final results = await graphqlApiClient.query(_options);
+    final results = await graphqlApiClient.query(options);
     final Map<String, dynamic> json = results.data!['miPushKey'];
     final miPushKeyObject = MiPushKey.fromJson(json);
     return miPushKeyObject;
@@ -29,14 +29,14 @@ class PushRepository {
     final deviceInfo = DeviceInfoPlugin();
     final androidInfo = await deviceInfo.androidInfo;
 
-    final _options = QueryOptions(
+    final options = QueryOptions(
       document: gql(miPushQuery),
       variables: {
         'deviceId': androidInfo.androidId,
       },
       fetchPolicy: FetchPolicy.networkOnly,
     );
-    final results = await graphqlApiClient.query(_options);
+    final results = await graphqlApiClient.query(options);
     final Map<String, dynamic> json = results.data!['miPush'];
     final miPushObject = MiPush.fromJson(json);
     return miPushObject;

@@ -59,13 +59,13 @@ class GraphQLApiClient {
 
   /// 初始化 GraphQL 客户端
   void initailize(String url) {
-    final _authLink = AuthLink(getToken: () async => 'JWT ${await token}');
-    final _httpLink = HttpLink(
+    final authLink = AuthLink(getToken: () async => 'JWT ${await token}');
+    final httpLink = HttpLink(
       url,
       defaultHeaders: headers,
     );
-    final _tokenErrorLink = ErrorLink(onGraphQLError: _handleTokenError);
-    final _link = _tokenErrorLink.split((request) {
+    final tokenErrorLink = ErrorLink(onGraphQLError: _handleTokenError);
+    final link = tokenErrorLink.split((request) {
       final definition = request.operation.document.definitions.first;
       if (definition.runtimeType == OperationDefinitionNode) {
         final operationName =
@@ -75,11 +75,11 @@ class GraphQLApiClient {
         }
       }
       return true;
-    }, _authLink.concat(_httpLink), _httpLink);
+    }, authLink.concat(httpLink), httpLink);
 
     _client = GraphQLClient(
       cache: GraphQLCache(),
-      link: _link,
+      link: link,
     );
     _log.fine('GraphQLClient initailized with url $url');
   }
@@ -154,9 +154,10 @@ class GraphQLApiClient {
         yield* forward(request);
       } else {
         yield Response(
-          context: response.context,
           data: response.data,
           errors: error,
+          context: response.context,
+          response: response.response,
         );
       }
     } else {
