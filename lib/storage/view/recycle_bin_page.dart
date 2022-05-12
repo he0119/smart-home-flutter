@@ -122,6 +122,8 @@ Widget _buildItem(BuildContext context, Item item) {
       child: IconButton(
         icon: const Icon(Icons.undo),
         onPressed: () async {
+          final recycleBinBloc = BlocProvider.of<RecycleBinBloc>(context);
+
           await showDialog(
             context: context,
             builder: (_) => AlertDialog(
@@ -146,8 +148,7 @@ Widget _buildItem(BuildContext context, Item item) {
               ],
             ),
           );
-          BlocProvider.of<RecycleBinBloc>(context)
-              .add(const RecycleBinFetched(cache: false));
+          recycleBinBloc.add(const RecycleBinFetched(cache: false));
         },
       ),
     ),

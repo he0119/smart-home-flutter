@@ -177,6 +177,8 @@ class _DetailScreen extends StatelessWidget {
                   tooltip: '添加评论',
                   child: const Icon(Icons.add_comment),
                   onPressed: () async {
+                    final topicDetailBloc = context.read<TopicDetailBloc>();
+
                     final r = await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => BlocProvider(
@@ -190,12 +192,12 @@ class _DetailScreen extends StatelessWidget {
                       ),
                     );
                     if (r == true) {
-                      context.read<TopicDetailBloc>().add(
-                            TopicDetailFetched(
-                              descending: descending,
-                              cache: false,
-                            ),
-                          );
+                      topicDetailBloc.add(
+                        TopicDetailFetched(
+                          descending: descending,
+                          cache: false,
+                        ),
+                      );
                     }
                   },
                 ),
@@ -221,6 +223,7 @@ class _DetailScreen extends StatelessWidget {
       actions: <Widget>[
         PopupMenuButton<TopicDetailMenu>(
           onSelected: (value) async {
+            final topicDetailBloc = context.read<TopicDetailBloc>();
             if (value == TopicDetailMenu.edit) {
               final r = await Navigator.of(context).push(
                 MaterialPageRoute(
@@ -235,12 +238,9 @@ class _DetailScreen extends StatelessWidget {
                 ),
               );
               if (r == true) {
-                context.read<TopicDetailBloc>().add(
-                      TopicDetailFetched(
-                        descending: descending,
-                        cache: false,
-                      ),
-                    );
+                topicDetailBloc.add(
+                  TopicDetailFetched(descending: descending, cache: false),
+                );
               }
             }
             if (value == TopicDetailMenu.delete) {

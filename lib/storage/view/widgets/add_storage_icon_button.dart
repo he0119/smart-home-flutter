@@ -20,6 +20,8 @@ class AddStorageIconButton extends StatelessWidget {
       child: IconButton(
         icon: const Icon(Icons.add),
         onPressed: () async {
+          final storageDetailBloc = context.read<StorageDetailBloc>();
+
           final r = await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => BlocProvider<StorageEditBloc>(
@@ -35,12 +37,9 @@ class AddStorageIconButton extends StatelessWidget {
             ),
           );
           if (r == true) {
-            context.read<StorageDetailBloc>().add(
-                  StorageDetailFetched(
-                    id: storage?.id ?? '',
-                    cache: false,
-                  ),
-                );
+            storageDetailBloc.add(
+              StorageDetailFetched(id: storage?.id ?? '', cache: false),
+            );
           }
         },
       ),

@@ -99,6 +99,10 @@ class ItemDetailScreen extends StatelessWidget {
         const SearchIconButton(),
         PopupMenuButton<ItemDetailMenu>(
           onSelected: (value) async {
+            final itemDetailBloc = context.read<ItemDetailBloc>();
+            final navigator = Navigator.of(context);
+            final myRouterDelegate = MyRouterDelegate.of(context);
+
             if (value == ItemDetailMenu.edit) {
               final r = await Navigator.of(context).push(
                 MaterialPageRoute(
@@ -114,15 +118,11 @@ class ItemDetailScreen extends StatelessWidget {
                 ),
               );
               if (r == true) {
-                context.read<ItemDetailBloc>().add(
-                      ItemDetailStarted(
-                        id: state.item.id,
-                      ),
-                    );
+                itemDetailBloc.add(ItemDetailStarted(id: state.item.id));
               }
             }
             if (value == ItemDetailMenu.consumable) {
-              await Navigator.of(context).push(
+              await navigator.push(
                 MaterialPageRoute(
                   builder: (_) => BlocProvider<ItemEditBloc>(
                     create: (_) => ItemEditBloc(
@@ -134,15 +134,10 @@ class ItemDetailScreen extends StatelessWidget {
                   ),
                 ),
               );
-              context.read<ItemDetailBloc>().add(
-                    ItemDetailStarted(
-                      id: state.item.id,
-                    ),
-                  );
+              itemDetailBloc.add(ItemDetailStarted(id: state.item.id));
             }
             if (value == ItemDetailMenu.addPicture) {
-              MyRouterDelegate.of(context)
-                  .push(PictureAddPage(itemId: state.item.id));
+              myRouterDelegate.push(PictureAddPage(itemId: state.item.id));
             }
             if (value == ItemDetailMenu.delete) {
               await showDialog(
