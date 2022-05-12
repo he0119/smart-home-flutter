@@ -61,6 +61,10 @@ class CommentItem extends StatelessWidget {
                       );
                       break;
                     case Menu.edit:
+                      final settingsController =
+                          context.read<SettingsController>();
+                      final topicDetailBloc = context.read<TopicDetailBloc>();
+
                       final r = await Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => BlocProvider(
@@ -76,15 +80,13 @@ class CommentItem extends StatelessWidget {
                         ),
                       );
                       if (r == true) {
-                        final descending = context
-                            .read<SettingsController>()
-                            .commentDescending;
-                        context.read<TopicDetailBloc>().add(
-                              TopicDetailFetched(
-                                descending: descending,
-                                cache: false,
-                              ),
-                            );
+                        final descending = settingsController.commentDescending;
+                        topicDetailBloc.add(
+                          TopicDetailFetched(
+                            descending: descending,
+                            cache: false,
+                          ),
+                        );
                       }
                       break;
                   }

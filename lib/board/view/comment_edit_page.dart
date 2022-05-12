@@ -19,7 +19,7 @@ class CommentEditPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CommentEditPageState createState() => _CommentEditPageState();
+  State<CommentEditPage> createState() => _CommentEditPageState();
 }
 
 class _CommentEditPageState extends State<CommentEditPage> {

@@ -16,7 +16,7 @@ class ConsumableEditPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ConsumableEditPageState createState() => _ConsumableEditPageState();
+  State<ConsumableEditPage> createState() => _ConsumableEditPageState();
 }
 
 class _ConsumableEditPageState extends State<ConsumableEditPage> {

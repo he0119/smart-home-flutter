@@ -123,6 +123,8 @@ class StorageDetailScreen extends StatelessWidget {
         PopupMenuButton<Menu>(
           onSelected: (value) async {
             if (value == Menu.edit) {
+              final storageDetailBloc = context.read<StorageDetailBloc>();
+
               final r = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => BlocProvider<StorageEditBloc>(
@@ -137,12 +139,9 @@ class StorageDetailScreen extends StatelessWidget {
                 ),
               );
               if (r == true) {
-                context.read<StorageDetailBloc>().add(
-                      StorageDetailFetched(
-                        id: storageId,
-                        cache: false,
-                      ),
-                    );
+                storageDetailBloc.add(
+                  StorageDetailFetched(id: storageId, cache: false),
+                );
               }
             }
             if (value == Menu.delete) {
@@ -272,6 +271,8 @@ class StorageDetailScreen extends StatelessWidget {
       return FloatingActionButton(
         tooltip: '添加物品',
         onPressed: () async {
+          final storageDetailBloc = context.read<StorageDetailBloc>();
+
           final r = await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => BlocProvider<ItemEditBloc>(
@@ -286,12 +287,9 @@ class StorageDetailScreen extends StatelessWidget {
             ),
           );
           if (r == true) {
-            context.read<StorageDetailBloc>().add(
-                  StorageDetailFetched(
-                    id: storageId,
-                    cache: false,
-                  ),
-                );
+            storageDetailBloc.add(
+              StorageDetailFetched(id: storageId, cache: false),
+            );
           }
         },
         child: const Icon(Icons.add),

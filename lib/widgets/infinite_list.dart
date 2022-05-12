@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:smarthome/widgets/bottom_loader.dart';
 
 /// 无限长列表
@@ -28,7 +27,7 @@ class InfiniteList<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _InfiniteListState createState() => _InfiniteListState<T>();
+  State<InfiniteList<T>> createState() => _InfiniteListState<T>();
 }
 
 class _InfiniteListState<T> extends State<InfiniteList<T>> {
@@ -112,7 +111,7 @@ class SliverInfiniteList<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SliverInfiniteListState createState() => _SliverInfiniteListState<T>();
+  State<SliverInfiniteList<T>> createState() => _SliverInfiniteListState<T>();
 }
 
 class _SliverInfiniteListState<T> extends State<SliverInfiniteList<T>> {

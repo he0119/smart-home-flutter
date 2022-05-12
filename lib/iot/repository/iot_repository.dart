@@ -18,11 +18,11 @@ class IotRepository {
     required String deviceId,
     int? number,
   }) async {
-    final _options = QueryOptions(
+    final options = QueryOptions(
       document: gql(deviceDataQuery),
       fetchPolicy: FetchPolicy.networkOnly,
     );
-    final results = await graphqlApiClient.query(_options);
+    final results = await graphqlApiClient.query(options);
 
     final List<dynamic> deviceData = results.data!['autowateringData']['edges'];
     final listofAutowateringData = deviceData

@@ -34,8 +34,8 @@ class MyDropdownSearch<T> extends StatelessWidget {
         contentPadding: EdgeInsets.zero,
         labelText: label,
       ),
-      searchFieldProps: TextFieldProps(
-        decoration: const InputDecoration(
+      searchFieldProps: const TextFieldProps(
+        decoration: InputDecoration(
           labelText: '搜索',
           contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 0),
         ),

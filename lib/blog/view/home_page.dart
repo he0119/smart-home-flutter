@@ -39,7 +39,7 @@ class BlogHomeScreen extends StatefulWidget {
   const BlogHomeScreen({Key? key}) : super(key: key);
 
   @override
-  _BlogHomeScreenState createState() => _BlogHomeScreenState();
+  State<BlogHomeScreen> createState() => _BlogHomeScreenState();
 }
 
 class _BlogHomeScreenState extends State<BlogHomeScreen> {

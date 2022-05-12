@@ -47,7 +47,7 @@ class PictureAddScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PictureAddScreenState createState() => _PictureAddScreenState();
+  State<PictureAddScreen> createState() => _PictureAddScreenState();
 }
 
 class _PictureAddScreenState extends State<PictureAddScreen> {

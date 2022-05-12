@@ -17,7 +17,7 @@ class TopicEditPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _TopicEditPageState createState() => _TopicEditPageState();
+  State<TopicEditPage> createState() => _TopicEditPageState();
 }
 
 class _TopicEditPageState extends State<TopicEditPage> {

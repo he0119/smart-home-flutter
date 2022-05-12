@@ -18,7 +18,7 @@ class StorageEditPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _StorageEditPageState createState() => _StorageEditPageState();
+  State<StorageEditPage> createState() => _StorageEditPageState();
 }
 
 class _StorageEditPageState extends State<StorageEditPage> {

@@ -28,7 +28,7 @@ class ItemEditPage extends StatefulWidget {
         super(key: key);
 
   @override
-  _ItemEditPageState createState() => _ItemEditPageState();
+  State<ItemEditPage> createState() => _ItemEditPageState();
 }
 
 class _ItemEditPageState extends State<ItemEditPage> {
@@ -284,9 +284,9 @@ class _ItemEditPageState extends State<ItemEditPage> {
   }
 
   void _onSubmitPressed() {
-    double? _price;
+    double? price;
     if (_priceController.text != '') {
-      _price = double.parse(_priceController.text);
+      price = double.parse(_priceController.text);
     }
 
     if (widget.isEditing) {
@@ -297,7 +297,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
         storageId: storageId,
         oldStorageId: widget.item!.id,
         description: _descriptionController.text,
-        price: _price,
+        price: price,
         expiredAt: expiredAt?.toUtc(),
       ));
     } else {
@@ -306,7 +306,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
         number: int.parse(_numberController.text),
         storageId: storageId,
         description: _descriptionController.text,
-        price: _price,
+        price: price,
         expiredAt: expiredAt?.toUtc(),
       ));
     }

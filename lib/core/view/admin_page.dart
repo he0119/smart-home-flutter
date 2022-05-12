@@ -28,7 +28,7 @@ class AdminScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AdminScreenState createState() => _AdminScreenState();
+  State<AdminScreen> createState() => _AdminScreenState();
 }
 
 class _AdminScreenState extends State<AdminScreen> {

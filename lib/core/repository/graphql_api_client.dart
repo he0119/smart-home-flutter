@@ -9,9 +9,8 @@ import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:smarthome/core/graphql/mutations/mutations.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
+import 'package:smarthome/core/graphql/mutations/mutations.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 class GraphQLApiClient {
@@ -60,13 +59,13 @@ class GraphQLApiClient {
 
   /// 初始化 GraphQL 客户端
   void initailize(String url) {
-    final _authLink = AuthLink(getToken: () async => 'JWT ${await token}');
-    final _httpLink = HttpLink(
+    final authLink = AuthLink(getToken: () async => 'JWT ${await token}');
+    final httpLink = HttpLink(
       url,
       defaultHeaders: headers,
     );
-    final _tokenErrorLink = ErrorLink(onGraphQLError: _handleTokenError);
-    final _link = _tokenErrorLink.split((request) {
+    final tokenErrorLink = ErrorLink(onGraphQLError: _handleTokenError);
+    final link = tokenErrorLink.split((request) {
       final definition = request.operation.document.definitions.first;
       if (definition.runtimeType == OperationDefinitionNode) {
         final operationName =
@@ -76,11 +75,11 @@ class GraphQLApiClient {
         }
       }
       return true;
-    }, _authLink.concat(_httpLink), _httpLink);
+    }, authLink.concat(httpLink), httpLink);
 
     _client = GraphQLClient(
       cache: GraphQLCache(),
-      link: _link,
+      link: link,
     );
     _log.fine('GraphQLClient initailized with url $url');
   }
@@ -155,9 +154,10 @@ class GraphQLApiClient {
         yield* forward(request);
       } else {
         yield Response(
-          context: response.context,
           data: response.data,
           errors: error,
+          context: response.context,
+          response: response.response,
         );
       }
     } else {
