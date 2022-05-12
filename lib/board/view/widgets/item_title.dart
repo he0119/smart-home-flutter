@@ -25,7 +25,7 @@ class ItemTitle extends StatelessWidget {
       title: Text(user.username),
       subtitle: isSameDateTime(createdAt, editedAt)
           ? Text(createdAt.toLocalStr())
-          : Text(createdAt.toLocalStr() + ' 已编辑'),
+          : Text('${createdAt.toLocalStr()} 已编辑'),
       trailing: (onSelected != null)
           ? PopupMenuButton(
               onSelected: onSelected,
