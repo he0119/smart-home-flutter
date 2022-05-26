@@ -169,7 +169,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Download web files
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: web
       - name: Copy file to server
@@ -192,7 +192,7 @@ jobs:
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     steps:
       - name: Download web files
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: web
       - name: Copy file to server
@@ -212,7 +212,7 @@ jobs:
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
       - name: Compress files
         run: |
           tar -czvf web.tar.gz web
