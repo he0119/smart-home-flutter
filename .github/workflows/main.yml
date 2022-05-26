@@ -54,7 +54,7 @@ jobs:
           flutter test --coverage
           python lcov_cobertura.py coverage/lcov.info
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
 
   android:
     name: Android
