@@ -218,7 +218,7 @@ jobs:
           tar -czvf web.tar.gz web
           tar -czvf windows.tar.gz windows
       - name: Upload Release Assets
-        uses: alexellis/upload-assets@0.2.3
+        uses: alexellis/upload-assets@0.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
