@@ -90,7 +90,7 @@ class VersionRepository {
       } else {
         final versionName = match.group(1);
         _log.fine('最新的版本号为 { $versionName }');
-        return Version.parse(versionName);
+        return Version.parse(versionName!);
       }
     } on http.ClientException catch (e) {
       _log.warning(e);
