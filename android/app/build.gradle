@@ -91,6 +91,12 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 flutter {
@@ -98,7 +104,7 @@ flutter {
 }
 
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
+    implementation (name: 'MiPush_SDK_Client_5_0_5-C_3rd', ext: 'aar')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
