@@ -149,14 +149,16 @@ class SettingsService {
       prefs.remove('token');
       prefs.remove('refreshToken');
       // 清除 Sentry 设置的用户
-      Sentry.configureScope((scope) => scope.user = null);
+      Sentry.configureScope((scope) => scope.setUser(null));
     } else {
       prefs.setString('loginUser', jsonEncode(user.toJson()));
       // 设置 Sentry 用户
       Sentry.configureScope(
-        (scope) => scope.user = SentryUser(
-          id: user.username,
-          email: user.email,
+        (scope) => scope.setUser(
+          SentryUser(
+            id: user.username,
+            email: user.email,
+          ),
         ),
       );
     }

@@ -1,3 +1,4 @@
+import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:graphql/client.dart';
 import 'package:smarthome/core/graphql/mutations/push/mutations.dart';
@@ -26,13 +27,12 @@ class PushRepository {
 
   /// MiPush
   Future<MiPush> miPush() async {
-    final deviceInfo = DeviceInfoPlugin();
-    final androidInfo = await deviceInfo.androidInfo;
+    const androidId = AndroidId();
 
     final options = QueryOptions(
       document: gql(miPushQuery),
       variables: {
-        'deviceId': androidInfo.androidId,
+        'deviceId': androidId.getId(),
       },
       fetchPolicy: FetchPolicy.networkOnly,
     );
@@ -47,13 +47,14 @@ class PushRepository {
     required String regId,
   }) async {
     final deviceInfo = DeviceInfoPlugin();
+    const androidId = AndroidId();
     final androidInfo = await deviceInfo.androidInfo;
     final options = MutationOptions(
       document: gql(updateMiPushMutation),
       variables: {
         'input': {
           'regId': regId,
-          'deviceId': androidInfo.androidId,
+          'deviceId': androidId.getId(),
           'model': androidInfo.model,
         }
       },
