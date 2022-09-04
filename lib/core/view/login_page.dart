@@ -182,7 +182,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    void _onLoginButtonPressed() {
+    void onLoginButtonPressed() {
       BlocProvider.of<AuthenticationBloc>(context).add(
         AuthenticationLogin(
           username: _usernameController.text,
@@ -231,7 +231,7 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     RoundedRaisedButton(
                       onPressed: state is! AuthenticationInProgress
-                          ? _onLoginButtonPressed
+                          ? onLoginButtonPressed
                           : null,
                       child: const Text('登录'),
                     ),

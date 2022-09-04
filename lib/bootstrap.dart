@@ -35,16 +35,12 @@ Future<void> bootstrap(AppConfig appConfig) async {
             ..release = 'release';
         },
       );
-      BlocOverrides.runZoned(
-        () async {
-          runApp(
-            MyApp(
-              settingsController: settingsController,
-              graphQLApiClient: graphQLApiClient,
-            ),
-          );
-        },
-        blocObserver: SimpleBlocObserver(),
+      Bloc.observer = SimpleBlocObserver();
+      runApp(
+        MyApp(
+          settingsController: settingsController,
+          graphQLApiClient: graphQLApiClient,
+        ),
       );
     },
     (exception, stackTrace) async {
