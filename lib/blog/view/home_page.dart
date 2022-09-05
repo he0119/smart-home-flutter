@@ -105,18 +105,18 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                     child: const Text('博客'),
                   ),
                 ),
-          floatingActionButton: controller.hasData
-              ? FloatingActionButton(
-                  tooltip: '使用浏览器打开',
-                  onPressed: () async {
-                    final currentUrl = await controller.data!.currentUrl();
-                    if (currentUrl != null) {
-                      await launchUrl(currentUrl);
-                    }
-                  },
-                  child: const Icon(Icons.open_in_new),
-                )
-              : null,
+          floatingActionButton: FloatingActionButton(
+            tooltip: '使用浏览器打开',
+            onPressed: () async {
+              if (controller.hasData) {
+                final currentUrl = await controller.data!.currentUrl();
+                if (currentUrl != null) {
+                  await launchUrl(currentUrl);
+                }
+              }
+            },
+            child: const Icon(Icons.open_in_new),
+          ),
         ),
       ),
     );
