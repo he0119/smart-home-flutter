@@ -13,18 +13,17 @@ class TabSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: AppTab.values.indexOf(activeTab),
-      onTap: (index) => onTabSelected(AppTab.values[index]),
-      items: AppTab.values
+    return NavigationBar(
+      destinations: AppTab.values
           .map(
-            (tab) => BottomNavigationBarItem(
+            (tab) => NavigationDestination(
               icon: tab.icon,
               label: tab.name,
             ),
           )
           .toList(),
+      selectedIndex: AppTab.values.indexOf(activeTab),
+      onDestinationSelected: (index) => onTabSelected(AppTab.values[index]),
     );
   }
 }
