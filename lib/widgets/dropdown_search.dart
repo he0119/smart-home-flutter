@@ -5,7 +5,7 @@ typedef DropdownSearchOnFind<T> = Future<List<T>> Function(String? text);
 
 class MyDropdownSearch<T> extends StatelessWidget {
   final String? label;
-  final DropdownSearchOnFind<T>? onFind;
+  final DropdownSearchOnFind<T>? asyncItems;
   final ValueChanged<T?>? onChanged;
   final T? selectedItem;
   final bool showClearButton;
@@ -15,7 +15,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
   const MyDropdownSearch({
     Key? key,
     this.label,
-    this.onFind,
+    this.asyncItems,
     this.onChanged,
     this.selectedItem,
     this.showClearButton = false,
@@ -26,24 +26,34 @@ class MyDropdownSearch<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<T>(
-      mode: Mode.MENU,
-      showSearchBox: true,
-      showClearButton: showClearButton,
-      isFilteredOnline: true,
-      dropdownSearchDecoration: InputDecoration(
-        contentPadding: EdgeInsets.zero,
-        labelText: label,
-      ),
-      searchFieldProps: const TextFieldProps(
-        decoration: InputDecoration(
-          labelText: '搜索',
-          contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+      compareFn: (i1, i2) => i1 == i2,
+      popupProps: PopupProps.menu(
+        showSelectedItems: true,
+        showSearchBox: true,
+        itemBuilder: (ctx, item, isSelected) {
+          return ListTile(
+            title: Text(item.toString()),
+            selected: isSelected,
+          );
+        },
+        emptyBuilder: (context, searchEntry) => const Center(
+          child: Text('无结果'),
+        ),
+        searchFieldProps: const TextFieldProps(
+          decoration: InputDecoration(
+            labelText: '搜索',
+            contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+          ),
         ),
       ),
-      emptyBuilder: (context, searchEntry) => const Center(
-        child: Text('无结果'),
+      dropdownDecoratorProps: DropDownDecoratorProps(
+        dropdownSearchDecoration: InputDecoration(
+          contentPadding: EdgeInsets.zero,
+          labelText: label,
+        ),
       ),
-      onFind: onFind,
+      clearButtonProps: const ClearButtonProps(isVisible: true),
+      asyncItems: asyncItems,
       onChanged: onChanged,
       selectedItem: selectedItem,
       validator: validator,
