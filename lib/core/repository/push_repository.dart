@@ -32,7 +32,7 @@ class PushRepository {
     final options = QueryOptions(
       document: gql(miPushQuery),
       variables: {
-        'deviceId': androidId.getId(),
+        'deviceId': await androidId.getId(),
       },
       fetchPolicy: FetchPolicy.networkOnly,
     );
@@ -54,7 +54,7 @@ class PushRepository {
       variables: {
         'input': {
           'regId': regId,
-          'deviceId': androidId.getId(),
+          'deviceId': await androidId.getId(),
           'model': androidInfo.model,
         }
       },
