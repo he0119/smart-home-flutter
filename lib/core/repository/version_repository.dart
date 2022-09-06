@@ -80,7 +80,7 @@ class VersionRepository {
     final versionRegex = RegExp(
         r'releases/tag/v([\d.]+)(-([0-9A-Za-z\-.]+))?(\+([0-9A-Za-z\-.]+))?');
     const url =
-        'https://hub.fastgit.org/he0119/smart-home-flutter/releases/latest';
+        'https://hub.fastgit.xyz/he0119/smart-home-flutter/releases/latest';
     try {
       final response = await http.get(Uri.parse(url));
       _fileExist = response.body.contains(await filename);
