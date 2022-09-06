@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -143,21 +144,26 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
   Widget build(BuildContext context) {
     final themeMode =
         context.select((SettingsController settings) => settings.themeMode);
-    return MaterialApp.router(
-      scaffoldMessengerKey: scaffoldMessengerKey,
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData.dark().copyWith(
-        useMaterial3: true,
-      ),
-      themeMode: themeMode,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      title: widget.settingsController.appConfig.appName,
-      routeInformationParser: MyRouteInformationParser(),
-      routerDelegate: _delegate,
+    return DynamicColorBuilder(
+      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+        return MaterialApp.router(
+          scaffoldMessengerKey: scaffoldMessengerKey,
+          theme: ThemeData(
+            colorScheme: lightDynamic,
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData.dark().copyWith(
+            colorScheme: darkDynamic,
+            useMaterial3: true,
+          ),
+          themeMode: themeMode,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          title: widget.settingsController.appConfig.appName,
+          routeInformationParser: MyRouteInformationParser(),
+          routerDelegate: _delegate,
+        );
+      },
     );
   }
 }
