@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' hide NetworkException, ServerException;
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
@@ -45,6 +46,64 @@ class ClientWithCookies extends IOClient {
     });
   }
 }
+
+/// 强行加上 OperationInfo
+class AddOperationInfoVisitor extends TransformingVisitor {
+  @override
+  SelectionSetNode visitSelectionSetNode(SelectionSetNode node) {
+    final hasInlineFragment =
+        node.selections.whereType<InlineFragmentNode>().isNotEmpty;
+
+    if (!hasInlineFragment) return node;
+
+    final hasOperation = node.selections
+        .whereType<InlineFragmentNode>()
+        .any((node) => node.typeCondition?.on.name.value == 'OperationInfo');
+
+    if (hasOperation) return node;
+
+    return SelectionSetNode(
+      selections: [
+        ...node.selections,
+        const InlineFragmentNode(
+          typeCondition: TypeConditionNode(
+            on: NamedTypeNode(
+              name: NameNode(
+                value: 'OperationInfo',
+              ),
+            ),
+          ),
+          selectionSet: SelectionSetNode(
+            selections: [
+              FieldNode(
+                name: NameNode(value: '__typename'),
+              ),
+              FieldNode(
+                name: NameNode(value: 'messages'),
+                selectionSet: SelectionSetNode(
+                  selections: [
+                    FieldNode(
+                      name: NameNode(value: '__typename'),
+                    ),
+                    FieldNode(
+                      name: NameNode(value: 'message'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+/// 给 Mutation 强行加上 OperationInfo
+DocumentNode opi(DocumentNode document) => transform(
+      document,
+      [AddOperationInfoVisitor()],
+    );
 
 class GraphQLApiClient {
   static final Logger _log = Logger('GraphQLApiClient');
@@ -93,7 +152,7 @@ class GraphQLApiClient {
 
   Future<bool> logout() async {
     final loginOptions = MutationOptions(
-      document: gql(logoutMutation),
+      document: opi(gql(logoutMutation)),
     );
     final results = await mutate(loginOptions);
     if (results.hasException) {
@@ -157,6 +216,25 @@ class GraphQLApiClient {
     final results = await _client!.mutate(options);
     if (results.hasException) {
       _handleException(results.exception!);
+    }
+    // 一些简化的操作
+    // 暂时先这样吧，如果 Mutation 出错的话，会返回 OperationInfo
+    if (options.document.definitions.first.runtimeType.toString() ==
+        'OperationDefinitionNode') {
+      final nodeName =
+          (options.document.definitions.first as OperationDefinitionNode)
+              .name!
+              .value;
+      final data = results.data![nodeName];
+
+      if (data['__typename'] == 'OperationInfo') {
+        try {
+          final String errorMessage = data['messages'][0]['message'];
+          throw ServerException(errorMessage);
+        } on NoSuchMethodError {
+          throw const NetworkException('操作失败，请稍后再试');
+        }
+      }
     }
     return results;
   }

@@ -50,7 +50,7 @@ class PushRepository {
     const androidId = AndroidId();
     final androidInfo = await deviceInfo.androidInfo;
     final options = MutationOptions(
-      document: gql(updateMiPushMutation),
+      document: opi(gql(updateMiPushMutation)),
       variables: {
         'input': {
           'regId': regId,

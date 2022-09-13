@@ -17,7 +17,7 @@ class BoardRepository {
     String? parentId,
   }) async {
     final options = MutationOptions(
-      document: gql(addCommentMutation),
+      document: opi(gql(addCommentMutation)),
       variables: {
         'input': {
           'topicId': topicId,
@@ -37,7 +37,7 @@ class BoardRepository {
     required String description,
   }) async {
     final options = MutationOptions(
-      document: gql(addTopicMutation),
+      document: opi(gql(addTopicMutation)),
       variables: {
         'input': {
           'title': title,
@@ -53,7 +53,7 @@ class BoardRepository {
 
   Future<Topic> closeTopic({required String topicId}) async {
     final options = MutationOptions(
-      document: gql(closeTopicMutation),
+      document: opi(gql(closeTopicMutation)),
       variables: {
         'input': {'topicId': topicId}
       },
@@ -66,7 +66,7 @@ class BoardRepository {
 
   Future<Topic> pinTopic({required String topicId}) async {
     final options = MutationOptions(
-      document: gql(pinTopicMutation),
+      document: opi(gql(pinTopicMutation)),
       variables: {
         'input': {'topicId': topicId}
       },
@@ -79,7 +79,7 @@ class BoardRepository {
 
   Future<Topic> unpinTopic({required String topicId}) async {
     final options = MutationOptions(
-      document: gql(unpinTopicMutation),
+      document: opi(gql(unpinTopicMutation)),
       variables: {
         'input': {'topicId': topicId}
       },
@@ -92,7 +92,7 @@ class BoardRepository {
 
   Future<String?> deleteComment({required String commentId}) async {
     final options = MutationOptions(
-      document: gql(deleteCommentMutation),
+      document: opi(gql(deleteCommentMutation)),
       variables: {
         'input': {'commentId': commentId}
       },
@@ -103,7 +103,7 @@ class BoardRepository {
 
   Future<String?> deleteTopic({required String topicId}) async {
     final options = MutationOptions(
-      document: gql(deleteTopicMutation),
+      document: opi(gql(deleteTopicMutation)),
       variables: {
         'input': {'topicId': topicId}
       },
@@ -114,7 +114,7 @@ class BoardRepository {
 
   Future<Topic> reopenTopic({required String topicId}) async {
     final options = MutationOptions(
-      document: gql(reopenTopicMutation),
+      document: opi(gql(reopenTopicMutation)),
       variables: {
         'input': {'topicId': topicId}
       },
@@ -185,7 +185,7 @@ class BoardRepository {
     required String body,
   }) async {
     final options = MutationOptions(
-      document: gql(updateCommentMutation),
+      document: opi(gql(updateCommentMutation)),
       variables: {
         'input': {
           'id': id,
@@ -205,7 +205,7 @@ class BoardRepository {
     required String description,
   }) async {
     final options = MutationOptions(
-      document: gql(updateTopicMutation),
+      document: opi(gql(updateTopicMutation)),
       variables: {
         'input': {
           'id': id,

@@ -23,7 +23,7 @@ class StorageRepository {
     List<String>? consumableIds,
   }) async {
     final options = MutationOptions(
-      document: gql(addConsumableMutation),
+      document: opi(gql(addConsumableMutation)),
       variables: {
         'input': {
           'id': id,
@@ -48,7 +48,7 @@ class StorageRepository {
     DateTime? expiredAt,
   }) async {
     final options = MutationOptions(
-      document: gql(addItemMutation),
+      document: opi(gql(addItemMutation)),
       variables: {
         'input': {
           'name': name,
@@ -78,7 +78,7 @@ class StorageRepository {
     final myFile = await _getMultipartFile(picturePath);
 
     final options = MutationOptions(
-      document: gql(addPictureMutation),
+      document: opi(gql(addPictureMutation)),
       variables: {
         'input': {
           'itemId': itemId,
@@ -103,7 +103,7 @@ class StorageRepository {
     String? description,
   }) async {
     final options = MutationOptions(
-      document: gql(addStorageMutation),
+      document: opi(gql(addStorageMutation)),
       variables: {
         'input': {
           'name': name,
@@ -147,7 +147,7 @@ class StorageRepository {
     List<String>? consumableIds,
   }) async {
     final options = MutationOptions(
-      document: gql(deleteConsumableMutation),
+      document: opi(gql(deleteConsumableMutation)),
       variables: {
         'input': {
           'id': id,
@@ -187,7 +187,7 @@ class StorageRepository {
 
   Future<void> deleteItem({String? itemId}) async {
     final options = MutationOptions(
-      document: gql(deleteItemMutation),
+      document: opi(gql(deleteItemMutation)),
       variables: {
         'input': {
           'itemId': itemId,
@@ -199,7 +199,7 @@ class StorageRepository {
 
   Future<void> deletePicture({String? pictureId}) async {
     final options = MutationOptions(
-      document: gql(deletePictureMutation),
+      document: opi(gql(deletePictureMutation)),
       variables: {
         'input': {
           'pictureId': pictureId,
@@ -211,7 +211,7 @@ class StorageRepository {
 
   Future<void> deleteStorage({String? storageId}) async {
     final options = MutationOptions(
-      document: gql(deleteStorageMutation),
+      document: opi(gql(deleteStorageMutation)),
       variables: {
         'input': {
           'storageId': storageId,
@@ -425,7 +425,7 @@ class StorageRepository {
 
   Future<void> restoreItem({String? itemId}) async {
     final options = MutationOptions(
-      document: gql(restoreItemMutation),
+      document: opi(gql(restoreItemMutation)),
       variables: {
         'input': {
           'itemId': itemId,
@@ -566,7 +566,7 @@ class StorageRepository {
     DateTime? expiredAt,
   }) async {
     final options = MutationOptions(
-      document: gql(updateItemMutation),
+      document: opi(gql(updateItemMutation)),
       variables: {
         'input': {
           'id': id,
@@ -602,7 +602,7 @@ class StorageRepository {
     }
 
     final options = MutationOptions(
-      document: gql(updatePictureMutation),
+      document: opi(gql(updatePictureMutation)),
       variables: {
         'input': {
           'id': id,
@@ -628,7 +628,7 @@ class StorageRepository {
     String? description,
   }) async {
     final options = MutationOptions(
-      document: gql(updateStorageMutation),
+      document: opi(gql(updateStorageMutation)),
       variables: {
         'input': {
           'id': id,

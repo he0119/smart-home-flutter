@@ -37,7 +37,7 @@ class IotRepository {
     String? location,
   }) async {
     final options = MutationOptions(
-      document: gql(addDeviceMutation),
+      document: opi(gql(addDeviceMutation)),
       variables: {
         'input': {
           'name': name,
@@ -60,7 +60,7 @@ class IotRepository {
     String? location,
   }) async {
     final options = MutationOptions(
-      document: gql(setDeviceMutation),
+      document: opi(gql(setDeviceMutation)),
       variables: {
         'input': {
           'id': id,
@@ -78,7 +78,7 @@ class IotRepository {
 
   Future<String?> deleteDevice({required String deviceId}) async {
     final options = MutationOptions(
-      document: gql(deleteDeviceMutation),
+      document: opi(gql(deleteDeviceMutation)),
       variables: {
         'input': {'deviceId': deviceId}
       },
@@ -94,7 +94,7 @@ class IotRepository {
     String? location,
   }) async {
     final options = MutationOptions(
-      document: gql(updateDeviceMutation),
+      document: opi(gql(updateDeviceMutation)),
       variables: {
         'input': {
           'id ': id,
