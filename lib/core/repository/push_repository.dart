@@ -60,7 +60,7 @@ class PushRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['updateMiPush']['miPush'];
+    final Map<String, dynamic> json = result.data!['updateMiPush'];
     final miPushObject = MiPush.fromJson(json);
     return miPushObject;
   }

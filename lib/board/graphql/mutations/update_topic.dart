@@ -1,7 +1,7 @@
 const String updateTopicMutation = r'''
-mutation updateTopic($input: UpdateTopicMutationInput!) {
+mutation updateTopic($input: UpdateTopicInput!) {
   updateTopic(input: $input) {
-    topic {
+    ... on Topic {
       id
       title
       description

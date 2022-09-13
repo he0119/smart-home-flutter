@@ -27,7 +27,7 @@ class BoardRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['addComment']['comment'];
+    final Map<String, dynamic> json = result.data!['addComment'];
     final commentObject = Comment.fromJson(json);
     return commentObject;
   }
@@ -46,7 +46,7 @@ class BoardRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['addTopic']['topic'];
+    final Map<String, dynamic> json = result.data!['addTopic'];
     final topicObject = Topic.fromJson(json);
     return topicObject;
   }
@@ -59,7 +59,7 @@ class BoardRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['closeTopic']['topic'];
+    final Map<String, dynamic> json = result.data!['closeTopic'];
     final topicObject = Topic.fromJson(json);
     return topicObject;
   }
@@ -72,7 +72,7 @@ class BoardRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> topicJson = result.data!['pinTopic']['topic'];
+    final Map<String, dynamic> topicJson = result.data!['pinTopic'];
     final topic = Topic.fromJson(topicJson);
     return topic;
   }
@@ -85,7 +85,7 @@ class BoardRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> topicJson = result.data!['unpinTopic']['topic'];
+    final Map<String, dynamic> topicJson = result.data!['unpinTopic'];
     final topic = Topic.fromJson(topicJson);
     return topic;
   }
@@ -98,7 +98,7 @@ class BoardRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    return result.data!['deleteComment']['commentId'];
+    return result.data!['deleteComment']['id'];
   }
 
   Future<String?> deleteTopic({required String topicId}) async {
@@ -109,7 +109,7 @@ class BoardRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    return result.data!['deleteTopic']['topicId'];
+    return result.data!['deleteTopic']['id'];
   }
 
   Future<Topic> reopenTopic({required String topicId}) async {
@@ -120,7 +120,7 @@ class BoardRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['reopenTopic']['topic'];
+    final Map<String, dynamic> json = result.data!['reopenTopic'];
     final topicObject = Topic.fromJson(json);
     return topicObject;
   }
@@ -137,7 +137,7 @@ class BoardRepository {
       document: gql(topicDetailQuery),
       variables: {
         'topicId': topicId,
-        'orderBy': descending ? '-created_at' : 'created_at',
+        'order': descending ? 'DESC' : 'ASC',
         'after': after,
       },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
@@ -194,7 +194,7 @@ class BoardRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['updateComment']['comment'];
+    final Map<String, dynamic> json = result.data!['updateComment'];
     final commentObject = Comment.fromJson(json);
     return commentObject;
   }
@@ -215,7 +215,7 @@ class BoardRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['updateTopic']['topic'];
+    final Map<String, dynamic> json = result.data!['updateTopic'];
     final topicObject = Topic.fromJson(json);
     return topicObject;
   }

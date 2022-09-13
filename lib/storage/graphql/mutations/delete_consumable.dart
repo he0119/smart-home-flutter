@@ -1,10 +1,10 @@
 const String deleteConsumableMutation = r'''
-mutation deleteConsumable($input: DeleteConsumableMutationInput!) {
+mutation deleteConsumable($input: DeleteConsumableInput!) {
   deleteConsumable(input: $input) {
-    item {
+    ... on Item {
       id
       name
-      consumables(isDeleted: false) {
+      consumables(filters: {isDeleted: false}) {
         edges {
           node {
             id

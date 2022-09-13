@@ -1,6 +1,6 @@
 const String deviceDataQuery = r'''
 query autowateringData {
-  autowateringData(first: 1, orderBy: "-time") {
+  autowateringData(first: 1, order: {time: DESC}) {
     edges {
       node {
         id

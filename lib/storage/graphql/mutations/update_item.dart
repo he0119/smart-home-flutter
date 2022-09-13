@@ -1,7 +1,7 @@
 const String updateItemMutation = r'''
-mutation updateItem($input: UpdateItemMutationInput!) {
+mutation updateItem($input: UpdateItemInput!) {
   updateItem(input: $input) {
-    item {
+    ... on Item {
       id
       name
       number

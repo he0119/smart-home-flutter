@@ -1,10 +1,10 @@
 const String recentlyEditedItemsQuery = r'''
 query recentlyEditedItems($after: String) {
-  recentlyEditedItems: items(isDeleted: false, after: $after, orderBy: "-edited_at") {
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
+  recentlyEditedItems: items(
+    filters: {isDeleted: false}
+    after: $after
+    order: {editedAt: DESC}
+  ) {
     edges {
       node {
         id

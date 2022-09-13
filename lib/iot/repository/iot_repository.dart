@@ -47,7 +47,7 @@ class IotRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['addDevice']['device'];
+    final Map<String, dynamic> json = result.data!['addDevice'];
     final deviceObject = Device.fromJson(json);
     return deviceObject;
   }
@@ -71,7 +71,7 @@ class IotRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['setDevice']['device'];
+    final Map<String, dynamic> json = result.data!['setDevice'];
     final deviceObject = Device.fromJson(json);
     return deviceObject;
   }
@@ -84,7 +84,7 @@ class IotRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    return result.data!['deleteDevice']['deviceId'];
+    return result.data!['deleteDevice']['id'];
   }
 
   Future<Device> updateDevice({
@@ -105,7 +105,7 @@ class IotRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['updateDevice']['device'];
+    final Map<String, dynamic> json = result.data!['updateDevice'];
     final deviceObject = Device.fromJson(json);
     return deviceObject;
   }

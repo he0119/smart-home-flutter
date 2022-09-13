@@ -1,6 +1,6 @@
 const String rootStorageQuery = r'''
 query rootStorage($after: String) {
-  rootStorage: storages(level: 0, after: $after) {
+  rootStorage: storages(filters: {level: {exact: 0}}, after: $after) {
     pageInfo {
       hasNextPage
       endCursor

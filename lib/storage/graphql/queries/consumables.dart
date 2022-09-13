@@ -1,6 +1,9 @@
 const String consumablesQuery = r'''
 query consumables($after: String) {
-  consumables: items(isDeleted: false, consumables: true, after: $after) {
+  consumables: items(
+    after: $after
+    filters: {isDeleted: false, consumables: true}
+  ) {
     pageInfo {
       hasNextPage
       endCursor
@@ -9,7 +12,7 @@ query consumables($after: String) {
       node {
         id
         name
-        consumables(isDeleted: false) {
+        consumables(filters: {isDeleted: false}) {
           edges {
             node {
               id

@@ -1,10 +1,10 @@
 const String addConsumableMutation = r'''
-mutation addConsumable($input: AddConsumableMutationInput!) {
+mutation addConsumable($input: AddConsumableInput!) {
   addConsumable(input: $input) {
-    item {
+    ... on Item {
       id
       name
-      consumables(isDeleted: false) {
+      consumables(filters: {isDeleted: false}) {
         edges {
           node {
             id

@@ -33,7 +33,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> itemJson =
-        result.data!.flattenConnection['addConsumable']['item'];
+        result.data!.flattenConnection['addConsumable'];
 
     final item = Item.fromJson(itemJson);
     return item;
@@ -61,7 +61,7 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['addItem']['item'];
+    final Map<String, dynamic> json = result.data!['addItem'];
     final itemObject = Item.fromJson(json);
     return itemObject;
   }
@@ -92,7 +92,7 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['addPicture']['picture'];
+    final Map<String, dynamic> json = result.data!['addPicture'];
     final pictureObject = Picture.fromJson(json);
     return pictureObject;
   }
@@ -113,7 +113,7 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['addStorage']['storage'];
+    final Map<String, dynamic> json = result.data!['addStorage'];
     final storageObject = Storage.fromJson(json);
     return storageObject;
   }
@@ -157,7 +157,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> itemJson =
-        result.data!.flattenConnection['deleteConsumable']['item'];
+        result.data!.flattenConnection['deleteConsumable'];
 
     final item = Item.fromJson(itemJson);
     return item;
@@ -581,7 +581,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.mutate(options);
 
-    final Map<String, dynamic> itemJson = result.data!['updateItem']['item'];
+    final Map<String, dynamic> itemJson = result.data!['updateItem'];
     final item = Item.fromJson(itemJson);
 
     return item;
@@ -616,7 +616,7 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['updatePicture']['picture'];
+    final Map<String, dynamic> json = result.data!['updatePicture'];
     final pictureObject = Picture.fromJson(json);
     return pictureObject;
   }
@@ -640,8 +640,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.mutate(options);
 
-    final Map<String, dynamic> storageJson =
-        result.data!['updateStorage']['storage'];
+    final Map<String, dynamic> storageJson = result.data!['updateStorage'];
     final storage = Storage.fromJson(storageJson);
 
     return storage;

@@ -1,7 +1,7 @@
 const String addCommentMutation = r'''
-mutation addComment($input: AddCommentMutationInput!) {
+mutation addComment($input: AddCommentInput!) {
   addComment(input: $input) {
-    comment {
+    ... on Comment {
       id
       body
       user {
