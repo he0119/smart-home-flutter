@@ -1,17 +1,50 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' hide NetworkException, ServerException;
+import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/core/graphql/mutations/mutations.dart';
+import 'package:smarthome/user/model/user.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+class ClientWithCookies extends IOClient {
+  final PersistCookieJar cookieJar = PersistCookieJar();
+
+  @override
+  Future<IOStreamedResponse> send(BaseRequest request) async {
+    final cookie = await cookieJar.loadForRequest(request.url);
+    if (cookie.isNotEmpty) {
+      final cookiesString =
+          cookie.map((e) => '${e.name}=${e.value}').join('; ');
+      request.headers['cookie'] = cookiesString;
+    }
+    return super.send(request).then((response) {
+      final cookiesString = response.headers['set-cookie'];
+      final request = response.request;
+      if (cookiesString != null && request != null) {
+        // 这个分割真的难受，不知道还没有更好的方法
+        // cookie 有效期的格式中包含了逗号
+        final cookieStringList = cookiesString.split(',');
+        List<Cookie> cookies = [];
+        for (var i = 0; i < cookieStringList.length; i += 2) {
+          cookies.add(Cookie.fromSetCookieValue(
+              cookieStringList[i] + cookieStringList[i + 1]));
+        }
+        cookieJar.saveFromResponse(request.url, cookies);
+      }
+      return response;
+    });
+  }
+}
 
 class GraphQLApiClient {
   static final Logger _log = Logger('GraphQLApiClient');
@@ -32,9 +65,9 @@ class GraphQLApiClient {
   }
 
   /// 登录
-  Future<bool> authenticate(String username, String password) async {
+  Future<User?> authenticate(String username, String password) async {
     final loginOptions = MutationOptions(
-      document: gql(tokenAuth),
+      document: gql(loginMutation),
       variables: {
         'input': {
           'username': username,
@@ -47,35 +80,47 @@ class GraphQLApiClient {
       if (results.exception!.linkException != null) {
         throw const NetworkException('网络异常，请稍后再试');
       }
+      return null;
+    } else {
+      final data = results.data!['login'];
+      if (data['__typename'] == 'User') {
+        final user = User.fromJson(data);
+        return user;
+      }
+    }
+    return null;
+  }
+
+  Future<bool> logout() async {
+    final loginOptions = MutationOptions(
+      document: gql(logoutMutation),
+    );
+    final results = await mutate(loginOptions);
+    if (results.hasException) {
+      if (results.exception!.linkException != null) {
+        throw const NetworkException('网络异常，请稍后再试');
+      }
       return false;
     } else {
-      String token = results.data!['tokenAuth']['token'];
-      String refreshToken = results.data!['tokenAuth']['refreshToken'];
-      await _setToken(token);
-      await _setRefreshToken(refreshToken);
       return true;
     }
   }
 
   /// 初始化 GraphQL 客户端
   void initailize(String url) {
-    final authLink = AuthLink(getToken: () async => 'JWT ${await token}');
-    final httpLink = HttpLink(
-      url,
-      defaultHeaders: headers,
-    );
-    final tokenErrorLink = ErrorLink(onGraphQLError: _handleTokenError);
-    final link = tokenErrorLink.split((request) {
-      final definition = request.operation.document.definitions.first;
-      if (definition.runtimeType == OperationDefinitionNode) {
-        final operationName =
-            (definition as OperationDefinitionNode).name!.value;
-        if (operationName == 'tokenAuth' || operationName == 'refreshToken') {
-          return false;
-        }
-      }
-      return true;
-    }, authLink.concat(httpLink), httpLink);
+    Link link;
+    if (!kIsWeb) {
+      link = HttpLink(
+        url,
+        httpClient: ClientWithCookies(),
+        defaultHeaders: headers,
+      );
+    } else {
+      link = HttpLink(
+        url,
+        defaultHeaders: headers,
+      );
+    }
 
     _client = GraphQLClient(
       cache: GraphQLCache(),
@@ -127,7 +172,7 @@ class GraphQLApiClient {
 
   void _handleException(OperationException exception) {
     for (var error in exception.graphqlErrors) {
-      if (error.message.toLowerCase().contains('refresh token')) {
+      if (error.message == 'User is not authenticated') {
         settingsController.updateLoginUser(null);
         throw const AuthenticationException('认证过期，请重新登录');
       }
@@ -138,67 +183,5 @@ class GraphQLApiClient {
       _log.severe(exception.linkException.toString());
       throw const NetworkException('网络异常，请稍后再试');
     }
-  }
-
-  /// 处理令牌相关的问题
-  Stream<Response> _handleTokenError(
-      Request request, forward, Response response) async* {
-    final message = response.errors!.first.message.toLowerCase();
-    if ([
-      'signature has expired',
-      'error decoding signature',
-    ].contains(message)) {
-      // 如果访问令牌失效，则自动刷新
-      final error = await _refreshToken();
-      if (error.isEmpty) {
-        yield* forward(request);
-      } else {
-        yield Response(
-          data: response.data,
-          errors: error,
-          context: response.context,
-          response: response.response,
-        );
-      }
-    } else {
-      yield response;
-    }
-  }
-
-  /// 刷新令牌
-  Future<List<GraphQLError>> _refreshToken() async {
-    final prefs = await _prefs;
-    _log.fine('refreshing token');
-    final refreshToken = prefs.getString('refreshToken');
-    final options = MutationOptions(
-      document: gql(refreshTokenMutation),
-      variables: {
-        'input': {
-          'refreshToken': refreshToken,
-        }
-      },
-    );
-    final results = await _client!.mutate(options);
-
-    // 如果刷新令牌出错，则返回错误
-    final exception = results.exception;
-    if (exception != null && exception.graphqlErrors.isNotEmpty) {
-      return results.exception!.graphqlErrors;
-    } else {
-      String token = results.data!['refreshToken']['token'];
-      await _setToken(token);
-      _log.fine('token refreshed');
-      return [];
-    }
-  }
-
-  Future _setRefreshToken(String refreshToken) async {
-    final prefs = await _prefs;
-    await prefs.setString('refreshToken', refreshToken);
-  }
-
-  Future _setToken(String token) async {
-    final prefs = await _prefs;
-    await prefs.setString('token', token);
   }
 }

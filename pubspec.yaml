@@ -37,6 +37,7 @@ dependencies:
   gql:
   rxdart: ^0.27.3
   http_parser: ^4.0.0
+  cookie_jar: ^3.0.1
 
   # Flutter
   flutter_bloc: ^8.0.1

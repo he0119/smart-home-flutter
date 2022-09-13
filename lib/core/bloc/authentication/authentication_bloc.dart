@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:smarthome/core/repository/repositories.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
+import 'package:smarthome/core/repository/repositories.dart';
 import 'package:smarthome/user/user.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
@@ -45,10 +45,9 @@ class AuthenticationBloc
       AuthenticationLogin event, Emitter<AuthenticationState> emit) async {
     emit(AuthenticationInProgress());
     try {
-      final result =
+      final user =
           await graphqlApiClient.authenticate(event.username, event.password);
-      if (result) {
-        final user = await userRepository.currentUser();
+      if (user != null) {
         await settingsController.updateLoginUser(user);
         emit(AuthenticationSuccess(user));
       } else {
@@ -61,7 +60,10 @@ class AuthenticationBloc
 
   FutureOr<void> _onAuthenticationLogout(
       AuthenticationLogout event, Emitter<AuthenticationState> emit) async {
-    await settingsController.updateLoginUser(null);
-    emit(const AuthenticationFailure('已登出'));
+    final result = await graphqlApiClient.logout();
+    if (result) {
+      await settingsController.updateLoginUser(null);
+      emit(const AuthenticationFailure('已登出'));
+    }
   }
 }
