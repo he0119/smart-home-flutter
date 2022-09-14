@@ -18,7 +18,7 @@ class RefreshIntervalPage extends StatelessWidget {
               .read<SettingsController>()
               .updateRefreshInterval(int.parse(value));
         },
-        description: '物联网数据的刷新间隔，单位为秒',
+        description: '物联网数据的刷新间隔，单位为秒\n因为现在支持订阅，所以这个设置没有任何作用',
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         keyboardType: TextInputType.number,
         validator: (value) {
