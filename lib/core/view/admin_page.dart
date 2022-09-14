@@ -56,7 +56,18 @@ class _AdminScreenState extends State<AdminScreen> {
                   initialUrl: settings.adminUrl,
                   javascriptMode: JavascriptMode.unrestricted,
                   onWebViewCreated: _controller.complete,
-                  // TODO: 同步软件的认证，这样就不需要再输入密码
+                  initialCookies: [
+                    if (settings.cookies != null)
+                      ...settings.cookies!.split(';').map(
+                        (cookie) {
+                          final parts = cookie.split('=');
+                          return WebViewCookie(
+                              name: parts[0].trim(),
+                              value: parts[1].trim(),
+                              domain: settings.apiUrl ?? '');
+                        },
+                      ).toList(),
+                  ],
                 ),
               )),
           floatingActionButton: controller.hasData
