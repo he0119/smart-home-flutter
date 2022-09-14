@@ -2,6 +2,7 @@ import 'package:graphql/client.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/iot/graphql/mutations/mutations.dart';
 import 'package:smarthome/iot/graphql/queries/queries.dart';
+import 'package:smarthome/iot/graphql/subscriptions/subscriptions.dart';
 import 'package:smarthome/iot/model/iot.dart';
 
 class IotRepository {
@@ -108,5 +109,31 @@ class IotRepository {
     final Map<String, dynamic> json = result.data!['updateDevice'];
     final deviceObject = Device.fromJson(json);
     return deviceObject;
+  }
+
+  Stream<AutowateringData> deviceDataStream() {
+    final options = SubscriptionOptions(
+      document: gql(deviceDataSubscription),
+    );
+    return graphqlApiClient.subscribe(options).map(
+      (result) {
+        final Map<String, dynamic> json = result.data!['autowateringData'];
+        final dataObject = AutowateringData.fromJson(json);
+        return dataObject;
+      },
+    );
+  }
+
+  Stream<Device> deviceStream() {
+    final options = SubscriptionOptions(
+      document: gql(deviceSubscription),
+    );
+    return graphqlApiClient.subscribe(options).map(
+      (result) {
+        final Map<String, dynamic> json = result.data!['device'];
+        final deviceObject = Device.fromJson(json);
+        return deviceObject;
+      },
+    );
   }
 }

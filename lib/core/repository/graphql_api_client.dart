@@ -18,7 +18,9 @@ import 'package:smarthome/user/model/user.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 class ClientWithCookies extends IOClient {
-  final PersistCookieJar cookieJar = PersistCookieJar();
+  final PersistCookieJar cookieJar;
+
+  ClientWithCookies(this.cookieJar) : super();
 
   @override
   Future<IOStreamedResponse> send(BaseRequest request) async {
@@ -111,6 +113,7 @@ class GraphQLApiClient {
   static GraphQLClient? _client;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final SettingsController settingsController;
+  final PersistCookieJar cookieJar = PersistCookieJar();
 
   GraphQLApiClient(
     this.settingsController,
@@ -171,7 +174,7 @@ class GraphQLApiClient {
     if (!kIsWeb) {
       link = HttpLink(
         url,
-        httpClient: ClientWithCookies(),
+        httpClient: ClientWithCookies(cookieJar),
         defaultHeaders: headers,
       );
     } else {
@@ -180,6 +183,16 @@ class GraphQLApiClient {
         defaultHeaders: headers,
       );
     }
+    final websocketLink = WebSocketLink(
+      url.replaceFirst('http', 'ws'),
+      config: SocketClientConfig(
+        autoReconnect: true,
+        headers: headers,
+        inactivityTimeout: const Duration(hours: 1),
+      ),
+    );
+
+    link = Link.split((request) => request.isSubscription, websocketLink, link);
 
     _client = GraphQLClient(
       cache: GraphQLCache(),
@@ -191,6 +204,15 @@ class GraphQLApiClient {
   /// 加载配置，比如用户代理
   /// 这些需要在最开始就加载，因为后面的操作需要用到
   Future<void> loadSettings() async {
+    if (!kIsWeb) {
+      final cookie = await cookieJar
+          .loadForRequest(Uri.parse(settingsController.apiUrl ?? ''));
+      if (cookie.isNotEmpty) {
+        final cookiesString =
+            cookie.map((e) => '${e.name}=${e.value}').join('; ');
+        headers['cookie'] = cookiesString;
+      }
+    }
     // 用户代理设置为当前手机
     // 暂时只支持 Android
     // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
@@ -246,6 +268,10 @@ class GraphQLApiClient {
       _handleException(results.exception!);
     }
     return results;
+  }
+
+  Stream<QueryResult> subscribe(SubscriptionOptions options) {
+    return _client!.subscribe(options);
   }
 
   void _handleException(OperationException exception) {
