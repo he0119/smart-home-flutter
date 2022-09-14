@@ -25,11 +25,19 @@ class MyDrawer extends StatelessWidget {
         children: [
           if (loginUser != null)
             UserAccountsDrawerHeader(
-              accountName: Text(loginUser.username),
-              accountEmail: Text(loginUser.email!),
+              accountName: Text(
+                loginUser.username,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground),
+              ),
+              accountEmail: Text(loginUser.email!,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground)),
               currentAccountPicture: MyCircleAvatar(
                 avatarUrl: loginUser.avatarUrl,
               ),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.background),
             ),
           ListTile(
             title: const Text('耗材管理'),
