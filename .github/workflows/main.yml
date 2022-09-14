@@ -136,7 +136,7 @@ jobs:
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
           sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" .\lib\bootstrap.dart
-          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" .\lib/bootstrap.dart
+          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" .\lib\bootstrap.dart
         env:
           VERSION: ${{ needs.test.outputs.version }}
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
@@ -148,7 +148,6 @@ jobs:
           ref: ${{ env.flutter_version }}
       - name: Build windows version
         run: |
-          flutter config --enable-windows-desktop
           flutter build windows -t ./lib/main_${env:ENVIRONMENT}.dart
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
