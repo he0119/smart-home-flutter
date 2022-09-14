@@ -56,7 +56,7 @@ class StorageRepository {
           'storageId': storageId,
           'description': description,
           'price': price,
-          'expiredAt': expiredAt?.toIso8601String(),
+          'expiredAt': expiredAt?.toUtc().toIso8601String(),
         }
       },
     );
@@ -229,7 +229,7 @@ class StorageRepository {
       document: gql(expiredItemsQuery),
       variables: {
         'after': after,
-        'now': DateTime.now().toIso8601String(),
+        'now': DateTime.now().toUtc().toIso8601String(),
       },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
@@ -252,9 +252,11 @@ class StorageRepository {
     final options = QueryOptions(
       document: gql(homepageQuery),
       variables: {
-        'now': DateTime.now().toIso8601String(),
-        'nearExpiredTime':
-            DateTime.now().add(const Duration(days: 180)).toIso8601String(),
+        'now': DateTime.now().toUtc().toIso8601String(),
+        'nearExpiredTime': DateTime.now()
+            .toUtc()
+            .add(const Duration(days: 180))
+            .toIso8601String(),
       },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
@@ -360,9 +362,11 @@ class StorageRepository {
       document: gql(nearExpiredItemsQuery),
       variables: {
         'after': after,
-        'now': DateTime.now().toIso8601String(),
-        'nearExpiredTime':
-            DateTime.now().add(const Duration(days: 180)).toIso8601String(),
+        'now': DateTime.now().toUtc().toIso8601String(),
+        'nearExpiredTime': DateTime.now()
+            .add(const Duration(days: 180))
+            .toUtc()
+            .toIso8601String(),
       },
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
@@ -575,7 +579,7 @@ class StorageRepository {
           'storageId': storageId,
           'description': description,
           'price': price,
-          'expiredAt': expiredAt?.toIso8601String(),
+          'expiredAt': expiredAt?.toUtc().toIso8601String(),
         }
       },
     );
