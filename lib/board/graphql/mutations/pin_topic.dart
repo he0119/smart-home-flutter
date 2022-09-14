@@ -1,7 +1,7 @@
 const String pinTopicMutation = r'''
-mutation pinTopic($input: PinTopicMutationInput!) {
+mutation pinTopic($input: PinTopicInput!) {
   pinTopic(input: $input) {
-    topic {
+    ... on Topic {
       id
       isPin
       editedAt

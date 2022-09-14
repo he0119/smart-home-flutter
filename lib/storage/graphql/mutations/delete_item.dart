@@ -1,7 +1,9 @@
 const String deleteItemMutation = r'''
-mutation deleteItem($input: DeleteItemMutationInput!) {
+mutation deleteItem($input: DeleteItemInput!) {
   deleteItem(input: $input) {
-    clientMutationId
+    ... on Item {
+      id
+    }
   }
 }
 ''';

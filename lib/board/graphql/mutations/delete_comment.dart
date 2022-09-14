@@ -1,7 +1,9 @@
 const String deleteCommentMutation = r'''
-mutation deleteComment($input: DeleteCommentMutationInput!) {
+mutation deleteComment($input: DeleteCommentInput!) {
   deleteComment(input: $input) {
-    clientMutationId
+    ... on Comment {
+      id
+    }
   }
 }
 ''';

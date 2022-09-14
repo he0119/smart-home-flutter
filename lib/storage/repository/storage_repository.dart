@@ -23,7 +23,7 @@ class StorageRepository {
     List<String>? consumableIds,
   }) async {
     final options = MutationOptions(
-      document: gql(addConsumableMutation),
+      document: opi(gql(addConsumableMutation)),
       variables: {
         'input': {
           'id': id,
@@ -33,7 +33,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> itemJson =
-        result.data!.flattenConnection['addConsumable']['item'];
+        result.data!.flattenConnection['addConsumable'];
 
     final item = Item.fromJson(itemJson);
     return item;
@@ -48,7 +48,7 @@ class StorageRepository {
     DateTime? expiredAt,
   }) async {
     final options = MutationOptions(
-      document: gql(addItemMutation),
+      document: opi(gql(addItemMutation)),
       variables: {
         'input': {
           'name': name,
@@ -61,7 +61,7 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['addItem']['item'];
+    final Map<String, dynamic> json = result.data!['addItem'];
     final itemObject = Item.fromJson(json);
     return itemObject;
   }
@@ -78,7 +78,7 @@ class StorageRepository {
     final myFile = await _getMultipartFile(picturePath);
 
     final options = MutationOptions(
-      document: gql(addPictureMutation),
+      document: opi(gql(addPictureMutation)),
       variables: {
         'input': {
           'itemId': itemId,
@@ -92,7 +92,7 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['addPicture']['picture'];
+    final Map<String, dynamic> json = result.data!['addPicture'];
     final pictureObject = Picture.fromJson(json);
     return pictureObject;
   }
@@ -103,7 +103,7 @@ class StorageRepository {
     String? description,
   }) async {
     final options = MutationOptions(
-      document: gql(addStorageMutation),
+      document: opi(gql(addStorageMutation)),
       variables: {
         'input': {
           'name': name,
@@ -113,7 +113,7 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['addStorage']['storage'];
+    final Map<String, dynamic> json = result.data!['addStorage'];
     final storageObject = Storage.fromJson(json);
     return storageObject;
   }
@@ -147,7 +147,7 @@ class StorageRepository {
     List<String>? consumableIds,
   }) async {
     final options = MutationOptions(
-      document: gql(deleteConsumableMutation),
+      document: opi(gql(deleteConsumableMutation)),
       variables: {
         'input': {
           'id': id,
@@ -157,7 +157,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.mutate(options);
     final Map<String, dynamic> itemJson =
-        result.data!.flattenConnection['deleteConsumable']['item'];
+        result.data!.flattenConnection['deleteConsumable'];
 
     final item = Item.fromJson(itemJson);
     return item;
@@ -187,7 +187,7 @@ class StorageRepository {
 
   Future<void> deleteItem({String? itemId}) async {
     final options = MutationOptions(
-      document: gql(deleteItemMutation),
+      document: opi(gql(deleteItemMutation)),
       variables: {
         'input': {
           'itemId': itemId,
@@ -199,7 +199,7 @@ class StorageRepository {
 
   Future<void> deletePicture({String? pictureId}) async {
     final options = MutationOptions(
-      document: gql(deletePictureMutation),
+      document: opi(gql(deletePictureMutation)),
       variables: {
         'input': {
           'pictureId': pictureId,
@@ -211,7 +211,7 @@ class StorageRepository {
 
   Future<void> deleteStorage({String? storageId}) async {
     final options = MutationOptions(
-      document: gql(deleteStorageMutation),
+      document: opi(gql(deleteStorageMutation)),
       variables: {
         'input': {
           'storageId': storageId,
@@ -425,7 +425,7 @@ class StorageRepository {
 
   Future<void> restoreItem({String? itemId}) async {
     final options = MutationOptions(
-      document: gql(restoreItemMutation),
+      document: opi(gql(restoreItemMutation)),
       variables: {
         'input': {
           'itemId': itemId,
@@ -566,7 +566,7 @@ class StorageRepository {
     DateTime? expiredAt,
   }) async {
     final options = MutationOptions(
-      document: gql(updateItemMutation),
+      document: opi(gql(updateItemMutation)),
       variables: {
         'input': {
           'id': id,
@@ -581,7 +581,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.mutate(options);
 
-    final Map<String, dynamic> itemJson = result.data!['updateItem']['item'];
+    final Map<String, dynamic> itemJson = result.data!['updateItem'];
     final item = Item.fromJson(itemJson);
 
     return item;
@@ -602,7 +602,7 @@ class StorageRepository {
     }
 
     final options = MutationOptions(
-      document: gql(updatePictureMutation),
+      document: opi(gql(updatePictureMutation)),
       variables: {
         'input': {
           'id': id,
@@ -616,7 +616,7 @@ class StorageRepository {
       },
     );
     final result = await graphqlApiClient.mutate(options);
-    final Map<String, dynamic> json = result.data!['updatePicture']['picture'];
+    final Map<String, dynamic> json = result.data!['updatePicture'];
     final pictureObject = Picture.fromJson(json);
     return pictureObject;
   }
@@ -628,7 +628,7 @@ class StorageRepository {
     String? description,
   }) async {
     final options = MutationOptions(
-      document: gql(updateStorageMutation),
+      document: opi(gql(updateStorageMutation)),
       variables: {
         'input': {
           'id': id,
@@ -640,8 +640,7 @@ class StorageRepository {
     );
     final result = await graphqlApiClient.mutate(options);
 
-    final Map<String, dynamic> storageJson =
-        result.data!['updateStorage']['storage'];
+    final Map<String, dynamic> storageJson = result.data!['updateStorage'];
     final storage = Storage.fromJson(storageJson);
 
     return storage;

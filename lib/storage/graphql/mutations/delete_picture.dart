@@ -1,7 +1,9 @@
 const String deletePictureMutation = r'''
-mutation deletePicture($input: DeletePictureMutationInput!) {
+mutation deletePicture($input: DeletePictureInput!) {
   deletePicture(input: $input) {
-    clientMutationId
+    ... on Picture {
+      id
+    }
   }
 }
 ''';

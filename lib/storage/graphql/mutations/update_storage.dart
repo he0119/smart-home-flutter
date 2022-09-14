@@ -1,7 +1,7 @@
 const String updateStorageMutation = r'''
-mutation updateStorage($input: UpdateStorageMutationInput!) {
+mutation updateStorage($input: UpdateStorageInput!) {
   updateStorage(input: $input) {
-    storage {
+    ... on Storage {
       id
       name
       description

@@ -1,6 +1,6 @@
 const String searchQuery = r'''
 query search($isDeleted: Boolean, $key: String!) {
-  itemName: items(isDeleted: $isDeleted, name_Icontains: $key) {
+  itemName: items(filters: {isDeleted: $isDeleted, name: {contains: $key}}) {
     edges {
       node {
         id
@@ -9,7 +9,9 @@ query search($isDeleted: Boolean, $key: String!) {
       }
     }
   }
-  itemDescription: items(isDeleted: $isDeleted, description_Icontains: $key) {
+  itemDescription: items(
+    filters: {isDeleted: $isDeleted, description: {contains: $key}}
+  ) {
     edges {
       node {
         id
@@ -18,7 +20,7 @@ query search($isDeleted: Boolean, $key: String!) {
       }
     }
   }
-  storageName: storages(name_Icontains: $key) {
+  storageName: storages(filters: {name: {contains: $key}}) {
     edges {
       node {
         id
@@ -27,7 +29,7 @@ query search($isDeleted: Boolean, $key: String!) {
       }
     }
   }
-  storageDescription: storages(description_Icontains: $key) {
+  storageDescription: storages(filters: {description: {contains: $key}}) {
     edges {
       node {
         id

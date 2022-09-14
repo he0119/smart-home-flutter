@@ -1,7 +1,7 @@
 const String updateMiPushMutation = r'''
-mutation updateMiPush($input: UpdateMiPushMutationInput!) {
+mutation updateMiPush($input: UpdateMiPushInput!) {
   updateMiPush(input: $input) {
-    miPush {
+    ... on MiPush {
       regId
       deviceId
       model

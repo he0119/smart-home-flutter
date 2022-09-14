@@ -1,6 +1,10 @@
 const String homepageQuery = r'''
 query homepage($nearExpiredTime: DateTime!, $now: DateTime!) {
-  recentlyCreatedItems: items(isDeleted: false, first:10, orderBy: "-created_at") {
+  recentlyCreatedItems: items(
+    first: 10
+    filters: {isDeleted: false}
+    order: {createdAt: DESC}
+  ) {
     edges {
       node {
         id
@@ -10,7 +14,11 @@ query homepage($nearExpiredTime: DateTime!, $now: DateTime!) {
       }
     }
   }
-  recentlyEditedItems: items(isDeleted: false, first:10, orderBy: "-edited_at") {
+  recentlyEditedItems: items(
+    filters: {isDeleted: false}
+    first: 10
+    order: {editedAt: DESC}
+  ) {
     edges {
       node {
         id
@@ -20,7 +28,11 @@ query homepage($nearExpiredTime: DateTime!, $now: DateTime!) {
       }
     }
   }
-  nearExpiredItems: items(isDeleted: false, first:10, expiredAt_Gt: $now, expiredAt_Lt: $nearExpiredTime, orderBy: "-expired_at") {
+  nearExpiredItems: items(
+    filters: {isDeleted: false, expiredAt: {gt: $now, lt: $nearExpiredTime}}
+    first: 10
+    order: {expiredAt: DESC}
+  ) {
     edges {
       node {
         id
@@ -30,7 +42,11 @@ query homepage($nearExpiredTime: DateTime!, $now: DateTime!) {
       }
     }
   }
-  expiredItems: items(isDeleted: false, first:10, expiredAt_Lt: $now, orderBy: "-expired_at") {
+  expiredItems: items(
+    filters: {isDeleted: false, expiredAt: {lt: $now}}
+    first: 10
+    order: {expiredAt: DESC}
+  ) {
     edges {
       node {
         id

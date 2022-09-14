@@ -1,5 +1,5 @@
 const String topicDetailQuery = r'''
-query topicDetail($topicId: ID!, $orderBy: String!, $after: String) {
+query topicDetail($topicId: GlobalID!, $order: Ordering!, $after: String) {
   topic(id: $topicId) {
     id
     title
@@ -13,7 +13,11 @@ query topicDetail($topicId: ID!, $orderBy: String!, $after: String) {
     createdAt
     editedAt
   }
-  comments(topic: $topicId, level: 0, orderBy: $orderBy, after: $after) {
+  comments(
+    after: $after
+    filters: {topic: {id: $topicId}, level: {exact: 0}}
+    order: {createdAt: $order}
+  ) {
     pageInfo {
       hasNextPage
       endCursor

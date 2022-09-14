@@ -1,6 +1,6 @@
 /// 通过 ID 获取位置详情
 const String storageQuery = r'''
-query storage($id: ID!, $itemCursor: String, $storageCursor: String) {
+query storage($id: GlobalID!, $itemCursor: String, $storageCursor: String) {
   storage(id: $id) {
     id
     name
@@ -42,7 +42,7 @@ query storage($id: ID!, $itemCursor: String, $storageCursor: String) {
         }
       }
     }
-    items(isDeleted: false, after: $itemCursor) {
+    items(filters: {isDeleted: false}, after: $itemCursor) {
       pageInfo {
         hasNextPage
         endCursor

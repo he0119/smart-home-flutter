@@ -120,68 +120,69 @@ class StorageDetailScreen extends StatelessWidget {
           storage: state.storage,
         ),
         const SearchIconButton(),
-        PopupMenuButton<Menu>(
-          onSelected: (value) async {
-            if (value == Menu.edit) {
-              final storageDetailBloc = context.read<StorageDetailBloc>();
+        if (state.storage.id != '')
+          PopupMenuButton<Menu>(
+            onSelected: (value) async {
+              if (value == Menu.edit) {
+                final storageDetailBloc = context.read<StorageDetailBloc>();
 
-              final r = await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => BlocProvider<StorageEditBloc>(
-                    create: (_) => StorageEditBloc(
-                      storageRepository: context.read<StorageRepository>(),
-                    ),
-                    child: StorageEditPage(
-                      isEditing: true,
-                      storage: state.storage,
+                final r = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider<StorageEditBloc>(
+                      create: (_) => StorageEditBloc(
+                        storageRepository: context.read<StorageRepository>(),
+                      ),
+                      child: StorageEditPage(
+                        isEditing: true,
+                        storage: state.storage,
+                      ),
                     ),
                   ),
-                ),
-              );
-              if (r == true) {
-                storageDetailBloc.add(
-                  StorageDetailFetched(id: storageId, cache: false),
+                );
+                if (r == true) {
+                  storageDetailBloc.add(
+                    StorageDetailFetched(id: storageId, cache: false),
+                  );
+                }
+              }
+              if (value == Menu.delete) {
+                await showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text('删除 ${state.storage.name}'),
+                    content: const Text('你确认要删除该位置么？'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('否'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          context.read<StorageEditBloc>().add(
+                                StorageDeleted(storage: state.storage),
+                              );
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('是'),
+                      ),
+                    ],
+                  ),
                 );
               }
-            }
-            if (value == Menu.delete) {
-              await showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: Text('删除 ${state.storage.name}'),
-                  content: const Text('你确认要删除该位置么？'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('否'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        context.read<StorageEditBloc>().add(
-                              StorageDeleted(storage: state.storage),
-                            );
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('是'),
-                    ),
-                  ],
-                ),
-              );
-            }
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: Menu.edit,
-              child: Text('编辑'),
-            ),
-            const PopupMenuItem(
-              value: Menu.delete,
-              child: Text('删除'),
-            ),
-          ],
-        )
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: Menu.edit,
+                child: Text('编辑'),
+              ),
+              const PopupMenuItem(
+                value: Menu.delete,
+                child: Text('删除'),
+              ),
+            ],
+          )
       ],
       bottom: paths.isEmpty
           ? null
