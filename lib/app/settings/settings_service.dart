@@ -179,4 +179,14 @@ class SettingsService {
     final prefs = await _prefs;
     prefs.setBool('commentDescending', descending);
   }
+
+  Future<String?> cookies() async {
+    final prefs = await _prefs;
+    return prefs.getString('cookies');
+  }
+
+  Future<void> updateCookies(String cookies) async {
+    final prefs = await _prefs;
+    prefs.setString('cookies', cookies);
+  }
 }

@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' hide NetworkException, ServerException;
-import 'package:http/http.dart';
+import 'package:http/http.dart' hide Response, Request;
 import 'package:http/io_client.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -18,17 +17,15 @@ import 'package:smarthome/user/model/user.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 class ClientWithCookies extends IOClient {
-  final PersistCookieJar cookieJar;
+  final SettingsController settingsController;
 
-  ClientWithCookies(this.cookieJar) : super();
+  ClientWithCookies(this.settingsController) : super();
 
   @override
   Future<IOStreamedResponse> send(BaseRequest request) async {
-    final cookie = await cookieJar.loadForRequest(request.url);
-    if (cookie.isNotEmpty) {
-      final cookiesString =
-          cookie.map((e) => '${e.name}=${e.value}').join('; ');
-      request.headers['cookie'] = cookiesString;
+    final cookie = settingsController.cookies;
+    if (cookie != null) {
+      request.headers['cookie'] = cookie;
     }
     return super.send(request).then((response) {
       final cookiesString = response.headers['set-cookie'];
@@ -42,7 +39,9 @@ class ClientWithCookies extends IOClient {
           cookies.add(Cookie.fromSetCookieValue(
               cookieStringList[i] + cookieStringList[i + 1]));
         }
-        cookieJar.saveFromResponse(request.url, cookies);
+        final newCookies =
+            cookies.map((e) => '${e.name}=${e.value}').join('; ');
+        settingsController.updateCookies(newCookies);
       }
       return response;
     });
@@ -107,13 +106,64 @@ DocumentNode opi(DocumentNode document) => transform(
       [AddOperationInfoVisitor()],
     );
 
+class SocketCustomLink extends Link {
+  SocketCustomLink(this.url, this.settingsController);
+  final String url;
+  _Connection? _connection;
+  final SettingsController settingsController;
+
+  /// this will be called every time you make a subscription
+  @override
+  Stream<Response> request(Request request, [forward]) async* {
+    /// first get the token by your own way
+    String? cookies = settingsController.cookies;
+
+    /// check is connection is null or the token changed
+    if (_connection == null || _connection!.cookies != cookies) {
+      connectOrReconnect(cookies);
+    }
+    yield* _connection!.client.subscribe(request, true);
+  }
+
+  /// Connects or reconnects to the server with the specified headers.
+  void connectOrReconnect(String? cookies) {
+    _connection?.client.dispose();
+    _connection = _Connection(
+      client: SocketClient(
+        url,
+        config: SocketClientConfig(
+          autoReconnect: true,
+          inactivityTimeout: const Duration(hours: 1),
+          headers: kIsWeb || cookies == null ? null : {'cookie': cookies},
+        ),
+      ),
+      cookies: cookies,
+    );
+  }
+
+  @override
+  Future<void> dispose() async {
+    await _connection?.client.dispose();
+    _connection = null;
+  }
+}
+
+/// this a wrapper for web socket to hold the used token
+class _Connection {
+  SocketClient client;
+  String? cookies;
+  _Connection({
+    required this.client,
+    required this.cookies,
+  });
+}
+
 class GraphQLApiClient {
   static final Logger _log = Logger('GraphQLApiClient');
   static Map<String, String> headers = {};
   static GraphQLClient? _client;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final SettingsController settingsController;
-  final PersistCookieJar cookieJar = PersistCookieJar();
 
   GraphQLApiClient(
     this.settingsController,
@@ -174,7 +224,7 @@ class GraphQLApiClient {
     if (!kIsWeb) {
       link = HttpLink(
         url,
-        httpClient: ClientWithCookies(cookieJar),
+        httpClient: ClientWithCookies(settingsController),
         defaultHeaders: headers,
       );
     } else {
@@ -183,14 +233,8 @@ class GraphQLApiClient {
         defaultHeaders: headers,
       );
     }
-    final websocketLink = WebSocketLink(
-      url.replaceFirst('http', 'ws'),
-      config: SocketClientConfig(
-        autoReconnect: true,
-        headers: headers,
-        inactivityTimeout: const Duration(hours: 1),
-      ),
-    );
+    final websocketLink =
+        SocketCustomLink(url.replaceFirst('http', 'ws'), settingsController);
 
     link = Link.split((request) => request.isSubscription, websocketLink, link);
 
@@ -204,15 +248,6 @@ class GraphQLApiClient {
   /// 加载配置，比如用户代理
   /// 这些需要在最开始就加载，因为后面的操作需要用到
   Future<void> loadSettings() async {
-    if (!kIsWeb) {
-      final cookie = await cookieJar
-          .loadForRequest(Uri.parse(settingsController.apiUrl ?? ''));
-      if (cookie.isNotEmpty) {
-        final cookiesString =
-            cookie.map((e) => '${e.name}=${e.value}').join('; ');
-        headers['cookie'] = cookiesString;
-      }
-    }
     // 用户代理设置为当前手机
     // 暂时只支持 Android
     // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
