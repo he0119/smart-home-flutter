@@ -1,7 +1,7 @@
 const String addPictureMutation = r'''
-mutation addPicture($input: AddPictureMutationInput!) {
+mutation addPicture($input: AddPictureInput!) {
   addPicture(input: $input) {
-    picture {
+    ... on Picture {
       id
       name
       description

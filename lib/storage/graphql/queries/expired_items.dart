@@ -1,6 +1,11 @@
 const String expiredItemsQuery = r'''
 query expiredItems($now: DateTime!, $after: String) {
-  expiredItems: items(isDeleted: false, after: $after, expiredAt_Lt: $now, orderBy: "-expired_at") {
+  expiredItems: items(
+    filters: {isDeleted: false, expiredAt: {lt: $now}}
+    after: $after
+    first: 10
+    order: {expiredAt: DESC}
+  ) {
     pageInfo {
       hasNextPage
       endCursor

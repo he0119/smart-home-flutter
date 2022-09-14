@@ -1,7 +1,7 @@
 const String addDeviceMutation = r'''
-mutation addDevice($input: AddDeviceMutationInput!) {
+mutation addDevice($input: AddDeviceInput!) {
   addDevice(input: $input) {
-    device {
+    ... on Device {
       id
       name
       location

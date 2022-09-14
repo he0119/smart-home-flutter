@@ -1,7 +1,9 @@
 const String restoreItemMutation = r'''
-mutation restoreItem($input: RestoreItemMutationInput!) {
+mutation restoreItem($input: RestoreItemInput!) {
   restoreItem(input: $input) {
-    clientMutationId
+    ... on Item {
+      id
+    }
   }
 }
 ''';

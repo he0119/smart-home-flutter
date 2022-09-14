@@ -1,7 +1,7 @@
 const String closeTopicMutation = r'''
-mutation closeTopic($input: CloseTopicMutationInput!) {
+mutation closeTopic($input: CloseTopicInput!) {
   closeTopic(input: $input) {
-    topic {
+    ... on Topic {
       id
       isOpen
       editedAt

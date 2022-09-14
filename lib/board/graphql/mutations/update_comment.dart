@@ -1,7 +1,7 @@
 const String updateCommentMutation = r'''
-mutation updateComment($input: UpdateCommentMutationInput!) {
+mutation updateComment($input: UpdateCommentInput!) {
   updateComment(input: $input) {
-    comment {
+    ... on Comment {
       id
       body
       editedAt

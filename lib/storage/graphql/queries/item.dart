@@ -1,6 +1,6 @@
 /// 获取物品详情
 const String itemQuery = r'''
-query item($id: ID!) {
+query item($id: GlobalID!) {
   item(id: $id) {
     id
     name
@@ -12,7 +12,7 @@ query item($id: ID!) {
     description
     price
     expiredAt
-    consumables(isDeleted: false) {
+    consumables(filters: {isDeleted: false}) {
       edges {
         node {
           id

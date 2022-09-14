@@ -35,6 +35,7 @@ class SettingsController with ChangeNotifier {
   late String? _miPushRegId;
   late int _refreshInterval;
   late bool _commentDescending;
+  late String? _cookies;
 
   // 判断是否登录
   bool get isLogin => _loginUser != null;
@@ -52,6 +53,7 @@ class SettingsController with ChangeNotifier {
   String? get miPushRegId => _miPushRegId;
   int get refreshInterval => _refreshInterval;
   bool get commentDescending => _commentDescending;
+  String? get cookies => _cookies;
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
@@ -69,6 +71,7 @@ class SettingsController with ChangeNotifier {
     _miPushRegId = await _settingsService.miPushRegId();
     _refreshInterval = await _settingsService.refreshInterval();
     _commentDescending = await _settingsService.commentDescending();
+    _cookies = await _settingsService.cookies();
     // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
@@ -217,5 +220,15 @@ class SettingsController with ChangeNotifier {
     notifyListeners();
 
     await _settingsService.updateCommentDescending(newCommentDescending);
+  }
+
+  Future<void> updateCookies(String newCookies) async {
+    if (newCookies == _cookies) return;
+
+    _cookies = newCookies;
+
+    notifyListeners();
+
+    await _settingsService.updateCookies(newCookies);
   }
 }

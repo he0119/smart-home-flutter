@@ -1,7 +1,7 @@
 const String unpinTopicMutation = r'''
-mutation unpinTopic($input: UnpinTopicMutationInput!) {
+mutation unpinTopic($input: UnpinTopicInput!) {
   unpinTopic(input: $input) {
-    topic {
+    ... on Topic {
       id
       isPin
       editedAt

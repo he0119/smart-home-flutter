@@ -1,6 +1,6 @@
 /// 获取图片信息
 const String pictureQuery = r'''
-query picture($id: ID!) {
+query picture($id: GlobalID!) {
   picture(id: $id) {
     id
     item {
