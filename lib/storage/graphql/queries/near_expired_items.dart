@@ -6,6 +6,10 @@ query nearExpiredItems($nearExpiredTime: DateTime!, $now: DateTime!, $after: Str
     first: 10
     order: {expiredAt: DESC}
   ) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
     edges {
       node {
         id

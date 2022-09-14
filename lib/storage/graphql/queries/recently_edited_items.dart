@@ -5,6 +5,10 @@ query recentlyEditedItems($after: String) {
     after: $after
     order: {editedAt: DESC}
   ) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
     edges {
       node {
         id

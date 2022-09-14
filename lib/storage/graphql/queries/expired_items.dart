@@ -6,6 +6,10 @@ query expiredItems($now: DateTime!, $after: String) {
     first: 10
     order: {expiredAt: DESC}
   ) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
     edges {
       node {
         id

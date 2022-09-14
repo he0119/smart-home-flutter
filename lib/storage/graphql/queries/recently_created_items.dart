@@ -5,6 +5,10 @@ query recentlyCreatedItems($after: String) {
     after: $after
     order: {createdAt: DESC}
   ) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
     edges {
       node {
         id
