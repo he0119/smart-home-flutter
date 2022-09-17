@@ -8,12 +8,10 @@ abstract class DeviceDataEvent extends Equatable {
 }
 
 class DeviceDataStarted extends DeviceDataEvent {
-  final int refreshInterval;
-
-  const DeviceDataStarted(this.refreshInterval);
+  const DeviceDataStarted();
 
   @override
-  String toString() => 'DeviceDataStarted(refreshInterval: $refreshInterval)';
+  String toString() => 'DeviceDataStarted';
 }
 
 class DeviceDataStoped extends DeviceDataEvent {

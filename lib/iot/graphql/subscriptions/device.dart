@@ -1,6 +1,6 @@
 const String deviceSubscription = r'''
-subscription device {
-  device {
+subscription device($id: GlobalID!) {
+  device(id: $id) {
     id
     name
     isOnline
