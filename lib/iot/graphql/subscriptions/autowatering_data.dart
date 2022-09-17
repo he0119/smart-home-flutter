@@ -1,6 +1,6 @@
-const String deviceDataSubscription = r'''
-subscription autowateringData {
-  autowateringData {
+const String autowateringDataSubscription = r'''
+subscription autowateringData($deviceId: GlobalID!) {
+  autowateringData(deviceId: $deviceId) {
     id
     device {
       id

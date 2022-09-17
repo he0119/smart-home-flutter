@@ -306,7 +306,12 @@ class GraphQLApiClient {
   }
 
   Stream<QueryResult> subscribe(SubscriptionOptions options) {
-    return _client!.subscribe(options);
+    return _client!.subscribe(options).map((event) {
+      if (event.hasException) {
+        _handleException(event.exception!);
+      }
+      return event;
+    });
   }
 
   void _handleException(OperationException exception) {

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:smarthome/core/core.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/iot/bloc/blocs.dart';
 import 'package:smarthome/iot/repository/iot_repository.dart';
 import 'package:smarthome/iot/view/settings/settings_page.dart';
@@ -49,8 +49,8 @@ class IotHomeScreen extends StatelessWidget {
               // 因为只有一个设备就先写死
               create: (context) => DeviceDataBloc(
                 iotRepository: RepositoryProvider.of<IotRepository>(context),
-                deviceId: '1',
-              )..add(DeviceDataStarted(settings.refreshInterval)),
+                deviceId: 'RGV2aWNlOjE=',
+              )..add(const DeviceDataStarted()),
             ),
             BlocProvider<DeviceEditBloc>(
               create: (context) => DeviceEditBloc(
@@ -263,10 +263,8 @@ class _IotHomeBody extends StatelessWidget {
         if (state is DeviceDataFailure) {
           return ErrorMessageButton(
             onPressed: () {
-              final refreshInterval =
-                  context.read<SettingsController>().refreshInterval;
               BlocProvider.of<DeviceDataBloc>(context)
-                  .add(DeviceDataStarted(refreshInterval));
+                  .add(const DeviceDataStarted());
             },
             message: state.message,
           );

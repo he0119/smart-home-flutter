@@ -111,9 +111,14 @@ class IotRepository {
     return deviceObject;
   }
 
-  Stream<AutowateringData> deviceDataStream() {
+  Stream<AutowateringData> autowateringDataStream({
+    required String deviceId,
+  }) {
     final options = SubscriptionOptions(
-      document: gql(deviceDataSubscription),
+      document: gql(autowateringDataSubscription),
+      variables: {
+        'deviceId': deviceId,
+      },
     );
     return graphqlApiClient.subscribe(options).map(
       (result) {
@@ -124,9 +129,14 @@ class IotRepository {
     );
   }
 
-  Stream<Device> deviceStream() {
+  Stream<Device> deviceStream({
+    required String id,
+  }) {
     final options = SubscriptionOptions(
       document: gql(deviceSubscription),
+      variables: {
+        'id': id,
+      },
     );
     return graphqlApiClient.subscribe(options).map(
       (result) {

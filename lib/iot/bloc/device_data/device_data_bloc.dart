@@ -33,22 +33,22 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
   FutureOr<void> _onDeviceDataStarted(
       DeviceDataStarted event, Emitter<DeviceDataState> emit) async {
     emit(DeviceDataInProgress());
-    // 进入界面后手动获取一次最新数据
-    try {
-      final data =
-          await iotRepository.autowateringData(deviceId: deviceId, number: 1);
-      if (data.isNotEmpty) {
-        add(DeviceDataupdated(data.first));
-      } else {
-        add(const DeviceDataStoped('无数据'));
-      }
-    } on MyException catch (e) {
-      add(DeviceDataStoped(e.message));
-    }
     await _dataSubscription?.cancel();
-    _dataSubscription = iotRepository.deviceDataStream().listen((x) async {
-      add(DeviceDataupdated(x));
-    });
+    // 订阅数据
+    _dataSubscription =
+        iotRepository.autowateringDataStream(deviceId: deviceId).listen(
+      (x) async {
+        add(DeviceDataupdated(x));
+      },
+    )..onError(
+            (error) {
+              if (error is MyException) {
+                add(DeviceDataStoped(error.message));
+              } else {
+                add(const DeviceDataStoped('未知错误'));
+              }
+            },
+          );
   }
 
   FutureOr<void> _onDeviceDataupdated(
