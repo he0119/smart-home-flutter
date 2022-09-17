@@ -263,7 +263,7 @@ class GraphQLApiClient {
           exception,
           stackTrace: stackTrace,
         );
-        _log.severe('设置 User-Agent 失败 (${exception.toString()})');
+        _log.severe('设置 User-Agent 失败 ($exception)');
       }
     }
   }

@@ -31,29 +31,21 @@ Future<void> bootstrap(AppConfig appConfig) async {
   // 初始化 GraphQL API Client
   final graphQLApiClient = GraphQLApiClient(settingsController);
   await graphQLApiClient.loadSettings();
+  // 配置 BLoC 的日志
+  Bloc.observer = SimpleBlocObserver();
 
-  await runZonedGuarded(
-    () async {
-      await SentryFlutter.init(
-        (options) {
-          options
-            ..dsn = ''
-            ..environment = 'dev'
-            ..release = 'release';
-        },
-      );
-      Bloc.observer = SimpleBlocObserver();
-      runApp(
-        MyApp(
-          settingsController: settingsController,
-          graphQLApiClient: graphQLApiClient,
-        ),
-      );
+  await SentryFlutter.init(
+    (options) {
+      options
+        ..dsn = ''
+        ..environment = 'dev'
+        ..release = 'release';
     },
-    (exception, stackTrace) async {
-      // ignore: avoid_print
-      print('$exception, $stackTrace');
-      await Sentry.captureException(exception, stackTrace: stackTrace);
-    },
+    appRunner: () => runApp(
+      MyApp(
+        settingsController: settingsController,
+        graphQLApiClient: graphQLApiClient,
+      ),
+    ),
   );
 }
