@@ -24,30 +24,25 @@ class ItemDetailPage extends Page {
 
   @override
   Route createRoute(BuildContext context) {
-    return PageRouteBuilder(
+    return MaterialPageRoute(
       settings: this,
-      pageBuilder: (BuildContext context, Animation<double> animation,
-              Animation<double> secondaryAnimation) =>
-          FadeTransition(
-        opacity: animation,
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<ItemDetailBloc>(
-              create: (context) => ItemDetailBloc(
-                storageRepository: context.read<StorageRepository>(),
-              )..add(ItemDetailStarted(
-                  id: itemId,
-                )),
-            ),
-            BlocProvider<ItemEditBloc>(
-              create: (context) => ItemEditBloc(
-                storageRepository: context.read<StorageRepository>(),
-              ),
-            ),
-          ],
-          child: ItemDetailScreen(
-            itemId: itemId,
+      builder: (BuildContext context) => MultiBlocProvider(
+        providers: [
+          BlocProvider<ItemDetailBloc>(
+            create: (context) => ItemDetailBloc(
+              storageRepository: context.read<StorageRepository>(),
+            )..add(ItemDetailStarted(
+                id: itemId,
+              )),
           ),
+          BlocProvider<ItemEditBloc>(
+            create: (context) => ItemEditBloc(
+              storageRepository: context.read<StorageRepository>(),
+            ),
+          ),
+        ],
+        child: ItemDetailScreen(
+          itemId: itemId,
         ),
       ),
     );
