@@ -5,7 +5,7 @@ mutation addTopic($input: AddTopicInput!) {
       id
       title
       description
-      isOpen
+      isClosed
       user {
         username
       }

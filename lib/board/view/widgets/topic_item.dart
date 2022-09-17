@@ -56,8 +56,8 @@ class TopicItem extends StatelessWidget {
     } else {
       // 依据话题添加标志
       var title = topic.title!;
-      if (!topic.isOpen!) title = '🔒$title';
-      if (topic.isPin!) title = '🔝$title';
+      if (topic.isClosed!) title = '🔒$title';
+      if (topic.isPinned!) title = '🔝$title';
       return InkWell(
         onTap: () async {
           MyRouterDelegate.of(context).push(TopicDetailPage(topicId: topic.id));

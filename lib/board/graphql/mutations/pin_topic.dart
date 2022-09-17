@@ -3,7 +3,7 @@ mutation pinTopic($input: PinTopicInput!) {
   pinTopic(input: $input) {
     ... on Topic {
       id
-      isPin
+      isPinned
       editedAt
     }
   }

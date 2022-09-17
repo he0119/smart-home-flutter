@@ -11,8 +11,8 @@ class Topic extends Equatable {
   final String id;
   final String? title;
   final String? description;
-  final bool? isOpen;
-  final bool? isPin;
+  final bool? isClosed;
+  final bool? isPinned;
   final User? user;
   final DateTime? createdAt;
   final DateTime? editedAt;
@@ -22,8 +22,8 @@ class Topic extends Equatable {
     required this.id,
     this.title,
     this.description,
-    this.isOpen,
-    this.isPin,
+    this.isClosed,
+    this.isPinned,
     this.user,
     this.createdAt,
     this.editedAt,
@@ -40,8 +40,8 @@ class Topic extends Equatable {
       id,
       title,
       description,
-      isOpen,
-      isPin,
+      isClosed,
+      isPinned,
       user,
       createdAt,
       editedAt,

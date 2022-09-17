@@ -10,8 +10,8 @@ query topics($after: String) {
         id
         title
         description
-        isOpen
-        isPin
+        isClosed
+        isPinned
         createdAt
         editedAt
         user {

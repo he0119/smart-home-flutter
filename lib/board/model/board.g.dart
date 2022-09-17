@@ -10,8 +10,8 @@ Topic _$TopicFromJson(Map<String, dynamic> json) => Topic(
       id: json['id'] as String,
       title: json['title'] as String?,
       description: json['description'] as String?,
-      isOpen: json['isOpen'] as bool?,
-      isPin: json['isPin'] as bool?,
+      isClosed: json['isClosed'] as bool?,
+      isPinned: json['isPinned'] as bool?,
       user: json['user'] == null
           ? null
           : User.fromJson(json['user'] as Map<String, dynamic>),
@@ -30,8 +30,8 @@ Map<String, dynamic> _$TopicToJson(Topic instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'description': instance.description,
-      'isOpen': instance.isOpen,
-      'isPin': instance.isPin,
+      'isClosed': instance.isClosed,
+      'isPinned': instance.isPinned,
       'user': instance.user,
       'createdAt': instance.createdAt?.toIso8601String(),
       'editedAt': instance.editedAt?.toIso8601String(),

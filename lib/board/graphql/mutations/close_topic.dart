@@ -3,7 +3,7 @@ mutation closeTopic($input: CloseTopicInput!) {
   closeTopic(input: $input) {
     ... on Topic {
       id
-      isOpen
+      isClosed
       editedAt
     }
   }

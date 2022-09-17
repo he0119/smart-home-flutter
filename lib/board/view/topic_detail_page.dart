@@ -168,34 +168,38 @@ class _DetailScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                floatingActionButton: FloatingActionButton(
-                  tooltip: '添加评论',
-                  child: const Icon(Icons.add_comment),
-                  onPressed: () async {
-                    final topicDetailBloc = context.read<TopicDetailBloc>();
+                floatingActionButton: state.topic.isClosed!
+                    ? null
+                    : FloatingActionButton(
+                        tooltip: '添加评论',
+                        child: const Icon(Icons.add_comment),
+                        onPressed: () async {
+                          final topicDetailBloc =
+                              context.read<TopicDetailBloc>();
 
-                    final r = await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider(
-                          create: (context) => CommentEditBloc(
-                              boardRepository: context.read<BoardRepository>()),
-                          child: CommentEditPage(
-                            isEditing: false,
-                            topic: state.topic,
-                          ),
-                        ),
+                          final r = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (context) => CommentEditBloc(
+                                    boardRepository:
+                                        context.read<BoardRepository>()),
+                                child: CommentEditPage(
+                                  isEditing: false,
+                                  topic: state.topic,
+                                ),
+                              ),
+                            ),
+                          );
+                          if (r == true) {
+                            topicDetailBloc.add(
+                              TopicDetailFetched(
+                                descending: descending,
+                                cache: false,
+                              ),
+                            );
+                          }
+                        },
                       ),
-                    );
-                    if (r == true) {
-                      topicDetailBloc.add(
-                        TopicDetailFetched(
-                          descending: descending,
-                          cache: false,
-                        ),
-                      );
-                    }
-                  },
-                ),
               ),
             ),
           );
@@ -375,32 +379,32 @@ class _DetailScreen extends StatelessWidget {
             }
           },
           itemBuilder: (context) => [
-            if (!state.topic.isPin!)
+            if (!state.topic.isPinned!)
               const PopupMenuItem(
                 value: TopicDetailMenu.pin,
                 child: Text('置顶'),
               ),
-            if (state.topic.isPin!)
+            if (state.topic.isPinned!)
               const PopupMenuItem(
                 value: TopicDetailMenu.unpin,
                 child: Text('取消置顶'),
               ),
-            if (state.topic.isOpen!)
+            if (!state.topic.isClosed!)
               const PopupMenuItem(
                 value: TopicDetailMenu.close,
                 child: Text('关闭'),
               ),
-            if (!state.topic.isOpen!)
+            if (state.topic.isClosed!)
               const PopupMenuItem(
                 value: TopicDetailMenu.reopen,
                 child: Text('开启'),
               ),
-            if (loginUser == state.topic.user)
+            if (!state.topic.isClosed! && loginUser == state.topic.user)
               const PopupMenuItem(
                 value: TopicDetailMenu.edit,
                 child: Text('编辑'),
               ),
-            if (loginUser == state.topic.user)
+            if (!state.topic.isClosed! && loginUser == state.topic.user)
               const PopupMenuItem(
                 value: TopicDetailMenu.delete,
                 child: Text('删除'),

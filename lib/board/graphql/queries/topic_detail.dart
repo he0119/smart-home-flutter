@@ -4,8 +4,8 @@ query topicDetail($topicId: GlobalID!, $order: Ordering!, $after: String) {
     id
     title
     description
-    isOpen
-    isPin
+    isClosed
+    isPinned
     user {
       username
       avatarUrl
