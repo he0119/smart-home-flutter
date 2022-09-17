@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Added
+
+- 设置导航栏透明
+
 ### Changed
 
 - 升级至 Flutter 3.3
