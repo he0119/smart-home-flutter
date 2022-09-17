@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 - 升级至 Flutter 3.3
 - 使用 AAR 格式的小米推送SDK
 - 使用 NavigationBar，并支持动态颜色
+- 位置物品话题详情页面的切换使用默认动画
 
 ## [0.8.5] - 2022-01-02
 
