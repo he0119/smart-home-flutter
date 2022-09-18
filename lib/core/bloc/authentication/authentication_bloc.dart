@@ -45,8 +45,7 @@ class AuthenticationBloc
       AuthenticationLogin event, Emitter<AuthenticationState> emit) async {
     emit(AuthenticationInProgress());
     try {
-      final user =
-          await graphqlApiClient.authenticate(event.username, event.password);
+      final user = await graphqlApiClient.login(event.username, event.password);
       if (user != null) {
         await settingsController.updateLoginUser(user);
         emit(AuthenticationSuccess(user));

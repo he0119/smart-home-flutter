@@ -177,7 +177,7 @@ class GraphQLApiClient {
   }
 
   /// 登录
-  Future<User?> authenticate(String username, String password) async {
+  Future<User?> login(String username, String password) async {
     final loginOptions = MutationOptions(
       document: gql(loginMutation),
       variables: {
@@ -188,16 +188,16 @@ class GraphQLApiClient {
       },
     );
     final results = await _client!.mutate(loginOptions);
-    if (results.hasException) {
-      if (results.exception!.linkException != null) {
-        throw const NetworkException('网络异常，请稍后再试');
-      }
-      return null;
-    } else {
+
+    if (!results.hasException) {
       final data = results.data!['login'];
       if (data['__typename'] == 'User') {
         final user = User.fromJson(data);
         return user;
+      }
+    } else {
+      if (results.exception!.linkException != null) {
+        throw const NetworkException('网络异常，请稍后再试');
       }
     }
     return null;
@@ -276,8 +276,7 @@ class GraphQLApiClient {
     }
     // 一些简化的操作
     // 暂时先这样吧，如果 Mutation 出错的话，会返回 OperationInfo
-    if (options.document.definitions.first.runtimeType.toString() ==
-        'OperationDefinitionNode') {
+    if (options.document.definitions.first is OperationDefinitionNode) {
       final nodeName =
           (options.document.definitions.first as OperationDefinitionNode)
               .name!
