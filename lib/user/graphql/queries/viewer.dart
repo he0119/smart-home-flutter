@@ -1,4 +1,4 @@
-const String viewer = r'''
+const String viewerQuery = r'''
 query viewer {
   viewer {
     username

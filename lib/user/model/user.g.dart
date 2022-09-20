@@ -6,6 +6,22 @@ part of user;
 // JsonSerializableGenerator
 // **************************************************************************
 
+Session _$SessionFromJson(Map<String, dynamic> json) => Session(
+      id: json['id'] as String,
+      ip: json['ip'] as String,
+      isCurrent: json['isCurrent'] as bool,
+      isValid: json['isValid'] as bool,
+      lastActivity: DateTime.parse(json['lastActivity'] as String),
+    );
+
+Map<String, dynamic> _$SessionToJson(Session instance) => <String, dynamic>{
+      'id': instance.id,
+      'ip': instance.ip,
+      'isCurrent': instance.isCurrent,
+      'isValid': instance.isValid,
+      'lastActivity': instance.lastActivity.toIso8601String(),
+    };
+
 User _$UserFromJson(Map<String, dynamic> json) => User(
       username: json['username'] as String,
       email: json['email'] as String?,
