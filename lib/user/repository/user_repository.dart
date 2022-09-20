@@ -25,12 +25,12 @@ class UserRepository {
       fetchPolicy: FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
-    final List<dynamic> sessionsJson = results.data!['viewer']['sessions'];
+    final List<dynamic> sessionsJson = results.data!['viewer']['session'];
     final sessions = sessionsJson.map((e) => Session.fromJson(e)).toList();
     return sessions;
   }
 
-  Future<void> deleteSession({String? id}) async {
+  Future<void> deleteSession(String id) async {
     final options = MutationOptions(
       document: opi(gql(deleteSessionMutation)),
       variables: {

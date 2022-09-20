@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/blog/blog.dart';
@@ -11,8 +12,11 @@ import 'package:smarthome/core/view/settings/admin_url_page.dart';
 import 'package:smarthome/core/view/settings/api_url_page.dart';
 import 'package:smarthome/core/view/settings/default_page.dart';
 import 'package:smarthome/core/view/settings/mipush_settings_tile.dart';
+import 'package:smarthome/core/view/settings/session_page.dart';
 import 'package:smarthome/core/view/settings/theme_mode.dart';
 import 'package:smarthome/iot/iot.dart';
+import 'package:smarthome/user/bloc/bloc/session_bloc.dart';
+import 'package:smarthome/user/repository/user_repository.dart';
 import 'package:smarthome/utils/theme_mode_extension.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
@@ -84,6 +88,21 @@ class SettingsScreen extends StatelessWidget {
                   },
                 ),
                 if (!kIsWeb && Platform.isAndroid) const MiPushSettingsTile(),
+                SettingsTile(
+                  title: '登陆设备管理',
+                  onPressed: (context) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider(
+                          create: (context) =>
+                              SessionBloc(context.read<UserRepository>())
+                                ..add(SessionFetched()),
+                          child: const SessionPage(),
+                        ),
+                      ),
+                    );
+                  },
+                )
               ],
             ),
             SettingsSection(
