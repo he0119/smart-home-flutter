@@ -107,7 +107,7 @@ class _IotHomeBody extends StatelessWidget {
                       deviceId: device.id,
                       key: 'valve1',
                       value: value.toString(),
-                      valueType: 'bool',
+                      valueType: 'BOOLEAN',
                     ));
                     showInfoSnackBar(value ? '正在开启...' : '正在关闭...');
                   },
@@ -120,7 +120,7 @@ class _IotHomeBody extends StatelessWidget {
                       deviceId: device.id,
                       key: 'valve2',
                       value: value.toString(),
-                      valueType: 'bool',
+                      valueType: 'BOOLEAN',
                     ));
                     showInfoSnackBar(value ? '正在开启...' : '正在关闭...');
                   },
@@ -133,7 +133,7 @@ class _IotHomeBody extends StatelessWidget {
                       deviceId: device.id,
                       key: 'valve3',
                       value: value.toString(),
-                      valueType: 'bool',
+                      valueType: 'BOOLEAN',
                     ));
                     showInfoSnackBar(value ? '正在开启...' : '正在关闭...');
                   },
@@ -146,7 +146,7 @@ class _IotHomeBody extends StatelessWidget {
                       deviceId: device.id,
                       key: 'pump',
                       value: value.toString(),
-                      valueType: 'bool',
+                      valueType: 'BOOLEAN',
                     ));
                     showInfoSnackBar(value ? '正在开启...' : '正在关闭...');
                   },
@@ -165,7 +165,7 @@ class _IotHomeBody extends StatelessWidget {
                               deviceId: device.id,
                               key: 'valve1_delay',
                               value: value,
-                              valueType: 'int',
+                              valueType: 'INTEGER',
                             ),
                           );
                           showInfoSnackBar('正在设置...');
@@ -191,7 +191,7 @@ class _IotHomeBody extends StatelessWidget {
                               deviceId: device.id,
                               key: 'valve2_delay',
                               value: value,
-                              valueType: 'int',
+                              valueType: 'INTEGER',
                             ),
                           );
                           showInfoSnackBar('正在设置...');
@@ -217,7 +217,7 @@ class _IotHomeBody extends StatelessWidget {
                               deviceId: device.id,
                               key: 'valve3_delay',
                               value: value,
-                              valueType: 'int',
+                              valueType: 'INTEGER',
                             ),
                           );
                           showInfoSnackBar('正在设置...');
@@ -243,7 +243,7 @@ class _IotHomeBody extends StatelessWidget {
                               deviceId: device.id,
                               key: 'pump_delay',
                               value: value,
-                              valueType: 'int',
+                              valueType: 'INTEGER',
                             ),
                           );
                           showInfoSnackBar('正在设置...');
