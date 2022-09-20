@@ -12,6 +12,7 @@ class Session extends Equatable {
   final bool isCurrent;
   final bool isValid;
   final DateTime lastActivity;
+  final String userAgent;
 
   const Session({
     required this.id,
@@ -19,6 +20,7 @@ class Session extends Equatable {
     required this.isCurrent,
     required this.isValid,
     required this.lastActivity,
+    required this.userAgent,
   });
 
   factory Session.fromJson(Map<String, dynamic> json) =>

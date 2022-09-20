@@ -26,6 +26,24 @@ class SessionPage extends StatelessWidget {
                   title:
                       Text(session.ip + (session.isCurrent ? ' (当前设备)' : '')),
                   subtitle: Text('最近活跃：${session.lastActivity.toLocalStr()}'),
+                  onTap: () => {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(session.ip),
+                          content: Text(
+                              '最近活跃：${session.lastActivity.toLocalStr()}\n用户代理：${session.userAgent}'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('确认'),
+                            ),
+                          ],
+                        );
+                      },
+                    )
+                  },
                   trailing: session.isCurrent
                       ? null
                       : IconButton(

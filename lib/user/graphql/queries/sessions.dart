@@ -7,6 +7,7 @@ query session {
       isCurrent
       isValid
       lastActivity
+      userAgent
     }
   }
 }

@@ -12,6 +12,7 @@ Session _$SessionFromJson(Map<String, dynamic> json) => Session(
       isCurrent: json['isCurrent'] as bool,
       isValid: json['isValid'] as bool,
       lastActivity: DateTime.parse(json['lastActivity'] as String),
+      userAgent: json['userAgent'] as String,
     );
 
 Map<String, dynamic> _$SessionToJson(Session instance) => <String, dynamic>{
@@ -20,6 +21,7 @@ Map<String, dynamic> _$SessionToJson(Session instance) => <String, dynamic>{
       'isCurrent': instance.isCurrent,
       'isValid': instance.isValid,
       'lastActivity': instance.lastActivity.toIso8601String(),
+      'userAgent': instance.userAgent,
     };
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
