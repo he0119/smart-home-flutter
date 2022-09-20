@@ -248,23 +248,31 @@ class GraphQLApiClient {
   /// 加载配置，比如用户代理
   /// 这些需要在最开始就加载，因为后面的操作需要用到
   Future<void> loadSettings() async {
-    // 用户代理设置为当前手机
-    // 暂时只支持 Android
-    // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
-    if (!kIsWeb && Platform.isAndroid) {
-      try {
-        final deviceInfo = DeviceInfoPlugin();
+    if (kIsWeb) return;
+
+    try {
+      final deviceInfo = DeviceInfoPlugin();
+      final packageInfo = await PackageInfo.fromPlatform();
+      // 用户代理设置为当前手机
+      // 支持 Android 和 Windows
+      // SmartHome/0.6.1 (Linux; Android 10; Mi-4c Build/QQ3A.200805.001)
+      if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
-        final packageInfo = await PackageInfo.fromPlatform();
         headers['User-Agent'] =
             'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
-      } catch (exception, stackTrace) {
-        await Sentry.captureException(
-          exception,
-          stackTrace: stackTrace,
-        );
-        _log.severe('设置 User-Agent 失败 ($exception)');
       }
+      // SmartHome/0.6.1 (Windows NT) ComputerName
+      else if (Platform.isWindows) {
+        final windowsInfo = await deviceInfo.windowsInfo;
+        headers['User-Agent'] =
+            'SmartHome/${packageInfo.version} (Windows NT) ${windowsInfo.computerName}';
+      }
+    } catch (exception, stackTrace) {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
+      _log.severe('设置 User-Agent 失败 ($exception)');
     }
   }
 

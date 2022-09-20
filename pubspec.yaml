@@ -28,7 +28,7 @@ dependencies:
   http: ^0.13.0
   bloc: ^8.0.2
   equatable: ^2.0.3
-  json_annotation: ^4.3.0
+  json_annotation: ^4.6.0
   enum_to_string: ^2.0.0
   version: ^3.0.2
   tuple: ^2.0.0
