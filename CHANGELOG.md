@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 ### Added
 
 - 设置导航栏透明
+- 支持管理用户会话
 
 ### Changed
 
