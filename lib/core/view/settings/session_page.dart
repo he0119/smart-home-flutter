@@ -33,7 +33,7 @@ class SessionPage extends StatelessWidget {
                           onPressed: () async {
                             await showDialog(
                               context: context,
-                              builder: (context) => AlertDialog(
+                              builder: (_) => AlertDialog(
                                 title: const Text('确定要删除吗？'),
                                 actions: [
                                   TextButton(
