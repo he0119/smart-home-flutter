@@ -18,8 +18,8 @@ Future<void> main() async {
   final appConfig = AppConfig(
     appName: '智慧家庭 DEV',
     flavorName: 'dev',
-    defaultApiUrl: 'https://test.hehome.xyz/graphql/',
-    defaultAdminUrl: 'https://test.hehome.xyz/admin/',
+    defaultApiUrl: 'https://smart.hemengyang.tk:2053/graphql/',
+    defaultAdminUrl: 'https://smart.hemengyang.tk:2053/admin/',
   );
   bootstrap(appConfig);
 }
