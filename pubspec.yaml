@@ -45,7 +45,7 @@ dependencies:
   device_info_plus: ^4.0.1
   android_id: ^0.0.7
   package_info_plus: ^1.0.0
-  url_launcher: ^6.0.2
+  url_launcher: ^6.1.6
   flutter_keyboard_visibility: ^5.0.0
   photo_view: ^0.14.0
   image_picker: ^0.8.4
