@@ -31,7 +31,7 @@ dependencies:
   json_annotation: ^4.6.0
   enum_to_string: ^2.0.0
   version: ^3.0.2
-  tuple: ^2.0.0
+  tuple: ^2.0.1
   provider: ^6.0.1
   mime: ^1.0.1
   gql:
