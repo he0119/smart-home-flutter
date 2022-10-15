@@ -261,11 +261,11 @@ class GraphQLApiClient {
         headers['User-Agent'] =
             'SmartHome/${packageInfo.version} (Linux; Android ${androidInfo.version.release}; ${androidInfo.model} Build/${androidInfo.id})';
       }
-      // SmartHome/0.6.1 (Windows NT) ComputerName
+      // SmartHome/0.9.0 (Windows NT; Build/22621.ni_release.220506-1250) HMY-SPIN5
       else if (Platform.isWindows) {
         final windowsInfo = await deviceInfo.windowsInfo;
         headers['User-Agent'] =
-            'SmartHome/${packageInfo.version} (Windows NT) ${windowsInfo.computerName}';
+            'SmartHome/${packageInfo.version} (Windows NT; Build/${windowsInfo.buildLab}) ${windowsInfo.computerName}';
       }
     } catch (exception, stackTrace) {
       await Sentry.captureException(
