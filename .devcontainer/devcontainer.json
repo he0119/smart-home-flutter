@@ -1,0 +1,36 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.224.2/containers/python-3-postgres
+// Update the VARIANT arg in docker-compose.yml to pick a Python version
+{
+    "name": "Smart Home Flutter",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    // Set *default* container specific settings.json values on container create.
+    // "settings": {
+    //   "python.defaultInterpreterPath": "/usr/local/bin/python",
+    //   "python.formatting.blackPath": "/usr/local/py-utils/bin/black",
+    //   "python.testing.pytestPath": "/usr/local/py-utils/bin/pytest"
+    // },
+    // Add the IDs of extensions you want installed when the container is created.
+    "extensions": [
+        "mhutchie.git-graph",
+        "GitHub.copilot",
+        "GitHub.vscode-pull-request-github",
+        "eamodio.gitlens",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "EditorConfig.EditorConfig",
+        "usernamehw.errorlens",
+        "DavidAnson.vscode-markdownlint",
+        "ms-ossdata.vscode-postgresql",
+        "Dart-Code.dart-code",
+		"Dart-Code.flutter"
+    ]
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // This can be used to network with other containers or the host.
+    // "forwardPorts": [5000, 5432],
+    // Use 'postCreateCommand' to run commands after the container is created.
+    // "postCreateCommand": "",
+    // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+    // "remoteUser": "vscode"
+}
