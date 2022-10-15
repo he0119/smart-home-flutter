@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Changed
+
+- 用户代理现在会包含 Windows 的系统版本号
+
 ## [0.9.0] - 2022-10-02
 
 ### Added

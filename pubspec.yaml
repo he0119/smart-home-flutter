@@ -24,7 +24,7 @@ dependencies:
 
   # Dart
   logging: ^1.0.0
-  graphql: ^5.0.0
+  graphql: ^5.1.2-beta.5
   http: ^0.13.0
   bloc: ^8.0.2
   equatable: ^2.0.3
@@ -42,9 +42,9 @@ dependencies:
   flutter_bloc: ^8.0.1
   shared_preferences: ^2.0.5
   quick_actions: ^1.0.0
-  device_info_plus: ^4.0.1
+  device_info_plus: ^6.0.0
   android_id: ^0.0.7
-  package_info_plus: ^1.0.0
+  package_info_plus: ^2.0.0
   url_launcher: ^6.0.2
   flutter_keyboard_visibility: ^5.0.0
   photo_view: ^0.14.0
