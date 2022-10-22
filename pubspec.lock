@@ -21,14 +21,14 @@ packages:
       name: android_id
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.7"
+    version: "0.0.8"
   archive:
     dependency: transitive
     description:
       name: archive
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.3.1"
+    version: "3.3.2"
   args:
     dependency: transitive
     description:
@@ -77,7 +77,7 @@ packages:
       name: build_config
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   build_daemon:
     dependency: transitive
     description:
@@ -105,7 +105,7 @@ packages:
       name: build_runner_core
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "7.2.4"
+    version: "7.2.6"
   built_collection:
     dependency: transitive
     description:
@@ -238,42 +238,14 @@ packages:
       name: device_info_plus
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.0"
-  device_info_plus_linux:
-    dependency: transitive
-    description:
-      name: device_info_plus_linux
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "5.0.0"
-  device_info_plus_macos:
-    dependency: transitive
-    description:
-      name: device_info_plus_macos
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "5.0.0"
+    version: "7.0.1"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
       name: device_info_plus_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.0.0"
-  device_info_plus_web:
-    dependency: transitive
-    description:
-      name: device_info_plus_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "5.0.0"
-  device_info_plus_windows:
-    dependency: transitive
-    description:
-      name: device_info_plus_windows
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "6.0.0"
+    version: "6.0.1"
   diff_match_patch:
     dependency: transitive
     description:
@@ -538,7 +510,7 @@ packages:
       name: graphs
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.0"
   hive:
     dependency: transitive
     description:
@@ -573,7 +545,7 @@ packages:
       name: image
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.2.0"
+    version: "3.2.2"
   image_picker:
     dependency: "direct main"
     description:
@@ -643,14 +615,14 @@ packages:
       name: json_serializable
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.5.1"
+    version: "6.5.3"
   lints:
     dependency: transitive
     description:
       name: lints
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   logging:
     dependency: "direct main"
     description:
@@ -741,42 +713,14 @@ packages:
       name: package_info_plus
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
-  package_info_plus_linux:
-    dependency: transitive
-    description:
-      name: package_info_plus_linux
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0"
-  package_info_plus_macos:
-    dependency: transitive
-    description:
-      name: package_info_plus_macos
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0"
+    version: "3.0.1"
   package_info_plus_platform_interface:
     dependency: transitive
     description:
       name: package_info_plus_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
-  package_info_plus_web:
-    dependency: transitive
-    description:
-      name: package_info_plus_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0"
-  package_info_plus_windows:
-    dependency: transitive
-    description:
-      name: package_info_plus_windows
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.0"
+    version: "2.0.1"
   path:
     dependency: transitive
     description:
@@ -944,14 +888,14 @@ packages:
       name: sentry
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.12.2"
+    version: "6.13.1"
   sentry_flutter:
     dependency: "direct main"
     description:
       name: sentry_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.12.2"
+    version: "6.13.1"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -1061,14 +1005,14 @@ packages:
       name: source_map_stack_trace
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   source_maps:
     dependency: transitive
     description:
       name: source_maps
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.10.10"
+    version: "0.10.11"
   source_span:
     dependency: transitive
     description:
