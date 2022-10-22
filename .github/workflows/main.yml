@@ -176,7 +176,7 @@ jobs:
         with:
           switches: -vzr --delete --exclude ".well-known"
           path: "."
-          remote_path: "websites/smart-home/web"
+          remote_path: ${{ secrets.WEBSITES_ROOT }}/smart-home/web
           remote_host: ${{ secrets.SSH_HOST }}
           remote_user: ${{ secrets.SSH_USERNAME }}
           remote_key: ${{ secrets.SSH_KEY }}
@@ -199,7 +199,7 @@ jobs:
         with:
           switches: -vzr --delete --exclude ".well-known"
           path: "."
-          remote_path: "websites/smart-home/web"
+          remote_path: ${{ secrets.WEBSITES_ROOT }}/smart-home/web
           remote_host: ${{ secrets.SSH_HOST }}
           remote_user: ${{ secrets.SSH_USERNAME }}
           remote_key: ${{ secrets.SSH_KEY }}
