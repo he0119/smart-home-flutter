@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_treeview/flutter_treeview.dart';
 import 'package:smarthome/storage/storage.dart';
+import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/widgets/substring_highlight.dart';
 
 List<Node> childrenNode(String? key, List<Storage> storages) {
-  final children = storages.where((storage) => storage.parent?.id == key);
+  final children =
+      storages.where((storage) => (storage.parent?.id ?? '') == key);
   if (children.isNotEmpty) {
     final childNodes = children
         .map(
@@ -23,24 +25,15 @@ List<Node> childrenNode(String? key, List<Storage> storages) {
 }
 
 List<Node> generateNodes(List<Storage> storages) {
-  List<Node> nodes = [];
-  for (final storage in storages) {
-    // 排除父节点在列表中的位置
-    // 因为从父节点找下来的时候自然会找到这个位置
-    final storageIndex =
-        storages.indexWhere((element) => element.id == storage.parent?.id);
-    if (storageIndex == -1) {
-      nodes.add(
-        Node(
-          key: storage.id,
-          label: storage.name,
-          expanded: true,
-          children: childrenNode(storage.id, storages),
-        ),
-      );
-    }
-  }
-  return nodes;
+  // 家应该最为根节点，这样才能选中
+  return [
+    Node(
+      key: '',
+      label: '家',
+      expanded: true,
+      children: childrenNode('', storages),
+    )
+  ];
 }
 
 class StorageDialog extends StatefulWidget {
@@ -111,8 +104,14 @@ class _StorageDialogState extends State<StorageDialog> {
               ),
               allowParentSelect: true,
               onNodeTap: (node) {
-                final storage =
-                    widget.storages.firstWhere((storage) => storage.id == node);
+                // 针对家做特殊处理，家应该为一个 id 为 '' 的 storage
+                Storage storage;
+                if (node == '') {
+                  storage = homeStorage;
+                } else {
+                  storage = widget.storages
+                      .firstWhere((storage) => storage.id == node);
+                }
                 Navigator.of(context).pop(storage);
               },
             ),
