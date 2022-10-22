@@ -209,93 +209,99 @@ class _ItemDetailList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        ListTile(
-          title: const Text('数量'),
-          subtitle: SelectableText(item.number.toString()),
-        ),
-        if (item.description != null && item.description!.isNotEmpty)
+    return SelectionArea(
+      child: ListView(
+        children: <Widget>[
           ListTile(
-            title: const Text('备注'),
-            subtitle: SelectableText(item.description!),
+            title: const Text('数量'),
+            subtitle: Text(item.number.toString()),
           ),
-        if (item.storage != null)
-          ListTile(
-            title: const Text('属于'),
-            subtitle: SelectableText(
-              item.storage!.name,
-              onTap: () {
-                MyRouterDelegate.of(context)
-                    .push(StorageDetailPage(storageId: item.storage!.id));
-              },
-              style: const TextStyle(
-                decoration: TextDecoration.underline,
+          if (item.description != null && item.description!.isNotEmpty)
+            ListTile(
+              title: const Text('备注'),
+              subtitle: Text(item.description!),
+            ),
+          if (item.storage != null)
+            ListTile(
+              title: const Text('属于'),
+              subtitle: InkWell(
+                child: Text(
+                  item.storage!.name,
+                  style: const TextStyle(
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                onTap: () {
+                  MyRouterDelegate.of(context)
+                      .push(StorageDetailPage(storageId: item.storage!.id));
+                },
               ),
             ),
-          ),
-        if (item.price != null)
-          ListTile(
-            title: const Text('价格'),
-            subtitle: SelectableText(item.price.toString()),
-          ),
-        if (item.expiredAt != null)
-          ListTile(
-            title: const Text('有效期至'),
-            subtitle: SelectableText(item.expiredAt?.toLocalStr() ?? ''),
-          ),
-        if (item.consumables!.isNotEmpty)
-          ListTile(
-            title: const Text('耗材'),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: item.consumables!
-                  .map(
-                    (item) => SelectableText(
-                      item.name,
-                      onTap: () {
-                        MyRouterDelegate.of(context)
-                            .push(ItemDetailPage(itemId: item.id));
-                      },
-                      style: const TextStyle(
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        if (item.editedBy != null)
-          ListTile(
-            title: const Text('修改人'),
-            subtitle: SelectableText(item.editedBy!.username),
-          ),
-        ListTile(
-          title: const Text('修改时间'),
-          subtitle: SelectableText(item.editedAt?.toLocalStr() ?? ''),
-        ),
-        if (item.createdBy != null)
-          ListTile(
-            title: const Text('录入人'),
-            subtitle: SelectableText(item.createdBy!.username),
-          ),
-        ListTile(
-          title: const Text('录入时间'),
-          subtitle: SelectableText(item.createdAt?.toLocalStr() ?? ''),
-        ),
-        if (item.pictures!.isNotEmpty)
-          for (Picture picture in item.pictures!)
+          if (item.price != null)
             ListTile(
-              title: picture.description.isNotEmpty
-                  ? Text('图片（${picture.description}）')
-                  : const Text('图片（未命名）'),
-              subtitle: const Text('单击查看'),
-              onTap: () {
-                MyRouterDelegate.of(context)
-                    .push(PicturePage(pictureId: picture.id));
-              },
-            )
-      ],
+              title: const Text('价格'),
+              subtitle: Text(item.price.toString()),
+            ),
+          if (item.expiredAt != null)
+            ListTile(
+              title: const Text('有效期至'),
+              subtitle: Text(item.expiredAt?.toLocalStr() ?? ''),
+            ),
+          if (item.consumables!.isNotEmpty)
+            ListTile(
+              title: const Text('耗材'),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: item.consumables!
+                    .map(
+                      (item) => InkWell(
+                        child: Text(
+                          item.name,
+                          style: const TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                        onTap: () {
+                          MyRouterDelegate.of(context)
+                              .push(ItemDetailPage(itemId: item.id));
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          if (item.editedBy != null)
+            ListTile(
+              title: const Text('修改人'),
+              subtitle: Text(item.editedBy!.username),
+            ),
+          ListTile(
+            title: const Text('修改时间'),
+            subtitle: Text(item.editedAt?.toLocalStr() ?? ''),
+          ),
+          if (item.createdBy != null)
+            ListTile(
+              title: const Text('录入人'),
+              subtitle: Text(item.createdBy!.username),
+            ),
+          ListTile(
+            title: const Text('录入时间'),
+            subtitle: Text(item.createdAt?.toLocalStr() ?? ''),
+          ),
+          if (item.pictures!.isNotEmpty)
+            for (Picture picture in item.pictures!)
+              ListTile(
+                title: picture.description.isNotEmpty
+                    ? Text('图片（${picture.description}）')
+                    : const Text('图片（未命名）'),
+                subtitle: const Text('单击查看'),
+                onTap: () {
+                  MyRouterDelegate.of(context)
+                      .push(PicturePage(pictureId: picture.id));
+                },
+              )
+        ],
+      ),
     );
   }
 }
