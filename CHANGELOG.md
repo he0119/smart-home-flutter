@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.9.1] - 2022-10-22
+
 ### Changed
 
 - 用户代理现在会包含 Windows 的系统版本号
@@ -428,7 +430,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/he0119/smart-home-flutter/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/he0119/smart-home-flutter/compare/v0.8.5...v0.9.0
 [0.8.5]: https://github.com/he0119/smart-home-flutter/compare/v0.8.4...v0.8.5
 [0.8.4]: https://github.com/he0119/smart-home-flutter/compare/v0.8.3...v0.8.4
