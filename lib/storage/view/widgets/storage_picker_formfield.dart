@@ -6,8 +6,8 @@ import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/widgets/substring_highlight.dart';
 
 List<Node> childrenNode(String? key, List<Storage> storages) {
-  final children =
-      storages.where((storage) => (storage.parent?.id ?? '') == key);
+  final children = storages
+      .where((storage) => (storage.parent?.id ?? homeStorage.id) == key);
   if (children.isNotEmpty) {
     final childNodes = children
         .map(
@@ -28,8 +28,8 @@ List<Node> generateNodes(List<Storage> storages) {
   // 家应该最为根节点，这样才能选中
   return [
     Node(
-      key: '',
-      label: '家',
+      key: homeStorage.id,
+      label: homeStorage.name,
       expanded: true,
       children: childrenNode('', storages),
     )
@@ -106,7 +106,7 @@ class _StorageDialogState extends State<StorageDialog> {
               onNodeTap: (node) {
                 // 针对家做特殊处理，家应该为一个 id 为 '' 的 storage
                 Storage storage;
-                if (node == '') {
+                if (node == homeStorage.id) {
                   storage = homeStorage;
                 } else {
                   storage = widget.storages

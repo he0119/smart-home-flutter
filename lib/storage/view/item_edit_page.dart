@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/view/widgets/storage_picker_formfield.dart';
+import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
@@ -139,7 +140,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       validator: (value) {
                         if (value == null) {
                           return '请选择一个存放位置';
-                        } else if (value.id == '') {
+                        } else if (value.id == homeStorage.id) {
                           return '家不能作为存放位置';
                         }
                         return null;

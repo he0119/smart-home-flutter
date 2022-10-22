@@ -43,7 +43,8 @@ class _StorageEditPageState extends State<StorageEditPage> {
       _descriptionController = TextEditingController();
       // 如果是家的话，需要特殊处理，因为家的 id 是空字符串
       // 服务器只能接受 null
-      parentId = widget.storage?.id != '' ? widget.storage?.id : null;
+      parentId =
+          widget.storage?.id != homeStorage.id ? widget.storage?.id : null;
     }
 
     _nameFocusNode = FocusNode();
@@ -154,7 +155,7 @@ class _StorageEditPageState extends State<StorageEditPage> {
                     onChanged: (Storage? value) {
                       // 家的 id 是空字符串，服务器只能接受 null
                       if (value != null) {
-                        parentId = value.id == '' ? null : value.id;
+                        parentId = value.id == homeStorage.id ? null : value.id;
                       }
                     },
                     initialValue: widget.isEditing
