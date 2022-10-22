@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ### Fixed
 
+- 修复 Windows 上的字体显示问题
 - 修复无法选择 家 这个位置的问题
 
 ## [0.9.0] - 2022-10-02
