@@ -9,6 +9,7 @@ import 'package:smarthome/storage/view/storage_edit_page.dart';
 import 'package:smarthome/storage/view/widgets/add_storage_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/storage_item_list.dart';
+import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
@@ -101,7 +102,7 @@ class StorageDetailScreen extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context, StorageDetailState state) {
     final paths = state.storage.ancestors ?? [];
-    if (!paths.contains(state.storage) && state.storage.id != '') {
+    if (!paths.contains(state.storage) && state.storage.id != homeStorage.id) {
       // 防止重复添加相同名称的位置
       // 因为无限列表重新获取时，位置对象虽然名字不会变，但是内容改变
       if (paths.isEmpty || paths.last.name != state.storage.name) {
@@ -115,7 +116,7 @@ class StorageDetailScreen extends StatelessWidget {
           storage: state.storage,
         ),
         const SearchIconButton(),
-        if (state.storage.id != '')
+        if (state.storage.id != homeStorage.id)
           PopupMenuButton<Menu>(
             onSelected: (value) async {
               if (value == Menu.edit) {
@@ -263,7 +264,8 @@ class StorageDetailScreen extends StatelessWidget {
 
   Widget? _buildFloatingActionButton(
       BuildContext context, StorageDetailState state) {
-    if (state.status == StorageDetailStatus.success && state.storage.id != '') {
+    if (state.status == StorageDetailStatus.success &&
+        state.storage.id != homeStorage.id) {
       return FloatingActionButton(
         tooltip: '添加物品',
         onPressed: () async {

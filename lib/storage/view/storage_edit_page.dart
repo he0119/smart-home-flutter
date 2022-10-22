@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/view/widgets/storage_picker_formfield.dart';
+import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
@@ -40,9 +41,10 @@ class _StorageEditPageState extends State<StorageEditPage> {
     } else {
       _nameController = TextEditingController();
       _descriptionController = TextEditingController();
-      // 如果是家的话，需要特殊处理，因为之前家的 parent 是空字符串
+      // 如果是家的话，需要特殊处理，因为家的 id 是空字符串
       // 服务器只能接受 null
-      parentId = widget.storage?.id != '' ? widget.storage?.id : null;
+      parentId =
+          widget.storage?.id != homeStorage.id ? widget.storage?.id : null;
     }
 
     _nameFocusNode = FocusNode();
@@ -145,19 +147,19 @@ class _StorageEditPageState extends State<StorageEditPage> {
                           context, _nameFocusNode!, _descriptionFocusNode);
                     },
                   ),
-                  // FIXME: 无法选择 家 这个位置
                   StorageFormField(
                     decoration: const InputDecoration(
                       labelText: '属于',
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     onChanged: (Storage? value) {
+                      // 家的 id 是空字符串，服务器只能接受 null
                       if (value != null) {
-                        parentId = value.id;
+                        parentId = value.id == homeStorage.id ? null : value.id;
                       }
                     },
                     initialValue: widget.isEditing
-                        ? widget.storage!.parent
+                        ? widget.storage!.parent ?? homeStorage
                         : widget.storage,
                     validator: (value) {
                       if (value == null) {

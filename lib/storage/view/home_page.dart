@@ -6,6 +6,7 @@ import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
+import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
@@ -149,7 +150,7 @@ class _StorageHomeBody extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 MyRouterDelegate.of(context)
-                    .push(StorageDetailPage(storageId: ''));
+                    .push(StorageDetailPage(storageId: homeStorage.id));
               },
               child: Card(
                 color: Theme.of(context).colorScheme.secondary,
