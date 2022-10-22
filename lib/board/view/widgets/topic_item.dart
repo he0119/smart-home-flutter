@@ -31,7 +31,7 @@ class TopicItem extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: SelectableText(
+            child: Text(
               topic.title!,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,

@@ -143,29 +143,31 @@ class _DetailScreen extends StatelessWidget {
                           cache: false,
                         ));
                   },
-                  child: InfiniteList<Comment>(
-                    items: state.comments,
-                    itemBuilder: (context, item) => CommentItem(
-                      comment: item,
-                      showMenu: loginUser == item.user,
+                  child: SelectionArea(
+                    child: InfiniteList<Comment>(
+                      items: state.comments,
+                      itemBuilder: (context, item) => CommentItem(
+                        comment: item,
+                        showMenu: loginUser == item.user,
+                      ),
+                      onFetch: () {
+                        context.read<TopicDetailBloc>().add(TopicDetailFetched(
+                              topicId: state.topic.id,
+                              descending: descending,
+                            ));
+                      },
+                      hasReachedMax: state.hasReachedMax,
+                      top: [
+                        TopicItem(
+                          topic: state.topic,
+                          showBody: true,
+                        ),
+                        CommentOrder(
+                          topicId: state.topic.id,
+                          descending: descending,
+                        ),
+                      ],
                     ),
-                    onFetch: () {
-                      context.read<TopicDetailBloc>().add(TopicDetailFetched(
-                            topicId: state.topic.id,
-                            descending: descending,
-                          ));
-                    },
-                    hasReachedMax: state.hasReachedMax,
-                    top: [
-                      TopicItem(
-                        topic: state.topic,
-                        showBody: true,
-                      ),
-                      CommentOrder(
-                        topicId: state.topic.id,
-                        descending: descending,
-                      ),
-                    ],
                   ),
                 ),
                 floatingActionButton: state.topic.isClosed!
