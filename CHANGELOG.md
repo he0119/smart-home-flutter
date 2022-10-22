@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 - 用户代理现在会包含 Windows 的系统版本号
 - 利用 SelectionArea 替换 SelectableText
 
+### Fixed
+
+- 修复 Windows 上的字体显示问题
+
 ## [0.9.0] - 2022-10-02
 
 ### Added
