@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Fixed
+
+- 留言板中单击网址链接现在能正常转跳到对应网页
+
 ## [0.9.1] - 2022-10-22
 
 ### Changed

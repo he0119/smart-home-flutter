@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/view/topic_detail_page.dart';
 import 'package:smarthome/board/view/widgets/item_title.dart';
 import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/widgets/markdown.dart';
 
 class TopicItem extends StatelessWidget {
   final Topic topic;
@@ -46,9 +46,8 @@ class TopicItem extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: MarkdownBody(
+            child: MyMarkdownBody(
               data: topic.description!,
-              selectable: true,
             ),
           ),
         ],
