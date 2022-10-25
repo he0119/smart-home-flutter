@@ -164,7 +164,7 @@ jobs:
     needs: web
     environment:
       name: dev
-      url: https://test.hehome.xyz
+      url: https://smart.dev.hehome.xyz
     if: github.event_name != 'pull_request'
     steps:
       - name: Download web files

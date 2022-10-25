@@ -61,7 +61,7 @@ android {
         dev {
             dimension "version"
             applicationIdSuffix ".dev"
-            def hostNameValue = "test.hehome.xyz"
+            def hostNameValue = "smart.dev.hehome.xyz"
             manifestPlaceholders = [appName: "智慧家庭 DEV", hostName: hostNameValue]
             buildConfigField("String",
                 "HOST_NAME",
