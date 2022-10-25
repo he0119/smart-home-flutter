@@ -22,11 +22,17 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const MyDrawer(),
-      appBar: AppBar(
-        title: Text(activeTab.title),
-        actions: actions,
-      ),
-      body: body,
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar.medium(
+              title: Text(activeTab.title),
+              actions: actions,
+            ),
+          ];
+        },
+        body: body,
+      ), // This trailing comma makes auto-formatting nicer for build methods.
       bottomNavigationBar: TabSelector(
         activeTab: activeTab,
         onTabSelected: (tab) =>
