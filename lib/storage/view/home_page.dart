@@ -41,45 +41,34 @@ class StorageHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyHomePage(
-      activeTab: AppTab.storage,
-      actions: const <Widget>[
-        SearchIconButton(),
-      ],
-      body: const _StorageHomeBody(),
-      floatingActionButton: FloatingActionButton(
-        tooltip: '添加物品',
-        onPressed: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => BlocProvider<ItemEditBloc>(
-                create: (_) => ItemEditBloc(
-                  storageRepository:
-                      RepositoryProvider.of<StorageRepository>(context),
-                ),
-                child: const ItemEditPage(
-                  isEditing: false,
-                ),
-              ),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-class _StorageHomeBody extends StatelessWidget {
-  const _StorageHomeBody({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
     return BlocBuilder<StorageHomeBloc, StorageHomeState>(
       builder: (context, state) {
-        return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: _buildBody(state, context),
+        return MyHomePage(
+          activeTab: AppTab.storage,
+          actions: const <Widget>[
+            SearchIconButton(),
+          ],
+          floatingActionButton: FloatingActionButton(
+            tooltip: '添加物品',
+            onPressed: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider<ItemEditBloc>(
+                    create: (_) => ItemEditBloc(
+                      storageRepository:
+                          RepositoryProvider.of<StorageRepository>(context),
+                    ),
+                    child: const ItemEditPage(
+                      isEditing: false,
+                    ),
+                  ),
+                ),
+              );
+            },
+            child: const Icon(Icons.add),
+          ),
+          slivers:
+              state is StorageHomeSuccess ? _buildSlivers(context, state) : [],
         );
       },
     );
