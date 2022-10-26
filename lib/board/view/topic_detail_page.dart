@@ -7,6 +7,7 @@ import 'package:smarthome/board/repository/board_repository.dart';
 import 'package:smarthome/board/view/comment_edit_page.dart';
 import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
+import 'package:smarthome/board/view/widgets/item_title.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
@@ -314,11 +315,22 @@ class TopicDetailScreen extends StatelessWidget {
               slivers: [
                 if (state.topic.description != null)
                   SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                      child: MyMarkdownBody(
-                        data: state.topic.description!,
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ItemTitle(
+                          user: state.topic.user!,
+                          createdAt: state.topic.createdAt!,
+                          editedAt: state.topic.editedAt!,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          child: MyMarkdownBody(
+                            data: state.topic.description!,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 SliverToBoxAdapter(
@@ -426,7 +438,7 @@ class CommentOrder extends StatelessWidget {
         children: <Widget>[
           const Text(
             '全部评论',
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 16),
           ),
           const Spacer(),
           PopupMenuButton(
