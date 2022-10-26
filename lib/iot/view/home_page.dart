@@ -6,8 +6,6 @@ import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/iot/bloc/blocs.dart';
 import 'package:smarthome/iot/repository/iot_repository.dart';
-import 'package:smarthome/iot/view/settings/settings_page.dart';
-import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
@@ -266,18 +264,6 @@ class IotHomeScreen extends StatelessWidget {
                   const SliverFillRemaining(
                     child: CenterLoadingIndicator(),
                   )
-              ],
-              actions: <Widget>[
-                Tooltip(
-                  message: '设置',
-                  child: IconButton(
-                    icon: const Icon(Icons.settings),
-                    onPressed: () {
-                      MyRouterDelegate.of(context)
-                          .push(const IotSettingsPage());
-                    },
-                  ),
-                ),
               ],
             );
           },

@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/user/bloc/bloc/session_bloc.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
+import 'package:smarthome/widgets/home_page.dart';
 
 class SessionPage extends StatelessWidget {
   const SessionPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('登录设备'),
-      ),
-      body: BlocBuilder<SessionBloc, SessionState>(
+    return MySliverPage(
+      title: '登录设备',
+      sliver: BlocBuilder<SessionBloc, SessionState>(
         builder: (context, state) {
           if (state is SessionInProgress) {
             return const Center(child: CircularProgressIndicator());

@@ -8,6 +8,7 @@ import 'package:smarthome/storage/view/item_datail_page.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
+import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 
 class ConsumablesPage extends Page {
@@ -34,39 +35,39 @@ class ConsumablesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('耗材管理'),
-      ),
-      body: BlocBuilder<ConsumablesBloc, ConsumablesState>(
-        builder: (context, state) {
-          if (state is ConsumablesFailure) {
-            return ErrorMessageButton(
-              message: state.message,
-              onPressed: () {
-                BlocProvider.of<ConsumablesBloc>(context)
-                    .add(const ConsumablesFetched(cache: false));
-              },
-            );
-          }
-          if (state is ConsumablesSuccess) {
-            return RefreshIndicator(
-                onRefresh: () async {
-                  BlocProvider.of<ConsumablesBloc>(context)
-                      .add(const ConsumablesFetched(cache: false));
-                },
-                child: InfiniteList(
-                  itemBuilder: _buildItem,
-                  items: state.items,
-                  hasReachedMax: state.hasReachedMax,
-                  onFetch: () => context
-                      .read<ConsumablesBloc>()
-                      .add(const ConsumablesFetched()),
-                ));
-          }
-          return const CenterLoadingIndicator();
-        },
-      ),
+    return BlocBuilder<ConsumablesBloc, ConsumablesState>(
+      builder: (context, state) {
+        return MySliverPage(
+          title: '耗材管理',
+          slivers: [
+            if (state is ConsumablesFailure)
+              SliverFillRemaining(
+                child: ErrorMessageButton(
+                  message: state.message,
+                  onPressed: () {
+                    BlocProvider.of<ConsumablesBloc>(context)
+                        .add(const ConsumablesFetched(cache: false));
+                  },
+                ),
+              ),
+            if (state is ConsumablesSuccess)
+              SliverInfiniteList(
+                itemBuilder: _buildItem,
+                items: state.items,
+                hasReachedMax: state.hasReachedMax,
+                onFetch: () => context
+                    .read<ConsumablesBloc>()
+                    .add(const ConsumablesFetched()),
+              ),
+            if (state is ConsumablesInProgress)
+              const SliverFillRemaining(child: CenterLoadingIndicator()),
+          ],
+          onRefresh: () async {
+            BlocProvider.of<ConsumablesBloc>(context)
+                .add(const ConsumablesFetched(cache: false));
+          },
+        );
+      },
     );
   }
 }

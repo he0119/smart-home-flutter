@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/blog/view/settings/blog_admin_url_page.dart';
 import 'package:smarthome/blog/view/settings/blog_url_page.dart';
+import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class BlogSettingsPage extends Page {
@@ -26,11 +27,9 @@ class BlogSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('博客'),
-      ),
-      body: Consumer<SettingsController>(
+    return MySliverPage(
+      title: '博客',
+      sliver: Consumer<SettingsController>(
         builder: (context, settings, child) => SettingsList(
           sections: [
             SettingsSection(

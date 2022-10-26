@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
+import 'package:smarthome/core/bloc/blocs.dart';
+import 'package:smarthome/widgets/home_page.dart';
 
 class MiPushPage extends StatelessWidget {
   const MiPushPage({Key? key}) : super(key: key);
@@ -25,28 +26,26 @@ class MiPushPage extends StatelessWidget {
         if (state is PushError) {
           status = state.message;
         }
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('小米推送'),
-            actions: [
-              Tooltip(
-                message: '同步',
-                child: IconButton(
-                  icon: const Icon(Icons.sync),
-                  onPressed: () {
-                    // 重新同步本地与服务器的注册数据
-                    final local = localRegId;
-                    if (local != null) {
-                      context.read<PushBloc>().add(PushRefreshed(regId: local));
-                    } else {
-                      context.read<PushBloc>().add(PushStarted());
-                    }
-                  },
-                ),
+        return MySliverPage(
+          title: '小米推送',
+          actions: [
+            Tooltip(
+              message: '同步',
+              child: IconButton(
+                icon: const Icon(Icons.sync),
+                onPressed: () {
+                  // 重新同步本地与服务器的注册数据
+                  final local = localRegId;
+                  if (local != null) {
+                    context.read<PushBloc>().add(PushRefreshed(regId: local));
+                  } else {
+                    context.read<PushBloc>().add(PushStarted());
+                  }
+                },
               ),
-            ],
-          ),
-          body: ListView(
+            ),
+          ],
+          sliver: ListView(
             children: [
               ListTile(
                 title: const Text('状态'),

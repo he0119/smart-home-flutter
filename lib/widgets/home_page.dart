@@ -46,6 +46,7 @@ class MySliverPage extends StatelessWidget {
   final String title;
   final List<Widget>? actions;
   final List<Widget>? slivers;
+  final Widget? sliver;
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
   final Widget? drawer;
@@ -62,6 +63,7 @@ class MySliverPage extends StatelessWidget {
     this.drawer,
     this.onRefresh,
     this.onWillPop,
+    this.sliver,
   });
 
   @override
@@ -87,6 +89,7 @@ class MySliverPage extends StatelessWidget {
                 title: Text(title),
                 actions: actions,
               ),
+              if (sliver != null) sliver!,
               if (slivers != null) ...slivers!,
             ],
           ),
