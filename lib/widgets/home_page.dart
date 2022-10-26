@@ -66,3 +66,60 @@ class MyHomePage extends StatelessWidget {
     }
   }
 }
+
+typedef FutureVoidCallback = Future<void> Function();
+
+class MyCustomPage extends StatelessWidget {
+  final List<Widget>? actions;
+  final List<Widget>? slivers;
+  final Widget? floatingActionButton;
+  final AppTab activeTab;
+  final FutureVoidCallback? onRefresh;
+
+  const MyCustomPage({
+    super.key,
+    required this.activeTab,
+    this.actions,
+    this.slivers,
+    this.floatingActionButton,
+    this.onRefresh,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: const MyDrawer(),
+      body: (onRefresh != null)
+          ? RefreshIndicator(
+              edgeOffset: 56,
+              onRefresh: () async {
+                await onRefresh!();
+              },
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar.medium(
+                    title: Text(activeTab.title),
+                    actions: actions,
+                  ),
+                  if (slivers != null) ...slivers!,
+                ],
+              ),
+            )
+          : CustomScrollView(
+              slivers: <Widget>[
+                SliverAppBar.medium(
+                  title: Text(activeTab.title),
+                  actions: actions,
+                ),
+                if (slivers != null) ...slivers!,
+              ],
+            ),
+      bottomNavigationBar: TabSelector(
+        activeTab: activeTab,
+        onTabSelected: (tab) =>
+            BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
+      ),
+      floatingActionButton: floatingActionButton,
+    );
+  }
+}
