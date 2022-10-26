@@ -43,7 +43,7 @@ class StorageHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<StorageHomeBloc, StorageHomeState>(
       builder: (context, state) {
-        return MySliverHomePage(
+        return MyHomePage(
           activeTab: AppTab.storage,
           actions: const <Widget>[
             SearchIconButton(),

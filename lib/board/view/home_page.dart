@@ -42,7 +42,7 @@ class BoardHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<BoardHomeBloc, BoardHomeState>(
       builder: (context, state) {
-        return MySliverHomePage(
+        return MyHomePage(
           activeTab: AppTab.board,
           floatingActionButton: FloatingActionButton(
             tooltip: '添加话题',
