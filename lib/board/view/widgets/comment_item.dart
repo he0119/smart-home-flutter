@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/board/bloc/blocs.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/repository/board_repository.dart';
@@ -13,11 +12,13 @@ import 'package:smarthome/widgets/markdown.dart';
 class CommentItem extends StatelessWidget {
   final Comment comment;
   final bool showMenu;
+  final void Function()? onEdit;
 
   const CommentItem({
     Key? key,
     required this.comment,
     required this.showMenu,
+    this.onEdit,
   }) : super(key: key);
 
   @override
@@ -61,10 +62,6 @@ class CommentItem extends StatelessWidget {
                       );
                       break;
                     case Menu.edit:
-                      final settingsController =
-                          context.read<SettingsController>();
-                      final topicDetailBloc = context.read<TopicDetailBloc>();
-
                       final r = await Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => BlocProvider(
@@ -79,15 +76,7 @@ class CommentItem extends StatelessWidget {
                           ),
                         ),
                       );
-                      if (r == true) {
-                        final descending = settingsController.commentDescending;
-                        topicDetailBloc.add(
-                          TopicDetailFetched(
-                            descending: descending,
-                            cache: false,
-                          ),
-                        );
-                      }
+                      if (r == true && onEdit != null) onEdit!();
                       break;
                   }
                 }

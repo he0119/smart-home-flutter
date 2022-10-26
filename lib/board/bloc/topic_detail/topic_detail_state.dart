@@ -1,49 +1,47 @@
 part of 'topic_detail_bloc.dart';
 
-abstract class TopicDetailState extends Equatable {
-  const TopicDetailState();
+class TopicDetailState extends Equatable {
+  /// 当前状态
+  final TopicDetailStatus status;
 
-  @override
-  List<Object?> get props => [];
-}
+  /// 错误信息
+  final String error;
 
-class TopicDetailInProgress extends TopicDetailState {
-  @override
-  String toString() => 'TopicDetailInProgress';
-}
-
-class TopicDetailFailure extends TopicDetailState {
-  final String message;
-  final String? topicId;
-
-  const TopicDetailFailure(
-    this.message, {
-    required this.topicId,
-  });
-
-  @override
-  List<Object?> get props => [message, topicId];
-
-  @override
-  String toString() => 'TopicDetailFailure { message: $message }';
-}
-
-class TopicDetailSuccess extends TopicDetailState {
+  /// 位置页面所需数据
   final Topic topic;
   final List<Comment> comments;
   final PageInfo pageInfo;
 
-  const TopicDetailSuccess({
-    required this.topic,
-    required this.comments,
-    required this.pageInfo,
+  const TopicDetailState({
+    this.status = TopicDetailStatus.initial,
+    this.error = '',
+    // 初始为空值
+    this.topic = const Topic(id: ''),
+    this.comments = const [],
+    this.pageInfo = const PageInfo(hasNextPage: false),
   });
 
   bool get hasReachedMax => !pageInfo.hasNextPage;
 
   @override
-  List<Object> get props => [topic, comments, pageInfo];
+  List<Object?> get props => [status, error, topic, comments, pageInfo];
 
   @override
-  String toString() => 'TopicDetailSuccess(topic: $topic, comments: $comments)';
+  bool get stringify => true;
+
+  TopicDetailState copyWith({
+    TopicDetailStatus? status,
+    String? error,
+    Topic? topic,
+    List<Comment>? comments,
+    PageInfo? pageInfo,
+  }) {
+    return TopicDetailState(
+      status: status ?? this.status,
+      error: error ?? this.error,
+      topic: topic ?? this.topic,
+      comments: comments ?? this.comments,
+      pageInfo: pageInfo ?? this.pageInfo,
+    );
+  }
 }

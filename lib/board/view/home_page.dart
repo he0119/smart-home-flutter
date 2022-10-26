@@ -40,48 +40,48 @@ class BoardHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MySliverHomePage(
-      activeTab: AppTab.board,
-      floatingActionButton: FloatingActionButton(
-        tooltip: '添加话题',
-        onPressed: () async {
-          final boardHomeBloc = context.read<BoardHomeBloc>();
+    return BlocBuilder<BoardHomeBloc, BoardHomeState>(
+      builder: (context, state) {
+        return MySliverHomePage(
+          activeTab: AppTab.board,
+          floatingActionButton: FloatingActionButton(
+            tooltip: '添加话题',
+            onPressed: () async {
+              final boardHomeBloc = context.read<BoardHomeBloc>();
 
-          final r = await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) => TopicEditBloc(
-                    boardRepository:
-                        RepositoryProvider.of<BoardRepository>(context)),
-                child: const TopicEditPage(
-                  isEditing: false,
+              final r = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) => TopicEditBloc(
+                        boardRepository:
+                            RepositoryProvider.of<BoardRepository>(context)),
+                    child: const TopicEditPage(
+                      isEditing: false,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-          if (r == true) {
-            boardHomeBloc.add(const BoardHomeFetched(cache: false));
-          }
-        },
-        child: const Icon(Icons.create),
-      ),
-      slivers: [
-        BlocBuilder<BoardHomeBloc, BoardHomeState>(
-          builder: (context, state) {
-            if (state is BoardHomeFailure) {
-              return SliverFillRemaining(
+              );
+              if (r == true) {
+                boardHomeBloc.add(const BoardHomeFetched(cache: false));
+              }
+            },
+            child: const Icon(Icons.create),
+          ),
+          slivers: [
+            if (state.status == BoardHomeStatus.failure)
+              SliverFillRemaining(
                 child: ErrorMessageButton(
                   onPressed: () {
                     BlocProvider.of<BoardHomeBloc>(context)
                         .add(const BoardHomeFetched(cache: false));
                   },
-                  message: state.message,
+                  message: state.error,
                 ),
-              );
-            }
-            if (state is BoardHomeSuccess) {
-              // 从各种类型详情页返回
-              return SliverInfiniteList<Topic>(
+              ),
+            if (state.status == BoardHomeStatus.loading)
+              const SliverFillRemaining(child: CenterLoadingIndicator()),
+            if (state.status == BoardHomeStatus.success)
+              SliverInfiniteList<Topic>(
                 items: state.topics,
                 hasReachedMax: state.hasReachedMax,
                 itemBuilder: (context, item) => TopicItem(topic: item),
@@ -89,15 +89,13 @@ class BoardHomeScreen extends StatelessWidget {
                   BlocProvider.of<BoardHomeBloc>(context)
                       .add(const BoardHomeFetched());
                 },
-              );
-            }
-            return const SliverFillRemaining(child: CenterLoadingIndicator());
+              ),
+          ],
+          onRefresh: () async {
+            BlocProvider.of<BoardHomeBloc>(context)
+                .add(const BoardHomeFetched(cache: false));
           },
-        )
-      ],
-      onRefresh: () async {
-        BlocProvider.of<BoardHomeBloc>(context)
-            .add(const BoardHomeFetched(cache: false));
+        );
       },
     );
   }

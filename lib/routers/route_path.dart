@@ -57,11 +57,11 @@ class PictureRoutePath extends RoutePath {
 
 /// 留言板相关的信息
 class TopicRoutePath extends RoutePath {
-  /// 物品 ID，空则为 家(/storage/home)
-  final String? topicId;
+  /// 话题 ID
+  final String topicId;
 
   TopicRoutePath({
-    this.topicId,
+    required this.topicId,
   });
 
   @override
