@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -11,7 +10,7 @@ import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:smarthome/widgets/webview.dart';
 
 class BlogHomePage extends Page {
   const BlogHomePage()
@@ -43,82 +42,91 @@ class BlogHomeScreen extends StatefulWidget {
 }
 
 class _BlogHomeScreenState extends State<BlogHomeScreen> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  late NestedWebviewController _controller;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsController>(
-      builder: (context, settings, child) => FutureBuilder(
-        future: _controller.future,
-        builder: (BuildContext context,
-                AsyncSnapshot<WebViewController> controller) =>
-            MyHomePage(
-          activeTab: AppTab.blog,
-          actions: [
-            Tooltip(
-              message: '进入管理页面',
-              child: IconButton(
-                icon: const Icon(Icons.dvr),
-                onPressed: () async {
-                  final blogAdminUrl = settings.blogAdminUrl;
-                  if (blogAdminUrl != null) {
-                    if (kIsWeb) {
-                      await launchUrl(blogAdminUrl);
-                    } else if (controller.hasData) {
-                      await controller.data!.loadUrl(blogAdminUrl);
-                    }
-                  } else {
-                    MyRouterDelegate.of(context).push(const BlogSettingsPage());
-                  }
-                },
-              ),
-            ),
-            Tooltip(
-              message: '设置',
-              child: IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () {
-                  MyRouterDelegate.of(context).push(const BlogSettingsPage());
-                },
-              ),
-            ),
-          ],
-          body: (!kIsWeb && !Platform.isWindows)
-              ? WillPopScope(
-                  onWillPop: () async {
-                    if (controller.hasData &&
-                        await controller.data!.canGoBack()) {
-                      await controller.data!.goBack();
-                      return false;
-                    }
-                    return true;
-                  },
-                  child: WebView(
-                    initialUrl: settings.blogUrl,
-                    javascriptMode: JavascriptMode.unrestricted,
-                    onWebViewCreated: _controller.complete,
-                  ))
-              : Center(
-                  child: RoundedRaisedButton(
-                    onPressed: () => launchUrl(settings.blogUrl),
-                    child: const Text('博客'),
+      builder: (context, settings, child) {
+        _controller = NestedWebviewController(settings.blogUrl);
+        return ValueListenableBuilder<WebViewStatus>(
+          valueListenable: _controller.webViewStatusNotifier,
+          builder: (
+            BuildContext context,
+            WebViewStatus webViewStatus,
+            Widget? child,
+          ) {
+            return MyCustomPage(
+              activeTab: AppTab.blog,
+              actions: [
+                Tooltip(
+                  message: '进入管理页面',
+                  child: IconButton(
+                    icon: const Icon(Icons.dvr),
+                    onPressed: () async {
+                      final blogAdminUrl = settings.blogAdminUrl;
+                      if (blogAdminUrl != null) {
+                        if (kIsWeb) {
+                          await launchUrl(blogAdminUrl);
+                        } else if (_controller.webviewController != null) {
+                          await _controller.webviewController!
+                              .loadUrl(blogAdminUrl);
+                        }
+                      } else {
+                        MyRouterDelegate.of(context)
+                            .push(const BlogSettingsPage());
+                      }
+                    },
                   ),
                 ),
-          floatingActionButton: FloatingActionButton(
-            tooltip: '使用浏览器打开',
-            onPressed: () async {
-              if (controller.hasData) {
-                final currentUrl = await controller.data!.currentUrl();
-                if (currentUrl != null) {
-                  await launchUrl(currentUrl);
+                Tooltip(
+                  message: '设置',
+                  child: IconButton(
+                    icon: const Icon(Icons.settings),
+                    onPressed: () {
+                      MyRouterDelegate.of(context)
+                          .push(const BlogSettingsPage());
+                    },
+                  ),
+                ),
+              ],
+              slivers: [
+                (!kIsWeb && !Platform.isWindows)
+                    ? MyWebview(
+                        controller: _controller,
+                      )
+                    : Center(
+                        child: RoundedRaisedButton(
+                          onPressed: () => launchUrl(settings.blogUrl),
+                          child: const Text('博客'),
+                        ),
+                      )
+              ],
+              floatingActionButton: FloatingActionButton(
+                tooltip: '使用浏览器打开',
+                onPressed: () async {
+                  if (_controller.webviewController?.currentUrl() != null) {
+                    final currentUrl =
+                        await _controller.webviewController?.currentUrl();
+                    if (currentUrl != null) {
+                      await launchUrl(currentUrl);
+                    }
+                  }
+                },
+                child: const Icon(Icons.open_in_new),
+              ),
+              onWillPop: () async {
+                if (_controller.webviewController != null &&
+                    await _controller.webviewController!.canGoBack()) {
+                  await _controller.webviewController!.goBack();
+                  return false;
                 }
-              }
-            },
-            child: const Icon(Icons.open_in_new),
-          ),
-        ),
-      ),
+                return true;
+              },
+            );
+          },
+        );
+      },
     );
   }
 }
