@@ -92,6 +92,7 @@ class MySliverHomePage extends StatelessWidget {
       title: activeTab.name,
       actions: actions,
       slivers: slivers,
+      drawer: const MyDrawer(),
       floatingActionButton: floatingActionButton,
       onRefresh: onRefresh,
       onWillPop: onWillPop,
@@ -110,6 +111,7 @@ class MySliverPage extends StatelessWidget {
   final List<Widget>? slivers;
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
+  final Widget? drawer;
   final Future<void> Function()? onRefresh;
   final Future<bool> Function()? onWillPop;
 
@@ -120,6 +122,7 @@ class MySliverPage extends StatelessWidget {
     this.slivers,
     this.floatingActionButton,
     this.bottomNavigationBar,
+    this.drawer,
     this.onRefresh,
     this.onWillPop,
   });
@@ -127,7 +130,7 @@ class MySliverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const MyDrawer(),
+      drawer: drawer,
       body: WillPopScope(
         onWillPop: onWillPop,
         child: ConditionalParentWidget(

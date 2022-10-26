@@ -25,7 +25,7 @@ class StorageItemList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final merged = List<dynamic>.from(storages!)..addAll(items!);
-    return InfiniteList(
+    return SliverInfiniteList(
       items: merged,
       itemBuilder: (context, dynamic item) {
         if (isHighlight) {
