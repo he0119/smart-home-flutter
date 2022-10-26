@@ -67,14 +67,13 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-typedef FutureVoidCallback = Future<void> Function();
-
 class MyCustomPage extends StatelessWidget {
   final List<Widget>? actions;
   final List<Widget>? slivers;
   final Widget? floatingActionButton;
   final AppTab activeTab;
-  final FutureVoidCallback? onRefresh;
+  final Future<void> Function()? onRefresh;
+  final Future<bool> Function()? onWillPop;
 
   const MyCustomPage({
     super.key,
@@ -83,19 +82,32 @@ class MyCustomPage extends StatelessWidget {
     this.slivers,
     this.floatingActionButton,
     this.onRefresh,
+    this.onWillPop,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const MyDrawer(),
-      body: (onRefresh != null)
-          ? RefreshIndicator(
-              edgeOffset: 56,
-              onRefresh: () async {
-                await onRefresh!();
-              },
-              child: CustomScrollView(
+      body: WillPopScope(
+        onWillPop: onWillPop,
+        child: (onRefresh != null)
+            ? RefreshIndicator(
+                edgeOffset: 56,
+                onRefresh: () async {
+                  await onRefresh!();
+                },
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar.medium(
+                      title: Text(activeTab.title),
+                      actions: actions,
+                    ),
+                    if (slivers != null) ...slivers!,
+                  ],
+                ),
+              )
+            : CustomScrollView(
                 slivers: <Widget>[
                   SliverAppBar.medium(
                     title: Text(activeTab.title),
@@ -104,16 +116,7 @@ class MyCustomPage extends StatelessWidget {
                   if (slivers != null) ...slivers!,
                 ],
               ),
-            )
-          : CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar.medium(
-                  title: Text(activeTab.title),
-                  actions: actions,
-                ),
-                if (slivers != null) ...slivers!,
-              ],
-            ),
+      ),
       bottomNavigationBar: TabSelector(
         activeTab: activeTab,
         onTabSelected: (tab) =>
