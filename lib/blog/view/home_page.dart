@@ -95,10 +95,12 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                     ? MyWebview(
                         controller: _controller,
                       )
-                    : Center(
-                        child: RoundedRaisedButton(
-                          onPressed: () => launchUrl(settings.blogUrl),
-                          child: const Text('博客'),
+                    : SliverFillRemaining(
+                        child: Center(
+                          child: RoundedRaisedButton(
+                            onPressed: () => launchUrl(settings.blogUrl),
+                            child: const Text('博客'),
+                          ),
                         ),
                       )
               ],
