@@ -41,14 +41,12 @@ class ConsumablesScreen extends StatelessWidget {
           title: '耗材管理',
           slivers: [
             if (state is ConsumablesFailure)
-              SliverFillRemaining(
-                child: ErrorMessageButton(
-                  message: state.message,
-                  onPressed: () {
-                    BlocProvider.of<ConsumablesBloc>(context)
-                        .add(const ConsumablesFetched(cache: false));
-                  },
-                ),
+              ErrorMessageButton(
+                message: state.message,
+                onPressed: () {
+                  BlocProvider.of<ConsumablesBloc>(context)
+                      .add(const ConsumablesFetched(cache: false));
+                },
               ),
             if (state is ConsumablesSuccess)
               SliverInfiniteList(
@@ -59,8 +57,7 @@ class ConsumablesScreen extends StatelessWidget {
                     .read<ConsumablesBloc>()
                     .add(const ConsumablesFetched()),
               ),
-            if (state is ConsumablesInProgress)
-              const SliverFillRemaining(child: CenterLoadingIndicator()),
+            if (state is ConsumablesInProgress) const CenterLoadingIndicator(),
           ],
           onRefresh: () async {
             BlocProvider.of<ConsumablesBloc>(context)

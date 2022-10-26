@@ -99,7 +99,9 @@ class PictureScreen extends StatelessWidget {
     }
     if (state is PictureSuccess) {
       return PhotoView(
-        loadingBuilder: (context, event) => const CenterLoadingIndicator(),
+        loadingBuilder: (context, event) => const CenterLoadingIndicator(
+          sliver: false,
+        ),
         imageProvider: CachedNetworkImageProvider(
           state.picture.url!,
         ),

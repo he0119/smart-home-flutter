@@ -96,18 +96,16 @@ class StorageHomeScreen extends StatelessWidget {
 
     if (state is StorageHomeFailure) {
       listofWidget.add(
-        SliverFillRemaining(
-          child: ErrorMessageButton(
-            onPressed: () {
-              BlocProvider.of<StorageHomeBloc>(context).add(
-                StorageHomeFetched(
-                  itemType: state.itemType,
-                  cache: false,
-                ),
-              );
-            },
-            message: state.message,
-          ),
+        ErrorMessageButton(
+          onPressed: () {
+            BlocProvider.of<StorageHomeBloc>(context).add(
+              StorageHomeFetched(
+                itemType: state.itemType,
+                cache: false,
+              ),
+            );
+          },
+          message: state.message,
         ),
       );
     } else if (state is StorageHomeSuccess) {
@@ -173,11 +171,7 @@ class StorageHomeScreen extends StatelessWidget {
         ));
       }
     } else {
-      listofWidget.add(
-        const SliverFillRemaining(
-          child: CenterLoadingIndicator(),
-        ),
-      );
+      listofWidget.add(const CenterLoadingIndicator());
     }
     return listofWidget;
   }

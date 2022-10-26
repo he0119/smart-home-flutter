@@ -62,14 +62,12 @@ class IotHomeScreen extends StatelessWidget {
               activeTab: AppTab.iot,
               slivers: [
                 if (state is DeviceDataFailure)
-                  SliverFillRemaining(
-                    child: ErrorMessageButton(
-                      onPressed: () {
-                        BlocProvider.of<DeviceDataBloc>(context)
-                            .add(const DeviceDataStarted());
-                      },
-                      message: state.message,
-                    ),
+                  ErrorMessageButton(
+                    onPressed: () {
+                      BlocProvider.of<DeviceDataBloc>(context)
+                          .add(const DeviceDataStarted());
+                    },
+                    message: state.message,
                   ),
                 if (state is DeviceDataSuccess)
                   Consumer<SettingsController>(
@@ -261,9 +259,7 @@ class IotHomeScreen extends StatelessWidget {
                     },
                   ),
                 if (state is DeviceDataInProgress)
-                  const SliverFillRemaining(
-                    child: CenterLoadingIndicator(),
-                  )
+                  const CenterLoadingIndicator(),
               ],
             );
           },

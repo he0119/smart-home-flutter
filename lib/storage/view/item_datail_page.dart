@@ -175,20 +175,16 @@ class ItemDetailScreen extends StatelessWidget {
               },
               slivers: [
                 if (state.status == ItemDetailStatus.failure)
-                  SliverFillRemaining(
-                    child: ErrorMessageButton(
-                      onPressed: () {
-                        context
-                            .read<ItemDetailBloc>()
-                            .add(ItemDetailStarted(id: itemId));
-                      },
-                      message: state.error,
-                    ),
+                  ErrorMessageButton(
+                    onPressed: () {
+                      context
+                          .read<ItemDetailBloc>()
+                          .add(ItemDetailStarted(id: itemId));
+                    },
+                    message: state.error,
                   ),
                 if (state.status == ItemDetailStatus.loading)
-                  const SliverFillRemaining(
-                    child: CenterLoadingIndicator(),
-                  ),
+                  const CenterLoadingIndicator(),
                 if (state.status == ItemDetailStatus.success)
                   _ItemDetailList(item: state.item)
               ],

@@ -165,20 +165,16 @@ class StorageDetailScreen extends StatelessWidget {
                 delegate: PathBarDelegate(paths: paths),
               ),
             if (state.status == StorageDetailStatus.failure)
-              SliverFillRemaining(
-                child: ErrorMessageButton(
-                  onPressed: () {
-                    context.read<StorageDetailBloc>().add(
-                          StorageDetailFetched(id: storageId),
-                        );
-                  },
-                  message: state.error,
-                ),
+              ErrorMessageButton(
+                onPressed: () {
+                  context.read<StorageDetailBloc>().add(
+                        StorageDetailFetched(id: storageId),
+                      );
+                },
+                message: state.error,
               ),
             if (state.status == StorageDetailStatus.loading)
-              const SliverFillRemaining(
-                child: CenterLoadingIndicator(),
-              ),
+              const CenterLoadingIndicator(),
             if (state.status == StorageDetailStatus.success)
               StorageItemList(
                 items: state.storage.items!.toList(),

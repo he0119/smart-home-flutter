@@ -14,16 +14,18 @@ class ErrorMessageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(message),
-          RoundedRaisedButton(
-            onPressed: onPressed,
-            child: const Text('重试'),
-          ),
-        ],
+    return SliverFillRemaining(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(message),
+            RoundedRaisedButton(
+              onPressed: onPressed,
+              child: const Text('重试'),
+            ),
+          ],
+        ),
       ),
     );
   }
