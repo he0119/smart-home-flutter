@@ -40,7 +40,7 @@ class BoardHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyCustomPage(
+    return MySliverHomePage(
       activeTab: AppTab.board,
       floatingActionButton: FloatingActionButton(
         tooltip: '添加话题',

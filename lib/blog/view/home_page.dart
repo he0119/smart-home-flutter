@@ -56,7 +56,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
             WebViewStatus webViewStatus,
             Widget? child,
           ) {
-            return MyCustomPage(
+            return MySliverHomePage(
               activeTab: AppTab.blog,
               actions: [
                 Tooltip(

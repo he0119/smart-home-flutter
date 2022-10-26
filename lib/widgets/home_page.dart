@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/widgets/conditional_parent_widget.dart';
 import 'package:smarthome/widgets/drawer.dart';
 import 'package:smarthome/widgets/tab_selector.dart';
 
@@ -67,15 +68,15 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-class MyCustomPage extends StatelessWidget {
+class MySliverHomePage extends StatelessWidget {
+  final AppTab activeTab;
   final List<Widget>? actions;
   final List<Widget>? slivers;
   final Widget? floatingActionButton;
-  final AppTab activeTab;
   final Future<void> Function()? onRefresh;
   final Future<bool> Function()? onWillPop;
 
-  const MyCustomPage({
+  const MySliverHomePage({
     super.key,
     required this.activeTab,
     this.actions,
@@ -87,41 +88,71 @@ class MyCustomPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const MyDrawer(),
-      body: WillPopScope(
-        onWillPop: onWillPop,
-        child: (onRefresh != null)
-            ? RefreshIndicator(
-                edgeOffset: 56,
-                onRefresh: () async {
-                  await onRefresh!();
-                },
-                child: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverAppBar.medium(
-                      title: Text(activeTab.title),
-                      actions: actions,
-                    ),
-                    if (slivers != null) ...slivers!,
-                  ],
-                ),
-              )
-            : CustomScrollView(
-                slivers: <Widget>[
-                  SliverAppBar.medium(
-                    title: Text(activeTab.title),
-                    actions: actions,
-                  ),
-                  if (slivers != null) ...slivers!,
-                ],
-              ),
-      ),
+    return MySliverPage(
+      title: activeTab.name,
+      actions: actions,
+      slivers: slivers,
+      floatingActionButton: floatingActionButton,
+      onRefresh: onRefresh,
+      onWillPop: onWillPop,
       bottomNavigationBar: TabSelector(
         activeTab: activeTab,
         onTabSelected: (tab) =>
             BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
       ),
+    );
+  }
+}
+
+class MySliverPage extends StatelessWidget {
+  final String title;
+  final List<Widget>? actions;
+  final List<Widget>? slivers;
+  final Widget? floatingActionButton;
+  final Widget? bottomNavigationBar;
+  final Future<void> Function()? onRefresh;
+  final Future<bool> Function()? onWillPop;
+
+  const MySliverPage({
+    super.key,
+    required this.title,
+    this.actions,
+    this.slivers,
+    this.floatingActionButton,
+    this.bottomNavigationBar,
+    this.onRefresh,
+    this.onWillPop,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: const MyDrawer(),
+      body: WillPopScope(
+        onWillPop: onWillPop,
+        child: ConditionalParentWidget(
+          condition: onRefresh != null,
+          conditionalBuilder: (child) {
+            return RefreshIndicator(
+              edgeOffset: 56,
+              onRefresh: () async {
+                await onRefresh!();
+              },
+              child: child,
+            );
+          },
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar.medium(
+                title: Text(title),
+                actions: actions,
+              ),
+              if (slivers != null) ...slivers!,
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingActionButton,
     );
   }
