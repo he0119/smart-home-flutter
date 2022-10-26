@@ -10,6 +10,7 @@ import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
+import 'package:smarthome/widgets/home_page.dart';
 
 class PicturePage extends Page {
   /// 图片 ID
@@ -56,9 +57,53 @@ class PictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PictureBloc, PictureState>(
       builder: (context, state) {
-        return Scaffold(
-          appBar: _buildAppBar(context, state),
-          body: BlocListener<PictureEditBloc, PictureEditState>(
+        return MySliverPage(
+          title: (state is PictureSuccess)
+              ? state.picture.description.isNotEmpty
+                  ? '${state.picture.item!.name}（${state.picture.description}）'
+                  : '${state.picture.item!.name}（未命名）'
+              : '图片',
+          actions: [
+            if (state is PictureSuccess)
+              PopupMenuButton<PictureMenu>(
+                onSelected: (value) async {
+                  if (value == PictureMenu.delete) {
+                    await showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text('删除 ${state.picture.description}'),
+                        content: const Text('你确认要删除该图片么？'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('否'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              showInfoSnackBar('正在删除...', duration: 1);
+                              BlocProvider.of<PictureEditBloc>(context).add(
+                                PictureDeleted(picture: state.picture),
+                              );
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('是'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: PictureMenu.delete,
+                    child: Text('删除'),
+                  ),
+                ],
+              )
+          ],
+          sliver: BlocListener<PictureEditBloc, PictureEditState>(
             listener: (context, state) {
               if (state is PictureDeleteSuccess) {
                 showInfoSnackBar('图片 ${state.picture.description} 删除成功');
@@ -98,71 +143,21 @@ class PictureScreen extends StatelessWidget {
       );
     }
     if (state is PictureSuccess) {
-      return PhotoView(
-        loadingBuilder: (context, event) => const CenterLoadingIndicator(
-          sliver: false,
+      return SliverFillRemaining(
+        child: PhotoView(
+          loadingBuilder: (context, event) => const CenterLoadingIndicator(
+            sliver: false,
+          ),
+          imageProvider: CachedNetworkImageProvider(
+            state.picture.url!,
+          ),
+          minScale: PhotoViewComputedScale.contained,
+          maxScale: PhotoViewComputedScale.covered * 5,
+          backgroundDecoration:
+              BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
         ),
-        imageProvider: CachedNetworkImageProvider(
-          state.picture.url!,
-        ),
-        minScale: PhotoViewComputedScale.contained,
-        maxScale: PhotoViewComputedScale.covered * 5,
-        backgroundDecoration:
-            BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
       );
     }
     return const CenterLoadingIndicator();
-  }
-
-  AppBar _buildAppBar(BuildContext context, PictureState state) {
-    if (state is PictureSuccess) {
-      return AppBar(
-        title: state.picture.description.isNotEmpty
-            ? Text('${state.picture.item!.name}（${state.picture.description}）')
-            : Text('${state.picture.item!.name}（未命名）'),
-        actions: [
-          PopupMenuButton<PictureMenu>(
-            onSelected: (value) async {
-              if (value == PictureMenu.delete) {
-                await showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text('删除 ${state.picture.description}'),
-                    content: const Text('你确认要删除该图片么？'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('否'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showInfoSnackBar('正在删除...', duration: 1);
-                          BlocProvider.of<PictureEditBloc>(context).add(
-                            PictureDeleted(picture: state.picture),
-                          );
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('是'),
-                      ),
-                    ],
-                  ),
-                );
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: PictureMenu.delete,
-                child: Text('删除'),
-              ),
-            ],
-          )
-        ],
-      );
-    }
-    return AppBar(
-      title: const Text('图片'),
-    );
   }
 }

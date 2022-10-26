@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
+import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class PictureAddPage extends Page {
@@ -81,13 +82,11 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
           showErrorSnackBar(state.message);
         }
       },
-      builder: (context, state) => Scaffold(
-        appBar: AppBar(
-          title: const Text('添加图片'),
-        ),
-        body: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
+      builder: (context, state) => MySliverPage(
+        title: '添加图片',
+        sliver: SliverToBoxAdapter(
+          child: Form(
+            key: _formKey,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
               child: Column(
@@ -153,16 +152,19 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                         ),
                     ],
                   ),
-                  RoundedRaisedButton(
-                    onPressed:
-                        (state is! PictureEditInProgress && picturePath != null)
-                            ? () {
-                                if (_formKey.currentState!.validate()) {
-                                  _onSubmitPressed();
-                                }
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RoundedRaisedButton(
+                      onPressed: (state is! PictureEditInProgress &&
+                              picturePath != null)
+                          ? () {
+                              if (_formKey.currentState!.validate()) {
+                                _onSubmitPressed();
                               }
-                            : null,
-                    child: const Text('上传'),
+                            }
+                          : null,
+                      child: const Text('上传'),
+                    ),
                   ),
                 ],
               ),
