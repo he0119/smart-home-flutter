@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:smarthome/widgets/bottom_loader.dart';
 
@@ -94,20 +96,23 @@ class _InfiniteListState<T> extends State<InfiniteList<T>> {
   }
 }
 
+/// 无限长列表
+///
+/// 随着用户的滚动载入新数据
 class SliverInfiniteList<T> extends StatefulWidget {
-  final List<Widget> slivers;
+  final List<T> items;
+  final Widget Function(BuildContext context, T item) itemBuilder;
   final bool hasReachedMax;
   final VoidCallback? onFetch;
-  final double threshold;
-  final int itemCount;
+  final int invisibleItemsThreshold;
 
   const SliverInfiniteList({
     Key? key,
-    required this.slivers,
+    required this.items,
+    required this.itemBuilder,
     this.hasReachedMax = true,
     this.onFetch,
-    this.threshold = 200,
-    required this.itemCount,
+    this.invisibleItemsThreshold = 3,
   }) : super(key: key);
 
   @override
@@ -115,52 +120,52 @@ class SliverInfiniteList<T> extends StatefulWidget {
 }
 
 class _SliverInfiniteListState<T> extends State<SliverInfiniteList<T>> {
-  final _scrollController = ScrollController();
-
-  int current = 0;
-  bool get canFetch {
-    if (current != widget.itemCount) {
-      current = widget.itemCount;
-      return true;
-    }
-    return false;
+  bool _hasRequestedNextPage = false;
+  int get _itemCount {
+    return widget.items.length;
   }
+
+  int _currentItemCount = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
-      controller: _scrollController,
-      child: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          ...widget.slivers,
-          if (!widget.hasReachedMax)
-            const SliverToBoxAdapter(
-              child: BottomLoader(),
-            ),
-        ],
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          _onBuildChildItem(index);
+          if (index < widget.items.length) {
+            return widget.itemBuilder(context, widget.items[index]);
+          }
+          return const BottomLoader();
+        },
+        childCount: !widget.hasReachedMax
+            ? widget.items.length + 1
+            : widget.items.length,
       ),
     );
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
+  /// 判断是否需要加载新数据
+  void _onBuildChildItem(int index) {
+    if (widget.onFetch == null) return;
 
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
+    if (widget.hasReachedMax) return;
 
-  void _onScroll() {
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= widget.threshold &&
-        !widget.hasReachedMax) {
-      if (widget.onFetch != null && canFetch) widget.onFetch!();
+    // 如果数据更新了，重置状态
+    if (_currentItemCount != _itemCount) {
+      _currentItemCount = _itemCount;
+      _hasRequestedNextPage = false;
+    }
+
+    if (_hasRequestedNextPage) return;
+
+    final newPageRequestTriggerIndex =
+        max(0, _itemCount - widget.invisibleItemsThreshold);
+    final isBuildingTriggerIndexItem = index == newPageRequestTriggerIndex;
+
+    if (isBuildingTriggerIndexItem) {
+      widget.onFetch!();
+      _hasRequestedNextPage = true;
     }
   }
 }
