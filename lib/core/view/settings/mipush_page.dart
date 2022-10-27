@@ -45,21 +45,23 @@ class MiPushPage extends StatelessWidget {
               ),
             ),
           ],
-          sliver: ListView(
-            children: [
-              ListTile(
-                title: const Text('状态'),
-                subtitle: Text(status),
-              ),
-              ListTile(
-                title: const Text('注册识别码（本地）'),
-                subtitle: Text(localRegId ?? ''),
-              ),
-              ListTile(
-                title: const Text('注册识别码（服务器）'),
-                subtitle: Text(serverRegId ?? '单击同步按钮获取并同步服务器数据'),
-              ),
-            ],
+          sliver: SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                ListTile(
+                  title: const Text('状态'),
+                  subtitle: Text(status),
+                ),
+                ListTile(
+                  title: const Text('注册识别码（本地）'),
+                  subtitle: Text(localRegId ?? ''),
+                ),
+                ListTile(
+                  title: const Text('注册识别码（服务器）'),
+                  subtitle: Text(serverRegId ?? '单击同步按钮获取并同步服务器数据'),
+                ),
+              ],
+            ),
           ),
         );
       },
