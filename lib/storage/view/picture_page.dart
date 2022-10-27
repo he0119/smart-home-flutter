@@ -57,12 +57,12 @@ class PictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PictureBloc, PictureState>(
       builder: (context, state) {
-        return MySliverPage(
-          title: (state is PictureSuccess)
+        return MySliverScaffold(
+          title: Text((state is PictureSuccess)
               ? state.picture.description.isNotEmpty
                   ? '${state.picture.item!.name}（${state.picture.description}）'
                   : '${state.picture.item!.name}（未命名）'
-              : '图片',
+              : '图片'),
           actions: [
             if (state is PictureSuccess)
               PopupMenuButton<PictureMenu>(

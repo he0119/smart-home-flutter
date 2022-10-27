@@ -41,8 +41,8 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MySliverPage(
-      title: '设置',
+    return MySliverScaffold(
+      title: const Text('设置'),
       sliver: Consumer<SettingsController>(
         builder: (context, settings, child) => SettingsList(
           sections: [

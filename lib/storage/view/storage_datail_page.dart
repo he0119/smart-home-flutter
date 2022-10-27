@@ -69,8 +69,8 @@ class StorageDetailScreen extends StatelessWidget {
             paths.add(state.storage);
           }
         }
-        return MySliverPage(
-          title: state.storage.name,
+        return MySliverScaffold(
+          title: Text(state.storage.name),
           onRefresh: () async {
             if (state.status == StorageDetailStatus.success) {
               context.read<StorageDetailBloc>().add(

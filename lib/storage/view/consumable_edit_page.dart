@@ -32,8 +32,8 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MySliverPage(
-      title: '耗材编辑',
+    return MySliverScaffold(
+      title: const Text('耗材编辑'),
       sliver: BlocConsumer<ItemEditBloc, ItemEditState>(
         listener: (context, state) {
           if (state is ConsumableAddSuccess) {

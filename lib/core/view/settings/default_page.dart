@@ -11,8 +11,8 @@ class DefaultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsController>(
-      builder: (context, settings, child) => MySliverPage(
-        title: '默认主页',
+      builder: (context, settings, child) => MySliverScaffold(
+        title: const Text('默认主页'),
         sliver: SettingsList(
           sections: [
             SettingsSection(tiles: [

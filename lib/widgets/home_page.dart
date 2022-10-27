@@ -25,8 +25,8 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MySliverPage(
-      title: activeTab.name,
+    return MySliverScaffold(
+      title: Text(activeTab.name),
       actions: actions,
       slivers: slivers,
       drawer: const MyDrawer(),
@@ -42,8 +42,9 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-class MySliverPage extends StatelessWidget {
-  final String title;
+/// 通用的 [Scaffold]，body 为 [CustomScrollView]
+class MySliverScaffold extends StatelessWidget {
+  final Widget title;
   final List<Widget>? actions;
   final List<Widget>? slivers;
   final Widget? sliver;
@@ -53,17 +54,17 @@ class MySliverPage extends StatelessWidget {
   final Future<void> Function()? onRefresh;
   final Future<bool> Function()? onWillPop;
 
-  const MySliverPage({
+  const MySliverScaffold({
     super.key,
     required this.title,
     this.actions,
+    this.sliver,
     this.slivers,
     this.floatingActionButton,
     this.bottomNavigationBar,
     this.drawer,
     this.onRefresh,
     this.onWillPop,
-    this.sliver,
   });
 
   @override
@@ -86,7 +87,7 @@ class MySliverPage extends StatelessWidget {
           child: CustomScrollView(
             slivers: <Widget>[
               SliverAppBar.medium(
-                title: Text(title),
+                title: title,
                 actions: actions,
               ),
               if (sliver != null) sliver!,

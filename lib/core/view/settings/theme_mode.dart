@@ -11,8 +11,8 @@ class ThemeModePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsController>(
-      builder: (context, settings, child) => MySliverPage(
-        title: '主题',
+      builder: (context, settings, child) => MySliverScaffold(
+        title: const Text('主题'),
         sliver: SettingsList(
           sections: [
             SettingsSection(

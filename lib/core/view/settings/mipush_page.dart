@@ -26,8 +26,8 @@ class MiPushPage extends StatelessWidget {
         if (state is PushError) {
           status = state.message;
         }
-        return MySliverPage(
-          title: '小米推送',
+        return MySliverScaffold(
+          title: const Text('小米推送'),
           actions: [
             Tooltip(
               message: '同步',

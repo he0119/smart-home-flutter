@@ -44,8 +44,8 @@ class _TextEditPageState extends State<TextEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MySliverPage(
-      title: widget.title,
+    return MySliverScaffold(
+      title: Text(widget.title),
       actions: <Widget>[
         Tooltip(
           message: '确认',

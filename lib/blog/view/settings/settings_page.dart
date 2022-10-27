@@ -27,8 +27,8 @@ class BlogSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MySliverPage(
-      title: '博客',
+    return MySliverScaffold(
+      title: const Text('博客'),
       sliver: Consumer<SettingsController>(
         builder: (context, settings, child) => SettingsList(
           sections: [

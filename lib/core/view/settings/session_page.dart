@@ -11,8 +11,8 @@ class SessionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MySliverPage(
-      title: '登录设备',
+    return MySliverScaffold(
+      title: const Text('登录设备'),
       sliver: BlocBuilder<SessionBloc, SessionState>(
         builder: (context, state) {
           if (state is SessionSuccess) {

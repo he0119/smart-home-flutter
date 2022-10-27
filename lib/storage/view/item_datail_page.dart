@@ -73,8 +73,8 @@ class ItemDetailScreen extends StatelessWidget {
             }
           },
           child: SelectionArea(
-            child: MySliverPage(
-              title: state.item.name,
+            child: MySliverScaffold(
+              title: Text(state.item.name),
               actions: <Widget>[
                 const SearchIconButton(),
                 PopupMenuButton<ItemDetailMenu>(

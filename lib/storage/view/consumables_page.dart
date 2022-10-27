@@ -37,8 +37,8 @@ class ConsumablesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ConsumablesBloc, ConsumablesState>(
       builder: (context, state) {
-        return MySliverPage(
-          title: '耗材管理',
+        return MySliverScaffold(
+          title: const Text('耗材管理'),
           slivers: [
             if (state is ConsumablesFailure)
               SliverErrorMessageButton(

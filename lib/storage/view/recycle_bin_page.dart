@@ -49,8 +49,8 @@ class RecycleBinScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RecycleBinBloc, RecycleBinState>(
       builder: (context, state) {
-        return MySliverPage(
-          title: '回收站',
+        return MySliverScaffold(
+          title: const Text('回收站'),
           onRefresh: () async {
             BlocProvider.of<RecycleBinBloc>(context)
                 .add(const RecycleBinFetched(cache: false));

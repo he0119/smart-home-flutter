@@ -82,8 +82,8 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
           showErrorSnackBar(state.message);
         }
       },
-      builder: (context, state) => MySliverPage(
-        title: '添加图片',
+      builder: (context, state) => MySliverScaffold(
+        title: const Text('添加图片'),
         sliver: SliverToBoxAdapter(
           child: Form(
             key: _formKey,

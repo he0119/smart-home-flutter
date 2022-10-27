@@ -113,8 +113,8 @@ class TopicDetailScreen extends StatelessWidget {
       child: BlocBuilder<TopicDetailBloc, TopicDetailState>(
         builder: (context, state) {
           return SelectionArea(
-            child: MySliverPage(
-              title: state.topic.title ?? '',
+            child: MySliverScaffold(
+              title: Text(state.topic.title ?? ''),
               actions: <Widget>[
                 PopupMenuButton<TopicDetailMenu>(
                   onSelected: (value) async {
