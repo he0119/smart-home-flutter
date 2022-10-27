@@ -5,6 +5,7 @@ import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/dropdown_search.dart';
+import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class ConsumableEditPage extends StatefulWidget {
@@ -31,11 +32,9 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('耗材编辑'),
-      ),
-      body: BlocConsumer<ItemEditBloc, ItemEditState>(
+    return MySliverScaffold(
+      title: const Text('耗材编辑'),
+      sliver: BlocConsumer<ItemEditBloc, ItemEditState>(
         listener: (context, state) {
           if (state is ConsumableAddSuccess) {
             showInfoSnackBar('耗材添加成功');
@@ -53,7 +52,7 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
             showErrorSnackBar(state.message);
           }
         },
-        builder: (context, state) => SingleChildScrollView(
+        builder: (context, state) => SliverToBoxAdapter(
           child: Column(
             children: <Widget>[
               if (current.consumables!.isEmpty)
@@ -95,20 +94,23 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
                   },
                 ),
               ),
-              RoundedRaisedButton(
-                onPressed:
-                    (state is! ItemEditInProgress && selectedItem != null)
-                        ? () {
-                            BlocProvider.of<ItemEditBloc>(context).add(
-                              ConsumableAdded(
-                                item: widget.item,
-                                consumables: [selectedItem],
-                              ),
-                            );
-                            showInfoSnackBar('正在添加...', duration: 1);
-                          }
-                        : null,
-                child: const Text('添加'),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RoundedRaisedButton(
+                  onPressed:
+                      (state is! ItemEditInProgress && selectedItem != null)
+                          ? () {
+                              BlocProvider.of<ItemEditBloc>(context).add(
+                                ConsumableAdded(
+                                  item: widget.item,
+                                  consumables: [selectedItem],
+                                ),
+                              );
+                              showInfoSnackBar('正在添加...', duration: 1);
+                            }
+                          : null,
+                  child: const Text('添加'),
+                ),
               ),
             ],
           ),

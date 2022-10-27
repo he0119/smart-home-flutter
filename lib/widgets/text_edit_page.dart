@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:smarthome/widgets/home_page.dart';
 
 class TextEditPage extends StatefulWidget {
   final String title;
@@ -43,49 +44,49 @@ class _TextEditPageState extends State<TextEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: <Widget>[
-          Tooltip(
-            message: '确认',
-            child: IconButton(
-              icon: const Icon(Icons.check),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  widget.onSubmit(_textController.text);
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
+    return MySliverScaffold(
+      title: Text(widget.title),
+      actions: <Widget>[
+        Tooltip(
+          message: '确认',
+          child: IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                widget.onSubmit(_textController.text);
+                Navigator.of(context).pop();
+              }
+            },
           ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Form(
-              key: _formKey,
-              child: TextFormField(
-                controller: _textController,
-                autofocus: true,
-                validator: (value) {
-                  if (widget.validator != null) {
-                    return widget.validator!(value ?? '');
-                  }
-                  return null;
-                },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                inputFormatters: widget.inputFormatters,
-                keyboardType: widget.keyboardType,
+        ),
+      ],
+      sliver: SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Form(
+                key: _formKey,
+                child: TextFormField(
+                  controller: _textController,
+                  autofocus: true,
+                  validator: (value) {
+                    if (widget.validator != null) {
+                      return widget.validator!(value ?? '');
+                    }
+                    return null;
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  inputFormatters: widget.inputFormatters,
+                  keyboardType: widget.keyboardType,
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Text(widget.description),
-          ],
+              const SizedBox(height: 12),
+              Text(widget.description),
+            ],
+          ),
         ),
       ),
     );

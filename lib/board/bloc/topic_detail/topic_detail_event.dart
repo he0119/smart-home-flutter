@@ -8,22 +8,21 @@ abstract class TopicDetailEvent extends Equatable {
 }
 
 class TopicDetailFetched extends TopicDetailEvent {
-  final String? topicId;
+  final String id;
   final bool descending;
   final bool cache;
   final bool showInProgress;
 
   const TopicDetailFetched({
-    this.topicId,
+    required this.id,
     required this.descending,
     this.cache = true,
     this.showInProgress = true,
   });
 
   @override
-  List<Object?> get props => [topicId, descending, cache, showInProgress];
+  List<Object?> get props => [id, descending, cache, showInProgress];
 
   @override
-  String toString() =>
-      'TopicDetailFetched(topicId: $topicId, descending: $descending)';
+  String toString() => 'TopicDetailFetched(id: $id, descending: $descending)';
 }

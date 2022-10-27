@@ -9,6 +9,7 @@ import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
+import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 
 class RecycleBinPage extends Page {
@@ -46,28 +47,27 @@ class RecycleBinScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('回收站'),
-      ),
-      body: BlocBuilder<RecycleBinBloc, RecycleBinState>(
-        builder: (context, state) {
-          if (state is RecycleBinFailure) {
-            return ErrorMessageButton(
-              message: state.message,
-              onPressed: () {
-                BlocProvider.of<RecycleBinBloc>(context)
-                    .add(const RecycleBinFetched(cache: false));
-              },
-            );
-          }
-          if (state is RecycleBinSuccess) {
-            return RefreshIndicator(
-              onRefresh: () async {
-                BlocProvider.of<RecycleBinBloc>(context)
-                    .add(const RecycleBinFetched(cache: false));
-              },
-              child: BlocListener<ItemEditBloc, ItemEditState>(
+    return BlocBuilder<RecycleBinBloc, RecycleBinState>(
+      builder: (context, state) {
+        return MySliverScaffold(
+          title: const Text('回收站'),
+          onRefresh: () async {
+            BlocProvider.of<RecycleBinBloc>(context)
+                .add(const RecycleBinFetched(cache: false));
+          },
+          slivers: [
+            if (state is RecycleBinFailure)
+              SliverErrorMessageButton(
+                message: state.message,
+                onPressed: () {
+                  BlocProvider.of<ConsumablesBloc>(context)
+                      .add(const ConsumablesFetched(cache: false));
+                },
+              ),
+            if (state is RecycleBinInProgress)
+              const SliverCenterLoadingIndicator(),
+            if (state is RecycleBinSuccess)
+              BlocListener<ItemEditBloc, ItemEditState>(
                   listener: (context, state) {
                     if (state is ItemRestoreSuccess) {
                       showInfoSnackBar(
@@ -79,7 +79,7 @@ class RecycleBinScreen extends StatelessWidget {
                       showErrorSnackBar(state.message);
                     }
                   },
-                  child: InfiniteList(
+                  child: SliverInfiniteList(
                     itemBuilder: _buildItem,
                     items: state.items,
                     hasReachedMax: state.hasReachedMax,
@@ -87,11 +87,9 @@ class RecycleBinScreen extends StatelessWidget {
                         .read<RecycleBinBloc>()
                         .add(const RecycleBinFetched()),
                   )),
-            );
-          }
-          return const CenterLoadingIndicator();
-        },
-      ),
+          ],
+        );
+      },
     );
   }
 }

@@ -14,10 +14,10 @@ import 'package:smarthome/core/view/settings/default_page.dart';
 import 'package:smarthome/core/view/settings/mipush_settings_tile.dart';
 import 'package:smarthome/core/view/settings/session_page.dart';
 import 'package:smarthome/core/view/settings/theme_mode.dart';
-import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/user/bloc/bloc/session_bloc.dart';
 import 'package:smarthome/user/repository/user_repository.dart';
 import 'package:smarthome/utils/theme_mode_extension.dart';
+import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class SettingsPage extends Page {
@@ -41,11 +41,9 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('设置'),
-      ),
-      body: Consumer<SettingsController>(
+    return MySliverScaffold(
+      title: const Text('设置'),
+      sliver: Consumer<SettingsController>(
         builder: (context, settings, child) => SettingsList(
           sections: [
             SettingsSection(
@@ -103,20 +101,6 @@ class SettingsScreen extends StatelessWidget {
                     );
                   },
                 )
-              ],
-            ),
-            SettingsSection(
-              title: '物联网',
-              tiles: [
-                SettingsTile(
-                  title: '刷新间隔',
-                  subtitle: settings.refreshInterval.toString(),
-                  onPressed: (context) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const RefreshIntervalPage(),
-                    ));
-                  },
-                ),
               ],
             ),
             SettingsSection(

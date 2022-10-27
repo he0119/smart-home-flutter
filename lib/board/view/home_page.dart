@@ -40,73 +40,60 @@ class BoardHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyHomePage(
-      activeTab: AppTab.board,
-      body: const _BoardHomeBody(),
-      floatingActionButton: FloatingActionButton(
-        tooltip: '添加话题',
-        onPressed: () async {
-          final boardHomeBloc = context.read<BoardHomeBloc>();
-
-          final r = await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) => TopicEditBloc(
-                    boardRepository:
-                        RepositoryProvider.of<BoardRepository>(context)),
-                child: const TopicEditPage(
-                  isEditing: false,
-                ),
-              ),
-            ),
-          );
-          if (r == true) {
-            boardHomeBloc.add(const BoardHomeFetched(cache: false));
-          }
-        },
-        child: const Icon(Icons.create),
-      ),
-    );
-  }
-}
-
-class _BoardHomeBody extends StatelessWidget {
-  const _BoardHomeBody({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
     return BlocBuilder<BoardHomeBloc, BoardHomeState>(
       builder: (context, state) {
-        if (state is BoardHomeFailure) {
-          return ErrorMessageButton(
-            onPressed: () {
-              BlocProvider.of<BoardHomeBloc>(context)
-                  .add(const BoardHomeFetched(cache: false));
+        return MyHomePage(
+          activeTab: AppTab.board,
+          floatingActionButton: FloatingActionButton(
+            tooltip: '添加话题',
+            onPressed: () async {
+              final boardHomeBloc = context.read<BoardHomeBloc>();
+
+              final r = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) => TopicEditBloc(
+                        boardRepository:
+                            RepositoryProvider.of<BoardRepository>(context)),
+                    child: const TopicEditPage(
+                      isEditing: false,
+                    ),
+                  ),
+                ),
+              );
+              if (r == true) {
+                boardHomeBloc.add(const BoardHomeFetched(cache: false));
+              }
             },
-            message: state.message,
-          );
-        }
-        if (state is BoardHomeSuccess) {
-          // 从各种类型详情页返回
-          return RefreshIndicator(
-            onRefresh: () async {
-              BlocProvider.of<BoardHomeBloc>(context)
-                  .add(const BoardHomeFetched(cache: false));
-            },
-            child: InfiniteList<Topic>(
-              items: state.topics,
-              hasReachedMax: state.hasReachedMax,
-              itemBuilder: (context, item) => TopicItem(topic: item),
-              onFetch: () {
-                BlocProvider.of<BoardHomeBloc>(context)
-                    .add(const BoardHomeFetched());
-              },
-            ),
-          );
-        }
-        return const CenterLoadingIndicator();
+            child: const Icon(Icons.create),
+          ),
+          slivers: [
+            if (state.status == BoardHomeStatus.failure)
+              SliverErrorMessageButton(
+                onPressed: () {
+                  BlocProvider.of<BoardHomeBloc>(context)
+                      .add(const BoardHomeFetched(cache: false));
+                },
+                message: state.error,
+              ),
+            if (state.status == BoardHomeStatus.loading)
+              const SliverCenterLoadingIndicator(),
+            if (state.status == BoardHomeStatus.success)
+              SliverInfiniteList<Topic>(
+                items: state.topics,
+                hasReachedMax: state.hasReachedMax,
+                itemBuilder: (context, item) => TopicItem(topic: item),
+                onFetch: () {
+                  BlocProvider.of<BoardHomeBloc>(context)
+                      .add(const BoardHomeFetched());
+                },
+              ),
+          ],
+          onRefresh: () async {
+            BlocProvider.of<BoardHomeBloc>(context)
+                .add(const BoardHomeFetched(cache: false));
+          },
+        );
       },
     );
   }

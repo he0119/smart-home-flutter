@@ -23,3 +23,26 @@ class RoundedRaisedButton extends StatelessWidget {
     );
   }
 }
+
+class SliverCenterRoundedRaisedButton extends StatelessWidget {
+  final Widget? child;
+  final Function? onPressed;
+
+  const SliverCenterRoundedRaisedButton({
+    Key? key,
+    this.child,
+    this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverFillRemaining(
+      child: Center(
+        child: RoundedRaisedButton(
+          onPressed: onPressed,
+          child: child,
+        ),
+      ),
+    );
+  }
+}

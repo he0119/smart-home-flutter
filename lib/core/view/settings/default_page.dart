@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/core/model/models.dart';
+import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class DefaultPage extends StatelessWidget {
@@ -10,9 +11,9 @@ class DefaultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsController>(
-      builder: (context, settings, child) => Scaffold(
-        appBar: AppBar(title: const Text('默认主页')),
-        body: SettingsList(
+      builder: (context, settings, child) => MySliverScaffold(
+        title: const Text('默认主页'),
+        sliver: SettingsList(
           sections: [
             SettingsSection(tiles: [
               SettingsTile(

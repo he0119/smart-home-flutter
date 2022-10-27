@@ -1,44 +1,43 @@
 part of 'board_home_bloc.dart';
 
-abstract class BoardHomeState extends Equatable {
-  const BoardHomeState();
+class BoardHomeState extends Equatable {
+  /// 当前状态
+  final BoardHomeStatus status;
 
-  @override
-  List<Object> get props => [];
-}
+  /// 错误信息
+  final String error;
 
-class BoardHomeInProgress extends BoardHomeState {
-  @override
-  String toString() => 'BoardHomeInProgress';
-}
-
-class BoardHomeFailure extends BoardHomeState {
-  final String message;
-
-  const BoardHomeFailure(this.message);
-
-  @override
-  List<Object> get props => [message];
-
-  @override
-  String toString() => 'BoardHomeFailure(message: $message)';
-}
-
-class BoardHomeSuccess extends BoardHomeState {
+  /// 位置页面所需数据
   final List<Topic> topics;
   final PageInfo pageInfo;
 
-  const BoardHomeSuccess({
-    required this.topics,
-    required this.pageInfo,
+  const BoardHomeState({
+    this.status = BoardHomeStatus.initial,
+    this.error = '',
+    // 初始为空值
+    this.topics = const [],
+    this.pageInfo = const PageInfo(hasNextPage: false),
   });
 
   bool get hasReachedMax => !pageInfo.hasNextPage;
 
   @override
-  List<Object> get props => [topics, pageInfo];
+  List<Object?> get props => [status, error, topics, pageInfo];
 
   @override
-  String toString() =>
-      'BoardHomeSuccess(topics: ${topics.length}, pageInfo: $pageInfo)';
+  bool get stringify => true;
+
+  BoardHomeState copyWith({
+    BoardHomeStatus? status,
+    String? error,
+    List<Topic>? topics,
+    PageInfo? pageInfo,
+  }) {
+    return BoardHomeState(
+      status: status ?? this.status,
+      error: error ?? this.error,
+      topics: topics ?? this.topics,
+      pageInfo: pageInfo ?? this.pageInfo,
+    );
+  }
 }

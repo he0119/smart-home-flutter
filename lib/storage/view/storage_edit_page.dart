@@ -6,6 +6,7 @@ import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/view/widgets/storage_picker_formfield.dart';
 import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
+import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class StorageEditPage extends StatefulWidget {
@@ -93,36 +94,34 @@ class _StorageEditPageState extends State<StorageEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: widget.isEditing
-            ? Text('编辑 ${widget.storage!.name}')
-            : const Text('添加位置'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: BlocConsumer<StorageEditBloc, StorageEditState>(
-          listener: (context, state) {
-            if (state is StorageEditInProgress) {
-              showInfoSnackBar('正在提交...', duration: 1);
-            }
-            if (state is StorageAddSuccess) {
-              showInfoSnackBar('位置 ${state.storage.name} 添加成功');
-            }
-            if (state is StorageUpdateSuccess) {
-              showInfoSnackBar('位置 ${state.storage.name} 修改成功');
-            }
-            if (state is StorageEditFailure) {
-              showErrorSnackBar(state.message);
-            }
-            // 位置添加和修改成功过后自动返回位置详情界面
-            if (state is StorageAddSuccess || state is StorageUpdateSuccess) {
-              Navigator.of(context).pop(true);
-            }
-          },
-          builder: (context, state) => Form(
-            key: _formKey,
-            child: SingleChildScrollView(
+    return MySliverScaffold(
+      title: widget.isEditing
+          ? Text('编辑 ${widget.storage!.name}')
+          : const Text('添加位置'),
+      sliver: SliverFillRemaining(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: BlocConsumer<StorageEditBloc, StorageEditState>(
+            listener: (context, state) {
+              if (state is StorageEditInProgress) {
+                showInfoSnackBar('正在提交...', duration: 1);
+              }
+              if (state is StorageAddSuccess) {
+                showInfoSnackBar('位置 ${state.storage.name} 添加成功');
+              }
+              if (state is StorageUpdateSuccess) {
+                showInfoSnackBar('位置 ${state.storage.name} 修改成功');
+              }
+              if (state is StorageEditFailure) {
+                showErrorSnackBar(state.message);
+              }
+              // 位置添加和修改成功过后自动返回位置详情界面
+              if (state is StorageAddSuccess || state is StorageUpdateSuccess) {
+                Navigator.of(context).pop(true);
+              }
+            },
+            builder: (context, state) => Form(
+              key: _formKey,
               child: Column(
                 children: <Widget>[
                   TextFormField(

@@ -28,3 +28,21 @@ class ErrorMessageButton extends StatelessWidget {
     );
   }
 }
+
+class SliverErrorMessageButton extends StatelessWidget {
+  final Function onPressed;
+  final String message;
+
+  const SliverErrorMessageButton({
+    super.key,
+    required this.onPressed,
+    required this.message,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverFillRemaining(
+      child: ErrorMessageButton(message: message, onPressed: onPressed),
+    );
+  }
+}

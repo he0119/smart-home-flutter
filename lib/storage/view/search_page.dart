@@ -5,6 +5,7 @@ import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/storage/view/widgets/storage_item_list.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
+import 'package:smarthome/widgets/home_page.dart';
 
 class SearchPage extends Page {
   // 按理来说每个搜索界面都不一样，所以每个界面的 key 都应不同
@@ -60,39 +61,40 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return KeyboardDismissOnTap(
-      child: Scaffold(
-        appBar: AppBar(
-          title: TextField(
-            decoration: InputDecoration(
-              hintText: '搜索',
-              suffixIcon: _showClearButton
-                  ? IconButton(
-                      icon: Icon(
-                        Icons.clear,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                      onPressed: () {
-                        _textController.text = '';
-                      },
-                    )
-                  : null,
-              border: InputBorder.none,
-            ),
-            autofocus: true,
-            controller: _textController,
+      child: MySliverScaffold(
+        appBarSize: AppBarSize.normal,
+        title: TextField(
+          decoration: InputDecoration(
+            hintText: '搜索',
+            suffixIcon: _showClearButton
+                ? IconButton(
+                    icon: Icon(
+                      Icons.clear,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    onPressed: () {
+                      _textController.text = '';
+                    },
+                  )
+                : null,
+            border: InputBorder.none,
           ),
+          autofocus: true,
+          controller: _textController,
         ),
-        body: BlocBuilder<StorageSearchBloc, StorageSearchState>(
+        sliver: BlocBuilder<StorageSearchBloc, StorageSearchState>(
           builder: (BuildContext context, StorageSearchState state) {
             if (state is StorageSearchInProgress) {
-              return const CenterLoadingIndicator();
+              return const SliverCenterLoadingIndicator();
             }
             if (state is StorageSearchFailure) {
-              return Center(child: Text(state.message));
+              return SliverFillRemaining(
+                  child: Center(child: Text(state.message)));
             }
             if (state is StorageSearchSuccess) {
               if (state.items.isEmpty && state.storages.isEmpty) {
-                return const Center(child: Text('无结果'));
+                return const SliverFillRemaining(
+                    child: Center(child: Text('无结果')));
               } else {
                 return StorageItemList(
                   items: state.items,
@@ -102,7 +104,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 );
               }
             }
-            return Container();
+            return SliverFillRemaining(child: Container());
           },
         ),
       ),

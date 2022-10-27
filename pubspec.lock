@@ -281,6 +281,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.5"
+  extended_sliver:
+    dependency: "direct main"
+    description:
+      name: extended_sliver
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.3"
   fake_async:
     dependency: transitive
     description:

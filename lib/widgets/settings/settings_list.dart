@@ -10,12 +10,10 @@ class SettingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      separatorBuilder: (context, index) => const Divider(height: 1),
-      itemCount: sections.length,
-      itemBuilder: (context, index) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, index) {
         return sections[index];
-      },
+      }, childCount: sections.length),
     );
   }
 }

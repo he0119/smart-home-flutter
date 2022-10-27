@@ -139,8 +139,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         return SettingsRoutePath(appSettings: AppSettings.home);
       } else if (pages.last is BlogSettingsPage) {
         return SettingsRoutePath(appSettings: AppSettings.blog);
-      } else if (pages.last is IotSettingsPage) {
-        return SettingsRoutePath(appSettings: AppSettings.iot);
       } else if (pages.last is PicturePage) {
         return PictureRoutePath(pictureId: uri.pathSegments[1]);
       }
@@ -194,12 +192,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           _pages = [
             settingsController.defaultPage.page,
             const SettingsPage(),
-          ];
-          break;
-        case AppSettings.iot:
-          _pages = [
-            const IotHomePage(),
-            const IotSettingsPage(),
           ];
           break;
         case AppSettings.blog:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
+import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class CommentOrderPage extends StatelessWidget {
@@ -9,9 +10,9 @@ class CommentOrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsController>(
-      builder: (context, settings, child) => Scaffold(
-        appBar: AppBar(title: const Text('评论排序')),
-        body: SettingsList(
+      builder: (context, settings, child) => MySliverScaffold(
+        title: const Text('评论排序'),
+        sliver: SettingsList(
           sections: [
             SettingsSection(
               tiles: [

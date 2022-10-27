@@ -8,6 +8,7 @@ import 'package:smarthome/storage/view/widgets/storage_picker_formfield.dart';
 import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
+import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class ItemEditPage extends StatefulWidget {
@@ -48,13 +49,11 @@ class _ItemEditPageState extends State<ItemEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: widget.isEditing
-            ? Text('编辑 ${widget.item!.name}')
-            : const Text('添加物品'),
-      ),
-      body: BlocListener<ItemEditBloc, ItemEditState>(
+    return MySliverScaffold(
+      title: widget.isEditing
+          ? Text('编辑 ${widget.item!.name}')
+          : const Text('添加物品'),
+      sliver: BlocListener<ItemEditBloc, ItemEditState>(
         listener: (context, state) {
           if (state is ItemEditInProgress) {
             showInfoSnackBar('正在提交...', duration: 1);
@@ -73,12 +72,12 @@ class _ItemEditPageState extends State<ItemEditPage> {
             Navigator.of(context).pop(true);
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: BlocBuilder<ItemEditBloc, ItemEditState>(
-            builder: (context, state) => Form(
-              key: _formKey,
-              child: SingleChildScrollView(
+        child: SliverFillRemaining(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: BlocBuilder<ItemEditBloc, ItemEditState>(
+              builder: (context, state) => Form(
+                key: _formKey,
                 child: Column(
                   children: <Widget>[
                     TextFormField(
