@@ -44,32 +44,33 @@ class _AdminScreenState extends State<AdminScreen> {
                 AsyncSnapshot<WebViewController> controller) =>
             Scaffold(
           body: WillPopScope(
-              onWillPop: () async {
-                if (controller.hasData && await controller.data!.canGoBack()) {
-                  await controller.data!.goBack();
-                  return false;
-                }
-                return true;
-              },
-              child: SafeArea(
-                child: WebView(
-                  initialUrl: settings.adminUrl,
-                  javascriptMode: JavascriptMode.unrestricted,
-                  onWebViewCreated: _controller.complete,
-                  initialCookies: [
-                    if (settings.cookies != null)
-                      ...settings.cookies!.split(';').map(
-                        (cookie) {
-                          final parts = cookie.split('=');
-                          return WebViewCookie(
-                              name: parts[0].trim(),
-                              value: parts[1].trim(),
-                              domain: settings.apiUrl ?? '');
-                        },
-                      ).toList(),
-                  ],
-                ),
-              )),
+            onWillPop: () async {
+              if (controller.hasData && await controller.data!.canGoBack()) {
+                await controller.data!.goBack();
+                return false;
+              }
+              return true;
+            },
+            child: SafeArea(
+              child: WebView(
+                initialUrl: settings.adminUrl,
+                javascriptMode: JavascriptMode.unrestricted,
+                onWebViewCreated: _controller.complete,
+                initialCookies: [
+                  if (settings.cookies != null)
+                    ...settings.cookies!.split(';').map(
+                      (cookie) {
+                        final parts = cookie.split('=');
+                        return WebViewCookie(
+                            name: parts[0].trim(),
+                            value: parts[1].trim(),
+                            domain: settings.apiUrl ?? '');
+                      },
+                    ).toList(),
+                ],
+              ),
+            ),
+          ),
           floatingActionButton: controller.hasData
               ? FloatingActionButton(
                   tooltip: '使用浏览器打开',

@@ -5,6 +5,7 @@ import 'package:smarthome/board/bloc/blocs.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
+import 'package:smarthome/widgets/home_page.dart';
 
 class TopicEditPage extends StatefulWidget {
   final bool isEditing;
@@ -60,53 +61,52 @@ class _TopicEditPageState extends State<TopicEditPage> {
       },
       child: DefaultTabController(
         length: tabs.length,
-        child: Scaffold(
-          appBar: AppBar(
-            title: widget.isEditing ? const Text('编辑话题') : const Text('新话题'),
-            actions: [
-              Tooltip(
-                message: '提交',
-                child: IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      if (widget.isEditing) {
-                        BlocProvider.of<TopicEditBloc>(context)
-                            .add(TopicUpdated(
-                          id: widget.topic!.id,
-                          title: _titleController.text,
-                          description: _descriptionController.text,
-                        ));
-                      } else {
-                        BlocProvider.of<TopicEditBloc>(context).add(TopicAdded(
-                          title: _titleController.text,
-                          description: _descriptionController.text,
-                        ));
-                      }
-                      showInfoSnackBar('正在提交...', duration: 1);
+        child: MySliverScaffold(
+          title: widget.isEditing ? const Text('编辑话题') : const Text('新话题'),
+          actions: [
+            Tooltip(
+              message: '提交',
+              child: IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    if (widget.isEditing) {
+                      BlocProvider.of<TopicEditBloc>(context).add(TopicUpdated(
+                        id: widget.topic!.id,
+                        title: _titleController.text,
+                        description: _descriptionController.text,
+                      ));
+                    } else {
+                      BlocProvider.of<TopicEditBloc>(context).add(TopicAdded(
+                        title: _titleController.text,
+                        description: _descriptionController.text,
+                      ));
                     }
-                  },
-                ),
-              )
-            ],
-            bottom: TabBar(
-              tabs: [for (final tab in tabs) Tab(text: tab)],
-            ),
+                    showInfoSnackBar('正在提交...', duration: 1);
+                  }
+                },
+              ),
+            )
+          ],
+          appbarBottom: TabBar(
+            tabs: [for (final tab in tabs) Tab(text: tab)],
           ),
-          body: TabBarView(
-            children: [
-              _EditPage(
-                isEditing: widget.isEditing,
-                topic: widget.topic,
-                formKey: _formKey,
-                titleController: _titleController,
-                descriptionController: _descriptionController,
-              ),
-              _PreviewPage(
-                titleController: _titleController,
-                descriptionController: _descriptionController,
-              ),
-            ],
+          sliver: SliverFillRemaining(
+            child: TabBarView(
+              children: [
+                _EditPage(
+                  isEditing: widget.isEditing,
+                  topic: widget.topic,
+                  formKey: _formKey,
+                  titleController: _titleController,
+                  descriptionController: _descriptionController,
+                ),
+                _PreviewPage(
+                  titleController: _titleController,
+                  descriptionController: _descriptionController,
+                ),
+              ],
+            ),
           ),
         ),
       ),

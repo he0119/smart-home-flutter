@@ -42,6 +42,8 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
+enum AppBarSize { normal, medium }
+
 /// 通用的 [Scaffold]，body 为 [CustomScrollView]
 class MySliverScaffold extends StatelessWidget {
   final Widget title;
@@ -51,8 +53,10 @@ class MySliverScaffold extends StatelessWidget {
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
   final Widget? drawer;
+  final PreferredSizeWidget? appbarBottom;
   final Future<void> Function()? onRefresh;
   final Future<bool> Function()? onWillPop;
+  final AppBarSize appBarSize;
 
   const MySliverScaffold({
     super.key,
@@ -65,6 +69,8 @@ class MySliverScaffold extends StatelessWidget {
     this.drawer,
     this.onRefresh,
     this.onWillPop,
+    this.appbarBottom,
+    this.appBarSize = AppBarSize.medium,
   });
 
   @override
@@ -86,10 +92,18 @@ class MySliverScaffold extends StatelessWidget {
           },
           child: CustomScrollView(
             slivers: <Widget>[
-              SliverAppBar.medium(
-                title: title,
-                actions: actions,
-              ),
+              if (appBarSize == AppBarSize.normal || appbarBottom != null)
+                SliverAppBar(
+                  title: title,
+                  actions: actions,
+                  bottom: appbarBottom,
+                  pinned: true,
+                )
+              else
+                SliverAppBar.medium(
+                  title: title,
+                  actions: actions,
+                ),
               if (sliver != null) sliver!,
               if (slivers != null) ...slivers!,
             ],
