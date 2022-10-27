@@ -42,6 +42,7 @@ class SliverErrorMessageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
+      hasScrollBody: false,
       child: ErrorMessageButton(message: message, onPressed: onPressed),
     );
   }

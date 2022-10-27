@@ -37,6 +37,7 @@ class SliverCenterRoundedRaisedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverFillRemaining(
+      hasScrollBody: false,
       child: Center(
         child: RoundedRaisedButton(
           onPressed: onPressed,

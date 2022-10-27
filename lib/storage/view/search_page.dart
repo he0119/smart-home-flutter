@@ -5,6 +5,7 @@ import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/storage/view/widgets/storage_item_list.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
+import 'package:smarthome/widgets/center_message.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
 class SearchPage extends Page {
@@ -88,13 +89,11 @@ class _SearchScreenState extends State<SearchScreen> {
               return const SliverCenterLoadingIndicator();
             }
             if (state is StorageSearchFailure) {
-              return SliverFillRemaining(
-                  child: Center(child: Text(state.message)));
+              return SliverCenterMessage(message: state.message);
             }
             if (state is StorageSearchSuccess) {
               if (state.items.isEmpty && state.storages.isEmpty) {
-                return const SliverFillRemaining(
-                    child: Center(child: Text('无结果')));
+                return const SliverCenterMessage(message: '无结果');
               } else {
                 return StorageItemList(
                   items: state.items,
@@ -104,7 +103,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 );
               }
             }
-            return SliverFillRemaining(child: Container());
+            return SliverFillRemaining(
+              hasScrollBody: false,
+              child: Container(),
+            );
           },
         ),
       ),

@@ -156,6 +156,6 @@ class PictureScreen extends StatelessWidget {
         ),
       );
     }
-    return const CenterLoadingIndicator();
+    return const SliverCenterLoadingIndicator();
   }
 }
