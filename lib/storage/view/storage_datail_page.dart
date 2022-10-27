@@ -165,7 +165,7 @@ class StorageDetailScreen extends StatelessWidget {
                 delegate: PathBarDelegate(paths: paths),
               ),
             if (state.status == StorageDetailStatus.failure)
-              ErrorMessageButton(
+              SliverErrorMessageButton(
                 onPressed: () {
                   context.read<StorageDetailBloc>().add(
                         StorageDetailFetched(id: storageId),
@@ -174,7 +174,7 @@ class StorageDetailScreen extends StatelessWidget {
                 message: state.error,
               ),
             if (state.status == StorageDetailStatus.loading)
-              const CenterLoadingIndicator(),
+              const SliverCenterLoadingIndicator(),
             if (state.status == StorageDetailStatus.success)
               StorageItemList(
                 items: state.storage.items!.toList(),

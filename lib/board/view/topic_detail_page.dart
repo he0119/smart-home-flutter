@@ -340,7 +340,7 @@ class TopicDetailScreen extends StatelessWidget {
                   ),
                 ),
                 if (state.status == TopicDetailStatus.failure)
-                  ErrorMessageButton(
+                  SliverErrorMessageButton(
                     onPressed: () {
                       context.read<TopicDetailBloc>().add(
                             TopicDetailFetched(

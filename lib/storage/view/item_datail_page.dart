@@ -175,7 +175,7 @@ class ItemDetailScreen extends StatelessWidget {
               },
               slivers: [
                 if (state.status == ItemDetailStatus.failure)
-                  ErrorMessageButton(
+                  SliverErrorMessageButton(
                     onPressed: () {
                       context
                           .read<ItemDetailBloc>()
@@ -184,7 +184,7 @@ class ItemDetailScreen extends StatelessWidget {
                     message: state.error,
                   ),
                 if (state.status == ItemDetailStatus.loading)
-                  const CenterLoadingIndicator(),
+                  const SliverCenterLoadingIndicator(),
                 if (state.status == ItemDetailStatus.success)
                   _ItemDetailList(item: state.item)
               ],

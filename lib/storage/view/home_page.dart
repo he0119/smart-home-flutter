@@ -96,7 +96,7 @@ class StorageHomeScreen extends StatelessWidget {
 
     if (state is StorageHomeFailure) {
       listofWidget.add(
-        ErrorMessageButton(
+        SliverErrorMessageButton(
           onPressed: () {
             BlocProvider.of<StorageHomeBloc>(context).add(
               StorageHomeFetched(
@@ -171,7 +171,7 @@ class StorageHomeScreen extends StatelessWidget {
         ));
       }
     } else {
-      listofWidget.add(const CenterLoadingIndicator());
+      listofWidget.add(const SliverCenterLoadingIndicator());
     }
     return listofWidget;
   }

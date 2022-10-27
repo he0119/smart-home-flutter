@@ -131,7 +131,7 @@ class PictureScreen extends StatelessWidget {
 
   Widget _buildBody(BuildContext context, PictureState state) {
     if (state is PictureFailure) {
-      return ErrorMessageButton(
+      return SliverErrorMessageButton(
         onPressed: () {
           BlocProvider.of<PictureBloc>(context).add(
             PictureStarted(
@@ -145,9 +145,7 @@ class PictureScreen extends StatelessWidget {
     if (state is PictureSuccess) {
       return SliverFillRemaining(
         child: PhotoView(
-          loadingBuilder: (context, event) => const CenterLoadingIndicator(
-            sliver: false,
-          ),
+          loadingBuilder: (context, event) => const CenterLoadingIndicator(),
           imageProvider: CachedNetworkImageProvider(
             state.picture.url!,
           ),

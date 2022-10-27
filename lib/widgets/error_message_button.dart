@@ -14,19 +14,35 @@ class ErrorMessageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverFillRemaining(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(message),
-            RoundedRaisedButton(
-              onPressed: onPressed,
-              child: const Text('重试'),
-            ),
-          ],
-        ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(message),
+          RoundedRaisedButton(
+            onPressed: onPressed,
+            child: const Text('重试'),
+          ),
+        ],
       ),
+    );
+  }
+}
+
+class SliverErrorMessageButton extends StatelessWidget {
+  final Function onPressed;
+  final String message;
+
+  const SliverErrorMessageButton({
+    super.key,
+    required this.onPressed,
+    required this.message,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverFillRemaining(
+      child: ErrorMessageButton(message: message, onPressed: onPressed),
     );
   }
 }

@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:smarthome/widgets/conditional_parent_widget.dart';
 
 class CenterLoadingIndicator extends StatelessWidget {
-  final bool sliver;
-
-  const CenterLoadingIndicator({super.key, this.sliver = true});
+  const CenterLoadingIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ConditionalParentWidget(
-      condition: sliver,
-      conditionalBuilder: (child) {
-        return SliverFillRemaining(child: child);
-      },
-      child: const Center(
-        child: CircularProgressIndicator(),
-      ),
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+class SliverCenterLoadingIndicator extends StatelessWidget {
+  const SliverCenterLoadingIndicator({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverFillRemaining(
+      child: CenterLoadingIndicator(),
     );
   }
 }

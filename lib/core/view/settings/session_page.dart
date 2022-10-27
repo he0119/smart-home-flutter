@@ -79,14 +79,14 @@ class SessionPage extends StatelessWidget {
             );
           }
           if (state is SessionFailure) {
-            return ErrorMessageButton(
+            return SliverErrorMessageButton(
               message: state.message,
               onPressed: () {
                 context.read<SessionBloc>().add(SessionFetched());
               },
             );
           }
-          return const CenterLoadingIndicator();
+          return const SliverCenterLoadingIndicator();
         },
       ),
     );

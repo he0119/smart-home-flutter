@@ -41,7 +41,7 @@ class ConsumablesScreen extends StatelessWidget {
           title: '耗材管理',
           slivers: [
             if (state is ConsumablesFailure)
-              ErrorMessageButton(
+              SliverErrorMessageButton(
                 message: state.message,
                 onPressed: () {
                   BlocProvider.of<ConsumablesBloc>(context)
@@ -57,7 +57,8 @@ class ConsumablesScreen extends StatelessWidget {
                     .read<ConsumablesBloc>()
                     .add(const ConsumablesFetched()),
               ),
-            if (state is ConsumablesInProgress) const CenterLoadingIndicator(),
+            if (state is ConsumablesInProgress)
+              const SliverCenterLoadingIndicator(),
           ],
           onRefresh: () async {
             BlocProvider.of<ConsumablesBloc>(context)

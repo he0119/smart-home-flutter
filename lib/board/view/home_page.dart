@@ -69,7 +69,7 @@ class BoardHomeScreen extends StatelessWidget {
           ),
           slivers: [
             if (state.status == BoardHomeStatus.failure)
-              ErrorMessageButton(
+              SliverErrorMessageButton(
                 onPressed: () {
                   BlocProvider.of<BoardHomeBloc>(context)
                       .add(const BoardHomeFetched(cache: false));
@@ -77,7 +77,7 @@ class BoardHomeScreen extends StatelessWidget {
                 message: state.error,
               ),
             if (state.status == BoardHomeStatus.loading)
-              const CenterLoadingIndicator(),
+              const SliverCenterLoadingIndicator(),
             if (state.status == BoardHomeStatus.success)
               SliverInfiniteList<Topic>(
                 items: state.topics,

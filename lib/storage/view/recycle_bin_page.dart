@@ -57,14 +57,15 @@ class RecycleBinScreen extends StatelessWidget {
           },
           slivers: [
             if (state is RecycleBinFailure)
-              ErrorMessageButton(
+              SliverErrorMessageButton(
                 message: state.message,
                 onPressed: () {
                   BlocProvider.of<ConsumablesBloc>(context)
                       .add(const ConsumablesFetched(cache: false));
                 },
               ),
-            if (state is RecycleBinInProgress) const CenterLoadingIndicator(),
+            if (state is RecycleBinInProgress)
+              const SliverCenterLoadingIndicator(),
             if (state is RecycleBinSuccess)
               BlocListener<ItemEditBloc, ItemEditState>(
                   listener: (context, state) {

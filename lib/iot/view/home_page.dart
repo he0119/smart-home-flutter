@@ -62,7 +62,7 @@ class IotHomeScreen extends StatelessWidget {
               activeTab: AppTab.iot,
               slivers: [
                 if (state is DeviceDataFailure)
-                  ErrorMessageButton(
+                  SliverErrorMessageButton(
                     onPressed: () {
                       BlocProvider.of<DeviceDataBloc>(context)
                           .add(const DeviceDataStarted());
@@ -259,7 +259,7 @@ class IotHomeScreen extends StatelessWidget {
                     },
                   ),
                 if (state is DeviceDataInProgress)
-                  const CenterLoadingIndicator(),
+                  const SliverCenterLoadingIndicator(),
               ],
             );
           },
