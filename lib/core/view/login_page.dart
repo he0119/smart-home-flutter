@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -49,20 +50,33 @@ class _LoginScreenState extends State<LoginScreen> {
             if (settings.apiUrl == null) {
               canLogin = false;
             }
-            return canLogin
-                ? LoginForm(onTapBack: () {
-                    setState(() {
-                      canLogin = false;
-                    });
-                  })
-                : ApiUrlForm(
-                    apiUrl: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
-                    onTapNext: () {
+            return PageTransitionSwitcher(
+              duration: const Duration(milliseconds: 300),
+              reverse: !canLogin,
+              transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+                return SharedAxisTransition(
+                  animation: primaryAnimation,
+                  secondaryAnimation: secondaryAnimation,
+                  transitionType: SharedAxisTransitionType.horizontal,
+                  child: child,
+                );
+              },
+              child: canLogin
+                  ? LoginForm(onTapBack: () {
                       setState(() {
-                        canLogin = true;
+                        canLogin = false;
                       });
-                    },
-                  );
+                    })
+                  : ApiUrlForm(
+                      apiUrl:
+                          settings.apiUrl ?? settings.appConfig.defaultApiUrl,
+                      onTapNext: () {
+                        setState(() {
+                          canLogin = true;
+                        });
+                      },
+                    ),
+            );
           },
         ),
       ),
