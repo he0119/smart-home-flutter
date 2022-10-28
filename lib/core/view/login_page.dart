@@ -51,7 +51,6 @@ class _LoginScreenState extends State<LoginScreen> {
               canLogin = false;
             }
             return PageTransitionSwitcher(
-              duration: const Duration(milliseconds: 300),
               reverse: !canLogin,
               transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
                 return SharedAxisTransition(

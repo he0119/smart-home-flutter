@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/core/core.dart';
@@ -25,9 +26,10 @@ class StorageDetailPage extends Page {
 
   @override
   Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: this,
-      builder: (BuildContext context) => MultiBlocProvider(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          MultiBlocProvider(
         providers: [
           BlocProvider<StorageDetailBloc>(
             create: (context) => StorageDetailBloc(
@@ -44,6 +46,14 @@ class StorageDetailPage extends Page {
           storageId: storageId,
         ),
       ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return SharedAxisTransition(
+          animation: animation,
+          secondaryAnimation: secondaryAnimation,
+          transitionType: SharedAxisTransitionType.horizontal,
+          child: child,
+        );
+      },
     );
   }
 }
