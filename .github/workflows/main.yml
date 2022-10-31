@@ -45,7 +45,7 @@ jobs:
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
       - name: Setup Flutter
-        uses: hrishikesh-kadam/setup-flutter@v1
+        uses: hrishikesh-kadam/setup-flutter@2bf2efb3b590d514835044647db9ce5f3a81b769
         with:
           ref: ${{ env.flutter_version }}
       - name: Flutter test
@@ -78,7 +78,7 @@ jobs:
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
       - name: Setup Flutter
-        uses: hrishikesh-kadam/setup-flutter@v1
+        uses: hrishikesh-kadam/setup-flutter@2bf2efb3b590d514835044647db9ce5f3a81b769
         with:
           ref: ${{ env.flutter_version }}
       - name: Build split-per-abi apks
@@ -110,7 +110,7 @@ jobs:
           RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Setup Flutter
-        uses: hrishikesh-kadam/setup-flutter@v1
+        uses: hrishikesh-kadam/setup-flutter@2bf2efb3b590d514835044647db9ce5f3a81b769
         with:
           ref: ${{ env.flutter_version }}
       - name: Build web version
@@ -143,7 +143,7 @@ jobs:
           RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Setup Flutter
-        uses: hrishikesh-kadam/setup-flutter@v1
+        uses: hrishikesh-kadam/setup-flutter@2bf2efb3b590d514835044647db9ce5f3a81b769
         with:
           ref: ${{ env.flutter_version }}
       - name: Build windows version
@@ -172,7 +172,7 @@ jobs:
         with:
           name: web
       - name: Copy file to server
-        uses: Burnett01/rsync-deployments@5.2
+        uses: Burnett01/rsync-deployments@2651e3eecb4ea772cbe952695d04952e92027b4f
         with:
           switches: -vzr --delete --exclude ".well-known"
           path: "."
@@ -195,7 +195,7 @@ jobs:
         with:
           name: web
       - name: Copy file to server
-        uses: Burnett01/rsync-deployments@5.2
+        uses: Burnett01/rsync-deployments@2651e3eecb4ea772cbe952695d04952e92027b4f
         with:
           switches: -vzr --delete --exclude ".well-known"
           path: "."
