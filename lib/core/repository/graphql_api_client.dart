@@ -107,8 +107,9 @@ DocumentNode opi(DocumentNode document) => transform(
     );
 
 class SocketCustomLink extends Link {
-  SocketCustomLink(this.url, this.settingsController);
+  SocketCustomLink(this.url, this.settingsController, this.defaultHeaders);
   final String url;
+  final Map<String, String> defaultHeaders;
   _Connection? _connection;
   final SettingsController settingsController;
 
@@ -134,7 +135,9 @@ class SocketCustomLink extends Link {
         config: SocketClientConfig(
           autoReconnect: true,
           inactivityTimeout: const Duration(hours: 1),
-          headers: kIsWeb || cookies == null ? null : {'cookie': cookies},
+          headers: kIsWeb || cookies == null
+              ? null
+              : {'cookie': cookies, ...defaultHeaders},
         ),
       ),
       cookies: cookies,
@@ -233,8 +236,8 @@ class GraphQLApiClient {
         defaultHeaders: headers,
       );
     }
-    final websocketLink =
-        SocketCustomLink(url.replaceFirst('http', 'ws'), settingsController);
+    final websocketLink = SocketCustomLink(
+        url.replaceFirst('http', 'ws'), settingsController, headers);
 
     link = Link.split((request) => request.isSubscription, websocketLink, link);
 
