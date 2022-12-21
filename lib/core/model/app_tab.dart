@@ -63,6 +63,20 @@ extension AppTabExtension on AppTab {
         return const BoardHomePage();
     }
   }
+
+  /// 对应的路由
+  String get path {
+    switch (this) {
+      case AppTab.iot:
+        return '/iot';
+      case AppTab.storage:
+        return '/storage';
+      case AppTab.blog:
+        return '/blog';
+      case AppTab.board:
+        return '/board';
+    }
+  }
 }
 
 /// 登录, 物品耗材, 回收站
