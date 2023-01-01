@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.9.2] - 2023-01-01
+
 ### Changed
 
 - 使用 Material Design 3 中的 medium top app bar
@@ -440,7 +442,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.9.1...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.9.2...HEAD
+[0.9.2]: https://github.com/he0119/smart-home-flutter/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/he0119/smart-home-flutter/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/he0119/smart-home-flutter/compare/v0.8.5...v0.9.0
 [0.8.5]: https://github.com/he0119/smart-home-flutter/compare/v0.8.4...v0.8.5
