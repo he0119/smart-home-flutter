@@ -12,6 +12,20 @@ class IotRepository {
     required this.graphqlApiClient,
   });
 
+  /// 设备列表
+  Future<List<Device>> devices() async {
+    final options = QueryOptions(
+      document: gql(devicesQuery),
+      fetchPolicy: FetchPolicy.networkOnly,
+    );
+    final results = await graphqlApiClient.query(options);
+
+    final List<dynamic> devices = results.data!['devices']['edges'];
+    final listofDevices =
+        devices.map((dynamic e) => Device.fromJson(e['node'])).toList();
+    return listofDevices;
+  }
+
   /// 设备数据
   ///
   /// 永远不缓存
