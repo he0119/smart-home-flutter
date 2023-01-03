@@ -28,6 +28,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
     return DropdownSearch<T>(
       compareFn: (i1, i2) => i1 == i2,
       popupProps: PopupProps.menu(
+        isFilterOnline: true,
         showSelectedItems: true,
         showSearchBox: true,
         itemBuilder: (ctx, item, isSelected) {
