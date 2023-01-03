@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Fixed
+
+- 修复耗材选择框没法搜索到对应物品的问题
+
 ## [0.9.2] - 2023-01-01
 
 ### Changed
