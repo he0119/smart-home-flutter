@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Changed
+
+- 搜索调整为大小写不敏感
+
 ### Fixed
 
 - 修复耗材选择框没法搜索到对应物品的问题
