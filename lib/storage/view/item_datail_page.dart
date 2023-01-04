@@ -282,6 +282,11 @@ class _ItemDetailList extends StatelessWidget {
             title: const Text('录入时间'),
             subtitle: Text(item.createdAt?.toLocalStr() ?? ''),
           ),
+          if (item.deletedAt != null)
+            ListTile(
+              title: const Text('删除时间'),
+              subtitle: Text(item.deletedAt?.toLocalStr() ?? ''),
+            ),
           if (item.pictures!.isNotEmpty)
             for (Picture picture in item.pictures!)
               ListTile(
