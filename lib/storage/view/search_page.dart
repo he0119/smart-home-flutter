@@ -6,6 +6,7 @@ import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/storage/view/widgets/storage_item_list.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/center_message.dart';
+import 'package:smarthome/widgets/chips.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
 class SearchPage extends Page {
@@ -37,6 +38,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   bool _showClearButton = false;
+  bool _isDeleted = false;
   final _textController = TextEditingController();
 
   @override
@@ -47,9 +49,7 @@ class _SearchScreenState extends State<SearchScreen> {
         if (_textController.text.isNotEmpty) _showClearButton = true;
         if (_textController.text.isEmpty) _showClearButton = false;
       });
-      context
-          .read<StorageSearchBloc>()
-          .add(StorageSearchChanged(key: _textController.text));
+      doSearch();
     });
   }
 
@@ -57,6 +57,13 @@ class _SearchScreenState extends State<SearchScreen> {
   void dispose() {
     _textController.dispose();
     super.dispose();
+  }
+
+  void doSearch() {
+    context.read<StorageSearchBloc>().add(StorageSearchChanged(
+          key: _textController.text,
+          isDeleted: _isDeleted,
+        ));
   }
 
   @override
@@ -82,6 +89,23 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           autofocus: true,
           controller: _textController,
+        ),
+        appbarBottom: PreferredSize(
+          preferredSize: const Size.fromHeight(48),
+          child: Row(
+            children: [
+              MyChoiceChip(
+                label: const Text('已删除'),
+                selected: _isDeleted,
+                onSelected: (value) {
+                  setState(() {
+                    _isDeleted = value;
+                    doSearch();
+                  });
+                },
+              ),
+            ],
+          ),
         ),
         sliver: BlocBuilder<StorageSearchBloc, StorageSearchState>(
           builder: (BuildContext context, StorageSearchState state) {
