@@ -34,20 +34,22 @@ jobs:
           BUILD_NUMBER=$(echo $VERSION_STRING | cut -d"+" -f2)
           COMMIT_ID=$(git rev-parse --short HEAD)
           if [[ "${{github.event_name}}" == "release" && "${{github.event.action}}" == "published" ]]; then
-            echo "::set-output name=environment::prod"
-            echo "::set-output name=version::$VERSION+$BUILD_NUMBER"
-            echo "::set-output name=release::xyz.hehome.smarthome@$VERSION+$BUILD_NUMBER"
+            echo "environment=prod" >> $GITHUB_OUTPUT
+            echo "version=$VERSION+$BUILD_NUMBER" >> $GITHUB_OUTPUT
+            echo "release=xyz.hehome.smarthome@$VERSION+$BUILD_NUMBER" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=environment::dev"
-            echo "::set-output name=version::$VERSION-git.$COMMIT_ID+$BUILD_NUMBER"
-            echo "::set-output name=release::xyz.hehome.smarthome.dev@$VERSION-git.$COMMIT_ID+$BUILD_NUMBER"
+            echo "environment=dev" >> $GITHUB_OUTPUT
+            echo "version=$VERSION-git.$COMMIT_ID+$BUILD_NUMBER" >> $GITHUB_OUTPUT
+            echo "release=xyz.hehome.smarthome.dev@$VERSION-git.$COMMIT_ID+$BUILD_NUMBER" >> $GITHUB_OUTPUT
           fi
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
       - name: Setup Flutter
-        uses: hrishikesh-kadam/setup-flutter@2bf2efb3b590d514835044647db9ce5f3a81b769
+        uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
         with:
-          ref: ${{ env.flutter_version }}
+          flutter-version:  ${{ env.flutter_version }}
+          channel: 'stable'
+          cache: true
       - name: Flutter test
         run: |
           flutter pub get
@@ -78,9 +80,11 @@ jobs:
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
       - name: Setup Flutter
-        uses: hrishikesh-kadam/setup-flutter@2bf2efb3b590d514835044647db9ce5f3a81b769
+        uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
         with:
-          ref: ${{ env.flutter_version }}
+          flutter-version:  ${{ env.flutter_version }}
+          channel: 'stable'
+          cache: true
       - name: Build split-per-abi apks
         run: flutter build apk --split-per-abi -t ./lib/main_$ENVIRONMENT.dart --flavor $ENVIRONMENT
         env:
@@ -110,9 +114,11 @@ jobs:
           RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Setup Flutter
-        uses: hrishikesh-kadam/setup-flutter@2bf2efb3b590d514835044647db9ce5f3a81b769
+        uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
         with:
-          ref: ${{ env.flutter_version }}
+          flutter-version:  ${{ env.flutter_version }}
+          channel: 'stable'
+          cache: true
       - name: Build web version
         run: |
           flutter build web --web-renderer=html -t ./lib/main_$ENVIRONMENT.dart
@@ -143,9 +149,11 @@ jobs:
           RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Setup Flutter
-        uses: hrishikesh-kadam/setup-flutter@2bf2efb3b590d514835044647db9ce5f3a81b769
+        uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
         with:
-          ref: ${{ env.flutter_version }}
+          flutter-version:  ${{ env.flutter_version }}
+          channel: 'stable'
+          cache: true
       - name: Build windows version
         run: |
           flutter build windows -t ./lib/main_${env:ENVIRONMENT}.dart
