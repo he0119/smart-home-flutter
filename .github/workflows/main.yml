@@ -49,6 +49,7 @@ jobs:
         with:
           flutter-version:  ${{ env.flutter_version }}
           channel: 'stable'
+          cache: true
       - name: Flutter test
         run: |
           flutter pub get
@@ -83,6 +84,7 @@ jobs:
         with:
           flutter-version:  ${{ env.flutter_version }}
           channel: 'stable'
+          cache: true
       - name: Build split-per-abi apks
         run: flutter build apk --split-per-abi -t ./lib/main_$ENVIRONMENT.dart --flavor $ENVIRONMENT
         env:
@@ -116,6 +118,7 @@ jobs:
         with:
           flutter-version:  ${{ env.flutter_version }}
           channel: 'stable'
+          cache: true
       - name: Build web version
         run: |
           flutter build web --web-renderer=html -t ./lib/main_$ENVIRONMENT.dart
@@ -150,6 +153,7 @@ jobs:
         with:
           flutter-version:  ${{ env.flutter_version }}
           channel: 'stable'
+          cache: true
       - name: Build windows version
         run: |
           flutter build windows -t ./lib/main_${env:ENVIRONMENT}.dart
