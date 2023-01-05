@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Fixed
+
+- 修复留言板话题评论界面没法下拉刷新
+
 ## [0.9.3] - 2023-01-04
 
 ### Changed
