@@ -19,7 +19,7 @@ dependencies:
 
   # Dart
   logging: ^1.0.0
-  graphql: ^5.1.2-beta.5
+  graphql: ^5.1.2
   http: ^0.13.0
   bloc: ^8.0.2
   equatable: ^2.0.3
