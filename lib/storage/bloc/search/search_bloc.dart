@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
 part 'search_events.dart';
 part 'search_states.dart';
 
@@ -27,7 +28,11 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
     }
     emit(StorageSearchInProgress());
     try {
-      final results = await storageRepository.search(event.key);
+      final results = await storageRepository.search(
+        event.key,
+        isDeleted: event.isDeleted,
+        missingStorage: event.missingStorage,
+      );
       emit(StorageSearchSuccess(
         items: results.item1,
         storages: results.item2,

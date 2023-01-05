@@ -29,6 +29,7 @@ query item($id: GlobalID!) {
     createdBy {
       username
     }
+    deletedAt
     pictures {
       edges {
         node {

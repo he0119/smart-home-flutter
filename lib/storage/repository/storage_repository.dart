@@ -463,24 +463,59 @@ class StorageRepository {
     return Tuple2(storages, pageInfo);
   }
 
-  Future<Tuple2<List<Item>, List<Storage>>> search(String key,
-      {bool isDeleted = false}) async {
-    final options = QueryOptions(
-      document: gql(searchQuery),
-      variables: {
-        'key': key,
-        'isDeleted': isDeleted,
-      },
-      fetchPolicy: FetchPolicy.noCache,
-    );
+  Future<Tuple2<List<Item>, List<Storage>>> search(
+    String key, {
+    bool isDeleted = false,
+    bool missingStorage = false,
+  }) async {
+    QueryOptions<Object?> options;
+    if (missingStorage) {
+      options = QueryOptions(
+        document: gql(itemSearchMissingStorageQuery),
+        variables: {
+          'key': key,
+          'isDeleted': isDeleted,
+        },
+        fetchPolicy: FetchPolicy.noCache,
+      );
+    } else {
+      if (isDeleted) {
+        options = QueryOptions(
+          document: gql(itemSearchQuery),
+          variables: {
+            'key': key,
+            'isDeleted': true,
+          },
+          fetchPolicy: FetchPolicy.noCache,
+        );
+      } else {
+        options = QueryOptions(
+          document: gql(searchQuery),
+          variables: {'key': key},
+          fetchPolicy: FetchPolicy.noCache,
+        );
+      }
+    }
+
     final results = await graphqlApiClient.query(options);
 
     final json = results.data!.flattenConnection;
 
-    final List<dynamic> storageNameJson = json['storageName'];
-    final List<dynamic> storageDescriptionJson = json['storageDescription'];
-    final List<dynamic> itemNameJson = json['itemName'];
-    final List<dynamic> itemDescriptionJson = json['itemDescription'];
+    List<dynamic> storageNameJson;
+    List<dynamic> storageDescriptionJson;
+    List<dynamic> itemNameJson;
+    List<dynamic> itemDescriptionJson;
+    if (isDeleted || missingStorage) {
+      itemNameJson = json['itemName'];
+      itemDescriptionJson = json['itemDescription'];
+      storageNameJson = [];
+      storageDescriptionJson = [];
+    } else {
+      storageNameJson = json['storageName'];
+      storageDescriptionJson = json['storageDescription'];
+      itemNameJson = json['itemName'];
+      itemDescriptionJson = json['itemDescription'];
+    }
 
     final storagesName =
         storageNameJson.map((dynamic e) => Storage.fromJson(e)).toList();
