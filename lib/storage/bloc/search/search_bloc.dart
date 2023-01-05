@@ -31,6 +31,7 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
       final results = await storageRepository.search(
         event.key,
         isDeleted: event.isDeleted,
+        missingStorage: event.missingStorage,
       );
       emit(StorageSearchSuccess(
         items: results.item1,

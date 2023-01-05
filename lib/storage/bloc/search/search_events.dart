@@ -10,8 +10,13 @@ abstract class StorageSearchEvent extends Equatable {
 class StorageSearchChanged extends StorageSearchEvent {
   final String key;
   final bool isDeleted;
+  final bool missingStorage;
 
-  const StorageSearchChanged({required this.key, this.isDeleted = false});
+  const StorageSearchChanged({
+    required this.key,
+    this.isDeleted = false,
+    this.missingStorage = false,
+  });
 
   @override
   List<Object> get props => [key];

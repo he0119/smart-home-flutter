@@ -65,3 +65,27 @@ query search($isDeleted: Boolean, $key: String!) {
   }
 }
 ''';
+const String itemSearchMissingStorageQuery = r'''
+query search($isDeleted: Boolean, $key: String!) {
+  itemName: items(filters: {isDeleted: $isDeleted, name: {iContains: $key}, storage: {isNull: true}}) {
+    edges {
+      node {
+        id
+        name
+        description
+      }
+    }
+  }
+  itemDescription: items(
+    filters: {isDeleted: $isDeleted, description: {iContains: $key}, storage: {isNull: true}}
+  ) {
+    edges {
+      node {
+        id
+        name
+        description
+      }
+    }
+  }
+}
+''';

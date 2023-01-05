@@ -39,6 +39,8 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   bool _showClearButton = false;
   bool _isDeleted = false;
+  bool _missingStorage = false;
+
   final _textController = TextEditingController();
 
   @override
@@ -63,6 +65,7 @@ class _SearchScreenState extends State<SearchScreen> {
     context.read<StorageSearchBloc>().add(StorageSearchChanged(
           key: _textController.text,
           isDeleted: _isDeleted,
+          missingStorage: _missingStorage,
         ));
   }
 
@@ -100,6 +103,16 @@ class _SearchScreenState extends State<SearchScreen> {
                 onSelected: (value) {
                   setState(() {
                     _isDeleted = value;
+                    doSearch();
+                  });
+                },
+              ),
+              MyChoiceChip(
+                label: const Text('无位置'),
+                selected: _missingStorage,
+                onSelected: (value) {
+                  setState(() {
+                    _missingStorage = value;
                     doSearch();
                   });
                 },

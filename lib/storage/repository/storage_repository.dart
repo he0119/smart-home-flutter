@@ -463,25 +463,40 @@ class StorageRepository {
     return Tuple2(storages, pageInfo);
   }
 
-  Future<Tuple2<List<Item>, List<Storage>>> search(String key,
-      {bool isDeleted = false}) async {
+  Future<Tuple2<List<Item>, List<Storage>>> search(
+    String key, {
+    bool isDeleted = false,
+    bool missingStorage = false,
+  }) async {
     QueryOptions<Object?> options;
-    if (isDeleted) {
+    if (missingStorage) {
       options = QueryOptions(
-        document: gql(itemSearchQuery),
+        document: gql(itemSearchMissingStorageQuery),
         variables: {
           'key': key,
-          'isDeleted': true,
+          'isDeleted': isDeleted,
         },
         fetchPolicy: FetchPolicy.noCache,
       );
     } else {
-      options = QueryOptions(
-        document: gql(searchQuery),
-        variables: {'key': key},
-        fetchPolicy: FetchPolicy.noCache,
-      );
+      if (isDeleted) {
+        options = QueryOptions(
+          document: gql(itemSearchQuery),
+          variables: {
+            'key': key,
+            'isDeleted': true,
+          },
+          fetchPolicy: FetchPolicy.noCache,
+        );
+      } else {
+        options = QueryOptions(
+          document: gql(searchQuery),
+          variables: {'key': key},
+          fetchPolicy: FetchPolicy.noCache,
+        );
+      }
     }
+
     final results = await graphqlApiClient.query(options);
 
     final json = results.data!.flattenConnection;
@@ -490,7 +505,7 @@ class StorageRepository {
     List<dynamic> storageDescriptionJson;
     List<dynamic> itemNameJson;
     List<dynamic> itemDescriptionJson;
-    if (isDeleted) {
+    if (isDeleted || missingStorage) {
       itemNameJson = json['itemName'];
       itemDescriptionJson = json['itemDescription'];
       storageNameJson = [];
