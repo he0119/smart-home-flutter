@@ -9,6 +9,7 @@ import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
 import 'package:smarthome/board/view/widgets/item_title.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
+import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
@@ -349,6 +350,8 @@ class TopicDetailScreen extends StatelessWidget {
                     },
                     message: state.error,
                   ),
+                if (state.status == TopicDetailStatus.loading)
+                  const SliverCenterLoadingIndicator(),
                 if (state.status == TopicDetailStatus.success)
                   SliverInfiniteList<Comment>(
                     items: state.comments,
@@ -376,6 +379,7 @@ class TopicDetailScreen extends StatelessWidget {
                 context.read<TopicDetailBloc>().add(TopicDetailFetched(
                       id: state.topic.id,
                       descending: descending,
+                      cache: false,
                     ));
               },
               floatingActionButton: (state.status ==
@@ -407,6 +411,7 @@ class TopicDetailScreen extends StatelessWidget {
                               id: topicId,
                               descending: descending,
                               cache: false,
+                              showInProgress: false,
                             ),
                           );
                         }
