@@ -194,7 +194,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                             firstDate: DateTime(1900),
                             initialDate: currentValue ?? DateTime.now(),
                             lastDate: DateTime(2100));
-                        if (date != null) {
+                        if (date != null && context.mounted) {
                           final time = await showTimePicker(
                             context: context,
                             initialTime: TimeOfDay.fromDateTime(

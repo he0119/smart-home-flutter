@@ -65,15 +65,17 @@ class MyDrawer extends StatelessWidget {
               final currentVersion =
                   await RepositoryProvider.of<VersionRepository>(context)
                       .currentVersion;
-              showAboutDialog(
-                context: context,
-                applicationVersion: currentVersion.toString(),
-                applicationIcon: const ImageIcon(
-                  AssetImage('assets/icon/icon.webp'),
-                  color: Color(0xFFF15713),
-                ),
-                applicationLegalese: '智慧家庭的客户端',
-              );
+              if (context.mounted) {
+                showAboutDialog(
+                  context: context,
+                  applicationVersion: currentVersion.toString(),
+                  applicationIcon: const ImageIcon(
+                    AssetImage('assets/icon/icon.webp'),
+                    color: Color(0xFFF15713),
+                  ),
+                  applicationLegalese: '智慧家庭的客户端',
+                );
+              }
             },
           ),
           ListTile(

@@ -143,140 +143,151 @@ class TopicDetailScreen extends StatelessWidget {
                         );
                       }
                     }
+
                     if (value == TopicDetailMenu.delete) {
-                      await showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: const Text('删除话题'),
-                          content: const Text('你确认要删除该话题？'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('否'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                showInfoSnackBar('正在删除...', duration: 1);
-                                context
-                                    .read<TopicEditBloc>()
-                                    .add(TopicDeleted(topic: state.topic));
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('是'),
-                            ),
-                          ],
-                        ),
-                      );
+                      if (context.mounted) {
+                        await showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text('删除话题'),
+                            content: const Text('你确认要删除该话题？'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('否'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  showInfoSnackBar('正在删除...', duration: 1);
+                                  context
+                                      .read<TopicEditBloc>()
+                                      .add(TopicDeleted(topic: state.topic));
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('是'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                     if (value == TopicDetailMenu.pin) {
-                      await showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: const Text('置顶话题'),
-                          content: const Text('你确认要置顶该话题？'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('否'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                showInfoSnackBar('正在置顶...', duration: 1);
-                                context
-                                    .read<TopicEditBloc>()
-                                    .add(TopicPinned(topic: state.topic));
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('是'),
-                            ),
-                          ],
-                        ),
-                      );
+                      if (context.mounted) {
+                        await showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text('置顶话题'),
+                            content: const Text('你确认要置顶该话题？'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('否'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  showInfoSnackBar('正在置顶...', duration: 1);
+                                  context
+                                      .read<TopicEditBloc>()
+                                      .add(TopicPinned(topic: state.topic));
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('是'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                     if (value == TopicDetailMenu.unpin) {
-                      await showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: const Text('取消置顶'),
-                          content: const Text('你确认要取消该话题的置顶？'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('否'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                showInfoSnackBar('正在取消...', duration: 1);
-                                context
-                                    .read<TopicEditBloc>()
-                                    .add(TopicUnpinned(topic: state.topic));
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('是'),
-                            ),
-                          ],
-                        ),
-                      );
+                      if (context.mounted) {
+                        await showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text('取消置顶'),
+                            content: const Text('你确认要取消该话题的置顶？'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('否'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  showInfoSnackBar('正在取消...', duration: 1);
+                                  context
+                                      .read<TopicEditBloc>()
+                                      .add(TopicUnpinned(topic: state.topic));
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('是'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                     if (value == TopicDetailMenu.close) {
-                      await showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: const Text('关闭话题'),
-                          content: const Text('你确认要关闭该话题？'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('否'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                showInfoSnackBar('正在关闭...', duration: 1);
-                                context
-                                    .read<TopicEditBloc>()
-                                    .add(TopicClosed(topic: state.topic));
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('是'),
-                            ),
-                          ],
-                        ),
-                      );
+                      if (context.mounted) {
+                        await showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text('关闭话题'),
+                            content: const Text('你确认要关闭该话题？'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('否'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  showInfoSnackBar('正在关闭...', duration: 1);
+                                  context
+                                      .read<TopicEditBloc>()
+                                      .add(TopicClosed(topic: state.topic));
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('是'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                     if (value == TopicDetailMenu.reopen) {
-                      await showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: const Text('开启话题'),
-                          content: const Text('你确认要重新开启该话题？'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('否'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                showInfoSnackBar('正在开启...', duration: 1);
-                                context
-                                    .read<TopicEditBloc>()
-                                    .add(TopicReopened(topic: state.topic));
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('是'),
-                            ),
-                          ],
-                        ),
-                      );
+                      if (context.mounted) {
+                        await showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text('开启话题'),
+                            content: const Text('你确认要重新开启该话题？'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('否'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  showInfoSnackBar('正在开启...', duration: 1);
+                                  context
+                                      .read<TopicEditBloc>()
+                                      .add(TopicReopened(topic: state.topic));
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('是'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                   },
                   itemBuilder: (context) => [

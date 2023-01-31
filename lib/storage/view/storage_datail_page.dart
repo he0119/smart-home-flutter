@@ -120,30 +120,32 @@ class StorageDetailScreen extends StatelessWidget {
                     }
                   }
                   if (value == Menu.delete) {
-                    await showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: Text('删除 ${state.storage.name}'),
-                        content: const Text('你确认要删除该位置么？'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('否'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              context.read<StorageEditBloc>().add(
-                                    StorageDeleted(storage: state.storage),
-                                  );
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('是'),
-                          ),
-                        ],
-                      ),
-                    );
+                    if (context.mounted) {
+                      await showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: Text('删除 ${state.storage.name}'),
+                          content: const Text('你确认要删除该位置么？'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('否'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                context.read<StorageEditBloc>().add(
+                                      StorageDeleted(storage: state.storage),
+                                    );
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('是'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   }
                 },
                 itemBuilder: (context) => [
