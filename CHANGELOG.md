@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Added
+
+- 支持搜索时筛选已删除和无存放位置的物品
+- 升级至 Flutter 3.7
+
 ### Fixed
 
 - 修复留言板话题评论界面没法下拉刷新

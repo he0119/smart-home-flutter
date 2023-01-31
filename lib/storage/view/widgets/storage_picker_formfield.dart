@@ -225,19 +225,21 @@ class _StorageFieldState extends FormFieldState<Storage> {
       isShowingDialog = true;
       final storages = await RepositoryProvider.of<StorageRepository>(context)
           .storages(key: '', cache: false);
-      final newValue = await showDialog<Storage>(
-        context: context,
-        builder: (context) {
-          return StorageDialog(
-            storage: value,
-            storages: storages,
-          );
-        },
-      );
-      isShowingDialog = false;
-      if (newValue != null) {
-        didChange(newValue);
-        _controller.text = newValue.name;
+      if (context.mounted) {
+        final newValue = await showDialog<Storage>(
+          context: context,
+          builder: (context) {
+            return StorageDialog(
+              storage: value,
+              storages: storages,
+            );
+          },
+        );
+        isShowingDialog = false;
+        if (newValue != null) {
+          didChange(newValue);
+          _controller.text = newValue.name;
+        }
       }
     }
   }

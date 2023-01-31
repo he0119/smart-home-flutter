@@ -124,30 +124,32 @@ class ItemDetailScreen extends StatelessWidget {
                           .push(PictureAddPage(itemId: state.item.id));
                     }
                     if (value == ItemDetailMenu.delete) {
-                      await showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: Text('删除 ${state.item.name}'),
-                          content: const Text('你确认要删除该物品么？'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('否'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                context.read<ItemEditBloc>().add(
-                                      ItemDeleted(item: state.item),
-                                    );
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('是'),
-                            ),
-                          ],
-                        ),
-                      );
+                      if (context.mounted) {
+                        await showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: Text('删除 ${state.item.name}'),
+                            content: const Text('你确认要删除该物品么？'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('否'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  context.read<ItemEditBloc>().add(
+                                        ItemDeleted(item: state.item),
+                                      );
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('是'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                   },
                   itemBuilder: (context) => [
