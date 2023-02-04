@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  flutter_version: "3.7.0"
+  flutter_version: "3.7.1"
 
 jobs:
   test:
