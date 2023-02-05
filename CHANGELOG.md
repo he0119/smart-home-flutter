@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.9.4] - 2023-02-05
+
 ### Added
 
 - 支持搜索时筛选已删除和无存放位置的物品
@@ -461,7 +463,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.9.3...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.9.4...HEAD
+[0.9.4]: https://github.com/he0119/smart-home-flutter/compare/v0.9.3...v0.9.4
 [0.9.3]: https://github.com/he0119/smart-home-flutter/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/he0119/smart-home-flutter/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/he0119/smart-home-flutter/compare/v0.9.0...v0.9.1
