@@ -49,7 +49,7 @@ dependencies:
   dynamic_color: ^1.5.4
 
   # Widget
-  webview_flutter: ^3.0.0
+  webview_flutter: ^4.0.6
   datetime_picker_formfield: ^2.0.0
   flutter_markdown: ^0.6.0
   cached_network_image: ^3.0.0
