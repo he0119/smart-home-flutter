@@ -45,7 +45,7 @@ jobs:
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
       - name: Setup Flutter
-        uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
+        uses: subosito/flutter-action@88cab4064b0a5145b0b53b42565b68248a3d7bcb
         with:
           flutter-version:  ${{ env.flutter_version }}
           channel: 'stable'
@@ -80,7 +80,7 @@ jobs:
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
       - name: Setup Flutter
-        uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
+        uses: subosito/flutter-action@88cab4064b0a5145b0b53b42565b68248a3d7bcb
         with:
           flutter-version:  ${{ env.flutter_version }}
           channel: 'stable'
@@ -114,7 +114,7 @@ jobs:
           RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Setup Flutter
-        uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
+        uses: subosito/flutter-action@88cab4064b0a5145b0b53b42565b68248a3d7bcb
         with:
           flutter-version:  ${{ env.flutter_version }}
           channel: 'stable'
@@ -149,7 +149,7 @@ jobs:
           RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Setup Flutter
-        uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
+        uses: subosito/flutter-action@88cab4064b0a5145b0b53b42565b68248a3d7bcb
         with:
           flutter-version:  ${{ env.flutter_version }}
           channel: 'stable'
