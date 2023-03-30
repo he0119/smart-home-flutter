@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  flutter_version: "3.7.1"
+  flutter_version: "3.7.8"
 
 jobs:
   test:
@@ -47,8 +47,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
         with:
-          flutter-version:  ${{ env.flutter_version }}
-          channel: 'stable'
+          flutter-version: ${{ env.flutter_version }}
+          channel: "stable"
           cache: true
       - name: Flutter test
         run: |
@@ -82,8 +82,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
         with:
-          flutter-version:  ${{ env.flutter_version }}
-          channel: 'stable'
+          flutter-version: ${{ env.flutter_version }}
+          channel: "stable"
           cache: true
       - name: Build split-per-abi apks
         run: flutter build apk --split-per-abi -t ./lib/main_$ENVIRONMENT.dart --flavor $ENVIRONMENT
@@ -116,8 +116,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
         with:
-          flutter-version:  ${{ env.flutter_version }}
-          channel: 'stable'
+          flutter-version: ${{ env.flutter_version }}
+          channel: "stable"
           cache: true
       - name: Build web version
         run: |
@@ -151,8 +151,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
         with:
-          flutter-version:  ${{ env.flutter_version }}
-          channel: 'stable'
+          flutter-version: ${{ env.flutter_version }}
+          channel: "stable"
           cache: true
       - name: Build windows version
         run: |
