@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Added
+
+- 留言板支持多行选择
+
 ## [0.9.4] - 2023-02-05
 
 ### Added
