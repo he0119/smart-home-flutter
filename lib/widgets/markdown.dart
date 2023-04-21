@@ -8,13 +8,15 @@ class MyMarkdownBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MarkdownBody(
-      data: data,
-      onTapLink: (text, href, title) {
-        if (href != null) {
-          launchUrl(href);
-        }
-      },
+    return SelectionArea(
+      child: MarkdownBody(
+        data: data,
+        onTapLink: (text, href, title) {
+          if (href != null) {
+            launchUrl(href);
+          }
+        },
+      ),
     );
   }
 }
