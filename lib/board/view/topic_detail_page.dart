@@ -444,42 +444,50 @@ class CommentOrder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-      child: Row(
-        children: <Widget>[
-          const Text(
-            '全部评论',
-            style: TextStyle(fontSize: 16),
-          ),
-          const Spacer(),
-          PopupMenuButton(
-            tooltip: '评论排序',
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Icon(Icons.sort),
-                  const SizedBox(width: 4),
-                  Text(descending ? '倒序' : '正序'),
+      child: Column(
+        children: [
+          const Divider(),
+          Row(
+            children: <Widget>[
+              const Text(
+                '全部评论',
+                style: TextStyle(fontSize: 16),
+              ),
+              const Spacer(),
+              PopupMenuButton(
+                tooltip: '评论排序',
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.sort),
+                      const SizedBox(width: 4),
+                      Text(descending ? '倒序' : '正序'),
+                    ],
+                  ),
+                ),
+                onSelected: (dynamic value) {
+                  context
+                      .read<SettingsController>()
+                      .updateCommentDescending(value);
+                  context.read<TopicDetailBloc>().add(
+                        TopicDetailFetched(id: topicId, descending: value),
+                      );
+                },
+                itemBuilder: (context) => <PopupMenuItem<bool>>[
+                  const PopupMenuItem(
+                    value: false,
+                    child: Text('正序'),
+                  ),
+                  const PopupMenuItem(
+                    value: true,
+                    child: Text('倒序'),
+                  ),
                 ],
-              ),
-            ),
-            onSelected: (dynamic value) {
-              context.read<SettingsController>().updateCommentDescending(value);
-              context.read<TopicDetailBloc>().add(
-                    TopicDetailFetched(id: topicId, descending: value),
-                  );
-            },
-            itemBuilder: (context) => <PopupMenuItem<bool>>[
-              const PopupMenuItem(
-                value: false,
-                child: Text('正序'),
-              ),
-              const PopupMenuItem(
-                value: true,
-                child: Text('倒序'),
-              ),
+              )
             ],
-          )
+          ),
+          const Divider(),
         ],
       ),
     );
