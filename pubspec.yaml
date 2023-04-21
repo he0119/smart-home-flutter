@@ -63,7 +63,7 @@ dev_dependencies:
   bloc_test: ^9.0.2
   build_runner: ^2.0.3
   json_serializable: ^6.0.1
-  flutter_launcher_icons: ^0.11.0
+  flutter_launcher_icons: ^0.13.0
   flutter_lints: ^2.0.0
 
 flutter:
@@ -72,6 +72,11 @@ flutter:
     - assets/icon/icon.webp
   generate: true
 
-flutter_icons:
+flutter_launcher_icons:
   android: true
   image_path: "assets/icon/icon.png"
+  min_sdk_android: 24
+  web:
+    generate: true
+  windows:
+    generate: true
