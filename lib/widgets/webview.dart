@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:extended_sliver/extended_sliver.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,7 @@ class MyWebview extends StatelessWidget {
             double y = scrollOffset;
             if (Platform.isAndroid) {
               // https://github.com/flutter/flutter/issues/75841
-              y *= window.devicePixelRatio;
+              y *= View.of(context).devicePixelRatio;
             }
             controller.webviewController?.scrollTo(0, y.ceil());
           },

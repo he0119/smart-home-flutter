@@ -143,9 +143,9 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
                     widget.onTapNext();
                   }
                 },
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Text('下一步'),
                     Icon(Icons.chevron_right),
                   ],
