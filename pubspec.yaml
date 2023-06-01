@@ -21,7 +21,7 @@ dependencies:
   logging: ^1.0.0
   graphql: ^5.1.2
   http: ^0.13.0
-  bloc: ^8.0.2
+  bloc: ^8.1.2
   equatable: ^2.0.3
   json_annotation: ^4.6.0
   enum_to_string: ^2.0.0
