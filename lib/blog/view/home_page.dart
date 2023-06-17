@@ -48,80 +48,68 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
   Widget build(BuildContext context) {
     return Consumer<SettingsController>(
       builder: (context, settings, child) {
-        _controller = NestedWebviewController(settings.blogUrl);
-        return ValueListenableBuilder<WebViewStatus>(
-          valueListenable: _controller.webViewStatusNotifier,
-          builder: (
-            BuildContext context,
-            WebViewStatus webViewStatus,
-            Widget? child,
-          ) {
-            return MyHomePage(
-              activeTab: AppTab.blog,
-              actions: [
-                Tooltip(
-                  message: '进入管理页面',
-                  child: IconButton(
-                    icon: const Icon(Icons.dvr),
-                    onPressed: () async {
-                      final blogAdminUrl = settings.blogAdminUrl;
-                      if (blogAdminUrl != null) {
-                        if (kIsWeb) {
-                          await launchUrl(blogAdminUrl);
-                        } else if (_controller.webviewController != null) {
-                          await _controller.webviewController!
-                              .loadUrl(blogAdminUrl);
-                        }
-                      } else {
-                        MyRouterDelegate.of(context)
-                            .push(const BlogSettingsPage());
-                      }
-                    },
-                  ),
-                ),
-                Tooltip(
-                  message: '设置',
-                  child: IconButton(
-                    icon: const Icon(Icons.settings),
-                    onPressed: () {
-                      MyRouterDelegate.of(context)
-                          .push(const BlogSettingsPage());
-                    },
-                  ),
-                ),
-              ],
-              slivers: [
-                (!kIsWeb && !Platform.isWindows)
-                    ? MyWebview(
-                        controller: _controller,
-                      )
-                    : SliverCenterRoundedRaisedButton(
-                        onPressed: () => launchUrl(settings.blogUrl),
-                        child: const Text('博客'),
-                      )
-              ],
-              floatingActionButton: FloatingActionButton(
-                tooltip: '使用浏览器打开',
+        if (!kIsWeb && !Platform.isWindows) {
+          _controller = NestedWebviewController(settings.blogUrl);
+        }
+        return MyHomePage(
+          activeTab: AppTab.blog,
+          actions: [
+            Tooltip(
+              message: '进入管理页面',
+              child: IconButton(
+                icon: const Icon(Icons.dvr),
                 onPressed: () async {
-                  if (_controller.webviewController?.currentUrl() != null) {
-                    final currentUrl =
-                        await _controller.webviewController?.currentUrl();
-                    if (currentUrl != null) {
-                      await launchUrl(currentUrl);
+                  final blogAdminUrl = settings.blogAdminUrl;
+                  if (blogAdminUrl != null) {
+                    if (kIsWeb) {
+                      await launchUrl(blogAdminUrl);
+                    } else {
+                      await _controller.webviewController
+                          .loadRequest(Uri.parse(blogAdminUrl));
                     }
+                  } else {
+                    MyRouterDelegate.of(context).push(const BlogSettingsPage());
                   }
                 },
-                child: const Icon(Icons.open_in_new),
               ),
-              onWillPop: () async {
-                if (_controller.webviewController != null &&
-                    await _controller.webviewController!.canGoBack()) {
-                  await _controller.webviewController!.goBack();
-                  return false;
-                }
-                return true;
-              },
-            );
+            ),
+            Tooltip(
+              message: '设置',
+              child: IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () {
+                  MyRouterDelegate.of(context).push(const BlogSettingsPage());
+                },
+              ),
+            ),
+          ],
+          slivers: [
+            (!kIsWeb && !Platform.isWindows)
+                ? SliverWebview(
+                    controller: _controller,
+                  )
+                : SliverCenterRoundedRaisedButton(
+                    onPressed: () => launchUrl(settings.blogUrl),
+                    child: const Text('博客'),
+                  )
+          ],
+          floatingActionButton: FloatingActionButton(
+            tooltip: '使用浏览器打开',
+            onPressed: () async {
+              final currentUrl =
+                  await _controller.webviewController.currentUrl();
+              if (currentUrl != null) {
+                await launchUrl(currentUrl);
+              }
+            },
+            child: const Icon(Icons.open_in_new),
+          ),
+          onWillPop: () async {
+            if (await _controller.webviewController.canGoBack()) {
+              await _controller.webviewController.goBack();
+              return false;
+            }
+            return true;
           },
         );
       },
