@@ -180,7 +180,7 @@ jobs:
         with:
           name: web
       - name: Copy file to server
-        uses: Burnett01/rsync-deployments@2651e3eecb4ea772cbe952695d04952e92027b4f
+        uses: Burnett01/rsync-deployments@45d84ad5f6c174f3e0ffc50e9060a9666d09c16e
         with:
           switches: -vzr --delete --exclude ".well-known"
           path: "."
@@ -203,7 +203,7 @@ jobs:
         with:
           name: web
       - name: Copy file to server
-        uses: Burnett01/rsync-deployments@2651e3eecb4ea772cbe952695d04952e92027b4f
+        uses: Burnett01/rsync-deployments@45d84ad5f6c174f3e0ffc50e9060a9666d09c16e
         with:
           switches: -vzr --delete --exclude ".well-known"
           path: "."
