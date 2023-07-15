@@ -4,6 +4,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
@@ -235,20 +236,16 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
                 await quickActions.initialize((String shortcutType) {
                   switch (shortcutType) {
                     case 'action_iot':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.iot));
+                      context.go(AppTab.iot.path);
                       break;
                     case 'action_storage':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.storage));
+                      context.go(AppTab.storage.path);
                       break;
                     case 'action_blog':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.blog));
+                      context.go(AppTab.blog.path);
                       break;
                     case 'action_board':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.board));
+                      context.go(AppTab.board.path);
                       break;
                   }
                 });
@@ -269,13 +266,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
             }
             if (state is AuthenticationError) {
               showErrorSnackBar(state.message);
-            }
-          },
-        ),
-        BlocListener<TabBloc, AppTab?>(
-          listener: (context, state) {
-            if (state != null) {
-              setHomePage(state);
             }
           },
         ),
