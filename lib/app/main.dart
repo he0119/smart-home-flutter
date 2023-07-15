@@ -182,24 +182,26 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
     redirect: (BuildContext context, GoRouterState state) {
       final settingsController = context.watch<SettingsController>();
       if (!settingsController.isLogin) {
-        if (state.subloc == '/login') {
+        if (state.matchedLocation == '/login') {
           return null;
         }
         return '/login?redirect=${state.location}';
-      } else {
-        if (state.location == '') {
+      }
+
+      if (state.matchedLocation == '/') {
+        return settingsController.defaultPage.path;
+      }
+
+      if (state.matchedLocation == '/login') {
+        if (state.queryParameters['redirect'] != null) {
+          return state.queryParameters['redirect'];
+        } else {
+          // 如果是登录状态，但是访问的是登录页面，那么就跳转到默认页面
           return settingsController.defaultPage.path;
         }
-        if (state.subloc == '/login') {
-          if (state.queryParams['redirect'] != null) {
-            return state.queryParams['redirect'];
-          } else {
-            // 如果是登录状态，但是访问的是登录页面，那么就跳转到默认页面
-            return settingsController.defaultPage.path;
-          }
-        }
-        return null;
       }
+
+      return null;
     },
   );
 
