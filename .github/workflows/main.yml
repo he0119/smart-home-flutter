@@ -84,7 +84,7 @@ jobs:
         uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
           flutter-version: ${{ env.flutter_version }}
-          channel: "stable"
+          channel: ${{ env.flutter_channel }}
           cache: true
       - name: Build split-per-abi apks
         run: flutter build apk --split-per-abi -t ./lib/main_$ENVIRONMENT.dart --flavor $ENVIRONMENT
@@ -118,7 +118,7 @@ jobs:
         uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
           flutter-version: ${{ env.flutter_version }}
-          channel: "stable"
+          channel: ${{ env.flutter_channel }}
           cache: true
       - name: Build web version
         run: |
@@ -153,7 +153,7 @@ jobs:
         uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
           flutter-version: ${{ env.flutter_version }}
-          channel: "stable"
+          channel: ${{ env.flutter_channel }}
           cache: true
       - name: Build windows version
         run: |
