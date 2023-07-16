@@ -13,7 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  flutter_version: "3.10.5"
+  flutter_version: "3.13.0-0.1.pre"
+  flutter_channel: "beta"
 
 jobs:
   test:
@@ -48,7 +49,7 @@ jobs:
         uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
           flutter-version: ${{ env.flutter_version }}
-          channel: "stable"
+          channel: ${{ env.flutter_channel }}
           cache: true
       - name: Flutter test
         run: |
