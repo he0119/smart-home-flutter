@@ -37,7 +37,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   shared_preferences: ^2.0.5
   url_launcher: ^6.0.2
-  quick_actions: ^1.0.0
+  quick_actions: ^1.0.6
   android_id: ^0.3.0
   device_info_plus: ^9.0.0
   package_info_plus: ^4.0.0
