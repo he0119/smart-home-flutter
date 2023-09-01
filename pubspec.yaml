@@ -43,7 +43,7 @@ dependencies:
   package_info_plus: ^4.0.0
   flutter_keyboard_visibility: ^5.4.1
   photo_view: ^0.14.0
-  image_picker: ^1.0.1
+  image_picker: ^1.0.4
   sentry_flutter: ^7.4.0
   flutter_treeview: ^1.0.6+1
   dynamic_color: ^1.5.4
