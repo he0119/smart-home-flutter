@@ -26,7 +26,7 @@ jobs:
       release: ${{ steps.setVersion.outputs.release }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set build version
         id: setVersion
         run: |
@@ -65,7 +65,7 @@ jobs:
     needs: test
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
@@ -103,7 +103,7 @@ jobs:
     needs: test
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
@@ -138,7 +138,7 @@ jobs:
     needs: test
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
@@ -239,7 +239,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         env:
