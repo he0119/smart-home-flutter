@@ -47,7 +47,7 @@ class VersionRepository {
 
   /// 更新文件的下载地址
   Future<String> updateUrl() async {
-    return 'https://ghproxy.com/https://github.com/he0119/smart-home-flutter/releases/download/v${await onlineVersion}/${await filename}';
+    return 'https://github.com/he0119/smart-home-flutter/releases/download/v${await onlineVersion}/${await filename}';
   }
 
   /// 当前版本
@@ -79,8 +79,7 @@ class VersionRepository {
   Future<Version> _getOnlineVersion() async {
     final versionRegex = RegExp(
         r'releases/tag/v([\d.]+)(-([0-9A-Za-z\-.]+))?(\+([0-9A-Za-z\-.]+))?');
-    const url =
-        'https://ghproxy.com/https://github.com/he0119/smart-home-flutter/releases/latest';
+    const url = 'https://github.com/he0119/smart-home-flutter/releases/latest';
     try {
       final response = await http.get(Uri.parse(url));
       _fileExist = response.body.contains(await filename);
