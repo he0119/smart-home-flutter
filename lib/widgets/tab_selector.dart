@@ -6,10 +6,10 @@ class TabSelector extends StatelessWidget {
   final Function(AppTab) onTabSelected;
 
   const TabSelector({
-    Key? key,
+    super.key,
     required this.activeTab,
     required this.onTabSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -12,9 +12,9 @@ class ConsumableEditPage extends StatefulWidget {
   final Item item;
 
   const ConsumableEditPage({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   State<ConsumableEditPage> createState() => _ConsumableEditPageState();

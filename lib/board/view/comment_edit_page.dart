@@ -13,11 +13,11 @@ class CommentEditPage extends StatefulWidget {
   final Topic? topic;
 
   const CommentEditPage({
-    Key? key,
+    super.key,
     required this.isEditing,
     this.comment,
     this.topic,
-  }) : super(key: key);
+  });
 
   @override
   State<CommentEditPage> createState() => _CommentEditPageState();
@@ -122,12 +122,11 @@ class _EditPage extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
   const _EditPage({
-    Key? key,
     required this.isEditing,
     this.comment,
     this.bodyController,
     required this.formKey,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -166,9 +165,8 @@ class _PreviewPage extends StatefulWidget {
   final TextEditingController? bodyController;
 
   const _PreviewPage({
-    Key? key,
     this.bodyController,
-  }) : super(key: key);
+  });
 
   @override
   __PreviewPageState createState() => __PreviewPageState();

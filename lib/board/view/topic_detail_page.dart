@@ -60,9 +60,9 @@ class TopicDetailScreen extends StatelessWidget {
   final String topicId;
 
   const TopicDetailScreen({
-    Key? key,
+    super.key,
     required this.topicId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -432,10 +432,10 @@ class TopicDetailScreen extends StatelessWidget {
 
 class CommentOrder extends StatelessWidget {
   const CommentOrder({
-    Key? key,
+    super.key,
     required this.topicId,
     required this.descending,
-  }) : super(key: key);
+  });
 
   final String topicId;
   final bool descending;

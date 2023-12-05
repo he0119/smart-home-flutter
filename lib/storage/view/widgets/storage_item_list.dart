@@ -13,14 +13,14 @@ class StorageItemList extends StatelessWidget {
   final VoidCallback? onFetch;
 
   const StorageItemList({
-    Key? key,
+    super.key,
     this.items,
     this.storages,
     this.term = '',
     this.isHighlight = false,
     this.hasReachedMax = true,
     this.onFetch,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +51,9 @@ class _HighlightStorageItemListItem extends StatelessWidget {
   final String term;
 
   const _HighlightStorageItemListItem({
-    Key? key,
     required this.item,
     required this.term,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -104,9 +103,8 @@ class _StorageItemListItem extends StatelessWidget {
   final dynamic item;
 
   const _StorageItemListItem({
-    Key? key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

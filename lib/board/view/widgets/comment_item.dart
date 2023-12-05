@@ -15,11 +15,11 @@ class CommentItem extends StatelessWidget {
   final void Function()? onEdit;
 
   const CommentItem({
-    Key? key,
+    super.key,
     required this.comment,
     required this.showMenu,
     this.onEdit,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

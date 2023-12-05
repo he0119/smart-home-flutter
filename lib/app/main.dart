@@ -18,10 +18,10 @@ import 'package:smarthome/user/user.dart';
 
 class MyApp extends StatelessWidget {
   MyApp({
-    Key? key,
+    super.key,
     required this.settingsController,
     required this.graphQLApiClient,
-  }) : super(key: key) {
+  }) {
     // 在应用最开始用设置里的 API URL 初始化 GraphQLClient
     graphQLApiClient.initailize(settingsController.apiUrl ??
         settingsController.appConfig.defaultApiUrl);
@@ -112,9 +112,9 @@ class MyMaterialApp extends StatefulWidget {
   final SettingsController settingsController;
 
   const MyMaterialApp({
-    Key? key,
+    super.key,
     required this.settingsController,
-  }) : super(key: key);
+  });
 
   @override
   State<MyMaterialApp> createState() => _MyMaterialAppState();
@@ -154,7 +154,6 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
           ),
           darkTheme: ThemeData.dark().copyWith(
             colorScheme: darkDynamic,
-            useMaterial3: true,
           ),
           themeMode: themeMode,
           localizationsDelegates: AppLocalizations.localizationsDelegates,

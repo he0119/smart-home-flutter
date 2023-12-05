@@ -6,7 +6,7 @@ import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class ThemeModePage extends StatelessWidget {
-  const ThemeModePage({Key? key}) : super(key: key);
+  const ThemeModePage({super.key});
 
   @override
   Widget build(BuildContext context) {

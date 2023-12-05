@@ -35,7 +35,7 @@ class BlogHomePage extends Page {
 
 /// 利用 WebView 实现的博客页面
 class BlogHomeScreen extends StatefulWidget {
-  const BlogHomeScreen({Key? key}) : super(key: key);
+  const BlogHomeScreen({super.key});
 
   @override
   State<BlogHomeScreen> createState() => _BlogHomeScreenState();
@@ -118,7 +118,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
 }
 
 class SettingButton extends StatelessWidget {
-  const SettingButton({Key? key}) : super(key: key);
+  const SettingButton({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -43,9 +43,9 @@ class PictureAddScreen extends StatefulWidget {
   final String itemId;
 
   const PictureAddScreen({
-    Key? key,
+    super.key,
     required this.itemId,
-  }) : super(key: key);
+  });
 
   @override
   State<PictureAddScreen> createState() => _PictureAddScreenState();

@@ -50,7 +50,7 @@ class IotHomePage extends Page {
 }
 
 class IotHomeScreen extends StatelessWidget {
-  const IotHomeScreen({Key? key}) : super(key: key);
+  const IotHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

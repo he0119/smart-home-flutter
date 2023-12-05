@@ -10,7 +10,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
     _log.fine('parseRouteInformation: ${routeInformation.location}');
-    return parseUrl(routeInformation.location!);
+    return parseUrl(routeInformation.location);
   }
 
   @override

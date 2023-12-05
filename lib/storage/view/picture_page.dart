@@ -50,7 +50,7 @@ class PicturePage extends Page {
 }
 
 class PictureScreen extends StatelessWidget {
-  const PictureScreen({Key? key}) : super(key: key);
+  const PictureScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

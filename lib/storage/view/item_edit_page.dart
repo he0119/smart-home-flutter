@@ -22,12 +22,11 @@ class ItemEditPage extends StatefulWidget {
   final Storage? storage;
 
   const ItemEditPage({
-    Key? key,
+    super.key,
     required this.isEditing,
     this.item,
     this.storage,
-  })  : assert(item != null || !isEditing),
-        super(key: key);
+  })  : assert(item != null || !isEditing);
 
   @override
   State<ItemEditPage> createState() => _ItemEditPageState();

@@ -4,7 +4,7 @@ import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/widgets/text_edit_page.dart';
 
 class BlogUrlPage extends StatelessWidget {
-  const BlogUrlPage({Key? key}) : super(key: key);
+  const BlogUrlPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -41,10 +41,10 @@ class StorageDialog extends StatefulWidget {
   final List<Storage> storages;
 
   const StorageDialog({
-    Key? key,
+    super.key,
     this.storage,
     required this.storages,
-  }) : super(key: key);
+  });
 
   @override
   State<StorageDialog> createState() => _StorageDialogState();
@@ -125,19 +125,14 @@ class _StorageDialogState extends State<StorageDialog> {
 class StorageFormField extends FormField<Storage> {
   StorageFormField({
     // From super
-    Key? key,
-    FormFieldValidator<Storage>? validator,
-    Storage? initialValue,
-    AutovalidateMode? autovalidateMode,
-    bool enabled = true,
+    super.key,
+    super.validator,
+    super.initialValue,
+    super.autovalidateMode,
+    super.enabled,
     InputDecoration? decoration = const InputDecoration(),
     this.onChanged,
   }) : super(
-          key: key,
-          autovalidateMode: autovalidateMode,
-          initialValue: initialValue,
-          enabled: enabled,
-          validator: validator,
           builder: (field) {
             final _StorageFieldState state = field as _StorageFieldState;
             final InputDecoration effectiveDecoration = (decoration ??

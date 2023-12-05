@@ -23,7 +23,7 @@ class BlogSettingsPage extends Page {
 }
 
 class BlogSettingsScreen extends StatelessWidget {
-  const BlogSettingsScreen({Key? key}) : super(key: key);
+  const BlogSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

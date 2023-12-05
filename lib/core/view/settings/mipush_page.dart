@@ -5,7 +5,7 @@ import 'package:smarthome/core/bloc/blocs.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
 class MiPushPage extends StatelessWidget {
-  const MiPushPage({Key? key}) : super(key: key);
+  const MiPushPage({super.key});
 
   @override
   Widget build(BuildContext context) {

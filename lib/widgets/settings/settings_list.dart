@@ -4,9 +4,9 @@ class SettingsList extends StatelessWidget {
   final List<Widget> sections;
 
   const SettingsList({
-    Key? key,
+    super.key,
     required this.sections,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

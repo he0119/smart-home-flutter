@@ -37,7 +37,7 @@ class StorageHomePage extends Page {
 }
 
 class StorageHomeScreen extends StatelessWidget {
-  const StorageHomeScreen({Key? key}) : super(key: key);
+  const StorageHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

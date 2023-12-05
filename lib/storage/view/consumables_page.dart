@@ -30,8 +30,8 @@ class ConsumablesPage extends Page {
 
 class ConsumablesScreen extends StatelessWidget {
   const ConsumablesScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

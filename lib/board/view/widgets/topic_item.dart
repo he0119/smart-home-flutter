@@ -10,10 +10,10 @@ class TopicItem extends StatelessWidget {
   final bool showBody;
 
   const TopicItem({
-    Key? key,
+    super.key,
     required this.topic,
     this.showBody = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

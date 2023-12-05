@@ -22,8 +22,8 @@ class AdminPage extends Page {
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<AdminScreen> createState() => _AdminScreenState();

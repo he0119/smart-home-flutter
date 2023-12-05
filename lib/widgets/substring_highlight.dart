@@ -9,10 +9,10 @@ class SubstringHighlight extends StatelessWidget {
   final String term;
 
   const SubstringHighlight({
-    Key? key,
+    super.key,
     required this.text,
     required this.term,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

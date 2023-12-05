@@ -8,9 +8,9 @@ class MyCircleAvatar extends StatelessWidget {
   final String? avatarUrl;
 
   const MyCircleAvatar({
-    Key? key,
+    super.key,
     required this.avatarUrl,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

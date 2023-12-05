@@ -29,8 +29,8 @@ class SearchPage extends Page {
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
