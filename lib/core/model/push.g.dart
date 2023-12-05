@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of push;
+part of 'push.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

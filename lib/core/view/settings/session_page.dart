@@ -7,7 +7,7 @@ import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
 class SessionPage extends StatelessWidget {
-  const SessionPage({Key? key}) : super(key: key);
+  const SessionPage({super.key});
 
   @override
   Widget build(BuildContext context) {

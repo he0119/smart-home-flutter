@@ -5,10 +5,10 @@ class SettingsSection extends StatelessWidget {
   final List<Widget> tiles;
 
   const SettingsSection({
-    Key? key,
+    super.key,
     this.title,
     required this.tiles,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

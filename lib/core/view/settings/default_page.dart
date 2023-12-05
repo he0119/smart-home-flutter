@@ -6,7 +6,7 @@ import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class DefaultPage extends StatelessWidget {
-  const DefaultPage({Key? key}) : super(key: key);
+  const DefaultPage({super.key});
 
   @override
   Widget build(BuildContext context) {

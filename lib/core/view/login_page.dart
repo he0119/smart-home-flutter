@@ -25,8 +25,8 @@ class LoginPage extends Page {
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -76,10 +76,10 @@ class ApiUrlForm extends StatefulWidget {
   final VoidCallback onTapNext;
 
   const ApiUrlForm({
-    Key? key,
+    super.key,
     required this.apiUrl,
     required this.onTapNext,
-  }) : super(key: key);
+  });
 
   @override
   State<ApiUrlForm> createState() => _ApiUrlFormState();
@@ -163,7 +163,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
 class LoginForm extends StatefulWidget {
   final Function onTapBack;
 
-  const LoginForm({Key? key, required this.onTapBack}) : super(key: key);
+  const LoginForm({super.key, required this.onTapBack});
 
   @override
   State<LoginForm> createState() => _LoginFormState();

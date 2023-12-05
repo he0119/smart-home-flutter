@@ -18,7 +18,7 @@ class InfiniteList<T> extends StatefulWidget {
   final double threshold;
 
   const InfiniteList({
-    Key? key,
+    super.key,
     required this.items,
     this.top,
     this.botton,
@@ -26,7 +26,7 @@ class InfiniteList<T> extends StatefulWidget {
     this.hasReachedMax = true,
     this.onFetch,
     this.threshold = 200,
-  }) : super(key: key);
+  });
 
   @override
   State<InfiniteList<T>> createState() => _InfiniteListState<T>();
@@ -107,13 +107,13 @@ class SliverInfiniteList<T> extends StatefulWidget {
   final int invisibleItemsThreshold;
 
   const SliverInfiniteList({
-    Key? key,
+    super.key,
     required this.items,
     required this.itemBuilder,
     this.hasReachedMax = true,
     this.onFetch,
     this.invisibleItemsThreshold = 3,
-  }) : super(key: key);
+  });
 
   @override
   State<SliverInfiniteList<T>> createState() => _SliverInfiniteListState<T>();

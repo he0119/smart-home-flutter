@@ -5,10 +5,10 @@ class RoundedRaisedButton extends StatelessWidget {
   final Function? onPressed;
 
   const RoundedRaisedButton({
-    Key? key,
+    super.key,
     this.child,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +29,10 @@ class SliverCenterRoundedRaisedButton extends StatelessWidget {
   final Function? onPressed;
 
   const SliverCenterRoundedRaisedButton({
-    Key? key,
+    super.key,
     this.child,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

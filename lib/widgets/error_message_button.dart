@@ -7,10 +7,10 @@ class ErrorMessageButton extends StatelessWidget {
   final String message;
 
   const ErrorMessageButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.message,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

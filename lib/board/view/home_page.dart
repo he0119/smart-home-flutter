@@ -35,8 +35,8 @@ class BoardHomePage extends Page {
 
 class BoardHomeScreen extends StatelessWidget {
   const BoardHomeScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

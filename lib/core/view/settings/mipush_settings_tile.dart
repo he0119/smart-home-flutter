@@ -5,7 +5,7 @@ import 'package:smarthome/core/view/settings/mipush_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class MiPushSettingsTile extends StatelessWidget {
-  const MiPushSettingsTile({Key? key}) : super(key: key);
+  const MiPushSettingsTile({super.key});
 
   @override
   Widget build(BuildContext context) {

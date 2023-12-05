@@ -12,7 +12,7 @@ class TextEditPage extends StatefulWidget {
   final TextInputType? keyboardType;
 
   const TextEditPage({
-    Key? key,
+    super.key,
     required this.title,
     required this.initialValue,
     required this.description,
@@ -20,7 +20,7 @@ class TextEditPage extends StatefulWidget {
     this.validator,
     this.inputFormatters,
     this.keyboardType,
-  }) : super(key: key);
+  });
 
   @override
   State<TextEditPage> createState() => _TextEditPageState();

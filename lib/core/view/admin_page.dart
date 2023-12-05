@@ -22,8 +22,8 @@ class AdminPage extends Page {
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<AdminScreen> createState() => _AdminScreenState();
@@ -54,13 +54,19 @@ class _AdminScreenState extends State<AdminScreen> {
         }
         controller.loadRequest(Uri.parse(settings.adminUrl));
         return Scaffold(
-            body: WillPopScope(
-              onWillPop: () async {
-                if (await controller.canGoBack()) {
-                  await controller.goBack();
-                  return false;
+            body: PopScope(
+              canPop: false,
+              onPopInvoked: (bool didPop) async {
+                if (didPop) {
+                  return;
                 }
-                return true;
+                final NavigatorState navigator = Navigator.of(context);
+                final bool canGoBack = await controller.canGoBack();
+                if (canGoBack) {
+                  controller.goBack();
+                } else {
+                  navigator.pop();
+                }
               },
               child: SafeArea(
                 child: WebViewWidget(controller: controller),

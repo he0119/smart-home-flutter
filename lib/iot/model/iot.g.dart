@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of iot;
+part of 'iot.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

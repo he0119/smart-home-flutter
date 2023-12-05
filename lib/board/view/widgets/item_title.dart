@@ -11,12 +11,12 @@ class ItemTitle extends StatelessWidget {
   final Function(Menu)? onSelected;
 
   const ItemTitle({
-    Key? key,
+    super.key,
     required this.user,
     required this.createdAt,
     required this.editedAt,
     this.onSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

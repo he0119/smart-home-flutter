@@ -13,7 +13,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
   final AutovalidateMode autoValidateMode;
 
   const MyDropdownSearch({
-    Key? key,
+    super.key,
     this.label,
     this.asyncItems,
     this.onChanged,
@@ -21,7 +21,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
     this.showClearButton = false,
     this.validator,
     this.autoValidateMode = AutovalidateMode.disabled,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

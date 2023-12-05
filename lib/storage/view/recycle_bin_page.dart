@@ -42,8 +42,8 @@ class RecycleBinPage extends Page {
 
 class RecycleBinScreen extends StatelessWidget {
   const RecycleBinScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

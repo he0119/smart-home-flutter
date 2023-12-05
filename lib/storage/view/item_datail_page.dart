@@ -54,9 +54,9 @@ class ItemDetailScreen extends StatelessWidget {
   final String itemId;
 
   const ItemDetailScreen({
-    Key? key,
+    super.key,
     required this.itemId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +201,7 @@ class ItemDetailScreen extends StatelessWidget {
 class _ItemDetailList extends StatelessWidget {
   final Item item;
 
-  const _ItemDetailList({Key? key, required this.item}) : super(key: key);
+  const _ItemDetailList({required this.item});
 
   @override
   Widget build(BuildContext context) {

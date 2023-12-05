@@ -14,10 +14,10 @@ class StorageEditPage extends StatefulWidget {
   final Storage? storage;
 
   const StorageEditPage({
-    Key? key,
+    super.key,
     required this.isEditing,
     required this.storage,
-  }) : super(key: key);
+  });
 
   @override
   State<StorageEditPage> createState() => _StorageEditPageState();

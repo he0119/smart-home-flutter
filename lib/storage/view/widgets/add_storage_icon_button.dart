@@ -9,9 +9,9 @@ class AddStorageIconButton extends StatelessWidget {
   final Storage? storage;
 
   const AddStorageIconButton({
-    Key? key,
+    super.key,
     this.storage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

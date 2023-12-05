@@ -52,9 +52,9 @@ class StorageDetailScreen extends StatelessWidget {
   final String storageId;
 
   const StorageDetailScreen({
-    Key? key,
+    super.key,
     required this.storageId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
