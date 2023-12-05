@@ -1,6 +1,6 @@
 const String topicsQuery = r'''
 query topics($after: String) {
-  topics(after: $after, order: {activeAt: DESC}) {
+  topics(after: $after, order: {isPinned: DESC, isClosed: ASC, activeAt: DESC}) {
     pageInfo {
       hasNextPage
       endCursor
