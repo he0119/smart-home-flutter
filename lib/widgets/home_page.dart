@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/conditional_parent_widget.dart';
 import 'package:smarthome/widgets/drawer.dart';
-import 'package:smarthome/widgets/tab_selector.dart';
 
 class MyHomePage extends StatelessWidget {
   final AppTab activeTab;
@@ -32,7 +31,6 @@ class MyHomePage extends StatelessWidget {
       floatingActionButton: floatingActionButton,
       onRefresh: onRefresh,
       onWillPop: onWillPop,
-      bottomNavigationBar: TabSelector(activeTab: activeTab),
     );
   }
 }

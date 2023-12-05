@@ -9,58 +9,76 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/iot/bloc/blocs.dart';
 import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/storage/storage.dart';
+import 'package:smarthome/widgets/tab_selector.dart';
 
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _homeNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'home');
 // 为了保存路由状态
 final GoRouter router = GoRouter(
+  navigatorKey: _rootNavigatorKey,
   initialLocation: '/',
   routes: [
-    GoRoute(
-      path: '/storage',
-      builder: (context, state) {
-        BlocProvider.of<StorageHomeBloc>(context)
-            .add(const StorageHomeFetched(itemType: ItemType.all));
-        return const StorageHomeScreen();
-      },
-    ),
-    GoRoute(
-      path: '/iot',
-      builder: (context, state) {
-        BlocProvider.of<StorageHomeBloc>(context)
-            .add(const StorageHomeFetched(itemType: ItemType.all));
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider<DeviceDataBloc>(
-              // 因为只有一个设备就先写死
-              create: (context) => DeviceDataBloc(
-                iotRepository: RepositoryProvider.of<IotRepository>(context),
-                deviceId: 'RGV2aWNlOjE=',
-              )..add(const DeviceDataStarted()),
-            ),
-            BlocProvider<DeviceEditBloc>(
-              create: (context) => DeviceEditBloc(
-                iotRepository: RepositoryProvider.of<IotRepository>(context),
-              ),
-            ),
-          ],
-          child: const IotHomeScreen(),
+    ShellRoute(
+      navigatorKey: _homeNavigatorKey,
+      builder: (context, state, child) {
+        return Scaffold(
+          body: child,
+          bottomNavigationBar: const TabSelector(),
         );
       },
-    ),
-    GoRoute(
-      path: '/blog',
-      builder: (context, state) {
-        BlocProvider.of<StorageHomeBloc>(context)
-            .add(const StorageHomeFetched(itemType: ItemType.all));
-        return const BlogHomeScreen();
-      },
-    ),
-    GoRoute(
-      path: '/board',
-      builder: (context, state) {
-        BlocProvider.of<StorageHomeBloc>(context)
-            .add(const StorageHomeFetched(itemType: ItemType.all));
-        return const BoardHomeScreen();
-      },
+      routes: [
+        GoRoute(
+          path: '/storage',
+          builder: (context, state) {
+            BlocProvider.of<StorageHomeBloc>(context)
+                .add(const StorageHomeFetched(itemType: ItemType.all));
+            return const StorageHomeScreen();
+          },
+        ),
+        GoRoute(
+          path: '/iot',
+          builder: (context, state) {
+            BlocProvider.of<StorageHomeBloc>(context)
+                .add(const StorageHomeFetched(itemType: ItemType.all));
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<DeviceDataBloc>(
+                  // 因为只有一个设备就先写死
+                  create: (context) => DeviceDataBloc(
+                    iotRepository:
+                        RepositoryProvider.of<IotRepository>(context),
+                    deviceId: 'RGV2aWNlOjE=',
+                  )..add(const DeviceDataStarted()),
+                ),
+                BlocProvider<DeviceEditBloc>(
+                  create: (context) => DeviceEditBloc(
+                    iotRepository:
+                        RepositoryProvider.of<IotRepository>(context),
+                  ),
+                ),
+              ],
+              child: const IotHomeScreen(),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/blog',
+          builder: (context, state) {
+            BlocProvider.of<StorageHomeBloc>(context)
+                .add(const StorageHomeFetched(itemType: ItemType.all));
+            return const BlogHomeScreen();
+          },
+        ),
+        GoRoute(
+          path: '/board',
+          builder: (context, state) {
+            BlocProvider.of<StorageHomeBloc>(context)
+                .add(const StorageHomeFetched(itemType: ItemType.all));
+            return const BoardHomeScreen();
+          },
+        ),
+      ],
     ),
     GoRoute(
       path: '/login',
