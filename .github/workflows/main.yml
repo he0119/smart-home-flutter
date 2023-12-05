@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  flutter_version: "3.13.0-0.1.pre"
-  flutter_channel: "beta"
+  flutter_version: "3.16.2"
+  flutter_channel: "stable"
 
 jobs:
   test:

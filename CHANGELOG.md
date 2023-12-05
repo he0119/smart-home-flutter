@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 ### Added
 
 - 留言板支持多行选择
+- 升级至 Flutter 3.16
 
 ### Fixed
 
