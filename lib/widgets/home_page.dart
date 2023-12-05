@@ -77,8 +77,23 @@ class MySliverScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: drawer,
-      body: WillPopScope(
-        onWillPop: onWillPop,
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (bool didPop) async {
+          if (didPop) {
+            return;
+          }
+          final NavigatorState navigator = Navigator.of(context);
+          final onWillPopCopy = onWillPop;
+          if (onWillPopCopy == null) {
+            navigator.pop();
+          } else {
+            final shouldPop = await onWillPopCopy();
+            if (shouldPop) {
+              navigator.pop();
+            }
+          }
+        },
         child: ConditionalParentWidget(
           condition: onRefresh != null,
           conditionalBuilder: (child) {
