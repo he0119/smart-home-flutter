@@ -94,7 +94,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   Future<void> navigateNewPath(String url) async {
     final uri = Uri.parse(url);
-    final routePath = parseUrl(uri);
+    final routePath = parseUri(uri);
     await setNewRoutePath(routePath);
     notifyListeners();
   }

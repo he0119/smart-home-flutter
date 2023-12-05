@@ -10,7 +10,7 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
   Future<RoutePath> parseRouteInformation(
       RouteInformation routeInformation) async {
     _log.fine('parseRouteInformation: ${routeInformation.uri}');
-    return parseUrl(routeInformation.uri);
+    return parseUri(routeInformation.uri);
   }
 
   @override
@@ -19,52 +19,52 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
     if (configuration is HomeRoutePath) {
       switch (configuration.appTab) {
         case AppTab.blog:
-          return RouteInformation(uri: Uri(path: '/blog'));
+          return RouteInformation(uri: Uri.parse('/blog'));
         case AppTab.iot:
-          return RouteInformation(uri: Uri(path: '/iot'));
+          return RouteInformation(uri: Uri.parse('/iot'));
         case AppTab.storage:
-          return RouteInformation(uri: Uri(path: '/storage'));
+          return RouteInformation(uri: Uri.parse('/storage'));
         case AppTab.board:
-          return RouteInformation(uri: Uri(path: '/board'));
+          return RouteInformation(uri: Uri.parse('/board'));
         default:
       }
     } else if (configuration is StorageRoutePath) {
       return RouteInformation(
-          uri: Uri(path: '/storage/${configuration.storageId}'));
+          uri: Uri.parse('/storage/${configuration.storageId}'));
     } else if (configuration is ItemRoutePath) {
-      return RouteInformation(uri: Uri(path: '/item/${configuration.itemId}'));
+      return RouteInformation(uri: Uri.parse('/item/${configuration.itemId}'));
     } else if (configuration is TopicRoutePath) {
       return RouteInformation(
-          uri: Uri(path: '/topic/${configuration.topicId}'));
+          uri: Uri.parse('/topic/${configuration.topicId}'));
     } else if (configuration is AppRoutePath) {
       switch (configuration.appPage) {
         case AppPage.login:
-          return RouteInformation(uri: Uri(path: '/login'));
+          return RouteInformation(uri: Uri.parse('/login'));
         case AppPage.consumables:
-          return RouteInformation(uri: Uri(path: '/consumables'));
+          return RouteInformation(uri: Uri.parse('/consumables'));
         case AppPage.recycleBin:
-          return RouteInformation(uri: Uri(path: '/recyclebin'));
+          return RouteInformation(uri: Uri.parse('/recyclebin'));
       }
     } else if (configuration is SettingsRoutePath) {
       switch (configuration.appSettings) {
         case AppSettings.home:
-          return RouteInformation(uri: Uri(path: '/settings'));
+          return RouteInformation(uri: Uri.parse('/settings'));
         case AppSettings.iot:
-          return RouteInformation(uri: Uri(path: '/settings/iot'));
+          return RouteInformation(uri: Uri.parse('/settings/iot'));
         case AppSettings.blog:
-          return RouteInformation(uri: Uri(path: '/settings/blog'));
+          return RouteInformation(uri: Uri.parse('/settings/blog'));
         default:
       }
     } else if (configuration is PictureRoutePath) {
       return RouteInformation(
-          uri: Uri(path: '/picture/${configuration.pictureId}'));
+          uri: Uri.parse('/picture/${configuration.pictureId}'));
     }
-    return RouteInformation(uri: Uri(path: '/'));
+    return RouteInformation(uri: Uri.parse('/'));
   }
 }
 
-/// 将 URL 转换成 RoutePath
-RoutePath parseUrl(Uri uri) {
+/// 将 URI 转换成 RoutePath
+RoutePath parseUri(Uri uri) {
   if (uri.pathSegments.length == 1) {
     if (uri.pathSegments[0] == 'iot') return HomeRoutePath(appTab: AppTab.iot);
     if (uri.pathSegments[0] == 'board') {
