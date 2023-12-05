@@ -75,7 +75,7 @@ final GoRouter router = GoRouter(
       if (state.matchedLocation == '/login') {
         return null;
       }
-      return '/login?redirect=${state.location}';
+      return '/login?redirect=${state.uri.toString()}';
     }
 
     if (state.matchedLocation == '/') {
@@ -83,8 +83,8 @@ final GoRouter router = GoRouter(
     }
 
     if (state.matchedLocation == '/login') {
-      if (state.queryParameters['redirect'] != null) {
-        return state.queryParameters['redirect'];
+      if (state.uri.queryParameters['redirect'] != null) {
+        return state.uri.queryParameters['redirect'];
       } else {
         // 如果是登录状态，但是访问的是登录页面，那么就跳转到默认页面
         return settingsController.defaultPage.path;
