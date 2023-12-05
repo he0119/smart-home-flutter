@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 ### Fixed
 
 - 修复话题排序问题
+- 暂时修复无法检查更新的问题
 
 ## [0.9.4] - 2023-02-05
 
