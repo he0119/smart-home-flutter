@@ -83,7 +83,7 @@ class MySliverScaffold extends StatelessWidget {
     return Scaffold(
       drawer: drawer,
       body: PopScope(
-        canPop: canPop == null ? false : canPop!(),
+        canPop: canPop == null ? true : canPop!(),
         onPopInvoked: onPopInvoked,
         child: ConditionalParentWidget(
           condition: onRefresh != null,
