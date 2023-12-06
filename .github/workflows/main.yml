@@ -165,7 +165,7 @@ jobs:
         if: github.event_name != 'pull_request'
         with:
           name: windows
-          path: ${{ github.workspace }}/build/windows/runner/Release
+          path: ${{ github.workspace }}/build/windows/x64/runner/Release
 
   deploy_web_dev:
     name: Deploy Web Dev
