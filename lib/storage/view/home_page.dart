@@ -78,13 +78,15 @@ class StorageHomeScreen extends StatelessWidget {
                   );
                 }
               : null,
-          onWillPop: () async {
-            if (state is StorageHomeSuccess && state.itemType != ItemType.all) {
+          canPop: () {
+            return state is StorageHomeSuccess &&
+                state.itemType == ItemType.all;
+          },
+          onPopInvoked: (didPop) {
+            if (state is StorageHomeSuccess) {
               BlocProvider.of<StorageHomeBloc>(context)
                   .add(const StorageHomeFetched(itemType: ItemType.all));
-              return false;
             }
-            return true;
           },
         );
       },

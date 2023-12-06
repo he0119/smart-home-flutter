@@ -104,12 +104,18 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
             },
             child: const Icon(Icons.open_in_new),
           ),
-          onWillPop: () async {
-            if (await _controller.webviewController.canGoBack()) {
-              await _controller.webviewController.goBack();
-              return false;
+          onPopInvoked: (didPop) async {
+            if (didPop) {
+              return;
             }
-            return true;
+
+            final NavigatorState navigator = Navigator.of(context);
+            final canGoBack = await _controller.webviewController.canGoBack();
+            if (canGoBack) {
+              await _controller.webviewController.goBack();
+            } else {
+              navigator.pop();
+            }
           },
         );
       },

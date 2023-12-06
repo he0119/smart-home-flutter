@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Fixed
+
+- 修复无法从主页退出应用的问题
+
 ## [0.9.5] - 2023-12-06
 
 ### Added

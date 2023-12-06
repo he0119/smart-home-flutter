@@ -11,7 +11,8 @@ class MyHomePage extends StatelessWidget {
   final List<Widget>? slivers;
   final Widget? floatingActionButton;
   final Future<void> Function()? onRefresh;
-  final Future<bool> Function()? onWillPop;
+  final bool Function()? canPop;
+  final void Function(bool)? onPopInvoked;
 
   const MyHomePage({
     super.key,
@@ -20,7 +21,8 @@ class MyHomePage extends StatelessWidget {
     this.slivers,
     this.floatingActionButton,
     this.onRefresh,
-    this.onWillPop,
+    this.canPop,
+    this.onPopInvoked,
   });
 
   @override
@@ -32,12 +34,13 @@ class MyHomePage extends StatelessWidget {
       drawer: const MyDrawer(),
       floatingActionButton: floatingActionButton,
       onRefresh: onRefresh,
-      onWillPop: onWillPop,
       bottomNavigationBar: TabSelector(
         activeTab: activeTab,
         onTabSelected: (tab) =>
             BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
       ),
+      canPop: canPop,
+      onPopInvoked: onPopInvoked,
     );
   }
 }
@@ -55,8 +58,9 @@ class MySliverScaffold extends StatelessWidget {
   final Widget? drawer;
   final PreferredSizeWidget? appbarBottom;
   final Future<void> Function()? onRefresh;
-  final Future<bool> Function()? onWillPop;
   final AppBarSize appBarSize;
+  final bool Function()? canPop;
+  final void Function(bool)? onPopInvoked;
 
   const MySliverScaffold({
     super.key,
@@ -68,9 +72,10 @@ class MySliverScaffold extends StatelessWidget {
     this.bottomNavigationBar,
     this.drawer,
     this.onRefresh,
-    this.onWillPop,
     this.appbarBottom,
     this.appBarSize = AppBarSize.medium,
+    this.canPop,
+    this.onPopInvoked,
   });
 
   @override
@@ -78,22 +83,8 @@ class MySliverScaffold extends StatelessWidget {
     return Scaffold(
       drawer: drawer,
       body: PopScope(
-        canPop: false,
-        onPopInvoked: (bool didPop) async {
-          if (didPop) {
-            return;
-          }
-          final NavigatorState navigator = Navigator.of(context);
-          final onWillPopCopy = onWillPop;
-          if (onWillPopCopy == null) {
-            navigator.pop();
-          } else {
-            final shouldPop = await onWillPopCopy();
-            if (shouldPop) {
-              navigator.pop();
-            }
-          }
-        },
+        canPop: canPop == null ? false : canPop!(),
+        onPopInvoked: onPopInvoked,
         child: ConditionalParentWidget(
           condition: onRefresh != null,
           conditionalBuilder: (child) {
