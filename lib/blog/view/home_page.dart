@@ -104,6 +104,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
             },
             child: const Icon(Icons.open_in_new),
           ),
+          // FIXME: 目前没法通过返回键退出应用
           onPopInvoked: (didPop) async {
             if (didPop) {
               return;

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.9.6] - 2023-12-06
+
 ### Fixed
 
 - 修复无法从主页退出应用的问题
@@ -479,7 +481,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.9.5...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.9.6...HEAD
+[0.9.6]: https://github.com/he0119/smart-home-flutter/compare/v0.9.5...v0.9.6
 [0.9.5]: https://github.com/he0119/smart-home-flutter/compare/v0.9.4...v0.9.5
 [0.9.4]: https://github.com/he0119/smart-home-flutter/compare/v0.9.3...v0.9.4
 [0.9.3]: https://github.com/he0119/smart-home-flutter/compare/v0.9.2...v0.9.3
