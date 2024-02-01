@@ -57,7 +57,7 @@ jobs:
           flutter test --coverage
           python lcov_cobertura.py coverage/lcov.info
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
 
   android:
     name: Android
@@ -91,7 +91,7 @@ jobs:
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
       - name: Upload split-per-abi apks
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
         with:
           name: android
@@ -126,7 +126,7 @@ jobs:
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
       - name: Upload web version
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
         with:
           name: web
@@ -161,7 +161,7 @@ jobs:
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
       - name: Upload windows version
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
         with:
           name: windows
@@ -177,7 +177,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Download web files
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: web
       - name: Copy file to server
@@ -200,7 +200,7 @@ jobs:
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     steps:
       - name: Download web files
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: web
       - name: Copy file to server
@@ -220,7 +220,7 @@ jobs:
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
       - name: Compress files
         run: |
           tar -czvf web.tar.gz web
