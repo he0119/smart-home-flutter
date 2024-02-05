@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Added
+
+- 物品管理位置支持生成和扫描二维码
+
 ### Fixed
 
 - 修复网页浏览无法返回的问题

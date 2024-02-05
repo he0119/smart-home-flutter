@@ -49,6 +49,7 @@ dependencies:
   dynamic_color: ^1.5.4
   qr_flutter: ^4.1.0
   share_plus: ^7.2.2
+  qr_code_scanner: ^1.0.1
 
   # Widget
   webview_flutter: ^4.2.1

@@ -5,6 +5,7 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
+import 'package:smarthome/storage/view/widgets/scan_qr_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
@@ -46,6 +47,7 @@ class StorageHomeScreen extends StatelessWidget {
         return MyHomePage(
           activeTab: AppTab.storage,
           actions: const <Widget>[
+            ScanQrIconButton(),
             SearchIconButton(),
           ],
           floatingActionButton: FloatingActionButton(
