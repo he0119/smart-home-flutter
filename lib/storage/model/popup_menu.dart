@@ -7,3 +7,5 @@ enum ItemDetailMenu { edit, delete, consumable, addPicture }
 ///
 /// 删除
 enum PictureMenu { delete }
+
+enum StorageDetailMenu { edit, delete, qr }

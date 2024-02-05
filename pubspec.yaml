@@ -47,6 +47,7 @@ dependencies:
   sentry_flutter: ^7.4.0
   flutter_treeview: ^1.0.6+1
   dynamic_color: ^1.5.4
+  qr_flutter: ^4.1.0
 
   # Widget
   webview_flutter: ^4.2.1
