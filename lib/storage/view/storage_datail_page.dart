@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/core/core.dart';
 import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/storage/model/popup_menu.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
 import 'package:smarthome/storage/view/storage_edit_page.dart';
+import 'package:smarthome/storage/view/storage_qr_page.dart';
 import 'package:smarthome/storage/view/widgets/add_storage_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/storage_item_list.dart';
@@ -94,12 +95,14 @@ class StorageDetailScreen extends StatelessWidget {
             ),
             const SearchIconButton(),
             if (state.storage.id != homeStorage.id)
-              PopupMenuButton<Menu>(
+              PopupMenuButton<StorageDetailMenu>(
                 onSelected: (value) async {
-                  if (value == Menu.edit) {
+                  final navigator = Navigator.of(context);
+
+                  if (value == StorageDetailMenu.edit) {
                     final storageDetailBloc = context.read<StorageDetailBloc>();
 
-                    final r = await Navigator.of(context).push(
+                    final r = await navigator.push(
                       MaterialPageRoute(
                         builder: (_) => BlocProvider<StorageEditBloc>(
                           create: (_) => StorageEditBloc(
@@ -119,7 +122,7 @@ class StorageDetailScreen extends StatelessWidget {
                       );
                     }
                   }
-                  if (value == Menu.delete) {
+                  if (value == StorageDetailMenu.delete) {
                     if (context.mounted) {
                       await showDialog(
                         context: context,
@@ -147,16 +150,29 @@ class StorageDetailScreen extends StatelessWidget {
                       );
                     }
                   }
+                  if (value == StorageDetailMenu.qr) {
+                    await navigator.push(
+                      MaterialPageRoute(
+                        builder: (_) => StorageQRPage(
+                          storage: state.storage,
+                        ),
+                      ),
+                    );
+                  }
                 },
                 itemBuilder: (context) => [
                   const PopupMenuItem(
-                    value: Menu.edit,
+                    value: StorageDetailMenu.edit,
                     child: Text('编辑'),
                   ),
                   const PopupMenuItem(
-                    value: Menu.delete,
+                    value: StorageDetailMenu.delete,
                     child: Text('删除'),
                   ),
+                  const PopupMenuItem(
+                    value: StorageDetailMenu.qr,
+                    child: Text('二维码'),
+                  )
                 ],
               )
           ],
