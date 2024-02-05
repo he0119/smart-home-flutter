@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:smarthome/core/model/grobal_keys.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/storage.dart';
 
-class ScanQrIconButton extends StatelessWidget {
-  const ScanQrIconButton({super.key});
+class ScanQRIconButton extends StatelessWidget {
+  const ScanQRIconButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class ScanQrIconButton extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => const ScanQrPage(),
+              builder: (_) => const ScanQRPage(),
             ),
           );
         },
@@ -26,17 +27,17 @@ class ScanQrIconButton extends StatelessWidget {
   }
 }
 
-class ScanQrPage extends StatefulWidget {
-  const ScanQrPage({super.key});
+class ScanQRPage extends StatefulWidget {
+  const ScanQRPage({super.key});
 
   @override
-  State<ScanQrPage> createState() => _ScanQrPageState();
+  State<ScanQRPage> createState() => _ScanQRPageState();
 }
 
-class _ScanQrPageState extends State<ScanQrPage> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
+class _ScanQRPageState extends State<ScanQRPage> {
+  bool jumped = false;
   QRViewController? controller;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -45,9 +46,8 @@ class _ScanQrPageState extends State<ScanQrPage> {
     super.reassemble();
     if (Platform.isAndroid) {
       controller!.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller!.resumeCamera();
     }
+    controller!.resumeCamera();
   }
 
   @override
@@ -56,34 +56,36 @@ class _ScanQrPageState extends State<ScanQrPage> {
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
-          ),
+              flex: 4,
+              child: GestureDetector(
+                child: _buildQrView(context),
+                onTap: () async {
+                  jumped = false;
+                  await controller?.resumeCamera();
+                },
+              )),
           Expanded(
             flex: 1,
-            child: Center(
-              child: (result != null)
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('ID: ${result?.code}'),
-                        ElevatedButton(
-                          onPressed: () {
-                            final storageId = result?.code;
-                            if (storageId == null) {
-                              return;
-                            }
-                            MyRouterDelegate.of(context)
-                                .push(StorageDetailPage(storageId: storageId));
-                          },
-                          child: const Text('转跳'),
-                        ),
-                      ],
-                    )
-                  : const Text('扫描二维码'),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text('请扫描二维码'),
+                Container(
+                  margin: const EdgeInsets.all(8),
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        await controller?.toggleFlash();
+                        setState(() {});
+                      },
+                      child: FutureBuilder(
+                        future: controller?.getFlashStatus(),
+                        builder: (context, snapshot) {
+                          return Text(
+                              snapshot.data ?? false ? '关闭闪光灯' : '打开闪光灯');
+                        },
+                      )),
+                ),
+              ],
             ),
           )
         ],
@@ -91,13 +93,52 @@ class _ScanQrPageState extends State<ScanQrPage> {
     );
   }
 
+  Widget _buildQrView(BuildContext context) {
+    // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
+    var scanArea = (MediaQuery.of(context).size.width < 400 ||
+            MediaQuery.of(context).size.height < 400)
+        ? 150.0
+        : 300.0;
+    // To ensure the Scanner view is properly sizes after rotation
+    // we need to listen for Flutter SizeChanged notification and update controller
+    return QRView(
+      key: qrKey,
+      onQRViewCreated: _onQRViewCreated,
+      overlay: QrScannerOverlayShape(
+          borderColor: Colors.red,
+          borderRadius: 10,
+          borderLength: 30,
+          borderWidth: 10,
+          cutOutSize: scanArea),
+      onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
+    );
+  }
+
   void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
+    setState(() {
+      this.controller = controller;
     });
+    controller.scannedDataStream.listen((scanData) {
+      if (jumped) {
+        return;
+      }
+      final storageId = scanData.code;
+      if (storageId == null) {
+        return;
+      }
+      MyRouterDelegate.of(context)
+          .push(StorageDetailPage(storageId: storageId));
+      jumped = true;
+      controller.pauseCamera();
+    });
+  }
+
+  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
+    if (!p) {
+      scaffoldMessengerKey.currentState!.showSnackBar(
+        const SnackBar(content: Text('没有相机权限')),
+      );
+    }
   }
 
   @override

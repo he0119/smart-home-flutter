@@ -47,7 +47,7 @@ class StorageHomeScreen extends StatelessWidget {
         return MyHomePage(
           activeTab: AppTab.storage,
           actions: const <Widget>[
-            ScanQrIconButton(),
+            ScanQRIconButton(),
             SearchIconButton(),
           ],
           floatingActionButton: FloatingActionButton(
