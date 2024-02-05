@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -126,10 +127,12 @@ class _ScanQRPageState extends State<ScanQRPage> {
       if (storageId == null) {
         return;
       }
-      MyRouterDelegate.of(context)
-          .push(StorageDetailPage(storageId: storageId));
-      jumped = true;
-      controller.pauseCamera();
+      if (validateStorageId(storageId)) {
+        MyRouterDelegate.of(context)
+            .push(StorageDetailPage(storageId: storageId));
+        jumped = true;
+        controller.pauseCamera();
+      }
     });
   }
 
@@ -145,5 +148,11 @@ class _ScanQRPageState extends State<ScanQRPage> {
   void dispose() {
     controller?.dispose();
     super.dispose();
+  }
+
+  bool validateStorageId(String id) {
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    final decoded = stringToBase64.decode(id);
+    return decoded.startsWith('Storage:');
   }
 }
