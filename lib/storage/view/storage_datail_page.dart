@@ -153,7 +153,7 @@ class StorageDetailScreen extends StatelessWidget {
                   if (value == StorageDetailMenu.qr) {
                     await navigator.push(
                       MaterialPageRoute(
-                        builder: (_) => StorageQrPage(
+                        builder: (_) => StorageQRPage(
                           storage: state.storage,
                         ),
                       ),

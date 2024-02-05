@@ -3,10 +3,10 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/view/widgets/share_icon_button.dart';
 
-class StorageQrPage extends StatelessWidget {
+class StorageQRPage extends StatelessWidget {
   final Storage storage;
 
-  const StorageQrPage({super.key, required this.storage});
+  const StorageQRPage({super.key, required this.storage});
 
   @override
   Widget build(BuildContext context) {

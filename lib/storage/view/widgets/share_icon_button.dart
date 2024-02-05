@@ -29,6 +29,8 @@ class ShareQrIconButton extends StatelessWidget {
           }
           final shareResult = await Share.shareXFiles(
             [
+              // NOTE: https://github.com/fluttercommunity/plus_plugins/issues/1548
+              // share_plus 不会使用 XFile 的名称
               XFile.fromData(
                 imageBytes,
                 mimeType: 'image/png',
