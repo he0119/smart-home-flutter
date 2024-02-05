@@ -123,10 +123,19 @@ class _ScanQRPageState extends State<ScanQRPage> {
       if (jumped) {
         return;
       }
-      final storageId = scanData.code;
+      var storageId = scanData.code;
+
       if (storageId == null) {
         return;
       }
+
+      // 从网址中提取 storageId
+      // https://smart.dev.hehome.xyz/storage/U3RvcmFnZTo1
+      if (storageId.startsWith('http')) {
+        final url = Uri.parse(storageId);
+        storageId = url.pathSegments.last;
+      }
+
       if (validateStorageId(storageId)) {
         MyRouterDelegate.of(context)
             .push(StorageDetailPage(storageId: storageId));

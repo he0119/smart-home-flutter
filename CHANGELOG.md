@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Added
+
+- 物品管理位置二维码支持完整的网址
+
 ## [0.9.7] - 2024-02-05
 
 ### Added
