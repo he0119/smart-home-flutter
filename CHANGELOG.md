@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.9.7] - 2024-02-05
+
 ### Added
 
 - 物品管理位置支持生成和扫描二维码
@@ -489,7 +491,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.9.6...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.9.7...HEAD
+[0.9.7]: https://github.com/he0119/smart-home-flutter/compare/v0.9.6...v0.9.7
 [0.9.6]: https://github.com/he0119/smart-home-flutter/compare/v0.9.5...v0.9.6
 [0.9.5]: https://github.com/he0119/smart-home-flutter/compare/v0.9.4...v0.9.5
 [0.9.4]: https://github.com/he0119/smart-home-flutter/compare/v0.9.3...v0.9.4
