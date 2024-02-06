@@ -166,7 +166,11 @@ class _ScanQRPageState extends State<ScanQRPage> {
 
   bool validateStorageId(String id) {
     Codec<String, String> stringToBase64 = utf8.fuse(base64);
-    final decoded = stringToBase64.decode(id);
-    return decoded.startsWith('Storage:');
+    try {
+      final decoded = stringToBase64.decode(id);
+      return decoded.startsWith('Storage:');
+    } catch (e) {
+      return false;
+    }
   }
 }
