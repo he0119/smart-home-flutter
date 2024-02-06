@@ -55,18 +55,21 @@ class _ScanQRPageState extends State<ScanQRPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('二维码')),
       body: Column(
         children: <Widget>[
           Expanded(
             flex: 4,
             child: GestureDetector(
-              child: _buildQrView(context),
               onTap: () async {
-                await controller?.resumeCamera();
                 setState(() {
                   jumped = false;
                 });
+                if (!kIsWeb) {
+                  await controller?.resumeCamera();
+                }
               },
+              child: _buildQrView(context),
             ),
           ),
           Expanded(
@@ -75,21 +78,23 @@ class _ScanQRPageState extends State<ScanQRPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(jumped ? '请单击屏幕再次扫描' : '请扫描二维码'),
-                Container(
-                  margin: const EdgeInsets.all(8),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await controller?.toggleFlash();
-                      setState(() {});
-                    },
-                    child: FutureBuilder(
-                      future: controller?.getFlashStatus(),
-                      builder: (context, snapshot) {
-                        return Text(snapshot.data ?? false ? '关闭闪光灯' : '打开闪光灯');
+                if (!kIsWeb)
+                  Container(
+                    margin: const EdgeInsets.all(8),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await controller?.toggleFlash();
+                        setState(() {});
                       },
+                      child: FutureBuilder(
+                        future: controller?.getFlashStatus(),
+                        builder: (context, snapshot) {
+                          return Text(
+                              snapshot.data ?? false ? '关闭闪光灯' : '打开闪光灯');
+                        },
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           )
