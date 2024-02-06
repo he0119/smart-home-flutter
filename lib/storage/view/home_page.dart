@@ -50,8 +50,8 @@ class StorageHomeScreen extends StatelessWidget {
         return MyHomePage(
           activeTab: AppTab.storage,
           actions: <Widget>[
-            // 仅支持安卓和网页
-            if (Platform.isAndroid || kIsWeb) const ScanQRIconButton(),
+            // 仅支持网页和安卓
+            if (kIsWeb || Platform.isAndroid) const ScanQRIconButton(),
             const SearchIconButton(),
           ],
           floatingActionButton: FloatingActionButton(
