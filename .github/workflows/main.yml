@@ -87,7 +87,7 @@ jobs:
           channel: ${{ env.flutter_channel }}
           cache: true
       - name: Build split-per-abi apks
-        run: flutter build apk --split-per-abi -t ./lib/main_$ENVIRONMENT.dart --flavor $ENVIRONMENT
+        run: flutter build apk --target-platform android-arm64,android-x64 --split-per-abi -t ./lib/main_$ENVIRONMENT.dart --flavor $ENVIRONMENT
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
       - name: Upload split-per-abi apks
@@ -122,7 +122,7 @@ jobs:
           cache: true
       - name: Build web version
         run: |
-          flutter build web --web-renderer=html -t ./lib/main_$ENVIRONMENT.dart
+          flutter build web --web-renderer=html --source-maps -t ./lib/main_$ENVIRONMENT.dart
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
       - name: Upload web version
@@ -131,6 +131,13 @@ jobs:
         with:
           name: web
           path: ${{ github.workspace }}/build/web
+      - name: Upload debug symbols
+        if: github.event_name != 'pull_request'
+        run: dart run sentry_dart_plugin
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
   windows:
     name: Windows

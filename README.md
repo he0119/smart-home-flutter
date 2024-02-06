@@ -26,11 +26,11 @@ flutter run -t ./lib/main_dev.dart
 ## Android
 
 编译正式版 `Android` 软件需要先根据 [文档](https://flutter.dev/docs/deployment/android) 创建签名。
-接着运行 `flutter build apk --split-per-abi -t ./lib/main_prod.dart --flavor prod` 完成编译。
+接着运行 `flutter build apk --target-platform android-arm64,android-x64 --split-per-abi -t ./lib/main_prod.dart --flavor prod` 完成编译。
 
 ## Web
 
-使用 `flutter build web -t ./lib/main_prod.dart` 编译网页版。
+使用 `flutter build web --web-renderer=html --source-maps -t ./lib/main_prod.dart` 编译网页版。
 
 ## Windows
 

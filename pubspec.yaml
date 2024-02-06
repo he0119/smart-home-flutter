@@ -68,6 +68,7 @@ dev_dependencies:
   json_serializable: ^6.0.1
   flutter_launcher_icons: ^0.13.0
   flutter_lints: ^3.0.1
+  sentry_dart_plugin: ^1.0.0
 
 flutter:
   uses-material-design: true
@@ -83,3 +84,12 @@ flutter_launcher_icons:
     generate: true
   windows:
     generate: true
+
+# https://github.com/getsentry/sentry-dart-plugin
+sentry:
+  # enabled by default
+  upload_debug_symbols: true
+  # disabled by default
+  upload_sources: true
+  # disabled by default
+  upload_source_maps: true
