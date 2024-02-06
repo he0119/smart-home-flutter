@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:smarthome/core/model/grobal_keys.dart';
@@ -140,12 +141,15 @@ class _ScanQRPageState extends State<ScanQRPage> {
       }
 
       if (validateStorageId(storageId)) {
-        MyRouterDelegate.of(context)
-            .push(StorageDetailPage(storageId: storageId));
-        await controller.pauseCamera();
         setState(() {
           jumped = true;
         });
+        MyRouterDelegate.of(context)
+            .push(StorageDetailPage(storageId: storageId));
+        // 只有安卓设备支持暂停相机
+        if (!kIsWeb && Platform.isAndroid) {
+          await controller.pauseCamera();
+        }
       }
     });
   }
