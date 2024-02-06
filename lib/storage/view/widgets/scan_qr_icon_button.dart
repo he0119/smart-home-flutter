@@ -57,34 +57,37 @@ class _ScanQRPageState extends State<ScanQRPage> {
       body: Column(
         children: <Widget>[
           Expanded(
-              flex: 4,
-              child: GestureDetector(
-                child: _buildQrView(context),
-                onTap: () async {
+            flex: 4,
+            child: GestureDetector(
+              child: _buildQrView(context),
+              onTap: () async {
+                await controller?.resumeCamera();
+                setState(() {
                   jumped = false;
-                  await controller?.resumeCamera();
-                },
-              )),
+                });
+              },
+            ),
+          ),
           Expanded(
             flex: 1,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text('请扫描二维码'),
+                Text(jumped ? '请单击屏幕再次扫描' : '请扫描二维码'),
                 Container(
                   margin: const EdgeInsets.all(8),
                   child: ElevatedButton(
-                      onPressed: () async {
-                        await controller?.toggleFlash();
-                        setState(() {});
+                    onPressed: () async {
+                      await controller?.toggleFlash();
+                      setState(() {});
+                    },
+                    child: FutureBuilder(
+                      future: controller?.getFlashStatus(),
+                      builder: (context, snapshot) {
+                        return Text(snapshot.data ?? false ? '关闭闪光灯' : '打开闪光灯');
                       },
-                      child: FutureBuilder(
-                        future: controller?.getFlashStatus(),
-                        builder: (context, snapshot) {
-                          return Text(
-                              snapshot.data ?? false ? '关闭闪光灯' : '打开闪光灯');
-                        },
-                      )),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -119,7 +122,7 @@ class _ScanQRPageState extends State<ScanQRPage> {
     setState(() {
       this.controller = controller;
     });
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       if (jumped) {
         return;
       }
@@ -139,8 +142,10 @@ class _ScanQRPageState extends State<ScanQRPage> {
       if (validateStorageId(storageId)) {
         MyRouterDelegate.of(context)
             .push(StorageDetailPage(storageId: storageId));
-        jumped = true;
-        controller.pauseCamera();
+        await controller.pauseCamera();
+        setState(() {
+          jumped = true;
+        });
       }
     });
   }

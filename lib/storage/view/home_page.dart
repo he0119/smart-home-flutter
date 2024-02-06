@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -46,9 +49,10 @@ class StorageHomeScreen extends StatelessWidget {
       builder: (context, state) {
         return MyHomePage(
           activeTab: AppTab.storage,
-          actions: const <Widget>[
-            ScanQRIconButton(),
-            SearchIconButton(),
+          actions: <Widget>[
+            // 仅支持安卓和网页
+            if (Platform.isAndroid || kIsWeb) const ScanQRIconButton(),
+            const SearchIconButton(),
           ],
           floatingActionButton: FloatingActionButton(
             tooltip: '添加物品',
