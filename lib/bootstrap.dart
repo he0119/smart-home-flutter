@@ -37,9 +37,9 @@ Future<void> bootstrap(AppConfig appConfig) async {
   await SentryFlutter.init(
     (options) {
       options
-        ..dsn = ''
-        ..environment = 'dev'
-        ..release = 'release';
+        ..dsn = const String.fromEnvironment('SENTRY_DSN', defaultValue: '')
+        ..environment = appConfig.flavorName
+        ..release = const String.fromEnvironment('SENTRY_RELEASE');
     },
     appRunner: () => runApp(
       MyApp(

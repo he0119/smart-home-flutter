@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 物品管理位置二维码支持完整的网址
 
+### Changed
+
+- 优化 Sentry 相关配置的设置方法
+
 ### Fixed
 
 - 修复搜索位置无法显示的问题

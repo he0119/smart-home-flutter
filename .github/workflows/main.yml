@@ -69,13 +69,8 @@ jobs:
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
-          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" ./lib/bootstrap.dart
-          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" ./lib/bootstrap.dart
         env:
           VERSION: ${{ needs.test.outputs.version }}
-          ENVIRONMENT: ${{ needs.test.outputs.environment }}
-          RELEASE: ${{ needs.test.outputs.release }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Decrypt large secret
         run: ./.github/scripts/decrypt_secret.sh
         env:
@@ -90,6 +85,8 @@ jobs:
         run: flutter build apk --target-platform android-arm64,android-x64 --split-per-abi -t ./lib/main_$ENVIRONMENT.dart --flavor $ENVIRONMENT
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
+          SENTRY_RELEASE: ${{ needs.test.outputs.release }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Upload split-per-abi apks
         uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
@@ -107,13 +104,8 @@ jobs:
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
-          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" ./lib/bootstrap.dart
-          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" ./lib/bootstrap.dart
         env:
           VERSION: ${{ needs.test.outputs.version }}
-          ENVIRONMENT: ${{ needs.test.outputs.environment }}
-          RELEASE: ${{ needs.test.outputs.release }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Setup Flutter
         uses: subosito/flutter-action@2783a3f08e1baf891508463f8c6653c258246225
         with:
@@ -125,6 +117,8 @@ jobs:
           flutter build web --web-renderer=html --source-maps -t ./lib/main_$ENVIRONMENT.dart
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
+          SENTRY_RELEASE: ${{ needs.test.outputs.release }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Upload web version
         uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
@@ -149,13 +143,8 @@ jobs:
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
-          sed -ri "s#..dsn = ''#..dsn = '$SENTRY_DSN'#g" .\lib\bootstrap.dart
-          sed -ri "s#..release = 'release'#..release = '$RELEASE'#g" .\lib\bootstrap.dart
         env:
           VERSION: ${{ needs.test.outputs.version }}
-          ENVIRONMENT: ${{ needs.test.outputs.environment }}
-          RELEASE: ${{ needs.test.outputs.release }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Setup Flutter
         uses: subosito/flutter-action@2783a3f08e1baf891508463f8c6653c258246225
         with:
@@ -167,6 +156,8 @@ jobs:
           flutter build windows -t ./lib/main_${env:ENVIRONMENT}.dart
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
+          SENTRY_RELEASE: ${{ needs.test.outputs.release }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Upload windows version
         uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
