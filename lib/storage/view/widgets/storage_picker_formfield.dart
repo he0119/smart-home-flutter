@@ -36,6 +36,19 @@ List<Node> generateNodes(List<Storage> storages) {
   ];
 }
 
+/// 查找 storage 的所有父节点
+List<Storage> findParents(Storage storage, List<Storage> storages) {
+  final parents = <Storage>[];
+  var current = storage;
+  while (current.parent != null) {
+    final parent =
+        storages.firstWhere((element) => element.id == current.parent!.id);
+    parents.add(parent);
+    current = parent;
+  }
+  return parents;
+}
+
 class StorageDialog extends StatefulWidget {
   final Storage? storage;
   final List<Storage> storages;
@@ -75,13 +88,20 @@ class _StorageDialogState extends State<StorageDialog> {
               contentPadding: EdgeInsets.fromLTRB(8, 0, 0, 0),
             ),
             onChanged: (value) async {
-              final newStorages = widget.storages
+              final filteredStorages = widget.storages
                   .where((element) => element.name.contains(value))
                   .toList();
+
+              final newStorages = filteredStorages.toSet();
+              for (var storage in filteredStorages) {
+                final parents = findParents(storage, widget.storages);
+                newStorages.addAll(parents);
+              }
+
               setState(() {
                 _searchTerm = value;
                 _controller = TreeViewController(
-                  children: generateNodes(newStorages),
+                  children: generateNodes(newStorages.toList()),
                   selectedKey: widget.storage?.id,
                 );
               });

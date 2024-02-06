@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 物品管理位置二维码支持完整的网址
 
+### Fixed
+
+- 修复搜索位置无法显示的问题
+
 ## [0.9.7] - 2024-02-05
 
 ### Added
