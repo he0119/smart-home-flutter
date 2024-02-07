@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 修复搜索位置无法显示的问题
 - 捕获解码异常并修复在网页无法打开物品管理主页的问题
+- 修复多次请求图片的问题
 
 ## [0.9.7] - 2024-02-05
 
