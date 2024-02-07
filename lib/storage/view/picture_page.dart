@@ -7,6 +7,7 @@ import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/utils/launch_url.dart';
+import 'package:smarthome/utils/parse_url.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
@@ -102,6 +103,7 @@ class PictureScreen extends StatelessWidget {
         loadingBuilder: (context, event) => const CenterLoadingIndicator(),
         imageProvider: CachedNetworkImageProvider(
           state.picture.url!,
+          cacheKey: getCacheKey(state.picture.url!),
         ),
         minScale: PhotoViewComputedScale.contained,
         maxScale: PhotoViewComputedScale.covered * 5,

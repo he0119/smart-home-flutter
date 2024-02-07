@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:smarthome/utils/parse_url.dart';
 
 class MyCircleAvatar extends StatelessWidget {
   final String? avatarUrl;
@@ -30,6 +31,7 @@ class MyCircleAvatar extends StatelessWidget {
         ),
         placeholder: (context, url) => const CircularProgressIndicator(),
         errorWidget: (context, url, error) => const Icon(Icons.error),
+        cacheKey: getCacheKey(url),
       );
     } else {
       return CircleAvatar(
