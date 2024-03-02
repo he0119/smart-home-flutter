@@ -46,7 +46,7 @@ jobs:
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
       - name: Setup Flutter
-        uses: subosito/flutter-action@2783a3f08e1baf891508463f8c6653c258246225
+        uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
         with:
           flutter-version: ${{ env.flutter_version }}
           channel: ${{ env.flutter_channel }}
@@ -76,7 +76,7 @@ jobs:
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
       - name: Setup Flutter
-        uses: subosito/flutter-action@2783a3f08e1baf891508463f8c6653c258246225
+        uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
         with:
           flutter-version: ${{ env.flutter_version }}
           channel: ${{ env.flutter_channel }}
@@ -107,7 +107,7 @@ jobs:
         env:
           VERSION: ${{ needs.test.outputs.version }}
       - name: Setup Flutter
-        uses: subosito/flutter-action@2783a3f08e1baf891508463f8c6653c258246225
+        uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
         with:
           flutter-version: ${{ env.flutter_version }}
           channel: ${{ env.flutter_channel }}
@@ -146,7 +146,7 @@ jobs:
         env:
           VERSION: ${{ needs.test.outputs.version }}
       - name: Setup Flutter
-        uses: subosito/flutter-action@2783a3f08e1baf891508463f8c6653c258246225
+        uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
         with:
           flutter-version: ${{ env.flutter_version }}
           channel: ${{ env.flutter_channel }}
