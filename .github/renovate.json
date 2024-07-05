@@ -9,5 +9,8 @@
     "labels": [
         "dependencies"
     ],
-    "rangeStrategy": "bump"
+    "rangeStrategy": "bump",
+    "ignoreDeps": [
+        "dart"
+    ]
 }
