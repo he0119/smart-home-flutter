@@ -84,6 +84,7 @@ flutter_launcher_icons:
     generate: true
   windows:
     generate: true
+    icon_size: 256
 
 # https://github.com/getsentry/sentry-dart-plugin
 sentry:
