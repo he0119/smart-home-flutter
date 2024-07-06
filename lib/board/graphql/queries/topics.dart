@@ -18,7 +18,7 @@ query topics($after: String) {
           username
           avatarUrl
         }
-        comments(last: 1) {
+        comments(first: 1, order: {createdAt: DESC}) {
           edges {
             node {
               id
