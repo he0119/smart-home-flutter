@@ -11,7 +11,9 @@
     ],
     "rangeStrategy": "bump",
     "ignoreDeps": [
-        "dart",
-        "dev.flutter.flutter-plugin-loader:dev.flutter.flutter-plugin-loader.gradle.plugin"
+        "dart"
+    ],
+    "ignorePaths": [
+        "**/android/**"
     ]
 }
