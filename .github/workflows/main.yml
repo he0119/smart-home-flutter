@@ -122,7 +122,7 @@ jobs:
           cache: true
       - name: Build web version
         run: |
-          flutter build web --web-renderer=html --source-maps -t ./lib/main_$ENVIRONMENT.dart
+          flutter build web --wasm --source-maps -t ./lib/main_$ENVIRONMENT.dart
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
           SENTRY_RELEASE: ${{ needs.test.outputs.release }}

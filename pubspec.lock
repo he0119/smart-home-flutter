@@ -455,13 +455,14 @@ packages:
     source: hosted
     version: "2.0.0"
   flutter_keyboard_visibility_web:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: flutter_keyboard_visibility_web
-      sha256: d3771a2e752880c79203f8d80658401d0c998e4183edca05a149f5098ce6e3d1
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
+      path: flutter_keyboard_visibility_web
+      ref: master
+      resolved-ref: "6c4afba1fcce4488b1f4f36d2ed1ec77f461ad54"
+      url: "https://github.com/raldhafiri/flutter_keyboard_visibility.git"
+    source: git
+    version: "2.0.1"
   flutter_keyboard_visibility_windows:
     dependency: transitive
     description:
@@ -1129,10 +1130,10 @@ packages:
     dependency: transitive
     description:
       name: sentry
-      sha256: "7342ef4c18932881730ac941a07a6e4cf76fe99cd1ea3bef06e53a6a1402dec0"
+      sha256: be1568413dc71b86276d0b1599b208c4fc0ea95a06ef8c68f971d43260a72a9b
       url: "https://pub.dev"
     source: hosted
-    version: "8.3.0"
+    version: "8.4.0-beta.1"
   sentry_dart_plugin:
     dependency: "direct dev"
     description:
@@ -1145,10 +1146,10 @@ packages:
     dependency: "direct main"
     description:
       name: sentry_flutter
-      sha256: "475cf49682e4d1eb48caa2577502721bcfdcbb63f215de57b3b246d52f4f7914"
+      sha256: e46f0efb9d002ae0d8bcadd2737ddf425cb76667c242d148224bb814b3d28350
       url: "https://pub.dev"
     source: hosted
-    version: "8.3.0"
+    version: "8.4.0-beta.1"
   share_plus:
     dependency: "direct main"
     description:

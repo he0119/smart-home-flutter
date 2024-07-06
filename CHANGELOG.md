@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 ### Added
 
 - 物品管理位置二维码支持完整的网址
+- 网页启用 wasm
 
 ### Changed
 
