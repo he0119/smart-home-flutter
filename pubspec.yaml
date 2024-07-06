@@ -5,7 +5,7 @@ homepage: https://github.com/he0119/smart-home-flutter
 publish_to: "none"
 
 environment:
-  sdk: ">=3.2.0 <4.0.0"
+  sdk: ">=3.4.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -84,6 +84,7 @@ flutter_launcher_icons:
     generate: true
   windows:
     generate: true
+    icon_size: 256
 
 # https://github.com/getsentry/sentry-dart-plugin
 sentry:

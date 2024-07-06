@@ -1,29 +1,27 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
 def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
+def localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
+    localPropertiesFile.withReader("UTF-8") { reader ->
         localProperties.load(reader)
     }
 }
 
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-}
-
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+def flutterVersionCode = localProperties.getProperty("flutter.versionCode")
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+    flutterVersionCode = "1"
 }
 
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
+def flutterVersionName = localProperties.getProperty("flutter.versionName")
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+    flutterVersionName = "1.0"
 }
-
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
@@ -32,28 +30,23 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    namespace = "xyz.hehome.smarthome"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
-        applicationId "xyz.hehome.smarthome"
-        minSdkVersion 24
-        targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        applicationId = "xyz.hehome.smarthome"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
+        minSdk = 24
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutterVersionCode.toInteger()
+        versionName = flutterVersionName
     }
 
     flavorDimensions "version"
@@ -100,11 +93,9 @@ android {
 }
 
 flutter {
-    source '../..'
+    source = "../.."
 }
 
 dependencies {
     implementation (name: 'MiPush_SDK_Client_5_0_5-C_3rd', ext: 'aar')
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "smarthome" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "smarthome" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 xyz.hehome. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 xyz.hehome. All rights reserved." "\0"
             VALUE "OriginalFilename", "smarthome.exe" "\0"
             VALUE "ProductName", "smarthome" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"

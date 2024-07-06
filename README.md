@@ -12,6 +12,8 @@
 
 ```shell
 flutter create --org xyz.hehome --platforms=android,web,windows smarthome
+# 重新生成项目
+flutter create . --org xyz.hehome --platforms=android,web,windows --project-name=smarthome
 ```
 
 ## Run
