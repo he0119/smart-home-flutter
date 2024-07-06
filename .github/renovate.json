@@ -11,6 +11,7 @@
     ],
     "rangeStrategy": "bump",
     "ignoreDeps": [
-        "dart"
+        "dart",
+        "dev.flutter.flutter-plugin-loader:dev.flutter.flutter-plugin-loader.gradle.plugin"
     ]
 }
