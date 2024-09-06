@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  flutter_version: "3.22.2"
+  flutter_version: "3.24.2"
   flutter_channel: "stable"
 
 jobs:
