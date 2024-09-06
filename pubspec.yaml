@@ -30,8 +30,8 @@ dependencies:
   provider: ^6.1.2
   mime: ^1.0.6
   gql: any
-  rxdart: ^0.28.0
-  http_parser: ^4.1.0
+  rxdart: any
+  http_parser: any
 
   # Flutter
   flutter_bloc: ^8.1.6
