@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/iot/model/iot.dart';
 import 'package:smarthome/iot/repository/iot_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';
@@ -11,13 +12,16 @@ part 'device_data_state.dart';
 
 class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
   final IotRepository iotRepository;
+  final GraphQLApiClient client;
   final String deviceId;
 
   StreamSubscription<AutowateringData>? _dataSubscription;
+  StreamSubscription<bool>? _connectionSubscription;
 
   DeviceDataBloc({
     required this.iotRepository,
     required this.deviceId,
+    required this.client,
   }) : super(DeviceDataInitial()) {
     on<DeviceDataStarted>(_onDeviceDataStarted);
     on<DeviceDataupdated>(_onDeviceDataupdated);
@@ -27,6 +31,7 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
   @override
   Future<void> close() {
     _dataSubscription?.cancel();
+    _connectionSubscription?.cancel();
     return super.close();
   }
 
@@ -49,6 +54,11 @@ class DeviceDataBloc extends Bloc<DeviceDataEvent, DeviceDataState> {
               }
             },
           );
+    _connectionSubscription = client.websocketConnectionState.listen((state) {
+      if (!state) {
+        add(const DeviceDataStoped('服务器断开连接'));
+      }
+    });
   }
 
   FutureOr<void> _onDeviceDataupdated(

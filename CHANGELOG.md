@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 - 捕获解码异常并修复在网页无法打开物品管理主页的问题
 - 修复多次请求图片的问题
 - 修复升级服务器 Filter 用法导致的问题
+- 物联网界面加载失败后添加错误提示
 
 ## [0.9.7] - 2024-02-05
 
