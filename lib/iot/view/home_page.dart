@@ -34,6 +34,7 @@ class IotHomePage extends Page {
               create: (context) => DeviceDataBloc(
                 iotRepository: RepositoryProvider.of<IotRepository>(context),
                 deviceId: 'RGV2aWNlOjE=',
+                client: RepositoryProvider.of<GraphQLApiClient>(context),
               )..add(const DeviceDataStarted()),
             ),
             BlocProvider<DeviceEditBloc>(

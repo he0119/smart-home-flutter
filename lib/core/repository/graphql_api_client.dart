@@ -107,11 +107,20 @@ DocumentNode opi(DocumentNode document) => transform(
     );
 
 class SocketCustomLink extends Link {
-  SocketCustomLink(this.url, this.settingsController, this.defaultHeaders);
+  SocketCustomLink(
+    this.url,
+    this.defaultHeaders,
+    this.settingsController,
+    this.onConnectionLost,
+    this.connectionStateController,
+  );
   final String url;
   final Map<String, String> defaultHeaders;
-  _Connection? _connection;
   final SettingsController settingsController;
+  final Future<Duration?> Function(int? code, String? reason) onConnectionLost;
+  final StreamController<bool> connectionStateController;
+
+  _Connection? _connection;
 
   /// this will be called every time you make a subscription
   @override
@@ -138,10 +147,18 @@ class SocketCustomLink extends Link {
           headers: kIsWeb || cookies == null
               ? null
               : {'cookie': cookies, ...defaultHeaders},
+          onConnectionLost: onConnectionLost,
         ),
       ),
       cookies: cookies,
     );
+
+    // 监听连接状态
+    _connection?.client.connectionState.listen((event) {
+      if (event == SocketConnectionState.connected) {
+        connectionStateController.add(true);
+      }
+    });
   }
 
   @override
@@ -168,9 +185,10 @@ class GraphQLApiClient {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final SettingsController settingsController;
 
-  GraphQLApiClient(
-    this.settingsController,
-  );
+  final StreamController<bool> _websocketConnectionStateController =
+      StreamController<bool>.broadcast();
+
+  GraphQLApiClient(this.settingsController);
 
   GraphQLClient? get client => _client;
 
@@ -178,6 +196,9 @@ class GraphQLApiClient {
     final prefs = await _prefs;
     return prefs.getString('token');
   }
+
+  Stream<bool> get websocketConnectionState =>
+      _websocketConnectionStateController.stream;
 
   /// 登录
   Future<User?> login(String username, String password) async {
@@ -237,7 +258,12 @@ class GraphQLApiClient {
       );
     }
     final websocketLink = SocketCustomLink(
-        url.replaceFirst('http', 'ws'), settingsController, headers);
+      url.replaceFirst('http', 'ws'),
+      headers,
+      settingsController,
+      onWebsocketConnectionLost,
+      _websocketConnectionStateController,
+    );
 
     link = Link.split((request) => request.isSubscription, websocketLink, link);
 
@@ -246,6 +272,13 @@ class GraphQLApiClient {
       link: link,
     );
     _log.fine('GraphQLClient initailized with url $url');
+    websocketConnectionState.listen((event) {
+      if (event) {
+        _log.info('Websocket connected');
+      } else {
+        _log.warning('Websocket disconnected');
+      }
+    });
   }
 
   /// 加载配置，比如用户代理
@@ -315,6 +348,7 @@ class GraphQLApiClient {
     return results;
   }
 
+  /// 订阅
   Stream<QueryResult> subscribe(SubscriptionOptions options) {
     return _client!.subscribe(options).map((event) {
       if (event.hasException) {
@@ -324,6 +358,7 @@ class GraphQLApiClient {
     });
   }
 
+  /// 处理异常
   void _handleException(OperationException exception) {
     for (var error in exception.graphqlErrors) {
       if (error.message == 'User is not authenticated') {
@@ -337,5 +372,12 @@ class GraphQLApiClient {
       _log.severe(exception.linkException.toString());
       throw const NetworkException('网络异常，请稍后再试');
     }
+  }
+
+  Future<Duration?> onWebsocketConnectionLost(int? code, String? reason) async {
+    _log.warning(
+        'Websocket Connection lost with code $code and reason $reason');
+    _websocketConnectionStateController.add(false);
+    return null;
   }
 }
