@@ -214,8 +214,10 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
+      # https://github.com/tailscale/tailscale/issues/5226
       - name: Copy file to server
         run: |
+          tailscale up --ssh
           rsync -vzr --delete . github@${{ secrets.SSH_HOST }}:/home/github/smart-home-web
           tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }}
 
@@ -242,6 +244,7 @@ jobs:
 
       - name: Copy file to server
         run: |
+          tailscale up --ssh
           rsync -vzr --delete . github@${{ secrets.SSH_HOST }}:/home/github/smart-home-web
           tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }}
 
