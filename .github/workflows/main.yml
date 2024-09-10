@@ -117,6 +117,8 @@ jobs:
     name: Web
     runs-on: ubuntu-latest
     needs: test
+    outputs:
+      artifact: ${{ steps.artifact.outputs.artifact }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -143,6 +145,7 @@ jobs:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
       - name: Upload web version
+        id: artifact-upload-step
         uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
         with:
@@ -156,6 +159,10 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+
+      - name: Output artifact URL
+        id: artifact
+        run: echo 'artifact=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}' >> $GITHUB_OUTPUT
 
   windows:
     name: Windows
@@ -214,12 +221,9 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      # https://github.com/tailscale/tailscale/issues/5226
       - name: Copy file to server
         run: |
-          tailscale up --ssh
-          rsync -vzr --delete . github@${{ secrets.SSH_HOST }}:/home/github/smart-home-web
-          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }}
+          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }} ${{ secrets.GITHUB_TOKEN }} ${{ needs.web.outputs.artifact }}
 
   deploy_web_prod:
     name: Deploy Web Prod
@@ -244,9 +248,7 @@ jobs:
 
       - name: Copy file to server
         run: |
-          tailscale up --ssh
-          rsync -vzr --delete . github@${{ secrets.SSH_HOST }}:/home/github/smart-home-web
-          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }}
+          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }} ${{ secrets.GITHUB_TOKEN }} ${{ needs.web.outputs.artifact }}
 
   deploy_github:
     name: Deploy Github
