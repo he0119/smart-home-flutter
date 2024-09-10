@@ -199,6 +199,8 @@ jobs:
   deploy_web_dev:
     name: Deploy Web Dev
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
     needs: web
     environment:
       name: dev
@@ -226,6 +228,8 @@ jobs:
   deploy_web_prod:
     name: Deploy Web Prod
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
     needs: web
     environment:
       name: prod
