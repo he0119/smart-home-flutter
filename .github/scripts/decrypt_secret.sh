@@ -1,5 +1,8 @@
 #!/bin/sh
 
+
+# https://docs.github.com/zh/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#storing-large-secrets
+
 # 解密文件
 # --批处理以防止交互式命令
 # --是以假定问题的回答是“是”
