@@ -118,7 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     outputs:
-      artifact: ${{ steps.artifact.outputs.artifact }}
+      artifact-id: ${{ steps.artifact-upload-step.outputs.artifact-id }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -159,10 +159,6 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-
-      - name: Output artifact URL
-        id: artifact
-        run: echo 'artifact=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}' >> $GITHUB_OUTPUT
 
   windows:
     name: Windows
@@ -223,7 +219,9 @@ jobs:
 
       - name: Copy file to server
         run: |
-          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }} ${{ secrets.GITHUB_TOKEN }} ${{ needs.web.outputs.artifact }}
+          url='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ needs.web.outputs.artifact-id }}'
+          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }} ${{ secrets.GITHUB_TOKEN }} $url
+
 
   deploy_web_prod:
     name: Deploy Web Prod
@@ -248,7 +246,8 @@ jobs:
 
       - name: Copy file to server
         run: |
-          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }} ${{ secrets.GITHUB_TOKEN }} ${{ needs.web.outputs.artifact }}
+          url='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ needs.web.outputs.artifact-id }}'
+          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }} ${{ secrets.GITHUB_TOKEN }} $url
 
   deploy_github:
     name: Deploy Github
