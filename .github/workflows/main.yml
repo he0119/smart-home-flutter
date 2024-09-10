@@ -27,6 +27,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set build version
         id: setVersion
         run: |
@@ -43,19 +44,23 @@ jobs:
             echo "version=$VERSION-git.$COMMIT_ID+$BUILD_NUMBER" >> $GITHUB_OUTPUT
             echo "release=xyz.hehome.smarthome.dev@$VERSION-git.$COMMIT_ID+$BUILD_NUMBER" >> $GITHUB_OUTPUT
           fi
+
       - name: Get lcov_cobertura
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
+
       - name: Setup Flutter
         uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
         with:
           flutter-version: ${{ env.flutter_version }}
           channel: ${{ env.flutter_channel }}
           cache: true
+
       - name: Flutter test
         run: |
           flutter pub get
           flutter test --coverage
           python lcov_cobertura.py coverage/lcov.info
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
 
@@ -66,15 +71,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
         env:
           VERSION: ${{ needs.test.outputs.version }}
+
       - name: Decrypt large secret
         run: ./.github/scripts/decrypt_secret.sh
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
+
       # https://github.com/incrediblezayed/file_saver/issues/86#issuecomment-2028079330
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -83,18 +91,21 @@ jobs:
           java-version: '17'
           cache: 'gradle'
           check-latest: true
+
       - name: Setup Flutter
         uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
         with:
           flutter-version: ${{ env.flutter_version }}
           channel: ${{ env.flutter_channel }}
           cache: true
+
       - name: Build split-per-abi apks
         run: flutter build apk --target-platform android-arm64,android-x64 --split-per-abi -t ./lib/main_$ENVIRONMENT.dart --flavor $ENVIRONMENT
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
           SENTRY_RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+
       - name: Upload split-per-abi apks
         uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
@@ -109,17 +120,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
         env:
           VERSION: ${{ needs.test.outputs.version }}
+
       - name: Setup Flutter
         uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
         with:
           flutter-version: ${{ env.flutter_version }}
           channel: ${{ env.flutter_channel }}
           cache: true
+
       - name: Build web version
         run: |
           flutter build web --wasm --source-maps -t ./lib/main_$ENVIRONMENT.dart
@@ -127,12 +141,14 @@ jobs:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
           SENTRY_RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+
       - name: Upload web version
         uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
         with:
           name: web
           path: ${{ github.workspace }}/build/web
+
       - name: Upload debug symbols
         if: github.event_name != 'pull_request'
         run: dart run sentry_dart_plugin
@@ -148,17 +164,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set version name
         run: |
           sed -ri "s#^version: .+#version: $VERSION#g" pubspec.yaml
         env:
           VERSION: ${{ needs.test.outputs.version }}
+
       - name: Setup Flutter
         uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
         with:
           flutter-version: ${{ env.flutter_version }}
           channel: ${{ env.flutter_channel }}
           cache: true
+
       - name: Build windows version
         run: |
           flutter build windows -t ./lib/main_${env:ENVIRONMENT}.dart
@@ -166,6 +185,7 @@ jobs:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
           SENTRY_RELEASE: ${{ needs.test.outputs.release }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+
       - name: Upload windows version
         uses: actions/upload-artifact@v4
         if: github.event_name != 'pull_request'
@@ -179,13 +199,14 @@ jobs:
     needs: web
     environment:
       name: dev
-      url: https://smart.dev.hehome.xyz
+      url: https://smart-dev.hehome.xyz
     if: github.event_name != 'pull_request'
     steps:
       - name: Download web files
         uses: actions/download-artifact@v4
         with:
           name: web
+
       - name: Copy file to server
         uses: Burnett01/rsync-deployments@796cf0d5e4b535745ce49d7429f77cf39e25ef39
         with:
@@ -209,6 +230,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: web
+
       - name: Copy file to server
         uses: Burnett01/rsync-deployments@796cf0d5e4b535745ce49d7429f77cf39e25ef39
         with:
@@ -227,10 +249,12 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
+
       - name: Compress files
         run: |
           tar -czvf web.tar.gz web
           tar -czvf windows.tar.gz windows
+
       - name: Upload Release Assets
         uses: alexellis/upload-assets@0.4.1
         env:
@@ -246,6 +270,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         env:
