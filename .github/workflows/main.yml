@@ -207,15 +207,17 @@ jobs:
         with:
           name: web
 
-      - name: Copy file to server
-        uses: Burnett01/rsync-deployments@796cf0d5e4b535745ce49d7429f77cf39e25ef39
+      - name: Tailscale
+        uses: tailscale/github-action@v2
         with:
-          switches: -vzr --delete --exclude ".well-known"
-          path: "."
-          remote_path: ${{ secrets.WEBSITES_ROOT }}/smart-home/web
-          remote_host: ${{ secrets.SSH_HOST }}
-          remote_user: ${{ secrets.SSH_USERNAME }}
-          remote_key: ${{ secrets.SSH_KEY }}
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Copy file to server
+        run: |
+          rsync -vzr --delete . github@${{ secrets.SSH_HOST }}:/home/github/smart-home-web
+          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }}
 
   deploy_web_prod:
     name: Deploy Web Prod
@@ -231,15 +233,17 @@ jobs:
         with:
           name: web
 
-      - name: Copy file to server
-        uses: Burnett01/rsync-deployments@796cf0d5e4b535745ce49d7429f77cf39e25ef39
+      - name: Tailscale
+        uses: tailscale/github-action@v2
         with:
-          switches: -vzr --delete --exclude ".well-known"
-          path: "."
-          remote_path: ${{ secrets.WEBSITES_ROOT }}/smart-home/web
-          remote_host: ${{ secrets.SSH_HOST }}
-          remote_user: ${{ secrets.SSH_USERNAME }}
-          remote_key: ${{ secrets.SSH_KEY }}
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Copy file to server
+        run: |
+          rsync -vzr --delete . github@${{ secrets.SSH_HOST }}:/home/github/smart-home-web
+          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }}
 
   deploy_github:
     name: Deploy Github
