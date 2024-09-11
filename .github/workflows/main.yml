@@ -207,11 +207,6 @@ jobs:
       url: https://smart-dev.hehome.xyz
     if: github.event_name != 'pull_request'
     steps:
-      - name: Download web files
-        uses: actions/download-artifact@v4
-        with:
-          name: web
-
       - name: Tailscale
         uses: tailscale/github-action@v2
         with:
@@ -219,11 +214,8 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Copy file to server
-        run: |
-          url='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ needs.web.outputs.artifact-id }}'
-          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }} ${{ secrets.GITHUB_TOKEN }} $url
-
+      - name: Download file to server
+        run: tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }} ${{ secrets.GITHUB_TOKEN }} ${{ needs.web.outputs.artifact-id }}
 
   deploy_web_prod:
     name: Deploy Web Prod
@@ -236,11 +228,6 @@ jobs:
       url: https://smart.hehome.xyz
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     steps:
-      - name: Download web files
-        uses: actions/download-artifact@v4
-        with:
-          name: web
-
       - name: Tailscale
         uses: tailscale/github-action@v2
         with:
@@ -248,10 +235,8 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-      - name: Copy file to server
-        run: |
-          url='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ needs.web.outputs.artifact-id }}'
-          tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }} ${{ secrets.GITHUB_TOKEN }} $url
+      - name: Download file to server
+        run: tailscale ssh github@${{ secrets.SSH_HOST }} ${{ secrets.DEPLOY_SCRIPT }} ${{ secrets.GITHUB_TOKEN }} ${{ needs.web.outputs.artifact-id }}
 
   deploy_github:
     name: Deploy Github
