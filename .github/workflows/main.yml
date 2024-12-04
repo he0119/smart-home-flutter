@@ -12,10 +12,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  flutter_version: "3.24.2"
-  flutter_channel: "stable"
-
 jobs:
   test:
     name: Test
@@ -49,10 +45,10 @@ jobs:
         run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
+        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: ${{ env.flutter_version }}
-          channel: ${{ env.flutter_channel }}
+          channel: stable
+          flutter-version-file: pubspec.yaml
           cache: true
 
       - name: Flutter test
@@ -93,10 +89,10 @@ jobs:
           check-latest: true
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
+        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: ${{ env.flutter_version }}
-          channel: ${{ env.flutter_channel }}
+          channel: stable
+          flutter-version-file: pubspec.yaml
           cache: true
 
       - name: Build split-per-abi apks
@@ -130,10 +126,10 @@ jobs:
           VERSION: ${{ needs.test.outputs.version }}
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
+        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: ${{ env.flutter_version }}
-          channel: ${{ env.flutter_channel }}
+          channel: stable
+          flutter-version-file: pubspec.yaml
           cache: true
 
       - name: Build web version
@@ -175,10 +171,10 @@ jobs:
           VERSION: ${{ needs.test.outputs.version }}
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
+        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: ${{ env.flutter_version }}
-          channel: ${{ env.flutter_channel }}
+          channel: stable
+          flutter-version-file: pubspec.yaml
           cache: true
 
       - name: Build windows version
