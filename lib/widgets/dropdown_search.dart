@@ -1,11 +1,9 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
-typedef DropdownSearchOnFind<T> = Future<List<T>> Function(String? text);
-
 class MyDropdownSearch<T> extends StatelessWidget {
   final String? label;
-  final DropdownSearchOnFind<T>? asyncItems;
+  final DropdownSearchOnFind<T>? items;
   final ValueChanged<T?>? onChanged;
   final T? selectedItem;
   final bool showClearButton;
@@ -15,7 +13,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
   const MyDropdownSearch({
     super.key,
     this.label,
-    this.asyncItems,
+    this.items,
     this.onChanged,
     this.selectedItem,
     this.showClearButton = false,
@@ -28,10 +26,11 @@ class MyDropdownSearch<T> extends StatelessWidget {
     return DropdownSearch<T>(
       compareFn: (i1, i2) => i1 == i2,
       popupProps: PopupProps.menu(
-        isFilterOnline: true,
+        disableFilter: true,
         showSelectedItems: true,
         showSearchBox: true,
-        itemBuilder: (ctx, item, isSelected) {
+        itemBuilder:
+            (BuildContext context, T item, bool isDisabled, bool isSelected) {
           return ListTile(
             title: Text(item.toString()),
             selected: isSelected,
@@ -47,14 +46,16 @@ class MyDropdownSearch<T> extends StatelessWidget {
           ),
         ),
       ),
-      dropdownDecoratorProps: DropDownDecoratorProps(
-        dropdownSearchDecoration: InputDecoration(
+      decoratorProps: DropDownDecoratorProps(
+        decoration: InputDecoration(
           contentPadding: EdgeInsets.zero,
           labelText: label,
         ),
       ),
-      clearButtonProps: const ClearButtonProps(isVisible: true),
-      asyncItems: asyncItems,
+      suffixProps: DropdownSuffixProps(
+        clearButtonProps: const ClearButtonProps(isVisible: true),
+      ),
+      items: items,
       onChanged: onChanged,
       selectedItem: selectedItem,
       validator: validator,

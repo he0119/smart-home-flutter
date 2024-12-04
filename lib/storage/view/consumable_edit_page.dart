@@ -80,7 +80,7 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 child: MyDropdownSearch(
                   label: '耗材',
-                  asyncItems: (text) async {
+                  items: (text, loadProps) async {
                     final items =
                         await RepositoryProvider.of<StorageRepository>(context)
                             .items(key: text, cache: false);
