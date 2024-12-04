@@ -149,6 +149,8 @@ class _ScanQRPageState extends State<ScanQRPage> {
         setState(() {
           jumped = true;
         });
+        // TODO: 弄清楚这里是什么情况，没看懂哪里来的 async gap。
+        // ignore: use_build_context_synchronously
         MyRouterDelegate.of(context)
             .push(StorageDetailPage(storageId: storageId));
         // 只有安卓设备支持暂停相机
