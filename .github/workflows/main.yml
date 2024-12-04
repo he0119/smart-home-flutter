@@ -12,10 +12,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  flutter_version: "3.24.2"
-  flutter_channel: "stable"
-
 jobs:
   test:
     name: Test
@@ -51,8 +47,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: ${{ env.flutter_version }}
-          channel: ${{ env.flutter_channel }}
+          channel: stable
+          flutter-version-file: pubspec.yaml
           cache: true
 
       - name: Flutter test
@@ -95,8 +91,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: ${{ env.flutter_version }}
-          channel: ${{ env.flutter_channel }}
+          channel: stable
+          flutter-version-file: pubspec.yaml
           cache: true
 
       - name: Build split-per-abi apks
@@ -132,8 +128,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: ${{ env.flutter_version }}
-          channel: ${{ env.flutter_channel }}
+          channel: stable
+          flutter-version-file: pubspec.yaml
           cache: true
 
       - name: Build web version
@@ -177,8 +173,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: ${{ env.flutter_version }}
-          channel: ${{ env.flutter_channel }}
+          channel: stable
+          flutter-version-file: pubspec.yaml
           cache: true
 
       - name: Build windows version
