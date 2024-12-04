@@ -99,14 +99,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     notifyListeners();
   }
 
-  bool _handlePopPage(Route<dynamic> route, dynamic result) {
-    final success = route.didPop(result);
-    if (success) {
-      _log.fine('Pop ${route.settings.name}');
-      _pages.remove(route.settings);
-      notifyListeners();
-    }
-    return success;
+  void _handleRemovePage(Page<Object?> page) {
+    _pages.remove(page);
+    notifyListeners();
   }
 
   // 网页版显示网址
@@ -313,7 +308,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       child: Navigator(
         key: navigatorKey,
         pages: pages,
-        onPopPage: _handlePopPage,
+        onDidRemovePage: _handleRemovePage,
         // transitionDelegate: transitionDelegate,
       ),
     );
