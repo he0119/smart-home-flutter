@@ -29,7 +29,7 @@ dependencies:
   version: ^3.0.2
   tuple: ^2.0.2
   provider: ^6.1.2
-  mime: ^1.0.6
+  mime: ^2.0.0
   gql: any
   rxdart: any
   http_parser: any
