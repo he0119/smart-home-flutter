@@ -106,7 +106,7 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
           ),
           // FIXME: 目前没法通过返回键退出应用
           canPop: () => false,
-          onPopInvoked: (didPop) async {
+          onPopInvokedWithResult: (didPop, result) async {
             if (didPop) {
               return;
             }

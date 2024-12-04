@@ -12,7 +12,7 @@ class MyHomePage extends StatelessWidget {
   final Widget? floatingActionButton;
   final Future<void> Function()? onRefresh;
   final bool Function()? canPop;
-  final void Function(bool)? onPopInvoked;
+  final void Function(bool, Object?)? onPopInvokedWithResult;
 
   const MyHomePage({
     super.key,
@@ -22,7 +22,7 @@ class MyHomePage extends StatelessWidget {
     this.floatingActionButton,
     this.onRefresh,
     this.canPop,
-    this.onPopInvoked,
+    this.onPopInvokedWithResult,
   });
 
   @override
@@ -40,7 +40,7 @@ class MyHomePage extends StatelessWidget {
             BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
       ),
       canPop: canPop,
-      onPopInvoked: onPopInvoked,
+      onPopInvokedWithResult: onPopInvokedWithResult,
     );
   }
 }
@@ -60,7 +60,7 @@ class MySliverScaffold extends StatelessWidget {
   final Future<void> Function()? onRefresh;
   final AppBarSize appBarSize;
   final bool Function()? canPop;
-  final void Function(bool)? onPopInvoked;
+  final void Function(bool, Object?)? onPopInvokedWithResult;
 
   const MySliverScaffold({
     super.key,
@@ -75,7 +75,7 @@ class MySliverScaffold extends StatelessWidget {
     this.appbarBottom,
     this.appBarSize = AppBarSize.medium,
     this.canPop,
-    this.onPopInvoked,
+    this.onPopInvokedWithResult,
   });
 
   @override
@@ -84,7 +84,7 @@ class MySliverScaffold extends StatelessWidget {
       drawer: drawer,
       body: PopScope(
         canPop: canPop == null ? true : canPop!(),
-        onPopInvoked: onPopInvoked,
+        onPopInvokedWithResult: onPopInvokedWithResult,
         child: ConditionalParentWidget(
           condition: onRefresh != null,
           conditionalBuilder: (child) {

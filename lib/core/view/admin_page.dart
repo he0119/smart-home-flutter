@@ -56,7 +56,7 @@ class _AdminScreenState extends State<AdminScreen> {
         return Scaffold(
             body: PopScope(
               canPop: false,
-              onPopInvoked: (bool didPop) async {
+              onPopInvokedWithResult: (bool didPop, Object? result) async {
                 if (didPop) {
                   return;
                 }
