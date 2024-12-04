@@ -57,7 +57,7 @@ dependencies:
   datetime_picker_formfield: ^2.0.1
   flutter_markdown_selectionarea: ^0.6.17+1
   cached_network_image: ^3.4.1
-  dropdown_search: ^5.0.6
+  dropdown_search: ^6.0.1
   flutter_sticky_header: ^0.6.5
   extended_sliver: ^2.1.3
 
