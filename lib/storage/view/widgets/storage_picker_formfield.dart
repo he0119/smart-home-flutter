@@ -232,6 +232,7 @@ class _StorageFieldState extends FormFieldState<Storage> {
   }
 
   void _hideKeyboard() {
+    // ignore: use_build_context_synchronously
     Future.microtask(() => FocusScope.of(context).requestFocus(FocusNode()));
   }
 
@@ -242,6 +243,8 @@ class _StorageFieldState extends FormFieldState<Storage> {
           .storages(key: '', cache: false);
       if (context.mounted) {
         final newValue = await showDialog<Storage>(
+          // TODO: 这里也不清楚，明明已经检查过 mounted 了。
+          // ignore: use_build_context_synchronously
           context: context,
           builder: (context) {
             return StorageDialog(

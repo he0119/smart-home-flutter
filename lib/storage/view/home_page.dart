@@ -88,7 +88,7 @@ class StorageHomeScreen extends StatelessWidget {
             return state is StorageHomeSuccess &&
                 state.itemType == ItemType.all;
           },
-          onPopInvoked: (didPop) {
+          onPopInvokedWithResult: (didPop, result) {
             if (state is StorageHomeSuccess) {
               BlocProvider.of<StorageHomeBloc>(context)
                   .add(const StorageHomeFetched(itemType: ItemType.all));
