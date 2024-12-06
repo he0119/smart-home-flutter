@@ -139,7 +139,7 @@ class _ScanQRPageState extends State<ScanQRPage> {
       }
 
       // 从网址中提取 storageId
-      // https://smart.dev.hehome.xyz/storage/U3RvcmFnZTo1
+      // https://smart.hehome.xyz/storage/U3RvcmFnZTo1
       if (storageId.startsWith('http')) {
         final url = Uri.parse(storageId);
         storageId = url.pathSegments.last;
