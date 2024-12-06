@@ -55,6 +55,7 @@ dependencies:
       url: https://github.com/samnbd/qr_code_scanner
       ref: master
       version: ^1.0.0
+  go_router: ^14.6.2
 
   # Widget
   webview_flutter: ^4.10.0
