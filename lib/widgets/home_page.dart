@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/conditional_parent_widget.dart';
 import 'package:smarthome/widgets/drawer.dart';
@@ -34,11 +33,7 @@ class MyHomePage extends StatelessWidget {
       drawer: const MyDrawer(),
       floatingActionButton: floatingActionButton,
       onRefresh: onRefresh,
-      bottomNavigationBar: TabSelector(
-        activeTab: activeTab,
-        onTabSelected: (tab) =>
-            BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
-      ),
+      bottomNavigationBar: TabSelector(activeTab: activeTab),
       canPop: canPop,
       onPopInvokedWithResult: onPopInvokedWithResult,
     );

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smarthome/core/core.dart';
 
 class TabSelector extends StatelessWidget {
   final AppTab activeTab;
-  final Function(AppTab) onTabSelected;
 
   const TabSelector({
     super.key,
     required this.activeTab,
-    required this.onTabSelected,
   });
 
   @override
@@ -23,7 +22,9 @@ class TabSelector extends StatelessWidget {
           )
           .toList(),
       selectedIndex: AppTab.values.indexOf(activeTab),
-      onDestinationSelected: (index) => onTabSelected(AppTab.values[index]),
+      onDestinationSelected: (index) {
+        context.go(AppTab.values[index].path);
+      },
     );
   }
 }
