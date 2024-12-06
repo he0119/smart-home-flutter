@@ -55,6 +55,8 @@ dependencies:
       url: https://github.com/samnbd/qr_code_scanner
       ref: master
       version: ^1.0.0
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
 
   # Widget
   webview_flutter: ^4.10.0
@@ -77,10 +79,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   bloc_test: ^9.1.7
-  build_runner: ^2.4.13
+  build_runner:
   json_serializable: ^6.9.0
-  flutter_launcher_icons: ^0.14.2
+  riverpod_generator: ^2.6.3
+  custom_lint:
   flutter_lints: ^5.0.0
+  riverpod_lint: ^2.6.3
+  flutter_launcher_icons: ^0.14.2
   sentry_dart_plugin: ^2.2.1
 
 flutter:
