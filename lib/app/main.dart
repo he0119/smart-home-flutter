@@ -8,8 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
+import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/iot/bloc/blocs.dart';
 import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/l10n/l10n.dart';
 import 'package:smarthome/storage/storage.dart';
@@ -122,7 +124,7 @@ class MyMaterialApp extends StatefulWidget {
 class _MyMaterialAppState extends State<MyMaterialApp> {
   // 为了保存路由状态
   final GoRouter _router = GoRouter(
-    initialLocation: '/storage',
+    initialLocation: '/',
     routes: [
       GoRoute(
         path: '/storage',
@@ -133,6 +135,47 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
         },
       ),
       GoRoute(
+        path: '/iot',
+        builder: (context, state) {
+          BlocProvider.of<StorageHomeBloc>(context)
+              .add(const StorageHomeFetched(itemType: ItemType.all));
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<DeviceDataBloc>(
+                // 因为只有一个设备就先写死
+                create: (context) => DeviceDataBloc(
+                  iotRepository: RepositoryProvider.of<IotRepository>(context),
+                  deviceId: 'RGV2aWNlOjE=',
+                  client: RepositoryProvider.of<GraphQLApiClient>(context),
+                )..add(const DeviceDataStarted()),
+              ),
+              BlocProvider<DeviceEditBloc>(
+                create: (context) => DeviceEditBloc(
+                  iotRepository: RepositoryProvider.of<IotRepository>(context),
+                ),
+              ),
+            ],
+            child: const IotHomeScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/blog',
+        builder: (context, state) {
+          BlocProvider.of<StorageHomeBloc>(context)
+              .add(const StorageHomeFetched(itemType: ItemType.all));
+          return const BlogHomeScreen();
+        },
+      ),
+      GoRoute(
+        path: '/board',
+        builder: (context, state) {
+          BlocProvider.of<StorageHomeBloc>(context)
+              .add(const StorageHomeFetched(itemType: ItemType.all));
+          return const BoardHomeScreen();
+        },
+      ),
+      GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),
       ),
@@ -140,8 +183,22 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
     redirect: (BuildContext context, GoRouterState state) {
       final settingsController = context.watch<SettingsController>();
       if (!settingsController.isLogin) {
-        return '/login';
+        if (state.matchedLocation == '/login') {
+          return null;
+        }
+        return '/login?redirect=${state.uri.toString()}';
       } else {
+        if (state.uri.toString() == '/') {
+          return settingsController.defaultPage.path;
+        }
+        if (state.matchedLocation == '/login') {
+          if (state.uri.queryParameters['redirect'] != null) {
+            return state.uri.queryParameters['redirect'];
+          } else {
+            // 如果是登录状态，但是访问的是登录页面，那么就跳转到默认页面
+            return settingsController.defaultPage.path;
+          }
+        }
         return null;
       }
     },
