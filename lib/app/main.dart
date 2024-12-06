@@ -5,14 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/l10n/l10n.dart';
-import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/routers/information_parser.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/user/user.dart';
 
@@ -122,18 +121,41 @@ class MyMaterialApp extends StatefulWidget {
 
 class _MyMaterialAppState extends State<MyMaterialApp> {
   // 为了保存路由状态
-  late final MyRouterDelegate _delegate;
+  final GoRouter _router = GoRouter(
+    initialLocation: '/storage',
+    routes: [
+      GoRoute(
+        path: '/storage',
+        builder: (context, state) {
+          BlocProvider.of<StorageHomeBloc>(context)
+              .add(const StorageHomeFetched(itemType: ItemType.all));
+          return const StorageHomeScreen();
+        },
+      ),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+    ],
+    redirect: (BuildContext context, GoRouterState state) {
+      final settingsController = context.watch<SettingsController>();
+      if (!settingsController.isLogin) {
+        return '/login';
+      } else {
+        return null;
+      }
+    },
+  );
 
   @override
   void initState() {
     super.initState();
-    _delegate = MyRouterDelegate(settingsController: widget.settingsController);
     // 仅在安卓上注册通道
     if (!kIsWeb && Platform.isAndroid) {
       const MethodChannel('hehome.xyz/route').setMethodCallHandler(
         (call) async {
           if (call.method == 'RouteChanged' && call.arguments != null) {
-            await _delegate.navigateNewPath(call.arguments as String);
+            _router.go(call.arguments as String);
           }
         },
       );
@@ -159,8 +181,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           title: widget.settingsController.appConfig.appName,
-          routeInformationParser: MyRouteInformationParser(),
-          routerDelegate: _delegate,
+          routerConfig: _router,
         );
       },
     );
