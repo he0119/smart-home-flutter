@@ -1,22 +1,20 @@
+import 'package:animated_tree_view/tree_view/tree_node.dart';
+import 'package:animated_tree_view/tree_view/tree_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_treeview/flutter_treeview.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/utils/constants.dart';
-import 'package:smarthome/widgets/substring_highlight.dart';
 
-List<Node> childrenNode(String? key, List<Storage> storages) {
+List<TreeNode<Storage>> childrenNode(String? key, List<Storage> storages) {
   final children = storages
       .where((storage) => (storage.parent?.id ?? homeStorage.id) == key);
   if (children.isNotEmpty) {
     final childNodes = children
         .map(
-          (child) => Node(
+          (child) => TreeNode<Storage>(
             key: child.id,
-            label: child.name,
-            expanded: true,
-            children: childrenNode(child.id, storages),
-          ),
+            data: child,
+          )..addAll(childrenNode(child.id, storages)),
         )
         .toList();
     return childNodes;
@@ -24,16 +22,14 @@ List<Node> childrenNode(String? key, List<Storage> storages) {
   return [];
 }
 
-List<Node> generateNodes(List<Storage> storages) {
+TreeNode<Storage> generateNodes(List<Storage> storages) {
   // 家应该最为根节点，这样才能选中
-  return [
-    Node(
-      key: homeStorage.id,
-      label: homeStorage.name,
-      expanded: true,
-      children: childrenNode('', storages),
-    )
-  ];
+  final homeNode = TreeNode<Storage>(
+    key: homeStorage.id,
+    data: homeStorage,
+  )..addAll(childrenNode(homeStorage.id, storages));
+
+  return homeNode;
 }
 
 /// 查找 storage 的所有父节点
@@ -65,15 +61,12 @@ class StorageDialog extends StatefulWidget {
 
 class _StorageDialogState extends State<StorageDialog> {
   String _searchTerm = '';
-  late TreeViewController _controller;
+  late TreeNode<Storage> _rootNode;
 
   @override
   void initState() {
     super.initState();
-    _controller = TreeViewController(
-      children: generateNodes(widget.storages),
-      selectedKey: widget.storage?.id,
-    );
+    _rootNode = generateNodes(widget.storages);
   }
 
   @override
@@ -100,40 +93,35 @@ class _StorageDialogState extends State<StorageDialog> {
 
               setState(() {
                 _searchTerm = value;
-                _controller = TreeViewController(
-                  children: generateNodes(newStorages.toList()),
-                  selectedKey: widget.storage?.id,
-                );
+                _rootNode = generateNodes(newStorages.toList());
               });
             },
           ),
           Expanded(
-            child: TreeView(
+            child: TreeView.simple(
+              tree: _rootNode,
               key: ValueKey(_searchTerm),
-              controller: _controller,
-              shrinkWrap: true,
-              nodeBuilder: (BuildContext context, Node node) {
-                return Container(
-                  padding: const EdgeInsets.all(16),
-                  child:
-                      SubstringHighlight(text: node.label, term: _searchTerm),
-                );
+              onTreeReady: (controller) {
+                controller.expandAllChildren(_rootNode);
               },
-              theme: TreeViewTheme(
-                colorScheme: Theme.of(context).colorScheme,
+              builder: (context, node) => Card(
+                color: node.key == widget.storage?.id
+                    ? Theme.of(context).highlightColor
+                    : null,
+                child: ListTile(
+                  title: Text(node.data?.name ?? ''),
+                  // 不能选择家和当前存储位置
+                  leading: node.key != widget.storage?.id &&
+                          node.key != homeStorage.id
+                      ? IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(node.data);
+                          },
+                          icon: Icon(Icons.check),
+                        )
+                      : null,
+                ),
               ),
-              allowParentSelect: true,
-              onNodeTap: (node) {
-                // 针对家做特殊处理，家应该为一个 id 为 '' 的 storage
-                Storage storage;
-                if (node == homeStorage.id) {
-                  storage = homeStorage;
-                } else {
-                  storage = widget.storages
-                      .firstWhere((storage) => storage.id == node);
-                }
-                Navigator.of(context).pop(storage);
-              },
             ),
           )
         ],
