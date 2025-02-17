@@ -105,6 +105,9 @@ class _StorageDialogState extends State<StorageDialog> {
                 controller.expandAllChildren(_rootNode);
               },
               builder: (context, node) => Card(
+                color: node.key == widget.storage?.id
+                    ? Theme.of(context).highlightColor
+                    : null,
                 child: ListTile(
                   title: Text(node.data?.name ?? ''),
                   // 不能选择家和当前存储位置
