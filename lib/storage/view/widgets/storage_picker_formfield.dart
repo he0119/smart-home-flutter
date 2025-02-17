@@ -107,6 +107,16 @@ class _StorageDialogState extends State<StorageDialog> {
               builder: (context, node) => Card(
                 child: ListTile(
                   title: Text(node.data?.name ?? ''),
+                  // 不能选择家和当前存储位置
+                  leading: node.key != widget.storage?.id &&
+                          node.key != homeStorage.id
+                      ? IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(node.data);
+                          },
+                          icon: Icon(Icons.check),
+                        )
+                      : null,
                 ),
               ),
             ),
