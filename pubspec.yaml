@@ -76,7 +76,7 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test: ^9.1.7
+  bloc_test: ^10.0.0
   build_runner: ^2.4.15
   json_serializable: ^6.9.4
   flutter_launcher_icons: ^0.14.3
