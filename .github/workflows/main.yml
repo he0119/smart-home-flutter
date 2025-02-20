@@ -83,9 +83,9 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
-          java-version: '17'
-          cache: 'gradle'
+          distribution: "zulu"
+          java-version: "17"
+          cache: "gradle"
           check-latest: true
 
       - name: Setup Flutter
@@ -134,7 +134,7 @@ jobs:
 
       - name: Build web version
         run: |
-          flutter build web --wasm --source-maps -t ./lib/main_$ENVIRONMENT.dart
+          flutter build web --source-maps -t ./lib/main_$ENVIRONMENT.dart
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
           SENTRY_RELEASE: ${{ needs.test.outputs.release }}
