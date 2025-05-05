@@ -84,6 +84,10 @@ final GoRouter router = GoRouter(
       path: '/login',
       builder: (context, state) => const LoginScreen(),
     ),
+    GoRoute(
+      path: '/settings',
+      builder: (context, state) => SettingsScreen(),
+    )
   ],
   redirect: (BuildContext context, GoRouterState state) {
     final settingsController = context.read<SettingsController>();

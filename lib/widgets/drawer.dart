@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/view/admin_page.dart';
@@ -56,7 +57,7 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             title: const Text('设置'),
             onTap: () {
-              MyRouterDelegate.of(context).push(const SettingsPage());
+              context.go('/settings');
             },
           ),
           ListTile(
