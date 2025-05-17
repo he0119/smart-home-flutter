@@ -42,7 +42,7 @@ jobs:
           fi
 
       - name: Get lcov_cobertura
-        run: curl -sSL https://raw.github.com/eriwen/lcov-to-cobertura-xml/master/lcov_cobertura/lcov_cobertura.py -o lcov_cobertura.py
+        run: pip install lcov_cobertura
 
       - name: Setup Flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
@@ -55,7 +55,7 @@ jobs:
         run: |
           flutter pub get
           flutter test --coverage
-          python lcov_cobertura.py coverage/lcov.info
+          lcov_cobertura coverage/lcov.info
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
