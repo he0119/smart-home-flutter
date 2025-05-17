@@ -49,6 +49,7 @@ dependencies:
   sentry_flutter: ^8.14.2
   dynamic_color: ^1.7.0
   qr_flutter: ^4.1.0
+  mobile_scanner: ^7.0.0
 
   # Widget
   webview_flutter: ^4.12.0

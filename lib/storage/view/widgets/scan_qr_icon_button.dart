@@ -1,187 +1,274 @@
-// import 'dart:convert';
-// import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
 
-// import 'package:flutter/foundation.dart';
-// import 'package:flutter/material.dart';
-// import 'package:qr_code_scanner/qr_code_scanner.dart';
-// import 'package:smarthome/core/model/grobal_keys.dart';
-// import 'package:smarthome/routers/delegate.dart';
-// import 'package:smarthome/storage/storage.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
-// class ScanQRIconButton extends StatelessWidget {
-//   const ScanQRIconButton({super.key});
+class ScanQRIconButton extends StatelessWidget {
+  const ScanQRIconButton({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Tooltip(
-//       message: '扫描二维码',
-//       child: IconButton(
-//         icon: const Icon(Icons.qr_code),
-//         onPressed: () {
-//           Navigator.of(context).push(
-//             MaterialPageRoute(
-//               builder: (_) => const ScanQRPage(),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: '扫描二维码',
+      child: IconButton(
+        icon: const Icon(Icons.qr_code),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const ScanQRPage(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
 
-// class ScanQRPage extends StatefulWidget {
-//   const ScanQRPage({super.key});
+/// Button widget for analyze image function
+class ScannerErrorWidget extends StatelessWidget {
+  /// Construct a new [ScannerErrorWidget] instance.
+  const ScannerErrorWidget({required this.error, super.key});
 
-//   @override
-//   State<ScanQRPage> createState() => _ScanQRPageState();
-// }
+  /// Error to display
+  final MobileScannerException error;
 
-// class _ScanQRPageState extends State<ScanQRPage> {
-//   bool jumped = false;
-//   QRViewController? controller;
-//   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: Colors.black,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: Icon(Icons.error, color: Colors.white),
+            ),
+            Text(
+              error.errorCode.message,
+              style: const TextStyle(color: Colors.white),
+            ),
+            if (error.errorDetails?.message case final String message)
+              Text(message, style: const TextStyle(color: Colors.white)),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-//   // In order to get hot reload to work we need to pause the camera if the platform
-//   // is android, or resume the camera if the platform is iOS.
-//   @override
-//   void reassemble() {
-//     super.reassemble();
-//     if (Platform.isAndroid) {
-//       controller!.pauseCamera();
-//     }
-//     controller!.resumeCamera();
-//   }
+/// Widget to display scanned barcodes.
+class ScannedBarcodeLabel extends StatelessWidget {
+  /// Construct a new [ScannedBarcodeLabel] instance.
+  const ScannedBarcodeLabel({required this.barcodes, super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('二维码')),
-//       body: Column(
-//         children: <Widget>[
-//           Expanded(
-//             flex: 4,
-//             child: GestureDetector(
-//               onTap: () async {
-//                 setState(() {
-//                   jumped = false;
-//                 });
-//                 if (!kIsWeb) {
-//                   await controller?.resumeCamera();
-//                 }
-//               },
-//               child: _buildQrView(context),
-//             ),
-//           ),
-//           Expanded(
-//             flex: 1,
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: <Widget>[
-//                 Text(jumped ? '请单击屏幕再次扫描' : '请扫描二维码'),
-//                 if (!kIsWeb)
-//                   Container(
-//                     margin: const EdgeInsets.all(8),
-//                     child: ElevatedButton(
-//                       onPressed: () async {
-//                         await controller?.toggleFlash();
-//                         setState(() {});
-//                       },
-//                       child: FutureBuilder(
-//                         future: controller?.getFlashStatus(),
-//                         builder: (context, snapshot) {
-//                           return Text(
-//                               snapshot.data ?? false ? '关闭闪光灯' : '打开闪光灯');
-//                         },
-//                       ),
-//                     ),
-//                   ),
-//               ],
-//             ),
-//           )
-//         ],
-//       ),
-//     );
-//   }
+  /// Barcode stream for scanned barcodes to display
+  final Stream<BarcodeCapture> barcodes;
 
-//   Widget _buildQrView(BuildContext context) {
-//     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
-//     var scanArea = (MediaQuery.of(context).size.width < 400 ||
-//             MediaQuery.of(context).size.height < 400)
-//         ? 150.0
-//         : 300.0;
-//     // To ensure the Scanner view is properly sizes after rotation
-//     // we need to listen for Flutter SizeChanged notification and update controller
-//     return QRView(
-//       key: qrKey,
-//       onQRViewCreated: _onQRViewCreated,
-//       overlay: QrScannerOverlayShape(
-//           borderColor: Colors.red,
-//           borderRadius: 10,
-//           borderLength: 30,
-//           borderWidth: 10,
-//           cutOutSize: scanArea),
-//       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
-//     );
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: barcodes,
+      builder: (context, snapshot) {
+        final List<Barcode> scannedBarcodes = snapshot.data?.barcodes ?? [];
 
-//   void _onQRViewCreated(QRViewController controller) {
-//     setState(() {
-//       this.controller = controller;
-//     });
-//     controller.scannedDataStream.listen((scanData) async {
-//       if (jumped) {
-//         return;
-//       }
-//       var storageId = scanData.code;
+        final String values =
+            scannedBarcodes.map((e) => e.displayValue).join('\n');
 
-//       if (storageId == null) {
-//         return;
-//       }
+        if (scannedBarcodes.isEmpty) {
+          return const Text(
+            'Scan something!',
+            overflow: TextOverflow.fade,
+            style: TextStyle(color: Colors.white),
+          );
+        }
 
-//       // 从网址中提取 storageId
-//       // https://smart.hehome.xyz/storage/U3RvcmFnZTo1
-//       if (storageId.startsWith('http')) {
-//         final url = Uri.parse(storageId);
-//         storageId = url.pathSegments.last;
-//       }
+        return Text(
+          values.isEmpty ? 'No display value.' : values,
+          overflow: TextOverflow.fade,
+          style: const TextStyle(color: Colors.white),
+        );
+      },
+    );
+  }
+}
 
-//       if (validateStorageId(storageId)) {
-//         setState(() {
-//           jumped = true;
-//         });
-//         // TODO: 弄清楚这里是什么情况，没看懂哪里来的 async gap。
-//         // ignore: use_build_context_synchronously
-//         MyRouterDelegate.of(context)
-//             .push(StorageDetailPage(storageId: storageId));
-//         // 只有安卓设备支持暂停相机
-//         if (!kIsWeb && Platform.isAndroid) {
-//           await controller.pauseCamera();
-//         }
-//       }
-//     });
-//   }
+class ScanQRPage extends StatefulWidget {
+  const ScanQRPage({super.key});
 
-//   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-//     if (!p) {
-//       scaffoldMessengerKey.currentState!.showSnackBar(
-//         const SnackBar(content: Text('没有相机权限')),
-//       );
-//     }
-//   }
+  @override
+  State<ScanQRPage> createState() => _ScanQRPageState();
+}
 
-//   @override
-//   void dispose() {
-//     controller?.dispose();
-//     super.dispose();
-//   }
+class _ScanQRPageState extends State<ScanQRPage> {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
-//   bool validateStorageId(String id) {
-//     Codec<String, String> stringToBase64 = utf8.fuse(base64);
-//     try {
-//       final decoded = stringToBase64.decode(id);
-//       return decoded.startsWith('Storage:');
-//     } catch (e) {
-//       return false;
-//     }
-//   }
-// }
+  bool jumped = false;
+
+  MobileScannerController? controller;
+  // A scan window does work on web, but not the overlay to preview the scan
+  // window. This is why we disable it here for web examples.
+  bool useScanWindow = !kIsWeb;
+
+  bool autoZoom = false;
+  bool invertImage = false;
+  bool returnImage = false;
+
+  Size desiredCameraResolution = const Size(1920, 1080);
+  DetectionSpeed detectionSpeed = DetectionSpeed.unrestricted;
+  int detectionTimeoutMs = 1000;
+
+  bool useBarcodeOverlay = true;
+  BoxFit boxFit = BoxFit.contain;
+  bool enableLifecycle = false;
+
+  /// Hides the MobileScanner widget while the MobileScannerController is
+  /// rebuilding
+  bool hideMobileScannerWidget = false;
+
+  List<BarcodeFormat> selectedFormats = [];
+
+  MobileScannerController initController() => MobileScannerController(
+        autoStart: false,
+        cameraResolution: desiredCameraResolution,
+        detectionSpeed: detectionSpeed,
+        detectionTimeoutMs: detectionTimeoutMs,
+        formats: selectedFormats,
+        returnImage: returnImage,
+        // torchEnabled: true,
+        invertImage: invertImage,
+        autoZoom: autoZoom,
+      );
+
+  @override
+  void initState() {
+    super.initState();
+    controller = initController();
+    unawaited(controller!.start());
+  }
+
+  @override
+  Future<void> dispose() async {
+    super.dispose();
+    await controller?.dispose();
+    controller = null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    late final scanWindow = Rect.fromCenter(
+      center: MediaQuery.sizeOf(context).center(const Offset(0, -100)),
+      width: 300,
+      height: 200,
+    );
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('二维码')),
+      body: controller == null || hideMobileScannerWidget
+          ? const Placeholder()
+          : Stack(
+              children: [
+                MobileScanner(
+                  // useAppLifecycleState: false, // Only set to false if you want
+                  // to handle lifecycle changes yourself
+                  scanWindow: useScanWindow ? scanWindow : null,
+                  controller: controller,
+                  errorBuilder: (context, error) {
+                    return ScannerErrorWidget(error: error);
+                  },
+                  fit: boxFit,
+                ),
+                if (useBarcodeOverlay)
+                  BarcodeOverlay(controller: controller!, boxFit: boxFit),
+                // The scanWindow is not supported on the web.
+                if (useScanWindow)
+                  ScanWindowOverlay(
+                    scanWindow: scanWindow,
+                    controller: controller!,
+                  ),
+                if (returnImage)
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Card(
+                      clipBehavior: Clip.hardEdge,
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: StreamBuilder<BarcodeCapture>(
+                          stream: controller!.barcodes,
+                          builder: (context, snapshot) {
+                            final BarcodeCapture? barcode = snapshot.data;
+
+                            if (barcode == null) {
+                              return const Center(
+                                child: Text(
+                                  'Your scanned barcode will appear here',
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+                            }
+
+                            final Uint8List? barcodeImage = barcode.image;
+
+                            if (barcodeImage == null) {
+                              return const Center(
+                                child: Text('No image for this barcode.'),
+                              );
+                            }
+
+                            return Image.memory(
+                              barcodeImage,
+                              fit: BoxFit.cover,
+                              gaplessPlayback: true,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Center(
+                                  child: Text(
+                                    'Could not decode image bytes. $error',
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
+                    height: 200,
+                    color: const Color.fromRGBO(0, 0, 0, 0.4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ScannedBarcodeLabel(
+                            barcodes: controller!.barcodes,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+
+  bool validateStorageId(String id) {
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    try {
+      final decoded = stringToBase64.decode(id);
+      return decoded.startsWith('Storage:');
+    } catch (e) {
+      return false;
+    }
+  }
+}
