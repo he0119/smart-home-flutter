@@ -9,7 +9,10 @@
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart",
-            "args": ["--flavor", "dev"],
+            "args": [
+                "--flavor",
+                "dev"
+            ],
         },
         {
             "name": "Flutter Release",
@@ -17,7 +20,10 @@
             "type": "dart",
             "flutterMode": "release",
             "program": "lib/main_dev.dart",
-            "args": ["--flavor", "dev"],
+            "args": [
+                "--flavor",
+                "dev"
+            ],
         },
         {
             "name": "Flutter Profile",
@@ -25,7 +31,22 @@
             "type": "dart",
             "flutterMode": "profile",
             "program": "lib/main_dev.dart",
-            "args": ["--flavor", "dev"],
+            "args": [
+                "--flavor",
+                "dev"
+            ],
+        },
+        {
+            "name": "Flutter for web (hot reloadable)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main_dev.dart",
+            "args": [
+                "-d",
+                "edge",
+                "--web-experimental-hot-reload",
+                "--web-browser-flag=--disable-web-security",
+            ]
         }
     ]
 }
