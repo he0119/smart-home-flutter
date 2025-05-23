@@ -1,6 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="xyz.hehome.smarthome">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 检查是否有可用浏览器
          https://developer.android.com/training/package-visibility/use-cases -->
