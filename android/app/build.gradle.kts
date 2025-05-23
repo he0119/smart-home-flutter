@@ -52,6 +52,31 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    flavorDimensions += "version"
+
+    productFlavors {
+        create("dev") {
+            dimension = "version"
+            applicationIdSuffix = ".dev"
+            val hostNameValue = "smart.dev.hehome.xyz"
+            manifestPlaceholders["appName"] = "智慧家庭 DEV"
+            manifestPlaceholders["hostName"] = hostNameValue
+            buildConfigField("String", "HOST_NAME", "\"${hostNameValue}\"")
+        }
+
+        create("prod") {
+            dimension = "version"
+            val hostNameValue = "smart.hehome.xyz"
+            manifestPlaceholders["appName"] = "智慧家庭"
+            manifestPlaceholders["hostName"] = hostNameValue
+            buildConfigField("String", "HOST_NAME", "\"${hostNameValue}\"")
+        }
+    }
 }
 
 flutter {
