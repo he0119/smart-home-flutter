@@ -45,7 +45,7 @@ jobs:
         run: pip install lcov_cobertura
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+        uses: subosito/flutter-action@e938fdf56512cc96ef2f93601a5a40bde3801046
         with:
           channel: stable
           flutter-version-file: pubspec.yaml
@@ -80,7 +80,7 @@ jobs:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+        uses: subosito/flutter-action@e938fdf56512cc96ef2f93601a5a40bde3801046
         with:
           channel: stable
           flutter-version-file: pubspec.yaml
@@ -117,7 +117,7 @@ jobs:
           VERSION: ${{ needs.test.outputs.version }}
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+        uses: subosito/flutter-action@e938fdf56512cc96ef2f93601a5a40bde3801046
         with:
           channel: stable
           flutter-version-file: pubspec.yaml
@@ -162,7 +162,7 @@ jobs:
           VERSION: ${{ needs.test.outputs.version }}
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+        uses: subosito/flutter-action@e938fdf56512cc96ef2f93601a5a40bde3801046
         with:
           channel: stable
           flutter-version-file: pubspec.yaml
