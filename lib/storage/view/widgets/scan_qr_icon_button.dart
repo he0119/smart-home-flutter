@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/storage/view/storage_datail_page.dart';
 
 class ScanQRIconButton extends StatelessWidget {
   const ScanQRIconButton({super.key});
@@ -79,7 +81,7 @@ class ScannedBarcodeLabel extends StatelessWidget {
 
         if (scannedBarcodes.isEmpty) {
           return const Text(
-            'Scan something!',
+            '请扫描二维码',
             overflow: TextOverflow.fade,
             style: TextStyle(color: Colors.white),
           );
@@ -105,41 +107,19 @@ class ScanQRPage extends StatefulWidget {
 class _ScanQRPageState extends State<ScanQRPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
-  bool jumped = false;
-
   MobileScannerController? controller;
+
+  bool jumpedToStorageDetail = false;
+
   // A scan window does work on web, but not the overlay to preview the scan
   // window. This is why we disable it here for web examples.
   bool useScanWindow = !kIsWeb;
 
-  bool autoZoom = false;
-  bool invertImage = false;
-  bool returnImage = false;
-
-  Size desiredCameraResolution = const Size(1920, 1080);
-  DetectionSpeed detectionSpeed = DetectionSpeed.unrestricted;
-  int detectionTimeoutMs = 1000;
-
-  bool useBarcodeOverlay = true;
   BoxFit boxFit = BoxFit.contain;
-  bool enableLifecycle = false;
-
-  /// Hides the MobileScanner widget while the MobileScannerController is
-  /// rebuilding
-  bool hideMobileScannerWidget = false;
-
-  List<BarcodeFormat> selectedFormats = [];
 
   MobileScannerController initController() => MobileScannerController(
-        autoStart: false,
-        cameraResolution: desiredCameraResolution,
-        detectionSpeed: detectionSpeed,
-        detectionTimeoutMs: detectionTimeoutMs,
-        formats: selectedFormats,
-        returnImage: returnImage,
-        // torchEnabled: true,
-        invertImage: invertImage,
-        autoZoom: autoZoom,
+        autoStart: true,
+        autoZoom: true,
       );
 
   @override
@@ -176,89 +156,43 @@ class _ScanQRPageState extends State<ScanQRPage> {
               return ScannerErrorWidget(error: error);
             },
             fit: boxFit,
+            onDetect: (result) async {
+              // 如果已经跳转到详情页，则不再处理扫描结果
+              if (jumpedToStorageDetail) {
+                return;
+              }
+
+              var storageId = result.barcodes.first.rawValue;
+
+              if (storageId == null) {
+                return;
+              }
+
+              // 从网址中提取 storageId
+              // https://smart.hehome.xyz/storage/U3RvcmFnZTo1
+              if (storageId.startsWith('http')) {
+                final url = Uri.parse(storageId);
+                storageId = url.pathSegments.last;
+              }
+
+              if (validateStorageId(storageId)) {
+                setState(() {
+                  jumpedToStorageDetail = true;
+                });
+
+                MyRouterDelegate.of(context)
+                    .push(StorageDetailPage(storageId: storageId));
+
+                await controller?.stop();
+              }
+            },
           ),
-          if (useBarcodeOverlay)
-            BarcodeOverlay(controller: controller!, boxFit: boxFit),
           // The scanWindow is not supported on the web.
           if (useScanWindow)
             ScanWindowOverlay(
               scanWindow: scanWindow,
               controller: controller!,
             ),
-          if (returnImage)
-            Align(
-              alignment: Alignment.topRight,
-              child: Card(
-                clipBehavior: Clip.hardEdge,
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: StreamBuilder<BarcodeCapture>(
-                    stream: controller!.barcodes,
-                    builder: (context, snapshot) {
-                      final BarcodeCapture? barcode = snapshot.data;
-
-                      if (barcode == null) {
-                        return const Center(
-                          child: Text(
-                            'Your scanned barcode will appear here',
-                            textAlign: TextAlign.center,
-                          ),
-                        );
-                      }
-
-                      final Uint8List? barcodeImage = barcode.image;
-
-                      if (barcodeImage == null) {
-                        return const Center(
-                          child: Text('No image for this barcode.'),
-                        );
-                      }
-
-                      return Image.memory(
-                        barcodeImage,
-                        fit: BoxFit.cover,
-                        gaplessPlayback: true,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Center(
-                            child: Text(
-                              'Could not decode image bytes. $error',
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              height: 200,
-              color: const Color.fromRGBO(0, 0, 0, 0.4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ElevatedButton(
-                    // The MobileScanner is already in the widget tree.
-                    onPressed: controller!.start,
-                    child: const Text('扫描'),
-                  ),
-                  Expanded(
-                    child: ScannedBarcodeLabel(
-                      barcodes: controller!.barcodes,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );
