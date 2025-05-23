@@ -79,15 +79,6 @@ jobs:
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
 
-      # https://github.com/incrediblezayed/file_saver/issues/86#issuecomment-2028079330
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: "zulu"
-          java-version: "17"
-          cache: "gradle"
-          check-latest: true
-
       - name: Setup Flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
