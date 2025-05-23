@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Added
+
+- 用 mobile_scanner 替换 qr_code_scanner
+
 ## [0.10.0] - 2024-12-06
 
 ### Added

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -5,6 +8,7 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
+import 'package:smarthome/storage/view/widgets/scan_qr_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
@@ -47,7 +51,7 @@ class StorageHomeScreen extends StatelessWidget {
           activeTab: AppTab.storage,
           actions: <Widget>[
             // 仅支持网页和安卓
-            // if (kIsWeb || Platform.isAndroid) const ScanQRIconButton(),
+            if (kIsWeb || Platform.isAndroid) const ScanQRIconButton(),
             const SearchIconButton(),
           ],
           floatingActionButton: FloatingActionButton(
