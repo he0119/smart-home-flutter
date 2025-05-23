@@ -146,7 +146,6 @@ class _ScanQRPageState extends State<ScanQRPage> {
   void initState() {
     super.initState();
     controller = initController();
-    unawaited(controller!.start());
   }
 
   @override
@@ -166,99 +165,102 @@ class _ScanQRPageState extends State<ScanQRPage> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('二维码')),
-      body: controller == null || hideMobileScannerWidget
-          ? const Placeholder()
-          : Stack(
-              children: [
-                MobileScanner(
-                  // useAppLifecycleState: false, // Only set to false if you want
-                  // to handle lifecycle changes yourself
-                  scanWindow: useScanWindow ? scanWindow : null,
-                  controller: controller,
-                  errorBuilder: (context, error) {
-                    return ScannerErrorWidget(error: error);
-                  },
-                  fit: boxFit,
-                ),
-                if (useBarcodeOverlay)
-                  BarcodeOverlay(controller: controller!, boxFit: boxFit),
-                // The scanWindow is not supported on the web.
-                if (useScanWindow)
-                  ScanWindowOverlay(
-                    scanWindow: scanWindow,
-                    controller: controller!,
-                  ),
-                if (returnImage)
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Card(
-                      clipBehavior: Clip.hardEdge,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: StreamBuilder<BarcodeCapture>(
-                          stream: controller!.barcodes,
-                          builder: (context, snapshot) {
-                            final BarcodeCapture? barcode = snapshot.data;
-
-                            if (barcode == null) {
-                              return const Center(
-                                child: Text(
-                                  'Your scanned barcode will appear here',
-                                  textAlign: TextAlign.center,
-                                ),
-                              );
-                            }
-
-                            final Uint8List? barcodeImage = barcode.image;
-
-                            if (barcodeImage == null) {
-                              return const Center(
-                                child: Text('No image for this barcode.'),
-                              );
-                            }
-
-                            return Image.memory(
-                              barcodeImage,
-                              fit: BoxFit.cover,
-                              gaplessPlayback: true,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Center(
-                                  child: Text(
-                                    'Could not decode image bytes. $error',
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    alignment: Alignment.bottomCenter,
-                    height: 200,
-                    color: const Color.fromRGBO(0, 0, 0, 0.4),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: ScannedBarcodeLabel(
-                            barcodes: controller!.barcodes,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+      body: Stack(
+        children: [
+          MobileScanner(
+            // useAppLifecycleState: false, // Only set to false if you want
+            // to handle lifecycle changes yourself
+            scanWindow: useScanWindow ? scanWindow : null,
+            controller: controller,
+            errorBuilder: (context, error) {
+              return ScannerErrorWidget(error: error);
+            },
+            fit: boxFit,
+          ),
+          if (useBarcodeOverlay)
+            BarcodeOverlay(controller: controller!, boxFit: boxFit),
+          // The scanWindow is not supported on the web.
+          if (useScanWindow)
+            ScanWindowOverlay(
+              scanWindow: scanWindow,
+              controller: controller!,
             ),
+          if (returnImage)
+            Align(
+              alignment: Alignment.topRight,
+              child: Card(
+                clipBehavior: Clip.hardEdge,
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: StreamBuilder<BarcodeCapture>(
+                    stream: controller!.barcodes,
+                    builder: (context, snapshot) {
+                      final BarcodeCapture? barcode = snapshot.data;
+
+                      if (barcode == null) {
+                        return const Center(
+                          child: Text(
+                            'Your scanned barcode will appear here',
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }
+
+                      final Uint8List? barcodeImage = barcode.image;
+
+                      if (barcodeImage == null) {
+                        return const Center(
+                          child: Text('No image for this barcode.'),
+                        );
+                      }
+
+                      return Image.memory(
+                        barcodeImage,
+                        fit: BoxFit.cover,
+                        gaplessPlayback: true,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Center(
+                            child: Text(
+                              'Could not decode image bytes. $error',
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              height: 200,
+              color: const Color.fromRGBO(0, 0, 0, 0.4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ElevatedButton(
+                    // The MobileScanner is already in the widget tree.
+                    onPressed: controller!.start,
+                    child: const Text('扫描'),
+                  ),
+                  Expanded(
+                    child: ScannedBarcodeLabel(
+                      barcodes: controller!.barcodes,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
