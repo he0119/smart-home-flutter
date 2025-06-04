@@ -6,7 +6,7 @@ publish_to: "none"
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
-  flutter: "3.32.0" # This must be exact! No ranges allowed.
+  flutter: "3.32.2" # This must be exact! No ranges allowed.
 
 dependencies:
   flutter:
@@ -49,10 +49,10 @@ dependencies:
   sentry_flutter: ^8.14.2
   dynamic_color: ^1.7.0
   qr_flutter: ^4.1.0
-  mobile_scanner: ^7.0.0
+  mobile_scanner: ^7.0.1
 
   # Widget
-  webview_flutter: ^4.12.0
+  webview_flutter: ^4.13.0
   datetime_picker_formfield: ^2.0.1
   flutter_markdown_selectionarea: ^0.6.17+1
   cached_network_image: ^3.4.1
