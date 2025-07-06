@@ -1,5 +1,5 @@
 const String autowateringDataSubscription = r'''
-subscription autowateringData($deviceId: GlobalID!) {
+subscription autowateringData($deviceId: ID!) {
   autowateringData(deviceId: $deviceId) {
     id
     device {
