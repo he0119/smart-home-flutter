@@ -1,5 +1,5 @@
 const String deviceSubscription = r'''
-subscription device($id: GlobalID!) {
+subscription device($id: ID!) {
   device(id: $id) {
     id
     name

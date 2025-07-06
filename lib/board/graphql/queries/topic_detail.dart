@@ -1,5 +1,5 @@
 const String topicDetailQuery = r'''
-query topicDetail($topicId: GlobalID!, $order: Ordering!, $after: String) {
+query topicDetail($topicId: ID!, $order: Ordering!, $after: String) {
   topic(id: $topicId) {
     id
     title
