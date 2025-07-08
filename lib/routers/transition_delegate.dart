@@ -32,7 +32,7 @@ class MyTransitionDelegate extends TransitionDelegate<void> {
               newRoute.route.settings is BlogHomePage ||
               newRoute.route.settings is StorageHomePage ||
               newRoute.route.settings is BoardHomePage)) {
-        exitingRoute.markForRemove();
+        exitingRoute.markForComplete();
         newRoute.markForAdd();
         results
           ..add(exitingRoute)
