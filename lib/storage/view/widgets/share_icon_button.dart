@@ -27,18 +27,12 @@ class ShareQrIconButton extends StatelessWidget {
           if (imageBytes == null) {
             return;
           }
-          final shareResult = await Share.shareXFiles(
-            [
-              // NOTE: https://github.com/fluttercommunity/plus_plugins/issues/1548
-              // share_plus 不会使用 XFile 的名称
-              XFile.fromData(
-                imageBytes,
-                mimeType: 'image/png',
-                name: '$name.png',
-              )
-            ],
+          final params = ShareParams(
             text: '二维码',
+            files: [XFile.fromData(imageBytes, mimeType: 'image/png')],
+            fileNameOverrides: ['$name.png'],
           );
+          final shareResult = await SharePlus.instance.share(params);
           if (shareResult.status == ShareResultStatus.success) {
             scaffoldMessengerKey.currentState!.showSnackBar(
               const SnackBar(
