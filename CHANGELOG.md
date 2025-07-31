@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+## [0.11.0] - 2025-07-31
+
 ### Added
 
 - 用 mobile_scanner 替换 qr_code_scanner
@@ -514,7 +516,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 利用 Flutter 编写的第一个可用的智慧家庭客户端
 
-[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/he0119/smart-home-flutter/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/he0119/smart-home-flutter/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/he0119/smart-home-flutter/compare/v0.9.7...v0.10.0
 [0.9.7]: https://github.com/he0119/smart-home-flutter/compare/v0.9.6...v0.9.7
 [0.9.6]: https://github.com/he0119/smart-home-flutter/compare/v0.9.5...v0.9.6
