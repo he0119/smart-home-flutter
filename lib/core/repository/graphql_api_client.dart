@@ -250,42 +250,111 @@ class GraphQLApiClient {
     final oidcUrl = '$baseUrl/oidc/authenticate/';
 
     try {
-      // 创建一个支持跟随重定向的 HTTP 客户端
-      final ioClient = HttpClient();
-      final httpClient = IOClient(ioClient);
+      // 创建一个不自动跟随重定向的 HTTP 客户端
+      final httpClient = HttpClient();
 
-      // 发送请求到 OIDC 认证端点
-      _log.info('开始 OIDC 认证: $oidcUrl');
-      final response = await httpClient.get(
-        Uri.parse(oidcUrl),
-        headers: headers,
-      );
+      // 手动跟随重定向
+      String currentUrl = oidcUrl;
+      Map<String, String> currentHeaders = Map.from(headers);
+      List<Cookie> allCookies = [];
+      int redirectCount = 0;
+      const maxRedirects = 20; // 最大重定向次数，防止无限循环
 
-      _log.info('OIDC 认证完成，状态码: ${response.statusCode}');
+      _log.info('开始 OIDC 认证: $currentUrl');
 
-      // 从响应头中提取 cookies
-      final setCookieHeaders = response.headers['set-cookie'];
-      if (setCookieHeaders == null || setCookieHeaders.isEmpty) {
-        _log.warning('未从响应中获取到 cookies');
-        throw const NetworkException('OIDC 认证失败：未获取到认证信息');
-      }
+      while (redirectCount < maxRedirects) {
+        final request = await httpClient.getUrl(Uri.parse(currentUrl));
+        request.followRedirects = false; // 禁用自动重定向
 
-      // 解析 cookies
-      final cookieStringList = setCookieHeaders.split(',');
-      List<Cookie> cookies = [];
-      for (var i = 0; i < cookieStringList.length; i += 2) {
-        if (i + 1 < cookieStringList.length) {
-          cookies.add(Cookie.fromSetCookieValue(
-              cookieStringList[i] + cookieStringList[i + 1]));
+        // 添加请求头
+        currentHeaders.forEach((key, value) {
+          request.headers.set(key, value);
+        });
+
+        final httpResponse = await request.close();
+        final statusCode = httpResponse.statusCode;
+
+        _log.info('步骤 ${redirectCount + 1}: 状态码 $statusCode, URL: $currentUrl');
+
+        // 收集 cookies
+        final setCookieHeaders = httpResponse.headers['set-cookie'];
+        if (setCookieHeaders != null && setCookieHeaders.isNotEmpty) {
+          for (var cookieString in setCookieHeaders) {
+            try {
+              allCookies.add(Cookie.fromSetCookieValue(cookieString));
+            } catch (e) {
+              _log.warning('解析 cookie 失败: $cookieString');
+            }
+          }
+          _log.info('收集到 ${allCookies.length} 个 cookies');
+        }
+
+        // 检查是否是重定向响应
+        if (statusCode == 302 ||
+            statusCode == 301 ||
+            statusCode == 303 ||
+            statusCode == 307 ||
+            statusCode == 308) {
+          final locationHeaders = httpResponse.headers['location'];
+          if (locationHeaders == null || locationHeaders.isEmpty) {
+            _log.warning('重定向响应但未找到 location 头');
+            break;
+          }
+
+          final location = locationHeaders.first;
+
+          // 处理相对路径和绝对路径
+          final locationUri = Uri.parse(location);
+          if (locationUri.isAbsolute) {
+            currentUrl = location;
+          } else {
+            final currentUri = Uri.parse(currentUrl);
+            currentUrl = currentUri.resolve(location).toString();
+          }
+
+          // 检查是否已经到达 admin 页面
+          if (currentUrl.contains('/admin')) {
+            _log.info('已到达 admin 页面，认证成功: $currentUrl');
+            break;
+          }
+
+          // 更新请求头，添加已收集的 cookies
+          if (allCookies.isNotEmpty) {
+            currentHeaders['cookie'] =
+                allCookies.map((e) => '${e.name}=${e.value}').join('; ');
+          }
+
+          redirectCount++;
+          _log.info('跟随重定向到: $currentUrl');
+        } else if (statusCode == 200) {
+          // 检查 URL 是否包含 admin
+          if (currentUrl.contains('/admin')) {
+            _log.info('成功到达 admin 页面: $currentUrl');
+            break;
+          } else {
+            _log.warning('收到 200 响应但不在 admin 页面: $currentUrl');
+            break;
+          }
         } else {
-          cookies.add(Cookie.fromSetCookieValue(cookieStringList[i]));
+          _log.warning('收到非预期的状态码: $statusCode');
+          break;
         }
       }
 
-      final newCookies = cookies.map((e) => '${e.name}=${e.value}').join('; ');
-      _log.info('成功获取 cookies');
+      if (redirectCount >= maxRedirects) {
+        _log.warning('达到最大重定向次数限制');
+        throw const NetworkException('OIDC 认证失败：重定向次数过多');
+      }
 
-      // 保存 cookies
+      if (allCookies.isEmpty) {
+        _log.warning('未获取到任何 cookies');
+        throw const NetworkException('OIDC 认证失败：未获取到认证信息');
+      }
+
+      // 保存所有收集到的 cookies
+      final newCookies =
+          allCookies.map((e) => '${e.name}=${e.value}').join('; ');
+      _log.info('成功获取 cookies: $newCookies');
       await settingsController.updateCookies(newCookies);
 
       // 关闭 HTTP 客户端
