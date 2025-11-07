@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/core/graphql/mutations/mutations.dart';
 import 'package:smarthome/user/model/user.dart';
+import 'package:smarthome/user/repository/user_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 class ClientWithCookies extends IOClient {
@@ -225,6 +226,83 @@ class GraphQLApiClient {
       }
     }
     return null;
+  }
+
+  /// OIDC 单点登录
+  ///
+  /// 返回登录后的用户信息
+  Future<User?> oidcLogin() async {
+    if (settingsController.apiUrl == null) {
+      throw const NetworkException('请先设置服务器地址');
+    }
+
+    // 从 apiUrl 中移除 /graphql/ 路径，构建 OIDC 端点
+    // apiUrl 格式: https://smart.dev.hehome.xyz/graphql/
+    // oidcUrl 格式: https://smart.dev.hehome.xyz/oidc/authenticate/
+    var baseUrl = settingsController.apiUrl!;
+    if (baseUrl.endsWith('/graphql/')) {
+      baseUrl = baseUrl.substring(0, baseUrl.length - 9); // 移除 '/graphql/'
+    } else if (baseUrl.endsWith('/graphql')) {
+      baseUrl = baseUrl.substring(0, baseUrl.length - 8); // 移除 '/graphql'
+    } else if (baseUrl.endsWith('/')) {
+      baseUrl = baseUrl.substring(0, baseUrl.length - 1); // 移除尾部 '/'
+    }
+    final oidcUrl = '$baseUrl/oidc/authenticate/';
+
+    try {
+      // 创建一个支持跟随重定向的 HTTP 客户端
+      final ioClient = HttpClient();
+      final httpClient = IOClient(ioClient);
+
+      // 发送请求到 OIDC 认证端点
+      _log.info('开始 OIDC 认证: $oidcUrl');
+      final response = await httpClient.get(
+        Uri.parse(oidcUrl),
+        headers: headers,
+      );
+
+      _log.info('OIDC 认证完成，状态码: ${response.statusCode}');
+
+      // 从响应头中提取 cookies
+      final setCookieHeaders = response.headers['set-cookie'];
+      if (setCookieHeaders == null || setCookieHeaders.isEmpty) {
+        _log.warning('未从响应中获取到 cookies');
+        throw const NetworkException('OIDC 认证失败：未获取到认证信息');
+      }
+
+      // 解析 cookies
+      final cookieStringList = setCookieHeaders.split(',');
+      List<Cookie> cookies = [];
+      for (var i = 0; i < cookieStringList.length; i += 2) {
+        if (i + 1 < cookieStringList.length) {
+          cookies.add(Cookie.fromSetCookieValue(
+              cookieStringList[i] + cookieStringList[i + 1]));
+        } else {
+          cookies.add(Cookie.fromSetCookieValue(cookieStringList[i]));
+        }
+      }
+
+      final newCookies = cookies.map((e) => '${e.name}=${e.value}').join('; ');
+      _log.info('成功获取 cookies');
+
+      // 保存 cookies
+      await settingsController.updateCookies(newCookies);
+
+      // 关闭 HTTP 客户端
+      httpClient.close();
+
+      // 获取当前用户信息
+      final userRepository = UserRepository(graphqlApiClient: this);
+      final user = await userRepository.currentUser();
+      _log.info('成功获取用户信息: ${user.username}');
+      return user;
+    } catch (e) {
+      _log.severe('OIDC 登录失败: $e');
+      if (e is MyException) {
+        rethrow;
+      }
+      throw const NetworkException('OIDC 登录失败，请稍后再试');
+    }
   }
 
   Future<bool> logout() async {

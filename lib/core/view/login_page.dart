@@ -191,6 +191,12 @@ class _LoginFormState extends State<LoginForm> {
       );
     }
 
+    void onOIDCLoginButtonPressed() {
+      BlocProvider.of<AuthenticationBloc>(context).add(
+        const AuthenticationOIDCLogin(),
+      );
+    }
+
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state is AuthenticationInProgress) {
@@ -234,6 +240,13 @@ class _LoginFormState extends State<LoginForm> {
                           ? onLoginButtonPressed
                           : null,
                       child: const Text('登录'),
+                    ),
+                    const SizedBox(height: 10),
+                    RoundedRaisedButton(
+                      onPressed: state is! AuthenticationInProgress
+                          ? onOIDCLoginButtonPressed
+                          : null,
+                      child: const Text('单点登录 (OIDC)'),
                     ),
                     TextButton(
                       onPressed: widget.onTapBack as void Function()?,

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 ## [Unreleased]
 
+### Added
+
+- 添加 OIDC 登录功能
+
 ## [0.11.0] - 2025-07-31
 
 ### Added

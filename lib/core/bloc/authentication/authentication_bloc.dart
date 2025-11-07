@@ -24,6 +24,7 @@ class AuthenticationBloc
     on<AuthenticationStarted>(_onAuthenticationStarted);
     on<AuthenticationLogin>(_onAuthenticationLogin);
     on<AuthenticationLogout>(_onAuthenticationLogout);
+    on<AuthenticationOIDCLogin>(_onAuthenticationOIDCLogin);
   }
 
   FutureOr<void> _onAuthenticationStarted(
@@ -63,6 +64,22 @@ class AuthenticationBloc
     if (result) {
       await settingsController.updateLoginUser(null);
       emit(const AuthenticationFailure('已登出'));
+    }
+  }
+
+  FutureOr<void> _onAuthenticationOIDCLogin(
+      AuthenticationOIDCLogin event, Emitter<AuthenticationState> emit) async {
+    emit(AuthenticationInProgress());
+    try {
+      final user = await graphqlApiClient.oidcLogin();
+      if (user != null) {
+        await settingsController.updateLoginUser(user);
+        emit(AuthenticationSuccess(user));
+      } else {
+        emit(const AuthenticationFailure('OIDC 登录失败'));
+      }
+    } on MyException catch (e) {
+      emit(AuthenticationFailure(e.message));
     }
   }
 }
