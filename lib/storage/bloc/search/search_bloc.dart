@@ -48,9 +48,7 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
     }
   }
 
-  EventTransformer<StorageSearchEvent> debounce<StorageSearchEvent>(
-    Duration duration,
-  ) {
+  EventTransformer<T> debounce<T>(Duration duration) {
     return (events, mapper) => events.debounceTime(duration).switchMap(mapper);
   }
 }
