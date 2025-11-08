@@ -236,110 +236,79 @@ class GraphQLApiClient {
       throw const NetworkException('请先设置服务器地址');
     }
 
-    // 从 apiUrl 中移除 /graphql/ 路径，构建 OIDC 端点
-    // apiUrl 格式: https://smart.dev.hehome.xyz/graphql/
-    // oidcUrl 格式: https://smart.dev.hehome.xyz/oidc/authenticate/
-    var baseUrl = settingsController.apiUrl!;
-    if (baseUrl.endsWith('/graphql/')) {
-      baseUrl = baseUrl.substring(0, baseUrl.length - 9); // 移除 '/graphql/'
-    } else if (baseUrl.endsWith('/graphql')) {
-      baseUrl = baseUrl.substring(0, baseUrl.length - 8); // 移除 '/graphql'
-    } else if (baseUrl.endsWith('/')) {
-      baseUrl = baseUrl.substring(0, baseUrl.length - 1); // 移除尾部 '/'
-    }
-    final oidcUrl = '$baseUrl/oidc/authenticate/';
+    // 构建 OIDC 端点 URL
+    final baseUri = Uri.parse(settingsController.apiUrl!);
+    final oidcUri = baseUri.replace(path: '/oidc/authenticate/');
 
     try {
-      // 创建一个不自动跟随重定向的 HTTP 客户端
+      _log.info('开始 OIDC 认证: $oidcUri');
+
+      // 使用 HttpClient 手动处理重定向以收集所有 cookies
       final httpClient = HttpClient();
 
-      // 手动跟随重定向
-      String currentUrl = oidcUrl;
-      Map<String, String> currentHeaders = Map.from(headers);
-      List<Cookie> allCookies = [];
-      int redirectCount = 0;
-      const maxRedirects = 20; // 最大重定向次数，防止无限循环
-
-      _log.info('开始 OIDC 认证: $currentUrl');
+      final allCookies = <Cookie>[];
+      var currentUri = oidcUri;
+      var redirectCount = 0;
+      const maxRedirects = 20;
 
       while (redirectCount < maxRedirects) {
-        final request = await httpClient.getUrl(Uri.parse(currentUrl));
+        final request = await httpClient.getUrl(currentUri);
         request.followRedirects = false; // 禁用自动重定向
 
         // 添加请求头
-        currentHeaders.forEach((key, value) {
+        headers.forEach((key, value) {
           request.headers.set(key, value);
         });
 
-        final httpResponse = await request.close();
-        final statusCode = httpResponse.statusCode;
+        // 添加已收集的 cookies
+        if (allCookies.isNotEmpty) {
+          request.headers.set('cookie',
+              allCookies.map((e) => '${e.name}=${e.value}').join('; '));
+        }
 
-        _log.info('步骤 ${redirectCount + 1}: 状态码 $statusCode, URL: $currentUrl');
+        final response = await request.close();
+        _log.info(
+            '步骤 ${redirectCount + 1}: 状态码 ${response.statusCode}, URL: $currentUri');
 
         // 收集 cookies
-        final setCookieHeaders = httpResponse.headers['set-cookie'];
-        if (setCookieHeaders != null && setCookieHeaders.isNotEmpty) {
-          for (var cookieString in setCookieHeaders) {
-            try {
-              allCookies.add(Cookie.fromSetCookieValue(cookieString));
-            } catch (e) {
-              _log.warning('解析 cookie 失败: $cookieString');
-            }
-          }
+        final setCookies = response.cookies;
+        if (setCookies.isNotEmpty) {
+          allCookies.addAll(setCookies);
           _log.info('收集到 ${allCookies.length} 个 cookies');
         }
 
-        // 检查是否是重定向响应
-        if (statusCode == 302 ||
-            statusCode == 301 ||
-            statusCode == 303 ||
-            statusCode == 307 ||
-            statusCode == 308) {
-          final locationHeaders = httpResponse.headers['location'];
-          if (locationHeaders == null || locationHeaders.isEmpty) {
+        // 处理重定向
+        if (response.isRedirect) {
+          final location = response.headers.value('location');
+          if (location == null) {
             _log.warning('重定向响应但未找到 location 头');
             break;
           }
 
-          final location = locationHeaders.first;
+          currentUri = currentUri.resolve(location);
+          _log.info('跟随重定向到: $currentUri');
 
-          // 处理相对路径和绝对路径
-          final locationUri = Uri.parse(location);
-          if (locationUri.isAbsolute) {
-            currentUrl = location;
-          } else {
-            final currentUri = Uri.parse(currentUrl);
-            currentUrl = currentUri.resolve(location).toString();
-          }
-
-          // 检查是否已经到达 admin 页面
-          if (currentUrl.contains('/admin')) {
-            _log.info('已到达 admin 页面，认证成功: $currentUrl');
+          // 检查是否已到达 admin 页面
+          if (currentUri.path.contains('/admin')) {
+            _log.info('已到达 admin 页面,认证成功: $currentUri');
             break;
-          }
-
-          // 更新请求头，添加已收集的 cookies
-          if (allCookies.isNotEmpty) {
-            currentHeaders['cookie'] =
-                allCookies.map((e) => '${e.name}=${e.value}').join('; ');
           }
 
           redirectCount++;
-          _log.info('跟随重定向到: $currentUrl');
-        } else if (statusCode == 200) {
-          // 检查 URL 是否包含 admin
-          if (currentUrl.contains('/admin')) {
-            _log.info('成功到达 admin 页面: $currentUrl');
-            break;
+        } else if (response.statusCode == 200) {
+          if (currentUri.path.contains('/admin')) {
+            _log.info('成功到达 admin 页面: $currentUri');
           } else {
-            _log.warning('收到 200 响应但不在 admin 页面: $currentUrl');
-            break;
+            _log.warning('收到 200 响应但不在 admin 页面: $currentUri');
           }
+          break;
         } else {
-          _log.warning('收到非预期的状态码: $statusCode');
+          _log.warning('收到非预期的状态码: ${response.statusCode}');
           break;
         }
       }
+
+      httpClient.close();
 
       if (redirectCount >= maxRedirects) {
         _log.warning('达到最大重定向次数限制');
@@ -352,13 +321,10 @@ class GraphQLApiClient {
       }
 
       // 保存所有收集到的 cookies
-      final newCookies =
+      final cookiesString =
           allCookies.map((e) => '${e.name}=${e.value}').join('; ');
-      _log.info('成功获取 cookies: $newCookies');
-      await settingsController.updateCookies(newCookies);
-
-      // 关闭 HTTP 客户端
-      httpClient.close();
+      _log.info('成功获取 cookies: $cookiesString');
+      await settingsController.updateCookies(cookiesString);
 
       // 获取当前用户信息
       final userRepository = UserRepository(graphqlApiClient: this);
@@ -370,7 +336,7 @@ class GraphQLApiClient {
       if (e is MyException) {
         rethrow;
       }
-      throw const NetworkException('OIDC 登录失败，请稍后再试');
+      throw const NetworkException('OIDC 登录失败,请稍后再试');
     }
   }
 
