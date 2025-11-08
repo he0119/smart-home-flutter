@@ -174,31 +174,6 @@ enum LoginMethod { password, oidc }
 class _LoginFormState extends State<LoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  LoginMethod _loginMethod = LoginMethod.password;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadLoginMethod();
-  }
-
-  Future<void> _loadLoginMethod() async {
-    final settings = context.read<SettingsController>();
-    final savedMethod = settings.loginMethod;
-    if (savedMethod != null) {
-      setState(() {
-        _loginMethod =
-            savedMethod == 'oidc' ? LoginMethod.oidc : LoginMethod.password;
-      });
-    }
-  }
-
-  Future<void> _saveLoginMethod(LoginMethod method) async {
-    final settings = context.read<SettingsController>();
-    await settings.updateLoginMethod(
-      method == LoginMethod.oidc ? 'oidc' : 'password',
-    );
-  }
 
   @override
   void dispose() {
@@ -209,8 +184,13 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+    final loginMethod = settings.loginMethod == 'oidc'
+        ? LoginMethod.oidc
+        : LoginMethod.password;
+
     void onLoginButtonPressed() {
-      if (_loginMethod == LoginMethod.password) {
+      if (loginMethod == LoginMethod.password) {
         BlocProvider.of<AuthenticationBloc>(context).add(
           AuthenticationLogin(
             username: _usernameController.text,
@@ -260,18 +240,19 @@ class _LoginFormState extends State<LoginForm> {
                             icon: Icon(Icons.login),
                           ),
                         ],
-                        selected: {_loginMethod},
+                        selected: {loginMethod},
                         onSelectionChanged: (Set<LoginMethod> newSelection) {
-                          setState(() {
-                            _loginMethod = newSelection.first;
-                          });
-                          _saveLoginMethod(newSelection.first);
+                          settings.updateLoginMethod(
+                            newSelection.first == LoginMethod.oidc
+                                ? 'oidc'
+                                : 'password',
+                          );
                         },
                       ),
                     ),
                     const SizedBox(height: 20),
                     // 用户名输入框（两种登录方式都需要）
-                    if (_loginMethod == LoginMethod.password) ...[
+                    if (loginMethod == LoginMethod.password) ...[
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                         child: TextFormField(
