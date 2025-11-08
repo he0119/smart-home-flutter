@@ -20,8 +20,6 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
       switch (configuration.appTab) {
         case AppTab.blog:
           return RouteInformation(uri: Uri.parse('/blog'));
-        case AppTab.iot:
-          return RouteInformation(uri: Uri.parse('/iot'));
         case AppTab.storage:
           return RouteInformation(uri: Uri.parse('/storage'));
         case AppTab.board:
@@ -49,8 +47,6 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
       switch (configuration.appSettings) {
         case AppSettings.home:
           return RouteInformation(uri: Uri.parse('/settings'));
-        case AppSettings.iot:
-          return RouteInformation(uri: Uri.parse('/settings/iot'));
         case AppSettings.blog:
           return RouteInformation(uri: Uri.parse('/settings/blog'));
         default:
@@ -66,7 +62,6 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
 /// 将 URI 转换成 RoutePath
 RoutePath parseUri(Uri uri) {
   if (uri.pathSegments.length == 1) {
-    if (uri.pathSegments[0] == 'iot') return HomeRoutePath(appTab: AppTab.iot);
     if (uri.pathSegments[0] == 'board') {
       return HomeRoutePath(appTab: AppTab.board);
     }
@@ -98,8 +93,6 @@ RoutePath parseUri(Uri uri) {
       case 'settings':
         // 单独的设置界面
         switch (uri.pathSegments[1]) {
-          case 'iot':
-            return SettingsRoutePath(appSettings: AppSettings.iot);
           case 'blog':
             return SettingsRoutePath(appSettings: AppSettings.blog);
         }
