@@ -36,3 +36,11 @@ class AuthenticationLogout extends AuthenticationEvent {
   @override
   String toString() => 'AuthenticationLogout';
 }
+
+/// OIDC 单点登录
+class AuthenticationOIDCLogin extends AuthenticationEvent {
+  const AuthenticationOIDCLogin();
+
+  @override
+  String toString() => 'AuthenticationOIDCLogin';
+}

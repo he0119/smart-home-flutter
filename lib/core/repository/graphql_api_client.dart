@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/core/graphql/mutations/mutations.dart';
 import 'package:smarthome/user/model/user.dart';
+import 'package:smarthome/user/repository/user_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 class ClientWithCookies extends IOClient {
@@ -225,6 +226,118 @@ class GraphQLApiClient {
       }
     }
     return null;
+  }
+
+  /// OIDC 单点登录
+  ///
+  /// 返回登录后的用户信息
+  Future<User?> oidcLogin() async {
+    if (settingsController.apiUrl == null) {
+      throw const NetworkException('请先设置服务器地址');
+    }
+
+    // 构建 OIDC 端点 URL
+    final baseUri = Uri.parse(settingsController.apiUrl!);
+    final oidcUri = baseUri.replace(path: '/oidc/authenticate/');
+
+    try {
+      _log.info('开始 OIDC 认证: $oidcUri');
+
+      // 使用 HttpClient 手动处理重定向以收集所有 cookies
+      final httpClient = HttpClient();
+
+      final allCookies = <Cookie>[];
+      var currentUri = oidcUri;
+      var redirectCount = 0;
+      const maxRedirects = 20;
+
+      while (redirectCount < maxRedirects) {
+        final request = await httpClient.getUrl(currentUri);
+        request.followRedirects = false; // 禁用自动重定向
+
+        // 添加请求头
+        headers.forEach((key, value) {
+          request.headers.set(key, value);
+        });
+
+        // 添加已收集的 cookies
+        if (allCookies.isNotEmpty) {
+          request.headers.set('cookie',
+              allCookies.map((e) => '${e.name}=${e.value}').join('; '));
+        }
+
+        final response = await request.close();
+        _log.info(
+            '步骤 ${redirectCount + 1}: 状态码 ${response.statusCode}, URL: $currentUri');
+
+        // 收集 cookies
+        final setCookies = response.cookies;
+        if (setCookies.isNotEmpty) {
+          allCookies.addAll(setCookies);
+          _log.info('收集到 ${allCookies.length} 个 cookies');
+        }
+
+        // 处理重定向
+        if (response.isRedirect) {
+          final location = response.headers.value('location');
+          if (location == null) {
+            _log.warning('重定向响应但未找到 location 头');
+            break;
+          }
+
+          currentUri = currentUri.resolve(location);
+          _log.info('跟随重定向到: $currentUri');
+
+          // 检查是否已到达 admin 页面
+          if (currentUri.path.contains('/admin')) {
+            _log.info('已到达 admin 页面,认证成功: $currentUri');
+            break;
+          }
+
+          redirectCount++;
+        } else if (response.statusCode == 200) {
+          if (currentUri.path.contains('/admin')) {
+            _log.info('成功到达 admin 页面: $currentUri');
+          } else {
+            _log.warning('收到 200 响应但不在 admin 页面: $currentUri');
+          }
+          break;
+        } else {
+          _log.warning('收到非预期的状态码: ${response.statusCode}');
+          break;
+        }
+      }
+
+      httpClient.close();
+
+      if (redirectCount >= maxRedirects) {
+        _log.warning('达到最大重定向次数限制');
+        throw const NetworkException('OIDC 认证失败：重定向次数过多');
+      }
+
+      if (allCookies.isEmpty) {
+        _log.warning('未获取到任何 cookies');
+        throw const NetworkException('OIDC 认证失败：未获取到认证信息');
+      }
+
+      // 保存所有收集到的 cookies
+      final cookiesString =
+          allCookies.map((e) => '${e.name}=${e.value}').join('; ');
+      _log.info('成功获取 cookies: $cookiesString');
+      await settingsController.updateCookies(cookiesString);
+
+      // 获取当前用户信息
+      final userRepository = UserRepository(graphqlApiClient: this);
+      final user = await userRepository.currentUser();
+      _log.info('成功获取用户信息: ${user.username}');
+      return user;
+    } catch (e) {
+      _log.severe('OIDC 登录失败: $e');
+      if (e is MyException) {
+        rethrow;
+      }
+      throw const NetworkException('OIDC 登录失败,请稍后再试');
+    }
   }
 
   Future<bool> logout() async {

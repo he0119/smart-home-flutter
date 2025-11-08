@@ -189,4 +189,14 @@ class SettingsService {
     final prefs = await _prefs;
     prefs.setString('cookies', cookies);
   }
+
+  Future<String?> loginMethod() async {
+    final prefs = await _prefs;
+    return prefs.getString('loginMethod');
+  }
+
+  Future<void> updateLoginMethod(String method) async {
+    final prefs = await _prefs;
+    prefs.setString('loginMethod', method);
+  }
 }

@@ -169,6 +169,8 @@ class LoginForm extends StatefulWidget {
   State<LoginForm> createState() => _LoginFormState();
 }
 
+enum LoginMethod { password, oidc }
+
 class _LoginFormState extends State<LoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -182,13 +184,24 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+    final loginMethod = settings.loginMethod == 'oidc'
+        ? LoginMethod.oidc
+        : LoginMethod.password;
+
     void onLoginButtonPressed() {
-      BlocProvider.of<AuthenticationBloc>(context).add(
-        AuthenticationLogin(
-          username: _usernameController.text,
-          password: _passwordController.text,
-        ),
-      );
+      if (loginMethod == LoginMethod.password) {
+        BlocProvider.of<AuthenticationBloc>(context).add(
+          AuthenticationLogin(
+            username: _usernameController.text,
+            password: _passwordController.text,
+          ),
+        );
+      } else {
+        BlocProvider.of<AuthenticationBloc>(context).add(
+          const AuthenticationOIDCLogin(),
+        );
+      }
     }
 
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
@@ -210,31 +223,77 @@ class _LoginFormState extends State<LoginForm> {
                       height: 100.0,
                       semanticLabel: 'icon',
                     ),
+                    const SizedBox(height: 20),
+                    // 登录方式选择
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                      child: TextFormField(
-                        enableSuggestions: false,
-                        decoration: const InputDecoration(labelText: '用户名'),
-                        controller: _usernameController,
-                        autofillHints: const <String>[AutofillHints.username],
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SegmentedButton<LoginMethod>(
+                        segments: const [
+                          ButtonSegment(
+                            value: LoginMethod.password,
+                            label: Text('密码登录'),
+                            icon: Icon(Icons.password),
+                          ),
+                          ButtonSegment(
+                            value: LoginMethod.oidc,
+                            label: Text('单点登录'),
+                            icon: Icon(Icons.login),
+                          ),
+                        ],
+                        selected: {loginMethod},
+                        onSelectionChanged: (Set<LoginMethod> newSelection) {
+                          settings.updateLoginMethod(
+                            newSelection.first == LoginMethod.oidc
+                                ? 'oidc'
+                                : 'password',
+                          );
+                        },
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    // 用户名输入框（两种登录方式都需要）
+                    if (loginMethod == LoginMethod.password) ...[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        child: TextFormField(
+                          enableSuggestions: false,
+                          decoration: const InputDecoration(labelText: '用户名'),
+                          controller: _usernameController,
+                          autofillHints: const <String>[AutofillHints.username],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                        child: TextFormField(
+                          enableSuggestions: false,
+                          decoration: const InputDecoration(labelText: '密码'),
+                          controller: _passwordController,
+                          obscureText: true,
+                          autofillHints: const <String>[AutofillHints.password],
+                        ),
+                      ),
+                    ] else ...[
+                      const Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        child: Text(
+                          '点击下方按钮将进行单点登录',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ],
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                      child: TextFormField(
-                        enableSuggestions: false,
-                        decoration: const InputDecoration(labelText: '密码'),
-                        controller: _passwordController,
-                        obscureText: true,
-                        autofillHints: const <String>[AutofillHints.password],
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Center(
+                        child: FilledButton(
+                          onPressed: state is! AuthenticationInProgress
+                              ? onLoginButtonPressed
+                              : null,
+                          child: const Text('登录'),
+                        ),
                       ),
                     ),
-                    RoundedRaisedButton(
-                      onPressed: state is! AuthenticationInProgress
-                          ? onLoginButtonPressed
-                          : null,
-                      child: const Text('登录'),
-                    ),
+                    const SizedBox(height: 8),
                     TextButton(
                       onPressed: widget.onTapBack as void Function()?,
                       child: const Text('返回'),
