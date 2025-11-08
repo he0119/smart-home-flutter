@@ -31,14 +31,13 @@ class MyDropdownSearch<T> extends StatelessWidget {
         showSearchBox: true,
         itemBuilder:
             (BuildContext context, T item, bool isDisabled, bool isSelected) {
-          return ListTile(
-            title: Text(item.toString()),
-            selected: isSelected,
-          );
-        },
-        emptyBuilder: (context, searchEntry) => const Center(
-          child: Text('无结果'),
-        ),
+              return ListTile(
+                title: Text(item.toString()),
+                selected: isSelected,
+              );
+            },
+        emptyBuilder: (context, searchEntry) =>
+            const Center(child: Text('无结果')),
         searchFieldProps: const TextFieldProps(
           decoration: InputDecoration(
             labelText: '搜索',

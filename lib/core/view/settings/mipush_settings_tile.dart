@@ -25,11 +25,9 @@ class MiPushSettingsTile extends StatelessWidget {
           title: '小米推送',
           subtitle: status,
           onPressed: (context) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const MiPushPage(),
-              ),
-            );
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => const MiPushPage()));
           },
         );
       },

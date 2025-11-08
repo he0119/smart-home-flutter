@@ -22,9 +22,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   final SettingsController settingsController;
 
-  MyRouterDelegate({
-    required this.settingsController,
-  });
+  MyRouterDelegate({required this.settingsController});
 
   static MyRouterDelegate of(BuildContext context) {
     final delegate = Router.of(context).routerDelegate;
@@ -44,9 +42,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     }
     // 未设置主页时显示默认主页
     if (_pages.isEmpty) {
-      _pages = [
-        settingsController.defaultPage.page,
-      ];
+      _pages = [settingsController.defaultPage.page];
     }
     return List.unmodifiable(_pages);
   }
@@ -168,31 +164,19 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
         case AppPage.login:
           break;
         case AppPage.consumables:
-          _pages = [
-            const StorageHomePage(),
-            ConsumablesPage(),
-          ];
+          _pages = [const StorageHomePage(), ConsumablesPage()];
           break;
         case AppPage.recycleBin:
-          _pages = [
-            const StorageHomePage(),
-            RecycleBinPage(),
-          ];
+          _pages = [const StorageHomePage(), RecycleBinPage()];
           break;
       }
     } else if (configuration is SettingsRoutePath) {
       switch (configuration.appSettings) {
         case AppSettings.home:
-          _pages = [
-            settingsController.defaultPage.page,
-            const SettingsPage(),
-          ];
+          _pages = [settingsController.defaultPage.page, const SettingsPage()];
           break;
         case AppSettings.blog:
-          _pages = [
-            const BlogHomePage(),
-            const BlogSettingsPage(),
-          ];
+          _pages = [const BlogHomePage(), const BlogSettingsPage()];
           break;
         default:
       }
@@ -228,30 +212,34 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
                 await quickActions.initialize((String shortcutType) {
                   switch (shortcutType) {
                     case 'action_storage':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.storage));
+                      BlocProvider.of<TabBloc>(
+                        context,
+                      ).add(const TabChanged(AppTab.storage));
                       break;
                     case 'action_blog':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.blog));
+                      BlocProvider.of<TabBloc>(
+                        context,
+                      ).add(const TabChanged(AppTab.blog));
                       break;
                     case 'action_board':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.board));
+                      BlocProvider.of<TabBloc>(
+                        context,
+                      ).add(const TabChanged(AppTab.board));
                       break;
                   }
                 });
-                await quickActions.setShortcutItems(
-                  <ShortcutItem>[
-                    // TODO: 给快捷方式添加图标
-                    const ShortcutItem(
-                        type: 'action_storage', localizedTitle: '物品'),
-                    const ShortcutItem(
-                        type: 'action_blog', localizedTitle: '博客'),
-                    const ShortcutItem(
-                        type: 'action_board', localizedTitle: '留言'),
-                  ],
-                );
+                await quickActions.setShortcutItems(<ShortcutItem>[
+                  // TODO: 给快捷方式添加图标
+                  const ShortcutItem(
+                    type: 'action_storage',
+                    localizedTitle: '物品',
+                  ),
+                  const ShortcutItem(type: 'action_blog', localizedTitle: '博客'),
+                  const ShortcutItem(
+                    type: 'action_board',
+                    localizedTitle: '留言',
+                  ),
+                ]);
               }
             }
             if (state is AuthenticationError) {

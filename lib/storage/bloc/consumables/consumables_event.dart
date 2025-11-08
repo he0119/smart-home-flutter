@@ -7,9 +7,7 @@ abstract class ConsumablesEvent extends Equatable {
 class ConsumablesFetched extends ConsumablesEvent {
   final bool cache;
 
-  const ConsumablesFetched({
-    this.cache = true,
-  });
+  const ConsumablesFetched({this.cache = true});
 
   @override
   List<Object> get props => [cache];

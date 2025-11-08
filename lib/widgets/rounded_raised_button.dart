@@ -4,11 +4,7 @@ class RoundedRaisedButton extends StatelessWidget {
   final Widget? child;
   final Function? onPressed;
 
-  const RoundedRaisedButton({
-    super.key,
-    this.child,
-    this.onPressed,
-  });
+  const RoundedRaisedButton({super.key, this.child, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +35,7 @@ class SliverCenterRoundedRaisedButton extends StatelessWidget {
     return SliverFillRemaining(
       hasScrollBody: false,
       child: Center(
-        child: RoundedRaisedButton(
-          onPressed: onPressed,
-          child: child,
-        ),
+        child: RoundedRaisedButton(onPressed: onPressed, child: child),
       ),
     );
   }

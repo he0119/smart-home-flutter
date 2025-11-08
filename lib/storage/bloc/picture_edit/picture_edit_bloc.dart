@@ -12,16 +12,17 @@ part 'picture_edit_state.dart';
 class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
   final StorageRepository storageRepository;
 
-  PictureEditBloc({
-    required this.storageRepository,
-  }) : super(PictureEditInitial()) {
+  PictureEditBloc({required this.storageRepository})
+    : super(PictureEditInitial()) {
     on<PictureUpdated>(_onPictureUpdated);
     on<PictureAdded>(_onPictureAdded);
     on<PictureDeleted>(_onPictureDeleted);
   }
 
   FutureOr<void> _onPictureUpdated(
-      PictureUpdated event, Emitter<PictureEditState> emit) async {
+    PictureUpdated event,
+    Emitter<PictureEditState> emit,
+  ) async {
     emit(PictureEditInProgress());
     try {
       final picture = await storageRepository.updatePicture(
@@ -40,7 +41,9 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
   }
 
   FutureOr<void> _onPictureAdded(
-      PictureAdded event, Emitter<PictureEditState> emit) async {
+    PictureAdded event,
+    Emitter<PictureEditState> emit,
+  ) async {
     emit(PictureEditInProgress());
     try {
       final picture = await storageRepository.addPicture(
@@ -59,7 +62,9 @@ class PictureEditBloc extends Bloc<PictureEditEvent, PictureEditState> {
   }
 
   FutureOr<void> _onPictureDeleted(
-      PictureDeleted event, Emitter<PictureEditState> emit) async {
+    PictureDeleted event,
+    Emitter<PictureEditState> emit,
+  ) async {
     emit(PictureEditInProgress());
     try {
       await storageRepository.deletePicture(pictureId: event.picture.id);

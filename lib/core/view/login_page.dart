@@ -8,11 +8,7 @@ import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class LoginPage extends Page {
-  const LoginPage()
-      : super(
-          key: const ValueKey('login'),
-          name: '/login',
-        );
+  const LoginPage() : super(key: const ValueKey('login'), name: '/login');
 
   @override
   Route createRoute(BuildContext context) {
@@ -24,9 +20,7 @@ class LoginPage extends Page {
 }
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({
-    super.key,
-  });
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -50,11 +44,13 @@ class _LoginScreenState extends State<LoginScreen> {
               canLogin = false;
             }
             return canLogin
-                ? LoginForm(onTapBack: () {
-                    setState(() {
-                      canLogin = false;
-                    });
-                  })
+                ? LoginForm(
+                    onTapBack: () {
+                      setState(() {
+                        canLogin = false;
+                      });
+                    },
+                  )
                 : ApiUrlForm(
                     apiUrl: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
                     onTapNext: () {
@@ -75,11 +71,7 @@ class ApiUrlForm extends StatefulWidget {
   final String apiUrl;
   final VoidCallback onTapNext;
 
-  const ApiUrlForm({
-    super.key,
-    required this.apiUrl,
-    required this.onTapNext,
-  });
+  const ApiUrlForm({super.key, required this.apiUrl, required this.onTapNext});
 
   @override
   State<ApiUrlForm> createState() => _ApiUrlFormState();
@@ -118,9 +110,7 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: '服务器网址',
-                  ),
+                  decoration: const InputDecoration(labelText: '服务器网址'),
                   controller: _controller,
                   validator: (value) {
                     if (value!.startsWith(RegExp(r'^https?://'))) {
@@ -134,21 +124,18 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
               RoundedRaisedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    context
-                        .read<GraphQLApiClient>()
-                        .initailize(_controller!.text);
-                    context
-                        .read<SettingsController>()
-                        .updateApiUrl(_controller!.text);
+                    context.read<GraphQLApiClient>().initailize(
+                      _controller!.text,
+                    );
+                    context.read<SettingsController>().updateApiUrl(
+                      _controller!.text,
+                    );
                     widget.onTapNext();
                   }
                 },
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('下一步'),
-                    Icon(Icons.chevron_right),
-                  ],
+                  children: [Text('下一步'), Icon(Icons.chevron_right)],
                 ),
               ),
             ],
@@ -198,9 +185,9 @@ class _LoginFormState extends State<LoginForm> {
           ),
         );
       } else {
-        BlocProvider.of<AuthenticationBloc>(context).add(
-          const AuthenticationOIDCLogin(),
-        );
+        BlocProvider.of<AuthenticationBloc>(
+          context,
+        ).add(const AuthenticationOIDCLogin());
       }
     }
 
@@ -274,8 +261,10 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                     ] else ...[
                       const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 20,
+                        ),
                         child: Text(
                           '点击下方按钮将进行单点登录',
                           style: TextStyle(color: Colors.grey),

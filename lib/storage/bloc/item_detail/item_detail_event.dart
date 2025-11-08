@@ -10,9 +10,7 @@ abstract class ItemDetailEvent extends Equatable {
 class ItemDetailStarted extends ItemDetailEvent {
   final String id;
 
-  const ItemDetailStarted({
-    required this.id,
-  });
+  const ItemDetailStarted({required this.id});
 
   @override
   List<Object?> get props => [id];

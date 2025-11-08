@@ -159,8 +159,10 @@ class _SliverInfiniteListState<T> extends State<SliverInfiniteList<T>> {
 
     if (_hasRequestedNextPage) return;
 
-    final newPageRequestTriggerIndex =
-        max(0, _itemCount - widget.invisibleItemsThreshold);
+    final newPageRequestTriggerIndex = max(
+      0,
+      _itemCount - widget.invisibleItemsThreshold,
+    );
     final isBuildingTriggerIndexItem = index == newPageRequestTriggerIndex;
 
     if (isBuildingTriggerIndexItem) {

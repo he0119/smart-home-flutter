@@ -78,7 +78,8 @@ class VersionRepository {
   /// 通过 GitHub Releases 页面获取最新的版本号
   Future<Version> _getOnlineVersion() async {
     final versionRegex = RegExp(
-        r'releases/tag/v([\d.]+)(-([0-9A-Za-z\-.]+))?(\+([0-9A-Za-z\-.]+))?');
+      r'releases/tag/v([\d.]+)(-([0-9A-Za-z\-.]+))?(\+([0-9A-Za-z\-.]+))?',
+    );
     const url = 'https://github.com/he0119/smart-home-flutter/releases/latest';
     try {
       final response = await http.get(Uri.parse(url));

@@ -50,9 +50,9 @@ class CommentItem extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 showInfoSnackBar('正在删除...', duration: 1);
-                                context
-                                    .read<CommentEditBloc>()
-                                    .add(CommentDeleted(comment: comment));
+                                context.read<CommentEditBloc>().add(
+                                  CommentDeleted(comment: comment),
+                                );
                                 Navigator.of(context).pop();
                               },
                               child: const Text('是'),
@@ -66,9 +66,11 @@ class CommentItem extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => BlocProvider(
                             create: (context) => CommentEditBloc(
-                                boardRepository:
-                                    RepositoryProvider.of<BoardRepository>(
-                                        context)),
+                              boardRepository:
+                                  RepositoryProvider.of<BoardRepository>(
+                                    context,
+                                  ),
+                            ),
                             child: CommentEditPage(
                               isEditing: true,
                               comment: comment,
@@ -84,9 +86,7 @@ class CommentItem extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-          child: MyMarkdownBody(
-            data: comment.body!,
-          ),
+          child: MyMarkdownBody(data: comment.body!),
         ),
       ],
     );

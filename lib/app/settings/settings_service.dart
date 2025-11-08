@@ -154,12 +154,8 @@ class SettingsService {
       prefs.setString('loginUser', jsonEncode(user.toJson()));
       // 设置 Sentry 用户
       Sentry.configureScope(
-        (scope) => scope.setUser(
-          SentryUser(
-            id: user.username,
-            email: user.email,
-          ),
-        ),
+        (scope) =>
+            scope.setUser(SentryUser(id: user.username, email: user.email)),
       );
     }
   }

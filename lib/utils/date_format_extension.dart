@@ -40,8 +40,11 @@ extension LocalDatetimeExtension on DateTime {
     }
     // 不在同一天
     final nowDay = DateTime(localNow.year, localNow.month, localNow.day);
-    final otherDay =
-        DateTime(localOther.year, localOther.month, localOther.day);
+    final otherDay = DateTime(
+      localOther.year,
+      localOther.month,
+      localOther.day,
+    );
     final differenceDay = nowDay.difference(otherDay).inDays;
     assert(differenceDay != 0);
     if (differenceDay == 1) {

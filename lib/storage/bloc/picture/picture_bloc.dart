@@ -12,37 +12,31 @@ part 'picture_state.dart';
 class PictureBloc extends Bloc<PictureEvent, PictureState> {
   final StorageRepository storageRepository;
 
-  PictureBloc({
-    required this.storageRepository,
-  }) : super(PictureInProgress()) {
+  PictureBloc({required this.storageRepository}) : super(PictureInProgress()) {
     on<PictureStarted>(_onPictureStarted);
     on<PictureRefreshed>(_onPictureRefreshed);
   }
 
   FutureOr<void> _onPictureStarted(
-      PictureStarted event, Emitter<PictureState> emit) async {
+    PictureStarted event,
+    Emitter<PictureState> emit,
+  ) async {
     try {
-      final picture = await storageRepository.picture(
-        id: event.id,
-      );
+      final picture = await storageRepository.picture(id: event.id);
       if (picture == null) {
-        emit(PictureFailure(
-          '获取图片失败，图片不存在',
-          id: event.id,
-        ));
+        emit(PictureFailure('获取图片失败，图片不存在', id: event.id));
         return;
       }
       emit(PictureSuccess(picture: picture));
     } on MyException catch (e) {
-      emit(PictureFailure(
-        e.message,
-        id: event.id,
-      ));
+      emit(PictureFailure(e.message, id: event.id));
     }
   }
 
   FutureOr<void> _onPictureRefreshed(
-      PictureRefreshed event, Emitter<PictureState> emit) async {
+    PictureRefreshed event,
+    Emitter<PictureState> emit,
+  ) async {
     final currentState = state;
     if (currentState is PictureSuccess) {
       emit(PictureInProgress());
@@ -55,10 +49,7 @@ class PictureBloc extends Bloc<PictureEvent, PictureState> {
           emit(PictureSuccess(picture: picture));
         }
       } on MyException catch (e) {
-        emit(PictureFailure(
-          e.message,
-          id: currentState.picture.id,
-        ));
+        emit(PictureFailure(e.message, id: currentState.picture.id));
       }
     }
   }

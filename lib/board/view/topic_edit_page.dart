@@ -11,11 +11,7 @@ class TopicEditPage extends StatefulWidget {
   final bool isEditing;
   final Topic? topic;
 
-  const TopicEditPage({
-    super.key,
-    required this.isEditing,
-    this.topic,
-  });
+  const TopicEditPage({super.key, required this.isEditing, this.topic});
 
   @override
   State<TopicEditPage> createState() => _TopicEditPageState();
@@ -71,26 +67,28 @@ class _TopicEditPageState extends State<TopicEditPage> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     if (widget.isEditing) {
-                      BlocProvider.of<TopicEditBloc>(context).add(TopicUpdated(
-                        id: widget.topic!.id,
-                        title: _titleController.text,
-                        description: _descriptionController.text,
-                      ));
+                      BlocProvider.of<TopicEditBloc>(context).add(
+                        TopicUpdated(
+                          id: widget.topic!.id,
+                          title: _titleController.text,
+                          description: _descriptionController.text,
+                        ),
+                      );
                     } else {
-                      BlocProvider.of<TopicEditBloc>(context).add(TopicAdded(
-                        title: _titleController.text,
-                        description: _descriptionController.text,
-                      ));
+                      BlocProvider.of<TopicEditBloc>(context).add(
+                        TopicAdded(
+                          title: _titleController.text,
+                          description: _descriptionController.text,
+                        ),
+                      );
                     }
                     showInfoSnackBar('正在提交...', duration: 1);
                   }
                 },
               ),
-            )
+            ),
           ],
-          appbarBottom: TabBar(
-            tabs: [for (final tab in tabs) Tab(text: tab)],
-          ),
+          appbarBottom: TabBar(tabs: [for (final tab in tabs) Tab(text: tab)]),
           sliver: SliverFillRemaining(
             child: TabBarView(
               children: [
@@ -211,8 +209,9 @@ class __PreviewPageState extends State<_PreviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final loginUser =
-        context.select((SettingsController settings) => settings.loginUser);
+    final loginUser = context.select(
+      (SettingsController settings) => settings.loginUser,
+    );
     return SingleChildScrollView(
       child: TopicItem(
         topic: Topic(

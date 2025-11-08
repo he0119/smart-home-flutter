@@ -8,10 +8,7 @@ import 'package:smarthome/widgets/settings/settings.dart';
 
 class BlogSettingsPage extends Page {
   const BlogSettingsPage()
-      : super(
-          key: const ValueKey('settings/blog'),
-          name: '/settings/blog',
-        );
+    : super(key: const ValueKey('settings/blog'), name: '/settings/blog');
 
   @override
   Route createRoute(BuildContext context) {
@@ -39,9 +36,11 @@ class BlogSettingsScreen extends StatelessWidget {
                   title: '博客网址',
                   subtitle: settings.blogUrl,
                   onPressed: (context) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const BlogUrlPage(),
-                    ));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const BlogUrlPage(),
+                      ),
+                    );
                   },
                 ),
                 SettingsTile(

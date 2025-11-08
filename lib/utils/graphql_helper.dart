@@ -12,8 +12,9 @@ Map<String, dynamic> flatten(Map<String, dynamic> json) {
         final List<dynamic> items = json[key]['edges'];
         if (items.isNotEmpty) {
           // 通过递归来处理
-          final newitems =
-              items.map((dynamic e) => flatten(e['node'])).toList();
+          final newitems = items
+              .map((dynamic e) => flatten(e['node']))
+              .toList();
           json[key] = newitems;
         } else {
           json[key] = [];

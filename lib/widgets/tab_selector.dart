@@ -15,12 +15,7 @@ class TabSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return NavigationBar(
       destinations: AppTab.values
-          .map(
-            (tab) => NavigationDestination(
-              icon: tab.icon,
-              label: tab.name,
-            ),
-          )
+          .map((tab) => NavigationDestination(icon: tab.icon, label: tab.name))
           .toList(),
       selectedIndex: AppTab.values.indexOf(activeTab),
       onDestinationSelected: (index) => onTabSelected(AppTab.values[index]),

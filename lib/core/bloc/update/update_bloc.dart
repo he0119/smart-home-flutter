@@ -18,7 +18,9 @@ class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
   }
 
   FutureOr<void> _onUpdateStarted(
-      UpdateStarted event, Emitter<UpdateState> emit) async {
+    UpdateStarted event,
+    Emitter<UpdateState> emit,
+  ) async {
     // 暂时只支持 Android
     if (!kIsWeb && Platform.isAndroid) {
       try {
@@ -26,8 +28,9 @@ class UpdateBloc extends Bloc<UpdateEvent, UpdateState> {
         if (needUpdate) {
           final url = await versionRepository.updateUrl();
           final version = await versionRepository.onlineVersion;
-          emit(UpdateSuccess(
-              needUpdate: needUpdate, url: url, version: version));
+          emit(
+            UpdateSuccess(needUpdate: needUpdate, url: url, version: version),
+          );
         } else {
           emit(UpdateSuccess(needUpdate: needUpdate));
         }

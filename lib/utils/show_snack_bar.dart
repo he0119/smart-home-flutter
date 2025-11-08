@@ -4,10 +4,7 @@ import 'package:smarthome/core/core.dart';
 /// 显示消息条
 ///
 /// 显示时间 [duration] 的单位为秒，默认为 4 秒
-void showInfoSnackBar(
-  String message, {
-  int duration = 4,
-}) {
+void showInfoSnackBar(String message, {int duration = 4}) {
   scaffoldMessengerKey.currentState!.showSnackBar(
     SnackBar(
       content: Text(message),
@@ -19,10 +16,7 @@ void showInfoSnackBar(
 /// 显示红色错误提示消息条
 ///
 /// 显示时间 [duration] 的单位为秒，默认为 4 秒
-void showErrorSnackBar(
-  String message, {
-  int duration = 4,
-}) {
+void showErrorSnackBar(String message, {int duration = 4}) {
   scaffoldMessengerKey.currentState!.showSnackBar(
     SnackBar(
       content: Text(message),

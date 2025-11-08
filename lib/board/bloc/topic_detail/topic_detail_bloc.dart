@@ -16,14 +16,15 @@ enum TopicDetailStatus { initial, loading, success, failure }
 class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
   final BoardRepository boardRepository;
 
-  TopicDetailBloc({
-    required this.boardRepository,
-  }) : super(const TopicDetailState()) {
+  TopicDetailBloc({required this.boardRepository})
+    : super(const TopicDetailState()) {
     on<TopicDetailFetched>(_onTopicDetailFetched);
   }
 
   FutureOr<void> _onTopicDetailFetched(
-      TopicDetailFetched event, Emitter<TopicDetailState> emit) async {
+    TopicDetailFetched event,
+    Emitter<TopicDetailState> emit,
+  ) async {
     try {
       // 如果需要刷新，则显示加载界面
       // 因为需要请求网络最好提示用户
@@ -41,12 +42,14 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
           after: state.pageInfo.endCursor,
           cache: false,
         );
-        emit(state.copyWith(
-          status: TopicDetailStatus.success,
-          topic: results.item1,
-          comments: state.comments + results.item2,
-          pageInfo: state.pageInfo.copyWith(results.item3),
-        ));
+        emit(
+          state.copyWith(
+            status: TopicDetailStatus.success,
+            topic: results.item1,
+            comments: state.comments + results.item2,
+            pageInfo: state.pageInfo.copyWith(results.item3),
+          ),
+        );
       } else {
         // 其他情况根据设置看是否需要打开缓存，并获取第一页
         Tuple3<Topic, List<Comment>, PageInfo> results;
@@ -63,18 +66,17 @@ class TopicDetailBloc extends Bloc<TopicDetailEvent, TopicDetailState> {
             cache: event.cache,
           );
         }
-        emit(state.copyWith(
-          status: TopicDetailStatus.success,
-          topic: results.item1,
-          comments: results.item2,
-          pageInfo: results.item3,
-        ));
+        emit(
+          state.copyWith(
+            status: TopicDetailStatus.success,
+            topic: results.item1,
+            comments: results.item2,
+            pageInfo: results.item3,
+          ),
+        );
       }
     } on MyException catch (e) {
-      emit(state.copyWith(
-        status: TopicDetailStatus.failure,
-        error: e.message,
-      ));
+      emit(state.copyWith(status: TopicDetailStatus.failure, error: e.message));
     }
   }
 }

@@ -12,9 +12,7 @@ part 'topic_edit_state.dart';
 class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   final BoardRepository boardRepository;
 
-  TopicEditBloc({
-    required this.boardRepository,
-  }) : super(TopicInProgress()) {
+  TopicEditBloc({required this.boardRepository}) : super(TopicInProgress()) {
     on<TopicAdded>(_onTopicAdded);
     on<TopicUpdated>(_onTopicUpdated);
     on<TopicDeleted>(_onTopicDeleted);
@@ -25,7 +23,9 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   }
 
   FutureOr<void> _onTopicAdded(
-      TopicAdded event, Emitter<TopicEditState> emit) async {
+    TopicAdded event,
+    Emitter<TopicEditState> emit,
+  ) async {
     emit(TopicInProgress());
     try {
       final topic = await boardRepository.addTopic(
@@ -39,7 +39,9 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   }
 
   FutureOr<void> _onTopicUpdated(
-      TopicUpdated event, Emitter<TopicEditState> emit) async {
+    TopicUpdated event,
+    Emitter<TopicEditState> emit,
+  ) async {
     emit(TopicInProgress());
     try {
       final topic = await boardRepository.updateTopic(
@@ -54,7 +56,9 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   }
 
   FutureOr<void> _onTopicDeleted(
-      TopicDeleted event, Emitter<TopicEditState> emit) async {
+    TopicDeleted event,
+    Emitter<TopicEditState> emit,
+  ) async {
     emit(TopicInProgress());
     try {
       await boardRepository.deleteTopic(topicId: event.topic.id);
@@ -65,7 +69,9 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   }
 
   FutureOr<void> _onTopicClosed(
-      TopicClosed event, Emitter<TopicEditState> emit) async {
+    TopicClosed event,
+    Emitter<TopicEditState> emit,
+  ) async {
     emit(TopicInProgress());
     try {
       await boardRepository.closeTopic(topicId: event.topic.id);
@@ -76,7 +82,9 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   }
 
   FutureOr<void> _onTopicReopened(
-      TopicReopened event, Emitter<TopicEditState> emit) async {
+    TopicReopened event,
+    Emitter<TopicEditState> emit,
+  ) async {
     emit(TopicInProgress());
     try {
       await boardRepository.reopenTopic(topicId: event.topic.id);
@@ -87,7 +95,9 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   }
 
   FutureOr<void> _onTopicPinned(
-      TopicPinned event, Emitter<TopicEditState> emit) async {
+    TopicPinned event,
+    Emitter<TopicEditState> emit,
+  ) async {
     emit(TopicInProgress());
     try {
       await boardRepository.pinTopic(topicId: event.topic.id);
@@ -98,7 +108,9 @@ class TopicEditBloc extends Bloc<TopicEditEvent, TopicEditState> {
   }
 
   FutureOr<void> _onTopicUnpinned(
-      TopicUnpinned event, Emitter<TopicEditState> emit) async {
+    TopicUnpinned event,
+    Emitter<TopicEditState> emit,
+  ) async {
     emit(TopicInProgress());
     try {
       await boardRepository.unpinTopic(topicId: event.topic.id);

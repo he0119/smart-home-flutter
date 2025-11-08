@@ -16,12 +16,8 @@ class PicturePage extends Page {
   /// 图片 ID
   final String pictureId;
 
-  PicturePage({
-    required this.pictureId,
-  }) : super(
-          key: ValueKey(pictureId),
-          name: '/picture/$pictureId',
-        );
+  PicturePage({required this.pictureId})
+    : super(key: ValueKey(pictureId), name: '/picture/$pictureId');
 
   @override
   Route createRoute(BuildContext context) {
@@ -31,16 +27,16 @@ class PicturePage extends Page {
         providers: [
           BlocProvider<PictureBloc>(
             create: (context) => PictureBloc(
-              storageRepository:
-                  RepositoryProvider.of<StorageRepository>(context),
-            )..add(PictureStarted(
-                id: pictureId,
-              )),
+              storageRepository: RepositoryProvider.of<StorageRepository>(
+                context,
+              ),
+            )..add(PictureStarted(id: pictureId)),
           ),
           BlocProvider<PictureEditBloc>(
             create: (context) => PictureEditBloc(
-              storageRepository:
-                  RepositoryProvider.of<StorageRepository>(context),
+              storageRepository: RepositoryProvider.of<StorageRepository>(
+                context,
+              ),
             ),
           ),
         ],
@@ -89,11 +85,9 @@ class PictureScreen extends StatelessWidget {
     if (state is PictureFailure) {
       return ErrorMessageButton(
         onPressed: () {
-          BlocProvider.of<PictureBloc>(context).add(
-            PictureStarted(
-              id: state.id,
-            ),
-          );
+          BlocProvider.of<PictureBloc>(
+            context,
+          ).add(PictureStarted(id: state.id));
         },
         message: state.message,
       );
@@ -107,8 +101,9 @@ class PictureScreen extends StatelessWidget {
         ),
         minScale: PhotoViewComputedScale.contained,
         maxScale: PhotoViewComputedScale.covered * 5,
-        backgroundDecoration:
-            BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+        backgroundDecoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+        ),
       );
     }
     return const CenterLoadingIndicator();
@@ -139,9 +134,9 @@ class PictureScreen extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           showInfoSnackBar('正在删除...', duration: 1);
-                          BlocProvider.of<PictureEditBloc>(context).add(
-                            PictureDeleted(picture: state.picture),
-                          );
+                          BlocProvider.of<PictureEditBloc>(
+                            context,
+                          ).add(PictureDeleted(picture: state.picture));
                           Navigator.of(context).pop();
                         },
                         child: const Text('是'),
@@ -152,17 +147,12 @@ class PictureScreen extends StatelessWidget {
               }
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: PictureMenu.delete,
-                child: Text('删除'),
-              ),
+              const PopupMenuItem(value: PictureMenu.delete, child: Text('删除')),
             ],
-          )
+          ),
         ],
       );
     }
-    return AppBar(
-      title: const Text('图片'),
-    );
+    return AppBar(title: const Text('图片'));
   }
 }

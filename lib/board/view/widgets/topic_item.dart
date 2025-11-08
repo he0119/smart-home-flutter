@@ -9,11 +9,7 @@ class TopicItem extends StatelessWidget {
   final Topic topic;
   final bool showBody;
 
-  const TopicItem({
-    super.key,
-    required this.topic,
-    this.showBody = false,
-  });
+  const TopicItem({super.key, required this.topic, this.showBody = false});
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +29,7 @@ class TopicItem extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: Text(
               topic.title!,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
             ),
           ),
           ItemTitle(
@@ -46,9 +39,7 @@ class TopicItem extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: MyMarkdownBody(
-              data: topic.description!,
-            ),
+            child: MyMarkdownBody(data: topic.description!),
           ),
         ],
       );

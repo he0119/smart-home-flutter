@@ -19,21 +19,27 @@ class CommentOrderPage extends StatelessWidget {
                 SettingsTile(
                   title: '正序',
                   trailing: trailingWidget(
-                      context, false, settings.commentDescending),
+                    context,
+                    false,
+                    settings.commentDescending,
+                  ),
                   onPressed: (context) {
-                    context
-                        .read<SettingsController>()
-                        .updateCommentDescending(false);
+                    context.read<SettingsController>().updateCommentDescending(
+                      false,
+                    );
                   },
                 ),
                 SettingsTile(
                   title: '倒序',
-                  trailing:
-                      trailingWidget(context, true, settings.commentDescending),
+                  trailing: trailingWidget(
+                    context,
+                    true,
+                    settings.commentDescending,
+                  ),
                   onPressed: (context) {
-                    context
-                        .read<SettingsController>()
-                        .updateCommentDescending(true);
+                    context.read<SettingsController>().updateCommentDescending(
+                      true,
+                    );
                   },
                 ),
               ],

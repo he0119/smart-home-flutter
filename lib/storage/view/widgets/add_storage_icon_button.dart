@@ -8,10 +8,7 @@ import 'package:smarthome/storage/view/storage_edit_page.dart';
 class AddStorageIconButton extends StatelessWidget {
   final Storage? storage;
 
-  const AddStorageIconButton({
-    super.key,
-    this.storage,
-  });
+  const AddStorageIconButton({super.key, this.storage});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +23,11 @@ class AddStorageIconButton extends StatelessWidget {
             MaterialPageRoute(
               builder: (_) => BlocProvider<StorageEditBloc>(
                 create: (_) => StorageEditBloc(
-                  storageRepository:
-                      RepositoryProvider.of<StorageRepository>(context),
+                  storageRepository: RepositoryProvider.of<StorageRepository>(
+                    context,
+                  ),
                 ),
-                child: StorageEditPage(
-                  isEditing: false,
-                  storage: storage,
-                ),
+                child: StorageEditPage(isEditing: false, storage: storage),
               ),
             ),
           );

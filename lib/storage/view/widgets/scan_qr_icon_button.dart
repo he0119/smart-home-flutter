@@ -17,11 +17,9 @@ class ScanQRIconButton extends StatelessWidget {
       child: IconButton(
         icon: const Icon(Icons.qr_code),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => const ScanQRPage(),
-            ),
-          );
+          Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (_) => const ScanQRPage()));
         },
       ),
     );
@@ -76,8 +74,9 @@ class ScannedBarcodeLabel extends StatelessWidget {
       builder: (context, snapshot) {
         final List<Barcode> scannedBarcodes = snapshot.data?.barcodes ?? [];
 
-        final String values =
-            scannedBarcodes.map((e) => e.displayValue).join('\n');
+        final String values = scannedBarcodes
+            .map((e) => e.displayValue)
+            .join('\n');
 
         if (scannedBarcodes.isEmpty) {
           return const Text(
@@ -117,10 +116,8 @@ class _ScanQRPageState extends State<ScanQRPage> {
 
   BoxFit boxFit = BoxFit.contain;
 
-  MobileScannerController initController() => MobileScannerController(
-        autoStart: true,
-        autoZoom: true,
-      );
+  MobileScannerController initController() =>
+      MobileScannerController(autoStart: true, autoZoom: true);
 
   @override
   void initState() {
@@ -180,8 +177,9 @@ class _ScanQRPageState extends State<ScanQRPage> {
                   jumpedToStorageDetail = true;
                 });
 
-                MyRouterDelegate.of(context)
-                    .push(StorageDetailPage(storageId: storageId));
+                MyRouterDelegate.of(
+                  context,
+                ).push(StorageDetailPage(storageId: storageId));
 
                 await controller?.stop();
               }
@@ -189,10 +187,7 @@ class _ScanQRPageState extends State<ScanQRPage> {
           ),
           // The scanWindow is not supported on the web.
           if (useScanWindow)
-            ScanWindowOverlay(
-              scanWindow: scanWindow,
-              controller: controller!,
-            ),
+            ScanWindowOverlay(scanWindow: scanWindow, controller: controller!),
         ],
       ),
     );

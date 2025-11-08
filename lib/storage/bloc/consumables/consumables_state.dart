@@ -28,10 +28,7 @@ class ConsumablesSuccess extends ConsumablesState {
   final List<Item> items;
   final PageInfo? pageInfo;
 
-  const ConsumablesSuccess({
-    required this.items,
-    this.pageInfo,
-  });
+  const ConsumablesSuccess({required this.items, this.pageInfo});
 
   bool get hasReachedMax => !pageInfo!.hasNextPage;
 
@@ -39,6 +36,7 @@ class ConsumablesSuccess extends ConsumablesState {
   List<Object?> get props => [items, pageInfo];
 
   @override
-  String toString() => 'ConsumablesSuccess'
+  String toString() =>
+      'ConsumablesSuccess'
       '(items: ${items.length}, hasReachedMax: $hasReachedMax)';
 }

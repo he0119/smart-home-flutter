@@ -15,11 +15,7 @@ class SliverWebview extends StatelessWidget {
     controller.initialize();
     return ValueListenableBuilder<double>(
       valueListenable: controller.scrollHeightNotifier,
-      builder: (
-        BuildContext context,
-        double scrollHeight,
-        Widget? child,
-      ) {
+      builder: (BuildContext context, double scrollHeight, Widget? child) {
         return SliverToNestedScrollBoxAdapter(
           childExtent: scrollHeight,
           onScrollOffsetChanged: (double scrollOffset) {
@@ -108,11 +104,7 @@ class NestedWebviewController {
   }
 }
 
-enum WebViewStatus {
-  loading,
-  failed,
-  completed,
-}
+enum WebViewStatus { loading, failed, completed }
 
 const String scrollHeightJs = '''(function() {
   var height = 0;

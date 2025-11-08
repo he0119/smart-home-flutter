@@ -18,9 +18,8 @@ import 'package:smarthome/widgets/markdown.dart';
 class TopicDetailPage extends Page {
   final String topicId;
 
-  TopicDetailPage({
-    required this.topicId,
-  }) : super(key: ValueKey(topicId), name: '/topic/$topicId');
+  TopicDetailPage({required this.topicId})
+    : super(key: ValueKey(topicId), name: '/topic/$topicId');
 
   @override
   Route createRoute(BuildContext context) {
@@ -28,7 +27,8 @@ class TopicDetailPage extends Page {
       settings: this,
       builder: (BuildContext context) {
         final descending = context.select(
-            (SettingsController settings) => settings.commentDescending);
+          (SettingsController settings) => settings.commentDescending,
+        );
         return MultiBlocProvider(
           providers: [
             BlocProvider<TopicDetailBloc>(
@@ -45,11 +45,9 @@ class TopicDetailPage extends Page {
               create: (context) => CommentEditBloc(
                 boardRepository: context.read<BoardRepository>(),
               ),
-            )
+            ),
           ],
-          child: TopicDetailScreen(
-            topicId: topicId,
-          ),
+          child: TopicDetailScreen(topicId: topicId),
         );
       },
     );
@@ -59,17 +57,16 @@ class TopicDetailPage extends Page {
 class TopicDetailScreen extends StatelessWidget {
   final String topicId;
 
-  const TopicDetailScreen({
-    super.key,
-    required this.topicId,
-  });
+  const TopicDetailScreen({super.key, required this.topicId});
 
   @override
   Widget build(BuildContext context) {
-    final loginUser =
-        context.select((SettingsController settings) => settings.loginUser);
-    final descending = context
-        .select((SettingsController settings) => settings.commentDescending);
+    final loginUser = context.select(
+      (SettingsController settings) => settings.loginUser,
+    );
+    final descending = context.select(
+      (SettingsController settings) => settings.commentDescending,
+    );
     return MultiBlocListener(
       listeners: [
         BlocListener<TopicEditBloc, TopicEditState>(
@@ -98,11 +95,13 @@ class TopicDetailScreen extends StatelessWidget {
         BlocListener<CommentEditBloc, CommentEditState>(
           listener: (context, state) {
             if (state is CommentDeleteSuccess) {
-              context.read<TopicDetailBloc>().add(TopicDetailFetched(
-                    id: topicId,
-                    descending: descending,
-                    cache: false,
-                  ));
+              context.read<TopicDetailBloc>().add(
+                TopicDetailFetched(
+                  id: topicId,
+                  descending: descending,
+                  cache: false,
+                ),
+              );
               showInfoSnackBar('评论删除成功');
             }
             if (state is CommentFailure) {
@@ -124,7 +123,8 @@ class TopicDetailScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (_) => BlocProvider(
                           create: (context) => TopicEditBloc(
-                              boardRepository: context.read<BoardRepository>()),
+                            boardRepository: context.read<BoardRepository>(),
+                          ),
                           child: TopicEditPage(
                             isEditing: true,
                             topic: state.topic,
@@ -135,7 +135,10 @@ class TopicDetailScreen extends StatelessWidget {
                     if (r == true) {
                       topicDetailBloc.add(
                         TopicDetailFetched(
-                            id: topicId, descending: descending, cache: false),
+                          id: topicId,
+                          descending: descending,
+                          cache: false,
+                        ),
                       );
                     }
                   }
@@ -157,9 +160,9 @@ class TopicDetailScreen extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 showInfoSnackBar('正在删除...', duration: 1);
-                                context
-                                    .read<TopicEditBloc>()
-                                    .add(TopicDeleted(topic: state.topic));
+                                context.read<TopicEditBloc>().add(
+                                  TopicDeleted(topic: state.topic),
+                                );
                                 Navigator.of(context).pop();
                               },
                               child: const Text('是'),
@@ -186,9 +189,9 @@ class TopicDetailScreen extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 showInfoSnackBar('正在置顶...', duration: 1);
-                                context
-                                    .read<TopicEditBloc>()
-                                    .add(TopicPinned(topic: state.topic));
+                                context.read<TopicEditBloc>().add(
+                                  TopicPinned(topic: state.topic),
+                                );
                                 Navigator.of(context).pop();
                               },
                               child: const Text('是'),
@@ -215,9 +218,9 @@ class TopicDetailScreen extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 showInfoSnackBar('正在取消...', duration: 1);
-                                context
-                                    .read<TopicEditBloc>()
-                                    .add(TopicUnpinned(topic: state.topic));
+                                context.read<TopicEditBloc>().add(
+                                  TopicUnpinned(topic: state.topic),
+                                );
                                 Navigator.of(context).pop();
                               },
                               child: const Text('是'),
@@ -244,9 +247,9 @@ class TopicDetailScreen extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 showInfoSnackBar('正在关闭...', duration: 1);
-                                context
-                                    .read<TopicEditBloc>()
-                                    .add(TopicClosed(topic: state.topic));
+                                context.read<TopicEditBloc>().add(
+                                  TopicClosed(topic: state.topic),
+                                );
                                 Navigator.of(context).pop();
                               },
                               child: const Text('是'),
@@ -273,9 +276,9 @@ class TopicDetailScreen extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 showInfoSnackBar('正在开启...', duration: 1);
-                                context
-                                    .read<TopicEditBloc>()
-                                    .add(TopicReopened(topic: state.topic));
+                                context.read<TopicEditBloc>().add(
+                                  TopicReopened(topic: state.topic),
+                                );
                                 Navigator.of(context).pop();
                               },
                               child: const Text('是'),
@@ -334,9 +337,7 @@ class TopicDetailScreen extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                        child: MyMarkdownBody(
-                          data: state.topic.description!,
-                        ),
+                        child: MyMarkdownBody(data: state.topic.description!),
                       ),
                     ],
                   ),
@@ -351,9 +352,8 @@ class TopicDetailScreen extends StatelessWidget {
                 SliverErrorMessageButton(
                   onPressed: () {
                     context.read<TopicDetailBloc>().add(
-                          TopicDetailFetched(
-                              id: topicId, descending: descending),
-                        );
+                      TopicDetailFetched(id: topicId, descending: descending),
+                    );
                   },
                   message: state.error,
                 ),
@@ -366,30 +366,37 @@ class TopicDetailScreen extends StatelessWidget {
                     comment: item,
                     showMenu: loginUser == item.user,
                     onEdit: () {
-                      context.read<TopicDetailBloc>().add(TopicDetailFetched(
-                            id: state.topic.id,
-                            descending: descending,
-                          ));
+                      context.read<TopicDetailBloc>().add(
+                        TopicDetailFetched(
+                          id: state.topic.id,
+                          descending: descending,
+                        ),
+                      );
                     },
                   ),
                   onFetch: () {
-                    context.read<TopicDetailBloc>().add(TopicDetailFetched(
-                          id: state.topic.id,
-                          descending: descending,
-                          cache: false,
-                        ));
+                    context.read<TopicDetailBloc>().add(
+                      TopicDetailFetched(
+                        id: state.topic.id,
+                        descending: descending,
+                        cache: false,
+                      ),
+                    );
                   },
                   hasReachedMax: state.hasReachedMax,
-                )
+                ),
             ],
             onRefresh: () async {
-              context.read<TopicDetailBloc>().add(TopicDetailFetched(
-                    id: state.topic.id,
-                    descending: descending,
-                    cache: false,
-                  ));
+              context.read<TopicDetailBloc>().add(
+                TopicDetailFetched(
+                  id: state.topic.id,
+                  descending: descending,
+                  cache: false,
+                ),
+              );
             },
-            floatingActionButton: (state.status == TopicDetailStatus.success &&
+            floatingActionButton:
+                (state.status == TopicDetailStatus.success &&
                     state.topic.isClosed!)
                 ? null
                 : FloatingActionButton(
@@ -402,8 +409,8 @@ class TopicDetailScreen extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => BlocProvider(
                             create: (context) => CommentEditBloc(
-                                boardRepository:
-                                    context.read<BoardRepository>()),
+                              boardRepository: context.read<BoardRepository>(),
+                            ),
                             child: CommentEditPage(
                               isEditing: false,
                               topic: state.topic,
@@ -449,10 +456,7 @@ class CommentOrder extends StatelessWidget {
           const Divider(),
           Row(
             children: <Widget>[
-              const Text(
-                '全部评论',
-                style: TextStyle(fontSize: 16),
-              ),
+              const Text('全部评论', style: TextStyle(fontSize: 16)),
               const Spacer(),
               PopupMenuButton(
                 tooltip: '评论排序',
@@ -467,24 +471,18 @@ class CommentOrder extends StatelessWidget {
                   ),
                 ),
                 onSelected: (dynamic value) {
-                  context
-                      .read<SettingsController>()
-                      .updateCommentDescending(value);
+                  context.read<SettingsController>().updateCommentDescending(
+                    value,
+                  );
                   context.read<TopicDetailBloc>().add(
-                        TopicDetailFetched(id: topicId, descending: value),
-                      );
+                    TopicDetailFetched(id: topicId, descending: value),
+                  );
                 },
                 itemBuilder: (context) => <PopupMenuItem<bool>>[
-                  const PopupMenuItem(
-                    value: false,
-                    child: Text('正序'),
-                  ),
-                  const PopupMenuItem(
-                    value: true,
-                    child: Text('倒序'),
-                  ),
+                  const PopupMenuItem(value: false, child: Text('正序')),
+                  const PopupMenuItem(value: true, child: Text('倒序')),
                 ],
-              )
+              ),
             ],
           ),
           const Divider(),

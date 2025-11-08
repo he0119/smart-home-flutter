@@ -17,7 +17,9 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   }
 
   FutureOr<void> _onSessionFetched(
-      SessionFetched event, Emitter<SessionState> emit) async {
+    SessionFetched event,
+    Emitter<SessionState> emit,
+  ) async {
     try {
       final sessions = await userRepository.sessions();
       emit(SessionSuccess(sessions: sessions));
@@ -27,7 +29,9 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   }
 
   FutureOr<void> _onSessionDeleted(
-      SessionDeleted event, Emitter<SessionState> emit) async {
+    SessionDeleted event,
+    Emitter<SessionState> emit,
+  ) async {
     try {
       await userRepository.deleteSession(event.id);
       final sessions = await userRepository.sessions();

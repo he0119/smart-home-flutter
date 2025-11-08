@@ -33,10 +33,7 @@ class RecycleBinSuccess extends RecycleBinState {
   final List<Item> items;
   final PageInfo pageInfo;
 
-  const RecycleBinSuccess({
-    required this.items,
-    required this.pageInfo,
-  });
+  const RecycleBinSuccess({required this.items, required this.pageInfo});
 
   bool get hasReachedMax => !pageInfo.hasNextPage;
 
@@ -44,6 +41,7 @@ class RecycleBinSuccess extends RecycleBinState {
   List<Object> get props => [items, pageInfo];
 
   @override
-  String toString() => 'RecycleBinSuccess'
+  String toString() =>
+      'RecycleBinSuccess'
       '(items: ${items.length}, hasReachedMax: $hasReachedMax)';
 }

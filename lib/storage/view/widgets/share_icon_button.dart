@@ -35,15 +35,11 @@ class ShareQrIconButton extends StatelessWidget {
           final shareResult = await SharePlus.instance.share(params);
           if (shareResult.status == ShareResultStatus.success) {
             scaffoldMessengerKey.currentState!.showSnackBar(
-              const SnackBar(
-                content: Text('分享成功'),
-              ),
+              const SnackBar(content: Text('分享成功')),
             );
           } else {
             scaffoldMessengerKey.currentState!.showSnackBar(
-              const SnackBar(
-                content: Text('分享失败'),
-              ),
+              const SnackBar(content: Text('分享失败')),
             );
           }
         },

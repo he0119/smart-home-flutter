@@ -16,10 +16,12 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final adminUrl =
-        context.select((SettingsController settings) => settings.adminUrl);
-    final loginUser =
-        context.select((SettingsController settings) => settings.loginUser);
+    final adminUrl = context.select(
+      (SettingsController settings) => settings.adminUrl,
+    );
+    final loginUser = context.select(
+      (SettingsController settings) => settings.loginUser,
+    );
     return Drawer(
       child: ListView(
         children: [
@@ -63,8 +65,9 @@ class MyDrawer extends StatelessWidget {
             title: const Text('关于'),
             onTap: () async {
               final currentVersion =
-                  await RepositoryProvider.of<VersionRepository>(context)
-                      .currentVersion;
+                  await RepositoryProvider.of<VersionRepository>(
+                    context,
+                  ).currentVersion;
               if (context.mounted) {
                 showAboutDialog(
                   context: context,
@@ -95,9 +98,9 @@ class MyDrawer extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        context
-                            .read<AuthenticationBloc>()
-                            .add(AuthenticationLogout());
+                        context.read<AuthenticationBloc>().add(
+                          AuthenticationLogout(),
+                        );
                         Navigator.of(context).pop();
                       },
                       child: const Text('是'),

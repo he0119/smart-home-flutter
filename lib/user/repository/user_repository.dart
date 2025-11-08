@@ -34,9 +34,7 @@ class UserRepository {
     final options = MutationOptions(
       document: opi(gql(deleteSessionMutation)),
       variables: {
-        'input': {
-          'id': id,
-        },
+        'input': {'id': id},
       },
     );
     await graphqlApiClient.mutate(options);

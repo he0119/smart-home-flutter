@@ -10,9 +10,7 @@ abstract class PictureEvent extends Equatable {
 class PictureStarted extends PictureEvent {
   final String id;
 
-  const PictureStarted({
-    required this.id,
-  });
+  const PictureStarted({required this.id});
 
   @override
   List<Object> get props => [id];

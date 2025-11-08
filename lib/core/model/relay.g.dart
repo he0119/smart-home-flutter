@@ -7,15 +7,15 @@ part of 'relay.dart';
 // **************************************************************************
 
 PageInfo _$PageInfoFromJson(Map<String, dynamic> json) => PageInfo(
-      hasNextPage: json['hasNextPage'] as bool,
-      hasPreviousPage: json['hasPreviousPage'] as bool?,
-      startCursor: json['startCursor'] as String?,
-      endCursor: json['endCursor'] as String?,
-    );
+  hasNextPage: json['hasNextPage'] as bool,
+  hasPreviousPage: json['hasPreviousPage'] as bool?,
+  startCursor: json['startCursor'] as String?,
+  endCursor: json['endCursor'] as String?,
+);
 
 Map<String, dynamic> _$PageInfoToJson(PageInfo instance) => <String, dynamic>{
-      'hasNextPage': instance.hasNextPage,
-      'hasPreviousPage': instance.hasPreviousPage,
-      'startCursor': instance.startCursor,
-      'endCursor': instance.endCursor,
-    };
+  'hasNextPage': instance.hasNextPage,
+  'hasPreviousPage': instance.hasPreviousPage,
+  'startCursor': instance.startCursor,
+  'endCursor': instance.endCursor,
+};

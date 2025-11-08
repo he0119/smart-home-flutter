@@ -23,16 +23,18 @@ class RecycleBinPage extends Page {
         providers: [
           BlocProvider<RecycleBinBloc>(
             create: (context) => RecycleBinBloc(
-              storageRepository:
-                  RepositoryProvider.of<StorageRepository>(context),
+              storageRepository: RepositoryProvider.of<StorageRepository>(
+                context,
+              ),
             )..add(const RecycleBinFetched()),
           ),
           BlocProvider<ItemEditBloc>(
             create: (context) => ItemEditBloc(
-              storageRepository:
-                  RepositoryProvider.of<StorageRepository>(context),
+              storageRepository: RepositoryProvider.of<StorageRepository>(
+                context,
+              ),
             ),
-          )
+          ),
         ],
         child: const RecycleBinScreen(),
       ),
@@ -41,9 +43,7 @@ class RecycleBinPage extends Page {
 }
 
 class RecycleBinScreen extends StatelessWidget {
-  const RecycleBinScreen({
-    super.key,
-  });
+  const RecycleBinScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,41 +52,41 @@ class RecycleBinScreen extends StatelessWidget {
         return MySliverScaffold(
           title: const Text('回收站'),
           onRefresh: () async {
-            BlocProvider.of<RecycleBinBloc>(context)
-                .add(const RecycleBinFetched(cache: false));
+            BlocProvider.of<RecycleBinBloc>(
+              context,
+            ).add(const RecycleBinFetched(cache: false));
           },
           slivers: [
             if (state is RecycleBinFailure)
               SliverErrorMessageButton(
                 message: state.message,
                 onPressed: () {
-                  BlocProvider.of<ConsumablesBloc>(context)
-                      .add(const ConsumablesFetched(cache: false));
+                  BlocProvider.of<ConsumablesBloc>(
+                    context,
+                  ).add(const ConsumablesFetched(cache: false));
                 },
               ),
             if (state is RecycleBinInProgress)
               const SliverCenterLoadingIndicator(),
             if (state is RecycleBinSuccess)
               BlocListener<ItemEditBloc, ItemEditState>(
-                  listener: (context, state) {
-                    if (state is ItemRestoreSuccess) {
-                      showInfoSnackBar(
-                        '物品 ${state.item.name} 恢复成功',
-                        duration: 2,
-                      );
-                    }
-                    if (state is ItemEditFailure) {
-                      showErrorSnackBar(state.message);
-                    }
-                  },
-                  child: SliverInfiniteList(
-                    itemBuilder: _buildItem,
-                    items: state.items,
-                    hasReachedMax: state.hasReachedMax,
-                    onFetch: () => context
-                        .read<RecycleBinBloc>()
-                        .add(const RecycleBinFetched()),
-                  )),
+                listener: (context, state) {
+                  if (state is ItemRestoreSuccess) {
+                    showInfoSnackBar('物品 ${state.item.name} 恢复成功', duration: 2);
+                  }
+                  if (state is ItemEditFailure) {
+                    showErrorSnackBar(state.message);
+                  }
+                },
+                child: SliverInfiniteList(
+                  itemBuilder: _buildItem,
+                  items: state.items,
+                  hasReachedMax: state.hasReachedMax,
+                  onFetch: () => context.read<RecycleBinBloc>().add(
+                    const RecycleBinFetched(),
+                  ),
+                ),
+              ),
           ],
         );
       },
@@ -103,9 +103,7 @@ Widget _buildItem(BuildContext context, Item item) {
           text: item.name,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        TextSpan(
-          text: '（${item.deletedAt!.differenceFromNowStr()}删除）',
-        ),
+        TextSpan(text: '（${item.deletedAt!.differenceFromNowStr()}删除）'),
       ],
     ),
   );
@@ -136,8 +134,9 @@ Widget _buildItem(BuildContext context, Item item) {
                 ),
                 TextButton(
                   onPressed: () {
-                    BlocProvider.of<ItemEditBloc>(context)
-                        .add(ItemRestored(item: item));
+                    BlocProvider.of<ItemEditBloc>(
+                      context,
+                    ).add(ItemRestored(item: item));
                     showInfoSnackBar('正在恢复...', duration: 1);
                     Navigator.of(context).pop();
                   },

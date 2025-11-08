@@ -19,7 +19,9 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
   }
 
   FutureOr<void> _onCommentAdded(
-      CommentAdded event, Emitter<CommentEditState> emit) async {
+    CommentAdded event,
+    Emitter<CommentEditState> emit,
+  ) async {
     emit(CommentInProgress());
     try {
       final comment = await boardRepository.addComment(
@@ -33,7 +35,9 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
   }
 
   FutureOr<void> _onCommentUpdated(
-      CommentUpdated event, Emitter<CommentEditState> emit) async {
+    CommentUpdated event,
+    Emitter<CommentEditState> emit,
+  ) async {
     emit(CommentInProgress());
     try {
       final comment = await boardRepository.updateComment(
@@ -47,7 +51,9 @@ class CommentEditBloc extends Bloc<CommentEditEvent, CommentEditState> {
   }
 
   FutureOr<void> _onCommentDeleted(
-      CommentDeleted event, Emitter<CommentEditState> emit) async {
+    CommentDeleted event,
+    Emitter<CommentEditState> emit,
+  ) async {
     emit(CommentInProgress());
     try {
       await boardRepository.deleteComment(commentId: event.comment.id);

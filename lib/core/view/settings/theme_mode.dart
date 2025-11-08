@@ -20,31 +20,40 @@ class ThemeModePage extends StatelessWidget {
                 SettingsTile(
                   title: ThemeMode.system.toReadable(),
                   trailing: trailingWidget(
-                      context, ThemeMode.system, settings.themeMode),
+                    context,
+                    ThemeMode.system,
+                    settings.themeMode,
+                  ),
                   onPressed: (context) {
-                    context
-                        .read<SettingsController>()
-                        .updateThemeMode(ThemeMode.system);
+                    context.read<SettingsController>().updateThemeMode(
+                      ThemeMode.system,
+                    );
                   },
                 ),
                 SettingsTile(
                   title: ThemeMode.light.toReadable(),
                   trailing: trailingWidget(
-                      context, ThemeMode.light, settings.themeMode),
+                    context,
+                    ThemeMode.light,
+                    settings.themeMode,
+                  ),
                   onPressed: (context) {
-                    context
-                        .read<SettingsController>()
-                        .updateThemeMode(ThemeMode.light);
+                    context.read<SettingsController>().updateThemeMode(
+                      ThemeMode.light,
+                    );
                   },
                 ),
                 SettingsTile(
                   title: ThemeMode.dark.toReadable(),
                   trailing: trailingWidget(
-                      context, ThemeMode.dark, settings.themeMode),
+                    context,
+                    ThemeMode.dark,
+                    settings.themeMode,
+                  ),
                   onPressed: (context) {
-                    context
-                        .read<SettingsController>()
-                        .updateThemeMode(ThemeMode.dark);
+                    context.read<SettingsController>().updateThemeMode(
+                      ThemeMode.dark,
+                    );
                   },
                 ),
               ],
@@ -56,7 +65,10 @@ class ThemeModePage extends StatelessWidget {
   }
 
   Widget trailingWidget(
-      BuildContext context, ThemeMode appTab, ThemeMode current) {
+    BuildContext context,
+    ThemeMode appTab,
+    ThemeMode current,
+  ) {
     return (appTab == current)
         ? Icon(Icons.check, color: Theme.of(context).colorScheme.secondary)
         : const Icon(null);

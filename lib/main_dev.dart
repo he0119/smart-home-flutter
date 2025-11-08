@@ -10,8 +10,10 @@ Future<void> main() async {
     // FIXME: 重新用回 print，因为 dart:developer 的 log 不会在网页版显示
     // https://github.com/flutter/flutter/issues/47913
     // ignore: avoid_print
-    print('[${record.level.name}] ${record.loggerName}'
-        ' -- ${record.time} -- ${record.message}');
+    print(
+      '[${record.level.name}] ${record.loggerName}'
+      ' -- ${record.time} -- ${record.message}',
+    );
   });
 
   // 应用的默认配置

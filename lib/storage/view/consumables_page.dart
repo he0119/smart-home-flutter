@@ -29,9 +29,7 @@ class ConsumablesPage extends Page {
 }
 
 class ConsumablesScreen extends StatelessWidget {
-  const ConsumablesScreen({
-    super.key,
-  });
+  const ConsumablesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +42,9 @@ class ConsumablesScreen extends StatelessWidget {
               SliverErrorMessageButton(
                 message: state.message,
                 onPressed: () {
-                  BlocProvider.of<ConsumablesBloc>(context)
-                      .add(const ConsumablesFetched(cache: false));
+                  BlocProvider.of<ConsumablesBloc>(
+                    context,
+                  ).add(const ConsumablesFetched(cache: false));
                 },
               ),
             if (state is ConsumablesSuccess)
@@ -53,16 +52,17 @@ class ConsumablesScreen extends StatelessWidget {
                 itemBuilder: _buildItem,
                 items: state.items,
                 hasReachedMax: state.hasReachedMax,
-                onFetch: () => context
-                    .read<ConsumablesBloc>()
-                    .add(const ConsumablesFetched()),
+                onFetch: () => context.read<ConsumablesBloc>().add(
+                  const ConsumablesFetched(),
+                ),
               ),
             if (state is ConsumablesInProgress)
               const SliverCenterLoadingIndicator(),
           ],
           onRefresh: () async {
-            BlocProvider.of<ConsumablesBloc>(context)
-                .add(const ConsumablesFetched(cache: false));
+            BlocProvider.of<ConsumablesBloc>(
+              context,
+            ).add(const ConsumablesFetched(cache: false));
           },
         );
       },
@@ -90,9 +90,9 @@ Widget _buildItem(BuildContext context, Item item) {
                     ? Text(consumable.expiredAt!.differenceFromNowStr())
                     : null,
                 onTap: () {
-                  MyRouterDelegate.of(context).push(
-                    ItemDetailPage(itemId: consumable.id),
-                  );
+                  MyRouterDelegate.of(
+                    context,
+                  ).push(ItemDetailPage(itemId: consumable.id));
                 },
                 trailing: Text(consumable.number.toString()),
               ),

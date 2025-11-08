@@ -4,11 +4,7 @@ class SettingsSection extends StatelessWidget {
   final String? title;
   final List<Widget> tiles;
 
-  const SettingsSection({
-    super.key,
-    this.title,
-    required this.tiles,
-  });
+  const SettingsSection({super.key, this.title, required this.tiles});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +17,9 @@ class SettingsSection extends StatelessWidget {
             child: Text(
               title!,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.bold,
-                  ),
+                color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ListView.builder(

@@ -12,16 +12,17 @@ part 'storage_edit_state.dart';
 class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
   final StorageRepository storageRepository;
 
-  StorageEditBloc({
-    required this.storageRepository,
-  }) : super(StorageEditInitial()) {
+  StorageEditBloc({required this.storageRepository})
+    : super(StorageEditInitial()) {
     on<StorageUpdated>(_onStorageUpdated);
     on<StorageAdded>(_onStorageAdded);
     on<StorageDeleted>(_onStorageDeleted);
   }
 
   FutureOr<void> _onStorageUpdated(
-      StorageUpdated event, Emitter<StorageEditState> emit) async {
+    StorageUpdated event,
+    Emitter<StorageEditState> emit,
+  ) async {
     emit(StorageEditInProgress());
     try {
       final storage = await storageRepository.updateStorage(
@@ -37,7 +38,9 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
   }
 
   FutureOr<void> _onStorageAdded(
-      StorageAdded event, Emitter<StorageEditState> emit) async {
+    StorageAdded event,
+    Emitter<StorageEditState> emit,
+  ) async {
     emit(StorageEditInProgress());
     try {
       final storage = await storageRepository.addStorage(
@@ -52,7 +55,9 @@ class StorageEditBloc extends Bloc<StorageEditEvent, StorageEditState> {
   }
 
   FutureOr<void> _onStorageDeleted(
-      StorageDeleted event, Emitter<StorageEditState> emit) async {
+    StorageDeleted event,
+    Emitter<StorageEditState> emit,
+  ) async {
     emit(StorageEditInProgress());
     try {
       await storageRepository.deleteStorage(storageId: event.storage.id);

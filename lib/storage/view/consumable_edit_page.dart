@@ -11,10 +11,7 @@ import 'package:smarthome/widgets/rounded_raised_button.dart';
 class ConsumableEditPage extends StatefulWidget {
   final Item item;
 
-  const ConsumableEditPage({
-    super.key,
-    required this.item,
-  });
+  const ConsumableEditPage({super.key, required this.item});
 
   @override
   State<ConsumableEditPage> createState() => _ConsumableEditPageState();
@@ -56,9 +53,7 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
           child: Column(
             children: <Widget>[
               if (current.consumables!.isEmpty)
-                const ListTile(
-                  title: Text('无耗材'),
-                ),
+                const ListTile(title: Text('无耗材')),
               for (Item consumable in current.consumables!)
                 ListTile(
                   title: Text(consumable.name),
@@ -82,8 +77,9 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
                   label: '耗材',
                   items: (text, loadProps) async {
                     final items =
-                        await RepositoryProvider.of<StorageRepository>(context)
-                            .items(key: text, cache: false);
+                        await RepositoryProvider.of<StorageRepository>(
+                          context,
+                        ).items(key: text, cache: false);
                     return items;
                   },
                   showClearButton: true,
@@ -99,16 +95,16 @@ class _ConsumableEditPageState extends State<ConsumableEditPage> {
                 child: RoundedRaisedButton(
                   onPressed:
                       (state is! ItemEditInProgress && selectedItem != null)
-                          ? () {
-                              BlocProvider.of<ItemEditBloc>(context).add(
-                                ConsumableAdded(
-                                  item: widget.item,
-                                  consumables: [selectedItem],
-                                ),
-                              );
-                              showInfoSnackBar('正在添加...', duration: 1);
-                            }
-                          : null,
+                      ? () {
+                          BlocProvider.of<ItemEditBloc>(context).add(
+                            ConsumableAdded(
+                              item: widget.item,
+                              consumables: [selectedItem],
+                            ),
+                          );
+                          showInfoSnackBar('正在添加...', duration: 1);
+                        }
+                      : null,
                   child: const Text('添加'),
                 ),
               ),

@@ -11,9 +11,9 @@ class MyTransitionDelegate extends TransitionDelegate<void> {
   Iterable<RouteTransitionRecord> resolve({
     required List<RouteTransitionRecord> newPageRouteHistory,
     Map<RouteTransitionRecord?, RouteTransitionRecord>?
-        locationToExitingPageRoute,
+    locationToExitingPageRoute,
     Map<RouteTransitionRecord?, List<RouteTransitionRecord>>?
-        pageRouteToPagelessRoutes,
+    pageRouteToPagelessRoutes,
   }) {
     final results = <RouteTransitionRecord>[];
     // 主页之间的切换，不需要动画
@@ -39,11 +39,13 @@ class MyTransitionDelegate extends TransitionDelegate<void> {
     }
 
     // 如果不是特殊情况，按照默认处理
-    results.addAll(defaultTransitionDelegate.resolve(
-      newPageRouteHistory: newPageRouteHistory,
-      locationToExitingPageRoute: locationToExitingPageRoute!,
-      pageRouteToPagelessRoutes: pageRouteToPagelessRoutes!,
-    ));
+    results.addAll(
+      defaultTransitionDelegate.resolve(
+        newPageRouteHistory: newPageRouteHistory,
+        locationToExitingPageRoute: locationToExitingPageRoute!,
+        pageRouteToPagelessRoutes: pageRouteToPagelessRoutes!,
+      ),
+    );
 
     return results;
   }

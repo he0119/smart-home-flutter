@@ -16,10 +16,7 @@ class StorageHomeFailure extends StorageHomeState {
   final String message;
   final ItemType itemType;
 
-  const StorageHomeFailure(
-    this.message, {
-    required this.itemType,
-  });
+  const StorageHomeFailure(this.message, {required this.itemType});
 
   @override
   List<Object> get props => [message, itemType];
@@ -59,13 +56,13 @@ class StorageHomeSuccess extends StorageHomeState {
 
   @override
   List<Object?> get props => [
-        recentlyCreatedItems,
-        recentlyEditedItems,
-        expiredItems,
-        nearExpiredItems,
-        itemType,
-        pageInfo,
-      ];
+    recentlyCreatedItems,
+    recentlyEditedItems,
+    expiredItems,
+    nearExpiredItems,
+    itemType,
+    pageInfo,
+  ];
 
   @override
   String toString() =>

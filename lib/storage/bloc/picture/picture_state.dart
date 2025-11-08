@@ -16,10 +16,7 @@ class PictureFailure extends PictureState {
   final String message;
   final String id;
 
-  const PictureFailure(
-    this.message, {
-    required this.id,
-  });
+  const PictureFailure(this.message, {required this.id});
 
   @override
   List<Object> get props => [message, id];

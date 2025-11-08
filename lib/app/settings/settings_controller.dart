@@ -10,10 +10,7 @@ import 'package:smarthome/user/model/user.dart';
 /// Controllers glue Data Services to Flutter Widgets. The SettingsController
 /// uses the SettingsService to store and retrieve user settings.
 class SettingsController with ChangeNotifier {
-  SettingsController(
-    this._settingsService,
-    this.appConfig,
-  );
+  SettingsController(this._settingsService, this.appConfig);
 
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;

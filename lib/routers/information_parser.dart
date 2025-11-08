@@ -8,7 +8,8 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
 
   @override
   Future<RoutePath> parseRouteInformation(
-      RouteInformation routeInformation) async {
+    RouteInformation routeInformation,
+  ) async {
     _log.fine('parseRouteInformation: ${routeInformation.uri}');
     return parseUri(routeInformation.uri);
   }
@@ -28,12 +29,14 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
       }
     } else if (configuration is StorageRoutePath) {
       return RouteInformation(
-          uri: Uri.parse('/storage/${configuration.storageId}'));
+        uri: Uri.parse('/storage/${configuration.storageId}'),
+      );
     } else if (configuration is ItemRoutePath) {
       return RouteInformation(uri: Uri.parse('/item/${configuration.itemId}'));
     } else if (configuration is TopicRoutePath) {
       return RouteInformation(
-          uri: Uri.parse('/topic/${configuration.topicId}'));
+        uri: Uri.parse('/topic/${configuration.topicId}'),
+      );
     } else if (configuration is AppRoutePath) {
       switch (configuration.appPage) {
         case AppPage.login:
@@ -53,7 +56,8 @@ class MyRouteInformationParser extends RouteInformationParser<RoutePath> {
       }
     } else if (configuration is PictureRoutePath) {
       return RouteInformation(
-          uri: Uri.parse('/picture/${configuration.pictureId}'));
+        uri: Uri.parse('/picture/${configuration.pictureId}'),
+      );
     }
     return RouteInformation(uri: Uri.parse('/'));
   }

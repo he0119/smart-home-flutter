@@ -29,14 +29,9 @@ class StorageItemList extends StatelessWidget {
       items: merged,
       itemBuilder: (context, dynamic item) {
         if (isHighlight) {
-          return _HighlightStorageItemListItem(
-            item: item,
-            term: term,
-          );
+          return _HighlightStorageItemListItem(item: item, term: term);
         } else {
-          return _StorageItemListItem(
-            item: item,
-          );
+          return _StorageItemListItem(item: item);
         }
       },
       hasReachedMax: hasReachedMax,
@@ -50,48 +45,28 @@ class _HighlightStorageItemListItem extends StatelessWidget {
   final dynamic item;
   final String term;
 
-  const _HighlightStorageItemListItem({
-    required this.item,
-    required this.term,
-  });
+  const _HighlightStorageItemListItem({required this.item, required this.term});
 
   @override
   Widget build(BuildContext context) {
     if (item is Item) {
       return ListTile(
-        leading: const Icon(
-          Icons.insert_drive_file,
-          size: 34.0,
-        ),
-        title: SubstringHighlight(
-          text: item.name,
-          term: term,
-        ),
-        subtitle: SubstringHighlight(
-          text: item.description ?? '',
-          term: term,
-        ),
+        leading: const Icon(Icons.insert_drive_file, size: 34.0),
+        title: SubstringHighlight(text: item.name, term: term),
+        subtitle: SubstringHighlight(text: item.description ?? '', term: term),
         onTap: () {
           MyRouterDelegate.of(context).push(ItemDetailPage(itemId: item.id));
         },
       );
     } else {
       return ListTile(
-        leading: const Icon(
-          Icons.storage,
-          size: 34.0,
-        ),
-        title: SubstringHighlight(
-          text: item.name,
-          term: term,
-        ),
-        subtitle: SubstringHighlight(
-          text: item.description ?? '',
-          term: term,
-        ),
+        leading: const Icon(Icons.storage, size: 34.0),
+        title: SubstringHighlight(text: item.name, term: term),
+        subtitle: SubstringHighlight(text: item.description ?? '', term: term),
         onTap: () async {
-          MyRouterDelegate.of(context)
-              .push(StorageDetailPage(storageId: item.id));
+          MyRouterDelegate.of(
+            context,
+          ).push(StorageDetailPage(storageId: item.id));
         },
       );
     }
@@ -102,18 +77,13 @@ class _HighlightStorageItemListItem extends StatelessWidget {
 class _StorageItemListItem extends StatelessWidget {
   final dynamic item;
 
-  const _StorageItemListItem({
-    required this.item,
-  });
+  const _StorageItemListItem({required this.item});
 
   @override
   Widget build(BuildContext context) {
     if (item is Item) {
       return ListTile(
-        leading: const Icon(
-          Icons.insert_drive_file,
-          size: 34.0,
-        ),
+        leading: const Icon(Icons.insert_drive_file, size: 34.0),
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
         onTap: () {
@@ -122,15 +92,13 @@ class _StorageItemListItem extends StatelessWidget {
       );
     } else {
       return ListTile(
-        leading: const Icon(
-          Icons.storage,
-          size: 34.0,
-        ),
+        leading: const Icon(Icons.storage, size: 34.0),
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
         onTap: () {
-          MyRouterDelegate.of(context)
-              .push(StorageDetailPage(storageId: item.id));
+          MyRouterDelegate.of(
+            context,
+          ).push(StorageDetailPage(storageId: item.id));
         },
       );
     }
