@@ -36,6 +36,7 @@ class SettingsController with ChangeNotifier {
   late int _refreshInterval;
   late bool _commentDescending;
   late String? _cookies;
+  late String? _loginMethod;
 
   // 判断是否登录
   bool get isLogin => _loginUser != null;
@@ -54,6 +55,7 @@ class SettingsController with ChangeNotifier {
   int get refreshInterval => _refreshInterval;
   bool get commentDescending => _commentDescending;
   String? get cookies => _cookies;
+  String? get loginMethod => _loginMethod;
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
@@ -72,6 +74,7 @@ class SettingsController with ChangeNotifier {
     _refreshInterval = await _settingsService.refreshInterval();
     _commentDescending = await _settingsService.commentDescending();
     _cookies = await _settingsService.cookies();
+    _loginMethod = await _settingsService.loginMethod();
     // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
@@ -230,5 +233,17 @@ class SettingsController with ChangeNotifier {
     notifyListeners();
 
     await _settingsService.updateCookies(newCookies);
+  }
+
+  Future<void> updateLoginMethod(String? newLoginMethod) async {
+    if (newLoginMethod == null) return;
+
+    if (newLoginMethod == _loginMethod) return;
+
+    _loginMethod = newLoginMethod;
+
+    notifyListeners();
+
+    await _settingsService.updateLoginMethod(newLoginMethod);
   }
 }
