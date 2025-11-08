@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/l10n/l10n.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/routers/information_parser.dart';
@@ -57,10 +56,6 @@ class MyApp extends StatelessWidget {
           RepositoryProvider<BoardRepository>(
             create: (context) =>
                 BoardRepository(graphqlApiClient: graphQLApiClient),
-          ),
-          RepositoryProvider<IotRepository>(
-            create: (context) =>
-                IotRepository(graphqlApiClient: graphQLApiClient),
           ),
         ],
         child: MultiBlocProvider(

@@ -21,9 +21,6 @@ autolabeler:
   - label: "board"
     files:
       - lib/board/**/*
-  - label: "iot"
-    files:
-      - lib/iot/**/*
   - label: "blog"
     files:
       - lib/blog/**/*

@@ -17,16 +17,6 @@ class DefaultPage extends StatelessWidget {
           sections: [
             SettingsSection(tiles: [
               SettingsTile(
-                title: AppTab.iot.name,
-                trailing:
-                    trailingWidget(context, AppTab.iot, settings.defaultPage),
-                onPressed: (context) {
-                  context
-                      .read<SettingsController>()
-                      .updateDefaultPage(AppTab.iot);
-                },
-              ),
-              SettingsTile(
                 title: AppTab.storage.name,
                 trailing: trailingWidget(
                     context, AppTab.storage, settings.defaultPage),

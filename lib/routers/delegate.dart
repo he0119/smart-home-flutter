@@ -10,7 +10,6 @@ import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/iot/iot.dart';
 import 'package:smarthome/routers/information_parser.dart';
 import 'package:smarthome/routers/route_path.dart';
 import 'package:smarthome/storage/storage.dart';
@@ -112,8 +111,7 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
   RoutePath get routePath {
     if (pages.last.name != null) {
       final uri = Uri.parse(pages.last.name!);
-      if (pages.last is IotHomePage ||
-          pages.last is BoardHomePage ||
+      if (pages.last is BoardHomePage ||
           pages.last is BlogHomePage ||
           pages.last is StorageHomePage) {
         return HomeRoutePath(
@@ -229,10 +227,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
                 const quickActions = QuickActions();
                 await quickActions.initialize((String shortcutType) {
                   switch (shortcutType) {
-                    case 'action_iot':
-                      BlocProvider.of<TabBloc>(context)
-                          .add(const TabChanged(AppTab.iot));
-                      break;
                     case 'action_storage':
                       BlocProvider.of<TabBloc>(context)
                           .add(const TabChanged(AppTab.storage));
@@ -250,8 +244,6 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
                 await quickActions.setShortcutItems(
                   <ShortcutItem>[
                     // TODO: 给快捷方式添加图标
-                    const ShortcutItem(
-                        type: 'action_iot', localizedTitle: 'IOT'),
                     const ShortcutItem(
                         type: 'action_storage', localizedTitle: '物品'),
                     const ShortcutItem(

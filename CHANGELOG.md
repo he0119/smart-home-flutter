@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 
 - 添加 OIDC 登录功能
 
+### Removed
+
+- 移除物联网模块
+
 ## [0.11.0] - 2025-07-31
 
 ### Added
