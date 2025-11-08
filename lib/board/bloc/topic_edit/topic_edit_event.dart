@@ -11,10 +11,7 @@ class TopicAdded extends TopicEditEvent {
   final String title;
   final String description;
 
-  const TopicAdded({
-    required this.title,
-    required this.description,
-  });
+  const TopicAdded({required this.title, required this.description});
 
   @override
   List<Object> get props => [title, description];

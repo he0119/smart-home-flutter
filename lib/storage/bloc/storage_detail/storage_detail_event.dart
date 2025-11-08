@@ -8,10 +8,7 @@ class StorageDetailFetched extends StorageDetailEvent {
   final String id;
   final bool cache;
 
-  const StorageDetailFetched({
-    required this.id,
-    this.cache = true,
-  });
+  const StorageDetailFetched({required this.id, this.cache = true});
 
   @override
   List<Object?> get props => [id, cache];

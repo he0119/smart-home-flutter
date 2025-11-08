@@ -11,8 +11,9 @@ class MiPushPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PushBloc, PushState>(
       builder: (context, state) {
-        final localRegId = context
-            .select((SettingsController settings) => settings.miPushRegId);
+        final localRegId = context.select(
+          (SettingsController settings) => settings.miPushRegId,
+        );
         String? serverRegId;
 
         String status = '未知';
@@ -46,22 +47,17 @@ class MiPushPage extends StatelessWidget {
             ),
           ],
           sliver: SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                ListTile(
-                  title: const Text('状态'),
-                  subtitle: Text(status),
-                ),
-                ListTile(
-                  title: const Text('注册识别码（本地）'),
-                  subtitle: Text(localRegId ?? ''),
-                ),
-                ListTile(
-                  title: const Text('注册识别码（服务器）'),
-                  subtitle: Text(serverRegId ?? '单击同步按钮获取并同步服务器数据'),
-                ),
-              ],
-            ),
+            delegate: SliverChildListDelegate([
+              ListTile(title: const Text('状态'), subtitle: Text(status)),
+              ListTile(
+                title: const Text('注册识别码（本地）'),
+                subtitle: Text(localRegId ?? ''),
+              ),
+              ListTile(
+                title: const Text('注册识别码（服务器）'),
+                subtitle: Text(serverRegId ?? '单击同步按钮获取并同步服务器数据'),
+              ),
+            ]),
           ),
         );
       },

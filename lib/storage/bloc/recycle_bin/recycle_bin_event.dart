@@ -7,9 +7,7 @@ abstract class RecycleBinEvent extends Equatable {
 class RecycleBinFetched extends RecycleBinEvent {
   final bool cache;
 
-  const RecycleBinFetched({
-    this.cache = true,
-  });
+  const RecycleBinFetched({this.cache = true});
 
   @override
   List<Object> get props => [cache];

@@ -30,14 +30,8 @@ class ItemTitle extends StatelessWidget {
           ? PopupMenuButton(
               onSelected: onSelected,
               itemBuilder: (context) => <PopupMenuItem<Menu>>[
-                const PopupMenuItem(
-                  value: Menu.edit,
-                  child: Text('编辑'),
-                ),
-                const PopupMenuItem(
-                  value: Menu.delete,
-                  child: Text('删除'),
-                ),
+                const PopupMenuItem(value: Menu.edit, child: Text('编辑')),
+                const PopupMenuItem(value: Menu.delete, child: Text('删除')),
               ],
             )
           : null,

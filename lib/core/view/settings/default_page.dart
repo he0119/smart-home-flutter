@@ -15,38 +15,49 @@ class DefaultPage extends StatelessWidget {
         title: const Text('默认主页'),
         sliver: SettingsList(
           sections: [
-            SettingsSection(tiles: [
-              SettingsTile(
-                title: AppTab.storage.name,
-                trailing: trailingWidget(
-                    context, AppTab.storage, settings.defaultPage),
-                onPressed: (context) {
-                  context
-                      .read<SettingsController>()
-                      .updateDefaultPage(AppTab.storage);
-                },
-              ),
-              SettingsTile(
-                title: AppTab.blog.name,
-                trailing:
-                    trailingWidget(context, AppTab.blog, settings.defaultPage),
-                onPressed: (context) {
-                  context
-                      .read<SettingsController>()
-                      .updateDefaultPage(AppTab.blog);
-                },
-              ),
-              SettingsTile(
-                title: AppTab.board.name,
-                trailing:
-                    trailingWidget(context, AppTab.board, settings.defaultPage),
-                onPressed: (context) {
-                  context
-                      .read<SettingsController>()
-                      .updateDefaultPage(AppTab.board);
-                },
-              ),
-            ]),
+            SettingsSection(
+              tiles: [
+                SettingsTile(
+                  title: AppTab.storage.name,
+                  trailing: trailingWidget(
+                    context,
+                    AppTab.storage,
+                    settings.defaultPage,
+                  ),
+                  onPressed: (context) {
+                    context.read<SettingsController>().updateDefaultPage(
+                      AppTab.storage,
+                    );
+                  },
+                ),
+                SettingsTile(
+                  title: AppTab.blog.name,
+                  trailing: trailingWidget(
+                    context,
+                    AppTab.blog,
+                    settings.defaultPage,
+                  ),
+                  onPressed: (context) {
+                    context.read<SettingsController>().updateDefaultPage(
+                      AppTab.blog,
+                    );
+                  },
+                ),
+                SettingsTile(
+                  title: AppTab.board.name,
+                  trailing: trailingWidget(
+                    context,
+                    AppTab.board,
+                    settings.defaultPage,
+                  ),
+                  onPressed: (context) {
+                    context.read<SettingsController>().updateDefaultPage(
+                      AppTab.board,
+                    );
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),

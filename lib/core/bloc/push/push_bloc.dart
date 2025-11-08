@@ -23,14 +23,16 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   static const miPushEvent = EventChannel('hehome.xyz/push/event');
 
   PushBloc({required this.pushRepository, required this.settingsController})
-      : super(PushInProgress()) {
+    : super(PushInProgress()) {
     on<PushStarted>(_onPushStarted);
     on<PushUpdated>(_onPushUpdated);
     on<PushRefreshed>(_onPushRefreshed);
   }
 
   FutureOr<void> _onPushStarted(
-      PushStarted event, Emitter<PushState> emit) async {
+    PushStarted event,
+    Emitter<PushState> emit,
+  ) async {
     // 仅在安卓上注册
     if (!kIsWeb && Platform.isAndroid) {
       emit(PushInProgress());
@@ -46,25 +48,24 @@ class PushBloc extends Bloc<PushEvent, PushState> {
       }
       // 注册小米推送
       _log.fine('小米推送注册中');
-      await miPushMethod.invokeMethod(
-        'init',
-        {'appId': miPushKey.appId, 'appKey': miPushKey.appKey},
-      );
-      miPushMethod.setMethodCallHandler(
-        (call) async {
-          if (call.method == 'ReceiveRegisterResult' &&
-              call.arguments != null) {
-            _log.fine('小米推送注册成功');
-            final String regId = call.arguments;
-            add(PushUpdated(regId: regId));
-          }
-        },
-      );
+      await miPushMethod.invokeMethod('init', {
+        'appId': miPushKey.appId,
+        'appKey': miPushKey.appKey,
+      });
+      miPushMethod.setMethodCallHandler((call) async {
+        if (call.method == 'ReceiveRegisterResult' && call.arguments != null) {
+          _log.fine('小米推送注册成功');
+          final String regId = call.arguments;
+          add(PushUpdated(regId: regId));
+        }
+      });
     }
   }
 
   FutureOr<void> _onPushUpdated(
-      PushUpdated event, Emitter<PushState> emit) async {
+    PushUpdated event,
+    Emitter<PushState> emit,
+  ) async {
     emit(PushInProgress());
     try {
       // 获取本地保存的 regId
@@ -81,7 +82,9 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   }
 
   FutureOr<void> _onPushRefreshed(
-      PushRefreshed event, Emitter<PushState> emit) async {
+    PushRefreshed event,
+    Emitter<PushState> emit,
+  ) async {
     emit(PushInProgress());
     try {
       // 获取服务器上的 regId，如果与本地不同，则更新

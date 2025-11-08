@@ -35,15 +35,7 @@ class Storage extends Equatable {
 
   @override
   List<Object?> get props {
-    return [
-      id,
-      name,
-      parent,
-      ancestors,
-      description,
-      children,
-      items,
-    ];
+    return [id, name, parent, ancestors, description, children, items];
   }
 
   Storage copyWith({
@@ -101,17 +93,7 @@ class Picture extends Equatable {
 
   @override
   List<Object?> get props {
-    return [
-      id,
-      item,
-      name,
-      description,
-      url,
-      boxX,
-      boxY,
-      boxH,
-      boxW,
-    ];
+    return [id, item, name, description, url, boxX, boxY, boxH, boxW];
   }
 
   @override

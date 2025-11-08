@@ -106,12 +106,9 @@ class MySliverScaffold extends StatelessWidget {
                   pinned: true,
                 )
               else
-                SliverAppBar.medium(
-                  title: title,
-                  actions: actions,
-                ),
-              if (sliver != null) sliver!,
-              if (slivers != null) ...slivers!,
+                SliverAppBar.medium(title: title, actions: actions),
+              ?sliver,
+              ...?slivers,
             ],
           ),
         ),

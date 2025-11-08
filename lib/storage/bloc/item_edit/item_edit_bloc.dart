@@ -12,9 +12,7 @@ part 'item_edit_state.dart';
 class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
   final StorageRepository storageRepository;
 
-  ItemEditBloc({
-    required this.storageRepository,
-  }) : super(ItemEditInitial()) {
+  ItemEditBloc({required this.storageRepository}) : super(ItemEditInitial()) {
     on<ItemUpdated>(_onItemUpdated);
     on<ItemAdded>(_onItemAdded);
     on<ItemDeleted>(_onItemDeleted);
@@ -24,7 +22,9 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
   }
 
   FutureOr<void> _onItemUpdated(
-      ItemUpdated event, Emitter<ItemEditState> emit) async {
+    ItemUpdated event,
+    Emitter<ItemEditState> emit,
+  ) async {
     emit(ItemEditInProgress());
     try {
       final item = await storageRepository.updateItem(
@@ -43,7 +43,9 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
   }
 
   FutureOr<void> _onItemAdded(
-      ItemAdded event, Emitter<ItemEditState> emit) async {
+    ItemAdded event,
+    Emitter<ItemEditState> emit,
+  ) async {
     emit(ItemEditInProgress());
     try {
       final item = await storageRepository.addItem(
@@ -62,7 +64,9 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
   }
 
   FutureOr<void> _onItemDeleted(
-      ItemDeleted event, Emitter<ItemEditState> emit) async {
+    ItemDeleted event,
+    Emitter<ItemEditState> emit,
+  ) async {
     emit(ItemEditInProgress());
     try {
       await storageRepository.deleteItem(itemId: event.item.id);
@@ -73,7 +77,9 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
   }
 
   FutureOr<void> _onItemRestored(
-      ItemRestored event, Emitter<ItemEditState> emit) async {
+    ItemRestored event,
+    Emitter<ItemEditState> emit,
+  ) async {
     emit(ItemEditInProgress());
     try {
       await storageRepository.restoreItem(itemId: event.item.id);
@@ -84,12 +90,15 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
   }
 
   FutureOr<void> _onConsumableAdded(
-      ConsumableAdded event, Emitter<ItemEditState> emit) async {
+    ConsumableAdded event,
+    Emitter<ItemEditState> emit,
+  ) async {
     emit(ItemEditInProgress());
     try {
       final item = await storageRepository.addConsumable(
-          id: event.item.id,
-          consumableIds: event.consumables.map((e) => e!.id).toList());
+        id: event.item.id,
+        consumableIds: event.consumables.map((e) => e!.id).toList(),
+      );
       emit(ConsumableAddSuccess(item: item));
     } on MyException catch (e) {
       emit(ItemEditFailure(e.message));
@@ -97,12 +106,15 @@ class ItemEditBloc extends Bloc<ItemEditEvent, ItemEditState> {
   }
 
   FutureOr<void> _onConsumableDeleted(
-      ConsumableDeleted event, Emitter<ItemEditState> emit) async {
+    ConsumableDeleted event,
+    Emitter<ItemEditState> emit,
+  ) async {
     emit(ItemEditInProgress());
     try {
       final item = await storageRepository.deleteConsumable(
-          id: event.item.id,
-          consumableIds: event.consumables.map((e) => e.id).toList());
+        id: event.item.id,
+        consumableIds: event.consumables.map((e) => e.id).toList(),
+      );
       emit(ConsumableDeleteSuccess(item: item));
     } on MyException catch (e) {
       emit(ItemEditFailure(e.message));

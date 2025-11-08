@@ -12,31 +12,28 @@ import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 
 class BoardHomePage extends Page {
-  const BoardHomePage()
-      : super(
-          key: const ValueKey('board'),
-          name: '/board',
-        );
+  const BoardHomePage() : super(key: const ValueKey('board'), name: '/board');
 
   @override
   Route createRoute(BuildContext context) {
     BlocProvider.of<BoardHomeBloc>(context).add(const BoardHomeFetched());
     return PageRouteBuilder(
       settings: this,
-      pageBuilder: (BuildContext context, Animation<double> animation,
-              Animation<double> secondaryAnimation) =>
-          FadeTransition(
-        opacity: animation,
-        child: const BoardHomeScreen(),
-      ),
+      pageBuilder:
+          (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) => FadeTransition(
+            opacity: animation,
+            child: const BoardHomeScreen(),
+          ),
     );
   }
 }
 
 class BoardHomeScreen extends StatelessWidget {
-  const BoardHomeScreen({
-    super.key,
-  });
+  const BoardHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +50,11 @@ class BoardHomeScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => BlocProvider(
                     create: (context) => TopicEditBloc(
-                        boardRepository:
-                            RepositoryProvider.of<BoardRepository>(context)),
-                    child: const TopicEditPage(
-                      isEditing: false,
+                      boardRepository: RepositoryProvider.of<BoardRepository>(
+                        context,
+                      ),
                     ),
+                    child: const TopicEditPage(isEditing: false),
                   ),
                 ),
               );
@@ -71,8 +68,9 @@ class BoardHomeScreen extends StatelessWidget {
             if (state.status == BoardHomeStatus.failure)
               SliverErrorMessageButton(
                 onPressed: () {
-                  BlocProvider.of<BoardHomeBloc>(context)
-                      .add(const BoardHomeFetched(cache: false));
+                  BlocProvider.of<BoardHomeBloc>(
+                    context,
+                  ).add(const BoardHomeFetched(cache: false));
                 },
                 message: state.error,
               ),
@@ -84,14 +82,16 @@ class BoardHomeScreen extends StatelessWidget {
                 hasReachedMax: state.hasReachedMax,
                 itemBuilder: (context, item) => TopicItem(topic: item),
                 onFetch: () {
-                  BlocProvider.of<BoardHomeBloc>(context)
-                      .add(const BoardHomeFetched());
+                  BlocProvider.of<BoardHomeBloc>(
+                    context,
+                  ).add(const BoardHomeFetched());
                 },
               ),
           ],
           onRefresh: () async {
-            BlocProvider.of<BoardHomeBloc>(context)
-                .add(const BoardHomeFetched(cache: false));
+            BlocProvider.of<BoardHomeBloc>(
+              context,
+            ).add(const BoardHomeFetched(cache: false));
           },
         );
       },

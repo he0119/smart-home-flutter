@@ -17,12 +17,8 @@ import 'package:smarthome/widgets/home_page.dart';
 class StorageDetailPage extends Page {
   final String storageId;
 
-  StorageDetailPage({
-    required this.storageId,
-  }) : super(
-          key: UniqueKey(),
-          name: '/storage/$storageId',
-        );
+  StorageDetailPage({required this.storageId})
+    : super(key: UniqueKey(), name: '/storage/$storageId');
 
   @override
   Route createRoute(BuildContext context) {
@@ -39,11 +35,9 @@ class StorageDetailPage extends Page {
             create: (context) => StorageEditBloc(
               storageRepository: context.read<StorageRepository>(),
             ),
-          )
+          ),
         ],
-        child: StorageDetailScreen(
-          storageId: storageId,
-        ),
+        child: StorageDetailScreen(storageId: storageId),
       ),
     );
   }
@@ -52,10 +46,7 @@ class StorageDetailPage extends Page {
 class StorageDetailScreen extends StatelessWidget {
   final String storageId;
 
-  const StorageDetailScreen({
-    super.key,
-    required this.storageId,
-  });
+  const StorageDetailScreen({super.key, required this.storageId});
 
   @override
   Widget build(BuildContext context) {
@@ -75,24 +66,16 @@ class StorageDetailScreen extends StatelessWidget {
           onRefresh: () async {
             if (state.status == StorageDetailStatus.success) {
               context.read<StorageDetailBloc>().add(
-                    StorageDetailFetched(
-                      id: state.storage.id,
-                      cache: false,
-                    ),
-                  );
+                StorageDetailFetched(id: state.storage.id, cache: false),
+              );
             } else {
               context.read<StorageDetailBloc>().add(
-                    StorageDetailFetched(
-                      id: storageId,
-                      cache: false,
-                    ),
-                  );
+                StorageDetailFetched(id: storageId, cache: false),
+              );
             }
           },
           actions: <Widget>[
-            AddStorageIconButton(
-              storage: state.storage,
-            ),
+            AddStorageIconButton(storage: state.storage),
             const SearchIconButton(),
             if (state.storage.id != homeStorage.id)
               PopupMenuButton<StorageDetailMenu>(
@@ -106,8 +89,8 @@ class StorageDetailScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (_) => BlocProvider<StorageEditBloc>(
                           create: (_) => StorageEditBloc(
-                            storageRepository:
-                                context.read<StorageRepository>(),
+                            storageRepository: context
+                                .read<StorageRepository>(),
                           ),
                           child: StorageEditPage(
                             isEditing: true,
@@ -139,8 +122,8 @@ class StorageDetailScreen extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 context.read<StorageEditBloc>().add(
-                                      StorageDeleted(storage: state.storage),
-                                    );
+                                  StorageDeleted(storage: state.storage),
+                                );
                                 Navigator.of(context).pop();
                               },
                               child: const Text('是'),
@@ -153,9 +136,7 @@ class StorageDetailScreen extends StatelessWidget {
                   if (value == StorageDetailMenu.qr) {
                     await navigator.push(
                       MaterialPageRoute(
-                        builder: (_) => StorageQRPage(
-                          storage: state.storage,
-                        ),
+                        builder: (_) => StorageQRPage(storage: state.storage),
                       ),
                     );
                   }
@@ -172,9 +153,9 @@ class StorageDetailScreen extends StatelessWidget {
                   const PopupMenuItem(
                     value: StorageDetailMenu.qr,
                     child: Text('二维码'),
-                  )
+                  ),
                 ],
-              )
+              ),
           ],
           slivers: [
             if (paths.isNotEmpty)
@@ -186,8 +167,8 @@ class StorageDetailScreen extends StatelessWidget {
               SliverErrorMessageButton(
                 onPressed: () {
                   context.read<StorageDetailBloc>().add(
-                        StorageDetailFetched(id: storageId),
-                      );
+                    StorageDetailFetched(id: storageId),
+                  );
                 },
                 message: state.error,
               ),
@@ -199,11 +180,9 @@ class StorageDetailScreen extends StatelessWidget {
                 storages: state.storage.children!.toList(),
                 hasReachedMax: state.hasReachedMax,
                 onFetch: () => context.read<StorageDetailBloc>().add(
-                      StorageDetailFetched(
-                        id: state.storage.id,
-                      ),
-                    ),
-              )
+                  StorageDetailFetched(id: state.storage.id),
+                ),
+              ),
           ],
           floatingActionButton: FloatingActionButton(
             tooltip: '添加物品',
@@ -244,7 +223,10 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return Material(
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
@@ -263,8 +245,9 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
                     // 单击当前位置的时候，不做任何转跳
                     // 禁止原地 TP
                     if (index != paths.length) {
-                      MyRouterDelegate.of(context)
-                          .setStoragePage(storage: paths[index - 1]);
+                      MyRouterDelegate.of(
+                        context,
+                      ).setStoragePage(storage: paths[index - 1]);
                     }
                   },
                   child: Center(
@@ -279,10 +262,7 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
                 );
         },
         separatorBuilder: (BuildContext context, int index) {
-          return const Icon(
-            Icons.arrow_forward_ios,
-            size: 12,
-          );
+          return const Icon(Icons.arrow_forward_ios, size: 12);
         },
       ),
     );

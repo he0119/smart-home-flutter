@@ -26,7 +26,7 @@ class ItemEditPage extends StatefulWidget {
     required this.isEditing,
     this.item,
     this.storage,
-  })  : assert(item != null || !isEditing);
+  }) : assert(item != null || !isEditing);
 
   @override
   State<ItemEditPage> createState() => _ItemEditPageState();
@@ -81,12 +81,8 @@ class _ItemEditPageState extends State<ItemEditPage> {
                   children: <Widget>[
                     TextFormField(
                       controller: _nameController,
-                      decoration: const InputDecoration(
-                        labelText: '名称',
-                      ),
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(200),
-                      ],
+                      decoration: const InputDecoration(labelText: '名称'),
+                      inputFormatters: [LengthLimitingTextInputFormatter(200)],
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -98,14 +94,15 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       focusNode: _nameFocusNode,
                       onFieldSubmitted: (_) {
                         _fieldFocusChange(
-                            context, _nameFocusNode, _numberFocusNode);
+                          context,
+                          _nameFocusNode,
+                          _numberFocusNode,
+                        );
                       },
                     ),
                     TextFormField(
                       controller: _numberController,
-                      decoration: const InputDecoration(
-                        labelText: '数量',
-                      ),
+                      decoration: const InputDecoration(labelText: '数量'),
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -119,13 +116,14 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       focusNode: _numberFocusNode,
                       onFieldSubmitted: (_) {
                         _fieldFocusChange(
-                            context, _numberFocusNode, _descriptionFocusNode);
+                          context,
+                          _numberFocusNode,
+                          _descriptionFocusNode,
+                        );
                       },
                     ),
                     StorageFormField(
-                      decoration: const InputDecoration(
-                        labelText: '属于',
-                      ),
+                      decoration: const InputDecoration(labelText: '属于'),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       onChanged: (Storage? value) {
                         if (value != null) {
@@ -146,27 +144,24 @@ class _ItemEditPageState extends State<ItemEditPage> {
                     ),
                     TextFormField(
                       controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: '备注',
-                      ),
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(200),
-                      ],
+                      decoration: const InputDecoration(labelText: '备注'),
+                      inputFormatters: [LengthLimitingTextInputFormatter(200)],
                       textInputAction: TextInputAction.next,
                       focusNode: _descriptionFocusNode,
                       onFieldSubmitted: (_) {
                         _fieldFocusChange(
-                            context, _descriptionFocusNode, _priceFocusNode);
+                          context,
+                          _descriptionFocusNode,
+                          _priceFocusNode,
+                        );
                       },
                     ),
                     TextFormField(
                       controller: _priceController,
-                      decoration: const InputDecoration(
-                        labelText: '价格',
-                      ),
+                      decoration: const InputDecoration(labelText: '价格'),
                       keyboardType: TextInputType.number,
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp('[0-9.]'))
+                        FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
                       ],
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
@@ -189,15 +184,17 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       format: DateTime.now().localFormat,
                       onShowPicker: (context, currentValue) async {
                         final date = await showDatePicker(
-                            context: context,
-                            firstDate: DateTime(1900),
-                            initialDate: currentValue ?? DateTime.now(),
-                            lastDate: DateTime(2100));
+                          context: context,
+                          firstDate: DateTime(1900),
+                          initialDate: currentValue ?? DateTime.now(),
+                          lastDate: DateTime(2100),
+                        );
                         if (date != null && context.mounted) {
                           final time = await showTimePicker(
                             context: context,
                             initialTime: TimeOfDay.fromDateTime(
-                                currentValue ?? DateTime.now()),
+                              currentValue ?? DateTime.now(),
+                            ),
                           );
                           return DateTimeField.combine(date, time);
                         } else {
@@ -207,9 +204,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
                       initialValue: widget.isEditing
                           ? widget.item!.expiredAt?.toLocal()
                           : null,
-                      decoration: const InputDecoration(
-                        labelText: '有效期至',
-                      ),
+                      decoration: const InputDecoration(labelText: '有效期至'),
                       onChanged: (value) {
                         expiredAt = value;
                       },
@@ -252,12 +247,15 @@ class _ItemEditPageState extends State<ItemEditPage> {
   void initState() {
     if (widget.isEditing) {
       _nameController = TextEditingController(text: widget.item!.name);
-      _numberController =
-          TextEditingController(text: widget.item!.number.toString());
-      _priceController =
-          TextEditingController(text: widget.item!.price?.toString());
-      _descriptionController =
-          TextEditingController(text: widget.item!.description);
+      _numberController = TextEditingController(
+        text: widget.item!.number.toString(),
+      );
+      _priceController = TextEditingController(
+        text: widget.item!.price?.toString(),
+      );
+      _descriptionController = TextEditingController(
+        text: widget.item!.description,
+      );
       storageId = widget.item!.storage?.id;
       expiredAt = widget.item!.expiredAt;
     } else {
@@ -277,7 +275,10 @@ class _ItemEditPageState extends State<ItemEditPage> {
   }
 
   void _fieldFocusChange(
-      BuildContext context, FocusNode currentFocus, FocusNode? nextFocus) {
+    BuildContext context,
+    FocusNode currentFocus,
+    FocusNode? nextFocus,
+  ) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }
@@ -289,25 +290,29 @@ class _ItemEditPageState extends State<ItemEditPage> {
     }
 
     if (widget.isEditing) {
-      BlocProvider.of<ItemEditBloc>(context).add(ItemUpdated(
-        id: widget.item!.id,
-        name: _nameController.text,
-        number: int.parse(_numberController.text),
-        storageId: storageId,
-        oldStorageId: widget.item!.id,
-        description: _descriptionController.text,
-        price: price,
-        expiredAt: expiredAt?.toUtc(),
-      ));
+      BlocProvider.of<ItemEditBloc>(context).add(
+        ItemUpdated(
+          id: widget.item!.id,
+          name: _nameController.text,
+          number: int.parse(_numberController.text),
+          storageId: storageId,
+          oldStorageId: widget.item!.id,
+          description: _descriptionController.text,
+          price: price,
+          expiredAt: expiredAt?.toUtc(),
+        ),
+      );
     } else {
-      BlocProvider.of<ItemEditBloc>(context).add(ItemAdded(
-        name: _nameController.text,
-        number: int.parse(_numberController.text),
-        storageId: storageId,
-        description: _descriptionController.text,
-        price: price,
-        expiredAt: expiredAt?.toUtc(),
-      ));
+      BlocProvider.of<ItemEditBloc>(context).add(
+        ItemAdded(
+          name: _nameController.text,
+          number: int.parse(_numberController.text),
+          storageId: storageId,
+          description: _descriptionController.text,
+          price: price,
+          expiredAt: expiredAt?.toUtc(),
+        ),
+      );
     }
   }
 }

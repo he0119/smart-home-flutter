@@ -37,11 +37,15 @@ class ClientWithCookies extends IOClient {
         final cookieStringList = cookiesString.split(',');
         List<Cookie> cookies = [];
         for (var i = 0; i < cookieStringList.length; i += 2) {
-          cookies.add(Cookie.fromSetCookieValue(
-              cookieStringList[i] + cookieStringList[i + 1]));
+          cookies.add(
+            Cookie.fromSetCookieValue(
+              cookieStringList[i] + cookieStringList[i + 1],
+            ),
+          );
         }
-        final newCookies =
-            cookies.map((e) => '${e.name}=${e.value}').join('; ');
+        final newCookies = cookies
+            .map((e) => '${e.name}=${e.value}')
+            .join('; ');
         settingsController.updateCookies(newCookies);
       }
       return response;
@@ -53,14 +57,15 @@ class ClientWithCookies extends IOClient {
 class AddOperationInfoVisitor extends TransformingVisitor {
   @override
   SelectionSetNode visitSelectionSetNode(SelectionSetNode node) {
-    final hasInlineFragment =
-        node.selections.whereType<InlineFragmentNode>().isNotEmpty;
+    final hasInlineFragment = node.selections
+        .whereType<InlineFragmentNode>()
+        .isNotEmpty;
 
     if (!hasInlineFragment) return node;
 
-    final hasOperation = node.selections
-        .whereType<InlineFragmentNode>()
-        .any((node) => node.typeCondition?.on.name.value == 'OperationInfo');
+    final hasOperation = node.selections.whereType<InlineFragmentNode>().any(
+      (node) => node.typeCondition?.on.name.value == 'OperationInfo',
+    );
 
     if (hasOperation) return node;
 
@@ -69,43 +74,31 @@ class AddOperationInfoVisitor extends TransformingVisitor {
         ...node.selections,
         const InlineFragmentNode(
           typeCondition: TypeConditionNode(
-            on: NamedTypeNode(
-              name: NameNode(
-                value: 'OperationInfo',
-              ),
-            ),
+            on: NamedTypeNode(name: NameNode(value: 'OperationInfo')),
           ),
           selectionSet: SelectionSetNode(
             selections: [
-              FieldNode(
-                name: NameNode(value: '__typename'),
-              ),
+              FieldNode(name: NameNode(value: '__typename')),
               FieldNode(
                 name: NameNode(value: 'messages'),
                 selectionSet: SelectionSetNode(
                   selections: [
-                    FieldNode(
-                      name: NameNode(value: '__typename'),
-                    ),
-                    FieldNode(
-                      name: NameNode(value: 'message'),
-                    ),
+                    FieldNode(name: NameNode(value: '__typename')),
+                    FieldNode(name: NameNode(value: 'message')),
                   ],
                 ),
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }
 }
 
 /// 给 Mutation 强行加上 OperationInfo
-DocumentNode opi(DocumentNode document) => transform(
-      document,
-      [AddOperationInfoVisitor()],
-    );
+DocumentNode opi(DocumentNode document) =>
+    transform(document, [AddOperationInfoVisitor()]);
 
 class SocketCustomLink extends Link {
   SocketCustomLink(
@@ -173,10 +166,7 @@ class SocketCustomLink extends Link {
 class _Connection {
   SocketClient client;
   String? cookies;
-  _Connection({
-    required this.client,
-    required this.cookies,
-  });
+  _Connection({required this.client, required this.cookies});
 }
 
 class GraphQLApiClient {
@@ -206,10 +196,7 @@ class GraphQLApiClient {
     final loginOptions = MutationOptions(
       document: gql(loginMutation),
       variables: {
-        'input': {
-          'username': username,
-          'password': password,
-        }
+        'input': {'username': username, 'password': password},
       },
     );
     final results = await _client!.mutate(loginOptions);
@@ -262,13 +249,16 @@ class GraphQLApiClient {
 
         // 添加已收集的 cookies
         if (allCookies.isNotEmpty) {
-          request.headers.set('cookie',
-              allCookies.map((e) => '${e.name}=${e.value}').join('; '));
+          request.headers.set(
+            'cookie',
+            allCookies.map((e) => '${e.name}=${e.value}').join('; '),
+          );
         }
 
         final response = await request.close();
         _log.info(
-            '步骤 ${redirectCount + 1}: 状态码 ${response.statusCode}, URL: $currentUri');
+          '步骤 ${redirectCount + 1}: 状态码 ${response.statusCode}, URL: $currentUri',
+        );
 
         // 收集 cookies
         final setCookies = response.cookies;
@@ -321,8 +311,9 @@ class GraphQLApiClient {
       }
 
       // 保存所有收集到的 cookies
-      final cookiesString =
-          allCookies.map((e) => '${e.name}=${e.value}').join('; ');
+      final cookiesString = allCookies
+          .map((e) => '${e.name}=${e.value}')
+          .join('; ');
       _log.info('成功获取 cookies: $cookiesString');
       await settingsController.updateCookies(cookiesString);
 
@@ -341,9 +332,7 @@ class GraphQLApiClient {
   }
 
   Future<bool> logout() async {
-    final loginOptions = MutationOptions(
-      document: opi(gql(logoutMutation)),
-    );
+    final loginOptions = MutationOptions(document: opi(gql(logoutMutation)));
     final results = await mutate(loginOptions);
     if (results.hasException) {
       if (results.exception!.linkException != null) {
@@ -365,10 +354,7 @@ class GraphQLApiClient {
         defaultHeaders: headers,
       );
     } else {
-      link = HttpLink(
-        url,
-        defaultHeaders: headers,
-      );
+      link = HttpLink(url, defaultHeaders: headers);
     }
     final websocketLink = SocketCustomLink(
       url.replaceFirst('http', 'ws'),
@@ -380,10 +366,7 @@ class GraphQLApiClient {
 
     link = Link.split((request) => request.isSubscription, websocketLink, link);
 
-    _client = GraphQLClient(
-      cache: GraphQLCache(),
-      link: link,
-    );
+    _client = GraphQLClient(cache: GraphQLCache(), link: link);
     _log.fine('GraphQLClient initailized with url $url');
     websocketConnectionState.listen((event) {
       if (event) {
@@ -417,10 +400,7 @@ class GraphQLApiClient {
             'SmartHome/${packageInfo.version} (Windows NT; Build/${windowsInfo.buildLab}) ${windowsInfo.computerName}';
       }
     } catch (exception, stackTrace) {
-      await Sentry.captureException(
-        exception,
-        stackTrace: stackTrace,
-      );
+      await Sentry.captureException(exception, stackTrace: stackTrace);
       _log.severe('设置 User-Agent 失败 ($exception)');
     }
   }
@@ -489,7 +469,8 @@ class GraphQLApiClient {
 
   Future<Duration?> onWebsocketConnectionLost(int? code, String? reason) async {
     _log.warning(
-        'Websocket Connection lost with code $code and reason $reason');
+      'Websocket Connection lost with code $code and reason $reason',
+    );
     _websocketConnectionStateController.add(false);
     return null;
   }

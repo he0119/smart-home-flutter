@@ -19,23 +19,24 @@ import 'package:smarthome/widgets/infinite_list.dart';
 
 class StorageHomePage extends Page {
   const StorageHomePage()
-      : super(
-          key: const ValueKey('storage'),
-          name: '/storage',
-        );
+    : super(key: const ValueKey('storage'), name: '/storage');
 
   @override
   Route createRoute(BuildContext context) {
-    BlocProvider.of<StorageHomeBloc>(context)
-        .add(const StorageHomeFetched(itemType: ItemType.all));
+    BlocProvider.of<StorageHomeBloc>(
+      context,
+    ).add(const StorageHomeFetched(itemType: ItemType.all));
     return PageRouteBuilder(
       settings: this,
-      pageBuilder: (BuildContext context, Animation<double> animation,
-              Animation<double> secondaryAnimation) =>
-          FadeTransition(
-        opacity: animation,
-        child: const StorageHomeScreen(),
-      ),
+      pageBuilder:
+          (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) => FadeTransition(
+            opacity: animation,
+            child: const StorageHomeScreen(),
+          ),
     );
   }
 }
@@ -64,9 +65,7 @@ class StorageHomeScreen extends StatelessWidget {
                       storageRepository:
                           RepositoryProvider.of<StorageRepository>(context),
                     ),
-                    child: const ItemEditPage(
-                      isEditing: false,
-                    ),
+                    child: const ItemEditPage(isEditing: false),
                   ),
                 ),
               );
@@ -77,10 +76,7 @@ class StorageHomeScreen extends StatelessWidget {
           onRefresh: (state is StorageHomeSuccess)
               ? () async {
                   BlocProvider.of<StorageHomeBloc>(context).add(
-                    StorageHomeFetched(
-                      itemType: state.itemType,
-                      cache: false,
-                    ),
+                    StorageHomeFetched(itemType: state.itemType, cache: false),
                   );
                 }
               : null,
@@ -90,8 +86,9 @@ class StorageHomeScreen extends StatelessWidget {
           },
           onPopInvokedWithResult: (didPop, result) {
             if (state is StorageHomeSuccess) {
-              BlocProvider.of<StorageHomeBloc>(context)
-                  .add(const StorageHomeFetched(itemType: ItemType.all));
+              BlocProvider.of<StorageHomeBloc>(
+                context,
+              ).add(const StorageHomeFetched(itemType: ItemType.all));
             }
           },
         );
@@ -106,12 +103,9 @@ class StorageHomeScreen extends StatelessWidget {
       listofWidget.add(
         SliverErrorMessageButton(
           onPressed: () {
-            BlocProvider.of<StorageHomeBloc>(context).add(
-              StorageHomeFetched(
-                itemType: state.itemType,
-                cache: false,
-              ),
-            );
+            BlocProvider.of<StorageHomeBloc>(
+              context,
+            ).add(StorageHomeFetched(itemType: state.itemType, cache: false));
           },
           message: state.message,
         ),
@@ -125,8 +119,9 @@ class StorageHomeScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
               child: InkWell(
                 onTap: () {
-                  MyRouterDelegate.of(context)
-                      .push(StorageDetailPage(storageId: homeStorage.id));
+                  MyRouterDelegate.of(
+                    context,
+                  ).push(StorageDetailPage(storageId: homeStorage.id));
                 },
                 child: Card(
                   color: Theme.of(context).colorScheme.secondary,
@@ -149,34 +144,48 @@ class StorageHomeScreen extends StatelessWidget {
         );
       }
       if (state.expiredItems?.isNotEmpty ?? false) {
-        listofWidget.add(_buildSliverStickyHeader(context, state.expiredItems!,
-            ItemType.expired, state.itemType, state.hasReachedMax));
+        listofWidget.add(
+          _buildSliverStickyHeader(
+            context,
+            state.expiredItems!,
+            ItemType.expired,
+            state.itemType,
+            state.hasReachedMax,
+          ),
+        );
       }
       if (state.nearExpiredItems?.isNotEmpty ?? false) {
-        listofWidget.add(_buildSliverStickyHeader(
+        listofWidget.add(
+          _buildSliverStickyHeader(
             context,
             state.nearExpiredItems!,
             ItemType.nearExpired,
             state.itemType,
-            state.hasReachedMax));
+            state.hasReachedMax,
+          ),
+        );
       }
       if (state.recentlyEditedItems?.isNotEmpty ?? false) {
-        listofWidget.add(_buildSliverStickyHeader(
-          context,
-          state.recentlyEditedItems!,
-          ItemType.recentlyEdited,
-          state.itemType,
-          state.hasReachedMax,
-        ));
+        listofWidget.add(
+          _buildSliverStickyHeader(
+            context,
+            state.recentlyEditedItems!,
+            ItemType.recentlyEdited,
+            state.itemType,
+            state.hasReachedMax,
+          ),
+        );
       }
       if (state.recentlyCreatedItems?.isNotEmpty ?? false) {
-        listofWidget.add(_buildSliverStickyHeader(
-          context,
-          state.recentlyCreatedItems!,
-          ItemType.recentlyCreated,
-          state.itemType,
-          state.hasReachedMax,
-        ));
+        listofWidget.add(
+          _buildSliverStickyHeader(
+            context,
+            state.recentlyCreatedItems!,
+            ItemType.recentlyCreated,
+            state.itemType,
+            state.hasReachedMax,
+          ),
+        );
       }
     } else {
       listofWidget.add(const SliverCenterLoadingIndicator());
@@ -219,18 +228,21 @@ class StorageHomeScreen extends StatelessWidget {
             Text(headerText),
             const Spacer(),
             IconButton(
-              icon: Icon(currentType == ItemType.all
-                  ? Icons.expand_more
-                  : Icons.expand_less),
+              icon: Icon(
+                currentType == ItemType.all
+                    ? Icons.expand_more
+                    : Icons.expand_less,
+              ),
               onPressed: () {
                 BlocProvider.of<StorageHomeBloc>(context).add(
                   StorageHomeFetched(
-                      itemType: currentType != ItemType.all
-                          ? ItemType.all
-                          : listType),
+                    itemType: currentType != ItemType.all
+                        ? ItemType.all
+                        : listType,
+                  ),
                 );
               },
-            )
+            ),
           ],
         ),
       ),
@@ -241,11 +253,9 @@ class StorageHomeScreen extends StatelessWidget {
         },
         hasReachedMax: hasReachedMax,
         onFetch: () {
-          BlocProvider.of<StorageHomeBloc>(context).add(
-            StorageHomeFetched(
-              itemType: currentType,
-            ),
-          );
+          BlocProvider.of<StorageHomeBloc>(
+            context,
+          ).add(StorageHomeFetched(itemType: currentType));
         },
       ),
     );
@@ -280,9 +290,7 @@ class StorageHomeScreen extends StatelessWidget {
             text: item.name,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          TextSpan(
-            text: differenceText,
-          ),
+          TextSpan(text: differenceText),
         ],
       ),
     );

@@ -28,9 +28,7 @@ class SearchPage extends Page {
 }
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({
-    super.key,
-  });
+  const SearchScreen({super.key});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -62,11 +60,13 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void doSearch() {
-    context.read<StorageSearchBloc>().add(StorageSearchChanged(
-          key: _textController.text,
-          isDeleted: _isDeleted,
-          missingStorage: _missingStorage,
-        ));
+    context.read<StorageSearchBloc>().add(
+      StorageSearchChanged(
+        key: _textController.text,
+        isDeleted: _isDeleted,
+        missingStorage: _missingStorage,
+      ),
+    );
   }
 
   @override

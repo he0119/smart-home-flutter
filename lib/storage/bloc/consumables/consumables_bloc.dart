@@ -13,14 +13,15 @@ part 'consumables_state.dart';
 class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
   final StorageRepository storageRepository;
 
-  ConsumablesBloc({
-    required this.storageRepository,
-  }) : super(ConsumablesInProgress()) {
+  ConsumablesBloc({required this.storageRepository})
+    : super(ConsumablesInProgress()) {
     on<ConsumablesFetched>(_onConsumablesFetched);
   }
 
   FutureOr<void> _onConsumablesFetched(
-      ConsumablesFetched event, Emitter<ConsumablesState> emit) async {
+    ConsumablesFetched event,
+    Emitter<ConsumablesState> emit,
+  ) async {
     final currentState = state;
     try {
       // 如果需要刷新，则显示加载界面
@@ -37,19 +38,16 @@ class ConsumablesBloc extends Bloc<ConsumablesEvent, ConsumablesState> {
           after: currentState.pageInfo!.endCursor,
           cache: false,
         );
-        emit(ConsumablesSuccess(
-          items: currentState.items + results.item1,
-          pageInfo: currentState.pageInfo!.copyWith(results.item2),
-        ));
+        emit(
+          ConsumablesSuccess(
+            items: currentState.items + results.item1,
+            pageInfo: currentState.pageInfo!.copyWith(results.item2),
+          ),
+        );
       } else {
         // 其他情况根据设置看是否需要打开缓存，并获取第一页s
-        final results = await storageRepository.consumables(
-          cache: event.cache,
-        );
-        emit(ConsumablesSuccess(
-          items: results.item1,
-          pageInfo: results.item2,
-        ));
+        final results = await storageRepository.consumables(cache: event.cache);
+        emit(ConsumablesSuccess(items: results.item1, pageInfo: results.item2));
       }
     } on MyException catch (e) {
       emit(ConsumablesFailure(e.message));

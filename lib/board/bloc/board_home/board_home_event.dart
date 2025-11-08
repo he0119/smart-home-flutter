@@ -10,9 +10,7 @@ abstract class BoardHomeEvent extends Equatable {
 class BoardHomeFetched extends BoardHomeEvent {
   final bool cache;
 
-  const BoardHomeFetched({
-    this.cache = true,
-  });
+  const BoardHomeFetched({this.cache = true});
 
   @override
   List<Object> get props => [cache];

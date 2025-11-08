@@ -12,11 +12,7 @@ class StorageAdded extends StorageEditEvent {
   final String? parentId;
   final String? description;
 
-  const StorageAdded({
-    required this.name,
-    this.parentId,
-    this.description,
-  });
+  const StorageAdded({required this.name, this.parentId, this.description});
 
   @override
   List<Object?> get props => [name, parentId, description];

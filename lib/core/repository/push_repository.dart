@@ -9,9 +9,7 @@ import 'package:smarthome/core/repository/graphql_api_client.dart';
 class PushRepository {
   final GraphQLApiClient graphqlApiClient;
 
-  PushRepository({
-    required this.graphqlApiClient,
-  });
+  PushRepository({required this.graphqlApiClient});
 
   /// MiPushKey
   Future<MiPushKey> miPushKey() async {
@@ -31,9 +29,7 @@ class PushRepository {
 
     final options = QueryOptions(
       document: gql(miPushQuery),
-      variables: {
-        'deviceId': await androidId.getId(),
-      },
+      variables: {'deviceId': await androidId.getId()},
       fetchPolicy: FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
@@ -43,9 +39,7 @@ class PushRepository {
   }
 
   /// 更新 MiPush 的 RegId
-  Future<MiPush> updateMiPush({
-    required String regId,
-  }) async {
+  Future<MiPush> updateMiPush({required String regId}) async {
     final deviceInfo = DeviceInfoPlugin();
     const androidId = AndroidId();
     final androidInfo = await deviceInfo.androidInfo;
@@ -56,7 +50,7 @@ class PushRepository {
           'regId': regId,
           'deviceId': await androidId.getId(),
           'model': androidInfo.model,
-        }
+        },
       },
     );
     final result = await graphqlApiClient.mutate(options);

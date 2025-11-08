@@ -28,7 +28,9 @@ class AuthenticationBloc
   }
 
   FutureOr<void> _onAuthenticationStarted(
-      AuthenticationStarted event, Emitter<AuthenticationState> emit) async {
+    AuthenticationStarted event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     try {
       // 检查是否登录
       if (settingsController.isLogin) {
@@ -43,7 +45,9 @@ class AuthenticationBloc
   }
 
   FutureOr<void> _onAuthenticationLogin(
-      AuthenticationLogin event, Emitter<AuthenticationState> emit) async {
+    AuthenticationLogin event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     emit(AuthenticationInProgress());
     try {
       final user = await graphqlApiClient.login(event.username, event.password);
@@ -59,7 +63,9 @@ class AuthenticationBloc
   }
 
   FutureOr<void> _onAuthenticationLogout(
-      AuthenticationLogout event, Emitter<AuthenticationState> emit) async {
+    AuthenticationLogout event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     final result = await graphqlApiClient.logout();
     if (result) {
       await settingsController.updateLoginUser(null);
@@ -68,7 +74,9 @@ class AuthenticationBloc
   }
 
   FutureOr<void> _onAuthenticationOIDCLogin(
-      AuthenticationOIDCLogin event, Emitter<AuthenticationState> emit) async {
+    AuthenticationOIDCLogin event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     emit(AuthenticationInProgress());
     try {
       final user = await graphqlApiClient.oidcLogin();

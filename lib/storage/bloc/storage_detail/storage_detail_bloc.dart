@@ -17,12 +17,14 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
   final StorageRepository storageRepository;
 
   StorageDetailBloc({required this.storageRepository})
-      : super(const StorageDetailState()) {
+    : super(const StorageDetailState()) {
     on<StorageDetailFetched>(_onStorageDetailFetched);
   }
 
   FutureOr<void> _onStorageDetailFetched(
-      StorageDetailFetched event, Emitter<StorageDetailState> emit) async {
+    StorageDetailFetched event,
+    Emitter<StorageDetailState> emit,
+  ) async {
     try {
       // 如果需要刷新，则显示加载界面
       // 因为需要请求网络最好提示用户
@@ -71,8 +73,9 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       } else {
         // 其他情况根据设置看是否需要打开缓存，并获取第一页
         if (event.id == homeStorage.id) {
-          final results =
-              await storageRepository.rootStorage(cache: event.cache);
+          final results = await storageRepository.rootStorage(
+            cache: event.cache,
+          );
           emit(
             state.copyWith(
               status: StorageDetailStatus.success,
@@ -110,10 +113,7 @@ class StorageDetailBloc extends Bloc<StorageDetailEvent, StorageDetailState> {
       }
     } on MyException catch (e) {
       emit(
-        state.copyWith(
-          status: StorageDetailStatus.failure,
-          error: e.message,
-        ),
+        state.copyWith(status: StorageDetailStatus.failure, error: e.message),
       );
     }
   }

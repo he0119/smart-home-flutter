@@ -19,11 +19,7 @@ class BoardRepository {
     final options = MutationOptions(
       document: opi(gql(addCommentMutation)),
       variables: {
-        'input': {
-          'topicId': topicId,
-          'body': body,
-          'parentId': parentId,
-        }
+        'input': {'topicId': topicId, 'body': body, 'parentId': parentId},
       },
     );
     final result = await graphqlApiClient.mutate(options);
@@ -39,10 +35,7 @@ class BoardRepository {
     final options = MutationOptions(
       document: opi(gql(addTopicMutation)),
       variables: {
-        'input': {
-          'title': title,
-          'description': description,
-        }
+        'input': {'title': title, 'description': description},
       },
     );
     final result = await graphqlApiClient.mutate(options);
@@ -55,7 +48,7 @@ class BoardRepository {
     final options = MutationOptions(
       document: opi(gql(closeTopicMutation)),
       variables: {
-        'input': {'topicId': topicId}
+        'input': {'topicId': topicId},
       },
     );
     final result = await graphqlApiClient.mutate(options);
@@ -68,7 +61,7 @@ class BoardRepository {
     final options = MutationOptions(
       document: opi(gql(pinTopicMutation)),
       variables: {
-        'input': {'topicId': topicId}
+        'input': {'topicId': topicId},
       },
     );
     final result = await graphqlApiClient.mutate(options);
@@ -81,7 +74,7 @@ class BoardRepository {
     final options = MutationOptions(
       document: opi(gql(unpinTopicMutation)),
       variables: {
-        'input': {'topicId': topicId}
+        'input': {'topicId': topicId},
       },
     );
     final result = await graphqlApiClient.mutate(options);
@@ -94,7 +87,7 @@ class BoardRepository {
     final options = MutationOptions(
       document: opi(gql(deleteCommentMutation)),
       variables: {
-        'input': {'commentId': commentId}
+        'input': {'commentId': commentId},
       },
     );
     final result = await graphqlApiClient.mutate(options);
@@ -105,7 +98,7 @@ class BoardRepository {
     final options = MutationOptions(
       document: opi(gql(deleteTopicMutation)),
       variables: {
-        'input': {'topicId': topicId}
+        'input': {'topicId': topicId},
       },
     );
     final result = await graphqlApiClient.mutate(options);
@@ -116,7 +109,7 @@ class BoardRepository {
     final options = MutationOptions(
       document: opi(gql(reopenTopicMutation)),
       variables: {
-        'input': {'topicId': topicId}
+        'input': {'topicId': topicId},
       },
     );
     final result = await graphqlApiClient.mutate(options);
@@ -165,9 +158,7 @@ class BoardRepository {
   }) async {
     final options = QueryOptions(
       document: gql(topicsQuery),
-      variables: {
-        'after': after,
-      },
+      variables: {'after': after},
       fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.networkOnly,
     );
     final results = await graphqlApiClient.query(options);
@@ -187,10 +178,7 @@ class BoardRepository {
     final options = MutationOptions(
       document: opi(gql(updateCommentMutation)),
       variables: {
-        'input': {
-          'id': id,
-          'body': body,
-        }
+        'input': {'id': id, 'body': body},
       },
     );
     final result = await graphqlApiClient.mutate(options);
@@ -207,11 +195,7 @@ class BoardRepository {
     final options = MutationOptions(
       document: opi(gql(updateTopicMutation)),
       variables: {
-        'input': {
-          'id': id,
-          'title': title,
-          'description': description,
-        }
+        'input': {'id': id, 'title': title, 'description': description},
       },
     );
     final result = await graphqlApiClient.mutate(options);

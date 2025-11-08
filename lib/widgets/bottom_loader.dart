@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BottomLoader extends StatelessWidget {
-  const BottomLoader({
-    super.key,
-  });
+  const BottomLoader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +11,7 @@ class BottomLoader extends StatelessWidget {
         child: SizedBox(
           width: 33,
           height: 33,
-          child: CircularProgressIndicator(
-            strokeWidth: 1.5,
-          ),
+          child: CircularProgressIndicator(strokeWidth: 1.5),
         ),
       ),
     );

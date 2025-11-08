@@ -19,10 +19,7 @@ class PushSuccess extends PushState {
   /// 服务器上的推送 RegId
   final String? server;
 
-  const PushSuccess({
-    required this.local,
-    this.server,
-  });
+  const PushSuccess({required this.local, this.server});
 
   @override
   List<Object> get props => [local];
@@ -30,10 +27,7 @@ class PushSuccess extends PushState {
   @override
   String toString() => 'PushSuccess(local: $local, server: $server)';
 
-  PushSuccess copyWith({
-    String? local,
-    String? server,
-  }) {
+  PushSuccess copyWith({String? local, String? server}) {
     return PushSuccess(
       local: local ?? this.local,
       server: server ?? this.server,

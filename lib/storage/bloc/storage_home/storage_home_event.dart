@@ -14,10 +14,7 @@ class StorageHomeFetched extends StorageHomeEvent {
   /// 是否需要刷新，默认不需要
   final bool cache;
 
-  const StorageHomeFetched({
-    required this.itemType,
-    this.cache = true,
-  });
+  const StorageHomeFetched({required this.itemType, this.cache = true});
 
   @override
   List<Object> get props => [itemType, cache];

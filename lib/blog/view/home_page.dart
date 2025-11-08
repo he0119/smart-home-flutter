@@ -13,22 +13,19 @@ import 'package:smarthome/widgets/rounded_raised_button.dart';
 import 'package:smarthome/widgets/webview.dart';
 
 class BlogHomePage extends Page {
-  const BlogHomePage()
-      : super(
-          key: const ValueKey('blog'),
-          name: '/blog',
-        );
+  const BlogHomePage() : super(key: const ValueKey('blog'), name: '/blog');
 
   @override
   Route createRoute(BuildContext context) {
     return PageRouteBuilder(
       settings: this,
-      pageBuilder: (BuildContext context, Animation<double> animation,
-              Animation<double> secondaryAnimation) =>
-          FadeTransition(
-        opacity: animation,
-        child: const BlogHomeScreen(),
-      ),
+      pageBuilder:
+          (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              FadeTransition(opacity: animation, child: const BlogHomeScreen()),
     );
   }
 }
@@ -64,8 +61,9 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
                     if (kIsWeb) {
                       await launchUrl(blogAdminUrl);
                     } else {
-                      await _controller.webviewController
-                          .loadRequest(Uri.parse(blogAdminUrl));
+                      await _controller.webviewController.loadRequest(
+                        Uri.parse(blogAdminUrl),
+                      );
                     }
                   } else {
                     MyRouterDelegate.of(context).push(const BlogSettingsPage());
@@ -85,19 +83,17 @@ class _BlogHomeScreenState extends State<BlogHomeScreen> {
           ],
           slivers: [
             (!kIsWeb && !Platform.isWindows)
-                ? SliverWebview(
-                    controller: _controller,
-                  )
+                ? SliverWebview(controller: _controller)
                 : SliverCenterRoundedRaisedButton(
                     onPressed: () => launchUrl(settings.blogUrl),
                     child: const Text('博客'),
-                  )
+                  ),
           ],
           floatingActionButton: FloatingActionButton(
             tooltip: '使用浏览器打开',
             onPressed: () async {
-              final currentUrl =
-                  await _controller.webviewController.currentUrl();
+              final currentUrl = await _controller.webviewController
+                  .currentUrl();
               if (currentUrl != null) {
                 await launchUrl(currentUrl);
               }

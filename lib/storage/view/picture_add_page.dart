@@ -15,12 +15,8 @@ class PictureAddPage extends Page {
   /// 物品 ID
   final String itemId;
 
-  PictureAddPage({
-    required this.itemId,
-  }) : super(
-          key: ValueKey(itemId),
-          name: '/item/$itemId/picture/add',
-        );
+  PictureAddPage({required this.itemId})
+    : super(key: ValueKey(itemId), name: '/item/$itemId/picture/add');
 
   @override
   Route createRoute(BuildContext context) {
@@ -30,9 +26,7 @@ class PictureAddPage extends Page {
         create: (context) => PictureEditBloc(
           storageRepository: RepositoryProvider.of<StorageRepository>(context),
         ),
-        child: PictureAddScreen(
-          itemId: itemId,
-        ),
+        child: PictureAddScreen(itemId: itemId),
       ),
     );
   }
@@ -42,10 +36,7 @@ class PictureAddScreen extends StatefulWidget {
   /// 物品 ID
   final String itemId;
 
-  const PictureAddScreen({
-    super.key,
-    required this.itemId,
-  });
+  const PictureAddScreen({super.key, required this.itemId});
 
   @override
   State<PictureAddScreen> createState() => _PictureAddScreenState();
@@ -93,12 +84,8 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                 children: [
                   TextFormField(
                     controller: _descriptionController,
-                    decoration: const InputDecoration(
-                      labelText: '备注',
-                    ),
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(200),
-                    ],
+                    decoration: const InputDecoration(labelText: '备注'),
+                    inputFormatters: [LengthLimitingTextInputFormatter(200)],
                     textInputAction: TextInputAction.next,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -121,9 +108,7 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                         )
                       : const SizedBox(
                           height: 300,
-                          child: Center(
-                            child: Text('无图片'),
-                          ),
+                          child: Center(child: Text('无图片')),
                         ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +116,8 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                       RoundedRaisedButton(
                         onPressed: () async {
                           final image = await _picker.pickImage(
-                              source: ImageSource.gallery);
+                            source: ImageSource.gallery,
+                          );
                           setState(() {
                             picturePath = image?.path;
                           });
@@ -143,7 +129,8 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                         RoundedRaisedButton(
                           onPressed: () async {
                             final photo = await _picker.pickImage(
-                                source: ImageSource.camera);
+                              source: ImageSource.camera,
+                            );
                             setState(() {
                               picturePath = photo?.path;
                             });
@@ -155,7 +142,8 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: RoundedRaisedButton(
-                      onPressed: (state is! PictureEditInProgress &&
+                      onPressed:
+                          (state is! PictureEditInProgress &&
                               picturePath != null)
                           ? () {
                               if (_formKey.currentState!.validate()) {

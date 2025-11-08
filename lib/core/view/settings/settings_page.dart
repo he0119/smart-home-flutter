@@ -22,10 +22,7 @@ import 'package:smarthome/widgets/settings/settings.dart';
 
 class SettingsPage extends Page {
   const SettingsPage()
-      : super(
-          key: const ValueKey('settings'),
-          name: '/settings',
-        );
+    : super(key: const ValueKey('settings'), name: '/settings');
 
   @override
   Route createRoute(BuildContext context) {
@@ -53,36 +50,44 @@ class SettingsScreen extends StatelessWidget {
                   title: '主题',
                   subtitle: settings.themeMode.toReadable(),
                   onPressed: (context) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ThemeModePage(),
-                    ));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ThemeModePage(),
+                      ),
+                    );
                   },
                 ),
                 SettingsTile(
                   title: '服务器网址',
                   subtitle: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
                   onPressed: (context) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ApiUrlPage(),
-                    ));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ApiUrlPage(),
+                      ),
+                    );
                   },
                 ),
                 SettingsTile(
                   title: '管理网址',
                   subtitle: settings.adminUrl,
                   onPressed: (context) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const AdminUrlPage(),
-                    ));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AdminUrlPage(),
+                      ),
+                    );
                   },
                 ),
                 SettingsTile(
                   title: '默认主页',
                   subtitle: settings.defaultPage.name,
                   onPressed: (context) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const DefaultPage(),
-                    ));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const DefaultPage(),
+                      ),
+                    );
                   },
                 ),
                 if (!kIsWeb && Platform.isAndroid) const MiPushSettingsTile(),
@@ -100,7 +105,7 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     );
                   },
-                )
+                ),
               ],
             ),
             SettingsSection(
@@ -110,18 +115,22 @@ class SettingsScreen extends StatelessWidget {
                   title: '博客网址',
                   subtitle: settings.blogUrl,
                   onPressed: (context) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const BlogUrlPage(),
-                    ));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const BlogUrlPage(),
+                      ),
+                    );
                   },
                 ),
                 SettingsTile(
                   title: '博客管理网址',
                   subtitle: settings.blogAdminUrl ?? '请单击输入',
                   onPressed: (context) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const BlogAdminUrlPage(),
-                    ));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const BlogAdminUrlPage(),
+                      ),
+                    );
                   },
                 ),
               ],

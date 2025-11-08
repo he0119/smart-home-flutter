@@ -27,9 +27,7 @@ class SessionFailure extends SessionState {
 class SessionSuccess extends SessionState {
   final List<Session> sessions;
 
-  const SessionSuccess({
-    required this.sessions,
-  });
+  const SessionSuccess({required this.sessions});
 
   @override
   List<Object> get props => [sessions];

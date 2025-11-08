@@ -82,16 +82,7 @@ class Comment extends Equatable {
 
   @override
   List<Object?> get props {
-    return [
-      id,
-      topic,
-      user,
-      body,
-      createdAt,
-      editedAt,
-      parent,
-      replyTo,
-    ];
+    return [id, topic, user, body, createdAt, editedAt, parent, replyTo];
   }
 
   @override

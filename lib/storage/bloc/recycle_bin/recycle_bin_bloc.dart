@@ -13,14 +13,15 @@ part 'recycle_bin_state.dart';
 class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
   final StorageRepository storageRepository;
 
-  RecycleBinBloc({
-    required this.storageRepository,
-  }) : super(RecycleBinInProgress()) {
+  RecycleBinBloc({required this.storageRepository})
+    : super(RecycleBinInProgress()) {
     on<RecycleBinFetched>(_onRecycleBinFetched);
   }
 
   FutureOr<void> _onRecycleBinFetched(
-      RecycleBinFetched event, Emitter<RecycleBinState> emit) async {
+    RecycleBinFetched event,
+    Emitter<RecycleBinState> emit,
+  ) async {
     final currentState = state;
     try {
       // 如果需要刷新，则显示加载界面
@@ -37,19 +38,18 @@ class RecycleBinBloc extends Bloc<RecycleBinEvent, RecycleBinState> {
           after: currentState.pageInfo.endCursor,
           cache: false,
         );
-        emit(RecycleBinSuccess(
-          items: currentState.items + results.item1,
-          pageInfo: currentState.pageInfo.copyWith(results.item2),
-        ));
+        emit(
+          RecycleBinSuccess(
+            items: currentState.items + results.item1,
+            pageInfo: currentState.pageInfo.copyWith(results.item2),
+          ),
+        );
       } else {
         // 其他情况根据设置看是否需要打开缓存，并获取第一页
         final results = await storageRepository.deletedItems(
           cache: event.cache,
         );
-        emit(RecycleBinSuccess(
-          items: results.item1,
-          pageInfo: results.item2,
-        ));
+        emit(RecycleBinSuccess(items: results.item1, pageInfo: results.item2));
       }
     } on MyException catch (e) {
       emit(RecycleBinFailure(e.message));

@@ -72,28 +72,26 @@ class _CommentEditPageState extends State<CommentEditPage> {
                   if (_formKey.currentState!.validate()) {
                     if (widget.isEditing) {
                       context.read<CommentEditBloc>().add(
-                            CommentUpdated(
-                              id: widget.comment!.id,
-                              body: _bodyController.text,
-                            ),
-                          );
+                        CommentUpdated(
+                          id: widget.comment!.id,
+                          body: _bodyController.text,
+                        ),
+                      );
                     } else {
                       context.read<CommentEditBloc>().add(
-                            CommentAdded(
-                              topicId: widget.topic!.id,
-                              body: _bodyController.text,
-                            ),
-                          );
+                        CommentAdded(
+                          topicId: widget.topic!.id,
+                          body: _bodyController.text,
+                        ),
+                      );
                     }
                     showInfoSnackBar('正在提交...', duration: 1);
                   }
                 },
               ),
-            )
+            ),
           ],
-          appbarBottom: TabBar(
-            tabs: [for (final tab in tabs) Tab(text: tab)],
-          ),
+          appbarBottom: TabBar(tabs: [for (final tab in tabs) Tab(text: tab)]),
           sliver: SliverFillRemaining(
             child: TabBarView(
               children: [
@@ -103,9 +101,7 @@ class _CommentEditPageState extends State<CommentEditPage> {
                   formKey: _formKey,
                   bodyController: _bodyController,
                 ),
-                _PreviewPage(
-                  bodyController: _bodyController,
-                ),
+                _PreviewPage(bodyController: _bodyController),
               ],
             ),
           ),
@@ -164,9 +160,7 @@ class _EditPage extends StatelessWidget {
 class _PreviewPage extends StatefulWidget {
   final TextEditingController? bodyController;
 
-  const _PreviewPage({
-    this.bodyController,
-  });
+  const _PreviewPage({this.bodyController});
 
   @override
   __PreviewPageState createState() => __PreviewPageState();
@@ -191,8 +185,9 @@ class __PreviewPageState extends State<_PreviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final loginUser =
-        context.select((SettingsController settings) => settings.loginUser);
+    final loginUser = context.select(
+      (SettingsController settings) => settings.loginUser,
+    );
     return SingleChildScrollView(
       child: CommentItem(
         comment: Comment(

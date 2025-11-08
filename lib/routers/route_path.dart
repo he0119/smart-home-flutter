@@ -9,9 +9,7 @@ class HomeRoutePath extends RoutePath {
   /// 空则为默认主页
   final AppTab? appTab;
 
-  HomeRoutePath({
-    this.appTab,
-  });
+  HomeRoutePath({this.appTab});
 
   @override
   String toString() => 'HomeRoutePath(appTab: $appTab)';
@@ -22,9 +20,7 @@ class StorageRoutePath extends RoutePath {
   /// 空字符串则为 家(/storage/)
   final String storageId;
 
-  StorageRoutePath({
-    required this.storageId,
-  });
+  StorageRoutePath({required this.storageId});
 
   @override
   String toString() => 'StorageRoutePath(storageId: $storageId)';
@@ -34,9 +30,7 @@ class StorageRoutePath extends RoutePath {
 class ItemRoutePath extends RoutePath {
   final String itemId;
 
-  ItemRoutePath({
-    required this.itemId,
-  });
+  ItemRoutePath({required this.itemId});
 
   @override
   String toString() => 'ItemRoutePath(itemId: $itemId)';
@@ -47,9 +41,7 @@ class PictureRoutePath extends RoutePath {
   /// 图片的 ID
   final String pictureId;
 
-  PictureRoutePath({
-    required this.pictureId,
-  });
+  PictureRoutePath({required this.pictureId});
 
   @override
   String toString() => 'PictureRoutePath(pictureId: $pictureId)';
@@ -60,9 +52,7 @@ class TopicRoutePath extends RoutePath {
   /// 话题 ID
   final String topicId;
 
-  TopicRoutePath({
-    required this.topicId,
-  });
+  TopicRoutePath({required this.topicId});
 
   @override
   String toString() => 'TopicRoutePath(topicId: $topicId)';
@@ -87,9 +77,7 @@ class SettingsRoutePath extends RoutePath {
   /// 空则为默认主页
   final AppSettings? appSettings;
 
-  SettingsRoutePath({
-    this.appSettings,
-  });
+  SettingsRoutePath({this.appSettings});
 
   @override
   String toString() => 'SettingsRoutePath(appTab: $appSettings)';

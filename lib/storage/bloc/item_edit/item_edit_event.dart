@@ -75,10 +75,7 @@ class ConsumableAdded extends ItemEditEvent {
   final Item item;
   final List<Item?> consumables;
 
-  const ConsumableAdded({
-    required this.item,
-    required this.consumables,
-  });
+  const ConsumableAdded({required this.item, required this.consumables});
 
   @override
   String toString() => 'ConsumableAdded(item: $item)';
@@ -88,10 +85,7 @@ class ConsumableDeleted extends ItemEditEvent {
   final Item item;
   final List<Item> consumables;
 
-  const ConsumableDeleted({
-    required this.item,
-    required this.consumables,
-  });
+  const ConsumableDeleted({required this.item, required this.consumables});
 
   @override
   String toString() => 'ConsumableDeleted(item: $item)';

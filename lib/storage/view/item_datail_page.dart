@@ -16,12 +16,8 @@ import 'package:smarthome/widgets/home_page.dart';
 class ItemDetailPage extends Page {
   final String itemId;
 
-  ItemDetailPage({
-    required this.itemId,
-  }) : super(
-          key: UniqueKey(),
-          name: '/item/$itemId',
-        );
+  ItemDetailPage({required this.itemId})
+    : super(key: UniqueKey(), name: '/item/$itemId');
 
   @override
   Route createRoute(BuildContext context) {
@@ -32,9 +28,7 @@ class ItemDetailPage extends Page {
           BlocProvider<ItemDetailBloc>(
             create: (context) => ItemDetailBloc(
               storageRepository: context.read<StorageRepository>(),
-            )..add(ItemDetailStarted(
-                id: itemId,
-              )),
+            )..add(ItemDetailStarted(id: itemId)),
           ),
           BlocProvider<ItemEditBloc>(
             create: (context) => ItemEditBloc(
@@ -42,9 +36,7 @@ class ItemDetailPage extends Page {
             ),
           ),
         ],
-        child: ItemDetailScreen(
-          itemId: itemId,
-        ),
+        child: ItemDetailScreen(itemId: itemId),
       ),
     );
   }
@@ -53,10 +45,7 @@ class ItemDetailPage extends Page {
 class ItemDetailScreen extends StatelessWidget {
   final String itemId;
 
-  const ItemDetailScreen({
-    super.key,
-    required this.itemId,
-  });
+  const ItemDetailScreen({super.key, required this.itemId});
 
   @override
   Widget build(BuildContext context) {
@@ -88,8 +77,8 @@ class ItemDetailScreen extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => BlocProvider<ItemEditBloc>(
                             create: (_) => ItemEditBloc(
-                              storageRepository:
-                                  context.read<StorageRepository>(),
+                              storageRepository: context
+                                  .read<StorageRepository>(),
                             ),
                             child: ItemEditPage(
                               isEditing: true,
@@ -99,8 +88,9 @@ class ItemDetailScreen extends StatelessWidget {
                         ),
                       );
                       if (r == true) {
-                        itemDetailBloc
-                            .add(ItemDetailStarted(id: state.item.id));
+                        itemDetailBloc.add(
+                          ItemDetailStarted(id: state.item.id),
+                        );
                       }
                     }
                     if (value == ItemDetailMenu.consumable) {
@@ -108,20 +98,19 @@ class ItemDetailScreen extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => BlocProvider<ItemEditBloc>(
                             create: (_) => ItemEditBloc(
-                              storageRepository:
-                                  context.read<StorageRepository>(),
+                              storageRepository: context
+                                  .read<StorageRepository>(),
                             ),
-                            child: ConsumableEditPage(
-                              item: state.item,
-                            ),
+                            child: ConsumableEditPage(item: state.item),
                           ),
                         ),
                       );
                       itemDetailBloc.add(ItemDetailStarted(id: state.item.id));
                     }
                     if (value == ItemDetailMenu.addPicture) {
-                      myRouterDelegate
-                          .push(PictureAddPage(itemId: state.item.id));
+                      myRouterDelegate.push(
+                        PictureAddPage(itemId: state.item.id),
+                      );
                     }
                     if (value == ItemDetailMenu.delete) {
                       if (context.mounted) {
@@ -140,8 +129,8 @@ class ItemDetailScreen extends StatelessWidget {
                               TextButton(
                                 onPressed: () {
                                   context.read<ItemEditBloc>().add(
-                                        ItemDeleted(item: state.item),
-                                      );
+                                    ItemDeleted(item: state.item),
+                                  );
                                   Navigator.of(context).pop();
                                 },
                                 child: const Text('是'),
@@ -170,7 +159,7 @@ class ItemDetailScreen extends StatelessWidget {
                       child: Text('删除'),
                     ),
                   ],
-                )
+                ),
               ],
               onRefresh: () async {
                 context.read<ItemDetailBloc>().add(ItemDetailRefreshed());
@@ -179,16 +168,16 @@ class ItemDetailScreen extends StatelessWidget {
                 if (state.status == ItemDetailStatus.failure)
                   SliverErrorMessageButton(
                     onPressed: () {
-                      context
-                          .read<ItemDetailBloc>()
-                          .add(ItemDetailStarted(id: itemId));
+                      context.read<ItemDetailBloc>().add(
+                        ItemDetailStarted(id: itemId),
+                      );
                     },
                     message: state.error,
                   ),
                 if (state.status == ItemDetailStatus.loading)
                   const SliverCenterLoadingIndicator(),
                 if (state.status == ItemDetailStatus.success)
-                  _ItemDetailList(item: state.item)
+                  _ItemDetailList(item: state.item),
               ],
             ),
           ),
@@ -206,103 +195,99 @@ class _ItemDetailList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverList(
-      delegate: SliverChildListDelegate(
-        <Widget>[
+      delegate: SliverChildListDelegate(<Widget>[
+        ListTile(
+          title: const Text('数量'),
+          subtitle: Text(item.number.toString()),
+        ),
+        if (item.description != null && item.description!.isNotEmpty)
+          ListTile(title: const Text('备注'), subtitle: Text(item.description!)),
+        if (item.storage != null)
           ListTile(
-            title: const Text('数量'),
-            subtitle: Text(item.number.toString()),
-          ),
-          if (item.description != null && item.description!.isNotEmpty)
-            ListTile(
-              title: const Text('备注'),
-              subtitle: Text(item.description!),
-            ),
-          if (item.storage != null)
-            ListTile(
-              title: const Text('属于'),
-              subtitle: InkWell(
-                child: Text(
-                  item.storage!.name,
-                  style: const TextStyle(
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-                onTap: () {
-                  MyRouterDelegate.of(context)
-                      .push(StorageDetailPage(storageId: item.storage!.id));
-                },
+            title: const Text('属于'),
+            subtitle: InkWell(
+              child: Text(
+                item.storage!.name,
+                style: const TextStyle(decoration: TextDecoration.underline),
               ),
+              onTap: () {
+                MyRouterDelegate.of(
+                  context,
+                ).push(StorageDetailPage(storageId: item.storage!.id));
+              },
             ),
-          if (item.price != null)
-            ListTile(
-              title: const Text('价格'),
-              subtitle: Text(item.price.toString()),
-            ),
-          if (item.expiredAt != null)
-            ListTile(
-              title: const Text('有效期至'),
-              subtitle: Text(item.expiredAt?.toLocalStr() ?? ''),
-            ),
-          if (item.consumables!.isNotEmpty)
-            ListTile(
-              title: const Text('耗材'),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: item.consumables!
-                    .map(
-                      (item) => InkWell(
-                        child: Text(
-                          item.name,
-                          style: const TextStyle(
-                            decoration: TextDecoration.underline,
-                          ),
+          ),
+        if (item.price != null)
+          ListTile(
+            title: const Text('价格'),
+            subtitle: Text(item.price.toString()),
+          ),
+        if (item.expiredAt != null)
+          ListTile(
+            title: const Text('有效期至'),
+            subtitle: Text(item.expiredAt?.toLocalStr() ?? ''),
+          ),
+        if (item.consumables!.isNotEmpty)
+          ListTile(
+            title: const Text('耗材'),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: item.consumables!
+                  .map(
+                    (item) => InkWell(
+                      child: Text(
+                        item.name,
+                        style: const TextStyle(
+                          decoration: TextDecoration.underline,
                         ),
-                        onTap: () {
-                          MyRouterDelegate.of(context)
-                              .push(ItemDetailPage(itemId: item.id));
-                        },
                       ),
-                    )
-                    .toList(),
-              ),
+                      onTap: () {
+                        MyRouterDelegate.of(
+                          context,
+                        ).push(ItemDetailPage(itemId: item.id));
+                      },
+                    ),
+                  )
+                  .toList(),
             ),
-          if (item.editedBy != null)
-            ListTile(
-              title: const Text('修改人'),
-              subtitle: Text(item.editedBy!.username),
-            ),
-          ListTile(
-            title: const Text('修改时间'),
-            subtitle: Text(item.editedAt?.toLocalStr() ?? ''),
           ),
-          if (item.createdBy != null)
-            ListTile(
-              title: const Text('录入人'),
-              subtitle: Text(item.createdBy!.username),
-            ),
+        if (item.editedBy != null)
           ListTile(
-            title: const Text('录入时间'),
-            subtitle: Text(item.createdAt?.toLocalStr() ?? ''),
+            title: const Text('修改人'),
+            subtitle: Text(item.editedBy!.username),
           ),
-          if (item.deletedAt != null)
+        ListTile(
+          title: const Text('修改时间'),
+          subtitle: Text(item.editedAt?.toLocalStr() ?? ''),
+        ),
+        if (item.createdBy != null)
+          ListTile(
+            title: const Text('录入人'),
+            subtitle: Text(item.createdBy!.username),
+          ),
+        ListTile(
+          title: const Text('录入时间'),
+          subtitle: Text(item.createdAt?.toLocalStr() ?? ''),
+        ),
+        if (item.deletedAt != null)
+          ListTile(
+            title: const Text('删除时间'),
+            subtitle: Text(item.deletedAt?.toLocalStr() ?? ''),
+          ),
+        if (item.pictures!.isNotEmpty)
+          for (Picture picture in item.pictures!)
             ListTile(
-              title: const Text('删除时间'),
-              subtitle: Text(item.deletedAt?.toLocalStr() ?? ''),
+              title: picture.description.isNotEmpty
+                  ? Text('图片（${picture.description}）')
+                  : const Text('图片（未命名）'),
+              subtitle: const Text('单击查看'),
+              onTap: () {
+                MyRouterDelegate.of(
+                  context,
+                ).push(PicturePage(pictureId: picture.id));
+              },
             ),
-          if (item.pictures!.isNotEmpty)
-            for (Picture picture in item.pictures!)
-              ListTile(
-                title: picture.description.isNotEmpty
-                    ? Text('图片（${picture.description}）')
-                    : const Text('图片（未命名）'),
-                subtitle: const Text('单击查看'),
-                onTap: () {
-                  MyRouterDelegate.of(context)
-                      .push(PicturePage(pictureId: picture.id));
-                },
-              )
-        ],
-      ),
+      ]),
     );
   }
 }

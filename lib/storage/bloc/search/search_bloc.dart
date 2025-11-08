@@ -13,15 +13,18 @@ part 'search_states.dart';
 class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
   final StorageRepository storageRepository;
 
-  StorageSearchBloc({
-    required this.storageRepository,
-  }) : super(StorageSearchInitial()) {
-    on<StorageSearchChanged>(_onStorageSearchChanged,
-        transformer: debounce(const Duration(milliseconds: 300)));
+  StorageSearchBloc({required this.storageRepository})
+    : super(StorageSearchInitial()) {
+    on<StorageSearchChanged>(
+      _onStorageSearchChanged,
+      transformer: debounce(const Duration(milliseconds: 300)),
+    );
   }
 
   FutureOr<void> _onStorageSearchChanged(
-      StorageSearchChanged event, Emitter<StorageSearchState> emit) async {
+    StorageSearchChanged event,
+    Emitter<StorageSearchState> emit,
+  ) async {
     if (event.key.isEmpty) {
       emit(StorageSearchInitial());
       return;
@@ -33,18 +36,19 @@ class StorageSearchBloc extends Bloc<StorageSearchEvent, StorageSearchState> {
         isDeleted: event.isDeleted,
         missingStorage: event.missingStorage,
       );
-      emit(StorageSearchSuccess(
-        items: results.item1,
-        storages: results.item2,
-        term: event.key,
-      ));
+      emit(
+        StorageSearchSuccess(
+          items: results.item1,
+          storages: results.item2,
+          term: event.key,
+        ),
+      );
     } on MyException catch (e) {
       emit(StorageSearchFailure(e.message));
     }
   }
 
-  EventTransformer<StorageSearchEvent> debounce<StorageSearchEvent>(
-      Duration duration) {
+  EventTransformer<T> debounce<T>(Duration duration) {
     return (events, mapper) => events.debounceTime(duration).switchMap(mapper);
   }
 }

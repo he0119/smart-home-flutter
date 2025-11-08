@@ -8,10 +8,7 @@ import 'package:smarthome/utils/parse_url.dart';
 class MyCircleAvatar extends StatelessWidget {
   final String? avatarUrl;
 
-  const MyCircleAvatar({
-    super.key,
-    required this.avatarUrl,
-  });
+  const MyCircleAvatar({super.key, required this.avatarUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +23,14 @@ class MyCircleAvatar extends StatelessWidget {
     if (kIsWeb || !Platform.isWindows) {
       return CachedNetworkImage(
         imageUrl: url,
-        imageBuilder: (context, imageProvider) => CircleAvatar(
-          backgroundImage: imageProvider,
-        ),
+        imageBuilder: (context, imageProvider) =>
+            CircleAvatar(backgroundImage: imageProvider),
         placeholder: (context, url) => const CircularProgressIndicator(),
         errorWidget: (context, url, error) => const Icon(Icons.error),
         cacheKey: getCacheKey(url),
       );
     } else {
-      return CircleAvatar(
-        backgroundImage: NetworkImage(url),
-      );
+      return CircleAvatar(backgroundImage: NetworkImage(url));
     }
   }
 }

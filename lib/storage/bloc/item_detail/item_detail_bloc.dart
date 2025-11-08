@@ -14,19 +14,18 @@ enum ItemDetailStatus { initial, loading, success, failure }
 class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
   final StorageRepository storageRepository;
 
-  ItemDetailBloc({
-    required this.storageRepository,
-  }) : super(const ItemDetailState()) {
+  ItemDetailBloc({required this.storageRepository})
+    : super(const ItemDetailState()) {
     on<ItemDetailStarted>(_onItemDetailStarted);
     on<ItemDetailRefreshed>(_onItemDetailRefreshed);
   }
 
   FutureOr<void> _onItemDetailStarted(
-      ItemDetailStarted event, Emitter<ItemDetailState> emit) async {
+    ItemDetailStarted event,
+    Emitter<ItemDetailState> emit,
+  ) async {
     try {
-      final item = await storageRepository.item(
-        id: event.id,
-      );
+      final item = await storageRepository.item(id: event.id);
       if (item == null) {
         emit(
           state.copyWith(
@@ -36,24 +35,16 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
         );
         return;
       }
-      emit(
-        state.copyWith(
-          status: ItemDetailStatus.success,
-          item: item,
-        ),
-      );
+      emit(state.copyWith(status: ItemDetailStatus.success, item: item));
     } on MyException catch (e) {
-      emit(
-        state.copyWith(
-          status: ItemDetailStatus.failure,
-          error: e.message,
-        ),
-      );
+      emit(state.copyWith(status: ItemDetailStatus.failure, error: e.message));
     }
   }
 
   FutureOr<void> _onItemDetailRefreshed(
-      ItemDetailRefreshed event, Emitter<ItemDetailState> emit) async {
+    ItemDetailRefreshed event,
+    Emitter<ItemDetailState> emit,
+  ) async {
     if (state.status == ItemDetailStatus.success) {
       emit(state.copyWith(status: ItemDetailStatus.loading));
       try {
@@ -70,18 +61,10 @@ class ItemDetailBloc extends Bloc<ItemDetailEvent, ItemDetailState> {
           );
           return;
         }
-        emit(
-          state.copyWith(
-            status: ItemDetailStatus.success,
-            item: item,
-          ),
-        );
+        emit(state.copyWith(status: ItemDetailStatus.success, item: item));
       } on MyException catch (e) {
         emit(
-          state.copyWith(
-            status: ItemDetailStatus.failure,
-            error: e.message,
-          ),
+          state.copyWith(status: ItemDetailStatus.failure, error: e.message),
         );
       }
     }

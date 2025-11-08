@@ -36,16 +36,18 @@ class _StorageEditPageState extends State<StorageEditPage> {
   void initState() {
     if (widget.isEditing) {
       _nameController = TextEditingController(text: widget.storage!.name);
-      _descriptionController =
-          TextEditingController(text: widget.storage!.description);
+      _descriptionController = TextEditingController(
+        text: widget.storage!.description,
+      );
       parentId = widget.storage!.parent?.id;
     } else {
       _nameController = TextEditingController();
       _descriptionController = TextEditingController();
       // 如果是家的话，需要特殊处理，因为家的 id 是空字符串
       // 服务器只能接受 null
-      parentId =
-          widget.storage?.id != homeStorage.id ? widget.storage?.id : null;
+      parentId = widget.storage?.id != homeStorage.id
+          ? widget.storage?.id
+          : null;
     }
 
     _nameFocusNode = FocusNode();
@@ -65,7 +67,10 @@ class _StorageEditPageState extends State<StorageEditPage> {
   }
 
   void _fieldFocusChange(
-      BuildContext context, FocusNode currentFocus, FocusNode? nextFocus) {
+    BuildContext context,
+    FocusNode currentFocus,
+    FocusNode? nextFocus,
+  ) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }
@@ -126,12 +131,8 @@ class _StorageEditPageState extends State<StorageEditPage> {
                 children: <Widget>[
                   TextFormField(
                     controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: '名称',
-                    ),
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(200),
-                    ],
+                    decoration: const InputDecoration(labelText: '名称'),
+                    inputFormatters: [LengthLimitingTextInputFormatter(200)],
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -143,13 +144,14 @@ class _StorageEditPageState extends State<StorageEditPage> {
                     focusNode: _nameFocusNode,
                     onFieldSubmitted: (_) {
                       _fieldFocusChange(
-                          context, _nameFocusNode!, _descriptionFocusNode);
+                        context,
+                        _nameFocusNode!,
+                        _descriptionFocusNode,
+                      );
                     },
                   ),
                   StorageFormField(
-                    decoration: const InputDecoration(
-                      labelText: '属于',
-                    ),
+                    decoration: const InputDecoration(labelText: '属于'),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     onChanged: (Storage? value) {
                       // 家的 id 是空字符串，服务器只能接受 null
@@ -169,12 +171,8 @@ class _StorageEditPageState extends State<StorageEditPage> {
                   ),
                   TextFormField(
                     controller: _descriptionController,
-                    decoration: const InputDecoration(
-                      labelText: '备注',
-                    ),
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(200),
-                    ],
+                    decoration: const InputDecoration(labelText: '备注'),
+                    inputFormatters: [LengthLimitingTextInputFormatter(200)],
                     focusNode: _descriptionFocusNode,
                   ),
                   RoundedRaisedButton(

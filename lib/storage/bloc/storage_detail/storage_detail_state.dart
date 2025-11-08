@@ -25,8 +25,13 @@ class StorageDetailState extends Equatable {
       !itemPageInfo.hasNextPage && !storagePageInfo.hasNextPage;
 
   @override
-  List<Object?> get props =>
-      [status, error, storage, itemPageInfo, storagePageInfo];
+  List<Object?> get props => [
+    status,
+    error,
+    storage,
+    itemPageInfo,
+    storagePageInfo,
+  ];
 
   @override
   bool get stringify => true;

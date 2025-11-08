@@ -6,15 +6,15 @@ import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/utils/constants.dart';
 
 List<TreeNode<Storage>> childrenNode(String? key, List<Storage> storages) {
-  final children = storages
-      .where((storage) => (storage.parent?.id ?? homeStorage.id) == key);
+  final children = storages.where(
+    (storage) => (storage.parent?.id ?? homeStorage.id) == key,
+  );
   if (children.isNotEmpty) {
     final childNodes = children
         .map(
-          (child) => TreeNode<Storage>(
-            key: child.id,
-            data: child,
-          )..addAll(childrenNode(child.id, storages)),
+          (child) =>
+              TreeNode<Storage>(key: child.id, data: child)
+                ..addAll(childrenNode(child.id, storages)),
         )
         .toList();
     return childNodes;
@@ -24,10 +24,8 @@ List<TreeNode<Storage>> childrenNode(String? key, List<Storage> storages) {
 
 TreeNode<Storage> generateNodes(List<Storage> storages) {
   // 家应该最为根节点，这样才能选中
-  final homeNode = TreeNode<Storage>(
-    key: homeStorage.id,
-    data: homeStorage,
-  )..addAll(childrenNode(homeStorage.id, storages));
+  final homeNode = TreeNode<Storage>(key: homeStorage.id, data: homeStorage)
+    ..addAll(childrenNode(homeStorage.id, storages));
 
   return homeNode;
 }
@@ -37,8 +35,9 @@ List<Storage> findParents(Storage storage, List<Storage> storages) {
   final parents = <Storage>[];
   var current = storage;
   while (current.parent != null) {
-    final parent =
-        storages.firstWhere((element) => element.id == current.parent!.id);
+    final parent = storages.firstWhere(
+      (element) => element.id == current.parent!.id,
+    );
     parents.add(parent);
     current = parent;
   }
@@ -49,11 +48,7 @@ class StorageDialog extends StatefulWidget {
   final Storage? storage;
   final List<Storage> storages;
 
-  const StorageDialog({
-    super.key,
-    this.storage,
-    required this.storages,
-  });
+  const StorageDialog({super.key, this.storage, required this.storages});
 
   @override
   State<StorageDialog> createState() => _StorageDialogState();
@@ -122,7 +117,7 @@ class _StorageDialogState extends State<StorageDialog> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -140,27 +135,28 @@ class StorageFormField extends FormField<Storage> {
     InputDecoration? decoration = const InputDecoration(),
     this.onChanged,
   }) : super(
-          builder: (field) {
-            final _StorageFieldState state = field as _StorageFieldState;
-            final InputDecoration effectiveDecoration = (decoration ??
-                    const InputDecoration())
-                .applyDefaults(Theme.of(field.context).inputDecorationTheme);
-            return TextField(
-              focusNode: state._focusNode,
-              controller: state._controller,
-              decoration: effectiveDecoration.copyWith(
-                errorText: state.errorText,
-                suffixIcon: state.shouldShowClearIcon(effectiveDecoration)
-                    ? IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: state.clear,
-                      )
-                    : null,
-              ),
-              readOnly: true,
-            );
-          },
-        );
+         builder: (field) {
+           final _StorageFieldState state = field as _StorageFieldState;
+           final InputDecoration effectiveDecoration =
+               (decoration ?? const InputDecoration()).applyDefaults(
+                 Theme.of(field.context).inputDecorationTheme,
+               );
+           return TextField(
+             focusNode: state._focusNode,
+             controller: state._controller,
+             decoration: effectiveDecoration.copyWith(
+               errorText: state.errorText,
+               suffixIcon: state.shouldShowClearIcon(effectiveDecoration)
+                   ? IconButton(
+                       icon: const Icon(Icons.close),
+                       onPressed: state.clear,
+                     )
+                   : null,
+             ),
+             readOnly: true,
+           );
+         },
+       );
 
   final void Function(Storage? value)? onChanged;
 
@@ -226,18 +222,16 @@ class _StorageFieldState extends FormFieldState<Storage> {
   Future<void> requestUpdate() async {
     if (!isShowingDialog) {
       isShowingDialog = true;
-      final storages = await RepositoryProvider.of<StorageRepository>(context)
-          .storages(key: '', cache: false);
+      final storages = await RepositoryProvider.of<StorageRepository>(
+        context,
+      ).storages(key: '', cache: false);
       if (context.mounted) {
         final newValue = await showDialog<Storage>(
           // TODO: 这里也不清楚，明明已经检查过 mounted 了。
           // ignore: use_build_context_synchronously
           context: context,
           builder: (context) {
-            return StorageDialog(
-              storage: value,
-              storages: storages,
-            );
+            return StorageDialog(storage: value, storages: storages);
           },
         );
         isShowingDialog = false;
