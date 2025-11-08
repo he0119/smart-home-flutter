@@ -22,7 +22,7 @@ jobs:
       release: ${{ steps.setVersion.outputs.release }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set build version
         id: setVersion
@@ -66,7 +66,7 @@ jobs:
     needs: test
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set version name
         run: |
@@ -108,7 +108,7 @@ jobs:
       artifact-id: ${{ steps.artifact-upload-step.outputs.artifact-id }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set version name
         run: |
@@ -153,7 +153,7 @@ jobs:
     needs: test
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set version name
         run: |
@@ -253,7 +253,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Create Sentry release
         uses: getsentry/action-release@v3
