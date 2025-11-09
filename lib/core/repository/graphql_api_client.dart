@@ -17,6 +17,7 @@ import 'package:smarthome/core/graphql/mutations/mutations.dart';
 import 'package:smarthome/user/model/user.dart';
 import 'package:smarthome/user/repository/user_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';
+import 'package:web/web.dart' show document;
 
 class ClientWithCookies extends IOClient {
   final Ref ref;
@@ -242,10 +243,26 @@ class GraphQLApiClient {
     final baseUri = Uri.parse(apiUrl);
     final oidcUri = baseUri.replace(path: '/oidc/authenticate/');
 
+    if (kIsWeb) {
+      // Web 平台：使用浏览器重定向
+      _log.info('Web 平台：重定向到 OIDC 认证页面: $oidcUri');
+      // 在 URL 中添加返回地址参数（如果服务器支持）
+      final authUrl = oidcUri.replace(
+        queryParameters: {'next': Uri.base.toString()},
+      );
+
+      // 触发浏览器重定向
+      document.location!.href = authUrl.toString();
+
+      // 页面将会跳转，这里不会返回
+      // 但为了满足函数签名，返回 null
+      return null;
+    }
+
+    // 非 Web 平台：使用 HttpClient 手动处理重定向
     try {
       _log.info('开始 OIDC 认证: $oidcUri');
 
-      // 使用 HttpClient 手动处理重定向以收集所有 cookies
       final httpClient = HttpClient();
 
       final allCookies = <Cookie>[];
