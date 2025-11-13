@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:smarthome/utils/parse_url.dart';
 
 class MyCircleAvatar extends StatelessWidget {
@@ -34,3 +35,8 @@ class MyCircleAvatar extends StatelessWidget {
     }
   }
 }
+
+@Preview(name: 'MyCircleAvatar')
+Widget myCircleAvatarPreview() => const MyCircleAvatar(
+  avatarUrl: 'https://avatars.githubusercontent.com/u/5219550?v=4',
+);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widget_previews.dart';
 
 class RoundedRaisedButton extends StatelessWidget {
   final Widget? child;
@@ -40,3 +41,7 @@ class SliverCenterRoundedRaisedButton extends StatelessWidget {
     );
   }
 }
+
+@Preview(name: 'RoundedRaisedButton')
+Widget roundedRaisedButtonPreview() =>
+    RoundedRaisedButton(onPressed: () {}, child: const Text('Button'));
