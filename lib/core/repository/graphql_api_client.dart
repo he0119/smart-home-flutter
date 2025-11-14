@@ -32,21 +32,37 @@ class ClientWithCookies extends IOClient {
       final cookiesString = response.headers['set-cookie'];
       final request = response.request;
       if (cookiesString != null && request != null) {
-        // 这个分割真的难受，不知道还没有更好的方法
-        // cookie 有效期的格式中包含了逗号
-        final cookieStringList = cookiesString.split(',');
-        List<Cookie> cookies = [];
-        for (var i = 0; i < cookieStringList.length; i += 2) {
-          cookies.add(
-            Cookie.fromSetCookieValue(
-              cookieStringList[i] + cookieStringList[i + 1],
-            ),
-          );
+        // 解析 Set-Cookie 头
+        // Set-Cookie 头可能包含多个 cookie，使用更可靠的方式解析
+        final List<Cookie> cookies = [];
+
+        // 使用正则表达式匹配完整的 cookie 字符串
+        // 匹配模式：cookie_name=cookie_value; 后面可能跟其他属性
+        final cookiePattern = RegExp(
+          r'([^=,]+)=([^;]+)(?:;\s*[^,]+(?:,\s*\d{2}\s+[A-Za-z]+\s+\d{4}\s+[\d:]+\s+GMT)?)*',
+        );
+
+        final matches = cookiePattern.allMatches(cookiesString);
+        for (final match in matches) {
+          try {
+            // 尝试解析整个 cookie 字符串
+            final cookieStr = match.group(0);
+            if (cookieStr != null) {
+              final cookie = Cookie.fromSetCookieValue(cookieStr);
+              cookies.add(cookie);
+            }
+          } catch (e) {
+            // 如果解析失败，跳过这个 cookie
+            continue;
+          }
         }
-        final newCookies = cookies
-            .map((e) => '${e.name}=${e.value}')
-            .join('; ');
-        settingsController.updateCookies(newCookies);
+
+        if (cookies.isNotEmpty) {
+          final newCookies = cookies
+              .map((e) => '${e.name}=${e.value}')
+              .join('; ');
+          settingsController.updateCookies(newCookies);
+        }
       }
       return response;
     });
