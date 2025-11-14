@@ -462,6 +462,10 @@ class GraphQLApiClient {
       throw ServerException(error.message);
     }
     if (exception.linkException != null) {
+      if (exception.linkException.toString().contains('Invalid cookie')) {
+        settingsController.updateLoginUser(null);
+        throw const AuthenticationException('Cookie 无效，请重新登录');
+      }
       _log.severe(exception.linkException.toString());
       throw const NetworkException('网络异常，请稍后再试');
     }
