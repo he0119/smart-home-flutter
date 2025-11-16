@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:smarthome/bootstrap.dart';
 import 'package:smarthome/core/model/app_config.dart';
@@ -20,8 +21,12 @@ Future<void> main() async {
   final appConfig = AppConfig(
     appName: '智慧家庭 DEV',
     flavorName: 'dev',
-    defaultApiUrl: 'https://smart.dev.hehome.xyz/graphql/',
-    defaultAdminUrl: 'https://smart.dev.hehome.xyz/admin/',
+    defaultApiUrl: kIsWeb
+        ? 'http://localhost:8080/graphql/'
+        : 'https://smart.dev.hehome.xyz/graphql/',
+    defaultAdminUrl: kIsWeb
+        ? 'http://localhost:8080/admin/'
+        : 'https://smart.dev.hehome.xyz/admin/',
   );
   bootstrap(appConfig);
 }
