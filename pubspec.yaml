@@ -5,8 +5,8 @@ homepage: https://github.com/he0119/smart-home-flutter
 publish_to: "none"
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: "3.35.7" # This must be exact! No ranges allowed.
+  sdk: ">=3.10.0 <4.0.0"
+  flutter: "3.38.1" # This must be exact! No ranges allowed.
 
 dependencies:
   flutter:
