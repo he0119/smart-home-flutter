@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart' as provider;
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
@@ -39,8 +37,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
 
     return Scaffold(
-      body: provider.Consumer<SettingsController>(
-        builder: (context, settings, child) {
+      body: Builder(
+        builder: (context) {
+          final settings = ref.watch(settingsProvider);
+          final settingsNotifier = ref.read(settingsProvider.notifier);
           if (settings.apiUrl == null) {
             canLogin = false;
           }
@@ -53,7 +53,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   },
                 )
               : ApiUrlForm(
-                  apiUrl: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
+                  apiUrl:
+                      settings.apiUrl ??
+                      settingsNotifier.appConfig.defaultApiUrl,
                   onTapNext: () {
                     setState(() {
                       canLogin = true;
@@ -67,17 +69,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 }
 
 /// 选择服务器网址的界面
-class ApiUrlForm extends StatefulWidget {
+class ApiUrlForm extends ConsumerStatefulWidget {
   final String apiUrl;
   final VoidCallback onTapNext;
 
   const ApiUrlForm({super.key, required this.apiUrl, required this.onTapNext});
 
   @override
-  State<ApiUrlForm> createState() => _ApiUrlFormState();
+  ConsumerState<ApiUrlForm> createState() => _ApiUrlFormState();
 }
 
-class _ApiUrlFormState extends State<ApiUrlForm> {
+class _ApiUrlFormState extends ConsumerState<ApiUrlForm> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController? _controller;
 
@@ -124,12 +126,12 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
               RoundedRaisedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    context.read<GraphQLApiClient>().initailize(
-                      _controller!.text,
-                    );
-                    context.read<SettingsController>().updateApiUrl(
-                      _controller!.text,
-                    );
+                    ref
+                        .read(graphQLApiClientProvider)
+                        .initailize(_controller!.text);
+                    ref
+                        .read(settingsProvider.notifier)
+                        .updateApiUrl(_controller!.text);
                     widget.onTapNext();
                   }
                 },
@@ -171,7 +173,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsController>();
+    final settings = ref.watch(settingsProvider);
     final loginMethod = settings.loginMethod == 'oidc'
         ? LoginMethod.oidc
         : LoginMethod.password;
@@ -227,11 +229,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                         ],
                         selected: {loginMethod},
                         onSelectionChanged: (Set<LoginMethod> newSelection) {
-                          settings.updateLoginMethod(
-                            newSelection.first == LoginMethod.oidc
-                                ? 'oidc'
-                                : 'password',
-                          );
+                          ref
+                              .read(settingsProvider.notifier)
+                              .updateLoginMethod(
+                                newSelection.first == LoginMethod.oidc
+                                    ? 'oidc'
+                                    : 'password',
+                              );
                         },
                       ),
                     ),

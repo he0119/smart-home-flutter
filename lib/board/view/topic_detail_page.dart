@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart' as provider;
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/board/model/models.dart';
 import 'package:smarthome/board/providers/comment_edit_provider.dart';
 import 'package:smarthome/board/providers/topic_detail_provider.dart';
@@ -10,6 +8,7 @@ import 'package:smarthome/board/view/comment_edit_page.dart';
 import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
 import 'package:smarthome/board/view/widgets/item_title.dart';
+import 'package:smarthome/core/providers/settings_provider.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
@@ -48,7 +47,7 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final descending = context.read<SettingsController>().commentDescending;
+      final descending = ref.read(settingsProvider).commentDescending;
       ref
           .read(topicDetailProvider.notifier)
           .initialize(widget.topicId, descending: descending);
@@ -57,12 +56,9 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final loginUser = context.select<SettingsController, dynamic>(
-      (settings) => settings.loginUser,
-    );
-    final descending = context.select<SettingsController, bool>(
-      (settings) => settings.commentDescending,
-    );
+    final settings = ref.watch(settingsProvider);
+    final loginUser = settings.loginUser;
+    final descending = settings.commentDescending;
 
     // Listen to TopicEdit state changes
     ref.listen<TopicEditState>(topicEditProvider, (previous, state) {
@@ -413,10 +409,9 @@ class CommentOrder extends ConsumerWidget {
                   ),
                 ),
                 onSelected: (dynamic value) {
-                  provider.Provider.of<SettingsController>(
-                    context,
-                    listen: false,
-                  ).updateCommentDescending(value);
+                  ref
+                      .read(settingsProvider.notifier)
+                      .updateCommentDescending(value);
                   ref
                       .read(topicDetailProvider.notifier)
                       .refresh(descending: value);

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart' as provider;
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/providers/topic_edit_provider.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
-import 'package:smarthome/user/model/user.dart';
+import 'package:smarthome/core/providers/settings_provider.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
@@ -178,7 +176,7 @@ class _EditPage extends StatelessWidget {
   }
 }
 
-class _PreviewPage extends StatefulWidget {
+class _PreviewPage extends ConsumerStatefulWidget {
   final TextEditingController titleController;
   final TextEditingController descriptionController;
 
@@ -191,7 +189,7 @@ class _PreviewPage extends StatefulWidget {
   __PreviewPageState createState() => __PreviewPageState();
 }
 
-class __PreviewPageState extends State<_PreviewPage> {
+class __PreviewPageState extends ConsumerState<_PreviewPage> {
   @override
   void initState() {
     super.initState();
@@ -212,9 +210,8 @@ class __PreviewPageState extends State<_PreviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final loginUser = context.select<SettingsController, User?>(
-      (settings) => settings.loginUser,
-    );
+    final settings = ref.watch(settingsProvider);
+    final loginUser = settings.loginUser;
     return SingleChildScrollView(
       child: TopicItem(
         topic: Topic(

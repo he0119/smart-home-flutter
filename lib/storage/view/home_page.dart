@@ -7,7 +7,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/providers/storage_home_provider.dart';
-import 'package:smarthome/storage/storage.dart' hide StorageHomeState;
+import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
 import 'package:smarthome/storage/view/widgets/scan_qr_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';

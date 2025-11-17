@@ -147,8 +147,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
   }
 
   Future<void> updateMiPushAppKey(String? newMiPushAppKey) async {
-    if (newMiPushAppKey == null || newMiPushAppKey == state.miPushAppKey)
+    if (newMiPushAppKey == null || newMiPushAppKey == state.miPushAppKey) {
       return;
+    }
     state = state.copyWith(miPushAppKey: () => newMiPushAppKey);
     await _settingsService.updateMiPushAppKey(newMiPushAppKey);
   }
@@ -161,8 +162,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
 
   Future<void> updateRefreshInterval(int? newRefreshInterval) async {
     if (newRefreshInterval == null ||
-        newRefreshInterval == state.refreshInterval)
+        newRefreshInterval == state.refreshInterval) {
       return;
+    }
     state = state.copyWith(refreshInterval: newRefreshInterval);
     await _settingsService.updateRefreshInterval(newRefreshInterval);
   }
@@ -180,8 +182,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
   }
 
   Future<void> updateBlogAdminUrl(String? newBlogAdminUrl) async {
-    if (newBlogAdminUrl == null || newBlogAdminUrl == state.blogAdminUrl)
+    if (newBlogAdminUrl == null || newBlogAdminUrl == state.blogAdminUrl) {
       return;
+    }
     state = state.copyWith(blogAdminUrl: () => newBlogAdminUrl);
     await _settingsService.updateBlogAdminUrl(newBlogAdminUrl);
   }
@@ -194,8 +197,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
 
   Future<void> updateCommentDescending(bool? newCommentDescending) async {
     if (newCommentDescending == null ||
-        newCommentDescending == state.commentDescending)
+        newCommentDescending == state.commentDescending) {
       return;
+    }
     state = state.copyWith(commentDescending: newCommentDescending);
     await _settingsService.updateCommentDescending(newCommentDescending);
   }
