@@ -32,6 +32,11 @@ class RecycleBinState {
       pageInfo: pageInfo ?? this.pageInfo,
     );
   }
+
+  @override
+  String toString() {
+    return 'RecycleBinState(status: $status, items: ${items.length}, pageInfo: $pageInfo)';
+  }
 }
 
 enum RecycleBinStatus { initial, loading, success, failure }

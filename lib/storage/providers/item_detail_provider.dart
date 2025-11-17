@@ -30,6 +30,11 @@ class ItemDetailState {
       itemId: itemId ?? this.itemId,
     );
   }
+
+  @override
+  String toString() {
+    return 'ItemDetailState(status: $status, item: ${item.name}, itemId: $itemId)';
+  }
 }
 
 enum ItemDetailStatus { initial, loading, success, failure }

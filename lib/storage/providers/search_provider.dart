@@ -34,6 +34,11 @@ class SearchState {
       term: term ?? this.term,
     );
   }
+
+  @override
+  String toString() {
+    return 'SearchState(status: $status, term: $term, items: ${items.length}, storages: ${storages.length})';
+  }
 }
 
 enum SearchStatus { initial, loading, success, failure }

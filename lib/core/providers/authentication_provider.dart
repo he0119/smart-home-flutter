@@ -27,6 +27,11 @@ class AuthState {
       isLoading: isLoading ?? this.isLoading,
     );
   }
+
+  @override
+  String toString() {
+    return 'AuthState(user: $user, errorMessage: $errorMessage, isLoading: $isLoading)';
+  }
 }
 
 /// Authentication Notifier

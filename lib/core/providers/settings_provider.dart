@@ -78,6 +78,11 @@ class SettingsState {
       appConfig: appConfig ?? this.appConfig,
     );
   }
+
+  @override
+  String toString() {
+    return 'SettingsState(isLogin: $isLogin, themeMode: $themeMode, defaultPage: $defaultPage, apiUrl: $apiUrl)';
+  }
 }
 
 /// Settings Notifier

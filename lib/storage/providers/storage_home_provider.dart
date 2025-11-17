@@ -64,6 +64,11 @@ class StorageHomeState {
       pageInfo: pageInfo ?? this.pageInfo,
     );
   }
+
+  @override
+  String toString() {
+    return 'StorageHomeState(status: $status, itemType: $itemType, itemCount: $itemCount, pageInfo: $pageInfo)';
+  }
 }
 
 enum StorageHomeStatus { initial, loading, success, failure }

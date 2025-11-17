@@ -41,6 +41,11 @@ class StorageDetailState {
       storagePageInfo: storagePageInfo ?? this.storagePageInfo,
     );
   }
+
+  @override
+  String toString() {
+    return 'StorageDetailState(status: $status, storage: $storage, itemPageInfo: $itemPageInfo, storagePageInfo: $storagePageInfo)';
+  }
 }
 
 /// Storage detail notifier
@@ -163,5 +168,5 @@ class StorageDetailNotifier extends Notifier<StorageDetailState> {
 /// Storage detail provider
 final storageDetailProvider =
     NotifierProvider<StorageDetailNotifier, StorageDetailState>(
-  StorageDetailNotifier.new,
-);
+      StorageDetailNotifier.new,
+    );

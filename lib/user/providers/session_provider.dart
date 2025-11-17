@@ -10,18 +10,27 @@ sealed class SessionState {
 
 class SessionInProgress extends SessionState {
   const SessionInProgress();
+
+  @override
+  String toString() => 'SessionInProgress()';
 }
 
 class SessionSuccess extends SessionState {
   final List<Session> sessions;
 
   const SessionSuccess({required this.sessions});
+
+  @override
+  String toString() => 'SessionSuccess(sessions: ${sessions.length})';
 }
 
 class SessionFailure extends SessionState {
   final String message;
 
   const SessionFailure(this.message);
+
+  @override
+  String toString() => 'SessionFailure(message: $message)';
 }
 
 /// Session Notifier

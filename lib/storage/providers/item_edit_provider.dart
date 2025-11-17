@@ -26,6 +26,11 @@ class ItemEditState {
       item: item ?? this.item,
     );
   }
+
+  @override
+  String toString() {
+    return 'ItemEditState(status: $status, item: ${item?.name})';
+  }
 }
 
 enum ItemEditStatus {

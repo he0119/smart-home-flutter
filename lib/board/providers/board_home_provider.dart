@@ -39,6 +39,11 @@ class BoardHomeState {
       pageInfo: pageInfo ?? this.pageInfo,
     );
   }
+
+  @override
+  String toString() {
+    return 'BoardHomeState(status: $status, topics: ${topics.length}, pageInfo: $pageInfo)';
+  }
 }
 
 enum BoardHomeStatus { initial, loading, success, failure }

@@ -39,6 +39,11 @@ class TopicDetailState {
       pageInfo: pageInfo ?? this.pageInfo,
     );
   }
+
+  @override
+  String toString() {
+    return 'TopicDetailState(status: $status, topic: ${topic.title}, comments: ${comments.length}, pageInfo: $pageInfo)';
+  }
 }
 
 /// Topic detail notifier

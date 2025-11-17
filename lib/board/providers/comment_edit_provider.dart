@@ -26,6 +26,11 @@ class CommentEditState {
       comment: comment ?? this.comment,
     );
   }
+
+  @override
+  String toString() {
+    return 'CommentEditState(status: $status, comment: ${comment?.id})';
+  }
 }
 
 enum CommentEditStatus {

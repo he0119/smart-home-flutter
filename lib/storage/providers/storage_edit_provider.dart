@@ -26,6 +26,11 @@ class StorageEditState {
       storage: storage ?? this.storage,
     );
   }
+
+  @override
+  String toString() {
+    return 'StorageEditState(status: $status, storage: ${storage?.name})';
+  }
 }
 
 enum StorageEditStatus {

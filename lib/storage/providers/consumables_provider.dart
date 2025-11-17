@@ -32,6 +32,11 @@ class ConsumablesState {
       pageInfo: pageInfo ?? this.pageInfo,
     );
   }
+
+  @override
+  String toString() {
+    return 'ConsumablesState(status: $status, items: ${items.length}, pageInfo: $pageInfo)';
+  }
 }
 
 enum ConsumablesStatus { initial, loading, success, failure }

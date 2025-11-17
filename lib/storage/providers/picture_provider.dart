@@ -29,6 +29,11 @@ class PictureState {
       picture: picture ?? this.picture,
     );
   }
+
+  @override
+  String toString() {
+    return 'PictureState(status: $status, picture: ${picture.id})';
+  }
 }
 
 /// Picture notifier

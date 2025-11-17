@@ -26,6 +26,11 @@ class PictureEditState {
       picture: picture ?? this.picture,
     );
   }
+
+  @override
+  String toString() {
+    return 'PictureEditState(status: $status, picture: ${picture?.id})';
+  }
 }
 
 enum PictureEditStatus {

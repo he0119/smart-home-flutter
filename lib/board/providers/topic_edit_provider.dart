@@ -26,6 +26,11 @@ class TopicEditState {
       topic: topic ?? this.topic,
     );
   }
+
+  @override
+  String toString() {
+    return 'TopicEditState(status: $status, topic: ${topic?.title})';
+  }
 }
 
 enum TopicEditStatus {
