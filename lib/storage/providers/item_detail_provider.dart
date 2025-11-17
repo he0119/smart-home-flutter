@@ -8,22 +8,26 @@ class ItemDetailState {
   final ItemDetailStatus status;
   final String errorMessage;
   final Item item;
+  final String itemId;
 
   const ItemDetailState({
     this.status = ItemDetailStatus.initial,
     this.errorMessage = '',
     this.item = const Item(id: '', name: ''),
+    this.itemId = '',
   });
 
   ItemDetailState copyWith({
     ItemDetailStatus? status,
     String? errorMessage,
     Item? item,
+    String? itemId,
   }) {
     return ItemDetailState(
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       item: item ?? this.item,
+      itemId: itemId ?? this.itemId,
     );
   }
 }
@@ -32,15 +36,13 @@ enum ItemDetailStatus { initial, loading, success, failure }
 
 /// Item detail notifier
 class ItemDetailNotifier extends Notifier<ItemDetailState> {
-  late String itemId;
-
   @override
   ItemDetailState build() {
     return const ItemDetailState();
   }
 
   void initialize(String id) {
-    itemId = id;
+    state = state.copyWith(itemId: id);
     _loadItem(id);
   }
 

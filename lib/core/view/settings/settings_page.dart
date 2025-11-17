@@ -36,7 +36,6 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
-    final settingsNotifier = ref.read(settingsProvider.notifier);
     return MySliverScaffold(
       title: const Text('设置'),
       sliver: SettingsList(
@@ -57,8 +56,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
               SettingsTile(
                 title: '服务器网址',
-                subtitle:
-                    settings.apiUrl ?? settingsNotifier.appConfig.defaultApiUrl,
+                subtitle: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
                 onPressed: (context) {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => const ApiUrlPage()),

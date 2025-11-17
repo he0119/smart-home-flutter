@@ -21,6 +21,7 @@ class SettingsState {
   final bool commentDescending;
   final String? cookies;
   final String? loginMethod;
+  final AppConfig appConfig;
 
   const SettingsState({
     this.loginUser,
@@ -37,6 +38,7 @@ class SettingsState {
     required this.commentDescending,
     this.cookies,
     this.loginMethod,
+    required this.appConfig,
   });
 
   bool get isLogin => loginUser != null;
@@ -56,6 +58,7 @@ class SettingsState {
     bool? commentDescending,
     String? Function()? cookies,
     String? Function()? loginMethod,
+    AppConfig? appConfig,
   }) {
     return SettingsState(
       loginUser: loginUser != null ? loginUser() : this.loginUser,
@@ -72,6 +75,7 @@ class SettingsState {
       commentDescending: commentDescending ?? this.commentDescending,
       cookies: cookies != null ? cookies() : this.cookies,
       loginMethod: loginMethod != null ? loginMethod() : this.loginMethod,
+      appConfig: appConfig ?? this.appConfig,
     );
   }
 }
@@ -120,6 +124,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
       commentDescending: commentDescending,
       cookies: cookies,
       loginMethod: loginMethod,
+      appConfig: _appConfig,
     );
   }
 
@@ -215,8 +220,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
     state = state.copyWith(loginMethod: () => newLoginMethod);
     await _settingsService.updateLoginMethod(newLoginMethod);
   }
-
-  AppConfig get appConfig => _appConfig;
 }
 
 /// Internal providers for dependencies (exported for bootstrap)

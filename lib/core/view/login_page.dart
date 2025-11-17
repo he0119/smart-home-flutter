@@ -40,7 +40,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: Builder(
         builder: (context) {
           final settings = ref.watch(settingsProvider);
-          final settingsNotifier = ref.read(settingsProvider.notifier);
           if (settings.apiUrl == null) {
             canLogin = false;
           }
@@ -53,9 +52,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   },
                 )
               : ApiUrlForm(
-                  apiUrl:
-                      settings.apiUrl ??
-                      settingsNotifier.appConfig.defaultApiUrl,
+                  apiUrl: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
                   onTapNext: () {
                     setState(() {
                       canLogin = true;
