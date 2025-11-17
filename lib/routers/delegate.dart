@@ -209,51 +209,59 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
           }
         });
 
+        // 监听认证状态变化
+        ref.listen<AuthState>(authenticationProvider, (previous, next) async {
+          final user = next.user.when(
+            data: (user) => user,
+            loading: () => null,
+            error: (_, __) => null,
+          );
+
+          if (user != null &&
+              previous?.user.when(
+                    data: (u) => u,
+                    loading: () => null,
+                    error: (_, __) => null,
+                  ) ==
+                  null) {
+            // 当登录成功时，开始初始化推送服务
+            BlocProvider.of<PushBloc>(context).add(PushStarted());
+            // 仅在客户端上注册 Shortcut
+            if (!kIsWeb && !Platform.isWindows) {
+              const quickActions = QuickActions();
+              await quickActions.initialize((String shortcutType) {
+                switch (shortcutType) {
+                  case 'action_storage':
+                    ref.read(tabProvider.notifier).state = AppTab.storage;
+                    break;
+                  case 'action_blog':
+                    ref.read(tabProvider.notifier).state = AppTab.blog;
+                    break;
+                  case 'action_board':
+                    ref.read(tabProvider.notifier).state = AppTab.board;
+                    break;
+                }
+              });
+              await quickActions.setShortcutItems(<ShortcutItem>[
+                // TODO: 给快捷方式添加图标
+                const ShortcutItem(
+                  type: 'action_storage',
+                  localizedTitle: '物品',
+                ),
+                const ShortcutItem(type: 'action_blog', localizedTitle: '博客'),
+                const ShortcutItem(type: 'action_board', localizedTitle: '留言'),
+              ]);
+            }
+          }
+
+          if (next.errorMessage != null) {
+            showErrorSnackBar(next.errorMessage!);
+            ref.read(authenticationProvider.notifier).clearError();
+          }
+        });
+
         return MultiBlocListener(
           listeners: [
-            BlocListener<AuthenticationBloc, AuthenticationState>(
-              listener: (context, state) async {
-                if (state is AuthenticationSuccess) {
-                  // 当登录成功时，开始初始化推送服务
-                  BlocProvider.of<PushBloc>(context).add(PushStarted());
-                  // 仅在客户端上注册 Shortcut
-                  if (!kIsWeb && !Platform.isWindows) {
-                    const quickActions = QuickActions();
-                    await quickActions.initialize((String shortcutType) {
-                      switch (shortcutType) {
-                        case 'action_storage':
-                          ref.read(tabProvider.notifier).state = AppTab.storage;
-                          break;
-                        case 'action_blog':
-                          ref.read(tabProvider.notifier).state = AppTab.blog;
-                          break;
-                        case 'action_board':
-                          ref.read(tabProvider.notifier).state = AppTab.board;
-                          break;
-                      }
-                    });
-                    await quickActions.setShortcutItems(<ShortcutItem>[
-                      // TODO: 给快捷方式添加图标
-                      const ShortcutItem(
-                        type: 'action_storage',
-                        localizedTitle: '物品',
-                      ),
-                      const ShortcutItem(
-                        type: 'action_blog',
-                        localizedTitle: '博客',
-                      ),
-                      const ShortcutItem(
-                        type: 'action_board',
-                        localizedTitle: '留言',
-                      ),
-                    ]);
-                  }
-                }
-                if (state is AuthenticationError) {
-                  showErrorSnackBar(state.message);
-                }
-              },
-            ),
             BlocListener<UpdateBloc, UpdateState>(
               listener: (context, state) {
                 if (state is UpdateSuccess && state.needUpdate) {

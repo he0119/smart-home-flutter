@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as provider;
 import 'package:smarthome/app/settings/settings_controller.dart';
-import 'package:smarthome/core/bloc/blocs.dart';
-import 'package:smarthome/core/repository/graphql_api_client.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
@@ -19,48 +18,49 @@ class LoginPage extends Page {
   }
 }
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool canLogin = true;
 
   @override
   Widget build(BuildContext context) {
+    // 监听认证错误
+    ref.listen<AuthState>(authenticationProvider, (previous, next) {
+      if (next.errorMessage != null) {
+        showErrorSnackBar(next.errorMessage!);
+        ref.read(authenticationProvider.notifier).clearError();
+      }
+    });
+
     return Scaffold(
-      body: BlocListener<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-          if (state is AuthenticationFailure) {
-            showErrorSnackBar(state.message);
+      body: provider.Consumer<SettingsController>(
+        builder: (context, settings, child) {
+          if (settings.apiUrl == null) {
+            canLogin = false;
           }
+          return canLogin
+              ? LoginForm(
+                  onTapBack: () {
+                    setState(() {
+                      canLogin = false;
+                    });
+                  },
+                )
+              : ApiUrlForm(
+                  apiUrl: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
+                  onTapNext: () {
+                    setState(() {
+                      canLogin = true;
+                    });
+                  },
+                );
         },
-        child: Consumer<SettingsController>(
-          builder: (context, settings, child) {
-            if (settings.apiUrl == null) {
-              canLogin = false;
-            }
-            return canLogin
-                ? LoginForm(
-                    onTapBack: () {
-                      setState(() {
-                        canLogin = false;
-                      });
-                    },
-                  )
-                : ApiUrlForm(
-                    apiUrl: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
-                    onTapNext: () {
-                      setState(() {
-                        canLogin = true;
-                      });
-                    },
-                  );
-          },
-        ),
       ),
     );
   }
@@ -147,18 +147,18 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
 }
 
 /// 输入用户名密码的登录界面
-class LoginForm extends StatefulWidget {
+class LoginForm extends ConsumerStatefulWidget {
   final Function onTapBack;
 
   const LoginForm({super.key, required this.onTapBack});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  ConsumerState<LoginForm> createState() => _LoginFormState();
 }
 
 enum LoginMethod { password, oidc }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends ConsumerState<LoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -178,26 +178,24 @@ class _LoginFormState extends State<LoginForm> {
 
     void onLoginButtonPressed() {
       if (loginMethod == LoginMethod.password) {
-        BlocProvider.of<AuthenticationBloc>(context).add(
-          AuthenticationLogin(
-            username: _usernameController.text,
-            password: _passwordController.text,
-          ),
-        );
+        ref
+            .read(authenticationProvider.notifier)
+            .login(_usernameController.text, _passwordController.text);
       } else {
-        BlocProvider.of<AuthenticationBloc>(
-          context,
-        ).add(const AuthenticationOIDCLogin());
+        ref.read(authenticationProvider.notifier).oidcLogin();
       }
     }
 
-    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
-        if (state is AuthenticationInProgress) {
-          showInfoSnackBar('正在登录...', duration: 1);
-        }
-      },
-      builder: (context, state) {
+    // 监听登录状态
+    ref.listen<AuthState>(authenticationProvider, (previous, next) {
+      if (next.isLoading && !(previous?.isLoading ?? false)) {
+        showInfoSnackBar('正在登录...', duration: 1);
+      }
+    });
+
+    final authState = ref.watch(authenticationProvider);
+    return Builder(
+      builder: (context) {
         return Center(
           child: SingleChildScrollView(
             child: Form(
@@ -275,7 +273,7 @@ class _LoginFormState extends State<LoginForm> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Center(
                         child: FilledButton(
-                          onPressed: state is! AuthenticationInProgress
+                          onPressed: !authState.isLoading
                               ? onLoginButtonPressed
                               : null,
                           child: const Text('登录'),

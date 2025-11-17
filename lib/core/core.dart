@@ -1,5 +1,7 @@
 export 'bloc/blocs.dart';
 export 'model/models.dart';
+export 'providers/authentication_provider.dart';
+export 'providers/repository_providers.dart';
 export 'providers/settings_provider.dart';
 export 'providers/tab_provider.dart';
 export 'repository/repositories.dart';

@@ -13,7 +13,6 @@ import 'package:smarthome/l10n/l10n.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/routers/information_parser.dart';
 import 'package:smarthome/storage/storage.dart';
-import 'package:smarthome/user/user.dart';
 
 class MyApp extends StatelessWidget {
   MyApp({
@@ -36,11 +35,8 @@ class MyApp extends StatelessWidget {
       value: settingsController,
       child: MultiRepositoryProvider(
         providers: [
+          // 保留 Repository providers 以支持尚未迁移的 BLoCs
           RepositoryProvider<GraphQLApiClient>.value(value: graphQLApiClient),
-          RepositoryProvider<UserRepository>(
-            create: (context) =>
-                UserRepository(graphqlApiClient: graphQLApiClient),
-          ),
           RepositoryProvider<VersionRepository>(
             create: (context) => VersionRepository(),
           ),
@@ -59,15 +55,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MultiBlocProvider(
           providers: [
-            BlocProvider<AuthenticationBloc>(
-              create: (context) => AuthenticationBloc(
-                userRepository: RepositoryProvider.of<UserRepository>(context),
-                graphqlApiClient: RepositoryProvider.of<GraphQLApiClient>(
-                  context,
-                ),
-                settingsController: settingsController,
-              )..add(AuthenticationStarted()),
-            ),
+            // AuthenticationBloc 已迁移到 Riverpod - 使用 authenticationProvider
             // TabBloc 已迁移到 Riverpod - 使用 tabProvider
             BlocProvider<UpdateBloc>(
               create: (context) => UpdateBloc(

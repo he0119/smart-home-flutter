@@ -11,6 +11,7 @@ import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/app/settings/settings_service.dart';
 import 'package:smarthome/app/simple_riverpod_observer.dart';
 import 'package:smarthome/core/model/app_config.dart';
+import 'package:smarthome/core/providers/repository_providers.dart';
 import 'package:smarthome/core/providers/settings_provider.dart';
 import 'package:smarthome/core/repository/graphql_api_client.dart';
 
@@ -52,6 +53,7 @@ Future<void> bootstrap(AppConfig appConfig) async {
         overrides: [
           settingsServiceProvider.overrideWithValue(settingsService),
           appConfigProvider.overrideWithValue(appConfig),
+          graphQLApiClientProvider.overrideWithValue(graphQLApiClient),
         ],
       );
 
