@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/storage/storage.dart';
+import 'package:smarthome/storage/providers/storage_home_provider.dart';
+import 'package:smarthome/storage/storage.dart' hide StorageHomeState;
 import 'package:smarthome/storage/view/item_edit_page.dart';
 import 'package:smarthome/storage/view/widgets/scan_qr_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
@@ -23,9 +24,6 @@ class StorageHomePage extends Page {
 
   @override
   Route createRoute(BuildContext context) {
-    BlocProvider.of<StorageHomeBloc>(
-      context,
-    ).add(const StorageHomeFetched(itemType: ItemType.all));
     return PageRouteBuilder(
       settings: this,
       pageBuilder:
@@ -41,13 +39,14 @@ class StorageHomePage extends Page {
   }
 }
 
-class StorageHomeScreen extends StatelessWidget {
+class StorageHomeScreen extends ConsumerWidget {
   const StorageHomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<StorageHomeBloc, StorageHomeState>(
-      builder: (context, state) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(storageHomeProvider);
+    return Consumer(
+      builder: (context, ref, child) {
         return MyHomePage(
           activeTab: AppTab.storage,
           actions: <Widget>[
@@ -60,35 +59,29 @@ class StorageHomeScreen extends StatelessWidget {
             onPressed: () async {
               await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => BlocProvider<ItemEditBloc>(
-                    create: (_) => ItemEditBloc(
-                      storageRepository:
-                          RepositoryProvider.of<StorageRepository>(context),
-                    ),
-                    child: const ItemEditPage(isEditing: false),
-                  ),
+                  builder: (_) => const ItemEditPage(isEditing: false),
                 ),
               );
             },
             child: const Icon(Icons.add),
           ),
-          slivers: _buildSlivers(context, state),
-          onRefresh: (state is StorageHomeSuccess)
+          slivers: _buildSlivers(context, ref, state),
+          onRefresh: (state.status == StorageHomeStatus.success)
               ? () async {
-                  BlocProvider.of<StorageHomeBloc>(context).add(
-                    StorageHomeFetched(itemType: state.itemType, cache: false),
-                  );
+                  ref
+                      .read(storageHomeProvider.notifier)
+                      .fetch(itemType: state.itemType, cache: false);
                 }
               : null,
           canPop: () {
-            return state is StorageHomeSuccess &&
+            return state.status == StorageHomeStatus.success &&
                 state.itemType == ItemType.all;
           },
           onPopInvokedWithResult: (didPop, result) {
-            if (state is StorageHomeSuccess) {
-              BlocProvider.of<StorageHomeBloc>(
-                context,
-              ).add(const StorageHomeFetched(itemType: ItemType.all));
+            if (state.status == StorageHomeStatus.success) {
+              ref
+                  .read(storageHomeProvider.notifier)
+                  .fetch(itemType: ItemType.all);
             }
           },
         );
@@ -96,21 +89,25 @@ class StorageHomeScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildSlivers(BuildContext context, StorageHomeState state) {
+  List<Widget> _buildSlivers(
+    BuildContext context,
+    WidgetRef ref,
+    StorageHomeState state,
+  ) {
     List<Widget> listofWidget = [];
 
-    if (state is StorageHomeFailure) {
+    if (state.status == StorageHomeStatus.failure) {
       listofWidget.add(
         SliverErrorMessageButton(
           onPressed: () {
-            BlocProvider.of<StorageHomeBloc>(
-              context,
-            ).add(StorageHomeFetched(itemType: state.itemType, cache: false));
+            ref
+                .read(storageHomeProvider.notifier)
+                .fetch(itemType: state.itemType, cache: false);
           },
-          message: state.message,
+          message: state.errorMessage,
         ),
       );
-    } else if (state is StorageHomeSuccess) {
+    } else if (state.status == StorageHomeStatus.success) {
       // 仅在主界面添加所有位置按钮
       if (state.itemType == ItemType.all) {
         listofWidget.add(
@@ -147,6 +144,7 @@ class StorageHomeScreen extends StatelessWidget {
         listofWidget.add(
           _buildSliverStickyHeader(
             context,
+            ref,
             state.expiredItems!,
             ItemType.expired,
             state.itemType,
@@ -158,6 +156,7 @@ class StorageHomeScreen extends StatelessWidget {
         listofWidget.add(
           _buildSliverStickyHeader(
             context,
+            ref,
             state.nearExpiredItems!,
             ItemType.nearExpired,
             state.itemType,
@@ -169,6 +168,7 @@ class StorageHomeScreen extends StatelessWidget {
         listofWidget.add(
           _buildSliverStickyHeader(
             context,
+            ref,
             state.recentlyEditedItems!,
             ItemType.recentlyEdited,
             state.itemType,
@@ -180,6 +180,7 @@ class StorageHomeScreen extends StatelessWidget {
         listofWidget.add(
           _buildSliverStickyHeader(
             context,
+            ref,
             state.recentlyCreatedItems!,
             ItemType.recentlyCreated,
             state.itemType,
@@ -187,14 +188,15 @@ class StorageHomeScreen extends StatelessWidget {
           ),
         );
       }
-    } else {
+    } else if (state.status == StorageHomeStatus.loading) {
       listofWidget.add(const SliverCenterLoadingIndicator());
     }
     return listofWidget;
   }
 
-  SliverStickyHeader _buildSliverStickyHeader(
+  Widget _buildSliverStickyHeader(
     BuildContext context,
+    WidgetRef ref,
     List<Item> items,
     ItemType listType,
     ItemType currentType,
@@ -234,13 +236,13 @@ class StorageHomeScreen extends StatelessWidget {
                     : Icons.expand_less,
               ),
               onPressed: () {
-                BlocProvider.of<StorageHomeBloc>(context).add(
-                  StorageHomeFetched(
-                    itemType: currentType != ItemType.all
-                        ? ItemType.all
-                        : listType,
-                  ),
-                );
+                ref
+                    .read(storageHomeProvider.notifier)
+                    .fetch(
+                      itemType: currentType != ItemType.all
+                          ? ItemType.all
+                          : listType,
+                    );
               },
             ),
           ],
@@ -253,9 +255,7 @@ class StorageHomeScreen extends StatelessWidget {
         },
         hasReachedMax: hasReachedMax,
         onFetch: () {
-          BlocProvider.of<StorageHomeBloc>(
-            context,
-          ).add(StorageHomeFetched(itemType: currentType));
+          ref.read(storageHomeProvider.notifier).fetch(itemType: currentType);
         },
       ),
     );

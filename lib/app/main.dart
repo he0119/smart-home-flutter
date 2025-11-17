@@ -60,20 +60,8 @@ class MyApp extends StatelessWidget {
             // - TabBloc → tabProvider
             // - UpdateBloc → updateProvider
             // - PushBloc → pushProvider
-            BlocProvider<StorageHomeBloc>(
-              create: (context) => StorageHomeBloc(
-                storageRepository: RepositoryProvider.of<StorageRepository>(
-                  context,
-                ),
-              ),
-            ),
-            BlocProvider<BoardHomeBloc>(
-              create: (context) => BoardHomeBloc(
-                boardRepository: RepositoryProvider.of<BoardRepository>(
-                  context,
-                ),
-              ),
-            ),
+            // - StorageHomeBloc → storageHomeProvider
+            // - BoardHomeBloc → boardHomeProvider
           ],
           child: MyMaterialApp(settingsController: settingsController),
         ),
