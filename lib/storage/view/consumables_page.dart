@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
-import 'package:smarthome/storage/repository/storage_repository.dart';
+import 'package:smarthome/storage/providers/consumables_provider.dart';
 import 'package:smarthome/storage/view/item_datail_page.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
@@ -18,53 +17,39 @@ class ConsumablesPage extends Page {
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => BlocProvider<ConsumablesBloc>(
-        create: (context) => ConsumablesBloc(
-          storageRepository: RepositoryProvider.of<StorageRepository>(context),
-        )..add(const ConsumablesFetched()),
-        child: const ConsumablesScreen(),
-      ),
+      builder: (context) => const ConsumablesScreen(),
     );
   }
 }
 
-class ConsumablesScreen extends StatelessWidget {
+class ConsumablesScreen extends ConsumerWidget {
   const ConsumablesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ConsumablesBloc, ConsumablesState>(
-      builder: (context, state) {
-        return MySliverScaffold(
-          title: const Text('耗材管理'),
-          slivers: [
-            if (state is ConsumablesFailure)
-              SliverErrorMessageButton(
-                message: state.message,
-                onPressed: () {
-                  BlocProvider.of<ConsumablesBloc>(
-                    context,
-                  ).add(const ConsumablesFetched(cache: false));
-                },
-              ),
-            if (state is ConsumablesSuccess)
-              SliverInfiniteList(
-                itemBuilder: _buildItem,
-                items: state.items,
-                hasReachedMax: state.hasReachedMax,
-                onFetch: () => context.read<ConsumablesBloc>().add(
-                  const ConsumablesFetched(),
-                ),
-              ),
-            if (state is ConsumablesInProgress)
-              const SliverCenterLoadingIndicator(),
-          ],
-          onRefresh: () async {
-            BlocProvider.of<ConsumablesBloc>(
-              context,
-            ).add(const ConsumablesFetched(cache: false));
-          },
-        );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(consumablesProvider);
+    return MySliverScaffold(
+      title: const Text('耗材管理'),
+      slivers: [
+        if (state.status == ConsumablesStatus.failure)
+          SliverErrorMessageButton(
+            message: state.errorMessage,
+            onPressed: () {
+              ref.read(consumablesProvider.notifier).fetch(cache: false);
+            },
+          ),
+        if (state.status == ConsumablesStatus.success)
+          SliverInfiniteList(
+            itemBuilder: _buildItem,
+            items: state.items,
+            hasReachedMax: state.hasReachedMax,
+            onFetch: () => ref.read(consumablesProvider.notifier).fetch(),
+          ),
+        if (state.status == ConsumablesStatus.loading)
+          const SliverCenterLoadingIndicator(),
+      ],
+      onRefresh: () async {
+        ref.read(consumablesProvider.notifier).fetch(cache: false);
       },
     );
   }
