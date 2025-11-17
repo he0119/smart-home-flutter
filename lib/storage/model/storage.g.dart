@@ -63,7 +63,7 @@ Map<String, dynamic> _$PictureToJson(Picture instance) => <String, dynamic>{
 Item _$ItemFromJson(Map<String, dynamic> json) => Item(
   id: json['id'] as String,
   name: json['name'] as String,
-  number: json['number'] as int?,
+  number: (json['number'] as num?)?.toInt(),
   storage: json['storage'] == null
       ? null
       : Storage.fromJson(json['storage'] as Map<String, dynamic>),
