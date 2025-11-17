@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
+import 'package:smarthome/core/model/app_tab.dart';
 import 'package:smarthome/core/providers/settings_provider.dart';
 import 'package:smarthome/core/view/settings/admin_url_page.dart';
 import 'package:smarthome/core/view/settings/api_url_page.dart';
