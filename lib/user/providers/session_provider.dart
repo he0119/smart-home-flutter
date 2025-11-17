@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/providers/repository_providers.dart';
-import 'package:smarthome/user/model/user.dart';
+import 'package:smarthome/user/model/user.dart' as user_model;
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'session_provider.g.dart';
 
 /// Session 状态
 sealed class SessionState {
@@ -16,7 +18,7 @@ class SessionInProgress extends SessionState {
 }
 
 class SessionSuccess extends SessionState {
-  final List<Session> sessions;
+  final List<user_model.Session> sessions;
 
   const SessionSuccess({required this.sessions});
 
@@ -34,7 +36,8 @@ class SessionFailure extends SessionState {
 }
 
 /// Session Notifier
-class SessionNotifier extends Notifier<SessionState> {
+@riverpod
+class Session extends _$Session {
   @override
   SessionState build() {
     return const SessionInProgress();
@@ -62,8 +65,3 @@ class SessionNotifier extends Notifier<SessionState> {
     }
   }
 }
-
-/// Session provider
-final sessionProvider = NotifierProvider<SessionNotifier, SessionState>(
-  SessionNotifier.new,
-);

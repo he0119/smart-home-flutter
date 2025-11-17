@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/providers/providers.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'comment_edit_provider.g.dart';
 
 /// Comment edit state
 class CommentEditState {
@@ -43,7 +45,8 @@ enum CommentEditStatus {
 }
 
 /// Comment edit notifier
-class CommentEditNotifier extends Notifier<CommentEditState> {
+@riverpod
+class CommentEdit extends _$CommentEdit {
   @override
   CommentEditState build() {
     return const CommentEditState();
@@ -113,9 +116,3 @@ class CommentEditNotifier extends Notifier<CommentEditState> {
     state = const CommentEditState();
   }
 }
-
-/// Comment edit provider
-final commentEditProvider =
-    NotifierProvider<CommentEditNotifier, CommentEditState>(
-      CommentEditNotifier.new,
-    );

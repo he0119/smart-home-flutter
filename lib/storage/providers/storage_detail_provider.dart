@@ -1,8 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'storage_detail_provider.g.dart';
 
 /// Storage detail status
 enum StorageDetailStatus { initial, loading, success, failure }
@@ -49,21 +51,18 @@ class StorageDetailState {
 }
 
 /// Storage detail notifier
-class StorageDetailNotifier extends Notifier<StorageDetailState> {
-  StorageDetailNotifier(this._storageId);
-
-  final String _storageId;
-
+@riverpod
+class StorageDetail extends _$StorageDetail {
   @override
-  StorageDetailState build() {
+  StorageDetailState build(String storageId) {
     // Load storage data when the notifier is created
-    _loadStorage(_storageId, cache: true);
+    _loadStorage(storageId, cache: true);
     return const StorageDetailState();
   }
 
   /// Refresh storage data
   void refresh() {
-    _loadStorage(_storageId, cache: false);
+    _loadStorage(storageId, cache: false);
   }
 
   /// Fetch more data (pagination)
@@ -76,7 +75,7 @@ class StorageDetailNotifier extends Notifier<StorageDetailState> {
       final storageRepository = ref.read(storageRepositoryProvider);
       final storage = state.storage;
 
-      if (_storageId == homeStorage.id) {
+      if (storageId == homeStorage.id) {
         final results = await storageRepository.rootStorage(
           after: state.storagePageInfo.endCursor,
           cache: false,
@@ -162,9 +161,3 @@ class StorageDetailNotifier extends Notifier<StorageDetailState> {
     }
   }
 }
-
-/// Storage detail provider
-final storageDetailProvider =
-    NotifierProvider.family<StorageDetailNotifier, StorageDetailState, String>(
-      StorageDetailNotifier.new,
-    );

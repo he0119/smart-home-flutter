@@ -1,8 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/providers/repository_providers.dart';
 import 'package:smarthome/core/providers/settings_provider.dart';
 import 'package:smarthome/user/model/user.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'authentication_provider.g.dart';
 
 /// Authentication state (Riverpod version)
 class AuthState {
@@ -35,7 +37,8 @@ class AuthState {
 }
 
 /// Authentication Notifier
-class AuthenticationNotifier extends Notifier<AuthState> {
+@riverpod
+class Authentication extends _$Authentication {
   @override
   AuthState build() {
     // 启动时自动检查登录状态
@@ -135,24 +138,20 @@ class AuthenticationNotifier extends Notifier<AuthState> {
   }
 }
 
-/// Authentication provider
-final authenticationProvider =
-    NotifierProvider<AuthenticationNotifier, AuthState>(
-      AuthenticationNotifier.new,
-    );
-
 /// Convenience provider for current user
-final currentUserProvider = Provider<User?>((ref) {
+@riverpod
+User? currentUser(Ref ref) {
   final authState = ref.watch(authenticationProvider);
   return authState.user.when(
     data: (user) => user,
     loading: () => null,
     error: (_, _) => null,
   );
-});
+}
 
 /// Convenience provider for login status
-final isLoggedInProvider = Provider<bool>((ref) {
+@riverpod
+bool isLoggedIn(Ref ref) {
   final user = ref.watch(currentUserProvider);
   return user != null;
-});
+}

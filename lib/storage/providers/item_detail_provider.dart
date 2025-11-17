@@ -1,17 +1,16 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
+part 'item_detail_provider.g.dart';
+
 /// Item detail notifier
-class ItemDetailNotifier extends AsyncNotifier<Item> {
-  ItemDetailNotifier(this._itemId);
-
-  final String _itemId;
-
+@riverpod
+class ItemDetail extends _$ItemDetail {
   @override
-  Future<Item> build() async {
-    return await _loadItem(_itemId);
+  Future<Item> build(String itemId) async {
+    return await _loadItem(itemId);
   }
 
   Future<Item> _loadItem(String id, {bool cache = true}) async {
@@ -33,12 +32,6 @@ class ItemDetailNotifier extends AsyncNotifier<Item> {
 
   Future<void> refresh() async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => _loadItem(_itemId, cache: false));
+    state = await AsyncValue.guard(() => _loadItem(itemId, cache: false));
   }
 }
-
-/// Item detail provider
-final itemDetailProvider =
-    AsyncNotifierProvider.family<ItemDetailNotifier, Item, String>(
-      ItemDetailNotifier.new,
-    );

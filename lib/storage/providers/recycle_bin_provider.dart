@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'recycle_bin_provider.g.dart';
 
 /// RecycleBin state
 class RecycleBinState {
@@ -42,7 +44,8 @@ class RecycleBinState {
 enum RecycleBinStatus { initial, loading, success, failure }
 
 /// RecycleBin notifier
-class RecycleBinNotifier extends Notifier<RecycleBinState> {
+@riverpod
+class RecycleBin extends _$RecycleBin {
   @override
   RecycleBinState build() {
     // 初始加载 - 延迟执行避免在 build 期间访问 state
@@ -89,9 +92,3 @@ class RecycleBinNotifier extends Notifier<RecycleBinState> {
     }
   }
 }
-
-/// RecycleBin provider
-final recycleBinProvider =
-    NotifierProvider<RecycleBinNotifier, RecycleBinState>(
-      RecycleBinNotifier.new,
-    );

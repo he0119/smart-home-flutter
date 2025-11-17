@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'consumables_provider.g.dart';
 
 /// Consumables state
 class ConsumablesState {
@@ -42,7 +44,8 @@ class ConsumablesState {
 enum ConsumablesStatus { initial, loading, success, failure }
 
 /// Consumables notifier
-class ConsumablesNotifier extends Notifier<ConsumablesState> {
+@riverpod
+class Consumables extends _$Consumables {
   @override
   ConsumablesState build() {
     // 初始加载 - 延迟执行避免在 build 期间访问 state
@@ -89,9 +92,3 @@ class ConsumablesNotifier extends Notifier<ConsumablesState> {
     }
   }
 }
-
-/// Consumables provider
-final consumablesProvider =
-    NotifierProvider<ConsumablesNotifier, ConsumablesState>(
-      ConsumablesNotifier.new,
-    );

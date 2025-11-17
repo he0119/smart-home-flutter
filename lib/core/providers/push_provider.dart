@@ -3,12 +3,14 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/model/models.dart';
 import 'package:smarthome/core/providers/repository_providers.dart';
 import 'package:smarthome/core/providers/settings_provider.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'push_provider.g.dart';
 
 /// Push state
 class PushInfo {
@@ -40,7 +42,8 @@ class PushInfo {
 }
 
 /// Push Notifier
-class PushNotifier extends Notifier<PushInfo> {
+@riverpod
+class Push extends _$Push {
   static final Logger _log = Logger('PushProvider');
 
   static const miPushMethod = MethodChannel('hehome.xyz/push/method');
@@ -153,6 +156,3 @@ class PushNotifier extends Notifier<PushInfo> {
     state = state.copyWith(errorMessage: () => null);
   }
 }
-
-/// Push provider
-final pushProvider = NotifierProvider<PushNotifier, PushInfo>(PushNotifier.new);

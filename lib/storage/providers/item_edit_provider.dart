@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'item_edit_provider.g.dart';
 
 /// Item edit state
 class ItemEditState {
@@ -46,7 +48,8 @@ enum ItemEditStatus {
 }
 
 /// Item edit notifier
-class ItemEditNotifier extends Notifier<ItemEditState> {
+@riverpod
+class ItemEdit extends _$ItemEdit {
   @override
   ItemEditState build() {
     return const ItemEditState();
@@ -194,8 +197,3 @@ class ItemEditNotifier extends Notifier<ItemEditState> {
     state = const ItemEditState();
   }
 }
-
-/// Item edit provider
-final itemEditProvider = NotifierProvider<ItemEditNotifier, ItemEditState>(
-  ItemEditNotifier.new,
-);

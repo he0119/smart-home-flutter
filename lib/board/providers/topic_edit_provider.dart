@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/providers/providers.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'topic_edit_provider.g.dart';
 
 /// Topic edit state
 class TopicEditState {
@@ -47,7 +49,8 @@ enum TopicEditStatus {
 }
 
 /// Topic edit notifier
-class TopicEditNotifier extends Notifier<TopicEditState> {
+@riverpod
+class TopicEdit extends _$TopicEdit {
   @override
   TopicEditState build() {
     return const TopicEditState();
@@ -188,8 +191,3 @@ class TopicEditNotifier extends Notifier<TopicEditState> {
     state = const TopicEditState();
   }
 }
-
-/// Topic edit provider
-final topicEditProvider = NotifierProvider<TopicEditNotifier, TopicEditState>(
-  TopicEditNotifier.new,
-);

@@ -1,8 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'storage_home_provider.g.dart';
 
 /// Storage home state
 class StorageHomeState {
@@ -74,7 +76,8 @@ class StorageHomeState {
 enum StorageHomeStatus { initial, loading, success, failure }
 
 /// Storage home notifier
-class StorageHomeNotifier extends Notifier<StorageHomeState> {
+@riverpod
+class StorageHome extends _$StorageHome {
   @override
   StorageHomeState build() {
     // 初始加载 - 延迟执行避免在 build 期间访问 state
@@ -231,9 +234,3 @@ class StorageHomeNotifier extends Notifier<StorageHomeState> {
     }
   }
 }
-
-/// Storage home provider
-final storageHomeProvider =
-    NotifierProvider<StorageHomeNotifier, StorageHomeState>(
-      StorageHomeNotifier.new,
-    );

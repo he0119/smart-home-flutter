@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'picture_edit_provider.g.dart';
 
 /// Picture edit state
 class PictureEditState {
@@ -43,7 +45,8 @@ enum PictureEditStatus {
 }
 
 /// Picture edit notifier
-class PictureEditNotifier extends Notifier<PictureEditState> {
+@riverpod
+class PictureEdit extends _$PictureEdit {
   @override
   PictureEditState build() {
     return const PictureEditState();
@@ -139,9 +142,3 @@ class PictureEditNotifier extends Notifier<PictureEditState> {
     state = const PictureEditState();
   }
 }
-
-/// Picture edit provider
-final pictureEditProvider =
-    NotifierProvider<PictureEditNotifier, PictureEditState>(
-      PictureEditNotifier.new,
-    );

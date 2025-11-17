@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'topic_detail_provider.g.dart';
 
 /// Topic detail status
 enum TopicDetailStatus { initial, loading, success, failure }
@@ -47,14 +49,12 @@ class TopicDetailState {
 }
 
 /// Topic detail notifier
-class TopicDetailNotifier extends Notifier<TopicDetailState> {
-  TopicDetailNotifier(this._topicId);
-
-  final String _topicId;
+@riverpod
+class TopicDetail extends _$TopicDetail {
   bool _descending = true;
 
   @override
-  TopicDetailState build() {
+  TopicDetailState build(String topicId) {
     // Will be initialized with descending parameter in the screen
     return const TopicDetailState();
   }
@@ -111,7 +111,7 @@ class TopicDetailNotifier extends Notifier<TopicDetailState> {
 
     try {
       final boardRepository = ref.read(boardRepositoryProvider);
-      final topicId = _topicId;
+      final topicId = this.topicId;
 
       final results = await boardRepository.topicDetail(
         topicId: topicId,
@@ -133,9 +133,3 @@ class TopicDetailNotifier extends Notifier<TopicDetailState> {
     }
   }
 }
-
-/// Topic detail provider
-final topicDetailProvider =
-    NotifierProvider.family<TopicDetailNotifier, TopicDetailState, String>(
-      TopicDetailNotifier.new,
-    );

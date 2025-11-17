@@ -1,8 +1,11 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/model/app_tab.dart';
 
+part 'tab_provider.g.dart';
+
 /// Tab notifier - 管理底部导航栏的当前标签
-class TabNotifier extends Notifier<AppTab?> {
+@riverpod
+class Tab extends _$Tab {
   @override
   AppTab? build() => null;
 
@@ -10,6 +13,3 @@ class TabNotifier extends Notifier<AppTab?> {
     state = tab;
   }
 }
-
-/// Tab provider
-final tabProvider = NotifierProvider<TabNotifier, AppTab?>(TabNotifier.new);

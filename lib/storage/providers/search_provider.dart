@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'search_provider.g.dart';
 
 /// Search state
 class SearchState {
@@ -44,7 +46,8 @@ class SearchState {
 enum SearchStatus { initial, loading, success, failure }
 
 /// Search notifier
-class SearchNotifier extends Notifier<SearchState> {
+@riverpod
+class Search extends _$Search {
   @override
   SearchState build() {
     return const SearchState();
@@ -83,8 +86,3 @@ class SearchNotifier extends Notifier<SearchState> {
     }
   }
 }
-
-/// Search provider
-final searchProvider = NotifierProvider<SearchNotifier, SearchState>(
-  SearchNotifier.new,
-);

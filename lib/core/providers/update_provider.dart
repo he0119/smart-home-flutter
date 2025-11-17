@@ -1,10 +1,12 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/providers/repository_providers.dart';
 import 'package:smarthome/utils/exceptions.dart';
 import 'package:version/version.dart';
+
+part 'update_provider.g.dart';
 
 /// Update state
 class UpdateInfo {
@@ -36,7 +38,8 @@ class UpdateInfo {
 }
 
 /// Update Notifier
-class UpdateNotifier extends Notifier<UpdateInfo> {
+@riverpod
+class Update extends _$Update {
   @override
   UpdateInfo build() {
     // 自动检查更新
@@ -72,8 +75,3 @@ class UpdateNotifier extends Notifier<UpdateInfo> {
     state = state.copyWith(errorMessage: () => null);
   }
 }
-
-/// Update provider
-final updateProvider = NotifierProvider<UpdateNotifier, UpdateInfo>(
-  UpdateNotifier.new,
-);

@@ -1,14 +1,17 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/board/model/models.dart';
 import 'package:smarthome/board/repository/board_repository.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
+part 'board_home_provider.g.dart';
+
 /// Board repository provider
-final boardRepositoryProvider = Provider<BoardRepository>((ref) {
+@Riverpod(keepAlive: true)
+BoardRepository boardRepository(Ref ref) {
   final graphqlApiClient = ref.watch(graphQLApiClientProvider);
   return BoardRepository(graphqlApiClient: graphqlApiClient);
-});
+}
 
 /// Board home state
 class BoardHomeState {
@@ -49,7 +52,8 @@ class BoardHomeState {
 enum BoardHomeStatus { initial, loading, success, failure }
 
 /// Board home notifier
-class BoardHomeNotifier extends Notifier<BoardHomeState> {
+@riverpod
+class BoardHome extends _$BoardHome {
   @override
   BoardHomeState build() {
     // 初始加载 - 延迟执行避免在 build 期间访问 state
@@ -96,8 +100,3 @@ class BoardHomeNotifier extends Notifier<BoardHomeState> {
     }
   }
 }
-
-/// Board home provider
-final boardHomeProvider = NotifierProvider<BoardHomeNotifier, BoardHomeState>(
-  BoardHomeNotifier.new,
-);

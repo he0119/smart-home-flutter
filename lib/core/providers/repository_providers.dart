@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/board/repository/board_repository.dart';
 import 'package:smarthome/core/repository/graphql_api_client.dart';
 import 'package:smarthome/core/repository/push_repository.dart';
@@ -6,36 +6,44 @@ import 'package:smarthome/core/repository/version_repository.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/user/repository/user_repository.dart';
 
+part 'repository_providers.g.dart';
+
 /// GraphQL API Client Provider
-final graphQLApiClientProvider = Provider<GraphQLApiClient>((ref) {
+@Riverpod(keepAlive: true)
+GraphQLApiClient graphQLApiClient(Ref ref) {
   return GraphQLApiClient(ref);
-});
+}
 
 /// User Repository Provider
-final userRepositoryProvider = Provider<UserRepository>((ref) {
+@Riverpod(keepAlive: true)
+UserRepository userRepository(Ref ref) {
   final graphqlApiClient = ref.watch(graphQLApiClientProvider);
   return UserRepository(graphqlApiClient: graphqlApiClient);
-});
+}
 
 /// Version Repository Provider
-final versionRepositoryProvider = Provider<VersionRepository>((ref) {
+@Riverpod(keepAlive: true)
+VersionRepository versionRepository(Ref ref) {
   return VersionRepository();
-});
+}
 
 /// Push Repository Provider
-final pushRepositoryProvider = Provider<PushRepository>((ref) {
+@Riverpod(keepAlive: true)
+PushRepository pushRepository(Ref ref) {
   final graphqlApiClient = ref.watch(graphQLApiClientProvider);
   return PushRepository(graphqlApiClient: graphqlApiClient);
-});
+}
 
 /// Storage Repository Provider
-final storageRepositoryProvider = Provider<StorageRepository>((ref) {
+@Riverpod(keepAlive: true)
+StorageRepository storageRepository(Ref ref) {
   final graphqlApiClient = ref.watch(graphQLApiClientProvider);
   return StorageRepository(graphqlApiClient: graphqlApiClient);
-});
+}
 
 /// Board Repository Provider
-final boardRepositoryProvider = Provider<BoardRepository>((ref) {
+@Riverpod(keepAlive: true)
+BoardRepository boardRepository(Ref ref) {
   final graphqlApiClient = ref.watch(graphQLApiClientProvider);
   return BoardRepository(graphqlApiClient: graphqlApiClient);
-});
+}

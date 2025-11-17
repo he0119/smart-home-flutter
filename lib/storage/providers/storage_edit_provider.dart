@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+part 'storage_edit_provider.g.dart';
 
 /// Storage edit state
 class StorageEditState {
@@ -43,7 +45,8 @@ enum StorageEditStatus {
 }
 
 /// Storage edit notifier
-class StorageEditNotifier extends Notifier<StorageEditState> {
+@riverpod
+class StorageEdit extends _$StorageEdit {
   @override
   StorageEditState build() {
     return const StorageEditState();
@@ -125,9 +128,3 @@ class StorageEditNotifier extends Notifier<StorageEditState> {
     state = const StorageEditState();
   }
 }
-
-/// Storage edit provider
-final storageEditProvider =
-    NotifierProvider<StorageEditNotifier, StorageEditState>(
-      StorageEditNotifier.new,
-    );

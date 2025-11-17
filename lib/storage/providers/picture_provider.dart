@@ -1,17 +1,16 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
+part 'picture_provider.g.dart';
+
 /// Picture notifier
-class PictureNotifier extends AsyncNotifier<Picture> {
-  PictureNotifier(this._pictureId);
-
-  final String _pictureId;
-
+@riverpod
+class PictureNotifier extends _$PictureNotifier {
   @override
-  Future<Picture> build() async {
-    return await _loadPicture(_pictureId);
+  Future<Picture> build(String pictureId) async {
+    return await _loadPicture(pictureId);
   }
 
   Future<Picture> _loadPicture(String id, {bool cache = true}) async {
@@ -33,14 +32,6 @@ class PictureNotifier extends AsyncNotifier<Picture> {
 
   Future<void> refresh() async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(
-      () => _loadPicture(_pictureId, cache: false),
-    );
+    state = await AsyncValue.guard(() => _loadPicture(pictureId, cache: false));
   }
 }
-
-/// Picture provider
-final pictureProvider =
-    AsyncNotifierProvider.family<PictureNotifier, Picture, String>(
-      PictureNotifier.new,
-    );

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/model/app_tab.dart';
 import 'package:smarthome/core/repository/settings_repository.dart';
 import 'package:smarthome/user/model/user.dart';
+
+part 'settings_provider.g.dart';
 
 /// Settings state class
 class SettingsState {
@@ -86,7 +88,8 @@ class SettingsState {
 }
 
 /// Settings Notifier
-class SettingsNotifier extends Notifier<SettingsState> {
+@Riverpod(keepAlive: true)
+class Settings extends _$Settings {
   SettingsRepository get _settingsService => ref.read(settingsServiceProvider);
   AppConfig get _appConfig => ref.read(appConfigProvider);
 
@@ -228,15 +231,12 @@ class SettingsNotifier extends Notifier<SettingsState> {
 }
 
 /// Internal providers for dependencies (exported for bootstrap)
-final settingsServiceProvider = Provider<SettingsRepository>(
-  (ref) => throw UnimplementedError('Override in main'),
-);
+@Riverpod(keepAlive: true)
+SettingsRepository settingsService(Ref ref) {
+  throw UnimplementedError('Override in main');
+}
 
-final appConfigProvider = Provider<AppConfig>(
-  (ref) => throw UnimplementedError('Override in main'),
-);
-
-/// Settings provider
-final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(
-  SettingsNotifier.new,
-);
+@Riverpod(keepAlive: true)
+AppConfig appConfig(Ref ref) {
+  throw UnimplementedError('Override in main');
+}
