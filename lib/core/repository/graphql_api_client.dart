@@ -237,9 +237,6 @@ class GraphQLApiClient {
   /// 返回登录后的用户信息
   Future<User?> oidcLogin() async {
     final apiUrl = ref.read(settingsProvider).apiUrl;
-    if (apiUrl == null) {
-      throw const NetworkException('请先设置服务器地址');
-    }
 
     // 构建 OIDC 端点 URL
     final baseUri = Uri.parse(apiUrl);

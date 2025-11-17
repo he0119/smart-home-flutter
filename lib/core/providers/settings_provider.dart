@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/model/app_tab.dart';
+import 'package:smarthome/core/providers/repository_providers.dart';
 import 'package:smarthome/core/repository/settings_repository.dart';
 import 'package:smarthome/user/model/user.dart';
 
@@ -12,7 +13,7 @@ class SettingsState {
   final User? loginUser;
   final ThemeMode themeMode;
   final AppTab defaultPage;
-  final String? apiUrl;
+  final String apiUrl;
   final String adminUrl;
   final String blogUrl;
   final String? blogAdminUrl;
@@ -29,7 +30,7 @@ class SettingsState {
     this.loginUser,
     required this.themeMode,
     required this.defaultPage,
-    this.apiUrl,
+    required this.apiUrl,
     required this.adminUrl,
     required this.blogUrl,
     this.blogAdminUrl,
@@ -49,7 +50,7 @@ class SettingsState {
     User? Function()? loginUser,
     ThemeMode? themeMode,
     AppTab? defaultPage,
-    String? Function()? apiUrl,
+    String? apiUrl,
     String? adminUrl,
     String? blogUrl,
     String? Function()? blogAdminUrl,
@@ -66,7 +67,7 @@ class SettingsState {
       loginUser: loginUser != null ? loginUser() : this.loginUser,
       themeMode: themeMode ?? this.themeMode,
       defaultPage: defaultPage ?? this.defaultPage,
-      apiUrl: apiUrl != null ? apiUrl() : this.apiUrl,
+      apiUrl: apiUrl ?? this.apiUrl,
       adminUrl: adminUrl ?? this.adminUrl,
       blogUrl: blogUrl ?? this.blogUrl,
       blogAdminUrl: blogAdminUrl != null ? blogAdminUrl() : this.blogAdminUrl,
@@ -90,7 +91,8 @@ class SettingsState {
 /// Settings Notifier
 @Riverpod(keepAlive: true)
 class Settings extends _$Settings {
-  SettingsRepository get _settingsService => ref.read(settingsServiceProvider);
+  SettingsRepository get _settingsService =>
+      ref.read(settingsRepositoryProvider);
   AppConfig get _appConfig => ref.read(appConfigProvider);
 
   @override
@@ -104,7 +106,7 @@ class Settings extends _$Settings {
     final loginUser = await _settingsService.loginUser();
     final themeMode = await _settingsService.themeMode();
     final defaultPage = await _settingsService.defaultPage();
-    final apiUrl = await _settingsService.apiUrl();
+    final apiUrl = await _settingsService.apiUrl() ?? _appConfig.defaultApiUrl;
     final adminUrl =
         await _settingsService.adminUrl() ?? _appConfig.defaultAdminUrl;
     final blogUrl = await _settingsService.blogUrl();
@@ -147,9 +149,9 @@ class Settings extends _$Settings {
     await _settingsService.updateLoginUser(newLoginUser);
   }
 
-  Future<void> updateApiUrl(String? newApiUrl) async {
-    if (newApiUrl == null || newApiUrl == state.apiUrl) return;
-    state = state.copyWith(apiUrl: () => newApiUrl);
+  Future<void> updateApiUrl(String newApiUrl) async {
+    if (newApiUrl == state.apiUrl) return;
+    state = state.copyWith(apiUrl: newApiUrl);
     await _settingsService.updateApiUrl(newApiUrl);
   }
 
@@ -230,13 +232,10 @@ class Settings extends _$Settings {
   }
 }
 
-/// Internal providers for dependencies (exported for bootstrap)
-@Riverpod(keepAlive: true)
-SettingsRepository settingsService(Ref ref) {
-  throw UnimplementedError('Override in main');
-}
-
+/// App Config Provider - Must be overridden in bootstrap
 @Riverpod(keepAlive: true)
 AppConfig appConfig(Ref ref) {
-  throw UnimplementedError('Override in main');
+  throw UnimplementedError(
+    'appConfigProvider must be overridden with the actual AppConfig in bootstrap',
+  );
 }

@@ -29,7 +29,7 @@ void main() {
         overrides: [
           graphQLApiClientProvider.overrideWithValue(mockGraphQLApiClient),
           userRepositoryProvider.overrideWithValue(mockUserRepository),
-          settingsServiceProvider.overrideWithValue(mockSettingsRepository),
+          settingsRepositoryProvider.overrideWithValue(mockSettingsRepository),
           appConfigProvider.overrideWithValue(
             AppConfig(
               appName: 'Test',
@@ -84,7 +84,7 @@ void main() {
         overrides: [
           graphQLApiClientProvider.overrideWithValue(mockGraphQLApiClient),
           userRepositoryProvider.overrideWithValue(mockUserRepository),
-          settingsServiceProvider.overrideWithValue(mockSettingsRepository),
+          settingsRepositoryProvider.overrideWithValue(mockSettingsRepository),
           appConfigProvider.overrideWithValue(
             AppConfig(
               appName: 'Test',
@@ -152,7 +152,7 @@ void main() {
         overrides: [
           graphQLApiClientProvider.overrideWithValue(mockGraphQLApiClient),
           userRepositoryProvider.overrideWithValue(mockUserRepository),
-          settingsServiceProvider.overrideWithValue(mockSettingsRepository),
+          settingsRepositoryProvider.overrideWithValue(mockSettingsRepository),
           appConfigProvider.overrideWithValue(
             AppConfig(
               appName: 'Test',
@@ -219,7 +219,7 @@ void main() {
         overrides: [
           graphQLApiClientProvider.overrideWithValue(mockGraphQLApiClient),
           userRepositoryProvider.overrideWithValue(mockUserRepository),
-          settingsServiceProvider.overrideWithValue(mockSettingsRepository),
+          settingsRepositoryProvider.overrideWithValue(mockSettingsRepository),
           appConfigProvider.overrideWithValue(
             AppConfig(
               appName: 'Test',
@@ -293,7 +293,7 @@ void main() {
         overrides: [
           graphQLApiClientProvider.overrideWithValue(mockGraphQLApiClient),
           userRepositoryProvider.overrideWithValue(mockUserRepository),
-          settingsServiceProvider.overrideWithValue(mockSettingsRepository),
+          settingsRepositoryProvider.overrideWithValue(mockSettingsRepository),
           appConfigProvider.overrideWithValue(
             AppConfig(
               appName: 'Test',
@@ -363,7 +363,7 @@ void main() {
         overrides: [
           graphQLApiClientProvider.overrideWithValue(mockGraphQLApiClient),
           userRepositoryProvider.overrideWithValue(mockUserRepository),
-          settingsServiceProvider.overrideWithValue(mockSettingsRepository),
+          settingsRepositoryProvider.overrideWithValue(mockSettingsRepository),
           appConfigProvider.overrideWithValue(
             AppConfig(
               appName: 'Test',

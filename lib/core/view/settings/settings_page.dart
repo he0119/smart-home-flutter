@@ -57,7 +57,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
               SettingsTile(
                 title: '服务器网址',
-                subtitle: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
+                subtitle: settings.apiUrl,
                 onPressed: (context) {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => const ApiUrlPage()),

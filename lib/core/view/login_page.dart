@@ -40,9 +40,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: Builder(
         builder: (context) {
           final settings = ref.watch(settingsProvider);
-          if (settings.apiUrl == null) {
-            canLogin = false;
-          }
           return canLogin
               ? LoginForm(
                   onTapBack: () {
@@ -52,7 +49,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   },
                 )
               : ApiUrlForm(
-                  apiUrl: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
+                  apiUrl: settings.apiUrl,
                   onTapNext: () {
                     setState(() {
                       canLogin = true;

@@ -11,7 +11,6 @@ import 'package:smarthome/app/simple_riverpod_observer.dart';
 import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/providers/repository_providers.dart';
 import 'package:smarthome/core/providers/settings_provider.dart';
-import 'package:smarthome/core/repository/settings_repository.dart';
 import 'package:smarthome/routers/delegate.dart';
 
 Future<void> bootstrap(AppConfig appConfig) async {
@@ -34,16 +33,10 @@ Future<void> bootstrap(AppConfig appConfig) async {
       // 根据是否是网页环境，初始化不同的配置
       await configureApp();
 
-      // 初始化服务和配置
-      final settingsService = SettingsRepository();
-
       // 创建 ProviderContainer 并配置 Riverpod Observer
       final container = ProviderContainer(
         observers: [SimpleRiverpodObserver()],
-        overrides: [
-          settingsServiceProvider.overrideWithValue(settingsService),
-          appConfigProvider.overrideWithValue(appConfig),
-        ],
+        overrides: [appConfigProvider.overrideWithValue(appConfig)],
       );
 
       // 加载设置到 Riverpod provider
@@ -52,9 +45,7 @@ Future<void> bootstrap(AppConfig appConfig) async {
       // 初始化 GraphQL API Client
       final graphQLApiClient = container.read(graphQLApiClientProvider);
       final apiUrl = container.read(settingsProvider).apiUrl;
-      if (apiUrl != null) {
-        graphQLApiClient.initailize(apiUrl);
-      }
+      graphQLApiClient.initailize(apiUrl);
       await graphQLApiClient.loadSettings();
 
       // 创建 Router Delegate

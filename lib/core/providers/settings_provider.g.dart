@@ -44,7 +44,7 @@ final class SettingsProvider
   }
 }
 
-String _$settingsHash() => r'289ab0ca07c477b20e060c4a57d889c75c08386a';
+String _$settingsHash() => r'0850a93012e4ee8c2b43174ed53649ce1c7ab70c';
 
 /// Settings Notifier
 
@@ -67,64 +67,17 @@ abstract class _$Settings extends $Notifier<SettingsState> {
   }
 }
 
-/// Internal providers for dependencies (exported for bootstrap)
-
-@ProviderFor(settingsService)
-const settingsServiceProvider = SettingsServiceProvider._();
-
-/// Internal providers for dependencies (exported for bootstrap)
-
-final class SettingsServiceProvider
-    extends
-        $FunctionalProvider<
-          SettingsRepository,
-          SettingsRepository,
-          SettingsRepository
-        >
-    with $Provider<SettingsRepository> {
-  /// Internal providers for dependencies (exported for bootstrap)
-  const SettingsServiceProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'settingsServiceProvider',
-        isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$settingsServiceHash();
-
-  @$internal
-  @override
-  $ProviderElement<SettingsRepository> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
-
-  @override
-  SettingsRepository create(Ref ref) {
-    return settingsService(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(SettingsRepository value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<SettingsRepository>(value),
-    );
-  }
-}
-
-String _$settingsServiceHash() => r'a52f734b76865b35141f222bf2050c2f1242836b';
+/// App Config Provider - Must be overridden in bootstrap
 
 @ProviderFor(appConfig)
 const appConfigProvider = AppConfigProvider._();
 
+/// App Config Provider - Must be overridden in bootstrap
+
 final class AppConfigProvider
     extends $FunctionalProvider<AppConfig, AppConfig, AppConfig>
     with $Provider<AppConfig> {
+  /// App Config Provider - Must be overridden in bootstrap
   const AppConfigProvider._()
     : super(
         from: null,
@@ -158,4 +111,4 @@ final class AppConfigProvider
   }
 }
 
-String _$appConfigHash() => r'550dc85659cb7a89d3d0f7730d89cb8ad2196bfa';
+String _$appConfigHash() => r'693b430a1b385c92544cb71ebb4ae3b4a38427a1';

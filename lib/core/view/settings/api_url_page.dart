@@ -14,7 +14,7 @@ class ApiUrlPage extends ConsumerWidget {
 
     return TextEditPage(
       title: '服务器网址',
-      initialValue: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
+      initialValue: settings.apiUrl,
       onSubmit: (value) {
         graphqlApiClient.initailize(value);
         settingsNotifier.updateApiUrl(value);

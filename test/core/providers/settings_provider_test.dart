@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/model/app_tab.dart';
+import 'package:smarthome/core/providers/repository_providers.dart';
 import 'package:smarthome/core/providers/settings_provider.dart';
 import 'package:smarthome/user/model/user.dart';
 
@@ -26,8 +27,8 @@ void main() {
   ProviderContainer setupContainer() {
     return ProviderContainer.test(
       overrides: [
-        settingsServiceProvider.overrideWithValue(mockSettingsRepository),
         appConfigProvider.overrideWithValue(testAppConfig),
+        settingsRepositoryProvider.overrideWithValue(mockSettingsRepository),
       ],
     );
   }
@@ -68,7 +69,7 @@ void main() {
       expect(settings.loginUser, null);
       expect(settings.themeMode, ThemeMode.system);
       expect(settings.defaultPage, AppTab.storage);
-      expect(settings.apiUrl, null);
+      expect(settings.apiUrl, 'http://test.com');
       expect(settings.adminUrl, 'http://admin.test.com');
       expect(settings.blogUrl, 'http://blog.test.com');
       expect(settings.refreshInterval, 30);
