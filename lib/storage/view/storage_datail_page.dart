@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/routers/delegate.dart';
 import 'package:smarthome/storage/model/popup_menu.dart';
-import 'package:smarthome/storage/providers/storage_detail_provider.dart';
-import 'package:smarthome/storage/providers/storage_edit_provider.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
 import 'package:smarthome/storage/view/storage_edit_page.dart';
