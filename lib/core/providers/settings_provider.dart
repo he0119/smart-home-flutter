@@ -44,6 +44,20 @@ class SettingsState {
     required this.appConfig,
   });
 
+  /// Create default settings state
+  factory SettingsState.initial(AppConfig appConfig) {
+    return SettingsState(
+      themeMode: ThemeMode.system,
+      defaultPage: AppTab.storage,
+      apiUrl: appConfig.defaultApiUrl,
+      adminUrl: appConfig.defaultAdminUrl,
+      blogUrl: appConfig.defaultBlogUrl,
+      refreshInterval: 30,
+      commentDescending: false,
+      appConfig: appConfig,
+    );
+  }
+
   bool get isLogin => loginUser != null;
 
   SettingsState copyWith({
@@ -97,9 +111,7 @@ class Settings extends _$Settings {
 
   @override
   SettingsState build() {
-    // This will be initialized later in loadSettings
-    // Return a default state for now
-    throw UnimplementedError('Call loadSettings first');
+    return SettingsState.initial(_appConfig);
   }
 
   Future<void> loadSettings() async {
@@ -109,7 +121,8 @@ class Settings extends _$Settings {
     final apiUrl = await _settingsService.apiUrl() ?? _appConfig.defaultApiUrl;
     final adminUrl =
         await _settingsService.adminUrl() ?? _appConfig.defaultAdminUrl;
-    final blogUrl = await _settingsService.blogUrl();
+    final blogUrl =
+        await _settingsService.blogUrl() ?? _appConfig.defaultBlogUrl;
     final blogAdminUrl = await _settingsService.blogAdminUrl();
     final miPushAppId = await _settingsService.miPushAppId();
     final miPushAppKey = await _settingsService.miPushAppKey();

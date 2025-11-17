@@ -94,9 +94,9 @@ class SettingsRepository {
     prefs.setString('adminUrl', url);
   }
 
-  Future<String> blogUrl() async {
+  Future<String?> blogUrl() async {
     final prefs = await _prefs;
-    return prefs.getString('blogUrl') ?? 'https://hehome.xyz';
+    return prefs.getString('blogUrl');
   }
 
   Future<void> updateBlogUrl(String url) async {

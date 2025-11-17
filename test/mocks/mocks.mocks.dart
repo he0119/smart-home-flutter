@@ -368,14 +368,12 @@ class MockSettingsRepository extends _i1.Mock
           as _i9.Future<void>);
 
   @override
-  _i9.Future<String> blogUrl() =>
+  _i9.Future<String?> blogUrl() =>
       (super.noSuchMethod(
             Invocation.method(#blogUrl, []),
-            returnValue: _i9.Future<String>.value(
-              _i8.dummyValue<String>(this, Invocation.method(#blogUrl, [])),
-            ),
+            returnValue: _i9.Future<String?>.value(),
           )
-          as _i9.Future<String>);
+          as _i9.Future<String?>);
 
   @override
   _i9.Future<void> updateBlogUrl(String? url) =>

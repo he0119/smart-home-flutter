@@ -21,6 +21,7 @@ void main() {
       flavorName: 'test',
       defaultApiUrl: 'http://test.com',
       defaultAdminUrl: 'http://admin.test.com',
+      defaultBlogUrl: 'http://blog.test.com',
     );
   });
 

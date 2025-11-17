@@ -44,7 +44,7 @@ final class SettingsProvider
   }
 }
 
-String _$settingsHash() => r'0850a93012e4ee8c2b43174ed53649ce1c7ab70c';
+String _$settingsHash() => r'07c90d6ca0640e684f1c0a59e9b7985f552cc9d3';
 
 /// Settings Notifier
 

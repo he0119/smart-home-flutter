@@ -27,6 +27,7 @@ Future<void> main() async {
     defaultAdminUrl: kIsWeb
         ? 'http://localhost:8080/admin/'
         : 'https://smart.dev.hehome.xyz/admin/',
+    defaultBlogUrl: 'https://dev.hehome.xyz',
   );
   bootstrap(appConfig);
 }
