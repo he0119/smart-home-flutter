@@ -2,7 +2,7 @@ import 'package:animated_tree_view/tree_view/tree_node.dart';
 import 'package:animated_tree_view/tree_view/tree_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/core/providers/repository_providers.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/utils/constants.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:smarthome/core/providers/settings_provider.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/view/widgets/share_icon_button.dart';
 

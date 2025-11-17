@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:smarthome/core/providers/repository_providers.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/user/model/user.dart';
 import 'package:smarthome/user/providers/session_provider.dart' hide Session;
 import 'package:smarthome/utils/exceptions.dart';

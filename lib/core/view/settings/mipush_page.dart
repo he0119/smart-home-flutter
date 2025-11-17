@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/core/providers/push_provider.dart';
-import 'package:smarthome/core/providers/settings_provider.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
 class MiPushPage extends ConsumerWidget {

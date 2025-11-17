@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:smarthome/core/model/app_config.dart';
-import 'package:smarthome/core/model/app_tab.dart';
-import 'package:smarthome/core/providers/repository_providers.dart';
-import 'package:smarthome/core/repository/settings_repository.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/user/model/user.dart';
 
 part 'settings_provider.g.dart';

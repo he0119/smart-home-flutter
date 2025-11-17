@@ -8,7 +8,7 @@ import 'package:smarthome/board/view/comment_edit_page.dart';
 import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
 import 'package:smarthome/board/view/widgets/item_title.dart';
-import 'package:smarthome/core/providers/settings_provider.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';

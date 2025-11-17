@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/core/providers/settings_provider.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 

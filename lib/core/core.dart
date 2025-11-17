@@ -1,10 +1,5 @@
 export 'model/models.dart';
-export 'providers/authentication_provider.dart';
-export 'providers/push_provider.dart';
-export 'providers/repository_providers.dart';
-export 'providers/settings_provider.dart';
-export 'providers/tab_provider.dart';
-export 'providers/update_provider.dart';
+export 'providers/providers.dart';
 export 'repository/repositories.dart';
 export 'view/login_page.dart';
 export 'view/settings/settings_page.dart';

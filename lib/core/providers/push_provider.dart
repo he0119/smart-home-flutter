@@ -5,9 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:smarthome/core/model/models.dart';
-import 'package:smarthome/core/providers/repository_providers.dart';
-import 'package:smarthome/core/providers/settings_provider.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 part 'push_provider.g.dart';

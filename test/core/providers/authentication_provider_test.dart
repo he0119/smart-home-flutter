@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:smarthome/core/model/app_config.dart';
-import 'package:smarthome/core/model/app_tab.dart';
-import 'package:smarthome/core/providers/authentication_provider.dart';
-import 'package:smarthome/core/providers/repository_providers.dart';
-import 'package:smarthome/core/providers/settings_provider.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/user/model/user.dart';
 import 'package:smarthome/utils/exceptions.dart';
 

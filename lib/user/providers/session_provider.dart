@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:smarthome/core/providers/repository_providers.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/user/model/user.dart' as user_model;
 import 'package:smarthome/utils/exceptions.dart';
 
