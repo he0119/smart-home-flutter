@@ -7,13 +7,11 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:smarthome/app/configure_nonweb.dart'
     if (dart.library.html) 'package:smarthome/app/configure_web.dart';
 import 'package:smarthome/app/main.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/app/settings/settings_service.dart';
 import 'package:smarthome/app/simple_riverpod_observer.dart';
 import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/providers/repository_providers.dart';
 import 'package:smarthome/core/providers/settings_provider.dart';
-import 'package:smarthome/core/repository/graphql_api_client.dart';
 import 'package:smarthome/routers/delegate.dart';
 
 Future<void> bootstrap(AppConfig appConfig) async {
@@ -39,32 +37,28 @@ Future<void> bootstrap(AppConfig appConfig) async {
       // 初始化服务和配置
       final settingsService = SettingsService();
 
-      // 为了向后兼容，暂时保留旧的 SettingsController
-      // TODO: 完全迁移后可以删除
-      final settingsController = SettingsController(settingsService, appConfig);
-      await settingsController.loadSettings();
-
-      // 初始化 GraphQL API Client
-      final graphQLApiClient = GraphQLApiClient(settingsController);
-      await graphQLApiClient.loadSettings();
-
-      // 创建 Router Delegate
-      final routerDelegate = MyRouterDelegate(
-        settingsController: settingsController,
-      );
-
       // 创建 ProviderContainer 并配置 Riverpod Observer
       final container = ProviderContainer(
         observers: [SimpleRiverpodObserver()],
         overrides: [
           settingsServiceProvider.overrideWithValue(settingsService),
           appConfigProvider.overrideWithValue(appConfig),
-          graphQLApiClientProvider.overrideWithValue(graphQLApiClient),
         ],
       );
 
       // 加载设置到 Riverpod provider
       await container.read(settingsProvider.notifier).loadSettings();
+
+      // 初始化 GraphQL API Client
+      final graphQLApiClient = container.read(graphQLApiClientProvider);
+      final apiUrl = container.read(settingsProvider).apiUrl;
+      if (apiUrl != null) {
+        graphQLApiClient.initailize(apiUrl);
+      }
+      await graphQLApiClient.loadSettings();
+
+      // 创建 Router Delegate
+      final routerDelegate = MyRouterDelegate(container: container);
 
       runApp(
         UncontrolledProviderScope(

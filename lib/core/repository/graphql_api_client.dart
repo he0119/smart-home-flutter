@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' hide NetworkException, ServerException;
 import 'package:http/http.dart' hide Response, Request;
@@ -11,20 +12,20 @@ import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/core/graphql/mutations/mutations.dart';
+import 'package:smarthome/core/providers/settings_provider.dart';
 import 'package:smarthome/user/model/user.dart';
 import 'package:smarthome/user/repository/user_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 class ClientWithCookies extends IOClient {
-  final SettingsController settingsController;
+  final Ref ref;
 
-  ClientWithCookies(this.settingsController) : super();
+  ClientWithCookies(this.ref) : super();
 
   @override
   Future<IOStreamedResponse> send(BaseRequest request) async {
-    final cookie = settingsController.cookies;
+    final cookie = ref.read(settingsProvider).cookies;
     if (cookie != null) {
       request.headers['cookie'] = cookie;
     }
@@ -61,7 +62,7 @@ class ClientWithCookies extends IOClient {
           final newCookies = cookies
               .map((e) => '${e.name}=${e.value}')
               .join('; ');
-          settingsController.updateCookies(newCookies);
+          ref.read(settingsProvider.notifier).updateCookies(newCookies);
         }
       }
       return response;
@@ -120,13 +121,13 @@ class SocketCustomLink extends Link {
   SocketCustomLink(
     this.url,
     this.defaultHeaders,
-    this.settingsController,
+    this.ref,
     this.onConnectionLost,
     this.connectionStateController,
   );
   final String url;
   final Map<String, String> defaultHeaders;
-  final SettingsController settingsController;
+  final Ref ref;
   final Future<Duration?> Function(int? code, String? reason) onConnectionLost;
   final StreamController<bool> connectionStateController;
 
@@ -136,7 +137,7 @@ class SocketCustomLink extends Link {
   @override
   Stream<Response> request(Request request, [forward]) async* {
     /// first get the token by your own way
-    String? cookies = settingsController.cookies;
+    String? cookies = ref.read(settingsProvider).cookies;
 
     /// check is connection is null or the token changed
     if (_connection == null || _connection!.cookies != cookies) {
@@ -190,12 +191,12 @@ class GraphQLApiClient {
   static Map<String, String> headers = {};
   static GraphQLClient? _client;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  final SettingsController settingsController;
+  final Ref ref;
 
   final StreamController<bool> _websocketConnectionStateController =
       StreamController<bool>.broadcast();
 
-  GraphQLApiClient(this.settingsController);
+  GraphQLApiClient(this.ref);
 
   GraphQLClient? get client => _client;
 
@@ -235,12 +236,13 @@ class GraphQLApiClient {
   ///
   /// 返回登录后的用户信息
   Future<User?> oidcLogin() async {
-    if (settingsController.apiUrl == null) {
+    final apiUrl = ref.read(settingsProvider).apiUrl;
+    if (apiUrl == null) {
       throw const NetworkException('请先设置服务器地址');
     }
 
     // 构建 OIDC 端点 URL
-    final baseUri = Uri.parse(settingsController.apiUrl!);
+    final baseUri = Uri.parse(apiUrl);
     final oidcUri = baseUri.replace(path: '/oidc/authenticate/');
 
     try {
@@ -331,7 +333,7 @@ class GraphQLApiClient {
           .map((e) => '${e.name}=${e.value}')
           .join('; ');
       _log.info('成功获取 cookies: $cookiesString');
-      await settingsController.updateCookies(cookiesString);
+      await ref.read(settingsProvider.notifier).updateCookies(cookiesString);
 
       // 获取当前用户信息
       final userRepository = UserRepository(graphqlApiClient: this);
@@ -366,7 +368,7 @@ class GraphQLApiClient {
     if (!kIsWeb) {
       link = HttpLink(
         url,
-        httpClient: ClientWithCookies(settingsController),
+        httpClient: ClientWithCookies(ref),
         defaultHeaders: headers,
       );
     } else {
@@ -375,7 +377,7 @@ class GraphQLApiClient {
     final websocketLink = SocketCustomLink(
       url.replaceFirst('http', 'ws'),
       headers,
-      settingsController,
+      ref,
       onWebsocketConnectionLost,
       _websocketConnectionStateController,
     );
@@ -471,7 +473,7 @@ class GraphQLApiClient {
   void _handleException(OperationException exception) {
     for (var error in exception.graphqlErrors) {
       if (error.message == 'User is not authenticated') {
-        settingsController.updateLoginUser(null);
+        ref.read(settingsProvider.notifier).updateLoginUser(null);
         throw const AuthenticationException('认证过期，请重新登录');
       }
       _log.warning(error.toString());
@@ -479,7 +481,7 @@ class GraphQLApiClient {
     }
     if (exception.linkException != null) {
       if (exception.linkException.toString().contains('Invalid cookie')) {
-        settingsController.updateLoginUser(null);
+        ref.read(settingsProvider.notifier).updateLoginUser(null);
         throw const AuthenticationException('Cookie 无效，请重新登录');
       }
       _log.severe(exception.linkException.toString());

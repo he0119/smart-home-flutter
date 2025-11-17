@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:quick_actions/quick_actions.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
@@ -20,9 +19,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
   static final Logger _log = Logger('RouterDelegate');
 
-  final SettingsController settingsController;
+  final ProviderContainer container;
 
-  MyRouterDelegate({required this.settingsController});
+  MyRouterDelegate({required this.container});
 
   static MyRouterDelegate of(BuildContext context) {
     final delegate = Router.of(context).routerDelegate;
@@ -37,12 +36,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   List<Page> get pages {
     // 未登录时显示登陆界面
-    if (!settingsController.isLogin) {
+    if (!container.read(settingsProvider).isLogin) {
       return [const LoginPage()];
     }
     // 未设置主页时显示默认主页
     if (_pages.isEmpty) {
-      _pages = [settingsController.defaultPage.page];
+      _pages = [container.read(settingsProvider).defaultPage.page];
     }
     return List.unmodifiable(_pages);
   }
@@ -173,7 +172,10 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     } else if (configuration is SettingsRoutePath) {
       switch (configuration.appSettings) {
         case AppSettings.home:
-          _pages = [settingsController.defaultPage.page, const SettingsPage()];
+          _pages = [
+            container.read(settingsProvider).defaultPage.page,
+            const SettingsPage(),
+          ];
           break;
         case AppSettings.blog:
           _pages = [const BlogHomePage(), const BlogSettingsPage()];

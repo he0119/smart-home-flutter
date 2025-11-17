@@ -8,7 +8,7 @@ import 'package:smarthome/user/repository/user_repository.dart';
 
 /// GraphQL API Client Provider
 final graphQLApiClientProvider = Provider<GraphQLApiClient>((ref) {
-  throw UnimplementedError('Override in bootstrap');
+  return GraphQLApiClient(ref);
 });
 
 /// User Repository Provider
