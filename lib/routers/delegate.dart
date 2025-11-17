@@ -238,13 +238,13 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
                   await quickActions.initialize((String shortcutType) {
                     switch (shortcutType) {
                       case 'action_storage':
-                        ref.read(tabProvider.notifier).state = AppTab.storage;
+                        ref.read(tabProvider.notifier).setTab(AppTab.storage);
                         break;
                       case 'action_blog':
-                        ref.read(tabProvider.notifier).state = AppTab.blog;
+                        ref.read(tabProvider.notifier).setTab(AppTab.blog);
                         break;
                       case 'action_board':
-                        ref.read(tabProvider.notifier).state = AppTab.board;
+                        ref.read(tabProvider.notifier).setTab(AppTab.board);
                         break;
                     }
                   });

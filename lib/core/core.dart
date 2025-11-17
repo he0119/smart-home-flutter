@@ -1,4 +1,3 @@
-export 'bloc/blocs.dart';
 export 'model/models.dart';
 export 'providers/authentication_provider.dart';
 export 'providers/push_provider.dart';

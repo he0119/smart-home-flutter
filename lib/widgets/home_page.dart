@@ -36,7 +36,7 @@ class MyHomePage extends ConsumerWidget {
       onRefresh: onRefresh,
       bottomNavigationBar: TabSelector(
         activeTab: activeTab,
-        onTabSelected: (tab) => ref.read(tabProvider.notifier).state = tab,
+        onTabSelected: (tab) => ref.read(tabProvider.notifier).setTab(tab),
       ),
       canPop: canPop,
       onPopInvokedWithResult: onPopInvokedWithResult,

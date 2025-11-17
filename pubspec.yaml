@@ -22,20 +22,17 @@ dependencies:
   logging: ^1.3.0
   graphql: 5.2.3
   http: 1.6.0
-  bloc: 9.1.0
   equatable: ^2.0.7
   json_annotation: ^4.9.0
   enum_to_string: ^2.2.1
   version: ^3.0.2
   tuple: ^2.0.2
-  provider: ^6.1.5
   mime: ^2.0.0
   gql: any
   rxdart: any
   http_parser: any
 
   # Flutter
-  flutter_bloc: ^9.1.1
   shared_preferences: ^2.5.3
   url_launcher: 6.3.2
   quick_actions: ^1.1.0
@@ -73,7 +70,6 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test: ^10.0.0
   build_runner: 2.10.3
   json_serializable: 6.11.1
   flutter_launcher_icons: ^0.14.4

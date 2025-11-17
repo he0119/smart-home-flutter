@@ -1,7 +1,8 @@
 import 'package:animated_tree_view/tree_view/tree_node.dart';
 import 'package:animated_tree_view/tree_view/tree_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:smarthome/core/providers/repository_providers.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/utils/constants.dart';
 
@@ -124,63 +125,65 @@ class _StorageDialogState extends State<StorageDialog> {
   }
 }
 
-class StorageFormField extends FormField<Storage> {
-  StorageFormField({
+class StorageFormField extends ConsumerStatefulWidget {
+  const StorageFormField({
     // From super
     super.key,
-    super.validator,
-    super.initialValue,
-    super.autovalidateMode,
-    super.enabled,
-    InputDecoration? decoration = const InputDecoration(),
+    this.validator,
+    this.initialValue,
+    this.autovalidateMode,
+    this.enabled = true,
+    this.decoration = const InputDecoration(),
     this.onChanged,
-  }) : super(
-         builder: (field) {
-           final _StorageFieldState state = field as _StorageFieldState;
-           final InputDecoration effectiveDecoration =
-               (decoration ?? const InputDecoration()).applyDefaults(
-                 Theme.of(field.context).inputDecorationTheme,
-               );
-           return TextField(
-             focusNode: state._focusNode,
-             controller: state._controller,
-             decoration: effectiveDecoration.copyWith(
-               errorText: state.errorText,
-               suffixIcon: state.shouldShowClearIcon(effectiveDecoration)
-                   ? IconButton(
-                       icon: const Icon(Icons.close),
-                       onPressed: state.clear,
-                     )
-                   : null,
-             ),
-             readOnly: true,
-           );
-         },
-       );
+  });
 
+  final FormFieldValidator<Storage>? validator;
+  final Storage? initialValue;
+  final AutovalidateMode? autovalidateMode;
+  final bool enabled;
+  final InputDecoration? decoration;
   final void Function(Storage? value)? onChanged;
 
   @override
-  FormFieldState<Storage> createState() => _StorageFieldState();
+  ConsumerState<StorageFormField> createState() => _StorageFieldState();
 }
 
-class _StorageFieldState extends FormFieldState<Storage> {
+class _StorageFieldState extends ConsumerState<StorageFormField> {
   bool isShowingDialog = false;
   bool hadFocus = false;
   late TextEditingController _controller;
   late FocusNode _focusNode;
-
-  @override
-  StorageFormField get widget => super.widget as StorageFormField;
+  Storage? _value;
+  String? _errorText;
 
   bool get hasFocus => _focusNode.hasFocus;
 
   @override
   void initState() {
     super.initState();
+    _value = widget.initialValue;
     _controller = TextEditingController(text: widget.initialValue?.name);
     _focusNode = FocusNode();
     _focusNode.addListener(_handleFocusChanged);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final InputDecoration effectiveDecoration =
+        (widget.decoration ?? const InputDecoration()).applyDefaults(
+          Theme.of(context).inputDecorationTheme,
+        );
+    return TextField(
+      focusNode: _focusNode,
+      controller: _controller,
+      decoration: effectiveDecoration.copyWith(
+        errorText: _errorText,
+        suffixIcon: shouldShowClearIcon(effectiveDecoration)
+            ? IconButton(icon: const Icon(Icons.close), onPressed: clear)
+            : null,
+      ),
+      readOnly: true,
+    );
   }
 
   @override
@@ -191,17 +194,19 @@ class _StorageFieldState extends FormFieldState<Storage> {
     super.dispose();
   }
 
-  @override
   void reset() {
-    super.reset();
     _controller.text = widget.initialValue?.name ?? '';
-    didChange(widget.initialValue);
+    _updateValue(widget.initialValue);
   }
 
-  @override
-  void didChange(Storage? value) {
-    if (widget.onChanged != null) widget.onChanged!(value);
-    super.didChange(value);
+  void _updateValue(Storage? value) {
+    setState(() {
+      _value = value;
+      _errorText = widget.validator?.call(value);
+    });
+    if (widget.onChanged != null) {
+      widget.onChanged!(value);
+    }
   }
 
   void _handleFocusChanged() {
@@ -222,21 +227,20 @@ class _StorageFieldState extends FormFieldState<Storage> {
   Future<void> requestUpdate() async {
     if (!isShowingDialog) {
       isShowingDialog = true;
-      final storages = await RepositoryProvider.of<StorageRepository>(
-        context,
-      ).storages(key: '', cache: false);
+      final storageRepository = ref.read(storageRepositoryProvider);
+      final storages = await storageRepository.storages(key: '', cache: false);
       if (context.mounted) {
         final newValue = await showDialog<Storage>(
           // TODO: 这里也不清楚，明明已经检查过 mounted 了。
           // ignore: use_build_context_synchronously
           context: context,
           builder: (context) {
-            return StorageDialog(storage: value, storages: storages);
+            return StorageDialog(storage: _value, storages: storages);
           },
         );
         isShowingDialog = false;
         if (newValue != null) {
-          didChange(newValue);
+          _updateValue(newValue);
           _controller.text = newValue.name;
         }
       }
@@ -247,7 +251,7 @@ class _StorageFieldState extends FormFieldState<Storage> {
     _hideKeyboard();
     setState(() {
       _controller.clear();
-      didChange(null);
+      _updateValue(null);
     });
   }
 

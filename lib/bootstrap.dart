@@ -14,6 +14,7 @@ import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/providers/repository_providers.dart';
 import 'package:smarthome/core/providers/settings_provider.dart';
 import 'package:smarthome/core/repository/graphql_api_client.dart';
+import 'package:smarthome/routers/delegate.dart';
 
 Future<void> bootstrap(AppConfig appConfig) async {
   await SentryFlutter.init(
@@ -47,6 +48,11 @@ Future<void> bootstrap(AppConfig appConfig) async {
       final graphQLApiClient = GraphQLApiClient(settingsController);
       await graphQLApiClient.loadSettings();
 
+      // 创建 Router Delegate
+      final routerDelegate = MyRouterDelegate(
+        settingsController: settingsController,
+      );
+
       // 创建 ProviderContainer 并配置 Riverpod Observer
       final container = ProviderContainer(
         observers: [SimpleRiverpodObserver()],
@@ -63,10 +69,7 @@ Future<void> bootstrap(AppConfig appConfig) async {
       runApp(
         UncontrolledProviderScope(
           container: container,
-          child: MyApp(
-            settingsController: settingsController,
-            graphQLApiClient: graphQLApiClient,
-          ),
+          child: MyApp(delegate: routerDelegate),
         ),
       );
     },
