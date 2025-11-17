@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
+import 'package:smarthome/storage/providers/item_edit_provider.dart';
 import 'package:smarthome/storage/providers/recycle_bin_provider.dart';
-import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/storage/view/item_datail_page.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
@@ -21,12 +19,7 @@ class RecycleBinPage extends Page {
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => BlocProvider<ItemEditBloc>(
-        create: (context) => ItemEditBloc(
-          storageRepository: RepositoryProvider.of<StorageRepository>(context),
-        ),
-        child: const RecycleBinScreen(),
-      ),
+      builder: (context) => const RecycleBinScreen(),
     );
   }
 }
@@ -53,28 +46,18 @@ class RecycleBinScreen extends ConsumerWidget {
         if (state.status == RecycleBinStatus.loading)
           const SliverCenterLoadingIndicator(),
         if (state.status == RecycleBinStatus.success)
-          BlocListener<ItemEditBloc, ItemEditState>(
-            listener: (context, state) {
-              if (state is ItemRestoreSuccess) {
-                showInfoSnackBar('物品 ${state.item.name} 恢复成功', duration: 2);
-              }
-              if (state is ItemEditFailure) {
-                showErrorSnackBar(state.message);
-              }
-            },
-            child: SliverInfiniteList(
-              itemBuilder: _buildItem,
-              items: state.items,
-              hasReachedMax: state.hasReachedMax,
-              onFetch: () => ref.read(recycleBinProvider.notifier).fetch(),
-            ),
+          SliverInfiniteList(
+            itemBuilder: (context, item) => _buildItem(context, item, ref),
+            items: state.items,
+            hasReachedMax: state.hasReachedMax,
+            onFetch: () => ref.read(recycleBinProvider.notifier).fetch(),
           ),
       ],
     );
   }
 }
 
-Widget _buildItem(BuildContext context, Item item) {
+Widget _buildItem(BuildContext context, Item item, WidgetRef ref) {
   final text = RichText(
     text: TextSpan(
       style: DefaultTextStyle.of(context).style,
@@ -111,12 +94,19 @@ Widget _buildItem(BuildContext context, Item item) {
                   child: const Text('否'),
                 ),
                 TextButton(
-                  onPressed: () {
-                    BlocProvider.of<ItemEditBloc>(
-                      context,
-                    ).add(ItemRestored(item: item));
-                    showInfoSnackBar('正在恢复...', duration: 1);
+                  onPressed: () async {
                     Navigator.of(context).pop();
+                    showInfoSnackBar('正在恢复...', duration: 1);
+
+                    await ref.read(itemEditProvider.notifier).restoreItem(item);
+
+                    final state = ref.read(itemEditProvider);
+                    if (state.status == ItemEditStatus.restoreSuccess) {
+                      showInfoSnackBar('物品 ${item.name} 恢复成功', duration: 2);
+                      ref.read(recycleBinProvider.notifier).fetch(cache: false);
+                    } else if (state.status == ItemEditStatus.failure) {
+                      showErrorSnackBar(state.errorMessage);
+                    }
                   },
                   child: const Text('是'),
                 ),
