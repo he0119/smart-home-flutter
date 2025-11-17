@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/app/settings/settings_service.dart';
 import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/model/app_tab.dart';
+import 'package:smarthome/core/repository/settings_repository.dart';
 import 'package:smarthome/user/model/user.dart';
 
 /// Settings state class
@@ -82,7 +82,7 @@ class SettingsState {
 
 /// Settings Notifier
 class SettingsNotifier extends Notifier<SettingsState> {
-  SettingsService get _settingsService => ref.read(settingsServiceProvider);
+  SettingsRepository get _settingsService => ref.read(settingsServiceProvider);
   AppConfig get _appConfig => ref.read(appConfigProvider);
 
   @override
@@ -223,7 +223,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
 }
 
 /// Internal providers for dependencies (exported for bootstrap)
-final settingsServiceProvider = Provider<SettingsService>(
+final settingsServiceProvider = Provider<SettingsRepository>(
   (ref) => throw UnimplementedError('Override in main'),
 );
 

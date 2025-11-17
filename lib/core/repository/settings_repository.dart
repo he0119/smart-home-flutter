@@ -12,7 +12,7 @@ import 'package:smarthome/user/model/user.dart';
 /// By default, this class does not persist user settings. If you'd like to
 /// persist the user settings locally, use the shared_preferences package. If
 /// you'd like to store settings on a web server, use the http package.
-class SettingsService {
+class SettingsRepository {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future<ThemeMode> themeMode() async {

@@ -7,11 +7,11 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:smarthome/app/configure_nonweb.dart'
     if (dart.library.html) 'package:smarthome/app/configure_web.dart';
 import 'package:smarthome/app/main.dart';
-import 'package:smarthome/app/settings/settings_service.dart';
 import 'package:smarthome/app/simple_riverpod_observer.dart';
 import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/providers/repository_providers.dart';
 import 'package:smarthome/core/providers/settings_provider.dart';
+import 'package:smarthome/core/repository/settings_repository.dart';
 import 'package:smarthome/routers/delegate.dart';
 
 Future<void> bootstrap(AppConfig appConfig) async {
@@ -35,7 +35,7 @@ Future<void> bootstrap(AppConfig appConfig) async {
       await configureApp();
 
       // 初始化服务和配置
-      final settingsService = SettingsService();
+      final settingsService = SettingsRepository();
 
       // 创建 ProviderContainer 并配置 Riverpod Observer
       final container = ProviderContainer(
