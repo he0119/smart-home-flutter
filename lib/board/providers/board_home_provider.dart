@@ -1,7 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/board/model/models.dart';
+import 'package:smarthome/board/repository/board_repository.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/exceptions.dart';
+
+/// Board repository provider
+final boardRepositoryProvider = Provider<BoardRepository>((ref) {
+  final graphqlApiClient = ref.watch(graphQLApiClientProvider);
+  return BoardRepository(graphqlApiClient: graphqlApiClient);
+});
 
 /// Board home state
 class BoardHomeState {
