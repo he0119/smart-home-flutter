@@ -22,7 +22,7 @@ final class SessionProvider extends $NotifierProvider<Session, SessionState> {
         argument: null,
         retry: null,
         name: r'sessionProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -43,7 +43,7 @@ final class SessionProvider extends $NotifierProvider<Session, SessionState> {
   }
 }
 
-String _$sessionHash() => r'3e8376734229d69b9cc788cec2916895c3535489';
+String _$sessionHash() => r'6144ea7950de2424ba8f37b930cdb2c532c668bf';
 
 /// Session Notifier
 

@@ -36,7 +36,7 @@ class SessionFailure extends SessionState {
 }
 
 /// Session Notifier
-@riverpod
+@Riverpod(keepAlive: true)
 class Session extends _$Session {
   @override
   SessionState build() {
