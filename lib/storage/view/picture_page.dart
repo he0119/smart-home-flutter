@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:smarthome/storage/bloc/blocs.dart';
 import 'package:smarthome/storage/model/models.dart';
-import 'package:smarthome/storage/repository/storage_repository.dart';
+import 'package:smarthome/storage/providers/providers.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/utils/parse_url.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
@@ -23,76 +22,68 @@ class PicturePage extends Page {
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => MultiBlocProvider(
-        providers: [
-          BlocProvider<PictureBloc>(
-            create: (context) => PictureBloc(
-              storageRepository: RepositoryProvider.of<StorageRepository>(
-                context,
-              ),
-            )..add(PictureStarted(id: pictureId)),
-          ),
-          BlocProvider<PictureEditBloc>(
-            create: (context) => PictureEditBloc(
-              storageRepository: RepositoryProvider.of<StorageRepository>(
-                context,
-              ),
-            ),
-          ),
-        ],
-        child: const PictureScreen(),
-      ),
+      builder: (context) => PictureScreen(pictureId: pictureId),
     );
   }
 }
 
-class PictureScreen extends StatelessWidget {
-  const PictureScreen({super.key});
+class PictureScreen extends ConsumerStatefulWidget {
+  final String pictureId;
+
+  const PictureScreen({super.key, required this.pictureId});
+
+  @override
+  ConsumerState<PictureScreen> createState() => _PictureScreenState();
+}
+
+class _PictureScreenState extends ConsumerState<PictureScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(pictureProvider.notifier).initialize(widget.pictureId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PictureBloc, PictureState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: _buildAppBar(context, state),
-          body: BlocListener<PictureEditBloc, PictureEditState>(
-            listener: (context, state) {
-              if (state is PictureDeleteSuccess) {
-                showInfoSnackBar('图片 ${state.picture.description} 删除成功');
-                Navigator.of(context).pop();
-              }
-              if (state is PictureEditFailure) {
-                showErrorSnackBar(state.message);
-              }
-            },
-            child: _buildBody(context, state),
-          ),
-          floatingActionButton: (state is PictureSuccess && kIsWeb)
-              ? FloatingActionButton(
-                  tooltip: '在新标签页中打开',
-                  onPressed: () async {
-                    await launchUrl(state.picture.url!);
-                  },
-                  child: const Icon(Icons.open_in_new),
-                )
-              : null,
-        );
-      },
+    final state = ref.watch(pictureProvider);
+
+    ref.listen<PictureEditState>(pictureEditProvider, (previous, state) {
+      if (state.status == PictureEditStatus.deleteSuccess) {
+        showInfoSnackBar('图片 ${state.picture?.description} 删除成功');
+        Navigator.of(context).pop();
+      }
+      if (state.status == PictureEditStatus.failure) {
+        showErrorSnackBar(state.errorMessage);
+      }
+    });
+
+    return Scaffold(
+      appBar: _buildAppBar(context, state),
+      body: _buildBody(context, state),
+      floatingActionButton: (state.status == PictureStatus.success && kIsWeb)
+          ? FloatingActionButton(
+              tooltip: '在新标签页中打开',
+              onPressed: () async {
+                await launchUrl(state.picture.url!);
+              },
+              child: const Icon(Icons.open_in_new),
+            )
+          : null,
     );
   }
 
   Widget _buildBody(BuildContext context, PictureState state) {
-    if (state is PictureFailure) {
+    if (state.status == PictureStatus.failure) {
       return ErrorMessageButton(
         onPressed: () {
-          BlocProvider.of<PictureBloc>(
-            context,
-          ).add(PictureStarted(id: state.id));
+          ref.read(pictureProvider.notifier).refresh();
         },
-        message: state.message,
+        message: state.errorMessage,
       );
     }
-    if (state is PictureSuccess) {
+    if (state.status == PictureStatus.success) {
       return PhotoView(
         loadingBuilder: (context, event) => const CenterLoadingIndicator(),
         imageProvider: CachedNetworkImageProvider(
@@ -110,7 +101,7 @@ class PictureScreen extends StatelessWidget {
   }
 
   AppBar _buildAppBar(BuildContext context, PictureState state) {
-    if (state is PictureSuccess) {
+    if (state.status == PictureStatus.success) {
       return AppBar(
         title: state.picture.description.isNotEmpty
             ? Text('${state.picture.item!.name}（${state.picture.description}）')
@@ -134,9 +125,9 @@ class PictureScreen extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           showInfoSnackBar('正在删除...', duration: 1);
-                          BlocProvider.of<PictureEditBloc>(
-                            context,
-                          ).add(PictureDeleted(picture: state.picture));
+                          ref
+                              .read(pictureEditProvider.notifier)
+                              .deletePicture(state.picture);
                           Navigator.of(context).pop();
                         },
                         child: const Text('是'),
