@@ -40,8 +40,8 @@ enum ConsumablesStatus { initial, loading, success, failure }
 class ConsumablesNotifier extends Notifier<ConsumablesState> {
   @override
   ConsumablesState build() {
-    // 初始加载
-    fetch(cache: true);
+    // 初始加载 - 延迟执行避免在 build 期间访问 state
+    Future.microtask(() => fetch(cache: true));
     return const ConsumablesState();
   }
 

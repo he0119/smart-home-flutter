@@ -72,8 +72,8 @@ enum StorageHomeStatus { initial, loading, success, failure }
 class StorageHomeNotifier extends Notifier<StorageHomeState> {
   @override
   StorageHomeState build() {
-    // 初始加载
-    fetch(itemType: ItemType.all, cache: true);
+    // 初始加载 - 延迟执行避免在 build 期间访问 state
+    Future.microtask(() => fetch(itemType: ItemType.all, cache: true));
     return const StorageHomeState(itemType: ItemType.all);
   }
 

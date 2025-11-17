@@ -40,8 +40,8 @@ enum RecycleBinStatus { initial, loading, success, failure }
 class RecycleBinNotifier extends Notifier<RecycleBinState> {
   @override
   RecycleBinState build() {
-    // 初始加载
-    fetch(cache: true);
+    // 初始加载 - 延迟执行避免在 build 期间访问 state
+    Future.microtask(() => fetch(cache: true));
     return const RecycleBinState();
   }
 
