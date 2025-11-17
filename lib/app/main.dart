@@ -55,21 +55,11 @@ class MyApp extends StatelessWidget {
         ],
         child: MultiBlocProvider(
           providers: [
-            // AuthenticationBloc 已迁移到 Riverpod - 使用 authenticationProvider
-            // TabBloc 已迁移到 Riverpod - 使用 tabProvider
-            BlocProvider<UpdateBloc>(
-              create: (context) => UpdateBloc(
-                versionRepository: RepositoryProvider.of<VersionRepository>(
-                  context,
-                ),
-              )..add(UpdateStarted()),
-            ),
-            BlocProvider<PushBloc>(
-              create: (context) => PushBloc(
-                pushRepository: RepositoryProvider.of<PushRepository>(context),
-                settingsController: settingsController,
-              ),
-            ),
+            // 以下 BLoCs 已迁移到 Riverpod:
+            // - AuthenticationBloc → authenticationProvider
+            // - TabBloc → tabProvider
+            // - UpdateBloc → updateProvider
+            // - PushBloc → pushProvider
             BlocProvider<StorageHomeBloc>(
               create: (context) => StorageHomeBloc(
                 storageRepository: RepositoryProvider.of<StorageRepository>(
