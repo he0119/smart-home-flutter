@@ -49,8 +49,8 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final descending = ref.read(settingsProvider).commentDescending;
       ref
-          .read(topicDetailProvider.notifier)
-          .initialize(widget.topicId, descending: descending);
+          .read(topicDetailProvider(widget.topicId).notifier)
+          .initialize(descending: descending);
     });
   }
 
@@ -86,7 +86,9 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
     // Listen to CommentEdit state changes
     ref.listen<CommentEditState>(commentEditProvider, (previous, state) {
       if (state.status == CommentEditStatus.deleteSuccess) {
-        ref.read(topicDetailProvider.notifier).refresh(descending: descending);
+        ref
+            .read(topicDetailProvider(widget.topicId).notifier)
+            .refresh(descending: descending);
         showInfoSnackBar('评论删除成功');
       }
       if (state.status == CommentEditStatus.failure) {
@@ -94,7 +96,7 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
       }
     });
 
-    final state = ref.watch(topicDetailProvider);
+    final state = ref.watch(topicDetailProvider(widget.topicId));
 
     return MySliverScaffold(
       title: Text(state.topic.title ?? ''),
@@ -110,7 +112,7 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
               );
               if (r == true) {
                 ref
-                    .read(topicDetailProvider.notifier)
+                    .read(topicDetailProvider(widget.topicId).notifier)
                     .refresh(descending: descending);
               }
             }
@@ -321,7 +323,7 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
           SliverErrorMessageButton(
             onPressed: () {
               ref
-                  .read(topicDetailProvider.notifier)
+                  .read(topicDetailProvider(widget.topicId).notifier)
                   .refresh(descending: descending);
             },
             message: state.errorMessage,
@@ -336,20 +338,22 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
               showMenu: loginUser == item.user,
               onEdit: () {
                 ref
-                    .read(topicDetailProvider.notifier)
+                    .read(topicDetailProvider(widget.topicId).notifier)
                     .refresh(descending: descending);
               },
             ),
             onFetch: () {
               ref
-                  .read(topicDetailProvider.notifier)
+                  .read(topicDetailProvider(widget.topicId).notifier)
                   .fetchMore(descending: descending);
             },
             hasReachedMax: state.hasReachedMax,
           ),
       ],
       onRefresh: () async {
-        ref.read(topicDetailProvider.notifier).refresh(descending: descending);
+        ref
+            .read(topicDetailProvider(widget.topicId).notifier)
+            .refresh(descending: descending);
       },
       floatingActionButton:
           (state.status == TopicDetailStatus.success && state.topic.isClosed!)
@@ -366,7 +370,7 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
                 );
                 if (r == true) {
                   ref
-                      .read(topicDetailProvider.notifier)
+                      .read(topicDetailProvider(widget.topicId).notifier)
                       .refresh(descending: descending);
                 }
               },
@@ -413,7 +417,7 @@ class CommentOrder extends ConsumerWidget {
                       .read(settingsProvider.notifier)
                       .updateCommentDescending(value);
                   ref
-                      .read(topicDetailProvider.notifier)
+                      .read(topicDetailProvider(topicId).notifier)
                       .refresh(descending: value);
                 },
                 itemBuilder: (context) => <PopupMenuItem<bool>>[

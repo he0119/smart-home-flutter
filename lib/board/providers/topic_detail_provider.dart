@@ -48,17 +48,19 @@ class TopicDetailState {
 
 /// Topic detail notifier
 class TopicDetailNotifier extends Notifier<TopicDetailState> {
-  late String _topicId;
+  TopicDetailNotifier(this._topicId);
+
+  final String _topicId;
   bool _descending = true;
 
   @override
   TopicDetailState build() {
+    // Will be initialized with descending parameter in the screen
     return const TopicDetailState();
   }
 
-  /// Initialize with topic ID and load data
-  void initialize(String topicId, {bool descending = true}) {
-    _topicId = topicId;
+  /// Initialize with descending order and load data
+  void initialize({bool descending = true}) {
     _descending = descending;
     _loadTopic(cache: true, showLoading: true);
   }
@@ -109,9 +111,7 @@ class TopicDetailNotifier extends Notifier<TopicDetailState> {
 
     try {
       final boardRepository = ref.read(boardRepositoryProvider);
-      final topicId = state.status == TopicDetailStatus.success
-          ? state.topic.id
-          : _topicId;
+      final topicId = _topicId;
 
       final results = await boardRepository.topicDetail(
         topicId: topicId,
@@ -136,6 +136,6 @@ class TopicDetailNotifier extends Notifier<TopicDetailState> {
 
 /// Topic detail provider
 final topicDetailProvider =
-    NotifierProvider<TopicDetailNotifier, TopicDetailState>(
+    NotifierProvider.family<TopicDetailNotifier, TopicDetailState, String>(
       TopicDetailNotifier.new,
     );

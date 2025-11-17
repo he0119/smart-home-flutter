@@ -38,16 +38,8 @@ class PictureScreen extends ConsumerStatefulWidget {
 
 class _PictureScreenState extends ConsumerState<PictureScreen> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(pictureProvider.notifier).initialize(widget.pictureId);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final state = ref.watch(pictureProvider);
+    final state = ref.watch(pictureProvider(widget.pictureId));
 
     ref.listen<PictureEditState>(pictureEditProvider, (previous, state) {
       if (state.status == PictureEditStatus.deleteSuccess) {
@@ -59,91 +51,87 @@ class _PictureScreenState extends ConsumerState<PictureScreen> {
       }
     });
 
-    return Scaffold(
-      appBar: _buildAppBar(context, state),
-      body: _buildBody(context, state),
-      floatingActionButton: (state.status == PictureStatus.success && kIsWeb)
-          ? FloatingActionButton(
-              tooltip: '在新标签页中打开',
-              onPressed: () async {
-                await launchUrl(state.picture.url!);
+    return state.when(
+      data: (picture) => Scaffold(
+        appBar: AppBar(
+          title: picture.description.isNotEmpty
+              ? Text('${picture.item!.name}（${picture.description}）')
+              : Text('${picture.item!.name}（未命名）'),
+          actions: [
+            PopupMenuButton<PictureMenu>(
+              onSelected: (value) async {
+                if (value == PictureMenu.delete) {
+                  await showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text('删除 ${picture.description}'),
+                      content: const Text('你确认要删除该图片么？'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('否'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            showInfoSnackBar('正在删除...', duration: 1);
+                            ref
+                                .read(pictureEditProvider.notifier)
+                                .deletePicture(picture);
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('是'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
-              child: const Icon(Icons.open_in_new),
-            )
-          : null,
-    );
-  }
-
-  Widget _buildBody(BuildContext context, PictureState state) {
-    if (state.status == PictureStatus.failure) {
-      return ErrorMessageButton(
-        onPressed: () {
-          ref.read(pictureProvider.notifier).refresh();
-        },
-        message: state.errorMessage,
-      );
-    }
-    if (state.status == PictureStatus.success) {
-      return PhotoView(
-        loadingBuilder: (context, event) => const CenterLoadingIndicator(),
-        imageProvider: CachedNetworkImageProvider(
-          state.picture.url!,
-          cacheKey: getCacheKey(state.picture.url!),
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: PictureMenu.delete,
+                  child: Text('删除'),
+                ),
+              ],
+            ),
+          ],
         ),
-        minScale: PhotoViewComputedScale.contained,
-        maxScale: PhotoViewComputedScale.covered * 5,
-        backgroundDecoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-        ),
-      );
-    }
-    return const CenterLoadingIndicator();
-  }
-
-  AppBar _buildAppBar(BuildContext context, PictureState state) {
-    if (state.status == PictureStatus.success) {
-      return AppBar(
-        title: state.picture.description.isNotEmpty
-            ? Text('${state.picture.item!.name}（${state.picture.description}）')
-            : Text('${state.picture.item!.name}（未命名）'),
-        actions: [
-          PopupMenuButton<PictureMenu>(
-            onSelected: (value) async {
-              if (value == PictureMenu.delete) {
-                await showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text('删除 ${state.picture.description}'),
-                    content: const Text('你确认要删除该图片么？'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('否'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showInfoSnackBar('正在删除...', duration: 1);
-                          ref
-                              .read(pictureEditProvider.notifier)
-                              .deletePicture(state.picture);
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('是'),
-                      ),
-                    ],
-                  ),
-                );
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: PictureMenu.delete, child: Text('删除')),
-            ],
+        body: PhotoView(
+          loadingBuilder: (context, event) => const CenterLoadingIndicator(),
+          imageProvider: CachedNetworkImageProvider(
+            picture.url!,
+            cacheKey: getCacheKey(picture.url!),
           ),
-        ],
-      );
-    }
-    return AppBar(title: const Text('图片'));
+          minScale: PhotoViewComputedScale.contained,
+          maxScale: PhotoViewComputedScale.covered * 5,
+          backgroundDecoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
+        ),
+        floatingActionButton: kIsWeb
+            ? FloatingActionButton(
+                tooltip: '在新标签页中打开',
+                onPressed: () async {
+                  await launchUrl(picture.url!);
+                },
+                child: const Icon(Icons.open_in_new),
+              )
+            : null,
+      ),
+      loading: () => Scaffold(
+        appBar: AppBar(title: const Text('加载中...')),
+        body: const CenterLoadingIndicator(),
+      ),
+      error: (error, stack) => Scaffold(
+        appBar: AppBar(title: const Text('图片')),
+        body: ErrorMessageButton(
+          onPressed: () {
+            ref.read(pictureProvider(widget.pictureId).notifier).refresh();
+          },
+          message: error.toString(),
+        ),
+      ),
+    );
   }
 }

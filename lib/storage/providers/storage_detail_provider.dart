@@ -50,22 +50,20 @@ class StorageDetailState {
 
 /// Storage detail notifier
 class StorageDetailNotifier extends Notifier<StorageDetailState> {
-  late String _storageId;
+  StorageDetailNotifier(this._storageId);
+
+  final String _storageId;
 
   @override
   StorageDetailState build() {
+    // Load storage data when the notifier is created
+    _loadStorage(_storageId, cache: true);
     return const StorageDetailState();
-  }
-
-  /// Initialize with storage ID and load data
-  void initialize(String storageId) {
-    _storageId = storageId;
-    _loadStorage(cache: true);
   }
 
   /// Refresh storage data
   void refresh() {
-    _loadStorage(cache: false);
+    _loadStorage(_storageId, cache: false);
   }
 
   /// Fetch more data (pagination)
@@ -117,7 +115,7 @@ class StorageDetailNotifier extends Notifier<StorageDetailState> {
     }
   }
 
-  Future<void> _loadStorage({required bool cache}) async {
+  Future<void> _loadStorage(String storageId, {required bool cache}) async {
     if (!cache) {
       state = state.copyWith(status: StorageDetailStatus.loading);
     }
@@ -125,7 +123,7 @@ class StorageDetailNotifier extends Notifier<StorageDetailState> {
     try {
       final storageRepository = ref.read(storageRepositoryProvider);
 
-      if (_storageId == homeStorage.id) {
+      if (storageId == homeStorage.id) {
         final results = await storageRepository.rootStorage(cache: cache);
         state = state.copyWith(
           status: StorageDetailStatus.success,
@@ -139,7 +137,7 @@ class StorageDetailNotifier extends Notifier<StorageDetailState> {
         );
       } else {
         final results = await storageRepository.storage(
-          id: _storageId,
+          id: storageId,
           cache: cache,
         );
         if (results == null) {
@@ -167,6 +165,6 @@ class StorageDetailNotifier extends Notifier<StorageDetailState> {
 
 /// Storage detail provider
 final storageDetailProvider =
-    NotifierProvider<StorageDetailNotifier, StorageDetailState>(
+    NotifierProvider.family<StorageDetailNotifier, StorageDetailState, String>(
       StorageDetailNotifier.new,
     );

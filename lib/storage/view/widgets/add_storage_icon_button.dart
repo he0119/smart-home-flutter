@@ -22,8 +22,8 @@ class AddStorageIconButton extends ConsumerWidget {
                   StorageEditPage(isEditing: false, storage: storage),
             ),
           );
-          if (r == true) {
-            ref.read(storageDetailProvider.notifier).refresh();
+          if (r == true && storage != null) {
+            ref.read(storageDetailProvider(storage!.id).notifier).refresh();
           }
         },
       ),

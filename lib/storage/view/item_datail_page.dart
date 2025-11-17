@@ -42,17 +42,8 @@ class ItemDetailScreen extends ConsumerStatefulWidget {
 
 class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
   @override
-  void initState() {
-    super.initState();
-    // Initialize the provider with itemId
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(itemDetailProvider.notifier).initialize(widget.itemId);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final state = ref.watch(itemDetailProvider);
+    final state = ref.watch(itemDetailProvider(widget.itemId));
 
     // Listen to item edit state for delete notifications
     ref.listen<ItemEditState>(itemEditProvider, (previous, next) {
@@ -65,102 +56,113 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
       }
     });
 
-    return SelectionArea(
-      child: MySliverScaffold(
-        title: Text(state.item.name),
-        actions: <Widget>[
-          const SearchIconButton(),
-          PopupMenuButton<ItemDetailMenu>(
-            onSelected: (value) async {
-              final navigator = Navigator.of(context);
-              final myRouterDelegate = MyRouterDelegate.of(context);
+    return state.when(
+      data: (item) => SelectionArea(
+        child: MySliverScaffold(
+          title: Text(item.name),
+          actions: <Widget>[
+            const SearchIconButton(),
+            PopupMenuButton<ItemDetailMenu>(
+              onSelected: (value) async {
+                final navigator = Navigator.of(context);
+                final myRouterDelegate = MyRouterDelegate.of(context);
 
-              if (value == ItemDetailMenu.edit) {
-                final r = await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        ItemEditPage(isEditing: true, item: state.item),
-                  ),
-                );
-                if (r == true) {
-                  ref.read(itemDetailProvider.notifier).refresh();
-                }
-              }
-              if (value == ItemDetailMenu.consumable) {
-                await navigator.push(
-                  MaterialPageRoute(
-                    builder: (_) => ConsumableEditPage(item: state.item),
-                  ),
-                );
-                ref.read(itemDetailProvider.notifier).refresh();
-              }
-              if (value == ItemDetailMenu.addPicture) {
-                myRouterDelegate.push(PictureAddPage(itemId: state.item.id));
-              }
-              if (value == ItemDetailMenu.delete) {
-                if (context.mounted) {
-                  await showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text('删除 ${state.item.name}'),
-                      content: const Text('你确认要删除该物品么？'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('否'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            ref
-                                .read(itemEditProvider.notifier)
-                                .deleteItem(state.item);
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('是'),
-                        ),
-                      ],
+                if (value == ItemDetailMenu.edit) {
+                  final r = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ItemEditPage(isEditing: true, item: item),
                     ),
                   );
+                  if (r == true) {
+                    ref
+                        .read(itemDetailProvider(widget.itemId).notifier)
+                        .refresh();
+                  }
                 }
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: ItemDetailMenu.edit,
-                child: Text('编辑'),
-              ),
-              const PopupMenuItem(
-                value: ItemDetailMenu.addPicture,
-                child: Text('添加图片'),
-              ),
-              const PopupMenuItem(
-                value: ItemDetailMenu.consumable,
-                child: Text('耗材编辑'),
-              ),
-              const PopupMenuItem(
-                value: ItemDetailMenu.delete,
-                child: Text('删除'),
-              ),
-            ],
-          ),
-        ],
+                if (value == ItemDetailMenu.consumable) {
+                  await navigator.push(
+                    MaterialPageRoute(
+                      builder: (_) => ConsumableEditPage(item: item),
+                    ),
+                  );
+                  ref
+                      .read(itemDetailProvider(widget.itemId).notifier)
+                      .refresh();
+                }
+                if (value == ItemDetailMenu.addPicture) {
+                  myRouterDelegate.push(PictureAddPage(itemId: item.id));
+                }
+                if (value == ItemDetailMenu.delete) {
+                  if (context.mounted) {
+                    await showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text('删除 ${item.name}'),
+                        content: const Text('你确认要删除该物品么？'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('否'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              ref
+                                  .read(itemEditProvider.notifier)
+                                  .deleteItem(item);
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('是'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: ItemDetailMenu.edit,
+                  child: Text('编辑'),
+                ),
+                const PopupMenuItem(
+                  value: ItemDetailMenu.addPicture,
+                  child: Text('添加图片'),
+                ),
+                const PopupMenuItem(
+                  value: ItemDetailMenu.consumable,
+                  child: Text('耗材编辑'),
+                ),
+                const PopupMenuItem(
+                  value: ItemDetailMenu.delete,
+                  child: Text('删除'),
+                ),
+              ],
+            ),
+          ],
+          onRefresh: () async {
+            ref.read(itemDetailProvider(widget.itemId).notifier).refresh();
+          },
+          slivers: [_ItemDetailList(item: item)],
+        ),
+      ),
+      loading: () => MySliverScaffold(
+        title: const Text('加载中...'),
+        slivers: [const SliverCenterLoadingIndicator()],
+      ),
+      error: (error, stack) => MySliverScaffold(
+        title: const Text('错误'),
         onRefresh: () async {
-          ref.read(itemDetailProvider.notifier).refresh();
+          ref.read(itemDetailProvider(widget.itemId).notifier).refresh();
         },
         slivers: [
-          if (state.status == ItemDetailStatus.failure)
-            SliverErrorMessageButton(
-              onPressed: () {
-                ref.read(itemDetailProvider.notifier).initialize(widget.itemId);
-              },
-              message: state.errorMessage,
-            ),
-          if (state.status == ItemDetailStatus.loading)
-            const SliverCenterLoadingIndicator(),
-          if (state.status == ItemDetailStatus.success)
-            _ItemDetailList(item: state.item),
+          SliverErrorMessageButton(
+            onPressed: () {
+              ref.read(itemDetailProvider(widget.itemId).notifier).refresh();
+            },
+            message: error.toString(),
+          ),
         ],
       ),
     );

@@ -45,17 +45,8 @@ class StorageDetailScreen extends ConsumerStatefulWidget {
 
 class _StorageDetailScreenState extends ConsumerState<StorageDetailScreen> {
   @override
-  void initState() {
-    super.initState();
-    // Initialize the provider with storageId
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(storageDetailProvider.notifier).initialize(widget.storageId);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final state = ref.watch(storageDetailProvider);
+    final state = ref.watch(storageDetailProvider(widget.storageId));
 
     // Listen to storage edit state for delete notifications
     ref.listen<StorageEditState>(storageEditProvider, (previous, next) {
@@ -78,7 +69,7 @@ class _StorageDetailScreenState extends ConsumerState<StorageDetailScreen> {
     return MySliverScaffold(
       title: Text(state.storage.name),
       onRefresh: () async {
-        ref.read(storageDetailProvider.notifier).refresh();
+        ref.read(storageDetailProvider(widget.storageId).notifier).refresh();
       },
       actions: <Widget>[
         AddStorageIconButton(storage: state.storage),
@@ -98,7 +89,9 @@ class _StorageDetailScreenState extends ConsumerState<StorageDetailScreen> {
                   ),
                 );
                 if (r == true) {
-                  ref.read(storageDetailProvider.notifier).refresh();
+                  ref
+                      .read(storageDetailProvider(widget.storageId).notifier)
+                      .refresh();
                 }
               }
               if (value == StorageDetailMenu.delete) {
@@ -163,8 +156,8 @@ class _StorageDetailScreenState extends ConsumerState<StorageDetailScreen> {
           SliverErrorMessageButton(
             onPressed: () {
               ref
-                  .read(storageDetailProvider.notifier)
-                  .initialize(widget.storageId);
+                  .read(storageDetailProvider(widget.storageId).notifier)
+                  .refresh();
             },
             message: state.errorMessage,
           ),
@@ -175,7 +168,9 @@ class _StorageDetailScreenState extends ConsumerState<StorageDetailScreen> {
             items: state.storage.items!.toList(),
             storages: state.storage.children!.toList(),
             hasReachedMax: state.hasReachedMax,
-            onFetch: () => ref.read(storageDetailProvider.notifier).fetchMore(),
+            onFetch: () => ref
+                .read(storageDetailProvider(widget.storageId).notifier)
+                .fetchMore(),
           ),
       ],
       floatingActionButton: FloatingActionButton(
@@ -188,7 +183,9 @@ class _StorageDetailScreenState extends ConsumerState<StorageDetailScreen> {
             ),
           );
           if (r == true) {
-            ref.read(storageDetailProvider.notifier).refresh();
+            ref
+                .read(storageDetailProvider(widget.storageId).notifier)
+                .refresh();
           }
         },
         child: const Icon(Icons.add),
