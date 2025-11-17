@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
                 settingsController: settingsController,
               )..add(AuthenticationStarted()),
             ),
-            BlocProvider<TabBloc>(create: (context) => TabBloc()),
+            // TabBloc 已迁移到 Riverpod - 使用 tabProvider
             BlocProvider<UpdateBloc>(
               create: (context) => UpdateBloc(
                 versionRepository: RepositoryProvider.of<VersionRepository>(

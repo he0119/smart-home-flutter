@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/conditional_parent_widget.dart';
 import 'package:smarthome/widgets/drawer.dart';
 import 'package:smarthome/widgets/tab_selector.dart';
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends ConsumerWidget {
   final AppTab activeTab;
   final List<Widget>? actions;
   final List<Widget>? slivers;
@@ -26,7 +26,7 @@ class MyHomePage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MySliverScaffold(
       title: Text(activeTab.name),
       actions: actions,
@@ -36,8 +36,7 @@ class MyHomePage extends StatelessWidget {
       onRefresh: onRefresh,
       bottomNavigationBar: TabSelector(
         activeTab: activeTab,
-        onTabSelected: (tab) =>
-            BlocProvider.of<TabBloc>(context).add(TabChanged(tab)),
+        onTabSelected: (tab) => ref.read(tabProvider.notifier).state = tab,
       ),
       canPop: canPop,
       onPopInvokedWithResult: onPopInvokedWithResult,

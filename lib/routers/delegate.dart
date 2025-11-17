@@ -4,6 +4,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:smarthome/app/settings/settings_controller.dart';
@@ -199,98 +200,101 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     // 如果登录用户变化，则触发组件重新构建
     context.select((SettingsController settings) => settings.loginUser);
 
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) async {
-            if (state is AuthenticationSuccess) {
-              // 当登录成功时，开始初始化推送服务
-              BlocProvider.of<PushBloc>(context).add(PushStarted());
-              // 仅在客户端上注册 Shortcut
-              if (!kIsWeb && !Platform.isWindows) {
-                const quickActions = QuickActions();
-                await quickActions.initialize((String shortcutType) {
-                  switch (shortcutType) {
-                    case 'action_storage':
-                      BlocProvider.of<TabBloc>(
-                        context,
-                      ).add(const TabChanged(AppTab.storage));
-                      break;
-                    case 'action_blog':
-                      BlocProvider.of<TabBloc>(
-                        context,
-                      ).add(const TabChanged(AppTab.blog));
-                      break;
-                    case 'action_board':
-                      BlocProvider.of<TabBloc>(
-                        context,
-                      ).add(const TabChanged(AppTab.board));
-                      break;
+    return Consumer(
+      builder: (context, ref, child) {
+        // 使用 Riverpod 监听 tabProvider 的变化
+        ref.listen<AppTab?>(tabProvider, (previous, next) {
+          if (next != null) {
+            setHomePage(next);
+          }
+        });
+
+        return MultiBlocListener(
+          listeners: [
+            BlocListener<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) async {
+                if (state is AuthenticationSuccess) {
+                  // 当登录成功时，开始初始化推送服务
+                  BlocProvider.of<PushBloc>(context).add(PushStarted());
+                  // 仅在客户端上注册 Shortcut
+                  if (!kIsWeb && !Platform.isWindows) {
+                    const quickActions = QuickActions();
+                    await quickActions.initialize((String shortcutType) {
+                      switch (shortcutType) {
+                        case 'action_storage':
+                          ref.read(tabProvider.notifier).state = AppTab.storage;
+                          break;
+                        case 'action_blog':
+                          ref.read(tabProvider.notifier).state = AppTab.blog;
+                          break;
+                        case 'action_board':
+                          ref.read(tabProvider.notifier).state = AppTab.board;
+                          break;
+                      }
+                    });
+                    await quickActions.setShortcutItems(<ShortcutItem>[
+                      // TODO: 给快捷方式添加图标
+                      const ShortcutItem(
+                        type: 'action_storage',
+                        localizedTitle: '物品',
+                      ),
+                      const ShortcutItem(
+                        type: 'action_blog',
+                        localizedTitle: '博客',
+                      ),
+                      const ShortcutItem(
+                        type: 'action_board',
+                        localizedTitle: '留言',
+                      ),
+                    ]);
                   }
-                });
-                await quickActions.setShortcutItems(<ShortcutItem>[
-                  // TODO: 给快捷方式添加图标
-                  const ShortcutItem(
-                    type: 'action_storage',
-                    localizedTitle: '物品',
-                  ),
-                  const ShortcutItem(type: 'action_blog', localizedTitle: '博客'),
-                  const ShortcutItem(
-                    type: 'action_board',
-                    localizedTitle: '留言',
-                  ),
-                ]);
-              }
-            }
-            if (state is AuthenticationError) {
-              showErrorSnackBar(state.message);
-            }
-          },
-        ),
-        BlocListener<TabBloc, AppTab?>(
-          listener: (context, state) {
-            if (state != null) {
-              setHomePage(state);
-            }
-          },
-        ),
-        BlocListener<UpdateBloc, UpdateState>(
-          listener: (context, state) {
-            if (state is UpdateSuccess && state.needUpdate) {
-              scaffoldMessengerKey.currentState!.showSnackBar(
-                SnackBar(
-                  content: Text('发现新版本（${state.version}）'),
-                  action: SnackBarAction(
-                    label: '更新',
-                    onPressed: () {
-                      launchUrl(state.url!);
-                    },
-                  ),
-                ),
-              );
-            }
-            if (state is UpdateFailure) {
-              scaffoldMessengerKey.currentState!.showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  action: SnackBarAction(
-                    label: '重试',
-                    onPressed: () {
-                      BlocProvider.of<UpdateBloc>(context).add(UpdateStarted());
-                    },
-                  ),
-                ),
-              );
-            }
-          },
-        ),
-      ],
-      child: Navigator(
-        key: navigatorKey,
-        pages: pages,
-        onDidRemovePage: _handleRemovePage,
-        // transitionDelegate: transitionDelegate,
-      ),
+                }
+                if (state is AuthenticationError) {
+                  showErrorSnackBar(state.message);
+                }
+              },
+            ),
+            BlocListener<UpdateBloc, UpdateState>(
+              listener: (context, state) {
+                if (state is UpdateSuccess && state.needUpdate) {
+                  scaffoldMessengerKey.currentState!.showSnackBar(
+                    SnackBar(
+                      content: Text('发现新版本（${state.version}）'),
+                      action: SnackBarAction(
+                        label: '更新',
+                        onPressed: () {
+                          launchUrl(state.url!);
+                        },
+                      ),
+                    ),
+                  );
+                }
+                if (state is UpdateFailure) {
+                  scaffoldMessengerKey.currentState!.showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                      action: SnackBarAction(
+                        label: '重试',
+                        onPressed: () {
+                          BlocProvider.of<UpdateBloc>(
+                            context,
+                          ).add(UpdateStarted());
+                        },
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+          child: Navigator(
+            key: navigatorKey,
+            pages: pages,
+            onDidRemovePage: _handleRemovePage,
+            // transitionDelegate: transitionDelegate,
+          ),
+        );
+      },
     );
   }
 }
