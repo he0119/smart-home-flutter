@@ -208,7 +208,22 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
               ? IconButton(
                   icon: const Icon(Icons.home),
                   onPressed: () {
-                    context.setStoragePage();
+                    // 回到根位置
+                    // 计算需要回退的层数
+                    // 如果是从物品详情中转跳过来的，则 paths 没有根位置
+                    // 需要将最下面的页面替换成根位置
+                    final hasRoot =
+                        paths.isNotEmpty && paths.first.id == homeStorage.id;
+                    final popCount = paths.length + (hasRoot ? 0 : -1);
+                    final navigator = Navigator.of(context);
+                    for (var i = 0; i < popCount; i++) {
+                      if (navigator.canPop()) {
+                        navigator.pop();
+                      }
+                    }
+                    if (!hasRoot) {
+                      context.replaceStorageRootDetail();
+                    }
                   },
                 )
               : InkWell(
@@ -216,7 +231,17 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
                     // 单击当前位置的时候，不做任何转跳
                     // 禁止原地 TP
                     if (index != paths.length) {
-                      context.setStoragePageWithStorage(paths[index - 1].id);
+                      // 计算需要回退的层数
+                      // paths.length 是当前位置的深度（包括当前页面）
+                      // index 是点击的位置索引（从1开始，因为0是home图标）
+                      // 需要回退的次数 = 当前深度 - 点击的位置索引
+                      final popCount = paths.length - index;
+                      final navigator = Navigator.of(context);
+                      for (var i = 0; i < popCount; i++) {
+                        if (navigator.canPop()) {
+                          navigator.pop();
+                        }
+                      }
                     }
                   },
                   child: Center(

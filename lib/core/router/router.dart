@@ -70,8 +70,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
 
-      // 独立页面路由
-
       // 话题详情
       GoRoute(
         path: AppRoutes.topicDetail,

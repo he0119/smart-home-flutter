@@ -30,20 +30,24 @@ extension GoRouterExtension on BuildContext {
 
   void goRecycleBin() => push(AppRoutes.recycleBin);
 
+  void goSearch() => push(AppRoutes.search);
+
+  void goAdmin() => push(AppRoutes.admin);
+
   // 带参数的导航
   void goStorageDetail(String storageId) =>
       push(AppRoutes.storageDetailPath(storageId));
 
-  void goItemDetail(String itemId) => push('/item/$itemId');
+  void goItemDetail(String itemId) => push(AppRoutes.itemDetailPath(itemId));
 
-  void goTopicDetail(String topicId) => push('/topic/$topicId');
+  void goTopicDetail(String topicId) =>
+      push(AppRoutes.topicDetailPath(topicId));
 
-  void goPictureDetail(String pictureId) => push('/picture/$pictureId');
+  void goPictureDetail(String pictureId) =>
+      push(AppRoutes.pictureDetailPath(pictureId));
 
   // 替换当前路由
-  void replaceHome() => replace(AppRoutes.storage);
-
-  void replaceLogin() => replace(AppRoutes.login);
+  void replaceStorageRootDetail() => replace(AppRoutes.storageRootDetail);
 
   // 根据AppTab导航
   void goTab(AppTab tab) {
@@ -91,21 +95,5 @@ extension GoRouterExtension on BuildContext {
     } else {
       goHome();
     }
-  }
-
-  // 搜索页面
-  void goSearch() => push('/search');
-
-  // 管理页面
-  void goAdmin() => push('/admin');
-
-  // 存储页面导航 - 重置到根存储页面
-  void setStoragePage() {
-    go('/storage');
-  }
-
-  // 存储页面导航 - 导航到指定存储页面
-  void setStoragePageWithStorage(String storageId) {
-    go(AppRoutes.storageDetailPath(storageId));
   }
 }

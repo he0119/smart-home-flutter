@@ -29,6 +29,12 @@ class AppRoutes {
   static String storageDetailPath(String storageId) {
     return storageId.isEmpty ? storageRootDetail : '$storage/$storageId';
   }
+
+  static String itemDetailPath(String itemId) => '/item/$itemId';
+
+  static String topicDetailPath(String topicId) => '/topic/$topicId';
+
+  static String pictureDetailPath(String pictureId) => '/picture/$pictureId';
 }
 
 // 自定义路由转换
