@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smarthome/core/core.dart';
 
@@ -7,7 +8,11 @@ import 'app_router.dart';
 // GoRouter扩展
 extension GoRouterExtension on BuildContext {
   // 基础导航方法
-  void goHome() => go(AppRoutes.storage);
+  void goHome() {
+    final container = ProviderScope.containerOf(this, listen: false);
+    final defaultTab = container.read(settingsProvider).defaultPage;
+    goTab(defaultTab);
+  }
 
   void goLogin() => go(AppRoutes.login);
 
@@ -17,22 +22,23 @@ extension GoRouterExtension on BuildContext {
 
   void goBoard() => go(AppRoutes.board);
 
-  void goSettings() => go(AppRoutes.settings);
+  void goSettings() => push(AppRoutes.settings);
 
-  void goBlogSettings() => go(AppRoutes.blogSettings);
+  void goBlogSettings() => push(AppRoutes.blogSettings);
 
-  void goConsumables() => go(AppRoutes.consumables);
+  void goConsumables() => push(AppRoutes.consumables);
 
-  void goRecycleBin() => go(AppRoutes.recycleBin);
+  void goRecycleBin() => push(AppRoutes.recycleBin);
 
   // 带参数的导航
-  void goStorageDetail(String storageId) => go('/storage/$storageId');
+  void goStorageDetail(String storageId) =>
+      push(AppRoutes.storageDetailPath(storageId));
 
-  void goItemDetail(String itemId) => go('/item/$itemId');
+  void goItemDetail(String itemId) => push('/item/$itemId');
 
-  void goTopicDetail(String topicId) => go('/board/topic/$topicId');
+  void goTopicDetail(String topicId) => push('/board/topic/$topicId');
 
-  void goPictureDetail(String pictureId) => go('/picture/$pictureId');
+  void goPictureDetail(String pictureId) => push('/picture/$pictureId');
 
   // 替换当前路由
   void replaceHome() => replace(AppRoutes.storage);
@@ -100,6 +106,6 @@ extension GoRouterExtension on BuildContext {
 
   // 存储页面导航 - 导航到指定存储页面
   void setStoragePageWithStorage(String storageId) {
-    go('/storage/$storageId');
+    go(AppRoutes.storageDetailPath(storageId));
   }
 }

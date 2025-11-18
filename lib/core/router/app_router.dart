@@ -19,6 +19,19 @@ class AppRoutes {
   static const String blogSettings = '/settings/blog';
   static const String blog = '/blog';
   static const String board = '/board';
+  static const String search = '/search';
+  static const String admin = '/admin';
+  static const String itemEdit = '/item/:id/edit';
+  static const String itemPictureAdd = '/item/:id/picture/add';
+
+  // Special token for the virtual root storage detail page
+  static const String storageRootId = 'root';
+  static const String storageRootDetail = '$storage/$storageRootId';
+
+  // Build a concrete storage detail path, mapping the root id when needed
+  static String storageDetailPath(String storageId) {
+    return storageId.isEmpty ? storageRootDetail : '$storage/$storageId';
+  }
 }
 
 // 路由守卫
@@ -26,11 +39,7 @@ class AuthGuard extends StatelessWidget {
   final Widget child;
   final bool isLogin;
 
-  const AuthGuard({
-    super.key,
-    required this.child,
-    required this.isLogin,
-  });
+  const AuthGuard({super.key, required this.child, required this.isLogin});
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +73,7 @@ class HomeShell extends ConsumerWidget {
   final Widget child;
   final String location;
 
-  const HomeShell({
-    super.key,
-    required this.child,
-    required this.location,
-  });
+  const HomeShell({super.key, required this.child, required this.location});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
