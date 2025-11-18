@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/board/bloc/blocs.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/board/model/models.dart';
-import 'package:smarthome/board/repository/board_repository.dart';
+import 'package:smarthome/board/providers/board_home_provider.dart';
 import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
 import 'package:smarthome/core/core.dart';
@@ -16,7 +15,6 @@ class BoardHomePage extends Page {
 
   @override
   Route createRoute(BuildContext context) {
-    BlocProvider.of<BoardHomeBloc>(context).add(const BoardHomeFetched());
     return PageRouteBuilder(
       settings: this,
       pageBuilder:
@@ -32,68 +30,50 @@ class BoardHomePage extends Page {
   }
 }
 
-class BoardHomeScreen extends StatelessWidget {
+class BoardHomeScreen extends ConsumerWidget {
   const BoardHomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<BoardHomeBloc, BoardHomeState>(
-      builder: (context, state) {
-        return MyHomePage(
-          activeTab: AppTab.board,
-          floatingActionButton: FloatingActionButton(
-            tooltip: '添加话题',
-            onPressed: () async {
-              final boardHomeBloc = context.read<BoardHomeBloc>();
-
-              final r = await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                    create: (context) => TopicEditBloc(
-                      boardRepository: RepositoryProvider.of<BoardRepository>(
-                        context,
-                      ),
-                    ),
-                    child: const TopicEditPage(isEditing: false),
-                  ),
-                ),
-              );
-              if (r == true) {
-                boardHomeBloc.add(const BoardHomeFetched(cache: false));
-              }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(boardHomeProvider);
+    return MyHomePage(
+      activeTab: AppTab.board,
+      floatingActionButton: FloatingActionButton(
+        tooltip: '添加话题',
+        onPressed: () async {
+          final r = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const TopicEditPage(isEditing: false),
+            ),
+          );
+          if (r == true) {
+            ref.read(boardHomeProvider.notifier).fetch(cache: false);
+          }
+        },
+        child: const Icon(Icons.create),
+      ),
+      slivers: [
+        if (state.status == BoardHomeStatus.failure)
+          SliverErrorMessageButton(
+            onPressed: () {
+              ref.read(boardHomeProvider.notifier).fetch(cache: false);
             },
-            child: const Icon(Icons.create),
+            message: state.errorMessage,
           ),
-          slivers: [
-            if (state.status == BoardHomeStatus.failure)
-              SliverErrorMessageButton(
-                onPressed: () {
-                  BlocProvider.of<BoardHomeBloc>(
-                    context,
-                  ).add(const BoardHomeFetched(cache: false));
-                },
-                message: state.error,
-              ),
-            if (state.status == BoardHomeStatus.loading)
-              const SliverCenterLoadingIndicator(),
-            if (state.status == BoardHomeStatus.success)
-              SliverInfiniteList<Topic>(
-                items: state.topics,
-                hasReachedMax: state.hasReachedMax,
-                itemBuilder: (context, item) => TopicItem(topic: item),
-                onFetch: () {
-                  BlocProvider.of<BoardHomeBloc>(
-                    context,
-                  ).add(const BoardHomeFetched());
-                },
-              ),
-          ],
-          onRefresh: () async {
-            BlocProvider.of<BoardHomeBloc>(
-              context,
-            ).add(const BoardHomeFetched(cache: false));
-          },
-        );
+        if (state.status == BoardHomeStatus.loading)
+          const SliverCenterLoadingIndicator(),
+        if (state.status == BoardHomeStatus.success)
+          SliverInfiniteList<Topic>(
+            items: state.topics,
+            hasReachedMax: state.hasReachedMax,
+            itemBuilder: (context, item) => TopicItem(topic: item),
+            onFetch: () {
+              ref.read(boardHomeProvider.notifier).fetch();
+            },
+          ),
+      ],
+      onRefresh: () async {
+        ref.read(boardHomeProvider.notifier).fetch(cache: false);
       },
     );
   }

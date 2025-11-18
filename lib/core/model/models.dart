@@ -1,3 +1,4 @@
+export 'app_config.dart';
 export 'app_tab.dart';
 export 'grobal_keys.dart';
 export 'message_type.dart';

@@ -4,11 +4,13 @@ class AppConfig {
   final String flavorName;
   final String defaultApiUrl;
   final String defaultAdminUrl;
+  final String defaultBlogUrl;
 
   AppConfig({
     required this.appName,
     required this.flavorName,
     required this.defaultApiUrl,
     required this.defaultAdminUrl,
+    required this.defaultBlogUrl,
   });
 }

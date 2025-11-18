@@ -1,5 +1,5 @@
-export 'bloc/blocs.dart';
 export 'model/storage.dart';
+export 'providers/providers.dart';
 export 'repository/storage_repository.dart';
 export 'view/consumables_page.dart';
 export 'view/home_page.dart';

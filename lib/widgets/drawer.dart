@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/view/admin_page.dart';
 import 'package:smarthome/routers/delegate.dart';
@@ -11,17 +10,14 @@ import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/widgets/avatar.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends ConsumerWidget {
   const MyDrawer({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final adminUrl = context.select(
-      (SettingsController settings) => settings.adminUrl,
-    );
-    final loginUser = context.select(
-      (SettingsController settings) => settings.loginUser,
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider);
+    final adminUrl = settings.adminUrl;
+    final loginUser = settings.loginUser;
     return Drawer(
       child: ListView(
         children: [
@@ -64,10 +60,8 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             title: const Text('关于'),
             onTap: () async {
-              final currentVersion =
-                  await RepositoryProvider.of<VersionRepository>(
-                    context,
-                  ).currentVersion;
+              final versionRepository = ref.read(versionRepositoryProvider);
+              final currentVersion = await versionRepository.currentVersion;
               if (context.mounted) {
                 showAboutDialog(
                   context: context,
@@ -98,9 +92,7 @@ class MyDrawer extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        context.read<AuthenticationBloc>().add(
-                          AuthenticationLogout(),
-                        );
+                        ref.read(authenticationProvider.notifier).logout();
                         Navigator.of(context).pop();
                       },
                       child: const Text('是'),

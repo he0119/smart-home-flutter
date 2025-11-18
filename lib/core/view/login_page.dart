@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
-import 'package:smarthome/core/bloc/blocs.dart';
-import 'package:smarthome/core/repository/graphql_api_client.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
@@ -19,65 +16,64 @@ class LoginPage extends Page {
   }
 }
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool canLogin = true;
 
   @override
   Widget build(BuildContext context) {
+    // 监听认证错误
+    ref.listen<AuthState>(authenticationProvider, (previous, next) {
+      if (next.errorMessage != null) {
+        showErrorSnackBar(next.errorMessage!);
+        ref.read(authenticationProvider.notifier).clearError();
+      }
+    });
+
     return Scaffold(
-      body: BlocListener<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-          if (state is AuthenticationFailure) {
-            showErrorSnackBar(state.message);
-          }
+      body: Builder(
+        builder: (context) {
+          final settings = ref.watch(settingsProvider);
+          return canLogin
+              ? LoginForm(
+                  onTapBack: () {
+                    setState(() {
+                      canLogin = false;
+                    });
+                  },
+                )
+              : ApiUrlForm(
+                  apiUrl: settings.apiUrl,
+                  onTapNext: () {
+                    setState(() {
+                      canLogin = true;
+                    });
+                  },
+                );
         },
-        child: Consumer<SettingsController>(
-          builder: (context, settings, child) {
-            if (settings.apiUrl == null) {
-              canLogin = false;
-            }
-            return canLogin
-                ? LoginForm(
-                    onTapBack: () {
-                      setState(() {
-                        canLogin = false;
-                      });
-                    },
-                  )
-                : ApiUrlForm(
-                    apiUrl: settings.apiUrl ?? settings.appConfig.defaultApiUrl,
-                    onTapNext: () {
-                      setState(() {
-                        canLogin = true;
-                      });
-                    },
-                  );
-          },
-        ),
       ),
     );
   }
 }
 
 /// 选择服务器网址的界面
-class ApiUrlForm extends StatefulWidget {
+class ApiUrlForm extends ConsumerStatefulWidget {
   final String apiUrl;
   final VoidCallback onTapNext;
 
   const ApiUrlForm({super.key, required this.apiUrl, required this.onTapNext});
 
   @override
-  State<ApiUrlForm> createState() => _ApiUrlFormState();
+  ConsumerState<ApiUrlForm> createState() => _ApiUrlFormState();
 }
 
-class _ApiUrlFormState extends State<ApiUrlForm> {
+class _ApiUrlFormState extends ConsumerState<ApiUrlForm> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController? _controller;
 
@@ -124,12 +120,12 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
               RoundedRaisedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    context.read<GraphQLApiClient>().initailize(
-                      _controller!.text,
-                    );
-                    context.read<SettingsController>().updateApiUrl(
-                      _controller!.text,
-                    );
+                    ref
+                        .read(graphQLApiClientProvider)
+                        .initailize(_controller!.text);
+                    ref
+                        .read(settingsProvider.notifier)
+                        .updateApiUrl(_controller!.text);
                     widget.onTapNext();
                   }
                 },
@@ -147,18 +143,18 @@ class _ApiUrlFormState extends State<ApiUrlForm> {
 }
 
 /// 输入用户名密码的登录界面
-class LoginForm extends StatefulWidget {
+class LoginForm extends ConsumerStatefulWidget {
   final Function onTapBack;
 
   const LoginForm({super.key, required this.onTapBack});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  ConsumerState<LoginForm> createState() => _LoginFormState();
 }
 
 enum LoginMethod { password, oidc }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends ConsumerState<LoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -171,33 +167,31 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsController>();
+    final settings = ref.watch(settingsProvider);
     final loginMethod = settings.loginMethod == 'oidc'
         ? LoginMethod.oidc
         : LoginMethod.password;
 
     void onLoginButtonPressed() {
       if (loginMethod == LoginMethod.password) {
-        BlocProvider.of<AuthenticationBloc>(context).add(
-          AuthenticationLogin(
-            username: _usernameController.text,
-            password: _passwordController.text,
-          ),
-        );
+        ref
+            .read(authenticationProvider.notifier)
+            .login(_usernameController.text, _passwordController.text);
       } else {
-        BlocProvider.of<AuthenticationBloc>(
-          context,
-        ).add(const AuthenticationOIDCLogin());
+        ref.read(authenticationProvider.notifier).oidcLogin();
       }
     }
 
-    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
-        if (state is AuthenticationInProgress) {
-          showInfoSnackBar('正在登录...', duration: 1);
-        }
-      },
-      builder: (context, state) {
+    // 监听登录状态
+    ref.listen<AuthState>(authenticationProvider, (previous, next) {
+      if (next.isLoading && !(previous?.isLoading ?? false)) {
+        showInfoSnackBar('正在登录...', duration: 1);
+      }
+    });
+
+    final authState = ref.watch(authenticationProvider);
+    return Builder(
+      builder: (context) {
         return Center(
           child: SingleChildScrollView(
             child: Form(
@@ -229,11 +223,13 @@ class _LoginFormState extends State<LoginForm> {
                         ],
                         selected: {loginMethod},
                         onSelectionChanged: (Set<LoginMethod> newSelection) {
-                          settings.updateLoginMethod(
-                            newSelection.first == LoginMethod.oidc
-                                ? 'oidc'
-                                : 'password',
-                          );
+                          ref
+                              .read(settingsProvider.notifier)
+                              .updateLoginMethod(
+                                newSelection.first == LoginMethod.oidc
+                                    ? 'oidc'
+                                    : 'password',
+                              );
                         },
                       ),
                     ),
@@ -275,7 +271,7 @@ class _LoginFormState extends State<LoginForm> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Center(
                         child: FilledButton(
-                          onPressed: state is! AuthenticationInProgress
+                          onPressed: !authState.isLoading
                               ? onLoginButtonPressed
                               : null,
                           child: const Text('登录'),

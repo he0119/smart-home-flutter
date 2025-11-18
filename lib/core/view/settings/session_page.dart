@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/user/bloc/bloc/session_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:smarthome/user/providers/session_provider.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
-class SessionPage extends StatelessWidget {
+class SessionPage extends ConsumerWidget {
   const SessionPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(sessionProvider);
     return MySliverScaffold(
       title: const Text('登录设备'),
-      sliver: BlocBuilder<SessionBloc, SessionState>(
-        builder: (context, state) {
+      sliver: Builder(
+        builder: (context) {
           if (state is SessionSuccess) {
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
@@ -61,9 +62,9 @@ class SessionPage extends StatelessWidget {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      context.read<SessionBloc>().add(
-                                        SessionDeleted(session.id),
-                                      );
+                                      ref
+                                          .read(sessionProvider.notifier)
+                                          .deleteSession(session.id);
                                       Navigator.of(context).pop();
                                     },
                                     child: const Text('确定'),
@@ -81,7 +82,7 @@ class SessionPage extends StatelessWidget {
             return SliverErrorMessageButton(
               message: state.message,
               onPressed: () {
-                context.read<SessionBloc>().add(SessionFetched());
+                ref.read(sessionProvider.notifier).fetchSessions();
               },
             );
           }

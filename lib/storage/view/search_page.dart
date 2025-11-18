@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:smarthome/storage/bloc/blocs.dart';
-import 'package:smarthome/storage/repository/storage_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:smarthome/storage/providers/search_provider.dart';
 import 'package:smarthome/storage/view/widgets/storage_item_list.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/center_message.dart';
@@ -17,29 +18,25 @@ class SearchPage extends Page {
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => BlocProvider(
-        create: (context) => StorageSearchBloc(
-          storageRepository: RepositoryProvider.of<StorageRepository>(context),
-        ),
-        child: const SearchScreen(),
-      ),
+      builder: (context) => const SearchScreen(),
     );
   }
 }
 
-class SearchScreen extends StatefulWidget {
+class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  ConsumerState<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends ConsumerState<SearchScreen> {
   bool _showClearButton = false;
   bool _isDeleted = false;
   bool _missingStorage = false;
 
   final _textController = TextEditingController();
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -55,18 +52,22 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _textController.dispose();
     super.dispose();
   }
 
   void doSearch() {
-    context.read<StorageSearchBloc>().add(
-      StorageSearchChanged(
-        key: _textController.text,
-        isDeleted: _isDeleted,
-        missingStorage: _missingStorage,
-      ),
-    );
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+      ref
+          .read(searchProvider.notifier)
+          .search(
+            _textController.text,
+            isDeleted: _isDeleted,
+            missingStorage: _missingStorage,
+          );
+    });
   }
 
   @override
@@ -120,15 +121,16 @@ class _SearchScreenState extends State<SearchScreen> {
             ],
           ),
         ),
-        sliver: BlocBuilder<StorageSearchBloc, StorageSearchState>(
-          builder: (BuildContext context, StorageSearchState state) {
-            if (state is StorageSearchInProgress) {
+        sliver: Consumer(
+          builder: (BuildContext context, WidgetRef ref, _) {
+            final state = ref.watch(searchProvider);
+            if (state.status == SearchStatus.loading) {
               return const SliverCenterLoadingIndicator();
             }
-            if (state is StorageSearchFailure) {
-              return SliverCenterMessage(message: state.message);
+            if (state.status == SearchStatus.failure) {
+              return SliverCenterMessage(message: state.errorMessage);
             }
-            if (state is StorageSearchSuccess) {
+            if (state.status == SearchStatus.success) {
               if (state.items.isEmpty && state.storages.isEmpty) {
                 return const SliverCenterMessage(message: '无结果');
               } else {

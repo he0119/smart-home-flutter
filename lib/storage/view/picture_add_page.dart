@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:smarthome/storage/bloc/blocs.dart';
-import 'package:smarthome/storage/repository/storage_repository.dart';
+import 'package:smarthome/storage/providers/providers.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
@@ -22,27 +21,22 @@ class PictureAddPage extends Page {
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
-      builder: (context) => BlocProvider<PictureEditBloc>(
-        create: (context) => PictureEditBloc(
-          storageRepository: RepositoryProvider.of<StorageRepository>(context),
-        ),
-        child: PictureAddScreen(itemId: itemId),
-      ),
+      builder: (context) => PictureAddScreen(itemId: itemId),
     );
   }
 }
 
-class PictureAddScreen extends StatefulWidget {
+class PictureAddScreen extends ConsumerStatefulWidget {
   /// 物品 ID
   final String itemId;
 
   const PictureAddScreen({super.key, required this.itemId});
 
   @override
-  State<PictureAddScreen> createState() => _PictureAddScreenState();
+  ConsumerState<PictureAddScreen> createState() => _PictureAddScreenState();
 }
 
-class _PictureAddScreenState extends State<PictureAddScreen> {
+class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
   TextEditingController? _descriptionController;
   String? picturePath;
 
@@ -63,99 +57,100 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PictureEditBloc, PictureEditState>(
-      listener: (context, state) {
-        if (state is PictureAddSuccess) {
-          showInfoSnackBar('图片添加成功');
-          Navigator.of(context).pop();
-        }
-        if (state is PictureEditFailure) {
-          showErrorSnackBar(state.message);
-        }
-      },
-      builder: (context, state) => MySliverScaffold(
-        title: const Text('添加图片'),
-        sliver: SliverToBoxAdapter(
-          child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _descriptionController,
-                    decoration: const InputDecoration(labelText: '备注'),
-                    inputFormatters: [LengthLimitingTextInputFormatter(200)],
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return '备注不能为空';
-                      }
-                      return null;
-                    },
-                  ),
-                  picturePath != null
-                      ? Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: <Widget>[
+    final state = ref.watch(pictureEditProvider);
+
+    ref.listen<PictureEditState>(pictureEditProvider, (previous, state) {
+      if (state.status == PictureEditStatus.addSuccess) {
+        showInfoSnackBar('图片添加成功');
+        Navigator.of(context).pop();
+      }
+      if (state.status == PictureEditStatus.failure) {
+        showErrorSnackBar(state.errorMessage);
+      }
+    });
+
+    return MySliverScaffold(
+      title: const Text('添加图片'),
+      sliver: SliverToBoxAdapter(
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(labelText: '备注'),
+                  inputFormatters: [LengthLimitingTextInputFormatter(200)],
+                  textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return '备注不能为空';
+                    }
+                    return null;
+                  },
+                ),
+                picturePath != null
+                    ? Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: <Widget>[
+                          const CircularProgressIndicator(),
+                          kIsWeb
+                              ? Image.network(picturePath!)
+                              : Image.file(File(picturePath!)),
+                          if (state.status == PictureEditStatus.loading)
                             const CircularProgressIndicator(),
-                            kIsWeb
-                                ? Image.network(picturePath!)
-                                : Image.file(File(picturePath!)),
-                            if (state is PictureEditInProgress)
-                              const CircularProgressIndicator(),
-                          ],
-                        )
-                      : const SizedBox(
-                          height: 300,
-                          child: Center(child: Text('无图片')),
-                        ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                        ],
+                      )
+                    : const SizedBox(
+                        height: 300,
+                        child: Center(child: Text('无图片')),
+                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RoundedRaisedButton(
+                      onPressed: () async {
+                        final image = await _picker.pickImage(
+                          source: ImageSource.gallery,
+                        );
+                        setState(() {
+                          picturePath = image?.path;
+                        });
+                      },
+                      child: const Text('相册'),
+                    ),
+                    if (!kIsWeb) const SizedBox(width: 20),
+                    if (!kIsWeb)
                       RoundedRaisedButton(
                         onPressed: () async {
-                          final image = await _picker.pickImage(
-                            source: ImageSource.gallery,
+                          final photo = await _picker.pickImage(
+                            source: ImageSource.camera,
                           );
                           setState(() {
-                            picturePath = image?.path;
+                            picturePath = photo?.path;
                           });
                         },
-                        child: const Text('相册'),
+                        child: const Text('拍照'),
                       ),
-                      if (!kIsWeb) const SizedBox(width: 20),
-                      if (!kIsWeb)
-                        RoundedRaisedButton(
-                          onPressed: () async {
-                            final photo = await _picker.pickImage(
-                              source: ImageSource.camera,
-                            );
-                            setState(() {
-                              picturePath = photo?.path;
-                            });
-                          },
-                          child: const Text('拍照'),
-                        ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RoundedRaisedButton(
-                      onPressed:
-                          (state is! PictureEditInProgress &&
-                              picturePath != null)
-                          ? () {
-                              if (_formKey.currentState!.validate()) {
-                                _onSubmitPressed();
-                              }
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RoundedRaisedButton(
+                    onPressed:
+                        (state.status != PictureEditStatus.loading &&
+                            picturePath != null)
+                        ? () {
+                            if (_formKey.currentState!.validate()) {
+                              _onSubmitPressed();
                             }
-                          : null,
-                      child: const Text('上传'),
-                    ),
+                          }
+                        : null,
+                    child: const Text('上传'),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -165,17 +160,16 @@ class _PictureAddScreenState extends State<PictureAddScreen> {
 
   void _onSubmitPressed() {
     showInfoSnackBar('正在上传...');
-    // 默认物品就在图片正中，并占满整个屏幕
-    BlocProvider.of<PictureEditBloc>(context).add(
-      PictureAdded(
-        itemId: widget.itemId,
-        picturePath: picturePath!,
-        description: _descriptionController!.text,
-        boxX: 0.5,
-        boxY: 0.5,
-        boxH: 0.5,
-        boxW: 0.5,
-      ),
-    );
+    ref
+        .read(pictureEditProvider.notifier)
+        .addPicture(
+          itemId: widget.itemId,
+          picturePath: picturePath!,
+          description: _descriptionController!.text,
+          boxX: 0.5,
+          boxY: 0.5,
+          boxH: 0.5,
+          boxW: 0.5,
+        );
   }
 }

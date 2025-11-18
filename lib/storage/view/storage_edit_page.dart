@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smarthome/storage/bloc/blocs.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/storage/model/models.dart';
+import 'package:smarthome/storage/providers/storage_edit_provider.dart';
 import 'package:smarthome/storage/view/widgets/storage_picker_formfield.dart';
 import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
-class StorageEditPage extends StatefulWidget {
+class StorageEditPage extends ConsumerStatefulWidget {
   final bool isEditing;
   final Storage? storage;
 
@@ -20,10 +20,10 @@ class StorageEditPage extends StatefulWidget {
   });
 
   @override
-  State<StorageEditPage> createState() => _StorageEditPageState();
+  ConsumerState<StorageEditPage> createState() => _StorageEditPageState();
 }
 
-class _StorageEditPageState extends State<StorageEditPage> {
+class _StorageEditPageState extends ConsumerState<StorageEditPage> {
   String? parentId;
   TextEditingController? _nameController;
   TextEditingController? _descriptionController;
@@ -77,28 +77,47 @@ class _StorageEditPageState extends State<StorageEditPage> {
 
   void _onSubmitPressed() {
     if (widget.isEditing) {
-      BlocProvider.of<StorageEditBloc>(context).add(
-        StorageUpdated(
-          id: widget.storage!.id,
-          name: _nameController!.text,
-          parentId: parentId,
-          oldParentId: widget.storage!.parent?.id,
-          description: _descriptionController!.text,
-        ),
-      );
+      ref
+          .read(storageEditProvider.notifier)
+          .updateStorage(
+            id: widget.storage!.id,
+            name: _nameController!.text,
+            parentId: parentId,
+            description: _descriptionController!.text,
+          );
     } else {
-      BlocProvider.of<StorageEditBloc>(context).add(
-        StorageAdded(
-          name: _nameController!.text,
-          parentId: parentId,
-          description: _descriptionController!.text,
-        ),
-      );
+      ref
+          .read(storageEditProvider.notifier)
+          .addStorage(
+            name: _nameController!.text,
+            parentId: parentId,
+            description: _descriptionController!.text,
+          );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(storageEditProvider);
+
+    // Listen to state changes
+    ref.listen<StorageEditState>(storageEditProvider, (previous, next) {
+      if (next.status == StorageEditStatus.loading) {
+        showInfoSnackBar('正在提交...', duration: 1);
+      }
+      if (next.status == StorageEditStatus.addSuccess) {
+        showInfoSnackBar('位置 ${next.storage?.name ?? ''} 添加成功');
+        Navigator.of(context).pop(true);
+      }
+      if (next.status == StorageEditStatus.updateSuccess) {
+        showInfoSnackBar('位置 ${next.storage?.name ?? ''} 修改成功');
+        Navigator.of(context).pop(true);
+      }
+      if (next.status == StorageEditStatus.failure) {
+        showErrorSnackBar(next.errorMessage);
+      }
+    });
+
     return MySliverScaffold(
       title: widget.isEditing
           ? Text('编辑 ${widget.storage!.name}')
@@ -106,87 +125,67 @@ class _StorageEditPageState extends State<StorageEditPage> {
       sliver: SliverFillRemaining(
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
-          child: BlocConsumer<StorageEditBloc, StorageEditState>(
-            listener: (context, state) {
-              if (state is StorageEditInProgress) {
-                showInfoSnackBar('正在提交...', duration: 1);
-              }
-              if (state is StorageAddSuccess) {
-                showInfoSnackBar('位置 ${state.storage.name} 添加成功');
-              }
-              if (state is StorageUpdateSuccess) {
-                showInfoSnackBar('位置 ${state.storage.name} 修改成功');
-              }
-              if (state is StorageEditFailure) {
-                showErrorSnackBar(state.message);
-              }
-              // 位置添加和修改成功过后自动返回位置详情界面
-              if (state is StorageAddSuccess || state is StorageUpdateSuccess) {
-                Navigator.of(context).pop(true);
-              }
-            },
-            builder: (context, state) => Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(labelText: '名称'),
-                    inputFormatters: [LengthLimitingTextInputFormatter(200)],
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return '名称不能为空';
-                      }
-                      return null;
-                    },
-                    textInputAction: TextInputAction.next,
-                    focusNode: _nameFocusNode,
-                    onFieldSubmitted: (_) {
-                      _fieldFocusChange(
-                        context,
-                        _nameFocusNode!,
-                        _descriptionFocusNode,
-                      );
-                    },
-                  ),
-                  StorageFormField(
-                    decoration: const InputDecoration(labelText: '属于'),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    onChanged: (Storage? value) {
-                      // 家的 id 是空字符串，服务器只能接受 null
-                      if (value != null) {
-                        parentId = value.id == homeStorage.id ? null : value.id;
-                      }
-                    },
-                    initialValue: widget.isEditing
-                        ? widget.storage!.parent ?? homeStorage
-                        : widget.storage,
-                    validator: (value) {
-                      if (value == null) {
-                        return '请选择一个位置';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: _descriptionController,
-                    decoration: const InputDecoration(labelText: '备注'),
-                    inputFormatters: [LengthLimitingTextInputFormatter(200)],
-                    focusNode: _descriptionFocusNode,
-                  ),
-                  RoundedRaisedButton(
-                    onPressed: (state is! StorageEditInProgress)
-                        ? () {
-                            if (_formKey.currentState!.validate()) {
-                              _onSubmitPressed();
-                            }
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: '名称'),
+                  inputFormatters: [LengthLimitingTextInputFormatter(200)],
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return '名称不能为空';
+                    }
+                    return null;
+                  },
+                  textInputAction: TextInputAction.next,
+                  focusNode: _nameFocusNode,
+                  onFieldSubmitted: (_) {
+                    _fieldFocusChange(
+                      context,
+                      _nameFocusNode!,
+                      _descriptionFocusNode,
+                    );
+                  },
+                ),
+                StorageFormField(
+                  decoration: const InputDecoration(labelText: '属于'),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  onChanged: (Storage? value) {
+                    // 家的 id 是空字符串，服务器只能接受 null
+                    if (value != null) {
+                      parentId = value.id == homeStorage.id ? null : value.id;
+                    }
+                  },
+                  initialValue: widget.isEditing
+                      ? widget.storage!.parent ?? homeStorage
+                      : widget.storage,
+                  validator: (value) {
+                    if (value == null) {
+                      return '请选择一个位置';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(labelText: '备注'),
+                  inputFormatters: [LengthLimitingTextInputFormatter(200)],
+                  focusNode: _descriptionFocusNode,
+                ),
+                RoundedRaisedButton(
+                  onPressed: (state.status != StorageEditStatus.loading)
+                      ? () {
+                          if (_formKey.currentState!.validate()) {
+                            _onSubmitPressed();
                           }
-                        : null,
-                    child: const Text('提交'),
-                  ),
-                ],
-              ),
+                        }
+                      : null,
+                  child: const Text('提交'),
+                ),
+              ],
             ),
           ),
         ),

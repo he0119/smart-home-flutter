@@ -10,6 +10,7 @@ Future<void> main() async {
     flavorName: 'prod',
     defaultApiUrl: 'https://smart.hehome.xyz/graphql/',
     defaultAdminUrl: 'https://smart.hehome.xyz/admin/',
+    defaultBlogUrl: 'https://hehome.xyz',
   );
   bootstrap(appConfig);
 }

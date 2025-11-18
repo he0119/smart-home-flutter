@@ -1,4 +1,4 @@
-export 'bloc/blocs.dart';
+export 'providers/providers.dart';
 export 'repository/board_repository.dart';
 export 'view/home_page.dart';
 export 'view/settings/comment_order_page.dart';

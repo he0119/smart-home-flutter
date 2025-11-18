@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:quick_actions/quick_actions.dart';
-import 'package:smarthome/app/settings/settings_controller.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
@@ -20,9 +19,9 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
   static final Logger _log = Logger('RouterDelegate');
 
-  final SettingsController settingsController;
+  final ProviderContainer container;
 
-  MyRouterDelegate({required this.settingsController});
+  MyRouterDelegate({required this.container});
 
   static MyRouterDelegate of(BuildContext context) {
     final delegate = Router.of(context).routerDelegate;
@@ -37,12 +36,12 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
 
   List<Page> get pages {
     // 未登录时显示登陆界面
-    if (!settingsController.isLogin) {
+    if (!container.read(settingsProvider).isLogin) {
       return [const LoginPage()];
     }
     // 未设置主页时显示默认主页
     if (_pages.isEmpty) {
-      _pages = [settingsController.defaultPage.page];
+      _pages = [container.read(settingsProvider).defaultPage.page];
     }
     return List.unmodifiable(_pages);
   }
@@ -173,7 +172,10 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
     } else if (configuration is SettingsRoutePath) {
       switch (configuration.appSettings) {
         case AppSettings.home:
-          _pages = [settingsController.defaultPage.page, const SettingsPage()];
+          _pages = [
+            container.read(settingsProvider).defaultPage.page,
+            const SettingsPage(),
+          ];
           break;
         case AppSettings.blog:
           _pages = [const BlogHomePage(), const BlogSettingsPage()];
@@ -196,101 +198,107 @@ class MyRouterDelegate extends RouterDelegate<RoutePath>
       ..fine('Router rebuilded')
       ..fine('pages $pages');
 
-    // 如果登录用户变化，则触发组件重新构建
-    context.select((SettingsController settings) => settings.loginUser);
+    // 使用 Consumer 来监听 Riverpod providers
+    return Consumer(
+      builder: (context, ref, child) {
+        // 监听 settingsProvider 的 loginUser 变化
+        final _ = ref.watch(settingsProvider.select((s) => s.loginUser));
 
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) async {
-            if (state is AuthenticationSuccess) {
-              // 当登录成功时，开始初始化推送服务
-              BlocProvider.of<PushBloc>(context).add(PushStarted());
-              // 仅在客户端上注册 Shortcut
-              if (!kIsWeb && !Platform.isWindows) {
-                const quickActions = QuickActions();
-                await quickActions.initialize((String shortcutType) {
-                  switch (shortcutType) {
-                    case 'action_storage':
-                      BlocProvider.of<TabBloc>(
-                        context,
-                      ).add(const TabChanged(AppTab.storage));
-                      break;
-                    case 'action_blog':
-                      BlocProvider.of<TabBloc>(
-                        context,
-                      ).add(const TabChanged(AppTab.blog));
-                      break;
-                    case 'action_board':
-                      BlocProvider.of<TabBloc>(
-                        context,
-                      ).add(const TabChanged(AppTab.board));
-                      break;
-                  }
-                });
-                await quickActions.setShortcutItems(<ShortcutItem>[
-                  // TODO: 给快捷方式添加图标
-                  const ShortcutItem(
-                    type: 'action_storage',
-                    localizedTitle: '物品',
-                  ),
-                  const ShortcutItem(type: 'action_blog', localizedTitle: '博客'),
-                  const ShortcutItem(
-                    type: 'action_board',
-                    localizedTitle: '留言',
-                  ),
-                ]);
-              }
-            }
-            if (state is AuthenticationError) {
-              showErrorSnackBar(state.message);
-            }
-          },
-        ),
-        BlocListener<TabBloc, AppTab?>(
-          listener: (context, state) {
-            if (state != null) {
-              setHomePage(state);
-            }
-          },
-        ),
-        BlocListener<UpdateBloc, UpdateState>(
-          listener: (context, state) {
-            if (state is UpdateSuccess && state.needUpdate) {
-              scaffoldMessengerKey.currentState!.showSnackBar(
-                SnackBar(
-                  content: Text('发现新版本（${state.version}）'),
-                  action: SnackBarAction(
-                    label: '更新',
-                    onPressed: () {
-                      launchUrl(state.url!);
-                    },
-                  ),
+        // 使用 Riverpod 监听 tabProvider 的变化
+        ref.listen<AppTab?>(tabProvider, (previous, next) {
+          if (next != null) {
+            setHomePage(next);
+          }
+        });
+
+        // 监听认证状态变化
+        ref.listen<AuthState>(authenticationProvider, (previous, next) async {
+          final user = next.user.when(
+            data: (user) => user,
+            loading: () => null,
+            error: (_, _) => null,
+          );
+
+          if (user != null &&
+              previous?.user.when(
+                    data: (u) => u,
+                    loading: () => null,
+                    error: (_, _) => null,
+                  ) ==
+                  null) {
+            // 当登录成功时，开始初始化推送服务
+            ref.read(pushProvider.notifier).startPush();
+            // 仅在客户端上注册 Shortcut
+            if (!kIsWeb && !Platform.isWindows) {
+              const quickActions = QuickActions();
+              await quickActions.initialize((String shortcutType) {
+                switch (shortcutType) {
+                  case 'action_storage':
+                    ref.read(tabProvider.notifier).setTab(AppTab.storage);
+                    break;
+                  case 'action_blog':
+                    ref.read(tabProvider.notifier).setTab(AppTab.blog);
+                    break;
+                  case 'action_board':
+                    ref.read(tabProvider.notifier).setTab(AppTab.board);
+                    break;
+                }
+              });
+              await quickActions.setShortcutItems(<ShortcutItem>[
+                // TODO: 给快捷方式添加图标
+                const ShortcutItem(
+                  type: 'action_storage',
+                  localizedTitle: '物品',
                 ),
-              );
+                const ShortcutItem(type: 'action_blog', localizedTitle: '博客'),
+                const ShortcutItem(type: 'action_board', localizedTitle: '留言'),
+              ]);
             }
-            if (state is UpdateFailure) {
-              scaffoldMessengerKey.currentState!.showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  action: SnackBarAction(
-                    label: '重试',
-                    onPressed: () {
-                      BlocProvider.of<UpdateBloc>(context).add(UpdateStarted());
-                    },
-                  ),
+          }
+
+          if (next.errorMessage != null) {
+            showErrorSnackBar(next.errorMessage!);
+            ref.read(authenticationProvider.notifier).clearError();
+          }
+        });
+
+        // 监听版本更新
+        ref.listen<UpdateInfo>(updateProvider, (previous, next) {
+          if (next.needUpdate && next.url != null && next.version != null) {
+            scaffoldMessengerKey.currentState!.showSnackBar(
+              SnackBar(
+                content: Text('发现新版本（${next.version}）'),
+                action: SnackBarAction(
+                  label: '更新',
+                  onPressed: () {
+                    launchUrl(next.url!);
+                  },
                 ),
-              );
-            }
-          },
-        ),
-      ],
-      child: Navigator(
-        key: navigatorKey,
-        pages: pages,
-        onDidRemovePage: _handleRemovePage,
-        // transitionDelegate: transitionDelegate,
-      ),
+              ),
+            );
+          }
+          if (next.errorMessage != null) {
+            scaffoldMessengerKey.currentState!.showSnackBar(
+              SnackBar(
+                content: Text(next.errorMessage!),
+                action: SnackBarAction(
+                  label: '重试',
+                  onPressed: () {
+                    ref.read(updateProvider.notifier).checkUpdate();
+                  },
+                ),
+              ),
+            );
+          }
+        });
+
+        return Navigator(
+          key: navigatorKey,
+          pages: pages,
+          onDidRemovePage: _handleRemovePage,
+          // transitionDelegate: transitionDelegate,
+        );
+      },
     );
   }
 }
