@@ -35,7 +35,7 @@ class StorageHomeScreen extends ConsumerWidget {
     return Consumer(
       builder: (context, ref, child) {
         return MyHomePage(
-          activeTab: AppTab.storage,
+          title: AppTab.storage.name,
           actions: <Widget>[
             // 仅支持网页和安卓
             if (kIsWeb || Platform.isAndroid) const ScanQRIconButton(),

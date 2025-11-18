@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/conditional_parent_widget.dart';
 import 'package:smarthome/widgets/drawer.dart';
-import 'package:smarthome/widgets/tab_selector.dart';
 
 class MyHomePage extends ConsumerWidget {
-  final AppTab activeTab;
+  final String title;
   final List<Widget>? actions;
   final List<Widget>? slivers;
   final Widget? floatingActionButton;
@@ -16,7 +14,7 @@ class MyHomePage extends ConsumerWidget {
 
   const MyHomePage({
     super.key,
-    required this.activeTab,
+    required this.title,
     this.actions,
     this.slivers,
     this.floatingActionButton,
@@ -28,16 +26,12 @@ class MyHomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MySliverScaffold(
-      title: Text(activeTab.name),
+      title: Text(title),
       actions: actions,
       slivers: slivers,
       drawer: const MyDrawer(),
       floatingActionButton: floatingActionButton,
       onRefresh: onRefresh,
-      bottomNavigationBar: TabSelector(
-        activeTab: activeTab,
-        onTabSelected: (tab) => ref.read(tabProvider.notifier).setTab(tab),
-      ),
       canPop: canPop,
       onPopInvokedWithResult: onPopInvokedWithResult,
     );

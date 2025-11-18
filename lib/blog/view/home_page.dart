@@ -38,7 +38,7 @@ class _BlogHomeScreenState extends ConsumerState<BlogHomeScreen> {
       _controller = NestedWebviewController(settings.blogUrl);
     }
     return MyHomePage(
-      activeTab: AppTab.blog,
+      title: AppTab.blog.name,
       actions: [
         Tooltip(
           message: '进入管理页面',

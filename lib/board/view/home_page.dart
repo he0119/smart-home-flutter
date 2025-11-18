@@ -26,7 +26,7 @@ class BoardHomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(boardHomeProvider);
     return MyHomePage(
-      activeTab: AppTab.board,
+      title: AppTab.board.name,
       floatingActionButton: FloatingActionButton(
         tooltip: '添加话题',
         onPressed: () async {
