@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/blog/view/settings/blog_admin_url_page.dart';
-import 'package:smarthome/blog/view/settings/blog_url_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/core/router/app_router.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
-class BlogSettingsPage extends Page {
-  const BlogSettingsPage()
-    : super(key: const ValueKey('settings/blog'), name: '/settings/blog');
+class BlogSettingsPage extends StatelessWidget {
+  const BlogSettingsPage({super.key});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => const BlogSettingsScreen(),
-    );
+  Widget build(BuildContext context) {
+    return const BlogSettingsScreen();
   }
 }
 
@@ -36,22 +32,14 @@ class BlogSettingsScreen extends ConsumerWidget {
                 title: '博客网址',
                 subtitle: settings.blogUrl,
                 onPressed: (context) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const BlogUrlPage(),
-                    ),
-                  );
+                  context.push(AppRoutes.blogUrlSettings);
                 },
               ),
               SettingsTile(
                 title: '博客管理网址',
                 subtitle: settings.blogAdminUrl ?? '请单击输入',
                 onPressed: (context) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const BlogAdminUrlPage(),
-                    ),
-                  );
+                  context.push(AppRoutes.blogAdminUrlSettings);
                 },
               ),
             ],

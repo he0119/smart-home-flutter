@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/core/router/app_router.dart';
 import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/view/widgets/share_icon_button.dart';
 
@@ -12,7 +13,8 @@ class StorageQRPage extends ConsumerWidget {
 
   String getStorageUrl(String? apiUrl, String storageId) {
     final url = Uri.parse(apiUrl ?? '');
-    return '${url.scheme}://${url.host}/storage/$storageId';
+    final path = AppRoutes.storageDetailPath(storageId);
+    return '${url.scheme}://${url.host}$path';
   }
 
   @override

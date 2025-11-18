@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/storage/view/search_page.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 
 class SearchIconButton extends StatelessWidget {
   const SearchIconButton({super.key});
@@ -12,7 +11,7 @@ class SearchIconButton extends StatelessWidget {
       child: IconButton(
         icon: const Icon(Icons.search),
         onPressed: () {
-          MyRouterDelegate.of(context).push(SearchPage());
+          context.goSearch();
         },
       ),
     );

@@ -10,23 +10,12 @@ import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 
-class BoardHomePage extends Page {
-  const BoardHomePage() : super(key: const ValueKey('board'), name: '/board');
+class BoardHomePage extends StatelessWidget {
+  const BoardHomePage({super.key});
 
   @override
-  Route createRoute(BuildContext context) {
-    return PageRouteBuilder(
-      settings: this,
-      pageBuilder:
-          (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) => FadeTransition(
-            opacity: animation,
-            child: const BoardHomeScreen(),
-          ),
-    );
+  Widget build(BuildContext context) {
+    return const BoardHomeScreen();
   }
 }
 
@@ -37,7 +26,7 @@ class BoardHomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(boardHomeProvider);
     return MyHomePage(
-      activeTab: AppTab.board,
+      title: AppTab.board.name,
       floatingActionButton: FloatingActionButton(
         tooltip: '添加话题',
         onPressed: () async {

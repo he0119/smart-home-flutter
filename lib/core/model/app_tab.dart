@@ -44,7 +44,7 @@ extension AppTabExtension on AppTab {
   }
 
   /// 对应的页面
-  Page get page {
+  Widget get page {
     switch (this) {
       case AppTab.storage:
         return const StorageHomePage();
@@ -52,6 +52,17 @@ extension AppTabExtension on AppTab {
         return const BlogHomePage();
       case AppTab.board:
         return const BoardHomePage();
+    }
+  }
+
+  String get route {
+    switch (this) {
+      case AppTab.storage:
+        return '/storage';
+      case AppTab.blog:
+        return '/blog';
+      case AppTab.board:
+        return '/board';
     }
   }
 }

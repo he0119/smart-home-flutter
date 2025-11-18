@@ -4,9 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/core/view/admin_page.dart';
-import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/storage/storage.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/widgets/avatar.dart';
 
@@ -32,20 +30,20 @@ class MyDrawer extends ConsumerWidget {
           ListTile(
             title: const Text('耗材管理'),
             onTap: () {
-              MyRouterDelegate.of(context).push(ConsumablesPage());
+              context.goConsumables();
             },
           ),
           ListTile(
             title: const Text('回收站'),
             onTap: () {
-              MyRouterDelegate.of(context).push(RecycleBinPage());
+              context.goRecycleBin();
             },
           ),
           ListTile(
             title: const Text('管理'),
             onTap: () {
               if (!kIsWeb && !Platform.isWindows) {
-                MyRouterDelegate.of(context).push(const AdminPage());
+                context.goAdmin();
               } else {
                 launchUrl(adminUrl);
               }
@@ -54,7 +52,7 @@ class MyDrawer extends ConsumerWidget {
           ListTile(
             title: const Text('设置'),
             onTap: () {
-              MyRouterDelegate.of(context).push(const SettingsPage());
+              context.goSettings();
             },
           ),
           ListTile(

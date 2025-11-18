@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/providers/item_edit_provider.dart';
 import 'package:smarthome/storage/providers/recycle_bin_provider.dart';
-import 'package:smarthome/storage/view/item_datail_page.dart';
+
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
@@ -12,15 +12,12 @@ import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 
-class RecycleBinPage extends Page {
-  RecycleBinPage() : super(key: UniqueKey(), name: '/recyclebin');
+class RecycleBinPage extends StatelessWidget {
+  const RecycleBinPage({super.key});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => const RecycleBinScreen(),
-    );
+  Widget build(BuildContext context) {
+    return const RecycleBinScreen();
   }
 }
 
@@ -74,7 +71,7 @@ Widget _buildItem(BuildContext context, Item item, WidgetRef ref) {
     title: text,
     subtitle: Text(item.description ?? ''),
     onTap: () {
-      MyRouterDelegate.of(context).push(ItemDetailPage(itemId: item.id));
+      context.goItemDetail(item.id);
     },
     trailing: Tooltip(
       message: '恢复',

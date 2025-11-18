@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 import 'package:smarthome/widgets/substring_highlight.dart';
@@ -55,7 +55,7 @@ class _HighlightStorageItemListItem extends StatelessWidget {
         title: SubstringHighlight(text: item.name, term: term),
         subtitle: SubstringHighlight(text: item.description ?? '', term: term),
         onTap: () {
-          MyRouterDelegate.of(context).push(ItemDetailPage(itemId: item.id));
+          context.goItemDetail(item.id);
         },
       );
     } else {
@@ -64,9 +64,7 @@ class _HighlightStorageItemListItem extends StatelessWidget {
         title: SubstringHighlight(text: item.name, term: term),
         subtitle: SubstringHighlight(text: item.description ?? '', term: term),
         onTap: () async {
-          MyRouterDelegate.of(
-            context,
-          ).push(StorageDetailPage(storageId: item.id));
+          context.goStorageDetail(item.id);
         },
       );
     }
@@ -87,7 +85,7 @@ class _StorageItemListItem extends StatelessWidget {
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
         onTap: () {
-          MyRouterDelegate.of(context).push(ItemDetailPage(itemId: item.id));
+          context.goItemDetail(item.id);
         },
       );
     } else {
@@ -96,9 +94,7 @@ class _StorageItemListItem extends StatelessWidget {
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
         onTap: () {
-          MyRouterDelegate.of(
-            context,
-          ).push(StorageDetailPage(storageId: item.id));
+          context.goStorageDetail(item.id);
         },
       );
     }

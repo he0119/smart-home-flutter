@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/model/popup_menu.dart';
 import 'package:smarthome/storage/storage.dart';
-import 'package:smarthome/storage/view/item_edit_page.dart';
-import 'package:smarthome/storage/view/storage_edit_page.dart';
-import 'package:smarthome/storage/view/storage_qr_page.dart';
 import 'package:smarthome/storage/view/widgets/add_storage_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/storage_item_list.dart';
@@ -15,19 +12,14 @@ import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
-class StorageDetailPage extends Page {
+class StorageDetailPage extends StatelessWidget {
   final String storageId;
 
-  StorageDetailPage({required this.storageId})
-    : super(key: UniqueKey(), name: '/storage/$storageId');
+  const StorageDetailPage({super.key, required this.storageId});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (BuildContext context) =>
-          StorageDetailScreen(storageId: storageId),
-    );
+  Widget build(BuildContext context) {
+    return StorageDetailScreen(storageId: storageId);
   }
 }
 
@@ -213,7 +205,22 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
               ? IconButton(
                   icon: const Icon(Icons.home),
                   onPressed: () {
-                    MyRouterDelegate.of(context).setStoragePage();
+                    // 回到根位置
+                    // 计算需要回退的层数
+                    // 如果是从物品详情中转跳过来的，则 paths 没有根位置
+                    // 需要将最下面的页面替换成根位置
+                    final hasRoot =
+                        paths.isNotEmpty && paths.first.id == homeStorage.id;
+                    final popCount = paths.length + (hasRoot ? 0 : -1);
+                    final navigator = Navigator.of(context);
+                    for (var i = 0; i < popCount; i++) {
+                      if (navigator.canPop()) {
+                        navigator.pop();
+                      }
+                    }
+                    if (!hasRoot) {
+                      context.replaceStorageRootDetail();
+                    }
                   },
                 )
               : InkWell(
@@ -221,9 +228,17 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
                     // 单击当前位置的时候，不做任何转跳
                     // 禁止原地 TP
                     if (index != paths.length) {
-                      MyRouterDelegate.of(
-                        context,
-                      ).setStoragePage(storage: paths[index - 1]);
+                      // 计算需要回退的层数
+                      // paths.length 是当前位置的深度（包括当前页面）
+                      // index 是点击的位置索引（从1开始，因为0是home图标）
+                      // 需要回退的次数 = 当前深度 - 点击的位置索引
+                      final popCount = paths.length - index;
+                      final navigator = Navigator.of(context);
+                      for (var i = 0; i < popCount; i++) {
+                        if (navigator.canPop()) {
+                          navigator.pop();
+                        }
+                      }
                     }
                   },
                   child: Center(

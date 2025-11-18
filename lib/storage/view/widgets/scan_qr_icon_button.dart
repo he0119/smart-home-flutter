@@ -4,8 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/storage/view/storage_datail_page.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 
 class ScanQRIconButton extends StatelessWidget {
   const ScanQRIconButton({super.key});
@@ -177,9 +176,7 @@ class _ScanQRPageState extends State<ScanQRPage> {
                   jumpedToStorageDetail = true;
                 });
 
-                MyRouterDelegate.of(
-                  context,
-                ).push(StorageDetailPage(storageId: storageId));
+                context.goStorageDetail(storageId);
 
                 await controller?.stop();
               }

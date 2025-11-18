@@ -47,6 +47,7 @@ dependencies:
   dynamic_color: 1.8.1
   qr_flutter: ^4.1.0
   mobile_scanner: 7.1.3
+  go_router: ^17.0.0
 
   # Widget
   webview_flutter: ^4.13.0

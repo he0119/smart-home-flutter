@@ -10,16 +10,12 @@ import 'package:smarthome/widgets/center_message.dart';
 import 'package:smarthome/widgets/chips.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
-class SearchPage extends Page {
-  // 按理来说每个搜索界面都不一样，所以每个界面的 key 都应不同
-  SearchPage() : super(key: UniqueKey(), name: '/search');
+class SearchPage extends StatelessWidget {
+  const SearchPage({super.key});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => const SearchScreen(),
-    );
+  Widget build(BuildContext context) {
+    return const SearchScreen();
   }
 }
 

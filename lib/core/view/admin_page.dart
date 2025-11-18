@@ -4,15 +4,12 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class AdminPage extends Page {
-  const AdminPage() : super(key: const ValueKey('admin'), name: '/admin');
+class AdminPage extends StatelessWidget {
+  const AdminPage({super.key});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => const AdminScreen(),
-    );
+  Widget build(BuildContext context) {
+    return const AdminScreen();
   }
 }
 

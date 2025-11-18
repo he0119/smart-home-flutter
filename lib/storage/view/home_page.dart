@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/storage.dart';
-import 'package:smarthome/storage/view/item_edit_page.dart';
 import 'package:smarthome/storage/view/widgets/scan_qr_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/utils/constants.dart';
@@ -17,24 +16,12 @@ import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 
-class StorageHomePage extends Page {
-  const StorageHomePage()
-    : super(key: const ValueKey('storage'), name: '/storage');
+class StorageHomePage extends StatelessWidget {
+  const StorageHomePage({super.key});
 
   @override
-  Route createRoute(BuildContext context) {
-    return PageRouteBuilder(
-      settings: this,
-      pageBuilder:
-          (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) => FadeTransition(
-            opacity: animation,
-            child: const StorageHomeScreen(),
-          ),
-    );
+  Widget build(BuildContext context) {
+    return const StorageHomeScreen();
   }
 }
 
@@ -47,7 +34,7 @@ class StorageHomeScreen extends ConsumerWidget {
     return Consumer(
       builder: (context, ref, child) {
         return MyHomePage(
-          activeTab: AppTab.storage,
+          title: AppTab.storage.name,
           actions: <Widget>[
             // 仅支持网页和安卓
             if (kIsWeb || Platform.isAndroid) const ScanQRIconButton(),
@@ -115,9 +102,7 @@ class StorageHomeScreen extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
               child: InkWell(
                 onTap: () {
-                  MyRouterDelegate.of(
-                    context,
-                  ).push(StorageDetailPage(storageId: homeStorage.id));
+                  context.goStorageDetail(homeStorage.id);
                 },
                 child: Card(
                   color: Theme.of(context).colorScheme.secondary,
@@ -297,7 +282,7 @@ class StorageHomeScreen extends ConsumerWidget {
       title: text,
       subtitle: Text(item.description ?? ''),
       onTap: () async {
-        MyRouterDelegate.of(context).push(ItemDetailPage(itemId: item.id));
+        context.goItemDetail(item.id);
       },
     );
   }
