@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/providers/consumables_provider.dart';
-import 'package:smarthome/storage/view/item_datail_page.dart';
+
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 
-class ConsumablesPage extends Page {
-  ConsumablesPage() : super(key: UniqueKey(), name: '/consumables');
+class ConsumablesPage extends StatelessWidget {
+  const ConsumablesPage({super.key});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => const ConsumablesScreen(),
-    );
+  Widget build(BuildContext context) {
+    return const ConsumablesScreen();
   }
 }
 
@@ -62,7 +59,7 @@ Widget _buildItem(BuildContext context, Item item) {
         ListTile(
           title: Text(item.name),
           onTap: () {
-            MyRouterDelegate.of(context).push(ItemDetailPage(itemId: item.id));
+            context.goItemDetail(item.id);
           },
         ),
         if (item.consumables != null)
@@ -75,9 +72,7 @@ Widget _buildItem(BuildContext context, Item item) {
                     ? Text(consumable.expiredAt!.differenceFromNowStr())
                     : null,
                 onTap: () {
-                  MyRouterDelegate.of(
-                    context,
-                  ).push(ItemDetailPage(itemId: consumable.id));
+                  context.goItemDetail(consumable.id);
                 },
                 trailing: Text(consumable.number.toString()),
               ),

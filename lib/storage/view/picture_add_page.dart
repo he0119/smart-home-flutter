@@ -10,19 +10,15 @@ import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
-class PictureAddPage extends Page {
+class PictureAddPage extends StatelessWidget {
   /// 物品 ID
   final String itemId;
 
-  PictureAddPage({required this.itemId})
-    : super(key: ValueKey(itemId), name: '/item/$itemId/picture/add');
+  const PictureAddPage({super.key, required this.itemId});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => PictureAddScreen(itemId: itemId),
-    );
+  Widget build(BuildContext context) {
+    return PictureAddScreen(itemId: itemId);
   }
 }
 

@@ -6,16 +6,12 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
-class BlogSettingsPage extends Page {
-  const BlogSettingsPage()
-    : super(key: const ValueKey('settings/blog'), name: '/settings/blog');
+class BlogSettingsPage extends StatelessWidget {
+  const BlogSettingsPage({super.key});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => const BlogSettingsScreen(),
-    );
+  Widget build(BuildContext context) {
+    return const BlogSettingsScreen();
   }
 }
 

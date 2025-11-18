@@ -4,15 +4,12 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
-class LoginPage extends Page {
-  const LoginPage() : super(key: const ValueKey('login'), name: '/login');
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => const LoginScreen(),
-    );
+  Widget build(BuildContext context) {
+    return const LoginScreen();
   }
 }
 

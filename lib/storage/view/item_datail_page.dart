@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/routers/delegate.dart';
+import 'package:go_router/go_router.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/providers/item_detail_provider.dart';
 import 'package:smarthome/storage/providers/item_edit_provider.dart';
 import 'package:smarthome/storage/view/consumable_edit_page.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
-import 'package:smarthome/storage/view/picture_add_page.dart';
-import 'package:smarthome/storage/view/picture_page.dart';
-import 'package:smarthome/storage/view/storage_datail_page.dart';
+
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
@@ -16,18 +15,14 @@ import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
-class ItemDetailPage extends Page {
+class ItemDetailPage extends StatelessWidget {
   final String itemId;
 
-  ItemDetailPage({required this.itemId})
-    : super(key: UniqueKey(), name: '/item/$itemId');
+  const ItemDetailPage({super.key, required this.itemId});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (BuildContext context) => ItemDetailScreen(itemId: itemId),
-    );
+  Widget build(BuildContext context) {
+    return ItemDetailScreen(itemId: itemId);
   }
 }
 
@@ -65,7 +60,6 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
             PopupMenuButton<ItemDetailMenu>(
               onSelected: (value) async {
                 final navigator = Navigator.of(context);
-                final myRouterDelegate = MyRouterDelegate.of(context);
 
                 if (value == ItemDetailMenu.edit) {
                   final r = await Navigator.of(context).push(
@@ -90,7 +84,9 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
                       .refresh();
                 }
                 if (value == ItemDetailMenu.addPicture) {
-                  myRouterDelegate.push(PictureAddPage(itemId: item.id));
+                  if (context.mounted) {
+                    context.push('/item/${item.id}/picture/add');
+                  }
                 }
                 if (value == ItemDetailMenu.delete) {
                   if (context.mounted) {
@@ -193,9 +189,7 @@ class _ItemDetailList extends StatelessWidget {
                 style: const TextStyle(decoration: TextDecoration.underline),
               ),
               onTap: () {
-                MyRouterDelegate.of(
-                  context,
-                ).push(StorageDetailPage(storageId: item.storage!.id));
+                context.goStorageDetail(item.storage!.id);
               },
             ),
           ),
@@ -224,9 +218,7 @@ class _ItemDetailList extends StatelessWidget {
                         ),
                       ),
                       onTap: () {
-                        MyRouterDelegate.of(
-                          context,
-                        ).push(ItemDetailPage(itemId: item.id));
+                        context.goItemDetail(item.id);
                       },
                     ),
                   )
@@ -264,9 +256,7 @@ class _ItemDetailList extends StatelessWidget {
                   : const Text('图片（未命名）'),
               subtitle: const Text('单击查看'),
               onTap: () {
-                MyRouterDelegate.of(
-                  context,
-                ).push(PicturePage(pictureId: picture.id));
+                context.goPictureDetail(picture.id);
               },
             ),
       ]),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smarthome/board/model/board.dart';
-import 'package:smarthome/board/view/topic_detail_page.dart';
+
 import 'package:smarthome/board/view/widgets/item_title.dart';
-import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/widgets/markdown.dart';
 
 class TopicItem extends StatelessWidget {
@@ -50,7 +50,7 @@ class TopicItem extends StatelessWidget {
       if (topic.isPinned!) title = '🔝$title';
       return InkWell(
         onTap: () async {
-          MyRouterDelegate.of(context).push(TopicDetailPage(topicId: topic.id));
+          context.goTopicDetail(topic.id);
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

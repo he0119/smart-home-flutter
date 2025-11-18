@@ -9,7 +9,7 @@ import 'package:smarthome/app/configure_nonweb.dart'
 import 'package:smarthome/app/main.dart';
 import 'package:smarthome/app/simple_riverpod_observer.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/routers/delegate.dart';
+
 
 Future<void> bootstrap(AppConfig appConfig) async {
   await SentryFlutter.init(
@@ -46,13 +46,10 @@ Future<void> bootstrap(AppConfig appConfig) async {
       graphQLApiClient.initailize(apiUrl);
       await graphQLApiClient.loadSettings();
 
-      // 创建 Router Delegate
-      final routerDelegate = MyRouterDelegate(container: container);
-
       runApp(
         UncontrolledProviderScope(
           container: container,
-          child: MyApp(delegate: routerDelegate),
+          child: const MyApp(),
         ),
       );
     },

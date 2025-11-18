@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/model/popup_menu.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/item_edit_page.dart';
@@ -15,19 +15,14 @@ import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
-class StorageDetailPage extends Page {
+class StorageDetailPage extends StatelessWidget {
   final String storageId;
 
-  StorageDetailPage({required this.storageId})
-    : super(key: UniqueKey(), name: '/storage/$storageId');
+  const StorageDetailPage({super.key, required this.storageId});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (BuildContext context) =>
-          StorageDetailScreen(storageId: storageId),
-    );
+  Widget build(BuildContext context) {
+    return StorageDetailScreen(storageId: storageId);
   }
 }
 
@@ -213,7 +208,7 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
               ? IconButton(
                   icon: const Icon(Icons.home),
                   onPressed: () {
-                    MyRouterDelegate.of(context).setStoragePage();
+                    context.setStoragePage();
                   },
                 )
               : InkWell(
@@ -221,9 +216,7 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
                     // 单击当前位置的时候，不做任何转跳
                     // 禁止原地 TP
                     if (index != paths.length) {
-                      MyRouterDelegate.of(
-                        context,
-                      ).setStoragePage(storage: paths[index - 1]);
+                      context.setStoragePageWithStorage(paths[index - 1].id);
                     }
                   },
                   child: Center(

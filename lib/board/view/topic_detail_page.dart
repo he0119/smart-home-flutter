@@ -16,20 +16,14 @@ import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 import 'package:smarthome/widgets/markdown.dart';
 
-class TopicDetailPage extends Page {
+class TopicDetailPage extends StatelessWidget {
   final String topicId;
 
-  TopicDetailPage({required this.topicId})
-    : super(key: ValueKey(topicId), name: '/topic/$topicId');
+  const TopicDetailPage({super.key, required this.topicId});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (BuildContext context) {
-        return TopicDetailScreen(topicId: topicId);
-      },
-    );
+  Widget build(BuildContext context) {
+    return TopicDetailScreen(topicId: topicId);
   }
 }
 

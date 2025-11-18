@@ -3,29 +3,20 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smarthome/blog/view/settings/settings_page.dart';
+
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/routers/delegate.dart';
+import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 import 'package:smarthome/widgets/webview.dart';
 
-class BlogHomePage extends Page {
-  const BlogHomePage() : super(key: const ValueKey('blog'), name: '/blog');
+class BlogHomePage extends StatelessWidget {
+  const BlogHomePage({super.key});
 
   @override
-  Route createRoute(BuildContext context) {
-    return PageRouteBuilder(
-      settings: this,
-      pageBuilder:
-          (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) =>
-              FadeTransition(opacity: animation, child: const BlogHomeScreen()),
-    );
+  Widget build(BuildContext context) {
+    return const BlogHomeScreen();
   }
 }
 
@@ -64,7 +55,7 @@ class _BlogHomeScreenState extends ConsumerState<BlogHomeScreen> {
                   );
                 }
               } else {
-                MyRouterDelegate.of(context).push(const BlogSettingsPage());
+                context.goBlogSettings();
               }
             },
           ),
@@ -74,7 +65,7 @@ class _BlogHomeScreenState extends ConsumerState<BlogHomeScreen> {
           child: IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              MyRouterDelegate.of(context).push(const BlogSettingsPage());
+              context.goBlogSettings();
             },
           ),
         ),
@@ -124,7 +115,7 @@ class SettingButton extends StatelessWidget {
     return Center(
       child: RoundedRaisedButton(
         onPressed: () {
-          MyRouterDelegate.of(context).push(const BlogSettingsPage());
+          context.goBlogSettings();
         },
         child: const Text('设置博客网址'),
       ),

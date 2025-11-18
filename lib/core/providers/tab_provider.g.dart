@@ -43,7 +43,7 @@ final class TabProvider extends $NotifierProvider<Tab, AppTab?> {
   }
 }
 
-String _$tabHash() => r'bf4e89f61251b1dd7fed45c2b7bd1e236a17c43a';
+String _$tabHash() => r'bd63dcb84851ff3c909c6d236c6ee745d762d368';
 
 /// Tab notifier - 管理底部导航栏的当前标签
 

@@ -5,31 +5,34 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/l10n/l10n.dart';
-import 'package:smarthome/routers/delegate.dart';
-import 'package:smarthome/routers/information_parser.dart';
+import 'package:smarthome/core/router/router.dart';
 
 class MyApp extends ConsumerStatefulWidget {
-  final MyRouterDelegate delegate;
-
-  const MyApp({super.key, required this.delegate});
+  const MyApp({super.key});
 
   @override
   ConsumerState<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
+  late final GoRouter _router;
+
   @override
   void initState() {
     super.initState();
+    _router = ref.read(routerProvider);
+    
     // 仅在安卓上注册通道
     if (!kIsWeb && Platform.isAndroid) {
       const MethodChannel('hehome.xyz/route').setMethodCallHandler((
         call,
       ) async {
         if (call.method == 'RouteChanged' && call.arguments != null) {
-          await widget.delegate.navigateNewPath(call.arguments as String);
+          final uri = Uri.parse(call.arguments as String);
+          _router.go(uri.path);
         }
       });
     }
@@ -44,6 +47,11 @@ class _MyAppState extends ConsumerState<MyApp> {
       settingsProvider.select((settings) => settings.appConfig.appName),
     );
 
+    // 设置navigator context
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(navigatorContextProvider.notifier).setContext(context);
+    });
+
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
         return MaterialApp.router(
@@ -54,8 +62,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           title: title,
-          routeInformationParser: MyRouteInformationParser(),
-          routerDelegate: widget.delegate,
+          routerConfig: _router,
         );
       },
     );

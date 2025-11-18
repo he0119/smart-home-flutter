@@ -44,7 +44,7 @@ extension AppTabExtension on AppTab {
   }
 
   /// 对应的页面
-  Page get page {
+  Widget get page {
     switch (this) {
       case AppTab.storage:
         return const StorageHomePage();

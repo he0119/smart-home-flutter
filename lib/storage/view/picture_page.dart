@@ -11,19 +11,15 @@ import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
 
-class PicturePage extends Page {
+class PicturePage extends StatelessWidget {
   /// 图片 ID
   final String pictureId;
 
-  PicturePage({required this.pictureId})
-    : super(key: ValueKey(pictureId), name: '/picture/$pictureId');
+  const PicturePage({super.key, required this.pictureId});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => PictureScreen(pictureId: pictureId),
-    );
+  Widget build(BuildContext context) {
+    return PictureScreen(pictureId: pictureId);
   }
 }
 

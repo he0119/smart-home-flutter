@@ -17,16 +17,12 @@ import 'package:smarthome/utils/theme_mode_extension.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
-class SettingsPage extends Page {
-  const SettingsPage()
-    : super(key: const ValueKey('settings'), name: '/settings');
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
 
   @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (context) => const SettingsScreen(),
-    );
+  Widget build(BuildContext context) {
+    return const SettingsScreen();
   }
 }
 
