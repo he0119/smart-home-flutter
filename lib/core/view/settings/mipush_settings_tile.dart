@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/core/view/settings/mipush_page.dart';
+import 'package:smarthome/core/router/app_router.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
 
 class MiPushSettingsTile extends ConsumerWidget {
@@ -24,9 +25,7 @@ class MiPushSettingsTile extends ConsumerWidget {
       title: '小米推送',
       subtitle: status,
       onPressed: (context) {
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (context) => const MiPushPage()));
+        context.push(AppRoutes.miPushSettings);
       },
     );
   }

@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/core/router/router.dart';
 import 'package:smarthome/l10n/l10n.dart';
 
 class MyApp extends ConsumerStatefulWidget {

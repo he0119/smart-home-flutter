@@ -3,10 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:smarthome/blog/blog.dart';
 import 'package:smarthome/board/board.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/core/view/admin_page.dart';
 import 'package:smarthome/storage/storage.dart';
-import 'package:smarthome/storage/view/item_edit_page.dart';
-import 'package:smarthome/storage/view/picture_add_page.dart';
 
 import 'app_router.dart';
 
@@ -160,6 +157,96 @@ final routerProvider = Provider<GoRouter>((ref) {
           context: context,
           state: state,
           child: const BlogSettingsPage(),
+        ),
+      ),
+
+      // 主题设置
+      GoRoute(
+        path: AppRoutes.themeSettings,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const ThemeModePage(),
+        ),
+      ),
+
+      // API 网址设置
+      GoRoute(
+        path: AppRoutes.apiUrlSettings,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const ApiUrlPage(),
+        ),
+      ),
+
+      // 管理网址设置
+      GoRoute(
+        path: AppRoutes.adminUrlSettings,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const AdminUrlPage(),
+        ),
+      ),
+
+      // 默认主页设置
+      GoRoute(
+        path: AppRoutes.defaultPageSettings,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const DefaultPage(),
+        ),
+      ),
+
+      // 会话管理
+      GoRoute(
+        path: AppRoutes.sessionSettings,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const SessionPage(),
+        ),
+      ),
+
+      // 小米推送设置
+      GoRoute(
+        path: AppRoutes.miPushSettings,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const MiPushPage(),
+        ),
+      ),
+
+      // 博客网址设置
+      GoRoute(
+        path: AppRoutes.blogUrlSettings,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const BlogUrlPage(),
+        ),
+      ),
+
+      // 博客管理网址设置
+      GoRoute(
+        path: AppRoutes.blogAdminUrlSettings,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const BlogAdminUrlPage(),
+        ),
+      ),
+
+      // 评论排序设置
+      GoRoute(
+        path: AppRoutes.commentOrderSettings,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const CommentOrderPage(),
         ),
       ),
 

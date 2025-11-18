@@ -14,6 +14,18 @@ class AppRoutes {
   static const String recycleBin = '/recyclebin';
   static const String settings = '/settings';
   static const String blogSettings = '/settings/blog';
+  
+  // 设置子页面
+  static const String themeSettings = '/settings/theme';
+  static const String apiUrlSettings = '/settings/api-url';
+  static const String adminUrlSettings = '/settings/admin-url';
+  static const String defaultPageSettings = '/settings/default-page';
+  static const String sessionSettings = '/settings/sessions';
+  static const String miPushSettings = '/settings/mipush';
+  static const String blogUrlSettings = '/settings/blog-url';
+  static const String blogAdminUrlSettings = '/settings/blog-admin-url';
+  static const String commentOrderSettings = '/settings/comment-order';
+  
   static const String blog = '/blog';
   static const String board = '/board';
   static const String search = '/search';
