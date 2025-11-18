@@ -54,6 +54,17 @@ extension AppTabExtension on AppTab {
         return const BoardHomePage();
     }
   }
+
+  String get route {
+    switch (this) {
+      case AppTab.storage:
+        return '/storage';
+      case AppTab.blog:
+        return '/blog';
+      case AppTab.board:
+        return '/board';
+    }
+  }
 }
 
 /// 登录, 物品耗材, 回收站

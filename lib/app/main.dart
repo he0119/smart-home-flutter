@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smarthome/core/core.dart';
-import 'package:smarthome/l10n/l10n.dart';
 import 'package:smarthome/core/router/router.dart';
+import 'package:smarthome/l10n/l10n.dart';
 
 class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
@@ -24,7 +24,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     super.initState();
     _router = ref.read(routerProvider);
-    
+
     // 仅在安卓上注册通道
     if (!kIsWeb && Platform.isAndroid) {
       const MethodChannel('hehome.xyz/route').setMethodCallHandler((
@@ -46,11 +46,6 @@ class _MyAppState extends ConsumerState<MyApp> {
     final title = ref.read(
       settingsProvider.select((settings) => settings.appConfig.appName),
     );
-
-    // 设置navigator context
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(navigatorContextProvider.notifier).setContext(context);
-    });
 
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {

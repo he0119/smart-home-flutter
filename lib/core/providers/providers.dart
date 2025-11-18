@@ -1,6 +1,5 @@
 // Core providers
 export 'authentication_provider.dart';
-export 'navigator_context_provider.dart';
 export 'push_provider.dart';
 export 'repository_providers.dart';
 export 'settings_provider.dart';

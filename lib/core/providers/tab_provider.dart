@@ -1,7 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/core/model/app_tab.dart';
-import 'package:smarthome/core/router/router_extensions.dart';
-import 'package:smarthome/core/providers/navigator_context_provider.dart';
+import 'package:smarthome/core/router/router.dart';
 
 part 'tab_provider.g.dart';
 
@@ -13,12 +12,10 @@ class Tab extends _$Tab {
 
   void setTab(AppTab? tab) {
     state = tab;
-    // 使用go_router进行导航
+    // 使用 go_router 进行导航
     if (tab != null) {
-      final context = ref.read(navigatorContextProvider);
-      if (context != null) {
-        context.goTab(tab);
-      }
+      final router = ref.read(routerProvider);
+      router.go(tab.route);
     }
   }
 }
