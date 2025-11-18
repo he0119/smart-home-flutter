@@ -49,6 +49,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
         return MaterialApp.router(
+          restorationScopeId: 'app',
           scaffoldMessengerKey: scaffoldMessengerKey,
           theme: ThemeData(colorScheme: lightDynamic, useMaterial3: true),
           darkTheme: ThemeData.dark().copyWith(colorScheme: darkDynamic),

@@ -13,6 +13,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final isLogin = settings.isLogin;
 
   return GoRouter(
+    restorationScopeId: 'router',
     initialLocation: settings.defaultPage.route,
     redirect: (context, state) {
       // 登录状态检查
