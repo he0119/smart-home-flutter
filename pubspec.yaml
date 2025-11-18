@@ -47,6 +47,7 @@ dependencies:
   dynamic_color: 1.8.1
   qr_flutter: ^4.1.0
   mobile_scanner: 7.1.3
+  go_router: ^17.0.0
 
   # Widget
   webview_flutter: ^4.13.0
@@ -59,7 +60,6 @@ dependencies:
   animated_tree_view: ^2.3.0
   flutter_riverpod: ^3.0.3
   riverpod_annotation: ^3.0.3
-  go_router: ^14.6.1
 
 # https://github.com/MisterJimson/flutter_keyboard_visibility/pull/155#issuecomment-2112047514
 dependency_overrides:
