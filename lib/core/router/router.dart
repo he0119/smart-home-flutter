@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smarthome/blog/blog.dart';
@@ -7,15 +8,40 @@ import 'package:smarthome/storage/storage.dart';
 
 import 'app_router.dart';
 
+// GoRouter 刷新监听器
+class _GoRouterRefreshStream extends ChangeNotifier {
+  _GoRouterRefreshStream(SettingsState settings) {
+    _settings = settings;
+  }
+
+  late SettingsState _settings;
+
+  void update(SettingsState settings) {
+    if (_settings.isLogin != settings.isLogin) {
+      _settings = settings;
+      notifyListeners();
+    }
+  }
+}
+
 // 路由提供者
 final routerProvider = Provider<GoRouter>((ref) {
-  final settings = ref.watch(settingsProvider);
-  final isLogin = settings.isLogin;
+  final notifier = _GoRouterRefreshStream(ref.read(settingsProvider));
+
+  // 监听 settings 变化并更新 notifier
+  ref.listen(settingsProvider, (previous, next) {
+    notifier.update(next);
+  });
 
   return GoRouter(
     restorationScopeId: 'router',
-    initialLocation: settings.defaultPage.route,
+    initialLocation: ref.read(settingsProvider).defaultPage.route,
+    refreshListenable: notifier,
     redirect: (context, state) {
+      // 每次重定向时都读取最新的 settings 状态
+      final settings = ref.read(settingsProvider);
+      final isLogin = settings.isLogin;
+
       // 登录状态检查
       if (!isLogin && state.matchedLocation != AppRoutes.login) {
         return AppRoutes.login;

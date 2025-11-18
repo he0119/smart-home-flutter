@@ -36,7 +36,7 @@ class AuthState {
 }
 
 /// Authentication Notifier
-@riverpod
+@Riverpod(keepAlive: true)
 class Authentication extends _$Authentication {
   @override
   AuthState build() {

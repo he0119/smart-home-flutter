@@ -23,7 +23,7 @@ final class AuthenticationProvider
         argument: null,
         retry: null,
         name: r'authenticationProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -44,7 +44,7 @@ final class AuthenticationProvider
   }
 }
 
-String _$authenticationHash() => r'4ff10f1adac4586eb01112a8b59276a9be8c318f';
+String _$authenticationHash() => r'445c72aa97d7468f3924f79bf9869059715b13a9';
 
 /// Authentication Notifier
 
