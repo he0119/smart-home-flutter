@@ -16,18 +16,16 @@ final routerProvider = Provider<GoRouter>((ref) {
   final isLogin = settings.isLogin;
 
   return GoRouter(
-    initialLocation: settings.defaultPage == AppTab.storage
-        ? AppRoutes.storage
-        : settings.defaultPage == AppTab.blog
-        ? AppRoutes.blog
-        : AppRoutes.board,
+    initialLocation: settings.defaultPage.route,
     redirect: (context, state) {
       // 登录状态检查
       if (!isLogin && state.matchedLocation != AppRoutes.login) {
         return AppRoutes.login;
       }
-      if (isLogin && state.matchedLocation == AppRoutes.login) {
-        return AppRoutes.storage;
+      if (isLogin &&
+          (state.matchedLocation == AppRoutes.login ||
+              state.matchedLocation == AppRoutes.home)) {
+        return settings.defaultPage.route;
       }
       return null;
     },
@@ -42,42 +40,34 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
 
-      // 主页面Shell路由
-      ShellRoute(
-        builder: (context, state, child) {
-          return HomeShell(location: state.matchedLocation, child: child);
-        },
-        routes: [
-          // 存储管理路由
-          GoRoute(
-            path: AppRoutes.storage,
-            pageBuilder: (context, state) => buildPageWithDefaultTransition(
-              context: context,
-              state: state,
-              child: const StorageHomePage(),
-            ),
-          ),
+      // 存储管理路由
+      GoRoute(
+        path: AppRoutes.storage,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const StorageHomePage(),
+        ),
+      ),
 
-          // 博客路由
-          GoRoute(
-            path: AppRoutes.blog,
-            pageBuilder: (context, state) => buildPageWithDefaultTransition(
-              context: context,
-              state: state,
-              child: const BlogHomePage(),
-            ),
-          ),
+      // 博客路由
+      GoRoute(
+        path: AppRoutes.blog,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const BlogHomePage(),
+        ),
+      ),
 
-          // 留言板路由
-          GoRoute(
-            path: AppRoutes.board,
-            pageBuilder: (context, state) => buildPageWithDefaultTransition(
-              context: context,
-              state: state,
-              child: const BoardHomePage(),
-            ),
-          ),
-        ],
+      // 留言板路由
+      GoRoute(
+        path: AppRoutes.board,
+        pageBuilder: (context, state) => buildPageWithDefaultTransition(
+          context: context,
+          state: state,
+          child: const BoardHomePage(),
+        ),
       ),
 
       // 独立页面路由

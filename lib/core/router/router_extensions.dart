@@ -36,7 +36,7 @@ extension GoRouterExtension on BuildContext {
 
   void goItemDetail(String itemId) => push('/item/$itemId');
 
-  void goTopicDetail(String topicId) => push('/board/topic/$topicId');
+  void goTopicDetail(String topicId) => push('/topic/$topicId');
 
   void goPictureDetail(String pictureId) => push('/picture/$pictureId');
 
