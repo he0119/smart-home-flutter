@@ -3,6 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:intl/intl_browser.dart';
 
 Future<void> configureApp() async {
-  setUrlStrategy(PathUrlStrategy());
+  usePathUrlStrategy();
   Intl.defaultLocale = await findSystemLocale();
 }
