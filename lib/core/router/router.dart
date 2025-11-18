@@ -57,11 +57,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       // 登录页面
       GoRoute(
         path: AppRoutes.login,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const LoginScreen(),
-        ),
+        builder: (context, state) => const LoginScreen(),
       ),
 
       // 存储管理路由
@@ -97,218 +93,138 @@ final routerProvider = Provider<GoRouter>((ref) {
       // 话题详情
       GoRoute(
         path: AppRoutes.topicDetail,
-        pageBuilder: (context, state) {
+        builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
-          return buildPageWithDefaultTransition(
-            context: context,
-            state: state,
-            child: TopicDetailPage(topicId: id),
-          );
+          return TopicDetailPage(topicId: id);
         },
       ),
 
       // 物品详情
       GoRoute(
         path: AppRoutes.itemDetail,
-        pageBuilder: (context, state) {
+        builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
-          return buildPageWithDefaultTransition(
-            context: context,
-            state: state,
-            child: ItemDetailPage(itemId: id),
-          );
+          return ItemDetailPage(itemId: id);
         },
       ),
 
       // 位置详情
       GoRoute(
         path: AppRoutes.storageDetail,
-        pageBuilder: (context, state) {
+        builder: (context, state) {
           final idParam = state.pathParameters['id'] ?? '';
           final id = idParam == AppRoutes.storageRootId ? '' : idParam;
-          return buildPageWithDefaultTransition(
-            context: context,
-            state: state,
-            child: StorageDetailPage(storageId: id),
-          );
+          return StorageDetailPage(storageId: id);
         },
       ),
 
       // 图片详情
       GoRoute(
         path: AppRoutes.pictureDetail,
-        pageBuilder: (context, state) {
+        builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
-          return buildPageWithDefaultTransition(
-            context: context,
-            state: state,
-            child: PicturePage(pictureId: id),
-          );
+          return PicturePage(pictureId: id);
         },
       ),
 
       // 耗材页面
       GoRoute(
         path: AppRoutes.consumables,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const ConsumablesPage(),
-        ),
+        builder: (context, state) => const ConsumablesPage(),
       ),
 
       // 回收站
       GoRoute(
         path: AppRoutes.recycleBin,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const RecycleBinPage(),
-        ),
+        builder: (context, state) => const RecycleBinPage(),
       ),
 
       // 设置页面
       GoRoute(
         path: AppRoutes.settings,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const SettingsPage(),
-        ),
+        builder: (context, state) => const SettingsPage(),
       ),
 
       // 博客设置
       GoRoute(
         path: AppRoutes.blogSettings,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const BlogSettingsPage(),
-        ),
+        builder: (context, state) => const BlogSettingsPage(),
       ),
 
       // 主题设置
       GoRoute(
         path: AppRoutes.themeSettings,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const ThemeModePage(),
-        ),
+        builder: (context, state) => const ThemeModePage(),
       ),
 
       // API 网址设置
       GoRoute(
         path: AppRoutes.apiUrlSettings,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const ApiUrlPage(),
-        ),
+        builder: (context, state) => const ApiUrlPage(),
       ),
 
       // 管理网址设置
       GoRoute(
         path: AppRoutes.adminUrlSettings,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const AdminUrlPage(),
-        ),
+        builder: (context, state) => const AdminUrlPage(),
       ),
 
       // 默认主页设置
       GoRoute(
         path: AppRoutes.defaultPageSettings,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const DefaultPage(),
-        ),
+        builder: (context, state) => const DefaultPage(),
       ),
 
       // 会话管理
       GoRoute(
         path: AppRoutes.sessionSettings,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const SessionPage(),
-        ),
+        builder: (context, state) => const SessionPage(),
       ),
 
       // 小米推送设置
       GoRoute(
         path: AppRoutes.miPushSettings,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const MiPushPage(),
-        ),
+        builder: (context, state) => const MiPushPage(),
       ),
 
       // 博客网址设置
       GoRoute(
         path: AppRoutes.blogUrlSettings,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const BlogUrlPage(),
-        ),
+        builder: (context, state) => const BlogUrlPage(),
       ),
 
       // 博客管理网址设置
       GoRoute(
         path: AppRoutes.blogAdminUrlSettings,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const BlogAdminUrlPage(),
-        ),
+        builder: (context, state) => const BlogAdminUrlPage(),
       ),
 
       // 评论排序设置
       GoRoute(
         path: AppRoutes.commentOrderSettings,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const CommentOrderPage(),
-        ),
+        builder: (context, state) => const CommentOrderPage(),
       ),
 
       // 搜索页面
       GoRoute(
         path: AppRoutes.search,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const SearchPage(),
-        ),
+        builder: (context, state) => const SearchPage(),
       ),
 
       // 管理页面
       GoRoute(
         path: AppRoutes.admin,
-        pageBuilder: (context, state) => buildPageWithDefaultTransition(
-          context: context,
-          state: state,
-          child: const AdminPage(),
-        ),
+        builder: (context, state) => const AdminPage(),
       ),
 
       // 物品编辑页面
       GoRoute(
         path: AppRoutes.itemEdit,
-        pageBuilder: (context, state) {
+        builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
-          return buildPageWithDefaultTransition(
-            context: context,
-            state: state,
-            child: ItemEditPage(
-              isEditing: true,
-              item: Item(id: id, name: ''),
-            ),
+          return ItemEditPage(
+            isEditing: true,
+            item: Item(id: id, name: ''),
           );
         },
       ),
@@ -316,13 +232,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       // 添加物品图片页面
       GoRoute(
         path: AppRoutes.itemPictureAdd,
-        pageBuilder: (context, state) {
+        builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
-          return buildPageWithDefaultTransition(
-            context: context,
-            state: state,
-            child: PictureAddPage(itemId: id),
-          );
+          return PictureAddPage(itemId: id);
         },
       ),
     ],
