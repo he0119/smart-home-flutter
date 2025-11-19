@@ -38,7 +38,9 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: ref.read(settingsProvider).defaultPage.route,
     refreshListenable: notifier,
     redirect: (context, state) {
-      final isLogin = ref.read(isLoggedInProvider);
+      // 每次重定向时都读取最新的 settings 状态
+      final settings = ref.read(settingsProvider);
+      final isLogin = settings.isLogin;
 
       // 登录状态检查
       if (!isLogin && state.matchedLocation != AppRoutes.login) {

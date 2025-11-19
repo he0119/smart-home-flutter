@@ -14,10 +14,11 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/graphql/mutations/mutations.dart';
+import 'package:smarthome/core/router/app_router.dart';
 import 'package:smarthome/user/model/user.dart';
 import 'package:smarthome/user/repository/user_repository.dart';
 import 'package:smarthome/utils/exceptions.dart';
-import 'package:web/web.dart' show document;
+import 'package:smarthome/utils/web_utils.dart';
 
 class ClientWithCookies extends IOClient {
   final Ref ref;
@@ -241,18 +242,20 @@ class GraphQLApiClient {
 
     // 构建 OIDC 端点 URL
     final baseUri = Uri.parse(apiUrl);
-    final oidcUri = baseUri.replace(path: '/oidc/authenticate/');
+    // 在 URL 中添加返回地址参数
+    final oidcUri = baseUri.replace(
+      path: '/oidc/authenticate/',
+      queryParameters: {
+        'next': baseUri.replace(path: AppRoutes.home).toString(),
+      },
+    );
 
     if (kIsWeb) {
       // Web 平台：使用浏览器重定向
       _log.info('Web 平台：重定向到 OIDC 认证页面: $oidcUri');
-      // 在 URL 中添加返回地址参数（如果服务器支持）
-      final authUrl = oidcUri.replace(
-        queryParameters: {'next': Uri.base.toString()},
-      );
 
       // 触发浏览器重定向
-      document.location!.href = authUrl.toString();
+      webRedirect(oidcUri);
 
       // 页面将会跳转，这里不会返回
       // 但为了满足函数签名，返回 null
@@ -310,18 +313,18 @@ class GraphQLApiClient {
           currentUri = currentUri.resolve(location);
           _log.info('跟随重定向到: $currentUri');
 
-          // 检查是否已到达 admin 页面
-          if (currentUri.path.contains('/admin')) {
-            _log.info('已到达 admin 页面,认证成功: $currentUri');
+          // 检查是否已到达主页
+          if (currentUri.path == AppRoutes.home) {
+            _log.info('已到达主页，认证成功: $currentUri');
             break;
           }
 
           redirectCount++;
         } else if (response.statusCode == 200) {
-          if (currentUri.path.contains('/admin')) {
-            _log.info('成功到达 admin 页面: $currentUri');
+          if (currentUri.path == AppRoutes.home) {
+            _log.info('成功到达主页: $currentUri');
           } else {
-            _log.warning('收到 200 响应但不在 admin 页面: $currentUri');
+            _log.warning('收到 200 响应但不在主页: $currentUri');
           }
           break;
         } else {
