@@ -40,6 +40,11 @@ class UpdateInfo {
 /// Update Notifier
 @riverpod
 class Update extends _$Update {
+  @visibleForTesting
+  static bool? debugIsAndroid;
+
+  bool get _isAndroid => debugIsAndroid ?? (!kIsWeb && Platform.isAndroid);
+
   @override
   UpdateInfo build() {
     // 自动检查更新
@@ -49,7 +54,7 @@ class Update extends _$Update {
 
   Future<void> checkUpdate() async {
     // 暂时只支持 Android
-    if (!kIsWeb && Platform.isAndroid) {
+    if (_isAndroid) {
       try {
         final versionRepository = ref.read(versionRepositoryProvider);
         final needUpdate = await versionRepository.needUpdate();

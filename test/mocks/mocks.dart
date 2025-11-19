@@ -1,6 +1,10 @@
+import 'package:go_router/go_router.dart';
 import 'package:mockito/annotations.dart';
+import 'package:smarthome/board/repository/board_repository.dart';
 import 'package:smarthome/core/repository/graphql_api_client.dart';
+import 'package:smarthome/core/repository/push_repository.dart';
 import 'package:smarthome/core/repository/settings_repository.dart';
+import 'package:smarthome/core/repository/version_repository.dart';
 import 'package:smarthome/storage/repository/storage_repository.dart';
 import 'package:smarthome/user/repository/user_repository.dart';
 
@@ -11,5 +15,9 @@ import 'package:smarthome/user/repository/user_repository.dart';
   UserRepository,
   SettingsRepository,
   StorageRepository,
+  BoardRepository,
+  PushRepository,
+  VersionRepository,
+  GoRouter,
 ])
 void main() {}
