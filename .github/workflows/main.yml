@@ -263,4 +263,4 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         with:
           environment: ${{ needs.test.outputs.environment }}
-          version: ${{ needs.test.outputs.version }}
+          release: ${{ needs.test.outputs.version }}
