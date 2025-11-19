@@ -1,0 +1,1 @@
+void webRedirect(Uri uri) {}

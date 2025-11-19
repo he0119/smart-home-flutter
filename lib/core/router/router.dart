@@ -49,7 +49,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (isLogin &&
           (state.matchedLocation == AppRoutes.login ||
               state.matchedLocation == AppRoutes.home)) {
-        return settings.defaultPage.route;
+        // 检查是否有 next 参数
+        final next = state.uri.queryParameters['next'];
+        if (next != null && next.isNotEmpty) {
+          return next;
+        }
+        return ref.read(settingsProvider).defaultPage.route;
       }
       return null;
     },

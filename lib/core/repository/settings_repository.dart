@@ -145,9 +145,6 @@ class SettingsRepository {
     final prefs = await _prefs;
     if (user == null) {
       prefs.remove('loginUser');
-      // 同时删除 Token
-      prefs.remove('token');
-      prefs.remove('refreshToken');
       // 清除 Sentry 设置的用户
       Sentry.configureScope((scope) => scope.setUser(null));
     } else {

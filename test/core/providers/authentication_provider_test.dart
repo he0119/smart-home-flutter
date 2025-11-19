@@ -17,6 +17,7 @@ void main() {
     mockGraphQLApiClient = MockGraphQLApiClient();
     mockUserRepository = MockUserRepository();
     mockSettingsRepository = MockSettingsRepository();
+    when(mockUserRepository.currentUser()).thenThrow(MyException('未登录'));
   });
 
   group('AuthenticationNotifier', () {
@@ -343,7 +344,7 @@ void main() {
       await container.read(settingsProvider.notifier).loadSettings();
 
       // 登录前应该返回 null
-      expect(container.read(currentUserProvider), null);
+      expect(container.read(settingsProvider).loginUser, null);
 
       // 执行登录
       await container
@@ -351,7 +352,7 @@ void main() {
           .login('testuser', 'password');
 
       // 登录后应该返回用户
-      expect(container.read(currentUserProvider), testUser);
+      expect(container.read(authenticationProvider).user.value, testUser);
     });
 
     test('isLoggedInProvider 应该返回登录状态', () async {
@@ -414,7 +415,7 @@ void main() {
       await container.read(settingsProvider.notifier).loadSettings();
 
       // 登录前应该返回 false
-      expect(container.read(isLoggedInProvider), false);
+      expect(container.read(settingsProvider).isLogin, false);
 
       // 执行登录
       await container
@@ -422,7 +423,7 @@ void main() {
           .login('testuser', 'password');
 
       // 登录后应该返回 true
-      expect(container.read(isLoggedInProvider), true);
+      expect(container.read(settingsProvider).isLogin, true);
     });
   });
 }

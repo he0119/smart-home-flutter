@@ -50,11 +50,11 @@ class Authentication extends _$Authentication {
     final settings = ref.read(settingsProvider);
 
     try {
+      // 每次启动时都尝试获取当前用户信息，并更新本地缓存
+      final userRepository = ref.read(userRepositoryProvider);
+      final user = await userRepository.currentUser();
+      await settingsNotifier.updateLoginUser(user);
       if (settings.isLogin) {
-        // 每次启动时都获取当前用户信息，并更新本地缓存
-        final userRepository = ref.read(userRepositoryProvider);
-        final user = await userRepository.currentUser();
-        await settingsNotifier.updateLoginUser(user);
         state = AuthState(user: AsyncValue.data(user));
       } else {
         state = AuthState(user: const AsyncValue.data(null));
@@ -135,22 +135,4 @@ class Authentication extends _$Authentication {
   void clearError() {
     state = state.copyWith(errorMessage: () => null);
   }
-}
-
-/// Convenience provider for current user
-@riverpod
-User? currentUser(Ref ref) {
-  final authState = ref.watch(authenticationProvider);
-  return authState.user.when(
-    data: (user) => user,
-    loading: () => null,
-    error: (_, _) => null,
-  );
-}
-
-/// Convenience provider for login status
-@riverpod
-bool isLoggedIn(Ref ref) {
-  final user = ref.watch(currentUserProvider);
-  return user != null;
 }

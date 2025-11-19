@@ -245,10 +245,10 @@ packages:
     dependency: transitive
     description:
       name: cross_file
-      sha256: "942a4791cd385a68ccb3b32c71c427aba508a1bb949b86dff2adbe4049f16239"
+      sha256: "701dcfc06da0882883a2657c445103380e53e647060ad8d9dfb710c100996608"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.5"
+    version: "0.3.5+1"
   crypto:
     dependency: transitive
     description:
@@ -738,18 +738,18 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: a1cd1584fae64f6ecca63113fd5450e3483c097cc05e43a2f073330f62adcabe
+      sha256: "788167bcb578b13613b17c3b4a4efae911715f353e36bddc48a0b02a54a8de40"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.13+8"
+    version: "0.8.13+9"
   image_picker_for_web:
     dependency: transitive
     description:
       name: image_picker_for_web
-      sha256: "40c2a6a0da15556dc0f8e38a3246064a971a9f512386c3339b89f76db87269b6"
+      sha256: "66257a3191ab360d23a55c8241c91a6e329d31e94efa7be9cf7a212e65850214"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   image_picker_ios:
     dependency: transitive
     description:
@@ -1383,10 +1383,10 @@ packages:
     dependency: transitive
     description:
       name: source_gen
-      sha256: "9098ab86015c4f1d8af6486b547b11100e73b193e1899015033cb3e14ad20243"
+      sha256: "0d6c4e1080176801112ed1111226d13cd4f74947383aabafbd9726a22083aeaa"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.2"
+    version: "4.1.0"
   source_helper:
     dependency: transitive
     description:
@@ -1575,10 +1575,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_android
-      sha256: dff5e50339bf30b06d7950b50fda58164d3d8c40042b104ed041ddc520fbff28
+      sha256: "1a109ee074e2a3b17ec3f2785248cb3e93c1e4abab878f637bc33267089f05a3"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.25"
+    version: "6.3.26"
   url_launcher_ios:
     dependency: transitive
     description:
@@ -1676,7 +1676,7 @@ packages:
     source: hosted
     version: "1.1.4"
   web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: web
       sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"

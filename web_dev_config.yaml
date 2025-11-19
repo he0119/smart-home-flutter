@@ -3,4 +3,4 @@ server:
   port: 8080
   proxy:
     - target: "https://smart.dev.hehome.xyz/"
-      regex: "^/(graphql|admin|static)/"
+      regex: "^/(graphql|oidc|admin|static)/"
