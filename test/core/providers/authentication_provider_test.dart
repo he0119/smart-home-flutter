@@ -17,6 +17,7 @@ void main() {
     mockGraphQLApiClient = MockGraphQLApiClient();
     mockUserRepository = MockUserRepository();
     mockSettingsRepository = MockSettingsRepository();
+    when(mockUserRepository.currentUser()).thenThrow(MyException('未登录'));
   });
 
   group('AuthenticationNotifier', () {
