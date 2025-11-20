@@ -62,7 +62,7 @@ Future<void> initializeSettings(
 void keepProviderAlive(ProviderContainer container, dynamic provider) {
   final subscription = container.listen<dynamic>(
     provider,
-    (_, __) {},
+    (_, _) {},
     fireImmediately: true,
   );
   addTearDown(subscription.close);
