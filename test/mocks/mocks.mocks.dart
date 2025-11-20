@@ -3,19 +3,29 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i9;
+import 'dart:async' as _i17;
 
 import 'package:flutter/material.dart' as _i11;
-import 'package:flutter_riverpod/flutter_riverpod.dart' as _i7;
+import 'package:flutter_riverpod/flutter_riverpod.dart' as _i15;
+import 'package:go_router/src/configuration.dart' as _i10;
+import 'package:go_router/src/delegate.dart' as _i12;
+import 'package:go_router/src/information_provider.dart' as _i13;
+import 'package:go_router/src/match.dart' as _i22;
+import 'package:go_router/src/parser.dart' as _i14;
+import 'package:go_router/src/router.dart' as _i21;
+import 'package:go_router/src/state.dart' as _i9;
 import 'package:graphql/client.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i8;
+import 'package:mockito/src/dummies.dart' as _i16;
+import 'package:smarthome/board/model/board.dart' as _i7;
+import 'package:smarthome/board/repository/board_repository.dart' as _i20;
 import 'package:smarthome/core/core.dart' as _i3;
 import 'package:smarthome/storage/model/storage.dart' as _i5;
-import 'package:smarthome/storage/repository/storage_repository.dart' as _i12;
+import 'package:smarthome/storage/repository/storage_repository.dart' as _i19;
 import 'package:smarthome/user/model/user.dart' as _i4;
-import 'package:smarthome/user/repository/user_repository.dart' as _i10;
+import 'package:smarthome/user/repository/user_repository.dart' as _i18;
 import 'package:tuple/tuple.dart' as _i6;
+import 'package:version/version.dart' as _i8;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -70,6 +80,72 @@ class _FakeTuple2_6<T1, T2> extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
+class _FakeComment_7 extends _i1.SmartFake implements _i7.Comment {
+  _FakeComment_7(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeTopic_8 extends _i1.SmartFake implements _i7.Topic {
+  _FakeTopic_8(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeTuple3_9<T1, T2, T3> extends _i1.SmartFake
+    implements _i6.Tuple3<T1, T2, T3> {
+  _FakeTuple3_9(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeMiPushKey_10 extends _i1.SmartFake implements _i3.MiPushKey {
+  _FakeMiPushKey_10(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeMiPush_11 extends _i1.SmartFake implements _i3.MiPush {
+  _FakeMiPush_11(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeVersion_12 extends _i1.SmartFake implements _i8.Version {
+  _FakeVersion_12(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeGoRouterState_13 extends _i1.SmartFake implements _i9.GoRouterState {
+  _FakeGoRouterState_13(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeRouteConfiguration_14 extends _i1.SmartFake
+    implements _i10.RouteConfiguration {
+  _FakeRouteConfiguration_14(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeBackButtonDispatcher_15 extends _i1.SmartFake
+    implements _i11.BackButtonDispatcher {
+  _FakeBackButtonDispatcher_15(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeGoRouterDelegate_16 extends _i1.SmartFake
+    implements _i12.GoRouterDelegate {
+  _FakeGoRouterDelegate_16(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeGoRouteInformationProvider_17 extends _i1.SmartFake
+    implements _i13.GoRouteInformationProvider {
+  _FakeGoRouteInformationProvider_17(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeGoRouteInformationParser_18 extends _i1.SmartFake
+    implements _i14.GoRouteInformationParser {
+  _FakeGoRouteInformationParser_18(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
 /// A class which mocks [GraphQLApiClient].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -79,52 +155,55 @@ class MockGraphQLApiClient extends _i1.Mock implements _i3.GraphQLApiClient {
   }
 
   @override
-  _i7.Ref get ref =>
+  _i15.Ref get ref =>
       (super.noSuchMethod(
             Invocation.getter(#ref),
-            returnValue: _i8.dummyValue<_i7.Ref>(this, Invocation.getter(#ref)),
+            returnValue: _i16.dummyValue<_i15.Ref>(
+              this,
+              Invocation.getter(#ref),
+            ),
           )
-          as _i7.Ref);
+          as _i15.Ref);
 
   @override
-  _i9.Future<String?> get token =>
+  _i17.Future<String?> get token =>
       (super.noSuchMethod(
             Invocation.getter(#token),
-            returnValue: _i9.Future<String?>.value(),
+            returnValue: _i17.Future<String?>.value(),
           )
-          as _i9.Future<String?>);
+          as _i17.Future<String?>);
 
   @override
-  _i9.Stream<bool> get websocketConnectionState =>
+  _i17.Stream<bool> get websocketConnectionState =>
       (super.noSuchMethod(
             Invocation.getter(#websocketConnectionState),
-            returnValue: _i9.Stream<bool>.empty(),
+            returnValue: _i17.Stream<bool>.empty(),
           )
-          as _i9.Stream<bool>);
+          as _i17.Stream<bool>);
 
   @override
-  _i9.Future<_i4.User?> login(String? username, String? password) =>
+  _i17.Future<_i4.User?> login(String? username, String? password) =>
       (super.noSuchMethod(
             Invocation.method(#login, [username, password]),
-            returnValue: _i9.Future<_i4.User?>.value(),
+            returnValue: _i17.Future<_i4.User?>.value(),
           )
-          as _i9.Future<_i4.User?>);
+          as _i17.Future<_i4.User?>);
 
   @override
-  _i9.Future<_i4.User?> oidcLogin() =>
+  _i17.Future<_i4.User?> oidcLogin() =>
       (super.noSuchMethod(
             Invocation.method(#oidcLogin, []),
-            returnValue: _i9.Future<_i4.User?>.value(),
+            returnValue: _i17.Future<_i4.User?>.value(),
           )
-          as _i9.Future<_i4.User?>);
+          as _i17.Future<_i4.User?>);
 
   @override
-  _i9.Future<bool> logout() =>
+  _i17.Future<bool> logout() =>
       (super.noSuchMethod(
             Invocation.method(#logout, []),
-            returnValue: _i9.Future<bool>.value(false),
+            returnValue: _i17.Future<bool>.value(false),
           )
-          as _i9.Future<bool>);
+          as _i17.Future<bool>);
 
   @override
   void initailize(String? url) => super.noSuchMethod(
@@ -133,67 +212,67 @@ class MockGraphQLApiClient extends _i1.Mock implements _i3.GraphQLApiClient {
   );
 
   @override
-  _i9.Future<void> loadSettings() =>
+  _i17.Future<void> loadSettings() =>
       (super.noSuchMethod(
             Invocation.method(#loadSettings, []),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<_i2.QueryResult<Object?>> mutate(
+  _i17.Future<_i2.QueryResult<Object?>> mutate(
     _i2.MutationOptions<Object?>? options,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#mutate, [options]),
-            returnValue: _i9.Future<_i2.QueryResult<Object?>>.value(
+            returnValue: _i17.Future<_i2.QueryResult<Object?>>.value(
               _FakeQueryResult_0<Object?>(
                 this,
                 Invocation.method(#mutate, [options]),
               ),
             ),
           )
-          as _i9.Future<_i2.QueryResult<Object?>>);
+          as _i17.Future<_i2.QueryResult<Object?>>);
 
   @override
-  _i9.Future<_i2.QueryResult<Object?>> query(
+  _i17.Future<_i2.QueryResult<Object?>> query(
     _i2.QueryOptions<Object?>? options,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#query, [options]),
-            returnValue: _i9.Future<_i2.QueryResult<Object?>>.value(
+            returnValue: _i17.Future<_i2.QueryResult<Object?>>.value(
               _FakeQueryResult_0<Object?>(
                 this,
                 Invocation.method(#query, [options]),
               ),
             ),
           )
-          as _i9.Future<_i2.QueryResult<Object?>>);
+          as _i17.Future<_i2.QueryResult<Object?>>);
 
   @override
-  _i9.Stream<_i2.QueryResult<Object?>> subscribe(
+  _i17.Stream<_i2.QueryResult<Object?>> subscribe(
     _i2.SubscriptionOptions<Object?>? options,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#subscribe, [options]),
-            returnValue: _i9.Stream<_i2.QueryResult<Object?>>.empty(),
+            returnValue: _i17.Stream<_i2.QueryResult<Object?>>.empty(),
           )
-          as _i9.Stream<_i2.QueryResult<Object?>>);
+          as _i17.Stream<_i2.QueryResult<Object?>>);
 
   @override
-  _i9.Future<Duration?> onWebsocketConnectionLost(int? code, String? reason) =>
+  _i17.Future<Duration?> onWebsocketConnectionLost(int? code, String? reason) =>
       (super.noSuchMethod(
             Invocation.method(#onWebsocketConnectionLost, [code, reason]),
-            returnValue: _i9.Future<Duration?>.value(),
+            returnValue: _i17.Future<Duration?>.value(),
           )
-          as _i9.Future<Duration?>);
+          as _i17.Future<Duration?>);
 }
 
 /// A class which mocks [UserRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserRepository extends _i1.Mock implements _i10.UserRepository {
+class MockUserRepository extends _i1.Mock implements _i18.UserRepository {
   MockUserRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -210,31 +289,31 @@ class MockUserRepository extends _i1.Mock implements _i10.UserRepository {
           as _i3.GraphQLApiClient);
 
   @override
-  _i9.Future<_i4.User> currentUser() =>
+  _i17.Future<_i4.User> currentUser() =>
       (super.noSuchMethod(
             Invocation.method(#currentUser, []),
-            returnValue: _i9.Future<_i4.User>.value(
+            returnValue: _i17.Future<_i4.User>.value(
               _FakeUser_2(this, Invocation.method(#currentUser, [])),
             ),
           )
-          as _i9.Future<_i4.User>);
+          as _i17.Future<_i4.User>);
 
   @override
-  _i9.Future<List<_i4.Session>> sessions() =>
+  _i17.Future<List<_i4.Session>> sessions() =>
       (super.noSuchMethod(
             Invocation.method(#sessions, []),
-            returnValue: _i9.Future<List<_i4.Session>>.value(<_i4.Session>[]),
+            returnValue: _i17.Future<List<_i4.Session>>.value(<_i4.Session>[]),
           )
-          as _i9.Future<List<_i4.Session>>);
+          as _i17.Future<List<_i4.Session>>);
 
   @override
-  _i9.Future<void> deleteSession(String? id) =>
+  _i17.Future<void> deleteSession(String? id) =>
       (super.noSuchMethod(
             Invocation.method(#deleteSession, [id]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 }
 
 /// A class which mocks [SettingsRepository].
@@ -247,250 +326,250 @@ class MockSettingsRepository extends _i1.Mock
   }
 
   @override
-  _i9.Future<_i11.ThemeMode> themeMode() =>
+  _i17.Future<_i11.ThemeMode> themeMode() =>
       (super.noSuchMethod(
             Invocation.method(#themeMode, []),
-            returnValue: _i9.Future<_i11.ThemeMode>.value(
+            returnValue: _i17.Future<_i11.ThemeMode>.value(
               _i11.ThemeMode.system,
             ),
           )
-          as _i9.Future<_i11.ThemeMode>);
+          as _i17.Future<_i11.ThemeMode>);
 
   @override
-  _i9.Future<void> updateThemeMode(_i11.ThemeMode? theme) =>
+  _i17.Future<void> updateThemeMode(_i11.ThemeMode? theme) =>
       (super.noSuchMethod(
             Invocation.method(#updateThemeMode, [theme]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<String?> apiUrl() =>
+  _i17.Future<String?> apiUrl() =>
       (super.noSuchMethod(
             Invocation.method(#apiUrl, []),
-            returnValue: _i9.Future<String?>.value(),
+            returnValue: _i17.Future<String?>.value(),
           )
-          as _i9.Future<String?>);
+          as _i17.Future<String?>);
 
   @override
-  _i9.Future<void> updateApiUrl(String? url) =>
+  _i17.Future<void> updateApiUrl(String? url) =>
       (super.noSuchMethod(
             Invocation.method(#updateApiUrl, [url]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<String?> miPushAppId() =>
+  _i17.Future<String?> miPushAppId() =>
       (super.noSuchMethod(
             Invocation.method(#miPushAppId, []),
-            returnValue: _i9.Future<String?>.value(),
+            returnValue: _i17.Future<String?>.value(),
           )
-          as _i9.Future<String?>);
+          as _i17.Future<String?>);
 
   @override
-  _i9.Future<void> updateMiPushAppId(String? appId) =>
+  _i17.Future<void> updateMiPushAppId(String? appId) =>
       (super.noSuchMethod(
             Invocation.method(#updateMiPushAppId, [appId]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<String?> miPushAppKey() =>
+  _i17.Future<String?> miPushAppKey() =>
       (super.noSuchMethod(
             Invocation.method(#miPushAppKey, []),
-            returnValue: _i9.Future<String?>.value(),
+            returnValue: _i17.Future<String?>.value(),
           )
-          as _i9.Future<String?>);
+          as _i17.Future<String?>);
 
   @override
-  _i9.Future<void> updateMiPushAppKey(String? appKey) =>
+  _i17.Future<void> updateMiPushAppKey(String? appKey) =>
       (super.noSuchMethod(
             Invocation.method(#updateMiPushAppKey, [appKey]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<String?> miPushRegId() =>
+  _i17.Future<String?> miPushRegId() =>
       (super.noSuchMethod(
             Invocation.method(#miPushRegId, []),
-            returnValue: _i9.Future<String?>.value(),
+            returnValue: _i17.Future<String?>.value(),
           )
-          as _i9.Future<String?>);
+          as _i17.Future<String?>);
 
   @override
-  _i9.Future<void> updateMiPushRegId(String? regId) =>
+  _i17.Future<void> updateMiPushRegId(String? regId) =>
       (super.noSuchMethod(
             Invocation.method(#updateMiPushRegId, [regId]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<int> refreshInterval() =>
+  _i17.Future<int> refreshInterval() =>
       (super.noSuchMethod(
             Invocation.method(#refreshInterval, []),
-            returnValue: _i9.Future<int>.value(0),
+            returnValue: _i17.Future<int>.value(0),
           )
-          as _i9.Future<int>);
+          as _i17.Future<int>);
 
   @override
-  _i9.Future<void> updateRefreshInterval(int? interval) =>
+  _i17.Future<void> updateRefreshInterval(int? interval) =>
       (super.noSuchMethod(
             Invocation.method(#updateRefreshInterval, [interval]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<String?> adminUrl() =>
+  _i17.Future<String?> adminUrl() =>
       (super.noSuchMethod(
             Invocation.method(#adminUrl, []),
-            returnValue: _i9.Future<String?>.value(),
+            returnValue: _i17.Future<String?>.value(),
           )
-          as _i9.Future<String?>);
+          as _i17.Future<String?>);
 
   @override
-  _i9.Future<void> updateAdminUrl(String? url) =>
+  _i17.Future<void> updateAdminUrl(String? url) =>
       (super.noSuchMethod(
             Invocation.method(#updateAdminUrl, [url]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<String?> blogUrl() =>
+  _i17.Future<String?> blogUrl() =>
       (super.noSuchMethod(
             Invocation.method(#blogUrl, []),
-            returnValue: _i9.Future<String?>.value(),
+            returnValue: _i17.Future<String?>.value(),
           )
-          as _i9.Future<String?>);
+          as _i17.Future<String?>);
 
   @override
-  _i9.Future<void> updateBlogUrl(String? url) =>
+  _i17.Future<void> updateBlogUrl(String? url) =>
       (super.noSuchMethod(
             Invocation.method(#updateBlogUrl, [url]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<String?> blogAdminUrl() =>
+  _i17.Future<String?> blogAdminUrl() =>
       (super.noSuchMethod(
             Invocation.method(#blogAdminUrl, []),
-            returnValue: _i9.Future<String?>.value(),
+            returnValue: _i17.Future<String?>.value(),
           )
-          as _i9.Future<String?>);
+          as _i17.Future<String?>);
 
   @override
-  _i9.Future<void> updateBlogAdminUrl(String? url) =>
+  _i17.Future<void> updateBlogAdminUrl(String? url) =>
       (super.noSuchMethod(
             Invocation.method(#updateBlogAdminUrl, [url]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<_i3.AppTab> defaultPage() =>
+  _i17.Future<_i3.AppTab> defaultPage() =>
       (super.noSuchMethod(
             Invocation.method(#defaultPage, []),
-            returnValue: _i9.Future<_i3.AppTab>.value(_i3.AppTab.storage),
+            returnValue: _i17.Future<_i3.AppTab>.value(_i3.AppTab.storage),
           )
-          as _i9.Future<_i3.AppTab>);
+          as _i17.Future<_i3.AppTab>);
 
   @override
-  _i9.Future<void> updateDefaultPage(_i3.AppTab? page) =>
+  _i17.Future<void> updateDefaultPage(_i3.AppTab? page) =>
       (super.noSuchMethod(
             Invocation.method(#updateDefaultPage, [page]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<_i4.User?> loginUser() =>
+  _i17.Future<_i4.User?> loginUser() =>
       (super.noSuchMethod(
             Invocation.method(#loginUser, []),
-            returnValue: _i9.Future<_i4.User?>.value(),
+            returnValue: _i17.Future<_i4.User?>.value(),
           )
-          as _i9.Future<_i4.User?>);
+          as _i17.Future<_i4.User?>);
 
   @override
-  _i9.Future<void> updateLoginUser(_i4.User? user) =>
+  _i17.Future<void> updateLoginUser(_i4.User? user) =>
       (super.noSuchMethod(
             Invocation.method(#updateLoginUser, [user]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<bool> commentDescending() =>
+  _i17.Future<bool> commentDescending() =>
       (super.noSuchMethod(
             Invocation.method(#commentDescending, []),
-            returnValue: _i9.Future<bool>.value(false),
+            returnValue: _i17.Future<bool>.value(false),
           )
-          as _i9.Future<bool>);
+          as _i17.Future<bool>);
 
   @override
-  _i9.Future<void> updateCommentDescending(bool? descending) =>
+  _i17.Future<void> updateCommentDescending(bool? descending) =>
       (super.noSuchMethod(
             Invocation.method(#updateCommentDescending, [descending]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<String?> cookies() =>
+  _i17.Future<String?> cookies() =>
       (super.noSuchMethod(
             Invocation.method(#cookies, []),
-            returnValue: _i9.Future<String?>.value(),
+            returnValue: _i17.Future<String?>.value(),
           )
-          as _i9.Future<String?>);
+          as _i17.Future<String?>);
 
   @override
-  _i9.Future<void> updateCookies(String? cookies) =>
+  _i17.Future<void> updateCookies(String? cookies) =>
       (super.noSuchMethod(
             Invocation.method(#updateCookies, [cookies]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<String?> loginMethod() =>
+  _i17.Future<String?> loginMethod() =>
       (super.noSuchMethod(
             Invocation.method(#loginMethod, []),
-            returnValue: _i9.Future<String?>.value(),
+            returnValue: _i17.Future<String?>.value(),
           )
-          as _i9.Future<String?>);
+          as _i17.Future<String?>);
 
   @override
-  _i9.Future<void> updateLoginMethod(String? method) =>
+  _i17.Future<void> updateLoginMethod(String? method) =>
       (super.noSuchMethod(
             Invocation.method(#updateLoginMethod, [method]),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 }
 
 /// A class which mocks [StorageRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
+class MockStorageRepository extends _i1.Mock implements _i19.StorageRepository {
   MockStorageRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -507,7 +586,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
           as _i3.GraphQLApiClient);
 
   @override
-  _i9.Future<_i5.Item> addConsumable({
+  _i17.Future<_i5.Item> addConsumable({
     required String? id,
     List<String>? consumableIds,
   }) =>
@@ -516,7 +595,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #id: id,
               #consumableIds: consumableIds,
             }),
-            returnValue: _i9.Future<_i5.Item>.value(
+            returnValue: _i17.Future<_i5.Item>.value(
               _FakeItem_3(
                 this,
                 Invocation.method(#addConsumable, [], {
@@ -526,10 +605,10 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               ),
             ),
           )
-          as _i9.Future<_i5.Item>);
+          as _i17.Future<_i5.Item>);
 
   @override
-  _i9.Future<_i5.Item> addItem({
+  _i17.Future<_i5.Item> addItem({
     required String? name,
     required int? number,
     required String? storageId,
@@ -546,7 +625,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #price: price,
               #expiredAt: expiredAt,
             }),
-            returnValue: _i9.Future<_i5.Item>.value(
+            returnValue: _i17.Future<_i5.Item>.value(
               _FakeItem_3(
                 this,
                 Invocation.method(#addItem, [], {
@@ -560,10 +639,10 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               ),
             ),
           )
-          as _i9.Future<_i5.Item>);
+          as _i17.Future<_i5.Item>);
 
   @override
-  _i9.Future<_i5.Picture> addPicture({
+  _i17.Future<_i5.Picture> addPicture({
     required String? itemId,
     required String? picturePath,
     required double? boxX,
@@ -582,7 +661,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #boxW: boxW,
               #description: description,
             }),
-            returnValue: _i9.Future<_i5.Picture>.value(
+            returnValue: _i17.Future<_i5.Picture>.value(
               _FakePicture_4(
                 this,
                 Invocation.method(#addPicture, [], {
@@ -597,10 +676,10 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               ),
             ),
           )
-          as _i9.Future<_i5.Picture>);
+          as _i17.Future<_i5.Picture>);
 
   @override
-  _i9.Future<_i5.Storage> addStorage({
+  _i17.Future<_i5.Storage> addStorage({
     required String? name,
     String? parentId,
     String? description,
@@ -611,7 +690,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #parentId: parentId,
               #description: description,
             }),
-            returnValue: _i9.Future<_i5.Storage>.value(
+            returnValue: _i17.Future<_i5.Storage>.value(
               _FakeStorage_5(
                 this,
                 Invocation.method(#addStorage, [], {
@@ -622,17 +701,17 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               ),
             ),
           )
-          as _i9.Future<_i5.Storage>);
+          as _i17.Future<_i5.Storage>);
 
   @override
-  _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> consumables({
+  _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> consumables({
     String? after,
     bool? cache = true,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#consumables, [], {#after: after, #cache: cache}),
             returnValue:
-                _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
+                _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
                   _FakeTuple2_6<List<_i5.Item>, _i3.PageInfo>(
                     this,
                     Invocation.method(#consumables, [], {
@@ -642,10 +721,10 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
                   ),
                 ),
           )
-          as _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
+          as _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
 
   @override
-  _i9.Future<_i5.Item> deleteConsumable({
+  _i17.Future<_i5.Item> deleteConsumable({
     required String? id,
     List<String>? consumableIds,
   }) =>
@@ -654,7 +733,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #id: id,
               #consumableIds: consumableIds,
             }),
-            returnValue: _i9.Future<_i5.Item>.value(
+            returnValue: _i17.Future<_i5.Item>.value(
               _FakeItem_3(
                 this,
                 Invocation.method(#deleteConsumable, [], {
@@ -664,10 +743,10 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               ),
             ),
           )
-          as _i9.Future<_i5.Item>);
+          as _i17.Future<_i5.Item>);
 
   @override
-  _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> deletedItems({
+  _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> deletedItems({
     String? after,
     bool? cache = true,
   }) =>
@@ -677,7 +756,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #cache: cache,
             }),
             returnValue:
-                _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
+                _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
                   _FakeTuple2_6<List<_i5.Item>, _i3.PageInfo>(
                     this,
                     Invocation.method(#deletedItems, [], {
@@ -687,37 +766,37 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
                   ),
                 ),
           )
-          as _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
+          as _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
 
   @override
-  _i9.Future<void> deleteItem({String? itemId}) =>
+  _i17.Future<void> deleteItem({String? itemId}) =>
       (super.noSuchMethod(
             Invocation.method(#deleteItem, [], {#itemId: itemId}),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<void> deletePicture({String? pictureId}) =>
+  _i17.Future<void> deletePicture({String? pictureId}) =>
       (super.noSuchMethod(
             Invocation.method(#deletePicture, [], {#pictureId: pictureId}),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<void> deleteStorage({String? storageId}) =>
+  _i17.Future<void> deleteStorage({String? storageId}) =>
       (super.noSuchMethod(
             Invocation.method(#deleteStorage, [], {#storageId: storageId}),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> expiredItems({
+  _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> expiredItems({
     String? after,
     bool? cache = true,
   }) =>
@@ -727,7 +806,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #cache: cache,
             }),
             returnValue:
-                _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
+                _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
                   _FakeTuple2_6<List<_i5.Item>, _i3.PageInfo>(
                     this,
                     Invocation.method(#expiredItems, [], {
@@ -737,44 +816,47 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
                   ),
                 ),
           )
-          as _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
+          as _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
 
   @override
-  _i9.Future<Map<String, List<_i5.Item>>> homePage({bool? cache = true}) =>
+  _i17.Future<Map<String, List<_i5.Item>>> homePage({bool? cache = true}) =>
       (super.noSuchMethod(
             Invocation.method(#homePage, [], {#cache: cache}),
-            returnValue: _i9.Future<Map<String, List<_i5.Item>>>.value(
+            returnValue: _i17.Future<Map<String, List<_i5.Item>>>.value(
               <String, List<_i5.Item>>{},
             ),
           )
-          as _i9.Future<Map<String, List<_i5.Item>>>);
+          as _i17.Future<Map<String, List<_i5.Item>>>);
 
   @override
-  _i9.Future<_i5.Item?> item({required String? id, bool? cache = true}) =>
+  _i17.Future<_i5.Item?> item({required String? id, bool? cache = true}) =>
       (super.noSuchMethod(
             Invocation.method(#item, [], {#id: id, #cache: cache}),
-            returnValue: _i9.Future<_i5.Item?>.value(),
+            returnValue: _i17.Future<_i5.Item?>.value(),
           )
-          as _i9.Future<_i5.Item?>);
+          as _i17.Future<_i5.Item?>);
 
   @override
-  _i9.Future<_i5.Picture?> picture({required String? id, bool? cache = true}) =>
+  _i17.Future<_i5.Picture?> picture({
+    required String? id,
+    bool? cache = true,
+  }) =>
       (super.noSuchMethod(
             Invocation.method(#picture, [], {#id: id, #cache: cache}),
-            returnValue: _i9.Future<_i5.Picture?>.value(),
+            returnValue: _i17.Future<_i5.Picture?>.value(),
           )
-          as _i9.Future<_i5.Picture?>);
+          as _i17.Future<_i5.Picture?>);
 
   @override
-  _i9.Future<List<_i5.Item>> items({String? key, bool? cache = true}) =>
+  _i17.Future<List<_i5.Item>> items({String? key, bool? cache = true}) =>
       (super.noSuchMethod(
             Invocation.method(#items, [], {#key: key, #cache: cache}),
-            returnValue: _i9.Future<List<_i5.Item>>.value(<_i5.Item>[]),
+            returnValue: _i17.Future<List<_i5.Item>>.value(<_i5.Item>[]),
           )
-          as _i9.Future<List<_i5.Item>>);
+          as _i17.Future<List<_i5.Item>>);
 
   @override
-  _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> nearExpiredItems({
+  _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> nearExpiredItems({
     String? after,
     bool? cache = true,
   }) =>
@@ -784,7 +866,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #cache: cache,
             }),
             returnValue:
-                _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
+                _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
                   _FakeTuple2_6<List<_i5.Item>, _i3.PageInfo>(
                     this,
                     Invocation.method(#nearExpiredItems, [], {
@@ -794,10 +876,10 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
                   ),
                 ),
           )
-          as _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
+          as _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
 
   @override
-  _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> recentlyCreatedItems({
+  _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> recentlyCreatedItems({
     String? after,
     bool? cache = true,
   }) =>
@@ -807,7 +889,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #cache: cache,
             }),
             returnValue:
-                _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
+                _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
                   _FakeTuple2_6<List<_i5.Item>, _i3.PageInfo>(
                     this,
                     Invocation.method(#recentlyCreatedItems, [], {
@@ -817,10 +899,10 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
                   ),
                 ),
           )
-          as _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
+          as _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
 
   @override
-  _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> recentlyEditedItems({
+  _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>> recentlyEditedItems({
     String? after,
     bool? cache = true,
   }) =>
@@ -830,7 +912,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #cache: cache,
             }),
             returnValue:
-                _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
+                _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>.value(
                   _FakeTuple2_6<List<_i5.Item>, _i3.PageInfo>(
                     this,
                     Invocation.method(#recentlyEditedItems, [], {
@@ -840,26 +922,26 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
                   ),
                 ),
           )
-          as _i9.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
+          as _i17.Future<_i6.Tuple2<List<_i5.Item>, _i3.PageInfo>>);
 
   @override
-  _i9.Future<void> restoreItem({String? itemId}) =>
+  _i17.Future<void> restoreItem({String? itemId}) =>
       (super.noSuchMethod(
             Invocation.method(#restoreItem, [], {#itemId: itemId}),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i17.Future<void>);
 
   @override
-  _i9.Future<_i6.Tuple2<List<_i5.Storage>, _i3.PageInfo>> rootStorage({
+  _i17.Future<_i6.Tuple2<List<_i5.Storage>, _i3.PageInfo>> rootStorage({
     String? after,
     bool? cache = true,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#rootStorage, [], {#after: after, #cache: cache}),
             returnValue:
-                _i9.Future<_i6.Tuple2<List<_i5.Storage>, _i3.PageInfo>>.value(
+                _i17.Future<_i6.Tuple2<List<_i5.Storage>, _i3.PageInfo>>.value(
                   _FakeTuple2_6<List<_i5.Storage>, _i3.PageInfo>(
                     this,
                     Invocation.method(#rootStorage, [], {
@@ -869,10 +951,10 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
                   ),
                 ),
           )
-          as _i9.Future<_i6.Tuple2<List<_i5.Storage>, _i3.PageInfo>>);
+          as _i17.Future<_i6.Tuple2<List<_i5.Storage>, _i3.PageInfo>>);
 
   @override
-  _i9.Future<_i6.Tuple2<List<_i5.Item>, List<_i5.Storage>>> search(
+  _i17.Future<_i6.Tuple2<List<_i5.Item>, List<_i5.Storage>>> search(
     String? key, {
     bool? isDeleted = false,
     bool? missingStorage = false,
@@ -884,7 +966,9 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               {#isDeleted: isDeleted, #missingStorage: missingStorage},
             ),
             returnValue:
-                _i9.Future<_i6.Tuple2<List<_i5.Item>, List<_i5.Storage>>>.value(
+                _i17.Future<
+                  _i6.Tuple2<List<_i5.Item>, List<_i5.Storage>>
+                >.value(
                   _FakeTuple2_6<List<_i5.Item>, List<_i5.Storage>>(
                     this,
                     Invocation.method(
@@ -895,10 +979,10 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
                   ),
                 ),
           )
-          as _i9.Future<_i6.Tuple2<List<_i5.Item>, List<_i5.Storage>>>);
+          as _i17.Future<_i6.Tuple2<List<_i5.Item>, List<_i5.Storage>>>);
 
   @override
-  _i9.Future<_i6.Tuple3<_i5.Storage, _i3.PageInfo, _i3.PageInfo>?> storage({
+  _i17.Future<_i6.Tuple3<_i5.Storage, _i3.PageInfo, _i3.PageInfo>?> storage({
     required String? id,
     String? storageCursor,
     String? itemCursor,
@@ -912,22 +996,22 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #cache: cache,
             }),
             returnValue:
-                _i9.Future<
+                _i17.Future<
                   _i6.Tuple3<_i5.Storage, _i3.PageInfo, _i3.PageInfo>?
                 >.value(),
           )
-          as _i9.Future<_i6.Tuple3<_i5.Storage, _i3.PageInfo, _i3.PageInfo>?>);
+          as _i17.Future<_i6.Tuple3<_i5.Storage, _i3.PageInfo, _i3.PageInfo>?>);
 
   @override
-  _i9.Future<List<_i5.Storage>> storages({String? key, bool? cache = true}) =>
+  _i17.Future<List<_i5.Storage>> storages({String? key, bool? cache = true}) =>
       (super.noSuchMethod(
             Invocation.method(#storages, [], {#key: key, #cache: cache}),
-            returnValue: _i9.Future<List<_i5.Storage>>.value(<_i5.Storage>[]),
+            returnValue: _i17.Future<List<_i5.Storage>>.value(<_i5.Storage>[]),
           )
-          as _i9.Future<List<_i5.Storage>>);
+          as _i17.Future<List<_i5.Storage>>);
 
   @override
-  _i9.Future<_i5.Item> updateItem({
+  _i17.Future<_i5.Item> updateItem({
     required String? id,
     String? name,
     int? number,
@@ -946,7 +1030,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #price: price,
               #expiredAt: expiredAt,
             }),
-            returnValue: _i9.Future<_i5.Item>.value(
+            returnValue: _i17.Future<_i5.Item>.value(
               _FakeItem_3(
                 this,
                 Invocation.method(#updateItem, [], {
@@ -961,10 +1045,10 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               ),
             ),
           )
-          as _i9.Future<_i5.Item>);
+          as _i17.Future<_i5.Item>);
 
   @override
-  _i9.Future<_i5.Picture> updatePicture({
+  _i17.Future<_i5.Picture> updatePicture({
     required String? id,
     required double? boxX,
     required double? boxY,
@@ -983,7 +1067,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #picturePath: picturePath,
               #description: description,
             }),
-            returnValue: _i9.Future<_i5.Picture>.value(
+            returnValue: _i17.Future<_i5.Picture>.value(
               _FakePicture_4(
                 this,
                 Invocation.method(#updatePicture, [], {
@@ -998,10 +1082,10 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               ),
             ),
           )
-          as _i9.Future<_i5.Picture>);
+          as _i17.Future<_i5.Picture>);
 
   @override
-  _i9.Future<_i5.Storage> updateStorage({
+  _i17.Future<_i5.Storage> updateStorage({
     required String? id,
     String? name,
     String? parentId,
@@ -1014,7 +1098,7 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               #parentId: parentId,
               #description: description,
             }),
-            returnValue: _i9.Future<_i5.Storage>.value(
+            returnValue: _i17.Future<_i5.Storage>.value(
               _FakeStorage_5(
                 this,
                 Invocation.method(#updateStorage, [], {
@@ -1026,5 +1110,639 @@ class MockStorageRepository extends _i1.Mock implements _i12.StorageRepository {
               ),
             ),
           )
-          as _i9.Future<_i5.Storage>);
+          as _i17.Future<_i5.Storage>);
+}
+
+/// A class which mocks [BoardRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockBoardRepository extends _i1.Mock implements _i20.BoardRepository {
+  MockBoardRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.GraphQLApiClient get graphqlApiClient =>
+      (super.noSuchMethod(
+            Invocation.getter(#graphqlApiClient),
+            returnValue: _FakeGraphQLApiClient_1(
+              this,
+              Invocation.getter(#graphqlApiClient),
+            ),
+          )
+          as _i3.GraphQLApiClient);
+
+  @override
+  _i17.Future<_i7.Comment> addComment({
+    required String? topicId,
+    required String? body,
+    String? parentId,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#addComment, [], {
+              #topicId: topicId,
+              #body: body,
+              #parentId: parentId,
+            }),
+            returnValue: _i17.Future<_i7.Comment>.value(
+              _FakeComment_7(
+                this,
+                Invocation.method(#addComment, [], {
+                  #topicId: topicId,
+                  #body: body,
+                  #parentId: parentId,
+                }),
+              ),
+            ),
+          )
+          as _i17.Future<_i7.Comment>);
+
+  @override
+  _i17.Future<_i7.Topic> addTopic({
+    required String? title,
+    required String? description,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#addTopic, [], {
+              #title: title,
+              #description: description,
+            }),
+            returnValue: _i17.Future<_i7.Topic>.value(
+              _FakeTopic_8(
+                this,
+                Invocation.method(#addTopic, [], {
+                  #title: title,
+                  #description: description,
+                }),
+              ),
+            ),
+          )
+          as _i17.Future<_i7.Topic>);
+
+  @override
+  _i17.Future<_i7.Topic> closeTopic({required String? topicId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#closeTopic, [], {#topicId: topicId}),
+            returnValue: _i17.Future<_i7.Topic>.value(
+              _FakeTopic_8(
+                this,
+                Invocation.method(#closeTopic, [], {#topicId: topicId}),
+              ),
+            ),
+          )
+          as _i17.Future<_i7.Topic>);
+
+  @override
+  _i17.Future<_i7.Topic> pinTopic({required String? topicId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#pinTopic, [], {#topicId: topicId}),
+            returnValue: _i17.Future<_i7.Topic>.value(
+              _FakeTopic_8(
+                this,
+                Invocation.method(#pinTopic, [], {#topicId: topicId}),
+              ),
+            ),
+          )
+          as _i17.Future<_i7.Topic>);
+
+  @override
+  _i17.Future<_i7.Topic> unpinTopic({required String? topicId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#unpinTopic, [], {#topicId: topicId}),
+            returnValue: _i17.Future<_i7.Topic>.value(
+              _FakeTopic_8(
+                this,
+                Invocation.method(#unpinTopic, [], {#topicId: topicId}),
+              ),
+            ),
+          )
+          as _i17.Future<_i7.Topic>);
+
+  @override
+  _i17.Future<String?> deleteComment({required String? commentId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteComment, [], {#commentId: commentId}),
+            returnValue: _i17.Future<String?>.value(),
+          )
+          as _i17.Future<String?>);
+
+  @override
+  _i17.Future<String?> deleteTopic({required String? topicId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteTopic, [], {#topicId: topicId}),
+            returnValue: _i17.Future<String?>.value(),
+          )
+          as _i17.Future<String?>);
+
+  @override
+  _i17.Future<_i7.Topic> reopenTopic({required String? topicId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#reopenTopic, [], {#topicId: topicId}),
+            returnValue: _i17.Future<_i7.Topic>.value(
+              _FakeTopic_8(
+                this,
+                Invocation.method(#reopenTopic, [], {#topicId: topicId}),
+              ),
+            ),
+          )
+          as _i17.Future<_i7.Topic>);
+
+  @override
+  _i17.Future<_i6.Tuple3<_i7.Topic, List<_i7.Comment>, _i3.PageInfo>>
+  topicDetail({
+    required String? topicId,
+    bool? descending = false,
+    String? after,
+    bool? cache = true,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#topicDetail, [], {
+              #topicId: topicId,
+              #descending: descending,
+              #after: after,
+              #cache: cache,
+            }),
+            returnValue:
+                _i17.Future<
+                  _i6.Tuple3<_i7.Topic, List<_i7.Comment>, _i3.PageInfo>
+                >.value(
+                  _FakeTuple3_9<_i7.Topic, List<_i7.Comment>, _i3.PageInfo>(
+                    this,
+                    Invocation.method(#topicDetail, [], {
+                      #topicId: topicId,
+                      #descending: descending,
+                      #after: after,
+                      #cache: cache,
+                    }),
+                  ),
+                ),
+          )
+          as _i17.Future<
+            _i6.Tuple3<_i7.Topic, List<_i7.Comment>, _i3.PageInfo>
+          >);
+
+  @override
+  _i17.Future<_i6.Tuple2<List<_i7.Topic>, _i3.PageInfo>> topics({
+    String? after,
+    bool? cache = true,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#topics, [], {#after: after, #cache: cache}),
+            returnValue:
+                _i17.Future<_i6.Tuple2<List<_i7.Topic>, _i3.PageInfo>>.value(
+                  _FakeTuple2_6<List<_i7.Topic>, _i3.PageInfo>(
+                    this,
+                    Invocation.method(#topics, [], {
+                      #after: after,
+                      #cache: cache,
+                    }),
+                  ),
+                ),
+          )
+          as _i17.Future<_i6.Tuple2<List<_i7.Topic>, _i3.PageInfo>>);
+
+  @override
+  _i17.Future<_i7.Comment> updateComment({
+    required String? id,
+    required String? body,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateComment, [], {#id: id, #body: body}),
+            returnValue: _i17.Future<_i7.Comment>.value(
+              _FakeComment_7(
+                this,
+                Invocation.method(#updateComment, [], {#id: id, #body: body}),
+              ),
+            ),
+          )
+          as _i17.Future<_i7.Comment>);
+
+  @override
+  _i17.Future<_i7.Topic> updateTopic({
+    required String? id,
+    required String? title,
+    required String? description,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateTopic, [], {
+              #id: id,
+              #title: title,
+              #description: description,
+            }),
+            returnValue: _i17.Future<_i7.Topic>.value(
+              _FakeTopic_8(
+                this,
+                Invocation.method(#updateTopic, [], {
+                  #id: id,
+                  #title: title,
+                  #description: description,
+                }),
+              ),
+            ),
+          )
+          as _i17.Future<_i7.Topic>);
+}
+
+/// A class which mocks [PushRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPushRepository extends _i1.Mock implements _i3.PushRepository {
+  MockPushRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.GraphQLApiClient get graphqlApiClient =>
+      (super.noSuchMethod(
+            Invocation.getter(#graphqlApiClient),
+            returnValue: _FakeGraphQLApiClient_1(
+              this,
+              Invocation.getter(#graphqlApiClient),
+            ),
+          )
+          as _i3.GraphQLApiClient);
+
+  @override
+  _i17.Future<_i3.MiPushKey> miPushKey() =>
+      (super.noSuchMethod(
+            Invocation.method(#miPushKey, []),
+            returnValue: _i17.Future<_i3.MiPushKey>.value(
+              _FakeMiPushKey_10(this, Invocation.method(#miPushKey, [])),
+            ),
+          )
+          as _i17.Future<_i3.MiPushKey>);
+
+  @override
+  _i17.Future<_i3.MiPush> miPush() =>
+      (super.noSuchMethod(
+            Invocation.method(#miPush, []),
+            returnValue: _i17.Future<_i3.MiPush>.value(
+              _FakeMiPush_11(this, Invocation.method(#miPush, [])),
+            ),
+          )
+          as _i17.Future<_i3.MiPush>);
+
+  @override
+  _i17.Future<_i3.MiPush> updateMiPush({required String? regId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateMiPush, [], {#regId: regId}),
+            returnValue: _i17.Future<_i3.MiPush>.value(
+              _FakeMiPush_11(
+                this,
+                Invocation.method(#updateMiPush, [], {#regId: regId}),
+              ),
+            ),
+          )
+          as _i17.Future<_i3.MiPush>);
+}
+
+/// A class which mocks [VersionRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockVersionRepository extends _i1.Mock implements _i3.VersionRepository {
+  MockVersionRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i17.Future<_i8.Version> get currentVersion =>
+      (super.noSuchMethod(
+            Invocation.getter(#currentVersion),
+            returnValue: _i17.Future<_i8.Version>.value(
+              _FakeVersion_12(this, Invocation.getter(#currentVersion)),
+            ),
+          )
+          as _i17.Future<_i8.Version>);
+
+  @override
+  _i17.Future<String> get deviceAbi =>
+      (super.noSuchMethod(
+            Invocation.getter(#deviceAbi),
+            returnValue: _i17.Future<String>.value(
+              _i16.dummyValue<String>(this, Invocation.getter(#deviceAbi)),
+            ),
+          )
+          as _i17.Future<String>);
+
+  @override
+  _i17.Future<_i8.Version> get onlineVersion =>
+      (super.noSuchMethod(
+            Invocation.getter(#onlineVersion),
+            returnValue: _i17.Future<_i8.Version>.value(
+              _FakeVersion_12(this, Invocation.getter(#onlineVersion)),
+            ),
+          )
+          as _i17.Future<_i8.Version>);
+
+  @override
+  _i17.Future<String> get filename =>
+      (super.noSuchMethod(
+            Invocation.getter(#filename),
+            returnValue: _i17.Future<String>.value(
+              _i16.dummyValue<String>(this, Invocation.getter(#filename)),
+            ),
+          )
+          as _i17.Future<String>);
+
+  @override
+  _i17.Future<bool> needUpdate() =>
+      (super.noSuchMethod(
+            Invocation.method(#needUpdate, []),
+            returnValue: _i17.Future<bool>.value(false),
+          )
+          as _i17.Future<bool>);
+
+  @override
+  _i17.Future<String> updateUrl() =>
+      (super.noSuchMethod(
+            Invocation.method(#updateUrl, []),
+            returnValue: _i17.Future<String>.value(
+              _i16.dummyValue<String>(this, Invocation.method(#updateUrl, [])),
+            ),
+          )
+          as _i17.Future<String>);
+}
+
+/// A class which mocks [GoRouter].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGoRouter extends _i1.Mock implements _i21.GoRouter {
+  MockGoRouter() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i9.GoRouterState get state =>
+      (super.noSuchMethod(
+            Invocation.getter(#state),
+            returnValue: _FakeGoRouterState_13(this, Invocation.getter(#state)),
+          )
+          as _i9.GoRouterState);
+
+  @override
+  _i10.RouteConfiguration get configuration =>
+      (super.noSuchMethod(
+            Invocation.getter(#configuration),
+            returnValue: _FakeRouteConfiguration_14(
+              this,
+              Invocation.getter(#configuration),
+            ),
+          )
+          as _i10.RouteConfiguration);
+
+  @override
+  _i11.BackButtonDispatcher get backButtonDispatcher =>
+      (super.noSuchMethod(
+            Invocation.getter(#backButtonDispatcher),
+            returnValue: _FakeBackButtonDispatcher_15(
+              this,
+              Invocation.getter(#backButtonDispatcher),
+            ),
+          )
+          as _i11.BackButtonDispatcher);
+
+  @override
+  _i12.GoRouterDelegate get routerDelegate =>
+      (super.noSuchMethod(
+            Invocation.getter(#routerDelegate),
+            returnValue: _FakeGoRouterDelegate_16(
+              this,
+              Invocation.getter(#routerDelegate),
+            ),
+          )
+          as _i12.GoRouterDelegate);
+
+  @override
+  _i13.GoRouteInformationProvider get routeInformationProvider =>
+      (super.noSuchMethod(
+            Invocation.getter(#routeInformationProvider),
+            returnValue: _FakeGoRouteInformationProvider_17(
+              this,
+              Invocation.getter(#routeInformationProvider),
+            ),
+          )
+          as _i13.GoRouteInformationProvider);
+
+  @override
+  _i14.GoRouteInformationParser get routeInformationParser =>
+      (super.noSuchMethod(
+            Invocation.getter(#routeInformationParser),
+            returnValue: _FakeGoRouteInformationParser_18(
+              this,
+              Invocation.getter(#routeInformationParser),
+            ),
+          )
+          as _i14.GoRouteInformationParser);
+
+  @override
+  bool get overridePlatformDefaultLocation =>
+      (super.noSuchMethod(
+            Invocation.getter(#overridePlatformDefaultLocation),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  set configuration(_i10.RouteConfiguration? value) => super.noSuchMethod(
+    Invocation.setter(#configuration, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  set routerDelegate(_i12.GoRouterDelegate? value) => super.noSuchMethod(
+    Invocation.setter(#routerDelegate, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  set routeInformationProvider(_i13.GoRouteInformationProvider? value) =>
+      super.noSuchMethod(
+        Invocation.setter(#routeInformationProvider, value),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  set routeInformationParser(_i14.GoRouteInformationParser? value) =>
+      super.noSuchMethod(
+        Invocation.setter(#routeInformationParser, value),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool canPop() =>
+      (super.noSuchMethod(Invocation.method(#canPop, []), returnValue: false)
+          as bool);
+
+  @override
+  String namedLocation(
+    String? name, {
+    Map<String, String>? pathParameters = const {},
+    Map<String, dynamic>? queryParameters = const {},
+    String? fragment,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #namedLocation,
+              [name],
+              {
+                #pathParameters: pathParameters,
+                #queryParameters: queryParameters,
+                #fragment: fragment,
+              },
+            ),
+            returnValue: _i16.dummyValue<String>(
+              this,
+              Invocation.method(
+                #namedLocation,
+                [name],
+                {
+                  #pathParameters: pathParameters,
+                  #queryParameters: queryParameters,
+                  #fragment: fragment,
+                },
+              ),
+            ),
+          )
+          as String);
+
+  @override
+  void go(String? location, {Object? extra}) => super.noSuchMethod(
+    Invocation.method(#go, [location], {#extra: extra}),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void restore(_i22.RouteMatchList? matchList) => super.noSuchMethod(
+    Invocation.method(#restore, [matchList]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void goNamed(
+    String? name, {
+    Map<String, String>? pathParameters = const {},
+    Map<String, dynamic>? queryParameters = const {},
+    Object? extra,
+    String? fragment,
+  }) => super.noSuchMethod(
+    Invocation.method(
+      #goNamed,
+      [name],
+      {
+        #pathParameters: pathParameters,
+        #queryParameters: queryParameters,
+        #extra: extra,
+        #fragment: fragment,
+      },
+    ),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  _i17.Future<T?> push<T extends Object?>(String? location, {Object? extra}) =>
+      (super.noSuchMethod(
+            Invocation.method(#push, [location], {#extra: extra}),
+            returnValue: _i17.Future<T?>.value(),
+          )
+          as _i17.Future<T?>);
+
+  @override
+  _i17.Future<T?> pushNamed<T extends Object?>(
+    String? name, {
+    Map<String, String>? pathParameters = const {},
+    Map<String, dynamic>? queryParameters = const {},
+    Object? extra,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #pushNamed,
+              [name],
+              {
+                #pathParameters: pathParameters,
+                #queryParameters: queryParameters,
+                #extra: extra,
+              },
+            ),
+            returnValue: _i17.Future<T?>.value(),
+          )
+          as _i17.Future<T?>);
+
+  @override
+  _i17.Future<T?> pushReplacement<T extends Object?>(
+    String? location, {
+    Object? extra,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#pushReplacement, [location], {#extra: extra}),
+            returnValue: _i17.Future<T?>.value(),
+          )
+          as _i17.Future<T?>);
+
+  @override
+  _i17.Future<T?> pushReplacementNamed<T extends Object?>(
+    String? name, {
+    Map<String, String>? pathParameters = const {},
+    Map<String, dynamic>? queryParameters = const {},
+    Object? extra,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #pushReplacementNamed,
+              [name],
+              {
+                #pathParameters: pathParameters,
+                #queryParameters: queryParameters,
+                #extra: extra,
+              },
+            ),
+            returnValue: _i17.Future<T?>.value(),
+          )
+          as _i17.Future<T?>);
+
+  @override
+  _i17.Future<T?> replace<T>(String? location, {Object? extra}) =>
+      (super.noSuchMethod(
+            Invocation.method(#replace, [location], {#extra: extra}),
+            returnValue: _i17.Future<T?>.value(),
+          )
+          as _i17.Future<T?>);
+
+  @override
+  _i17.Future<T?> replaceNamed<T>(
+    String? name, {
+    Map<String, String>? pathParameters = const {},
+    Map<String, dynamic>? queryParameters = const {},
+    Object? extra,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #replaceNamed,
+              [name],
+              {
+                #pathParameters: pathParameters,
+                #queryParameters: queryParameters,
+                #extra: extra,
+              },
+            ),
+            returnValue: _i17.Future<T?>.value(),
+          )
+          as _i17.Future<T?>);
+
+  @override
+  void pop<T extends Object?>([T? result]) => super.noSuchMethod(
+    Invocation.method(#pop, [result]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void refresh() => super.noSuchMethod(
+    Invocation.method(#refresh, []),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void dispose() => super.noSuchMethod(
+    Invocation.method(#dispose, []),
+    returnValueForMissingStub: null,
+  );
 }
