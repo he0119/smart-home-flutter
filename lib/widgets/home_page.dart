@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/conditional_parent_widget.dart';
 import 'package:smarthome/widgets/drawer.dart';
+import 'package:smarthome/widgets/navigations.dart';
 import 'package:smarthome/widgets/tab_selector.dart';
 
 class MyHomePage extends ConsumerWidget {
@@ -137,5 +138,77 @@ class MySliverScaffold extends StatelessWidget {
       bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingActionButton,
     );
+  }
+}
+
+class AdaptiveHomePage extends ConsumerWidget {
+  final List<Widget>? actions;
+  final List<Widget>? slivers;
+  final Widget? floatingActionButton;
+  final Future<void> Function()? onRefresh;
+
+  const AdaptiveHomePage({
+    super.key,
+    this.actions,
+    this.slivers,
+    this.floatingActionButton,
+    this.onRefresh,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final useSideNavRail = MediaQuery.of(context).size.width >= 600;
+    final location = GoRouterState.of(context).matchedLocation;
+
+    return Scaffold(
+      body: Row(
+        children: <Widget>[
+          if (useSideNavRail)
+            SideNavBar(
+              selectedIndex: _getCurrentTab(location).index,
+              onDestinationSelected: (index) {
+                switch (AppTab.values[index]) {
+                  case AppTab.storage:
+                    context.go('/storage');
+                    break;
+                  case AppTab.blog:
+                    context.go('/blog');
+                    break;
+                  case AppTab.board:
+                    context.go('/board');
+                    break;
+                }
+              },
+            ),
+          Expanded(child: CustomScrollView(slivers: [...?slivers])),
+        ],
+      ),
+      bottomNavigationBar: useSideNavRail
+          ? null
+          : BottomNavBar(
+              selectedIndex: _getCurrentTab(location).index,
+              onDestinationSelected: (int index) {
+                switch (AppTab.values[index]) {
+                  case AppTab.storage:
+                    context.go('/storage');
+                    break;
+                  case AppTab.blog:
+                    context.go('/blog');
+                    break;
+                  case AppTab.board:
+                    context.go('/board');
+                    break;
+                }
+              },
+            ),
+      floatingActionButton: floatingActionButton,
+    );
+  }
+
+  AppTab _getCurrentTab(String location) {
+    if (location.startsWith('/storage')) return AppTab.storage;
+    if (location.startsWith('/blog')) return AppTab.blog;
+    if (location.startsWith('/board')) return AppTab.board;
+    return AppTab.storage;
   }
 }

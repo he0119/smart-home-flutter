@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/utils/launch_url.dart';
@@ -11,24 +10,15 @@ import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 import 'package:smarthome/widgets/webview.dart';
 
-class BlogHomePage extends StatelessWidget {
+/// 利用 WebView 实现的博客页面
+class BlogHomePage extends ConsumerStatefulWidget {
   const BlogHomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const BlogHomeScreen();
-  }
+  ConsumerState<BlogHomePage> createState() => _BlogHomePageState();
 }
 
-/// 利用 WebView 实现的博客页面
-class BlogHomeScreen extends ConsumerStatefulWidget {
-  const BlogHomeScreen({super.key});
-
-  @override
-  ConsumerState<BlogHomeScreen> createState() => _BlogHomeScreenState();
-}
-
-class _BlogHomeScreenState extends ConsumerState<BlogHomeScreen> {
+class _BlogHomePageState extends ConsumerState<BlogHomePage> {
   late NestedWebviewController _controller;
 
   @override
@@ -37,8 +27,7 @@ class _BlogHomeScreenState extends ConsumerState<BlogHomeScreen> {
     if (!kIsWeb && !Platform.isWindows) {
       _controller = NestedWebviewController(settings.blogUrl);
     }
-    return MyHomePage(
-      title: AppTab.blog.name,
+    return AdaptiveHomePage(
       actions: [
         Tooltip(
           message: '进入管理页面',
@@ -89,20 +78,20 @@ class _BlogHomeScreenState extends ConsumerState<BlogHomeScreen> {
         child: const Icon(Icons.open_in_new),
       ),
       // FIXME: 目前没法通过返回键退出应用
-      canPop: () => false,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) {
-          return;
-        }
+      // canPop: () => false,
+      // onPopInvokedWithResult: (didPop, result) async {
+      //   if (didPop) {
+      //     return;
+      //   }
 
-        final NavigatorState navigator = Navigator.of(context);
-        final canGoBack = await _controller.webviewController.canGoBack();
-        if (canGoBack) {
-          await _controller.webviewController.goBack();
-        } else {
-          navigator.pop();
-        }
-      },
+      //   final NavigatorState navigator = Navigator.of(context);
+      //   final canGoBack = await _controller.webviewController.canGoBack();
+      //   if (canGoBack) {
+      //     await _controller.webviewController.goBack();
+      //   } else {
+      //     navigator.pop();
+      //   }
+      // },
     );
   }
 }

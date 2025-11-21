@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/widgets/scan_qr_icon_button.dart';
@@ -16,62 +15,37 @@ import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 
-class StorageHomePage extends StatelessWidget {
+class StorageHomePage extends ConsumerWidget {
   const StorageHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const StorageHomeScreen();
-  }
-}
-
-class StorageHomeScreen extends ConsumerWidget {
-  const StorageHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(storageHomeProvider);
-    return Consumer(
-      builder: (context, ref, child) {
-        return MyHomePage(
-          title: AppTab.storage.name,
-          actions: <Widget>[
-            // 仅支持网页和安卓
-            if (kIsWeb || Platform.isAndroid) const ScanQRIconButton(),
-            const SearchIconButton(),
-          ],
-          floatingActionButton: FloatingActionButton(
-            tooltip: '添加物品',
-            onPressed: () async {
-              await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const ItemEditPage(isEditing: false),
-                ),
-              );
-            },
-            child: const Icon(Icons.add),
-          ),
-          slivers: _buildSlivers(context, ref, state),
-          onRefresh: (state.status == StorageHomeStatus.success)
-              ? () async {
-                  ref
-                      .read(storageHomeProvider.notifier)
-                      .fetch(itemType: state.itemType, cache: false);
-                }
-              : null,
-          canPop: () {
-            return state.status == StorageHomeStatus.success &&
-                state.itemType == ItemType.all;
-          },
-          onPopInvokedWithResult: (didPop, result) {
-            if (state.status == StorageHomeStatus.success) {
+    return AdaptiveHomePage(
+      actions: <Widget>[
+        // 仅支持网页和安卓
+        if (kIsWeb || Platform.isAndroid) const ScanQRIconButton(),
+        const SearchIconButton(),
+      ],
+      floatingActionButton: FloatingActionButton(
+        tooltip: '添加物品',
+        onPressed: () async {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const ItemEditPage(isEditing: false),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
+      slivers: _buildSlivers(context, ref, state),
+      onRefresh: (state.status == StorageHomeStatus.success)
+          ? () async {
               ref
                   .read(storageHomeProvider.notifier)
-                  .fetch(itemType: ItemType.all);
+                  .fetch(itemType: state.itemType, cache: false);
             }
-          },
-        );
-      },
+          : null,
     );
   }
 
