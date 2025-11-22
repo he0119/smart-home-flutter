@@ -37,6 +37,9 @@ void main() {
       when(
         mockVersionRepository.onlineVersion,
       ).thenAnswer((_) async => Version.parse('2.0.0'));
+      when(
+        mockVersionRepository.changelog,
+      ).thenAnswer((_) => 'Bug fixes and improvements');
 
       await container.read(updateProvider.notifier).checkUpdate();
 
@@ -45,6 +48,7 @@ void main() {
       expect(state.url, 'https://example.com/app.apk');
       expect(state.version, Version.parse('2.0.0'));
       expect(state.errorMessage, isNull);
+      expect(state.changelog, 'Bug fixes and improvements');
     },
   );
 
