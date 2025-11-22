@@ -181,18 +181,18 @@ class StorageHome extends _$StorageHome {
     switch (itemType) {
       case ItemType.expired:
         final results = await storageRepository.expiredItems(cache: cache);
-        state = state.copyWith(
+        state = StorageHomeState(
           status: StorageHomeStatus.success,
-          expiredItems: () => results.item1,
+          expiredItems: results.item1,
           pageInfo: results.item2,
           itemType: ItemType.expired,
         );
         break;
       case ItemType.nearExpired:
         final results = await storageRepository.nearExpiredItems(cache: cache);
-        state = state.copyWith(
+        state = StorageHomeState(
           status: StorageHomeStatus.success,
-          nearExpiredItems: () => results.item1,
+          nearExpiredItems: results.item1,
           pageInfo: results.item2,
           itemType: ItemType.nearExpired,
         );
@@ -201,9 +201,9 @@ class StorageHome extends _$StorageHome {
         final results = await storageRepository.recentlyCreatedItems(
           cache: cache,
         );
-        state = state.copyWith(
+        state = StorageHomeState(
           status: StorageHomeStatus.success,
-          recentlyCreatedItems: () => results.item1,
+          recentlyCreatedItems: results.item1,
           pageInfo: results.item2,
           itemType: ItemType.recentlyCreated,
         );
@@ -212,21 +212,21 @@ class StorageHome extends _$StorageHome {
         final results = await storageRepository.recentlyEditedItems(
           cache: cache,
         );
-        state = state.copyWith(
+        state = StorageHomeState(
           status: StorageHomeStatus.success,
-          recentlyEditedItems: () => results.item1,
+          recentlyEditedItems: results.item1,
           pageInfo: results.item2,
           itemType: ItemType.recentlyEdited,
         );
         break;
       case ItemType.all:
         final homepage = await storageRepository.homePage(cache: cache);
-        state = state.copyWith(
+        state = StorageHomeState(
           status: StorageHomeStatus.success,
-          recentlyCreatedItems: () => homepage['recentlyCreatedItems'],
-          recentlyEditedItems: () => homepage['recentlyEditedItems'],
-          expiredItems: () => homepage['expiredItems'],
-          nearExpiredItems: () => homepage['nearExpiredItems'],
+          recentlyCreatedItems: homepage['recentlyCreatedItems'],
+          recentlyEditedItems: homepage['recentlyEditedItems'],
+          expiredItems: homepage['expiredItems'],
+          nearExpiredItems: homepage['nearExpiredItems'],
           itemType: ItemType.all,
           pageInfo: const PageInfo(hasNextPage: false),
         );
