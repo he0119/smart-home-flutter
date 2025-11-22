@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
@@ -11,6 +13,8 @@ class VersionRepository {
   Version? _onlineVersion;
   String? _deviceAbi;
   bool _fileExist = false;
+  String? _downloadUrl;
+  String? _changelog;
 
   Future<Version> get currentVersion async {
     _currentVersion ??= await _getCurrentVersion();
@@ -45,8 +49,13 @@ class VersionRepository {
   Future<String> get filename async =>
       'app-prod-${await deviceAbi}-release.apk';
 
+  String? get changelog => _changelog;
+
   /// 更新文件的下载地址
   Future<String> updateUrl() async {
+    if (_downloadUrl != null) {
+      return _downloadUrl!;
+    }
     return 'https://github.com/he0119/smart-home-flutter/releases/download/v${await onlineVersion}/${await filename}';
   }
 
@@ -75,24 +84,37 @@ class VersionRepository {
   }
 
   /// 网上的版本
-  /// 通过 GitHub Releases 页面获取最新的版本号
+  /// 通过 GitHub Releases API 获取最新的版本号
   Future<Version> _getOnlineVersion() async {
-    final versionRegex = RegExp(
-      r'releases/tag/v([\d.]+)(-([0-9A-Za-z\-.]+))?(\+([0-9A-Za-z\-.]+))?',
-    );
-    const url = 'https://github.com/he0119/smart-home-flutter/releases/latest';
+    const url =
+        'https://api.github.com/repos/he0119/smart-home-flutter/releases';
     try {
       final response = await http.get(Uri.parse(url));
-      _fileExist = response.body.contains(await filename);
-      final Match? match = versionRegex.firstMatch(response.body);
-      if (match == null) {
+      final List<dynamic> releases = jsonDecode(response.body);
+      if (releases.isEmpty) {
         throw const NetworkException('检查更新失败，请重试');
-      } else {
-        final versionName = match.group(1);
-        _log.fine('最新的版本号为 { $versionName }');
-        return Version.parse(versionName!);
       }
-    } on http.ClientException catch (e) {
+      final latest = releases.first;
+      final tagName = latest['tag_name'] as String;
+      _changelog = latest['body'] as String?;
+      final versionStr = tagName.startsWith('v')
+          ? tagName.substring(1)
+          : tagName;
+
+      final assets = latest['assets'] as List<dynamic>;
+      final targetFilename = await filename;
+      _fileExist = false;
+      for (final asset in assets) {
+        if (asset['name'] == targetFilename) {
+          _downloadUrl = asset['browser_download_url'];
+          _fileExist = true;
+          break;
+        }
+      }
+
+      _log.fine('最新的版本号为 { $versionStr }');
+      return Version.parse(versionStr);
+    } catch (e) {
       _log.warning(e);
       throw const NetworkException('检查更新失败，请重试');
     }

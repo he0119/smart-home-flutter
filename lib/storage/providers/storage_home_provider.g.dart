@@ -44,7 +44,7 @@ final class StorageHomeProvider
   }
 }
 
-String _$storageHomeHash() => r'cfaf3454cff2c993cede642966d0b0dec0068a0e';
+String _$storageHomeHash() => r'16ebfd8a0c059eabf54cfa235ec2e5ee360a67a6';
 
 /// Storage home notifier
 

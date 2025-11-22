@@ -14,12 +14,14 @@ class UpdateInfo {
   final String? url;
   final Version? version;
   final String? errorMessage;
+  final String? changelog;
 
   const UpdateInfo({
     this.needUpdate = false,
     this.url,
     this.version,
     this.errorMessage,
+    this.changelog,
   });
 
   UpdateInfo copyWith({
@@ -27,18 +29,25 @@ class UpdateInfo {
     String? Function()? url,
     Version? Function()? version,
     String? Function()? errorMessage,
+    String? Function()? changelog,
   }) {
     return UpdateInfo(
       needUpdate: needUpdate ?? this.needUpdate,
       url: url != null ? url() : this.url,
       version: version != null ? version() : this.version,
       errorMessage: errorMessage != null ? errorMessage() : this.errorMessage,
+      changelog: changelog != null ? changelog() : this.changelog,
     );
+  }
+
+  @override
+  String toString() {
+    return 'UpdateInfo(needUpdate: $needUpdate, url: $url, version: $version, errorMessage: $errorMessage)';
   }
 }
 
 /// Update Notifier
-@riverpod
+@Riverpod(keepAlive: true)
 class Update extends _$Update {
   @visibleForTesting
   static bool? debugIsAndroid;
@@ -47,8 +56,6 @@ class Update extends _$Update {
 
   @override
   UpdateInfo build() {
-    // 自动检查更新
-    checkUpdate();
     return const UpdateInfo();
   }
 
@@ -62,10 +69,12 @@ class Update extends _$Update {
         if (needUpdate) {
           final url = await versionRepository.updateUrl();
           final version = await versionRepository.onlineVersion;
+          final changelog = versionRepository.changelog;
           state = UpdateInfo(
             needUpdate: needUpdate,
             url: url,
             version: version,
+            changelog: changelog,
           );
         } else {
           state = UpdateInfo(needUpdate: needUpdate);

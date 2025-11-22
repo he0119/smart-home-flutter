@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/lang/zh-CN/
 ### Added
 
 - 添加 OIDC 登录功能
+- 更新提示中显示更新日志
 
 ### Removed
 

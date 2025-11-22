@@ -22,7 +22,7 @@ final class UpdateProvider extends $NotifierProvider<Update, UpdateInfo> {
         argument: null,
         retry: null,
         name: r'updateProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -43,7 +43,7 @@ final class UpdateProvider extends $NotifierProvider<Update, UpdateInfo> {
   }
 }
 
-String _$updateHash() => r'593b943735df2a71975dd41ebf2c3d1acdfd6f17';
+String _$updateHash() => r'34b3c650b0ea484df9a5a89b60ecd395d10c897b';
 
 /// Update Notifier
 
