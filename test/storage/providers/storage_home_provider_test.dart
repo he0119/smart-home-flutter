@@ -132,4 +132,36 @@ void main() {
     final state = container.read(storageHomeProvider);
     expect(state.expiredItems?.map((e) => e.id), ['item-1', 'item-2']);
   });
+
+  test('fetch with specific item type clears other items', () async {
+    when(mockStorageRepository.homePage(cache: true)).thenAnswer(
+      (_) async => {
+        'recentlyCreatedItems': [buildItem(id: 'created')],
+        'recentlyEditedItems': <Item>[],
+        'expiredItems': <Item>[],
+        'nearExpiredItems': <Item>[],
+      },
+    );
+    when(mockStorageRepository.expiredItems(cache: false)).thenAnswer(
+      (_) async => Tuple2([buildItem(id: 'expired')], buildPageInfo()),
+    );
+
+    keepProviderAlive(container, storageHomeProvider);
+    container.read(storageHomeProvider);
+    await _flush();
+
+    // Verify initial state
+    var state = container.read(storageHomeProvider);
+    expect(state.recentlyCreatedItems, isNotEmpty);
+    expect(state.expiredItems, isEmpty);
+
+    await container
+        .read(storageHomeProvider.notifier)
+        .fetch(itemType: ItemType.expired, cache: false);
+
+    state = container.read(storageHomeProvider);
+    expect(state.itemType, ItemType.expired);
+    expect(state.expiredItems?.first.id, 'expired');
+    expect(state.recentlyCreatedItems, isNull);
+  });
 }
