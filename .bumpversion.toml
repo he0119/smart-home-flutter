@@ -2,6 +2,7 @@
 current_version = "0.12.0"
 commit = true
 message = "chore(release): {new_version}"
+pre_commit_hooks = ["git switch -c release/%BVHOOK_NEW_VERSION%"]
 
 [[tool.bumpversion.files]]
 filename = "pubspec.yaml"
