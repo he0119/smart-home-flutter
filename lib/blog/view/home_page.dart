@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/utils/launch_url.dart';
@@ -88,19 +88,18 @@ class _BlogHomeScreenState extends ConsumerState<BlogHomeScreen> {
         },
         child: const Icon(Icons.open_in_new),
       ),
-      // FIXME: 目前没法通过返回键退出应用
       canPop: () => false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) {
           return;
         }
 
-        final NavigatorState navigator = Navigator.of(context);
         final canGoBack = await _controller.webviewController.canGoBack();
         if (canGoBack) {
           await _controller.webviewController.goBack();
         } else {
-          navigator.pop();
+          // 退出应用
+          SystemNavigator.pop();
         }
       },
     );
