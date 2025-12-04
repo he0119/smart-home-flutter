@@ -6,7 +6,7 @@ publish_to: "none"
 
 environment:
   sdk: ">=3.10.0 <4.0.0"
-  flutter: "3.38.1" # This must be exact! No ranges allowed.
+  flutter: "3.38.4" # This must be exact! No ranges allowed.
 
 dependencies:
   flutter:
@@ -40,8 +40,8 @@ dependencies:
   shared_preferences: ^2.5.3
   url_launcher: ^6.3.2
   quick_actions: ^1.1.0
-  android_id: ^0.5.0
-  device_info_plus: ^12.2.0
+  android_id: 0.5.1
+  device_info_plus: 12.3.0
   package_info_plus: ^9.0.0
   share_plus: ^12.0.1
   flutter_keyboard_visibility: ^6.0.0
@@ -73,15 +73,15 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^2.10.3
-  json_serializable: ^6.11.1
+  build_runner: 2.10.4
+  json_serializable: 6.11.3
   riverpod_generator: ^3.0.3
   flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
   sentry_dart_plugin: ^3.2.0
   custom_lint: ^0.8.1
   riverpod_lint: ^3.0.3
-  mockito: ^5.5.1
+  mockito: 5.6.1
 
 flutter:
   uses-material-design: true
