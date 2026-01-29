@@ -94,7 +94,7 @@ jobs:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
       - name: Upload split-per-abi apks
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: github.event_name != 'pull_request'
         with:
           name: android
@@ -133,7 +133,7 @@ jobs:
 
       - name: Upload web version
         id: artifact-upload-step
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: github.event_name != 'pull_request'
         with:
           name: web
@@ -177,7 +177,7 @@ jobs:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
       - name: Upload windows version
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: github.event_name != 'pull_request'
         with:
           name: windows
@@ -232,7 +232,7 @@ jobs:
     if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
 
       - name: Compress files
         run: |
