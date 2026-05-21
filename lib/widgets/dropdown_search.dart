@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class MyDropdownSearch<T> extends StatelessWidget {
   final String? label;
   final DropdownSearchOnFind<T>? items;
-  final ValueChanged<T?>? onChanged;
+  final ValueChanged<T?>? onSelected;
   final T? selectedItem;
   final bool showClearButton;
   final String? Function(T?)? validator;
@@ -14,7 +14,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
     super.key,
     this.label,
     this.items,
-    this.onChanged,
+    this.onSelected,
     this.selectedItem,
     this.showClearButton = false,
     this.validator,
@@ -55,7 +55,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
         clearButtonProps: const ClearButtonProps(isVisible: true),
       ),
       items: items,
-      onChanged: onChanged,
+      onSelected: onSelected,
       selectedItem: selectedItem,
       validator: validator,
       autoValidateMode: autoValidateMode,

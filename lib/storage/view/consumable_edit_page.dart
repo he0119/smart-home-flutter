@@ -91,7 +91,7 @@ class _ConsumableEditPageState extends ConsumerState<ConsumableEditPage> {
                   return items;
                 },
                 showClearButton: true,
-                onChanged: (Item? value) {
+                onSelected: (Item? value) {
                   setState(() {
                     selectedItem = value;
                   });
