@@ -29,3 +29,5 @@
 - 修改带 `part '*.g.dart'` 的 provider/model 后，记得重新跑 build_runner。
 - 不要手改 `*.g.dart`、`app_localizations*.dart`、`test/mocks/mocks.mocks.dart` 这类生成文件。
 - 改动后优先跑 `flutter analyze --no-pub`，涉及逻辑再跑相关测试或全量 `flutter test --no-pub`。
+- 提交和 PR 标题遵循仓库已有风格：使用 conventional commit，优先中文描述，例如 `fix(storage): 修复...`、`style: 修正...`。
+- 分支名也沿用仓库习惯，例如 `fix/...`、`feat/...`、`test/...`、`chore/...`，不要默认加 `codex/` 或 `[codex]` 前缀。
