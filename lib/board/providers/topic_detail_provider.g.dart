@@ -11,13 +11,13 @@ part of 'topic_detail_provider.dart';
 /// Topic detail notifier
 
 @ProviderFor(TopicDetail)
-const topicDetailProvider = TopicDetailFamily._();
+final topicDetailProvider = TopicDetailFamily._();
 
 /// Topic detail notifier
 final class TopicDetailProvider
     extends $NotifierProvider<TopicDetail, TopicDetailState> {
   /// Topic detail notifier
-  const TopicDetailProvider._({
+  TopicDetailProvider._({
     required TopicDetailFamily super.from,
     required String super.argument,
   }) : super(
@@ -74,7 +74,7 @@ final class TopicDetailFamily extends $Family
           TopicDetailState,
           String
         > {
-  const TopicDetailFamily._()
+  TopicDetailFamily._()
     : super(
         retry: null,
         name: r'topicDetailProvider',
@@ -102,7 +102,6 @@ abstract class _$TopicDetail extends $Notifier<TopicDetailState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<TopicDetailState, TopicDetailState>;
     final element =
         ref.element
@@ -112,6 +111,6 @@ abstract class _$TopicDetail extends $Notifier<TopicDetailState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

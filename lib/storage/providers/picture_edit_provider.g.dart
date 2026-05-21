@@ -11,13 +11,13 @@ part of 'picture_edit_provider.dart';
 /// Picture edit notifier
 
 @ProviderFor(PictureEdit)
-const pictureEditProvider = PictureEditProvider._();
+final pictureEditProvider = PictureEditProvider._();
 
 /// Picture edit notifier
 final class PictureEditProvider
     extends $NotifierProvider<PictureEdit, PictureEditState> {
   /// Picture edit notifier
-  const PictureEditProvider._()
+  PictureEditProvider._()
     : super(
         from: null,
         argument: null,
@@ -53,7 +53,6 @@ abstract class _$PictureEdit extends $Notifier<PictureEditState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<PictureEditState, PictureEditState>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$PictureEdit extends $Notifier<PictureEditState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

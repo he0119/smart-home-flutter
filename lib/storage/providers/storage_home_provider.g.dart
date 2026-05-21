@@ -11,13 +11,13 @@ part of 'storage_home_provider.dart';
 /// Storage home notifier
 
 @ProviderFor(StorageHome)
-const storageHomeProvider = StorageHomeProvider._();
+final storageHomeProvider = StorageHomeProvider._();
 
 /// Storage home notifier
 final class StorageHomeProvider
     extends $NotifierProvider<StorageHome, StorageHomeState> {
   /// Storage home notifier
-  const StorageHomeProvider._()
+  StorageHomeProvider._()
     : super(
         from: null,
         argument: null,
@@ -53,7 +53,6 @@ abstract class _$StorageHome extends $Notifier<StorageHomeState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<StorageHomeState, StorageHomeState>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$StorageHome extends $Notifier<StorageHomeState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

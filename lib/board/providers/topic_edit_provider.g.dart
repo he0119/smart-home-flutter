@@ -11,13 +11,13 @@ part of 'topic_edit_provider.dart';
 /// Topic edit notifier
 
 @ProviderFor(TopicEdit)
-const topicEditProvider = TopicEditProvider._();
+final topicEditProvider = TopicEditProvider._();
 
 /// Topic edit notifier
 final class TopicEditProvider
     extends $NotifierProvider<TopicEdit, TopicEditState> {
   /// Topic edit notifier
-  const TopicEditProvider._()
+  TopicEditProvider._()
     : super(
         from: null,
         argument: null,
@@ -53,7 +53,6 @@ abstract class _$TopicEdit extends $Notifier<TopicEditState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<TopicEditState, TopicEditState>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$TopicEdit extends $Notifier<TopicEditState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

@@ -11,12 +11,12 @@ part of 'search_provider.dart';
 /// Search notifier
 
 @ProviderFor(Search)
-const searchProvider = SearchProvider._();
+final searchProvider = SearchProvider._();
 
 /// Search notifier
 final class SearchProvider extends $NotifierProvider<Search, SearchState> {
   /// Search notifier
-  const SearchProvider._()
+  SearchProvider._()
     : super(
         from: null,
         argument: null,
@@ -52,7 +52,6 @@ abstract class _$Search extends $Notifier<SearchState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<SearchState, SearchState>;
     final element =
         ref.element
@@ -62,6 +61,6 @@ abstract class _$Search extends $Notifier<SearchState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

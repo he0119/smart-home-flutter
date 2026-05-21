@@ -11,13 +11,13 @@ part of 'consumables_provider.dart';
 /// Consumables notifier
 
 @ProviderFor(Consumables)
-const consumablesProvider = ConsumablesProvider._();
+final consumablesProvider = ConsumablesProvider._();
 
 /// Consumables notifier
 final class ConsumablesProvider
     extends $NotifierProvider<Consumables, ConsumablesState> {
   /// Consumables notifier
-  const ConsumablesProvider._()
+  ConsumablesProvider._()
     : super(
         from: null,
         argument: null,
@@ -53,7 +53,6 @@ abstract class _$Consumables extends $Notifier<ConsumablesState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<ConsumablesState, ConsumablesState>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$Consumables extends $Notifier<ConsumablesState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

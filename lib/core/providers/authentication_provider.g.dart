@@ -11,13 +11,13 @@ part of 'authentication_provider.dart';
 /// Authentication Notifier
 
 @ProviderFor(Authentication)
-const authenticationProvider = AuthenticationProvider._();
+final authenticationProvider = AuthenticationProvider._();
 
 /// Authentication Notifier
 final class AuthenticationProvider
     extends $NotifierProvider<Authentication, AuthState> {
   /// Authentication Notifier
-  const AuthenticationProvider._()
+  AuthenticationProvider._()
     : super(
         from: null,
         argument: null,
@@ -53,7 +53,6 @@ abstract class _$Authentication extends $Notifier<AuthState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AuthState, AuthState>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$Authentication extends $Notifier<AuthState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

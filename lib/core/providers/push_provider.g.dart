@@ -11,12 +11,12 @@ part of 'push_provider.dart';
 /// Push Notifier
 
 @ProviderFor(Push)
-const pushProvider = PushProvider._();
+final pushProvider = PushProvider._();
 
 /// Push Notifier
 final class PushProvider extends $NotifierProvider<Push, PushInfo> {
   /// Push Notifier
-  const PushProvider._()
+  PushProvider._()
     : super(
         from: null,
         argument: null,
@@ -52,7 +52,6 @@ abstract class _$Push extends $Notifier<PushInfo> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<PushInfo, PushInfo>;
     final element =
         ref.element
@@ -62,6 +61,6 @@ abstract class _$Push extends $Notifier<PushInfo> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

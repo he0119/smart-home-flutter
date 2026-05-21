@@ -11,13 +11,13 @@ part of 'recycle_bin_provider.dart';
 /// RecycleBin notifier
 
 @ProviderFor(RecycleBin)
-const recycleBinProvider = RecycleBinProvider._();
+final recycleBinProvider = RecycleBinProvider._();
 
 /// RecycleBin notifier
 final class RecycleBinProvider
     extends $NotifierProvider<RecycleBin, RecycleBinState> {
   /// RecycleBin notifier
-  const RecycleBinProvider._()
+  RecycleBinProvider._()
     : super(
         from: null,
         argument: null,
@@ -53,7 +53,6 @@ abstract class _$RecycleBin extends $Notifier<RecycleBinState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<RecycleBinState, RecycleBinState>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$RecycleBin extends $Notifier<RecycleBinState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
