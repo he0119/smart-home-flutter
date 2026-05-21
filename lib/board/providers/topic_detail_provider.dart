@@ -87,6 +87,7 @@ class TopicDetail extends _$TopicDetail {
         after: state.pageInfo.endCursor,
         cache: false,
       );
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: TopicDetailStatus.success,
         topic: results.item1,
@@ -94,6 +95,7 @@ class TopicDetail extends _$TopicDetail {
         pageInfo: state.pageInfo.copyWith(results.item3),
       );
     } on MyException catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: TopicDetailStatus.failure,
         errorMessage: e.message,
@@ -119,6 +121,7 @@ class TopicDetail extends _$TopicDetail {
         cache: cache,
       );
 
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: TopicDetailStatus.success,
         topic: results.item1,
@@ -126,6 +129,7 @@ class TopicDetail extends _$TopicDetail {
         pageInfo: results.item3,
       );
     } on MyException catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: TopicDetailStatus.failure,
         errorMessage: e.message,

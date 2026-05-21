@@ -72,6 +72,7 @@ class Search extends _$Search {
         isDeleted: isDeleted,
         missingStorage: missingStorage,
       );
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: SearchStatus.success,
         items: results.item1,
@@ -79,6 +80,7 @@ class Search extends _$Search {
         term: key,
       );
     } on MyException catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: SearchStatus.failure,
         errorMessage: e.message,

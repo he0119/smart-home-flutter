@@ -108,6 +108,7 @@ class StorageHome extends _$StorageHome {
         await _fetchFirstPage(storageRepository, itemType, cache);
       }
     } on MyException catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: StorageHomeStatus.failure,
         errorMessage: e.message,
@@ -126,6 +127,7 @@ class StorageHome extends _$StorageHome {
           after: state.pageInfo.endCursor,
           cache: false,
         );
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: StorageHomeStatus.success,
           expiredItems: () => (state.expiredItems ?? []) + results.item1,
@@ -137,6 +139,7 @@ class StorageHome extends _$StorageHome {
           after: state.pageInfo.endCursor,
           cache: false,
         );
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: StorageHomeStatus.success,
           nearExpiredItems: () =>
@@ -149,6 +152,7 @@ class StorageHome extends _$StorageHome {
           after: state.pageInfo.endCursor,
           cache: false,
         );
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: StorageHomeStatus.success,
           recentlyCreatedItems: () =>
@@ -161,6 +165,7 @@ class StorageHome extends _$StorageHome {
           after: state.pageInfo.endCursor,
           cache: false,
         );
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: StorageHomeStatus.success,
           recentlyEditedItems: () =>
@@ -181,6 +186,7 @@ class StorageHome extends _$StorageHome {
     switch (itemType) {
       case ItemType.expired:
         final results = await storageRepository.expiredItems(cache: cache);
+        if (!ref.mounted) return;
         state = StorageHomeState(
           status: StorageHomeStatus.success,
           expiredItems: results.item1,
@@ -190,6 +196,7 @@ class StorageHome extends _$StorageHome {
         break;
       case ItemType.nearExpired:
         final results = await storageRepository.nearExpiredItems(cache: cache);
+        if (!ref.mounted) return;
         state = StorageHomeState(
           status: StorageHomeStatus.success,
           nearExpiredItems: results.item1,
@@ -201,6 +208,7 @@ class StorageHome extends _$StorageHome {
         final results = await storageRepository.recentlyCreatedItems(
           cache: cache,
         );
+        if (!ref.mounted) return;
         state = StorageHomeState(
           status: StorageHomeStatus.success,
           recentlyCreatedItems: results.item1,
@@ -212,6 +220,7 @@ class StorageHome extends _$StorageHome {
         final results = await storageRepository.recentlyEditedItems(
           cache: cache,
         );
+        if (!ref.mounted) return;
         state = StorageHomeState(
           status: StorageHomeStatus.success,
           recentlyEditedItems: results.item1,
@@ -221,6 +230,7 @@ class StorageHome extends _$StorageHome {
         break;
       case ItemType.all:
         final homepage = await storageRepository.homePage(cache: cache);
+        if (!ref.mounted) return;
         state = StorageHomeState(
           status: StorageHomeStatus.success,
           recentlyCreatedItems: homepage['recentlyCreatedItems'],

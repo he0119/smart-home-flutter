@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:smarthome/board/providers/board_home_provider.dart'
-    as board_home;
+import 'package:smarthome/board/providers/board_home_provider.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/exceptions.dart';
 import 'package:tuple/tuple.dart';
@@ -21,7 +20,7 @@ void main() {
     mockBoardRepository = MockBoardRepository();
     container = ProviderContainer.test(
       overrides: [
-        board_home.boardRepositoryProvider.overrideWithValue(
+        boardRepositoryProvider.overrideWithValue(
           mockBoardRepository,
         ),
       ],
@@ -43,7 +42,7 @@ void main() {
       );
 
       final repository = localContainer.read(
-        board_home.boardRepositoryProvider,
+        boardRepositoryProvider,
       );
       expect(repository.graphqlApiClient, mockGraphQLApiClient);
 
@@ -58,12 +57,12 @@ void main() {
       ], const PageInfo(hasNextPage: false)),
     );
 
-    keepProviderAlive(container, board_home.boardHomeProvider);
-    container.read(board_home.boardHomeProvider);
+    keepProviderAlive(container, boardHomeProvider);
+    container.read(boardHomeProvider);
     await _flush();
 
-    final state = container.read(board_home.boardHomeProvider);
-    expect(state.status, board_home.BoardHomeStatus.success);
+    final state = container.read(boardHomeProvider);
+    expect(state.status, BoardHomeStatus.success);
     expect(state.topics, hasLength(1));
   });
 
@@ -81,13 +80,13 @@ void main() {
       ], const PageInfo(hasNextPage: false)),
     );
 
-    keepProviderAlive(container, board_home.boardHomeProvider);
-    container.read(board_home.boardHomeProvider);
+    keepProviderAlive(container, boardHomeProvider);
+    container.read(boardHomeProvider);
     await _flush();
 
-    await container.read(board_home.boardHomeProvider.notifier).fetch();
+    await container.read(boardHomeProvider.notifier).fetch();
 
-    final state = container.read(board_home.boardHomeProvider);
+    final state = container.read(boardHomeProvider);
     expect(state.topics.map((e) => e.id), ['topic-1', 'topic-2']);
   });
 
@@ -96,12 +95,12 @@ void main() {
       mockBoardRepository.topics(cache: true),
     ).thenThrow(MyException('获取失败'));
 
-    keepProviderAlive(container, board_home.boardHomeProvider);
-    container.read(board_home.boardHomeProvider);
+    keepProviderAlive(container, boardHomeProvider);
+    container.read(boardHomeProvider);
     await _flush();
 
-    final state = container.read(board_home.boardHomeProvider);
-    expect(state.status, board_home.BoardHomeStatus.failure);
+    final state = container.read(boardHomeProvider);
+    expect(state.status, BoardHomeStatus.failure);
     expect(state.errorMessage, '获取失败');
   });
 }

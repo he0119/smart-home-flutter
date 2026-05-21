@@ -44,7 +44,7 @@ final class RecycleBinProvider
   }
 }
 
-String _$recycleBinHash() => r'9fc8c86f97c9549bf74ce52b6674a40312b7d0b2';
+String _$recycleBinHash() => r'5d082b32359beb2745380e60ba3b7e926d155a13';
 
 /// RecycleBin notifier
 

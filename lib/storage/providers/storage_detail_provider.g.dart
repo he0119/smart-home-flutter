@@ -61,7 +61,7 @@ final class StorageDetailProvider
   }
 }
 
-String _$storageDetailHash() => r'de86df07359758dd07eb7d264bc36d5aebe8f223';
+String _$storageDetailHash() => r'613a6158ff368c1fda72c4465e552e2cc4d35810';
 
 /// Storage detail notifier
 

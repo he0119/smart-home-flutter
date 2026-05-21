@@ -44,7 +44,7 @@ final class ConsumablesProvider
   }
 }
 
-String _$consumablesHash() => r'70412e6b02e74665db7a273209278da4dbb03c1f';
+String _$consumablesHash() => r'16c302d1a6b0e9fd5252a4d2998fa7b001a75993';
 
 /// Consumables notifier
 

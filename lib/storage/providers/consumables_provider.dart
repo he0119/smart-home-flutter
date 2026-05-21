@@ -70,6 +70,7 @@ class Consumables extends _$Consumables {
           after: state.pageInfo.endCursor,
           cache: false,
         );
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: ConsumablesStatus.success,
           items: state.items + results.item1,
@@ -78,6 +79,7 @@ class Consumables extends _$Consumables {
       } else {
         // 其他情况根据设置看是否需要打开缓存，并获取第一页
         final results = await storageRepository.consumables(cache: cache);
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: ConsumablesStatus.success,
           items: results.item1,
@@ -85,6 +87,7 @@ class Consumables extends _$Consumables {
         );
       }
     } on MyException catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: ConsumablesStatus.failure,
         errorMessage: e.message,
