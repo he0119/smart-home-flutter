@@ -58,7 +58,7 @@ jobs:
           lcov_cobertura coverage/lcov.info
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
 
   android:
     name: Android
