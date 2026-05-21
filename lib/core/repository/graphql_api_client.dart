@@ -380,7 +380,7 @@ class GraphQLApiClient {
   }
 
   /// 初始化 GraphQL 客户端
-  void initailize(String url) {
+  void initialize(String url) {
     Link link;
     if (!kIsWeb) {
       link = HttpLink(
@@ -402,7 +402,7 @@ class GraphQLApiClient {
     link = Link.split((request) => request.isSubscription, websocketLink, link);
 
     _client = GraphQLClient(cache: GraphQLCache(), link: link);
-    _log.fine('GraphQLClient initailized with url $url');
+    _log.fine('GraphQLClient initialized with url $url');
     websocketConnectionState.listen((event) {
       if (event) {
         _log.info('Websocket connected');

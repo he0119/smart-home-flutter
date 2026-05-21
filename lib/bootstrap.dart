@@ -43,7 +43,7 @@ Future<void> bootstrap(AppConfig appConfig) async {
       // 初始化 GraphQL API Client
       final graphQLApiClient = container.read(graphQLApiClientProvider);
       final apiUrl = container.read(settingsProvider).apiUrl;
-      graphQLApiClient.initailize(apiUrl);
+      graphQLApiClient.initialize(apiUrl);
       await graphQLApiClient.loadSettings();
 
       runApp(

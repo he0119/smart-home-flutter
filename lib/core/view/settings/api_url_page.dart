@@ -16,7 +16,7 @@ class ApiUrlPage extends ConsumerWidget {
       title: '服务器网址',
       initialValue: settings.apiUrl,
       onSubmit: (value) {
-        graphqlApiClient.initailize(value);
+        graphqlApiClient.initialize(value);
         settingsNotifier.updateApiUrl(value);
       },
       description: '要连接的服务器网址',

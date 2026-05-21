@@ -119,7 +119,7 @@ class _ApiUrlFormState extends ConsumerState<ApiUrlForm> {
                   if (_formKey.currentState!.validate()) {
                     ref
                         .read(graphQLApiClientProvider)
-                        .initailize(_controller!.text);
+                        .initialize(_controller!.text);
                     ref
                         .read(settingsProvider.notifier)
                         .updateApiUrl(_controller!.text);
