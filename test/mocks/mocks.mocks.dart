@@ -206,8 +206,8 @@ class MockGraphQLApiClient extends _i1.Mock implements _i3.GraphQLApiClient {
           as _i17.Future<bool>);
 
   @override
-  void initailize(String? url) => super.noSuchMethod(
-    Invocation.method(#initailize, [url]),
+  void initialize(String? url) => super.noSuchMethod(
+    Invocation.method(#initialize, [url]),
     returnValueForMissingStub: null,
   );
 

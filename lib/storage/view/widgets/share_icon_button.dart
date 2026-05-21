@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:smarthome/core/model/grobal_keys.dart';
+import 'package:smarthome/core/model/global_keys.dart';
 
 class ShareQrIconButton extends StatelessWidget {
   final String name;
