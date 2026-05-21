@@ -55,7 +55,7 @@ class MyDropdownSearch<T> extends StatelessWidget {
         clearButtonProps: const ClearButtonProps(isVisible: true),
       ),
       items: items,
-      onChanged: onChanged,
+      onSelected: onChanged,
       selectedItem: selectedItem,
       validator: validator,
       autoValidateMode: autoValidateMode,
