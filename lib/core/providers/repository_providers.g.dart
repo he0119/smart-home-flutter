@@ -11,7 +11,7 @@ part of 'repository_providers.dart';
 /// Settings Repository Provider
 
 @ProviderFor(settingsRepository)
-const settingsRepositoryProvider = SettingsRepositoryProvider._();
+final settingsRepositoryProvider = SettingsRepositoryProvider._();
 
 /// Settings Repository Provider
 
@@ -24,7 +24,7 @@ final class SettingsRepositoryProvider
         >
     with $Provider<SettingsRepository> {
   /// Settings Repository Provider
-  const SettingsRepositoryProvider._()
+  SettingsRepositoryProvider._()
     : super(
         from: null,
         argument: null,
@@ -64,7 +64,7 @@ String _$settingsRepositoryHash() =>
 /// GraphQL API Client Provider
 
 @ProviderFor(graphQLApiClient)
-const graphQLApiClientProvider = GraphQLApiClientProvider._();
+final graphQLApiClientProvider = GraphQLApiClientProvider._();
 
 /// GraphQL API Client Provider
 
@@ -77,7 +77,7 @@ final class GraphQLApiClientProvider
         >
     with $Provider<GraphQLApiClient> {
   /// GraphQL API Client Provider
-  const GraphQLApiClientProvider._()
+  GraphQLApiClientProvider._()
     : super(
         from: null,
         argument: null,
@@ -115,7 +115,7 @@ String _$graphQLApiClientHash() => r'ff65460a423a64734cdbe5eb175cae3c0dbc294f';
 /// User Repository Provider
 
 @ProviderFor(userRepository)
-const userRepositoryProvider = UserRepositoryProvider._();
+final userRepositoryProvider = UserRepositoryProvider._();
 
 /// User Repository Provider
 
@@ -123,7 +123,7 @@ final class UserRepositoryProvider
     extends $FunctionalProvider<UserRepository, UserRepository, UserRepository>
     with $Provider<UserRepository> {
   /// User Repository Provider
-  const UserRepositoryProvider._()
+  UserRepositoryProvider._()
     : super(
         from: null,
         argument: null,
@@ -161,7 +161,7 @@ String _$userRepositoryHash() => r'c5ba3c4a194632b2f8b7c8c137baca58ce9560f4';
 /// Version Repository Provider
 
 @ProviderFor(versionRepository)
-const versionRepositoryProvider = VersionRepositoryProvider._();
+final versionRepositoryProvider = VersionRepositoryProvider._();
 
 /// Version Repository Provider
 
@@ -174,7 +174,7 @@ final class VersionRepositoryProvider
         >
     with $Provider<VersionRepository> {
   /// Version Repository Provider
-  const VersionRepositoryProvider._()
+  VersionRepositoryProvider._()
     : super(
         from: null,
         argument: null,
@@ -213,7 +213,7 @@ String _$versionRepositoryHash() => r'cc89033f8a11cd3d74c3833a521322b6baf5115d';
 /// Push Repository Provider
 
 @ProviderFor(pushRepository)
-const pushRepositoryProvider = PushRepositoryProvider._();
+final pushRepositoryProvider = PushRepositoryProvider._();
 
 /// Push Repository Provider
 
@@ -221,7 +221,7 @@ final class PushRepositoryProvider
     extends $FunctionalProvider<PushRepository, PushRepository, PushRepository>
     with $Provider<PushRepository> {
   /// Push Repository Provider
-  const PushRepositoryProvider._()
+  PushRepositoryProvider._()
     : super(
         from: null,
         argument: null,
@@ -259,7 +259,7 @@ String _$pushRepositoryHash() => r'14e0291438a8584623f11f841de42629655031e0';
 /// Storage Repository Provider
 
 @ProviderFor(storageRepository)
-const storageRepositoryProvider = StorageRepositoryProvider._();
+final storageRepositoryProvider = StorageRepositoryProvider._();
 
 /// Storage Repository Provider
 
@@ -272,7 +272,7 @@ final class StorageRepositoryProvider
         >
     with $Provider<StorageRepository> {
   /// Storage Repository Provider
-  const StorageRepositoryProvider._()
+  StorageRepositoryProvider._()
     : super(
         from: null,
         argument: null,
@@ -311,7 +311,7 @@ String _$storageRepositoryHash() => r'880dd2019f5c2dc18a86e8eab687f48d38627e8e';
 /// Board Repository Provider
 
 @ProviderFor(boardRepository)
-const boardRepositoryProvider = BoardRepositoryProvider._();
+final boardRepositoryProvider = BoardRepositoryProvider._();
 
 /// Board Repository Provider
 
@@ -320,7 +320,7 @@ final class BoardRepositoryProvider
         $FunctionalProvider<BoardRepository, BoardRepository, BoardRepository>
     with $Provider<BoardRepository> {
   /// Board Repository Provider
-  const BoardRepositoryProvider._()
+  BoardRepositoryProvider._()
     : super(
         from: null,
         argument: null,

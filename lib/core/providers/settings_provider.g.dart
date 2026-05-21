@@ -11,13 +11,13 @@ part of 'settings_provider.dart';
 /// Settings Notifier
 
 @ProviderFor(Settings)
-const settingsProvider = SettingsProvider._();
+final settingsProvider = SettingsProvider._();
 
 /// Settings Notifier
 final class SettingsProvider
     extends $NotifierProvider<Settings, SettingsState> {
   /// Settings Notifier
-  const SettingsProvider._()
+  SettingsProvider._()
     : super(
         from: null,
         argument: null,
@@ -53,7 +53,6 @@ abstract class _$Settings extends $Notifier<SettingsState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<SettingsState, SettingsState>;
     final element =
         ref.element
@@ -63,14 +62,14 @@ abstract class _$Settings extends $Notifier<SettingsState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
 
 /// App Config Provider - Must be overridden in bootstrap
 
 @ProviderFor(appConfig)
-const appConfigProvider = AppConfigProvider._();
+final appConfigProvider = AppConfigProvider._();
 
 /// App Config Provider - Must be overridden in bootstrap
 
@@ -78,7 +77,7 @@ final class AppConfigProvider
     extends $FunctionalProvider<AppConfig, AppConfig, AppConfig>
     with $Provider<AppConfig> {
   /// App Config Provider - Must be overridden in bootstrap
-  const AppConfigProvider._()
+  AppConfigProvider._()
     : super(
         from: null,
         argument: null,

@@ -1,17 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/board/model/models.dart';
-import 'package:smarthome/board/repository/board_repository.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 part 'board_home_provider.g.dart';
-
-/// Board repository provider
-@Riverpod(keepAlive: true)
-BoardRepository boardRepository(Ref ref) {
-  final graphqlApiClient = ref.watch(graphQLApiClientProvider);
-  return BoardRepository(graphqlApiClient: graphqlApiClient);
-}
 
 /// Board home state
 class BoardHomeState {
@@ -78,6 +70,7 @@ class BoardHome extends _$BoardHome {
           after: state.pageInfo.endCursor,
           cache: false,
         );
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: BoardHomeStatus.success,
           topics: state.topics + results.item1,
@@ -86,6 +79,7 @@ class BoardHome extends _$BoardHome {
       } else {
         // 其他情况根据设置看是否需要打开缓存，并获取第一页
         final results = await boardRepository.topics(cache: cache);
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: BoardHomeStatus.success,
           topics: results.item1,
@@ -93,6 +87,7 @@ class BoardHome extends _$BoardHome {
         );
       }
     } on MyException catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: BoardHomeStatus.failure,
         errorMessage: e.message,

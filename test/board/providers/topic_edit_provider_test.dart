@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:smarthome/board/providers/board_home_provider.dart'
-    as board_home;
 import 'package:smarthome/board/providers/topic_edit_provider.dart';
+import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 import '../../helpers/board_test_utils.dart';
@@ -17,7 +16,7 @@ void main() {
     mockBoardRepository = MockBoardRepository();
     container = ProviderContainer.test(
       overrides: [
-        board_home.boardRepositoryProvider.overrideWithValue(
+        boardRepositoryProvider.overrideWithValue(
           mockBoardRepository,
         ),
       ],

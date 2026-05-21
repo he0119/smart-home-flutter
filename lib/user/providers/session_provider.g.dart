@@ -11,12 +11,12 @@ part of 'session_provider.dart';
 /// Session Notifier
 
 @ProviderFor(Session)
-const sessionProvider = SessionProvider._();
+final sessionProvider = SessionProvider._();
 
 /// Session Notifier
 final class SessionProvider extends $NotifierProvider<Session, SessionState> {
   /// Session Notifier
-  const SessionProvider._()
+  SessionProvider._()
     : super(
         from: null,
         argument: null,
@@ -52,7 +52,6 @@ abstract class _$Session extends $Notifier<SessionState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<SessionState, SessionState>;
     final element =
         ref.element
@@ -62,6 +61,6 @@ abstract class _$Session extends $Notifier<SessionState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

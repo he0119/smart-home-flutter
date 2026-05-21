@@ -11,13 +11,13 @@ part of 'storage_detail_provider.dart';
 /// Storage detail notifier
 
 @ProviderFor(StorageDetail)
-const storageDetailProvider = StorageDetailFamily._();
+final storageDetailProvider = StorageDetailFamily._();
 
 /// Storage detail notifier
 final class StorageDetailProvider
     extends $NotifierProvider<StorageDetail, StorageDetailState> {
   /// Storage detail notifier
-  const StorageDetailProvider._({
+  StorageDetailProvider._({
     required StorageDetailFamily super.from,
     required String super.argument,
   }) : super(
@@ -61,7 +61,7 @@ final class StorageDetailProvider
   }
 }
 
-String _$storageDetailHash() => r'de86df07359758dd07eb7d264bc36d5aebe8f223';
+String _$storageDetailHash() => r'613a6158ff368c1fda72c4465e552e2cc4d35810';
 
 /// Storage detail notifier
 
@@ -74,7 +74,7 @@ final class StorageDetailFamily extends $Family
           StorageDetailState,
           String
         > {
-  const StorageDetailFamily._()
+  StorageDetailFamily._()
     : super(
         retry: null,
         name: r'storageDetailProvider',
@@ -102,7 +102,6 @@ abstract class _$StorageDetail extends $Notifier<StorageDetailState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<StorageDetailState, StorageDetailState>;
     final element =
         ref.element
@@ -112,6 +111,6 @@ abstract class _$StorageDetail extends $Notifier<StorageDetailState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

@@ -11,13 +11,13 @@ part of 'item_detail_provider.dart';
 /// Item detail notifier
 
 @ProviderFor(ItemDetail)
-const itemDetailProvider = ItemDetailFamily._();
+final itemDetailProvider = ItemDetailFamily._();
 
 /// Item detail notifier
 final class ItemDetailProvider
     extends $AsyncNotifierProvider<ItemDetail, Item> {
   /// Item detail notifier
-  const ItemDetailProvider._({
+  ItemDetailProvider._({
     required ItemDetailFamily super.from,
     required String super.argument,
   }) : super(
@@ -66,7 +66,7 @@ final class ItemDetailFamily extends $Family
           FutureOr<Item>,
           String
         > {
-  const ItemDetailFamily._()
+  ItemDetailFamily._()
     : super(
         retry: null,
         name: r'itemDetailProvider',
@@ -94,7 +94,6 @@ abstract class _$ItemDetail extends $AsyncNotifier<Item> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<AsyncValue<Item>, Item>;
     final element =
         ref.element
@@ -104,6 +103,6 @@ abstract class _$ItemDetail extends $AsyncNotifier<Item> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

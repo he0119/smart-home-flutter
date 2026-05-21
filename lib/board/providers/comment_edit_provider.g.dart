@@ -11,13 +11,13 @@ part of 'comment_edit_provider.dart';
 /// Comment edit notifier
 
 @ProviderFor(CommentEdit)
-const commentEditProvider = CommentEditProvider._();
+final commentEditProvider = CommentEditProvider._();
 
 /// Comment edit notifier
 final class CommentEditProvider
     extends $NotifierProvider<CommentEdit, CommentEditState> {
   /// Comment edit notifier
-  const CommentEditProvider._()
+  CommentEditProvider._()
     : super(
         from: null,
         argument: null,
@@ -53,7 +53,6 @@ abstract class _$CommentEdit extends $Notifier<CommentEditState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<CommentEditState, CommentEditState>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$CommentEdit extends $Notifier<CommentEditState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

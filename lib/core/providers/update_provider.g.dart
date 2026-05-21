@@ -11,12 +11,12 @@ part of 'update_provider.dart';
 /// Update Notifier
 
 @ProviderFor(Update)
-const updateProvider = UpdateProvider._();
+final updateProvider = UpdateProvider._();
 
 /// Update Notifier
 final class UpdateProvider extends $NotifierProvider<Update, UpdateInfo> {
   /// Update Notifier
-  const UpdateProvider._()
+  UpdateProvider._()
     : super(
         from: null,
         argument: null,
@@ -52,7 +52,6 @@ abstract class _$Update extends $Notifier<UpdateInfo> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<UpdateInfo, UpdateInfo>;
     final element =
         ref.element
@@ -62,6 +61,6 @@ abstract class _$Update extends $Notifier<UpdateInfo> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

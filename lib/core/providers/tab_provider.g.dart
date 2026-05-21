@@ -11,12 +11,12 @@ part of 'tab_provider.dart';
 /// Tab notifier - 管理底部导航栏的当前标签
 
 @ProviderFor(Tab)
-const tabProvider = TabProvider._();
+final tabProvider = TabProvider._();
 
 /// Tab notifier - 管理底部导航栏的当前标签
 final class TabProvider extends $NotifierProvider<Tab, AppTab?> {
   /// Tab notifier - 管理底部导航栏的当前标签
-  const TabProvider._()
+  TabProvider._()
     : super(
         from: null,
         argument: null,
@@ -52,7 +52,6 @@ abstract class _$Tab extends $Notifier<AppTab?> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<AppTab?, AppTab?>;
     final element =
         ref.element
@@ -62,6 +61,6 @@ abstract class _$Tab extends $Notifier<AppTab?> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

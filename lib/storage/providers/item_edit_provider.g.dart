@@ -11,13 +11,13 @@ part of 'item_edit_provider.dart';
 /// Item edit notifier
 
 @ProviderFor(ItemEdit)
-const itemEditProvider = ItemEditProvider._();
+final itemEditProvider = ItemEditProvider._();
 
 /// Item edit notifier
 final class ItemEditProvider
     extends $NotifierProvider<ItemEdit, ItemEditState> {
   /// Item edit notifier
-  const ItemEditProvider._()
+  ItemEditProvider._()
     : super(
         from: null,
         argument: null,
@@ -53,7 +53,6 @@ abstract class _$ItemEdit extends $Notifier<ItemEditState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<ItemEditState, ItemEditState>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$ItemEdit extends $Notifier<ItemEditState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

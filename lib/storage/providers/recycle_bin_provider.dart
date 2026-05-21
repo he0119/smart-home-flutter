@@ -70,6 +70,7 @@ class RecycleBin extends _$RecycleBin {
           after: state.pageInfo.endCursor,
           cache: false,
         );
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: RecycleBinStatus.success,
           items: state.items + results.item1,
@@ -78,6 +79,7 @@ class RecycleBin extends _$RecycleBin {
       } else {
         // 其他情况根据设置看是否需要打开缓存，并获取第一页
         final results = await storageRepository.deletedItems(cache: cache);
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: RecycleBinStatus.success,
           items: results.item1,
@@ -85,6 +87,7 @@ class RecycleBin extends _$RecycleBin {
         );
       }
     } on MyException catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: RecycleBinStatus.failure,
         errorMessage: e.message,

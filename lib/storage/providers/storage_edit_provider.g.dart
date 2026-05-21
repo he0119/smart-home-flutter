@@ -11,13 +11,13 @@ part of 'storage_edit_provider.dart';
 /// Storage edit notifier
 
 @ProviderFor(StorageEdit)
-const storageEditProvider = StorageEditProvider._();
+final storageEditProvider = StorageEditProvider._();
 
 /// Storage edit notifier
 final class StorageEditProvider
     extends $NotifierProvider<StorageEdit, StorageEditState> {
   /// Storage edit notifier
-  const StorageEditProvider._()
+  StorageEditProvider._()
     : super(
         from: null,
         argument: null,
@@ -53,7 +53,6 @@ abstract class _$StorageEdit extends $Notifier<StorageEditState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<StorageEditState, StorageEditState>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$StorageEdit extends $Notifier<StorageEditState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }

@@ -11,13 +11,13 @@ part of 'picture_provider.dart';
 /// Picture notifier
 
 @ProviderFor(PictureNotifier)
-const pictureProvider = PictureNotifierFamily._();
+final pictureProvider = PictureNotifierFamily._();
 
 /// Picture notifier
 final class PictureNotifierProvider
     extends $AsyncNotifierProvider<PictureNotifier, Picture> {
   /// Picture notifier
-  const PictureNotifierProvider._({
+  PictureNotifierProvider._({
     required PictureNotifierFamily super.from,
     required String super.argument,
   }) : super(
@@ -66,7 +66,7 @@ final class PictureNotifierFamily extends $Family
           FutureOr<Picture>,
           String
         > {
-  const PictureNotifierFamily._()
+  PictureNotifierFamily._()
     : super(
         retry: null,
         name: r'pictureProvider',
@@ -94,7 +94,6 @@ abstract class _$PictureNotifier extends $AsyncNotifier<Picture> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
     final ref = this.ref as $Ref<AsyncValue<Picture>, Picture>;
     final element =
         ref.element
@@ -104,6 +103,6 @@ abstract class _$PictureNotifier extends $AsyncNotifier<Picture> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, () => build(_$args));
   }
 }

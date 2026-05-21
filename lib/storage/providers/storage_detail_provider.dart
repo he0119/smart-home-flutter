@@ -80,6 +80,7 @@ class StorageDetail extends _$StorageDetail {
           after: state.storagePageInfo.endCursor,
           cache: false,
         );
+        if (!ref.mounted) return;
         state = state.copyWith(
           storage: storage.copyWith(
             name: homeStorage.name,
@@ -96,6 +97,7 @@ class StorageDetail extends _$StorageDetail {
           cache: false,
         );
         if (results != null) {
+          if (!ref.mounted) return;
           state = state.copyWith(
             storage: storage.copyWith(
               children: storage.children! + results.item1.children!,
@@ -107,6 +109,7 @@ class StorageDetail extends _$StorageDetail {
         }
       }
     } on MyException catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: StorageDetailStatus.failure,
         errorMessage: e.message,
@@ -124,6 +127,7 @@ class StorageDetail extends _$StorageDetail {
 
       if (storageId == homeStorage.id) {
         final results = await storageRepository.rootStorage(cache: cache);
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: StorageDetailStatus.success,
           storage: Storage(
@@ -140,12 +144,14 @@ class StorageDetail extends _$StorageDetail {
           cache: cache,
         );
         if (results == null) {
+          if (!ref.mounted) return;
           state = state.copyWith(
             status: StorageDetailStatus.failure,
             errorMessage: '获取位置失败，位置不存在',
           );
           return;
         }
+        if (!ref.mounted) return;
         state = state.copyWith(
           status: StorageDetailStatus.success,
           storage: results.item1,
@@ -154,6 +160,7 @@ class StorageDetail extends _$StorageDetail {
         );
       }
     } on MyException catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         status: StorageDetailStatus.failure,
         errorMessage: e.message,

@@ -11,12 +11,12 @@ part of 'search_provider.dart';
 /// Search notifier
 
 @ProviderFor(Search)
-const searchProvider = SearchProvider._();
+final searchProvider = SearchProvider._();
 
 /// Search notifier
 final class SearchProvider extends $NotifierProvider<Search, SearchState> {
   /// Search notifier
-  const SearchProvider._()
+  SearchProvider._()
     : super(
         from: null,
         argument: null,
@@ -43,7 +43,7 @@ final class SearchProvider extends $NotifierProvider<Search, SearchState> {
   }
 }
 
-String _$searchHash() => r'51339dff12180c6309c3c86c77b0e8c82b46a265';
+String _$searchHash() => r'b624418729a74e253acc5ed23f0a69b925b2197e';
 
 /// Search notifier
 
@@ -52,7 +52,6 @@ abstract class _$Search extends $Notifier<SearchState> {
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
     final ref = this.ref as $Ref<SearchState, SearchState>;
     final element =
         ref.element
@@ -62,6 +61,6 @@ abstract class _$Search extends $Notifier<SearchState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleCreate(ref, build);
   }
 }
