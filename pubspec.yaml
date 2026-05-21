@@ -6,7 +6,7 @@ publish_to: "none"
 
 environment:
   sdk: ">=3.10.0 <4.0.0"
-  flutter: "3.38.1" # This must be exact! No ranges allowed.
+  flutter: "3.44.0" # This must be exact! No ranges allowed.
 
 dependencies:
   flutter:
