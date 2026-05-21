@@ -1,9 +1,18 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/exceptions.dart';
 
 part 'topic_detail_provider.g.dart';
+
+final commentProvider = FutureProvider.autoDispose.family<Comment, String>((
+  ref,
+  commentId,
+) async {
+  final boardRepository = ref.read(boardRepositoryProvider);
+  return boardRepository.comment(commentId: commentId);
+});
 
 /// Topic detail status
 enum TopicDetailStatus { initial, loading, success, failure }
@@ -60,9 +69,15 @@ class TopicDetail extends _$TopicDetail {
   }
 
   /// Initialize with descending order and load data
-  void initialize({bool descending = true}) {
+  Future<void> initialize({
+    bool descending = true,
+    String? targetCommentId,
+  }) async {
     _descending = descending;
-    _loadTopic(cache: true, showLoading: true);
+    await _loadTopic(cache: true, showLoading: true);
+    if (targetCommentId != null && targetCommentId.isNotEmpty) {
+      await loadUntilCommentAvailable(targetCommentId);
+    }
   }
 
   /// Refresh topic data
@@ -101,6 +116,24 @@ class TopicDetail extends _$TopicDetail {
         errorMessage: e.message,
       );
     }
+  }
+
+  Future<bool> loadUntilCommentAvailable(String commentId) async {
+    if (state.comments.any((comment) => comment.id == commentId)) {
+      return true;
+    }
+
+    while (!state.hasReachedMax) {
+      await fetchMore(descending: _descending);
+      if (state.comments.any((comment) => comment.id == commentId)) {
+        return true;
+      }
+      if (state.status == TopicDetailStatus.failure) {
+        return false;
+      }
+    }
+
+    return false;
   }
 
   Future<void> _loadTopic({

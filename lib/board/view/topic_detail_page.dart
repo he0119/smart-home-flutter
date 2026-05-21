@@ -18,25 +18,41 @@ import 'package:smarthome/widgets/markdown.dart';
 
 class TopicDetailPage extends StatelessWidget {
   final String topicId;
+  final String? targetCommentId;
 
-  const TopicDetailPage({super.key, required this.topicId});
+  const TopicDetailPage({
+    super.key,
+    required this.topicId,
+    this.targetCommentId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return TopicDetailScreen(topicId: topicId);
+    return TopicDetailScreen(
+      topicId: topicId,
+      targetCommentId: targetCommentId,
+    );
   }
 }
 
 class TopicDetailScreen extends ConsumerStatefulWidget {
   final String topicId;
+  final String? targetCommentId;
 
-  const TopicDetailScreen({super.key, required this.topicId});
+  const TopicDetailScreen({
+    super.key,
+    required this.topicId,
+    this.targetCommentId,
+  });
 
   @override
   ConsumerState<TopicDetailScreen> createState() => _TopicDetailScreenState();
 }
 
 class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
+  final Map<String, GlobalKey> _commentKeys = {};
+  String? _scrolledTargetCommentId;
+
   @override
   void initState() {
     super.initState();
@@ -44,8 +60,19 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
       final descending = ref.read(settingsProvider).commentDescending;
       ref
           .read(topicDetailProvider(widget.topicId).notifier)
-          .initialize(descending: descending);
+          .initialize(
+            descending: descending,
+            targetCommentId: widget.targetCommentId,
+          );
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant TopicDetailScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.targetCommentId != widget.targetCommentId) {
+      _scrolledTargetCommentId = null;
+    }
   }
 
   @override
@@ -91,6 +118,7 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
     });
 
     final state = ref.watch(topicDetailProvider(widget.topicId));
+    _scrollToTargetComment(state);
 
     return MySliverScaffold(
       title: Text(state.topic.title ?? ''),
@@ -327,15 +355,22 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
         if (state.status == TopicDetailStatus.success)
           SliverInfiniteList<Comment>(
             items: state.comments,
-            itemBuilder: (context, item) => CommentItem(
-              comment: item,
-              showMenu: loginUser == item.user,
-              onEdit: () {
-                ref
-                    .read(topicDetailProvider(widget.topicId).notifier)
-                    .refresh(descending: descending);
-              },
-            ),
+            itemBuilder: (context, item) {
+              final targetCommentId = widget.targetCommentId;
+              return KeyedSubtree(
+                key: _commentKeys.putIfAbsent(item.id, GlobalKey.new),
+                child: CommentItem(
+                  comment: item,
+                  showMenu: loginUser == item.user,
+                  highlighted: targetCommentId == item.id,
+                  onEdit: () {
+                    ref
+                        .read(topicDetailProvider(widget.topicId).notifier)
+                        .refresh(descending: descending);
+                  },
+                ),
+              );
+            },
             onFetch: () {
               ref
                   .read(topicDetailProvider(widget.topicId).notifier)
@@ -370,6 +405,29 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
               },
             ),
     );
+  }
+
+  void _scrollToTargetComment(TopicDetailState state) {
+    final targetCommentId = widget.targetCommentId;
+    if (targetCommentId == null || targetCommentId.isEmpty) return;
+    if (_scrolledTargetCommentId == targetCommentId) return;
+    if (state.status != TopicDetailStatus.success) return;
+    if (!state.comments.any((comment) => comment.id == targetCommentId)) {
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final context = _commentKeys[targetCommentId]?.currentContext;
+      if (context == null) return;
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+        alignment: 0.25,
+      );
+      _scrolledTargetCommentId = targetCommentId;
+    });
   }
 }
 

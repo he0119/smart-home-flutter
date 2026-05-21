@@ -61,6 +61,56 @@ void main() {
     expect(state.comments, hasLength(1));
   });
 
+  test('commentProvider loads comment context', () async {
+    final topic = buildTopic(id: 'topic-1');
+    when(
+      mockBoardRepository.comment(commentId: 'comment-1'),
+    ).thenAnswer((_) async => buildComment(id: 'comment-1', topic: topic));
+
+    final comment = await container.read(commentProvider('comment-1').future);
+
+    expect(comment.id, 'comment-1');
+    expect(comment.topic?.id, 'topic-1');
+  });
+
+  test(
+    'initialize fetches more pages until target comment is available',
+    () async {
+      when(
+        mockBoardRepository.topicDetail(
+          topicId: anyNamed('topicId'),
+          descending: anyNamed('descending'),
+          cache: anyNamed('cache'),
+          after: anyNamed('after'),
+        ),
+      ).thenAnswer((invocation) async {
+        final after =
+            invocation.namedArguments[const Symbol('after')] as String?;
+        if (after == 'cursor-1') {
+          return Tuple3(
+            buildTopic(id: 'topic-1'),
+            [buildComment(id: 'comment-2')],
+            const PageInfo(hasNextPage: false, endCursor: 'cursor-2'),
+          );
+        }
+        return Tuple3(
+          buildTopic(id: 'topic-1'),
+          [buildComment(id: 'comment-1')],
+          const PageInfo(hasNextPage: true, endCursor: 'cursor-1'),
+        );
+      });
+
+      final provider = topicDetailProvider('topic-1');
+      keepProviderAlive(container, provider);
+      await container
+          .read(provider.notifier)
+          .initialize(targetCommentId: 'comment-2');
+
+      final state = container.read(provider);
+      expect(state.comments.map((e) => e.id), ['comment-1', 'comment-2']);
+    },
+  );
+
   test('fetchMore appends additional comments', () async {
     when(
       mockBoardRepository.topicDetail(

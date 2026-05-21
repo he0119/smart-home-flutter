@@ -24,6 +24,7 @@ class AppRoutes {
   // 留言板
   static const String board = '/board';
   static const String topicDetail = '/topic/:id';
+  static const String commentDetail = '/comment/:id';
 
   // 博客
   static const String blog = '/blog';
@@ -50,6 +51,8 @@ class AppRoutes {
   static String itemDetailPath(String itemId) => '/item/$itemId';
 
   static String topicDetailPath(String topicId) => '/topic/$topicId';
+
+  static String commentDetailPath(String commentId) => '/comment/$commentId';
 
   static String pictureDetailPath(String pictureId) => '/picture/$pictureId';
 }
