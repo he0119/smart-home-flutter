@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:intl/intl.dart';
 
 class DateTimePickerFormField extends StatefulWidget {
@@ -109,4 +110,35 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
     });
     widget.onChanged(value);
   }
+}
+
+Widget _dateTimePickerPreviewFrame(Widget child) {
+  return MaterialApp(
+    home: Scaffold(
+      body: Center(child: SizedBox(width: 360, child: child)),
+    ),
+  );
+}
+
+@Preview(name: 'DateTimePickerFormField empty')
+Widget dateTimePickerFormFieldEmptyPreview() {
+  return _dateTimePickerPreviewFrame(
+    DateTimePickerFormField(
+      decoration: const InputDecoration(labelText: '有效期至'),
+      format: DateFormat.yMMMd().add_Hms(),
+      onChanged: (_) {},
+    ),
+  );
+}
+
+@Preview(name: 'DateTimePickerFormField selected')
+Widget dateTimePickerFormFieldSelectedPreview() {
+  return _dateTimePickerPreviewFrame(
+    DateTimePickerFormField(
+      decoration: const InputDecoration(labelText: '有效期至'),
+      format: DateFormat.yMMMd().add_Hms(),
+      initialValue: DateTime(2026, 5, 21, 12, 30),
+      onChanged: (_) {},
+    ),
+  );
 }
