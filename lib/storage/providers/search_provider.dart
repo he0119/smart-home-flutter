@@ -12,6 +12,7 @@ class SearchState {
   final List<Item> items;
   final List<Storage> storages;
   final String term;
+  final List<String> history;
 
   const SearchState({
     this.status = SearchStatus.initial,
@@ -19,6 +20,7 @@ class SearchState {
     this.items = const [],
     this.storages = const [],
     this.term = '',
+    this.history = const [],
   });
 
   SearchState copyWith({
@@ -27,6 +29,7 @@ class SearchState {
     List<Item>? items,
     List<Storage>? storages,
     String? term,
+    List<String>? history,
   }) {
     return SearchState(
       status: status ?? this.status,
@@ -34,6 +37,7 @@ class SearchState {
       items: items ?? this.items,
       storages: storages ?? this.storages,
       term: term ?? this.term,
+      history: history ?? this.history,
     );
   }
 
@@ -59,7 +63,7 @@ class Search extends _$Search {
     bool missingStorage = false,
   }) async {
     if (key.isEmpty) {
-      state = const SearchState();
+      state = SearchState(history: state.history);
       return;
     }
 
@@ -73,6 +77,7 @@ class Search extends _$Search {
         missingStorage: missingStorage,
       );
       if (!ref.mounted) return;
+      await _saveSearchHistory(key);
       state = state.copyWith(
         status: SearchStatus.success,
         items: results.item1,
@@ -86,5 +91,35 @@ class Search extends _$Search {
         errorMessage: e.message,
       );
     }
+  }
+
+  Future<void> loadHistory() async {
+    final settingsRepository = ref.read(settingsRepositoryProvider);
+    final history = await settingsRepository.searchHistory();
+    if (!ref.mounted) return;
+    state = state.copyWith(history: history);
+  }
+
+  Future<void> removeHistory(String key) async {
+    final history = state.history.where((item) => item != key).toList();
+    state = state.copyWith(history: history);
+    await ref.read(settingsRepositoryProvider).updateSearchHistory(history);
+  }
+
+  Future<void> clearHistory() async {
+    state = state.copyWith(history: const []);
+    await ref.read(settingsRepositoryProvider).clearSearchHistory();
+  }
+
+  Future<void> _saveSearchHistory(String key) async {
+    final trimmedKey = key.trim();
+    if (trimmedKey.isEmpty) return;
+
+    final history = [
+      trimmedKey,
+      ...state.history.where((item) => item != trimmedKey),
+    ].take(SettingsRepository.maxSearchHistoryLength).toList();
+    state = state.copyWith(history: history);
+    await ref.read(settingsRepositoryProvider).updateSearchHistory(history);
   }
 }

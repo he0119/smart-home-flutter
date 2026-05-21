@@ -11,13 +11,21 @@ import '../../mocks/mocks.mocks.dart';
 
 void main() {
   late MockStorageRepository mockStorageRepository;
+  late MockSettingsRepository mockSettingsRepository;
   late ProviderContainer container;
 
   setUp(() {
     mockStorageRepository = MockStorageRepository();
+    mockSettingsRepository = MockSettingsRepository();
+    when(mockSettingsRepository.searchHistory()).thenAnswer((_) async => []);
+    when(
+      mockSettingsRepository.updateSearchHistory(any),
+    ).thenAnswer((_) async {});
+    when(mockSettingsRepository.clearSearchHistory()).thenAnswer((_) async {});
     container = ProviderContainer.test(
       overrides: [
         storageRepositoryProvider.overrideWithValue(mockStorageRepository),
+        settingsRepositoryProvider.overrideWithValue(mockSettingsRepository),
       ],
     );
   });
@@ -60,6 +68,7 @@ void main() {
     final state = container.read(searchProvider);
     expect(state.status, SearchStatus.initial);
     expect(state.items, isEmpty);
+    expect(state.history, isEmpty);
   });
 
   test('search surfaces repository errors', () async {
@@ -76,5 +85,76 @@ void main() {
     final state = container.read(searchProvider);
     expect(state.status, SearchStatus.failure);
     expect(state.errorMessage, '搜索失败');
+  });
+
+  test('loadHistory reads saved search history', () async {
+    when(
+      mockSettingsRepository.searchHistory(),
+    ).thenAnswer((_) async => ['keyboard', 'router']);
+
+    await container.read(searchProvider.notifier).loadHistory();
+
+    expect(container.read(searchProvider).history, ['keyboard', 'router']);
+  });
+
+  test('search saves successful terms to history', () async {
+    when(
+      mockStorageRepository.search(
+        any,
+        isDeleted: anyNamed('isDeleted'),
+        missingStorage: anyNamed('missingStorage'),
+      ),
+    ).thenAnswer((_) async => const Tuple2([], []));
+
+    await container.read(searchProvider.notifier).loadHistory();
+    await container.read(searchProvider.notifier).search('keyboard');
+
+    expect(container.read(searchProvider).history, ['keyboard']);
+    verify(mockSettingsRepository.updateSearchHistory(['keyboard'])).called(1);
+  });
+
+  test('search moves repeated terms to the front', () async {
+    when(
+      mockSettingsRepository.searchHistory(),
+    ).thenAnswer((_) async => ['router', 'keyboard']);
+    when(
+      mockStorageRepository.search(
+        any,
+        isDeleted: anyNamed('isDeleted'),
+        missingStorage: anyNamed('missingStorage'),
+      ),
+    ).thenAnswer((_) async => const Tuple2([], []));
+
+    await container.read(searchProvider.notifier).loadHistory();
+    await container.read(searchProvider.notifier).search('keyboard');
+
+    expect(container.read(searchProvider).history, ['keyboard', 'router']);
+    verify(
+      mockSettingsRepository.updateSearchHistory(['keyboard', 'router']),
+    ).called(1);
+  });
+
+  test('removeHistory deletes a single saved term', () async {
+    when(
+      mockSettingsRepository.searchHistory(),
+    ).thenAnswer((_) async => ['router', 'keyboard']);
+
+    await container.read(searchProvider.notifier).loadHistory();
+    await container.read(searchProvider.notifier).removeHistory('router');
+
+    expect(container.read(searchProvider).history, ['keyboard']);
+    verify(mockSettingsRepository.updateSearchHistory(['keyboard'])).called(1);
+  });
+
+  test('clearHistory removes all saved terms', () async {
+    when(
+      mockSettingsRepository.searchHistory(),
+    ).thenAnswer((_) async => ['router']);
+
+    await container.read(searchProvider.notifier).loadHistory();
+    await container.read(searchProvider.notifier).clearHistory();
+
+    expect(container.read(searchProvider).history, isEmpty);
+    verify(mockSettingsRepository.clearSearchHistory()).called(1);
   });
 }

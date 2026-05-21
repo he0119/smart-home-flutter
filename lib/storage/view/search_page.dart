@@ -37,6 +37,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   @override
   void initState() {
     super.initState();
+    Future.microtask(() => ref.read(searchProvider.notifier).loadHistory());
     _textController.addListener(() {
       setState(() {
         if (_textController.text.isNotEmpty) _showClearButton = true;
@@ -56,14 +57,22 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   void doSearch() {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 300), () {
-      ref
-          .read(searchProvider.notifier)
-          .search(
-            _textController.text,
-            isDeleted: _isDeleted,
-            missingStorage: _missingStorage,
-          );
+      _search(_textController.text);
     });
+  }
+
+  void _search(String key) {
+    ref
+        .read(searchProvider.notifier)
+        .search(key, isDeleted: _isDeleted, missingStorage: _missingStorage);
+  }
+
+  void _searchHistory(String key) {
+    _debounceTimer?.cancel();
+    _textController.text = key;
+    _textController.selection = TextSelection.collapsed(offset: key.length);
+    _debounceTimer?.cancel();
+    _search(key);
   }
 
   @override
@@ -140,11 +149,59 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             }
             return SliverFillRemaining(
               hasScrollBody: false,
-              child: Container(),
+              child: _SearchHistoryList(
+                history: state.history,
+                onTap: _searchHistory,
+                onRemove: (key) =>
+                    ref.read(searchProvider.notifier).removeHistory(key),
+                onClear: () => ref.read(searchProvider.notifier).clearHistory(),
+              ),
             );
           },
         ),
       ),
+    );
+  }
+}
+
+class _SearchHistoryList extends StatelessWidget {
+  final List<String> history;
+  final ValueChanged<String> onTap;
+  final ValueChanged<String> onRemove;
+  final VoidCallback onClear;
+
+  const _SearchHistoryList({
+    required this.history,
+    required this.onTap,
+    required this.onRemove,
+    required this.onClear,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (history.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        ListTile(
+          title: Text('搜索历史', style: Theme.of(context).textTheme.titleMedium),
+          trailing: TextButton(onPressed: onClear, child: const Text('清空')),
+        ),
+        for (final key in history)
+          ListTile(
+            leading: const Icon(Icons.history),
+            title: Text(key),
+            onTap: () => onTap(key),
+            trailing: IconButton(
+              tooltip: '删除',
+              icon: const Icon(Icons.close),
+              onPressed: () => onRemove(key),
+            ),
+          ),
+      ],
     );
   }
 }
