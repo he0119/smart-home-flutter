@@ -51,7 +51,6 @@ dependencies:
 
   # Widget
   webview_flutter: ^4.13.0
-  datetime_picker_formfield: ^2.0.1
   flutter_markdown_selectionarea: ^0.6.17+1
   cached_network_image: ^3.4.1
   dropdown_search: ^6.0.2
