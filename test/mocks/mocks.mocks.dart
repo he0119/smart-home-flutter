@@ -564,6 +564,32 @@ class MockSettingsRepository extends _i1.Mock
             returnValueForMissingStub: _i17.Future<void>.value(),
           )
           as _i17.Future<void>);
+
+  @override
+  _i17.Future<List<String>> searchHistory() =>
+      (super.noSuchMethod(
+            Invocation.method(#searchHistory, []),
+            returnValue: _i17.Future<List<String>>.value(<String>[]),
+          )
+          as _i17.Future<List<String>>);
+
+  @override
+  _i17.Future<void> updateSearchHistory(List<String>? history) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateSearchHistory, [history]),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
+          )
+          as _i17.Future<void>);
+
+  @override
+  _i17.Future<void> clearSearchHistory() =>
+      (super.noSuchMethod(
+            Invocation.method(#clearSearchHistory, []),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
+          )
+          as _i17.Future<void>);
 }
 
 /// A class which mocks [StorageRepository].

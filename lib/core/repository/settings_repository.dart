@@ -13,6 +13,8 @@ import 'package:smarthome/user/model/user.dart';
 /// persist the user settings locally, use the shared_preferences package. If
 /// you'd like to store settings on a web server, use the http package.
 class SettingsRepository {
+  static const int maxSearchHistoryLength = 20;
+
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future<ThemeMode> themeMode() async {
@@ -191,5 +193,23 @@ class SettingsRepository {
   Future<void> updateLoginMethod(String method) async {
     final prefs = await _prefs;
     prefs.setString('loginMethod', method);
+  }
+
+  Future<List<String>> searchHistory() async {
+    final prefs = await _prefs;
+    return prefs.getStringList('searchHistory') ?? const [];
+  }
+
+  Future<void> updateSearchHistory(List<String> history) async {
+    final prefs = await _prefs;
+    await prefs.setStringList(
+      'searchHistory',
+      history.take(maxSearchHistoryLength).toList(),
+    );
+  }
+
+  Future<void> clearSearchHistory() async {
+    final prefs = await _prefs;
+    await prefs.remove('searchHistory');
   }
 }
