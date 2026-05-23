@@ -6,6 +6,9 @@ import 'package:smarthome/widgets/conditional_parent_widget.dart';
 import 'package:smarthome/widgets/drawer.dart';
 import 'package:smarthome/widgets/tab_selector.dart';
 
+const double _navigationRailBreakpoint = 720;
+const double _extendedNavigationRailBreakpoint = 1200;
+
 class MyHomePage extends ConsumerWidget {
   final String title;
   final List<Widget>? actions;
@@ -29,33 +32,62 @@ class MyHomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final location = GoRouterState.of(context).matchedLocation;
+    final activeTab = _getCurrentTab(location);
 
-    return MySliverScaffold(
-      title: Text(title),
-      actions: actions,
-      slivers: slivers,
-      drawer: const MyDrawer(),
-      floatingActionButton: floatingActionButton,
-      onRefresh: onRefresh,
-      canPop: canPop,
-      onPopInvokedWithResult: onPopInvokedWithResult,
-      bottomNavigationBar: TabSelector(
-        activeTab: _getCurrentTab(location),
-        onTabSelected: (tab) {
-          switch (tab) {
-            case AppTab.storage:
-              context.go('/storage');
-              break;
-            case AppTab.blog:
-              context.go('/blog');
-              break;
-            case AppTab.board:
-              context.go('/board');
-              break;
-          }
-        },
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final showRail = constraints.maxWidth >= _navigationRailBreakpoint;
+        final extendRail =
+            constraints.maxWidth >= _extendedNavigationRailBreakpoint;
+
+        final page = MySliverScaffold(
+          title: Text(title),
+          actions: actions,
+          slivers: slivers,
+          drawer: const MyDrawer(),
+          floatingActionButton: floatingActionButton,
+          onRefresh: onRefresh,
+          canPop: canPop,
+          onPopInvokedWithResult: onPopInvokedWithResult,
+          bottomNavigationBar: showRail
+              ? null
+              : TabSelector(
+                  activeTab: activeTab,
+                  onTabSelected: (tab) => _goToTab(context, tab),
+                ),
+        );
+
+        if (!showRail) {
+          return page;
+        }
+
+        return Row(
+          children: [
+            RailTabSelector(
+              activeTab: activeTab,
+              extended: extendRail,
+              onTabSelected: (tab) => _goToTab(context, tab),
+            ),
+            const VerticalDivider(width: 1),
+            Expanded(child: page),
+          ],
+        );
+      },
     );
+  }
+
+  void _goToTab(BuildContext context, AppTab tab) {
+    switch (tab) {
+      case AppTab.storage:
+        context.go('/storage');
+        break;
+      case AppTab.blog:
+        context.go('/blog');
+        break;
+      case AppTab.board:
+        context.go('/board');
+        break;
+    }
   }
 
   AppTab _getCurrentTab(String location) {
