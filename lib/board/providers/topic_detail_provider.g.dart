@@ -61,7 +61,7 @@ final class TopicDetailProvider
   }
 }
 
-String _$topicDetailHash() => r'f3bfc5e56fa6f99ad60a9352ccd73461a22e053e';
+String _$topicDetailHash() => r'3c2a3c63bd109a86203a7abd00dde78acac562a4';
 
 /// Topic detail notifier
 

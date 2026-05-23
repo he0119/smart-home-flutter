@@ -44,7 +44,10 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // 登录状态检查
       if (!isLogin && state.matchedLocation != AppRoutes.login) {
-        return AppRoutes.login;
+        return Uri(
+          path: AppRoutes.login,
+          queryParameters: {'next': state.uri.toString()},
+        ).toString();
       }
       if (isLogin &&
           (state.matchedLocation == AppRoutes.login ||
@@ -101,6 +104,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
           return TopicDetailPage(topicId: id);
+        },
+      ),
+
+      // 评论详情
+      GoRoute(
+        path: AppRoutes.commentDetail,
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return CommentLinkPage(commentId: id);
         },
       ),
 

@@ -1133,6 +1133,19 @@ class MockBoardRepository extends _i1.Mock implements _i20.BoardRepository {
           as _i3.GraphQLApiClient);
 
   @override
+  _i17.Future<_i7.Comment> comment({required String? commentId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#comment, [], {#commentId: commentId}),
+            returnValue: _i17.Future<_i7.Comment>.value(
+              _FakeComment_7(
+                this,
+                Invocation.method(#comment, [], {#commentId: commentId}),
+              ),
+            ),
+          )
+          as _i17.Future<_i7.Comment>);
+
+  @override
   _i17.Future<_i7.Comment> addComment({
     required String? topicId,
     required String? body,

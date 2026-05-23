@@ -1,5 +1,6 @@
 export 'providers/providers.dart';
 export 'repository/board_repository.dart';
+export 'view/comment_link_page.dart';
 export 'view/home_page.dart';
 export 'view/settings/comment_order_page.dart';
 export 'view/topic_detail_page.dart';

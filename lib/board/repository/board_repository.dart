@@ -3,6 +3,7 @@ import 'package:smarthome/board/graphql/mutations/mutations.dart';
 import 'package:smarthome/board/graphql/queries/queries.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/utils/exceptions.dart' as exceptions;
 import 'package:smarthome/utils/graphql_helper.dart';
 import 'package:tuple/tuple.dart';
 
@@ -10,6 +11,20 @@ class BoardRepository {
   final GraphQLApiClient graphqlApiClient;
 
   BoardRepository({required this.graphqlApiClient});
+
+  Future<Comment> comment({required String commentId}) async {
+    final options = QueryOptions(
+      document: gql(commentQuery),
+      variables: {'commentId': commentId},
+      fetchPolicy: FetchPolicy.networkOnly,
+    );
+    final result = await graphqlApiClient.query(options);
+    final Map<String, dynamic>? json = result.data!['node'];
+    if (json == null) {
+      throw const exceptions.ServerException('评论不存在');
+    }
+    return Comment.fromJson(json);
+  }
 
   Future<Comment> addComment({
     required String topicId,
