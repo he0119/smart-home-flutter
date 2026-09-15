@@ -52,7 +52,7 @@ dependencies:
   # Widget
   webview_flutter: ^4.13.0
   flutter_markdown_selectionarea: ^0.6.17+1
-  cached_network_image: ^3.4.1
+  cached_network_image: ^4.0.0
   dropdown_search: ^7.0.0
   flutter_sticky_header: ^0.8.0
   extended_sliver: ^2.1.3
