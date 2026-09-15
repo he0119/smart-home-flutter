@@ -47,7 +47,7 @@ dependencies:
   flutter_keyboard_visibility: ^6.0.0
   image_picker: ^1.2.1
   sentry_flutter: ^9.8.0
-  dynamic_color: ^1.8.1
+  dynamic_color: ^2.1.0
 
   # Widget
   webview_flutter: ^4.13.0
