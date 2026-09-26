@@ -240,7 +240,7 @@ jobs:
           tar -czvf windows.tar.gz windows
 
       - name: Upload Release Assets
-        uses: alexellis/upload-assets@0.4.1
+        uses: alexellis/upload-assets@0.5.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
