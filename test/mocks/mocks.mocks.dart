@@ -5,7 +5,6 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i17;
 
-import 'package:flutter/material.dart' as _i11;
 import 'package:flutter_riverpod/flutter_riverpod.dart' as _i15;
 import 'package:go_router/src/configuration.dart' as _i10;
 import 'package:go_router/src/delegate.dart' as _i12;
@@ -15,6 +14,7 @@ import 'package:go_router/src/parser.dart' as _i14;
 import 'package:go_router/src/router.dart' as _i21;
 import 'package:go_router/src/state.dart' as _i9;
 import 'package:graphql/client.dart' as _i2;
+import 'package:material_ui/material_ui.dart' as _i11;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i16;
 import 'package:smarthome/board/model/board.dart' as _i7;

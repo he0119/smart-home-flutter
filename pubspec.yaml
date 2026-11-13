@@ -6,7 +6,7 @@ publish_to: "none"
 
 environment:
   sdk: ">=3.10.0 <4.0.0"
-  flutter: "3.44.0" # This must be exact! No ranges allowed.
+  flutter: "3.50.0" # This must be exact! No ranges allowed.
 
 dependencies:
   flutter:
@@ -15,6 +15,9 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  # Material / Cupertino 已从 SDK 拆成独立包，见 Flutter 3.50 发布说明
+  material_ui: ^1.11.0
+  cupertino_ui: ^1.1.6
   intl: any
   cupertino_icons: ^1.0.8
 
@@ -47,13 +50,13 @@ dependencies:
   flutter_keyboard_visibility: ^6.0.0
   image_picker: ^1.2.1
   sentry_flutter: ^9.8.0
-  dynamic_color: ^1.8.1
+  dynamic_color: ^2.1.0
 
   # Widget
   webview_flutter: ^4.13.0
   flutter_markdown_selectionarea: ^0.6.17+1
   cached_network_image: ^3.4.1
-  dropdown_search: ^7.0.0
+  dropdown_search: ^8.1.0
   flutter_sticky_header: ^0.8.0
   extended_sliver: ^2.1.3
   animated_tree_view: ^2.3.0

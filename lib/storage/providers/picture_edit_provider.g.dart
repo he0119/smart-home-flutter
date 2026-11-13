@@ -52,7 +52,7 @@ abstract class _$PictureEdit extends $Notifier<PictureEditState> {
   PictureEditState build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<PictureEditState, PictureEditState>;
     final element =
         ref.element
@@ -62,6 +62,6 @@ abstract class _$PictureEdit extends $Notifier<PictureEditState> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }

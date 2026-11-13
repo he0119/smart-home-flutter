@@ -52,7 +52,7 @@ abstract class _$StorageHome extends $Notifier<StorageHomeState> {
   StorageHomeState build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<StorageHomeState, StorageHomeState>;
     final element =
         ref.element
@@ -62,6 +62,6 @@ abstract class _$StorageHome extends $Notifier<StorageHomeState> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }

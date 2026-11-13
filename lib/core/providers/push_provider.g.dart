@@ -51,7 +51,7 @@ abstract class _$Push extends $Notifier<PushInfo> {
   PushInfo build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<PushInfo, PushInfo>;
     final element =
         ref.element
@@ -61,6 +61,6 @@ abstract class _$Push extends $Notifier<PushInfo> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }
