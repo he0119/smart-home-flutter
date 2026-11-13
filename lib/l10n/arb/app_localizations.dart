@@ -1,3 +1,9 @@
+// 此文件由 flutter gen-l10n 生成，请勿手工修改。
+// Flutter 3.50 的生成器仍然产出 flutter_localizations 里的
+// GlobalMaterialLocalizations / GlobalCupertinoLocalizations（这两个已随设计组件包
+// 拆出 SDK 而弃用），而应用实际使用的是 material_ui 里的版本，见 lib/app/main.dart。
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
