@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown_selectionarea/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -58,12 +58,22 @@ class _MyAppState extends ConsumerState<MyApp> {
           theme: ThemeData(colorScheme: lightDynamic, useMaterial3: true),
           darkTheme: ThemeData.dark().copyWith(colorScheme: darkDynamic),
           themeMode: themeMode,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          // 本地化委托必须用 material_ui 里的 GlobalMaterialLocalizations，
+          // 否则 MaterialApp 找不到自己那一套 MaterialLocalizations。
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+            AppLocalizations.delegate,
+            ...GlobalMaterialLocalizations.delegates,
+          ],
           supportedLocales: AppLocalizations.supportedLocales,
           title: title,
           routerConfig: _router,
           builder: (context, child) {
-            return UpdateListener(child: child!);
+            // go_router、webview_flutter 等依赖还没迁移到 material_ui，
+            // 用官方兼容桥把主题和本地化往下补一份旧类型。
+            // ignore: deprecated_member_use
+            return MaterialUiCompatibilityBridge(
+              child: UpdateListener(child: child!),
+            );
           },
         );
       },

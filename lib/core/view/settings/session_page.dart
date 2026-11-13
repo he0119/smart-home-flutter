@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/user/providers/session_provider.dart';
 import 'package:smarthome/utils/date_format_extension.dart';

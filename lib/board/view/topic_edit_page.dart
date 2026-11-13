@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/providers/topic_edit_provider.dart';
