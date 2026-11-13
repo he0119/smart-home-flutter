@@ -101,7 +101,7 @@ abstract class _$TopicDetail extends $Notifier<TopicDetailState> {
   TopicDetailState build(String topicId);
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<TopicDetailState, TopicDetailState>;
     final element =
         ref.element
@@ -111,6 +111,6 @@ abstract class _$TopicDetail extends $Notifier<TopicDetailState> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, () => build(_$args));
+    return element.handleCreate(ref, () => build(_$args));
   }
 }

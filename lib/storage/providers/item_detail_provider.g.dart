@@ -93,7 +93,7 @@ abstract class _$ItemDetail extends $AsyncNotifier<Item> {
   FutureOr<Item> build(String itemId);
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<Item>, Item>;
     final element =
         ref.element
@@ -103,6 +103,6 @@ abstract class _$ItemDetail extends $AsyncNotifier<Item> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, () => build(_$args));
+    return element.handleCreate(ref, () => build(_$args));
   }
 }

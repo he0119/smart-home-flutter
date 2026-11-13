@@ -52,7 +52,7 @@ abstract class _$Consumables extends $Notifier<ConsumablesState> {
   ConsumablesState build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<ConsumablesState, ConsumablesState>;
     final element =
         ref.element
@@ -62,6 +62,6 @@ abstract class _$Consumables extends $Notifier<ConsumablesState> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }

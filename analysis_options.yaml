@@ -9,6 +9,14 @@
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
+# Flutter 3.50 的 flutter pub get 会自动补上这一段，避免去分析平台目录和构建产物。
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - web/**
+    - windows/**
+
 plugins:
   riverpod_lint: 3.1.3
 

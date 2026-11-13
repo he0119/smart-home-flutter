@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/board/model/board.dart';
 
 import 'package:smarthome/board/view/widgets/item_title.dart';

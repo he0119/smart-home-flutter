@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
 
 class SearchIconButton extends StatelessWidget {

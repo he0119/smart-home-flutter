@@ -52,7 +52,7 @@ abstract class _$TopicEdit extends $Notifier<TopicEditState> {
   TopicEditState build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<TopicEditState, TopicEditState>;
     final element =
         ref.element
@@ -62,6 +62,6 @@ abstract class _$TopicEdit extends $Notifier<TopicEditState> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }

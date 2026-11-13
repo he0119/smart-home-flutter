@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/widgets/infinite_list.dart';

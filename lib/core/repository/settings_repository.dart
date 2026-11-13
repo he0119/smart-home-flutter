@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smarthome/core/core.dart';

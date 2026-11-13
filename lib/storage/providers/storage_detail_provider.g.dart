@@ -101,7 +101,7 @@ abstract class _$StorageDetail extends $Notifier<StorageDetailState> {
   StorageDetailState build(String storageId);
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<StorageDetailState, StorageDetailState>;
     final element =
         ref.element
@@ -111,6 +111,6 @@ abstract class _$StorageDetail extends $Notifier<StorageDetailState> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, () => build(_$args));
+    return element.handleCreate(ref, () => build(_$args));
   }
 }
