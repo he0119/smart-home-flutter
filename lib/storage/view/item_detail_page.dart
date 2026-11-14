@@ -10,6 +10,7 @@ import 'package:smarthome/storage/view/item_edit_page.dart';
 
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
+import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
@@ -89,31 +90,18 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
                   }
                 }
                 if (value == ItemDetailMenu.delete) {
-                  if (context.mounted) {
-                    await showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: Text('删除 ${item.name}'),
-                        content: const Text('你确认要删除该物品么？'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('否'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              ref
-                                  .read(itemEditProvider.notifier)
-                                  .deleteItem(item);
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('是'),
-                          ),
-                        ],
-                      ),
-                    );
+                  if (!context.mounted) {
+                    return;
+                  }
+                  final confirmed = await showConfirmDialog(
+                    context,
+                    title: '删除 ${item.name}',
+                    message: '删除后可以在回收站里找回，确认删除？',
+                    confirmLabel: '删除',
+                    destructive: true,
+                  );
+                  if (confirmed) {
+                    ref.read(itemEditProvider.notifier).deleteItem(item);
                   }
                 }
               },

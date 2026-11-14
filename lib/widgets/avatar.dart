@@ -15,9 +15,14 @@ class MyCircleAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = avatarUrl;
     if (url == null) {
-      return const CircleAvatar(
-        backgroundColor: Colors.grey,
-        child: Text('?', style: TextStyle(fontSize: 24)),
+      final colors = Theme.of(context).colorScheme;
+      return CircleAvatar(
+        backgroundColor: colors.surfaceContainerHighest,
+        child: Icon(
+          Icons.person_outline,
+          size: 24,
+          color: colors.onSurfaceVariant,
+        ),
       );
     }
     // CachedNetworkImage 暂时不支持 Windows

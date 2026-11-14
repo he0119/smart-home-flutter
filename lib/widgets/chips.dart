@@ -20,9 +20,6 @@ class MyChoiceChip extends StatelessWidget {
         label: label,
         selected: selected,
         onSelected: onSelected,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
       ),
     );
   }

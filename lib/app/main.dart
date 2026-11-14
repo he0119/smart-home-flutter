@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_markdown_selectionarea/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:smarthome/app/theme.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/l10n/l10n.dart';
 import 'package:smarthome/utils/launch_url.dart';
@@ -55,8 +56,8 @@ class _MyAppState extends ConsumerState<MyApp> {
         return MaterialApp.router(
           restorationScopeId: 'app',
           scaffoldMessengerKey: scaffoldMessengerKey,
-          theme: ThemeData(colorScheme: lightDynamic, useMaterial3: true),
-          darkTheme: ThemeData.dark().copyWith(colorScheme: darkDynamic),
+          theme: buildLightTheme(lightDynamic),
+          darkTheme: buildDarkTheme(darkDynamic),
           themeMode: themeMode,
           // 本地化委托必须用 material_ui 里的 GlobalMaterialLocalizations，
           // 否则 MaterialApp 找不到自己那一套 MaterialLocalizations。

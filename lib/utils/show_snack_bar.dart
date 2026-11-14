@@ -17,11 +17,16 @@ void showInfoSnackBar(String message, {int duration = 4}) {
 ///
 /// 显示时间 [duration] 的单位为秒，默认为 4 秒
 void showErrorSnackBar(String message, {int duration = 4}) {
+  final context = scaffoldMessengerKey.currentContext;
+  final colors = context == null ? null : Theme.of(context).colorScheme;
   scaffoldMessengerKey.currentState!.showSnackBar(
     SnackBar(
-      content: Text(message),
+      content: Text(
+        message,
+        style: colors == null ? null : TextStyle(color: colors.onError),
+      ),
       duration: Duration(seconds: duration),
-      backgroundColor: Colors.red,
+      backgroundColor: colors?.error,
     ),
   );
 }
