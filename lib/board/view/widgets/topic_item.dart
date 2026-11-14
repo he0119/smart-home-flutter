@@ -29,7 +29,7 @@ class TopicItem extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: Text(
               topic.title!,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           ItemTitle(
@@ -45,9 +45,17 @@ class TopicItem extends StatelessWidget {
       );
     } else {
       // 依据话题添加标志
-      var title = topic.title!;
-      if (topic.isClosed!) title = '🔒$title';
-      if (topic.isPinned!) title = '🔝$title';
+      final colors = Theme.of(context).colorScheme;
+      final flags = <Widget>[
+        if (topic.isClosed!)
+          Icon(Icons.lock_outline, size: 16, color: colors.onSurfaceVariant),
+        if (topic.isPinned!)
+          Icon(
+            Icons.push_pin_outlined,
+            size: 16,
+            color: colors.onSurfaceVariant,
+          ),
+      ];
       return InkWell(
         onTap: () async {
           context.goTopicDetail(topic.id);
@@ -61,7 +69,17 @@ class TopicItem extends StatelessWidget {
               createdAt: activeAt!,
               editedAt: activeAt,
             ),
-            ListTile(title: Text(title)),
+            ListTile(
+              title: Row(
+                children: <Widget>[
+                  if (flags.isNotEmpty) ...<Widget>[
+                    ...flags,
+                    const SizedBox(width: 6),
+                  ],
+                  Expanded(child: Text(topic.title!)),
+                ],
+              ),
+            ),
           ],
         ),
       );

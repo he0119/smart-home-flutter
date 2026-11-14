@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:smarthome/app/dimens.dart';
 
 class SettingsSection extends StatelessWidget {
   final String? title;
@@ -13,12 +14,16 @@ class SettingsSection extends StatelessWidget {
       children: [
         if (title != null)
           Padding(
-            padding: const EdgeInsets.only(left: 16, top: 16),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.xl,
+              AppSpacing.lg,
+              AppSpacing.sm,
+            ),
             child: Text(
               title!,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: Theme.of(context).colorScheme.secondary,
-                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
           ),
