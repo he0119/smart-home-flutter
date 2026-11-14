@@ -97,19 +97,19 @@ class StorageHomeScreen extends ConsumerWidget {
       // 仅在主界面添加所有位置按钮
       if (state.itemType == ItemType.all) {
         listofWidget.add(
+          // 和下面的物品行用同一套网格：leading 图标 16、标题 72 起，
+          // 不再套 Card，避免卡片外边距把整行往右推 16dp
           SliverToBoxAdapter(
-            child: Card(
-              child: ListTile(
-                leading: Icon(
-                  Icons.storage,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                title: const Text('所有位置'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  context.goStorageDetail(homeStorage.id);
-                },
+            child: ListTile(
+              leading: Icon(
+                Icons.storage,
+                color: Theme.of(context).colorScheme.primary,
               ),
+              title: const Text('所有位置'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                context.goStorageDetail(homeStorage.id);
+              },
             ),
           ),
         );
