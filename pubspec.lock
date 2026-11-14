@@ -5,18 +5,18 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: "1b0e6a07425a3e460666e88bf1c949ccc7bb0116ad562ce94a1eca60fe820725"
+      sha256: "1c5591cc6f252d5f440d96ab87c03e43504be552a3fa49d7cb7563f04c51fb0a"
       url: "https://pub.dev"
     source: hosted
-    version: "103.0.0"
+    version: "111.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: "61c04d0c1bfed555c681ea079519933f071a5a026578ff73c4ff0df2d3462e5e"
+      sha256: "6c39bd5486a310e56217bed7cb1691377959f31be4227e41750107db7e6dd55c"
       url: "https://pub.dev"
     source: hosted
-    version: "13.3.0"
+    version: "14.7.0"
   analyzer_buffer:
     dependency: transitive
     description:
@@ -109,10 +109,10 @@ packages:
     dependency: "direct dev"
     description:
       name: build_runner
-      sha256: "894c243f6bc32015fec466ce30a6925bd537a77a426ee5bf481120477eb3de67"
+      sha256: "6feadd32d90a68253c1f7b4fcff76adb4b41ad32a53f8bad835dc65f01ac9dc5"
       url: "https://pub.dev"
     source: hosted
-    version: "2.16.1"
+    version: "2.16.2"
   built_collection:
     dependency: transitive
     description:
@@ -725,6 +725,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.2"
+  jni_flutter:
+    dependency: transitive
+    description:
+      name: jni_flutter
+      sha256: "0dd33d67797560f66e961a6053882d4df54bd345bf063b8fe7ea133f7ad8b191"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4+1"
   jni_util:
     dependency: transitive
     description:
@@ -857,10 +865,10 @@ packages:
     dependency: "direct dev"
     description:
       name: mockito
-      sha256: "3762486c07f0faba043abf7da4f51f8564d2119659b1d8a708d34bff74ed5035"
+      sha256: "6c1970612452260366064d4df80fdb3eece1ec5e52610ae34a0e51f2f3d8e64f"
       url: "https://pub.dev"
     source: hosted
-    version: "5.6.5"
+    version: "5.8.1"
   normalize:
     dependency: transitive
     description:
@@ -889,10 +897,10 @@ packages:
     dependency: transitive
     description:
       name: package_config
-      sha256: f096c55ebb7deb7e384101542bfba8c52696c1b56fca2eb62827989ef2353bbc
+      sha256: ffcf4cf3d6c0b74ac43708d9f56625506e8a68aa935abe9d267a7330f320eb5d
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "3.0.0"
   package_info_plus:
     dependency: "direct main"
     description:
@@ -929,10 +937,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: "149441ca6e4f38193b2e004c0ca6376a3d11f51fa5a77552d8bd4d2b0c0912ba"
+      sha256: "69cbd515a62b94d32a7944f086b2f82b4ac40a1d45bebfc00813a430ab2dabcd"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.23"
+    version: "2.3.1"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -1193,10 +1201,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "1e12aafe408aa50da80edfd679a2a6bf63ba7ab37c7fa98286da459a757b3399"
+      sha256: "137dedccacb394b8f470d6c9b435ffc3d33faaa6ce2949c4f54a61007d64396d"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.28"
+    version: "2.5.5"
   shared_preferences_foundation:
     dependency: transitive
     description:
