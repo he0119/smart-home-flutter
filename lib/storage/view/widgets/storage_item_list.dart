@@ -51,7 +51,10 @@ class _HighlightStorageItemListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     if (item is Item) {
       return ListTile(
-        leading: const Icon(Icons.insert_drive_file, size: 34.0),
+        leading: Icon(
+          Icons.inventory_2_outlined,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
         title: SubstringHighlight(text: item.name, term: term),
         subtitle: SubstringHighlight(text: item.description ?? '', term: term),
         onTap: () {
@@ -60,7 +63,10 @@ class _HighlightStorageItemListItem extends StatelessWidget {
       );
     } else {
       return ListTile(
-        leading: const Icon(Icons.storage, size: 34.0),
+        leading: Icon(
+          Icons.folder_outlined,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
         title: SubstringHighlight(text: item.name, term: term),
         subtitle: SubstringHighlight(text: item.description ?? '', term: term),
         onTap: () async {
@@ -81,7 +87,10 @@ class _StorageItemListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     if (item is Item) {
       return ListTile(
-        leading: const Icon(Icons.insert_drive_file, size: 34.0),
+        leading: Icon(
+          Icons.inventory_2_outlined,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
         onTap: () {
@@ -90,7 +99,10 @@ class _StorageItemListItem extends StatelessWidget {
       );
     } else {
       return ListTile(
-        leading: const Icon(Icons.storage, size: 34.0),
+        leading: Icon(
+          Icons.folder_outlined,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
         title: Text(item.name),
         subtitle: Text(item.description ?? ''),
         onTap: () {

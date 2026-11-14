@@ -98,27 +98,17 @@ class StorageHomeScreen extends ConsumerWidget {
       if (state.itemType == ItemType.all) {
         listofWidget.add(
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-              child: InkWell(
+            child: Card(
+              child: ListTile(
+                leading: Icon(
+                  Icons.storage,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: const Text('所有位置'),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   context.goStorageDetail(homeStorage.id);
                 },
-                child: Card(
-                  color: Theme.of(context).colorScheme.secondary,
-                  child: ListTile(
-                    title: Text(
-                      '所有位置',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSecondary,
-                      ),
-                    ),
-                    trailing: Icon(
-                      Icons.storage,
-                      color: Theme.of(context).colorScheme.onSecondary,
-                    ),
-                  ),
-                ),
               ),
             ),
           ),

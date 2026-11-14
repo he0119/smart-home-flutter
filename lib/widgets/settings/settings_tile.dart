@@ -19,7 +19,9 @@ class SettingsTile extends StatelessWidget {
     return ListTile(
       title: Text(title),
       subtitle: subtitle != null ? Text(subtitle!) : null,
-      trailing: trailing,
+      trailing:
+          trailing ??
+          (onPressed == null ? null : const Icon(Icons.chevron_right)),
       onTap: onPressed != null ? () => onPressed!(context) : null,
     );
   }
