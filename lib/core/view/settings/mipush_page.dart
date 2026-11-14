@@ -28,6 +28,7 @@ class MiPushPage extends ConsumerWidget {
         Tooltip(
           message: '同步',
           child: IconButton(
+            tooltip: '重新获取',
             icon: const Icon(Icons.sync),
             onPressed: () {
               // 重新同步本地与服务器的注册数据

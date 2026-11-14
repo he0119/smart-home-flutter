@@ -68,6 +68,7 @@ class _CommentEditPageState extends ConsumerState<CommentEditPage> {
           Tooltip(
             message: '提交',
             child: IconButton(
+              tooltip: '发送',
               icon: const Icon(Icons.send),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {

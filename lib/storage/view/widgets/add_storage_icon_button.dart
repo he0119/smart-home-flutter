@@ -14,6 +14,7 @@ class AddStorageIconButton extends ConsumerWidget {
     return Tooltip(
       message: '添加位置',
       child: IconButton(
+        tooltip: '添加位置',
         icon: const Icon(Icons.add),
         onPressed: () async {
           final r = await Navigator.of(context).push(

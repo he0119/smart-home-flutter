@@ -50,6 +50,7 @@ class _TextEditPageState extends State<TextEditPage> {
         Tooltip(
           message: '确认',
           child: IconButton(
+            tooltip: '保存',
             icon: const Icon(Icons.check),
             onPressed: () {
               if (_formKey.currentState!.validate()) {

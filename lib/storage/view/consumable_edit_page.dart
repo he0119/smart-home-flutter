@@ -65,6 +65,7 @@ class _ConsumableEditPageState extends ConsumerState<ConsumableEditPage> {
               ListTile(
                 title: Text(consumable.name),
                 trailing: IconButton(
+                  tooltip: '清除',
                   icon: const Icon(Icons.clear),
                   onPressed: () {
                     ref

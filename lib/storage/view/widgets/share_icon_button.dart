@@ -14,6 +14,7 @@ class ShareQrIconButton extends StatelessWidget {
     return Tooltip(
       message: '分享',
       child: IconButton(
+        tooltip: '分享',
         icon: const Icon(Icons.share),
         onPressed: () async {
           final painter = QrPainter(

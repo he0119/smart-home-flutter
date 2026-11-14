@@ -14,6 +14,7 @@ class ScanQRIconButton extends StatelessWidget {
     return Tooltip(
       message: '扫描二维码',
       child: IconButton(
+        tooltip: '扫描二维码',
         icon: const Icon(Icons.qr_code),
         onPressed: () {
           Navigator.of(

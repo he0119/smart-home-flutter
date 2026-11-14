@@ -204,6 +204,7 @@ class StorageHomeScreen extends ConsumerWidget {
             Text(headerText),
             const Spacer(),
             IconButton(
+              tooltip: currentType == ItemType.all ? '展开全部' : '收起',
               icon: Icon(
                 currentType == ItemType.all
                     ? Icons.expand_more
