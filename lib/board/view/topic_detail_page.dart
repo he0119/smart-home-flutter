@@ -245,7 +245,7 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
                   editedAt: state.topic.editedAt!,
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                   child: MyMarkdownBody(data: state.topic.description!),
                 ),
               ],

@@ -58,7 +58,11 @@ class _StorageFieldState extends ConsumerState<StorageFormField> {
       decoration: effectiveDecoration.copyWith(
         errorText: _errorText,
         suffixIcon: shouldShowClearIcon(effectiveDecoration)
-            ? IconButton(icon: const Icon(Icons.close), onPressed: clear)
+            ? IconButton(
+                tooltip: '清除',
+                icon: const Icon(Icons.close),
+                onPressed: clear,
+              )
             : null,
       ),
       readOnly: true,

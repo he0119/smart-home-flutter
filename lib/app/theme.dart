@@ -19,17 +19,19 @@ ThemeData buildDarkTheme(ColorScheme? scheme) => _buildTheme(
 
 ThemeData _buildTheme(ColorScheme scheme) {
   final base = ThemeData(colorScheme: scheme, useMaterial3: true);
-  final inputBorder = OutlineInputBorder(
+  // 填充输入框必须配 UnderlineInputBorder：OutlineInputBorder 会把浮动标签
+  // 压在填充色边缘上，标签上半截被盖住。
+  final inputBorder = UnderlineInputBorder(
     borderRadius: BorderRadius.circular(AppRadius.md),
     borderSide: BorderSide.none,
   );
-  final focusedBorder = OutlineInputBorder(
+  final focusedBorder = UnderlineInputBorder(
     borderRadius: BorderRadius.circular(AppRadius.md),
-    borderSide: BorderSide(color: scheme.primary, width: 1.5),
+    borderSide: BorderSide(color: scheme.primary, width: 2),
   );
-  final errorBorder = OutlineInputBorder(
+  final errorBorder = UnderlineInputBorder(
     borderRadius: BorderRadius.circular(AppRadius.md),
-    borderSide: BorderSide(color: scheme.error, width: 1.5),
+    borderSide: BorderSide(color: scheme.error, width: 2),
   );
 
   return base.copyWith(
@@ -48,8 +50,8 @@ ThemeData _buildTheme(ColorScheme scheme) {
       errorBorder: errorBorder,
       focusedErrorBorder: errorBorder,
       hintStyle: TextStyle(color: scheme.onSurfaceVariant),
+      // 浮动标签的颜色交给 M3 默认规则：未聚焦是次要色、聚焦变主色
       labelStyle: TextStyle(color: scheme.onSurfaceVariant),
-      floatingLabelStyle: TextStyle(color: scheme.primary),
     ),
     // 按钮统一 48 高、12 圆角，主次靠样式而不是各自的 shape
     filledButtonTheme: FilledButtonThemeData(

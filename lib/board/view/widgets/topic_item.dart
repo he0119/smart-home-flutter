@@ -3,6 +3,8 @@ import 'package:smarthome/board/model/board.dart';
 
 import 'package:smarthome/board/view/widgets/item_title.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
+import 'package:smarthome/utils/date_format_extension.dart';
+import 'package:smarthome/widgets/avatar.dart';
 import 'package:smarthome/widgets/markdown.dart';
 
 class TopicItem extends StatelessWidget {
@@ -56,32 +58,32 @@ class TopicItem extends StatelessWidget {
             color: colors.onSurfaceVariant,
           ),
       ];
-      return InkWell(
-        onTap: () async {
-          context.goTopicDetail(topic.id);
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+      // 列表里标题在前、作者和时间压成一行副标题，和物品列表保持一致
+      return ListTile(
+        leading: MyCircleAvatar(avatarUrl: topic.user!.avatarUrl),
+        title: Row(
           children: <Widget>[
-            ItemTitle(
-              user: topic.user!,
-              createdAt: activeAt!,
-              editedAt: activeAt,
-            ),
-            ListTile(
-              title: Row(
-                children: <Widget>[
-                  if (flags.isNotEmpty) ...<Widget>[
-                    ...flags,
-                    const SizedBox(width: 6),
-                  ],
-                  Expanded(child: Text(topic.title!)),
-                ],
+            if (flags.isNotEmpty) ...<Widget>[
+              ...flags,
+              const SizedBox(width: 6),
+            ],
+            Expanded(
+              child: Text(
+                topic.title!,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
         ),
+        subtitle: Text(
+          '${topic.user!.username} · ${activeAt!.toLocalStr()}',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        onTap: () async {
+          context.goTopicDetail(topic.id);
+        },
       );
     }
   }

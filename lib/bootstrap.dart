@@ -10,7 +10,6 @@ import 'package:smarthome/app/main.dart';
 import 'package:smarthome/app/simple_riverpod_observer.dart';
 import 'package:smarthome/core/core.dart';
 
-
 Future<void> bootstrap(AppConfig appConfig) async {
   await SentryFlutter.init(
     (options) {
@@ -47,10 +46,7 @@ Future<void> bootstrap(AppConfig appConfig) async {
       await graphQLApiClient.loadSettings();
 
       runApp(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MyApp(),
-        ),
+        UncontrolledProviderScope(container: container, child: const MyApp()),
       );
     },
   );

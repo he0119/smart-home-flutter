@@ -27,10 +27,25 @@ void main() {
 
     expect(light.inputDecorationTheme.filled, isTrue);
     expect(light.inputDecorationTheme.fillColor, isNotNull);
-    final border = light.inputDecorationTheme.border! as OutlineInputBorder;
+    // 填充输入框必须用 UnderlineInputBorder：换成 OutlineInputBorder 时
+    // 浮动标签会被填充色盖住上半截（真机上验证过）。
+    final border = light.inputDecorationTheme.border! as UnderlineInputBorder;
     expect(border.borderRadius, BorderRadius.circular(12));
     expect(border.borderSide.width, 0);
   });
+
+  testWidgets(
+    'focused input border keeps the fill and uses the primary color',
+    (tester) async {
+      await pumpThemes(tester);
+
+      final focused =
+          light.inputDecorationTheme.focusedBorder! as UnderlineInputBorder;
+      expect(focused.borderRadius, BorderRadius.circular(12));
+      expect(focused.borderSide.color, light.colorScheme.primary);
+      expect(focused.borderSide.width, 2);
+    },
+  );
 
   testWidgets('chips use the 8 radius instead of a per-widget override', (
     tester,

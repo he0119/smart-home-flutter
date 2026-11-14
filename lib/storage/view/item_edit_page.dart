@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:smarthome/app/dimens.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/storage/model/models.dart';
@@ -69,15 +70,18 @@ class _ItemEditPageState extends ConsumerState<ItemEditPage> {
     });
 
     return MySliverScaffold(
+      appBarSize: AppBarSize.normal,
       title: widget.isEditing
           ? Text('编辑 ${widget.item!.name}')
           : const Text('添加物品'),
       sliver: SliverFillRemaining(
+        hasScrollBody: false,
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Form(
             key: _formKey,
             child: Column(
+              spacing: AppSpacing.md,
               children: <Widget>[
                 TextFormField(
                   controller: _nameController,

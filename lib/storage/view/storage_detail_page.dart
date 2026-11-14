@@ -193,6 +193,7 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
         itemBuilder: (BuildContext context, int index) {
           return index == 0
               ? IconButton(
+                  tooltip: '回到「家」',
                   icon: const Icon(Icons.home),
                   onPressed: () {
                     // 回到根位置

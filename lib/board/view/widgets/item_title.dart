@@ -22,10 +22,14 @@ class ItemTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: MyCircleAvatar(avatarUrl: user.avatarUrl),
-      title: Text(user.username),
-      subtitle: isSameDateTime(createdAt, editedAt)
-          ? Text(createdAt.toLocalStr())
-          : Text('${createdAt.toLocalStr()} 已编辑'),
+      title: Text(user.username, maxLines: 1, overflow: TextOverflow.ellipsis),
+      subtitle: Text(
+        isSameDateTime(createdAt, editedAt)
+            ? createdAt.toLocalStr()
+            : '${createdAt.toLocalStr()} 已编辑',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
       trailing: (onSelected != null)
           ? PopupMenuButton(
               onSelected: onSelected,

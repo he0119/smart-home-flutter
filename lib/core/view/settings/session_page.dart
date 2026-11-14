@@ -47,6 +47,7 @@ class SessionPage extends ConsumerWidget {
                   trailing: session.isCurrent
                       ? null
                       : IconButton(
+                          tooltip: '删除会话',
                           icon: const Icon(Icons.delete),
                           onPressed: () async {
                             await showDialog(

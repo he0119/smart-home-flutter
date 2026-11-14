@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:smarthome/app/dimens.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smarthome/storage/providers/providers.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/home_page.dart';
+import 'package:smarthome/widgets/state_views.dart';
 import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class PictureAddPage extends StatelessWidget {
@@ -67,12 +69,14 @@ class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
 
     return MySliverScaffold(
       title: const Text('添加图片'),
-      sliver: SliverToBoxAdapter(
+      sliver: SliverFillRemaining(
+        hasScrollBody: false,
         child: Form(
           key: _formKey,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
             child: Column(
+              spacing: AppSpacing.md,
               children: [
                 TextFormField(
                   controller: _descriptionController,
@@ -86,22 +90,24 @@ class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
                     return null;
                   },
                 ),
-                picturePath != null
-                    ? Stack(
-                        alignment: AlignmentDirectional.center,
-                        children: <Widget>[
-                          const CircularProgressIndicator(),
-                          kIsWeb
-                              ? Image.network(picturePath!)
-                              : Image.file(File(picturePath!)),
-                          if (state.status == PictureEditStatus.loading)
-                            const CircularProgressIndicator(),
-                        ],
-                      )
-                    : const SizedBox(
-                        height: 300,
-                        child: Center(child: Text('无图片')),
-                      ),
+                Expanded(
+                  child: picturePath != null
+                      ? Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: <Widget>[
+                            kIsWeb
+                                ? Image.network(picturePath!)
+                                : Image.file(File(picturePath!)),
+                            if (state.status == PictureEditStatus.loading)
+                              const CircularProgressIndicator(),
+                          ],
+                        )
+                      : const EmptyState(
+                          icon: Icons.image_outlined,
+                          title: '还没有图片',
+                          message: '从相册里选一张，或者直接拍一张',
+                        ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -131,8 +137,9 @@ class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
                       ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                SafeArea(
+                  top: false,
+                  minimum: const EdgeInsets.only(top: 8, bottom: 8),
                   child: RoundedRaisedButton(
                     onPressed:
                         (state.status != PictureEditStatus.loading &&

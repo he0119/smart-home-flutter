@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:smarthome/app/dimens.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
@@ -93,6 +94,7 @@ class _ApiUrlFormState extends ConsumerState<ApiUrlForm> {
         child: Form(
           key: _formKey,
           child: Column(
+            spacing: AppSpacing.lg,
             children: [
               Image.asset(
                 'assets/icon/icon.webp',
