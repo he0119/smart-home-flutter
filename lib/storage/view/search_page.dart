@@ -152,7 +152,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               );
             }
           }
-          return SliverFillRemaining(hasScrollBody: false, child: Container());
+          return const SliverEmptyState(
+            icon: Icons.search,
+            title: '搜索物品和位置',
+            message: '输入名称或备注里的关键字',
+          );
         },
       ),
     );

@@ -17,30 +17,42 @@ class MyDrawer extends ConsumerWidget {
     final settings = ref.watch(settingsProvider);
     final adminUrl = settings.adminUrl;
     final loginUser = settings.loginUser;
+    final scheme = Theme.of(context).colorScheme;
     return Drawer(
       child: ListView(
         children: [
           if (loginUser != null)
             UserAccountsDrawerHeader(
-              accountName: Text(loginUser.username),
-              accountEmail: Text(loginUser.email!),
+              // 用 container 配色：直接拿 primary 铺满会变成浅底浅字
+              decoration: BoxDecoration(color: scheme.primaryContainer),
+              accountName: Text(
+                loginUser.username,
+                style: TextStyle(color: scheme.onPrimaryContainer),
+              ),
+              accountEmail: Text(
+                loginUser.email!,
+                style: TextStyle(color: scheme.onPrimaryContainer),
+              ),
               currentAccountPicture: MyCircleAvatar(
                 avatarUrl: loginUser.avatarUrl,
               ),
             ),
           ListTile(
+            leading: const Icon(Icons.inventory_2_outlined),
             title: const Text('耗材管理'),
             onTap: () {
               context.goConsumables();
             },
           ),
           ListTile(
+            leading: const Icon(Icons.delete_outline),
             title: const Text('回收站'),
             onTap: () {
               context.goRecycleBin();
             },
           ),
           ListTile(
+            leading: const Icon(Icons.admin_panel_settings_outlined),
             title: const Text('管理'),
             onTap: () {
               if (!kIsWeb && !Platform.isWindows) {
@@ -51,12 +63,14 @@ class MyDrawer extends ConsumerWidget {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.settings_outlined),
             title: const Text('设置'),
             onTap: () {
               context.goSettings();
             },
           ),
           ListTile(
+            leading: const Icon(Icons.info_outline),
             title: const Text('关于'),
             onTap: () async {
               final versionRepository = ref.read(versionRepositoryProvider);
@@ -75,6 +89,7 @@ class MyDrawer extends ConsumerWidget {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.logout),
             title: const Text('登出'),
             onTap: () async {
               final confirmed = await showConfirmDialog(

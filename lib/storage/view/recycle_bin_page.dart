@@ -68,9 +68,16 @@ Widget _buildItem(BuildContext context, Item item, WidgetRef ref) {
       ],
     ),
   );
+  final description = item.description;
   return ListTile(
+    leading: Icon(
+      Icons.inventory_2_outlined,
+      color: Theme.of(context).colorScheme.onSurfaceVariant,
+    ),
     title: text,
-    subtitle: Text(item.description ?? ''),
+    subtitle: (description == null || description.isEmpty)
+        ? null
+        : Text(description),
     onTap: () {
       context.goItemDetail(item.id);
     },

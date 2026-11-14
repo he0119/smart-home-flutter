@@ -271,6 +271,10 @@ class StorageHomeScreen extends ConsumerWidget {
     );
     final description = item.description;
     return ListTile(
+      leading: Icon(
+        Icons.inventory_2_outlined,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
       title: text,
       subtitle: (description == null || description.isEmpty)
           ? null
