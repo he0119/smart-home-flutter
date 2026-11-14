@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:smarthome/app/dimens.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -73,6 +74,7 @@ class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
             child: Column(
+              spacing: AppSpacing.md,
               children: [
                 TextFormField(
                   controller: _descriptionController,

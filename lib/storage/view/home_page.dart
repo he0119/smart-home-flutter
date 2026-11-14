@@ -269,9 +269,12 @@ class StorageHomeScreen extends ConsumerWidget {
         ],
       ),
     );
+    final description = item.description;
     return ListTile(
       title: text,
-      subtitle: Text(item.description ?? ''),
+      subtitle: (description == null || description.isEmpty)
+          ? null
+          : Text(description),
       onTap: () async {
         context.goItemDetail(item.id);
       },
