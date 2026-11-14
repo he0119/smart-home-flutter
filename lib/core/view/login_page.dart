@@ -253,14 +253,18 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                         ),
                       ),
                     ] else ...[
-                      const Padding(
-                        padding: EdgeInsets.symmetric(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 20,
                         ),
                         child: Text(
                           '点击下方按钮将进行单点登录',
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
                         ),
                       ),
                     ],

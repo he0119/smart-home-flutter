@@ -9,6 +9,7 @@ import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
 import 'package:smarthome/board/view/widgets/item_title.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
@@ -112,149 +113,89 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
             }
 
             if (value == TopicDetailMenu.delete) {
-              if (context.mounted) {
-                await showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text('删除话题'),
-                    content: const Text('你确认要删除该话题？'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('否'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showInfoSnackBar('正在删除...', duration: 1);
-                          ref
-                              .read(topicEditProvider.notifier)
-                              .deleteTopic(state.topic);
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('是'),
-                      ),
-                    ],
-                  ),
-                );
+              if (!context.mounted) {
+                return;
               }
+              final confirmed = await showConfirmDialog(
+                context,
+                title: '删除话题',
+                message: '删除后无法恢复，确认删除这个话题？',
+                confirmLabel: '删除',
+                destructive: true,
+              );
+              if (!confirmed) {
+                return;
+              }
+              showInfoSnackBar('正在删除...', duration: 1);
+              ref.read(topicEditProvider.notifier).deleteTopic(state.topic);
             }
             if (value == TopicDetailMenu.pin) {
-              if (context.mounted) {
-                await showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text('置顶话题'),
-                    content: const Text('你确认要置顶该话题？'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('否'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showInfoSnackBar('正在置顶...', duration: 1);
-                          ref
-                              .read(topicEditProvider.notifier)
-                              .pinTopic(state.topic);
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('是'),
-                      ),
-                    ],
-                  ),
-                );
+              if (!context.mounted) {
+                return;
               }
+              final confirmed = await showConfirmDialog(
+                context,
+                title: '置顶话题',
+                message: '置顶后会排到列表最前面，确认置顶？',
+                confirmLabel: '置顶',
+                destructive: false,
+              );
+              if (!confirmed) {
+                return;
+              }
+              showInfoSnackBar('正在置顶...', duration: 1);
+              ref.read(topicEditProvider.notifier).pinTopic(state.topic);
             }
             if (value == TopicDetailMenu.unpin) {
-              if (context.mounted) {
-                await showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text('取消置顶'),
-                    content: const Text('你确认要取消该话题的置顶？'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('否'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showInfoSnackBar('正在取消...', duration: 1);
-                          ref
-                              .read(topicEditProvider.notifier)
-                              .unpinTopic(state.topic);
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('是'),
-                      ),
-                    ],
-                  ),
-                );
+              if (!context.mounted) {
+                return;
               }
+              final confirmed = await showConfirmDialog(
+                context,
+                title: '取消置顶',
+                message: '确认把这个话题放回正常排序？',
+                confirmLabel: '取消置顶',
+                destructive: false,
+              );
+              if (!confirmed) {
+                return;
+              }
+              showInfoSnackBar('正在取消...', duration: 1);
+              ref.read(topicEditProvider.notifier).unpinTopic(state.topic);
             }
             if (value == TopicDetailMenu.close) {
-              if (context.mounted) {
-                await showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text('关闭话题'),
-                    content: const Text('你确认要关闭该话题？'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('否'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showInfoSnackBar('正在关闭...', duration: 1);
-                          ref
-                              .read(topicEditProvider.notifier)
-                              .closeTopic(state.topic);
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('是'),
-                      ),
-                    ],
-                  ),
-                );
+              if (!context.mounted) {
+                return;
               }
+              final confirmed = await showConfirmDialog(
+                context,
+                title: '关闭话题',
+                message: '确认关闭这个话题？',
+                confirmLabel: '关闭',
+                destructive: false,
+              );
+              if (!confirmed) {
+                return;
+              }
+              showInfoSnackBar('正在关闭...', duration: 1);
+              ref.read(topicEditProvider.notifier).closeTopic(state.topic);
             }
             if (value == TopicDetailMenu.reopen) {
-              if (context.mounted) {
-                await showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text('开启话题'),
-                    content: const Text('你确认要重新开启该话题？'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('否'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showInfoSnackBar('正在开启...', duration: 1);
-                          ref
-                              .read(topicEditProvider.notifier)
-                              .reopenTopic(state.topic);
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('是'),
-                      ),
-                    ],
-                  ),
-                );
+              if (!context.mounted) {
+                return;
               }
+              final confirmed = await showConfirmDialog(
+                context,
+                title: '重新开启话题',
+                message: '确认重新开启这个话题？',
+                confirmLabel: '开启',
+                destructive: false,
+              );
+              if (!confirmed) {
+                return;
+              }
+              showInfoSnackBar('正在开启...', duration: 1);
+              ref.read(topicEditProvider.notifier).reopenTopic(state.topic);
             }
           },
           itemBuilder: (context) => [

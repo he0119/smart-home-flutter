@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/utils/launch_url.dart';
+import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/widgets/avatar.dart';
 
 class MyDrawer extends ConsumerWidget {
@@ -75,29 +76,18 @@ class MyDrawer extends ConsumerWidget {
           ),
           ListTile(
             title: const Text('登出'),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: const Text('登出'),
-                  content: const Text('确认登出账户？'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('否'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        ref.read(authenticationProvider.notifier).logout();
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('是'),
-                    ),
-                  ],
-                ),
+            onTap: () async {
+              final confirmed = await showConfirmDialog(
+                context,
+                title: '登出',
+                message: '确认退出当前账号？',
+                confirmLabel: '登出',
+                destructive: true,
               );
+              if (!confirmed) {
+                return;
+              }
+              ref.read(authenticationProvider.notifier).logout();
             },
           ),
         ],

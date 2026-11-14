@@ -7,6 +7,7 @@ import 'package:smarthome/storage/model/models.dart';
 import 'package:smarthome/storage/providers/providers.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/utils/parse_url.dart';
+import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
@@ -57,31 +58,18 @@ class _PictureScreenState extends ConsumerState<PictureScreen> {
             PopupMenuButton<PictureMenu>(
               onSelected: (value) async {
                 if (value == PictureMenu.delete) {
-                  await showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text('删除 ${picture.description}'),
-                      content: const Text('你确认要删除该图片么？'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('否'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            showInfoSnackBar('正在删除...', duration: 1);
-                            ref
-                                .read(pictureEditProvider.notifier)
-                                .deletePicture(picture);
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('是'),
-                        ),
-                      ],
-                    ),
+                  final confirmed = await showConfirmDialog(
+                    context,
+                    title: '删除 ${picture.description}',
+                    message: '删除后无法恢复，确认删除这张图片？',
+                    confirmLabel: '删除',
+                    destructive: true,
                   );
+                  if (!confirmed) {
+                    return;
+                  }
+                  showInfoSnackBar('正在删除...', duration: 1);
+                  ref.read(pictureEditProvider.notifier).deletePicture(picture);
                 }
               },
               itemBuilder: (context) => [

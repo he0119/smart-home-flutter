@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:smarthome/widgets/state_views.dart';
 
 class CenterMessage extends StatelessWidget {
   final String message;
@@ -7,7 +8,7 @@ class CenterMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text(message));
+    return EmptyState(title: message);
   }
 }
 

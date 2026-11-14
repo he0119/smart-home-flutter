@@ -13,9 +13,12 @@ class SubstringHighlight extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = DefaultTextStyle.of(context).style;
-    // 高亮颜色为红色
+    // 高亮用主色加粗，红色留给错误状态
     final textHighlightStyle = textStyle.merge(
-      const TextStyle(color: Colors.red),
+      TextStyle(
+        color: Theme.of(context).colorScheme.primary,
+        fontWeight: FontWeight.w600,
+      ),
     );
 
     if (term.isEmpty) {

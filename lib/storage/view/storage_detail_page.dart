@@ -7,6 +7,7 @@ import 'package:smarthome/storage/view/widgets/add_storage_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/storage_item_list.dart';
 import 'package:smarthome/utils/constants.dart';
+import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
@@ -85,31 +86,20 @@ class _StorageDetailScreenState extends ConsumerState<StorageDetailScreen> {
                 }
               }
               if (value == StorageDetailMenu.delete) {
-                if (context.mounted) {
-                  await showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text('删除 ${state.storage.name}'),
-                      content: const Text('你确认要删除该位置么？'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('否'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            ref
-                                .read(storageEditProvider.notifier)
-                                .deleteStorage(state.storage);
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('是'),
-                        ),
-                      ],
-                    ),
-                  );
+                if (!context.mounted) {
+                  return;
+                }
+                final confirmed = await showConfirmDialog(
+                  context,
+                  title: '删除 ${state.storage.name}',
+                  message: '确认删除这个位置？',
+                  confirmLabel: '删除',
+                  destructive: true,
+                );
+                if (confirmed) {
+                  ref
+                      .read(storageEditProvider.notifier)
+                      .deleteStorage(state.storage);
                 }
               }
               if (value == StorageDetailMenu.qr) {

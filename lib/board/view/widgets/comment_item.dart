@@ -5,6 +5,7 @@ import 'package:smarthome/board/providers/comment_edit_provider.dart';
 import 'package:smarthome/board/view/comment_edit_page.dart';
 import 'package:smarthome/board/view/widgets/item_title.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/markdown.dart';
 
@@ -34,31 +35,20 @@ class CommentItem extends ConsumerWidget {
               ? (Menu menu) async {
                   switch (menu) {
                     case Menu.delete:
-                      await showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: const Text('删除评论'),
-                          content: const Text('你确认要删除该评论？'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('否'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                showInfoSnackBar('正在删除...', duration: 1);
-                                ref
-                                    .read(commentEditProvider.notifier)
-                                    .deleteComment(comment);
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('是'),
-                            ),
-                          ],
-                        ),
+                      final confirmed = await showConfirmDialog(
+                        context,
+                        title: '删除评论',
+                        message: '删除后无法恢复，确认删除这条评论？',
+                        confirmLabel: '删除',
+                        destructive: true,
                       );
+                      if (!confirmed) {
+                        return;
+                      }
+                      showInfoSnackBar('正在删除...', duration: 1);
+                      ref
+                          .read(commentEditProvider.notifier)
+                          .deleteComment(comment);
                       break;
                     case Menu.edit:
                       final r = await Navigator.of(context).push(

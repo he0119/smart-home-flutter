@@ -6,6 +6,7 @@ import 'package:smarthome/storage/providers/item_edit_provider.dart';
 import 'package:smarthome/storage/providers/recycle_bin_provider.dart';
 
 import 'package:smarthome/utils/date_format_extension.dart';
+import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/error_message_button.dart';
@@ -78,38 +79,25 @@ Widget _buildItem(BuildContext context, Item item, WidgetRef ref) {
       child: IconButton(
         icon: const Icon(Icons.undo),
         onPressed: () async {
-          await showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              title: const Text('恢复物品'),
-              content: const Text('你确认要恢复该物品？'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('否'),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    Navigator.of(context).pop();
-                    showInfoSnackBar('正在恢复...', duration: 1);
-
-                    await ref.read(itemEditProvider.notifier).restoreItem(item);
-
-                    final state = ref.read(itemEditProvider);
-                    if (state.status == ItemEditStatus.restoreSuccess) {
-                      showInfoSnackBar('物品 ${item.name} 恢复成功', duration: 2);
-                      ref.read(recycleBinProvider.notifier).fetch(cache: false);
-                    } else if (state.status == ItemEditStatus.failure) {
-                      showErrorSnackBar(state.errorMessage);
-                    }
-                  },
-                  child: const Text('是'),
-                ),
-              ],
-            ),
+          final confirmed = await showConfirmDialog(
+            context,
+            title: '恢复物品',
+            message: '确认把「${item.name}」恢复到原来的位置？',
+            confirmLabel: '恢复',
           );
+          if (!confirmed) {
+            return;
+          }
+          showInfoSnackBar('正在恢复...', duration: 1);
+          await ref.read(itemEditProvider.notifier).restoreItem(item);
+
+          final state = ref.read(itemEditProvider);
+          if (state.status == ItemEditStatus.restoreSuccess) {
+            showInfoSnackBar('物品 ${item.name} 恢复成功', duration: 2);
+            ref.read(recycleBinProvider.notifier).fetch(cache: false);
+          } else if (state.status == ItemEditStatus.failure) {
+            showErrorSnackBar(state.errorMessage);
+          }
         },
       ),
     ),
