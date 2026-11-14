@@ -19,7 +19,7 @@ dependencies:
   material_ui: ^1.11.0
   cupertino_ui: ^1.1.6
   intl: any
-  cupertino_icons: ^1.0.9
+  cupertino_icons: ^2.0.0
 
   # Dart
   logging: ^1.3.0
