@@ -1,4 +1,3 @@
-import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
@@ -7,6 +6,7 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/conditional_parent_widget.dart';
 import 'package:smarthome/widgets/drawer.dart';
 import 'package:smarthome/widgets/list_rows.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 import 'package:smarthome/widgets/tab_selector.dart';
 
@@ -188,7 +188,7 @@ class MySliverScaffold extends StatelessWidget {
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
 /// 它是二级页的通用骨架：普通 AppBar + 限宽内容 + 可选的 FAB。
-@Preview(
+@AppPreview(
   name: 'MySliverScaffold',
   group: previewGroupWidgets,
   size: Size(720, 560),

@@ -3,7 +3,7 @@ import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/list_rows.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 /// 物品列表里的一行：名称 + 备注（没有就显示位置）+ 右侧相对时间。
@@ -66,7 +66,7 @@ class ItemRow extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(name: 'ItemRow', group: previewGroupStorage, size: Size(400, 240))
+@AppPreview(name: 'ItemRow', group: previewGroupStorage, size: Size(400, 240))
 Widget itemRowPreview() {
   const cabinet = Storage(id: 'cabinet', name: '阳台储物柜');
   final now = DateTime.now();

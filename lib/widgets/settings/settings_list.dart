@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/widget_previews.dart';
 import 'package:smarthome/widgets/settings/settings_section.dart';
 import 'package:smarthome/widgets/settings/settings_tile.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class SettingsList extends StatelessWidget {
@@ -21,7 +21,7 @@ class SettingsList extends StatelessWidget {
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
 /// 它本身是 sliver，必须放进 CustomScrollView 才有滚动上下文。
-@Preview(
+@AppPreview(
   name: 'SettingsList',
   group: previewGroupSettings,
   size: Size(400, 400),

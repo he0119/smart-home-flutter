@@ -61,6 +61,16 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- 开启 HCPP（Hybrid Composition++）：Flutter 3.44 引入的平台视图新合成方式，
+             平台视图改由 SurfaceFlinger 直接把原生层和 Flutter 画面合成，改善本项目
+             webview_flutter 内嵌网页滚动时的撕裂和触摸输入问题。
+             这里配置是给正式包用的：命令行的 enable-hcpp 开关只对本地 run/test 生效，
+             不能传给 flutter build 的构建命令。
+             HCPP 有门槛：需要 Android API 34 以上，且 Impeller 走 Vulkan 后端；
+             不满足的设备不会报错，会自动回退到该平台视图原本的合成方式。 -->
+        <meta-data
+            android:name="io.flutter.embedding.android.EnableHcpp"
+            android:value="true" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

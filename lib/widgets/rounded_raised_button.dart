@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class RoundedRaisedButton extends StatelessWidget {
@@ -36,13 +36,13 @@ class SliverCenterRoundedRaisedButton extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(name: 'RoundedRaisedButton', group: previewGroupWidgets)
+@AppPreview(name: 'RoundedRaisedButton', group: previewGroupWidgets)
 Widget roundedRaisedButtonPreview() => PreviewFrame(
   width: 360,
   child: RoundedRaisedButton(onPressed: () {}, child: const Text('保存')),
 );
 
-@Preview(
+@AppPreview(
   name: 'SliverCenterRoundedRaisedButton',
   group: previewGroupWidgets,
   size: Size(360, 320),

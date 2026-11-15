@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 import 'package:intl/intl.dart';
 
@@ -114,7 +114,7 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(
+@AppPreview(
   name: 'DateTimePickerFormField empty',
   group: previewGroupWidgets,
   size: Size(400, 160),
@@ -130,7 +130,7 @@ Widget dateTimePickerFormFieldEmptyPreview() {
   );
 }
 
-@Preview(
+@AppPreview(
   name: 'DateTimePickerFormField selected',
   group: previewGroupWidgets,
   size: Size(400, 160),

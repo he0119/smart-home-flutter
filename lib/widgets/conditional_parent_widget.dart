@@ -1,6 +1,6 @@
-import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/app/dimens.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 /// https://gist.github.com/ltOgt/3771c824fc1c8811f5ec1a81a9a4937b
@@ -56,7 +56,7 @@ class ConditionalParentWidget extends StatelessWidget {
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
 /// 左右两行对比：condition 为 true 时才套上外层 Card。
-@Preview(
+@AppPreview(
   name: 'ConditionalParentWidget',
   group: previewGroupWidgets,
   size: Size(400, 240),

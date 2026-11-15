@@ -1,18 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/app/dimens.dart';
-import 'package:smarthome/app/theme.dart';
 import 'package:smarthome/core/model/app_config.dart';
 import 'package:smarthome/core/providers/authentication_provider.dart';
 import 'package:smarthome/core/model/app_tab.dart';
 import 'package:smarthome/core/providers/settings_provider.dart';
 import 'package:smarthome/user/model/user.dart';
 
-/// 组件预览的外壳：套上应用的亮色主题，并给出一块手机宽度的画布。
+/// 组件预览的布局外壳：给出一块手机宽度的画布，并可选地套上页面骨架。
 ///
 /// 只在 IDE 的 Widget Previewer 里用，业务页面不要引用它。
-/// 不加这层外壳的话，`Theme.of(context)` 拿到的是 Flutter 默认主题，
-/// 预览里看到的按钮高度、文字层级都和真机不一样。
+/// 主题和本地化不在这里处理：`@AppPreview` 注解的 `theme:` / `localizations:`
+/// 会把 `MaterialApp`、应用主题和中文本地化套在整个预览外面（见
+/// `lib/widgets/app_preview.dart`）。这样预览器切亮暗、切语言只有一条路径，
+/// 也不会有「新写的预览忘了套主题」这种事；这里只负责布局。
 class PreviewFrame extends StatelessWidget {
   const PreviewFrame({
     super.key,
@@ -43,15 +44,8 @@ class PreviewFrame extends StatelessWidget {
         child: SizedBox(width: canvasWidth, child: content),
       );
     }
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // 亮色、暗色都备好，由预览器给的 platformBrightness 决定用哪套：
-      // 卡片上的「Switch to dark mode」和 @Preview(brightness:) 都是改这个值。
-      theme: buildLightTheme(null),
-      darkTheme: buildDarkTheme(null),
-      themeMode: ThemeMode.system,
-      home: withScaffold ? Scaffold(body: SafeArea(child: content)) : content,
-    );
+    // 页面骨架仍留在这一层：它是布局，不是主题。
+    return withScaffold ? Scaffold(body: SafeArea(child: content)) : content;
   }
 }
 

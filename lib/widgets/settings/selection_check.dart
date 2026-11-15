@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/widget_previews.dart';
 import 'package:smarthome/widgets/settings/settings_tile.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 /// 单选型设置行的尾部：选中显示勾，未选中留出同样宽度的空位保持对齐。
@@ -21,7 +21,7 @@ class SelectionCheck extends StatelessWidget {
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
 /// 放在单选型设置行里看对齐：选中是勾，未选中是等宽空位。
-@Preview(
+@AppPreview(
   name: 'SelectionCheck',
   group: previewGroupSettings,
   size: Size(400, 200),

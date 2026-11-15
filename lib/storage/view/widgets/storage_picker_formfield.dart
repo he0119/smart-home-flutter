@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/widgets/storage_picker_sheet.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class StorageFormField extends ConsumerStatefulWidget {
@@ -160,7 +160,7 @@ class _StorageFieldState extends ConsumerState<StorageFormField> {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(
+@AppPreview(
   name: 'StorageFormField 空',
   group: previewGroupStorage,
   size: Size(400, 160),
@@ -172,7 +172,7 @@ Widget storageFormFieldEmptyPreview() => const PreviewFrame(
   ),
 );
 
-@Preview(
+@AppPreview(
   name: 'StorageFormField 已选',
   group: previewGroupStorage,
   size: Size(400, 160),

@@ -3,7 +3,7 @@ import 'package:smarthome/app/dimens.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class LoginPage extends StatelessWidget {
@@ -326,7 +326,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
 /// fakeAuth 换掉真的登录状态，否则预览一启动就去请求后端。
-@Preview(name: 'LoginForm', group: previewGroupAuth, size: Size(420, 560))
+@AppPreview(name: 'LoginForm', group: previewGroupAuth, size: Size(420, 560))
 Widget loginFormPreview() => PreviewFrame(
   width: 420,
   padding: EdgeInsets.zero,
@@ -337,7 +337,7 @@ Widget loginFormPreview() => PreviewFrame(
   ),
 );
 
-@Preview(name: 'ApiUrlForm', group: previewGroupAuth, size: Size(420, 520))
+@AppPreview(name: 'ApiUrlForm', group: previewGroupAuth, size: Size(420, 520))
 Widget apiUrlFormPreview() => PreviewFrame(
   width: 420,
   padding: EdgeInsets.zero,

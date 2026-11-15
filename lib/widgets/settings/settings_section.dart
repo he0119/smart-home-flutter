@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/widgets/list_rows.dart';
-import 'package:flutter/widget_previews.dart';
 import 'package:smarthome/widgets/settings/settings_tile.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class SettingsSection extends StatelessWidget {
@@ -24,7 +24,7 @@ class SettingsSection extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(
+@AppPreview(
   name: 'SettingsSection',
   group: previewGroupSettings,
   size: Size(400, 360),

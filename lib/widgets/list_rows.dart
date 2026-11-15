@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/app/dimens.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 /// 分组标题。全站统一：titleSmall + 次要色，上 24、下 8。
@@ -216,7 +216,7 @@ class ListBottomPadding extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(
+@AppPreview(
   name: 'SectionHeader',
   group: previewGroupWidgets,
   size: Size(400, 200),
@@ -235,7 +235,7 @@ Widget sectionHeaderPreview() => PreviewFrame(
   ),
 );
 
-@Preview(name: 'EntryRow', group: previewGroupWidgets, size: Size(400, 200))
+@AppPreview(name: 'EntryRow', group: previewGroupWidgets, size: Size(400, 200))
 Widget entryRowPreview() => PreviewFrame(
   width: 400,
   padding: EdgeInsets.zero,
@@ -252,7 +252,7 @@ Widget entryRowPreview() => PreviewFrame(
   ),
 );
 
-@Preview(name: 'ContentRow', group: previewGroupWidgets, size: Size(400, 200))
+@AppPreview(name: 'ContentRow', group: previewGroupWidgets, size: Size(400, 200))
 Widget contentRowPreview() => PreviewFrame(
   width: 400,
   padding: EdgeInsets.zero,
@@ -273,7 +273,7 @@ Widget contentRowPreview() => PreviewFrame(
   ),
 );
 
-@Preview(name: 'InfoRow', group: previewGroupWidgets, size: Size(400, 200))
+@AppPreview(name: 'InfoRow', group: previewGroupWidgets, size: Size(400, 200))
 Widget infoRowPreview() => PreviewFrame(
   width: 400,
   padding: EdgeInsets.zero,
@@ -290,7 +290,7 @@ Widget infoRowPreview() => PreviewFrame(
   ),
 );
 
-@Preview(
+@AppPreview(
   name: 'ContentDivider',
   group: previewGroupWidgets,
   size: Size(400, 240),

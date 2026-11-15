@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_markdown_selectionarea/flutter_markdown.dart';
 import 'package:smarthome/utils/launch_url.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class MyMarkdownBody extends StatelessWidget {
@@ -24,7 +24,7 @@ class MyMarkdownBody extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(
+@AppPreview(
   name: 'MyMarkdownBody',
   group: previewGroupWidgets,
   size: Size(480, 520),
