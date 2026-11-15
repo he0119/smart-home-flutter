@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class BottomLoader extends StatelessWidget {
@@ -24,6 +24,6 @@ class BottomLoader extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(name: 'BottomLoader', group: previewGroupWidgets, size: Size(360, 120))
+@AppPreview(name: 'BottomLoader', group: previewGroupWidgets, size: Size(360, 120))
 Widget bottomLoaderPreview() =>
     const PreviewFrame(width: 360, child: BottomLoader());

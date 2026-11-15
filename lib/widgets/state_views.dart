@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/app/dimens.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 /// 空状态：图标 + 标题 + 说明 + 可选操作。
@@ -218,7 +218,7 @@ class _StateLayout extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(name: 'EmptyState', group: previewGroupWidgets, size: Size(400, 400))
+@AppPreview(name: 'EmptyState', group: previewGroupWidgets, size: Size(400, 400))
 Widget emptyStatePreview() => PreviewFrame(
   child: EmptyState(
     title: '还没有物品',
@@ -227,16 +227,16 @@ Widget emptyStatePreview() => PreviewFrame(
   ),
 );
 
-@Preview(name: 'ErrorState', group: previewGroupWidgets, size: Size(400, 400))
+@AppPreview(name: 'ErrorState', group: previewGroupWidgets, size: Size(400, 400))
 Widget errorStatePreview() => PreviewFrame(
   child: ErrorState(message: '网络连接超时', onRetry: () {}),
 );
 
-@Preview(name: 'LoadingState', group: previewGroupWidgets, size: Size(400, 240))
+@AppPreview(name: 'LoadingState', group: previewGroupWidgets, size: Size(400, 240))
 Widget loadingStatePreview() =>
     PreviewFrame(child: const LoadingState(message: '正在加载物品'));
 
-@Preview(
+@AppPreview(
   name: 'SliverEmptyState',
   group: previewGroupWidgets,
   size: Size(400, 400),
@@ -251,7 +251,7 @@ Widget sliverEmptyStatePreview() => PreviewFrame(
   ),
 );
 
-@Preview(
+@AppPreview(
   name: 'SliverErrorState',
   group: previewGroupWidgets,
   size: Size(400, 400),

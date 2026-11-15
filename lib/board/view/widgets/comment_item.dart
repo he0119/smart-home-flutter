@@ -9,7 +9,7 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/markdown.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 import 'package:smarthome/user/user.dart';
 
@@ -84,7 +84,7 @@ class CommentItem extends ConsumerWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(name: 'CommentItem', group: previewGroupBoard, size: Size(480, 280))
+@AppPreview(name: 'CommentItem', group: previewGroupBoard, size: Size(480, 280))
 Widget commentItemPreview() => PreviewFrame(
   width: 480,
   padding: EdgeInsets.zero,

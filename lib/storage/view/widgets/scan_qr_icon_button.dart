@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class ScanQRIconButton extends StatelessWidget {
@@ -202,7 +202,7 @@ class _ScanQRPageState extends State<ScanQRPage> {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(
+@AppPreview(
   name: 'ScanQRIconButton',
   group: previewGroupStorage,
   size: Size(120, 80),
@@ -213,7 +213,7 @@ Widget scanQrIconButtonPreview() => const PreviewFrame(
   child: Center(child: ScanQRIconButton()),
 );
 
-@Preview(
+@AppPreview(
   name: 'ScannerErrorWidget',
   group: previewGroupStorage,
   size: Size(360, 240),
@@ -229,7 +229,7 @@ Widget scannerErrorWidgetPreview() => const PreviewFrame(
   ),
 );
 
-@Preview(
+@AppPreview(
   name: 'ScannedBarcodeLabel',
   group: previewGroupStorage,
   size: Size(360, 200),

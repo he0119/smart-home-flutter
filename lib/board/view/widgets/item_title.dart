@@ -3,7 +3,7 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/user/user.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/avatar.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class ItemTitle extends StatelessWidget {
@@ -55,7 +55,7 @@ bool isSameDateTime(DateTime a, DateTime b) {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(name: 'ItemTitle', group: previewGroupBoard, size: Size(400, 200))
+@AppPreview(name: 'ItemTitle', group: previewGroupBoard, size: Size(400, 200))
 Widget itemTitlePreview() {
   final created = DateTime(2026, 11, 10, 9, 30);
   const author = User(username: '橙子', email: 'chengzi@example.com');

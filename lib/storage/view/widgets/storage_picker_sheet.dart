@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 
-import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/utils/constants.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 import 'package:smarthome/widgets/state_views.dart';
 
@@ -712,7 +712,7 @@ class _EmptySearch extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(
+@AppPreview(
   name: 'StoragePicker',
   group: previewGroupStorage,
   size: Size(400, 480),

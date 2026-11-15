@@ -2,7 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:smarthome/core/model/global_keys.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class ShareQrIconButton extends StatelessWidget {
@@ -52,7 +52,7 @@ class ShareQrIconButton extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(
+@AppPreview(
   name: 'ShareQrIconButton',
   group: previewGroupStorage,
   size: Size(120, 80),

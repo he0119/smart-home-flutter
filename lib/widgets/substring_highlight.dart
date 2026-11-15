@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/widget_previews.dart';
 import 'package:smarthome/app/dimens.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 /// 高亮指定文字
@@ -74,7 +74,7 @@ class SubstringHighlight extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(
+@AppPreview(
   name: 'SubstringHighlight',
   group: previewGroupWidgets,
   size: Size(400, 200),

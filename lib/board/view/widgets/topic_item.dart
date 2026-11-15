@@ -7,7 +7,7 @@ import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/avatar.dart';
 import 'package:smarthome/widgets/markdown.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 import 'package:smarthome/user/user.dart';
 
@@ -105,7 +105,7 @@ class TopicItem extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(name: 'TopicItem 列表', group: previewGroupBoard, size: Size(400, 240))
+@AppPreview(name: 'TopicItem 列表', group: previewGroupBoard, size: Size(400, 240))
 Widget topicItemPreview() => PreviewFrame(
   width: 400,
   padding: EdgeInsets.zero,
@@ -137,7 +137,7 @@ Widget topicItemPreview() => PreviewFrame(
   ),
 );
 
-@Preview(name: 'TopicItem 详情', group: previewGroupBoard, size: Size(480, 420))
+@AppPreview(name: 'TopicItem 详情', group: previewGroupBoard, size: Size(480, 420))
 Widget topicItemDetailPreview() => PreviewFrame(
   width: 480,
   child: TopicItem(

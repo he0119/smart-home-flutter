@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/widget_previews.dart';
 import 'package:smarthome/app/dimens.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class MyChoiceChip extends StatelessWidget {
@@ -56,7 +56,7 @@ class MyFilterChip extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(name: 'MyChoiceChip', group: previewGroupWidgets, size: Size(400, 120))
+@AppPreview(name: 'MyChoiceChip', group: previewGroupWidgets, size: Size(400, 120))
 Widget myChoiceChipPreview() => PreviewFrame(
   child: Wrap(
     spacing: AppSpacing.sm,
@@ -75,7 +75,7 @@ Widget myChoiceChipPreview() => PreviewFrame(
   ),
 );
 
-@Preview(name: 'MyFilterChip', group: previewGroupWidgets, size: Size(400, 120))
+@AppPreview(name: 'MyFilterChip', group: previewGroupWidgets, size: Size(400, 120))
 Widget myFilterChipPreview() => PreviewFrame(
   child: Wrap(
     spacing: AppSpacing.sm,

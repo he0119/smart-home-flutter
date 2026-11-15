@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/widget_previews.dart';
 import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/utils/parse_url.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 class MyCircleAvatar extends StatelessWidget {
@@ -45,7 +45,7 @@ class MyCircleAvatar extends StatelessWidget {
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
 /// 左边有头像，右边是没有头像时退回的人像占位图标。
-@Preview(
+@AppPreview(
   name: 'MyCircleAvatar',
   group: previewGroupWidgets,
   size: Size(180, 80),

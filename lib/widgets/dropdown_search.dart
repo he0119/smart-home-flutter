@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 /// 按关键字加载候选项的回调。关键字为空时返回全部候选项。
@@ -259,7 +259,7 @@ class _DropdownSearchDialogState<T> extends State<_DropdownSearchDialog<T>> {
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
 /// 点一下输入框能看到候选弹窗，弹窗里的数据来自下面这个假加载器。
-@Preview(
+@AppPreview(
   name: 'MyDropdownSearch',
   group: previewGroupWidgets,
   size: Size(400, 200),

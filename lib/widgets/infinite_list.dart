@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/widgets/bottom_loader.dart';
-import 'package:flutter/widget_previews.dart';
 import 'package:smarthome/widgets/list_rows.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 /// 无限长列表
@@ -94,7 +94,7 @@ class _SliverInfiniteListState<T> extends State<SliverInfiniteList<T>> {
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
 /// hasReachedMax 为 false，底部那条转圈就是「还有下一页」的样子。
-@Preview(
+@AppPreview(
   name: 'SliverInfiniteList',
   group: previewGroupWidgets,
   size: Size(400, 480),

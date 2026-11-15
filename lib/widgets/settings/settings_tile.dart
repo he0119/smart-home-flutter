@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 import 'package:smarthome/widgets/settings/selection_check.dart';
 
@@ -49,7 +49,7 @@ class SettingsTile extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(
+@AppPreview(
   name: 'SettingsTile',
   group: previewGroupSettings,
   size: Size(400, 320),

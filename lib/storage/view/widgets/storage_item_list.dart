@@ -4,7 +4,7 @@ import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 import 'package:smarthome/widgets/list_rows.dart';
 import 'package:smarthome/widgets/substring_highlight.dart';
-import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/app_preview.dart';
 import 'package:smarthome/widgets/preview_frame.dart';
 
 /// 物品 / 位置混排的列表，位置详情和搜索页都用它。
@@ -114,7 +114,7 @@ class _ContentItemRow extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(
+@AppPreview(
   name: 'StorageItemList',
   group: previewGroupStorage,
   size: Size(400, 360),
@@ -142,7 +142,7 @@ Widget storageItemListPreview() => PreviewFrame(
   ),
 );
 
-@Preview(
+@AppPreview(
   name: 'StorageItemList 搜索高亮',
   group: previewGroupStorage,
   size: Size(400, 360),
