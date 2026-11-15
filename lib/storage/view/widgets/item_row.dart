@@ -9,8 +9,11 @@ class ItemRow extends StatelessWidget {
   final Item item;
   final ItemType type;
 
-  /// 是否显示副标题（备注，没有备注时退到位置名）。
-  /// 首页只要名称和时间，副标题会关掉；分类完整列表里才显示。
+  /// 是否保留副标题行。
+  ///
+  /// 首页只要名称和时间，关掉副标题，每行统一 56；
+  /// 分类完整列表开着，每行都留这一行（有备注放备注，没备注放位置），统一 72。
+  /// 同一个列表里不要一半有副标题一半没有，行高会忽高忽低。
   final bool showSupporting;
 
   const ItemRow({
@@ -29,22 +32,22 @@ class ItemRow extends StatelessWidget {
       ItemType.recentlyEdited => item.editedAt?.differenceFromNowStr() ?? '',
       ItemType.all => '',
     };
-    // 副标题优先放备注，没有备注再退到位置名；时间放在尾部，
-    // 这样「最近修改」这类列表里的时间一眼能看到，也不挤掉原来的备注
+    // 副标题优先放备注，没有备注再退到位置名；两者都没有就留空，
+    // 但仍然占住这一行，保证同一个列表里每行高度一致
     final description = item.description;
     final storageName = item.storage?.name;
     final supporting = !showSupporting
         ? null
         : ((description != null && description.isNotEmpty)
               ? description
-              : storageName);
+              : (storageName ?? ''));
 
     return ContentRow(
       icon: Icons.inventory_2_outlined,
       title: Text(item.name),
-      supporting: supporting == null || supporting.isEmpty
+      supporting: supporting == null
           ? null
-          : Text(supporting),
+          : Text(supporting, maxLines: 1, overflow: TextOverflow.ellipsis),
       trailing: time.isEmpty
           ? null
           : Text(

@@ -63,9 +63,13 @@ class _HighlightRow extends StatelessWidget {
     return ContentRow(
       icon: isItem ? Icons.inventory_2_outlined : Icons.folder_outlined,
       title: SubstringHighlight(text: item.name as String, term: term),
-      supporting: supporting.isEmpty
-          ? null
-          : SubstringHighlight(text: supporting, term: term),
+      // 副标题始终保留，没内容也占住这一行，保证列表里行高一致
+      supporting: SubstringHighlight(
+        text: supporting,
+        term: term,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
       onTap: () {
         if (isItem) {
           context.goItemDetail(item.id);
@@ -90,7 +94,12 @@ class _ContentItemRow extends StatelessWidget {
     return ContentRow(
       icon: isItem ? Icons.inventory_2_outlined : Icons.folder_outlined,
       title: Text(item.name as String),
-      supporting: description.isEmpty ? null : Text(description),
+      // 同样始终保留副标题行，避免有备注和没备注的行高不同
+      supporting: Text(
+        description,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
       onTap: () {
         if (isItem) {
           context.goItemDetail(item.id);

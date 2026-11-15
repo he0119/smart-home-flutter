@@ -8,7 +8,17 @@ class SubstringHighlight extends StatelessWidget {
   /// 高亮文本
   final String term;
 
-  const SubstringHighlight({super.key, required this.text, required this.term});
+  /// 最多几行，副标题一般限一行，避免把行撑高
+  final int? maxLines;
+  final TextOverflow? overflow;
+
+  const SubstringHighlight({
+    super.key,
+    required this.text,
+    required this.term,
+    this.maxLines,
+    this.overflow,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +32,12 @@ class SubstringHighlight extends StatelessWidget {
     );
 
     if (term.isEmpty) {
-      return Text(text, style: textStyle);
+      return Text(
+        text,
+        style: textStyle,
+        maxLines: maxLines,
+        overflow: overflow,
+      );
     } else {
       final termLC = term.toLowerCase();
 
@@ -46,7 +61,11 @@ class SubstringHighlight extends StatelessWidget {
           i += term.length;
         }
       }
-      return RichText(text: TextSpan(children: children));
+      return RichText(
+        text: TextSpan(children: children),
+        maxLines: maxLines,
+        overflow: overflow ?? TextOverflow.clip,
+      );
     }
   }
 }
