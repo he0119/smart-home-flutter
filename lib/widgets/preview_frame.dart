@@ -39,7 +39,7 @@ class PreviewFrame extends StatelessWidget {
     if (canvasWidth != null) {
       // 顶部对齐：组件按自身高度显示，不会被拉伸到整屏
       content = Align(
-        alignment: Alignment.topCenter,
+        alignment: .topCenter,
         child: SizedBox(width: canvasWidth, child: content),
       );
     }

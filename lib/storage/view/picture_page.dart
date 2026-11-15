@@ -59,7 +59,7 @@ class _PictureScreenState extends ConsumerState<PictureScreen> {
           appBarSize: AppBarSize.normal,
           // 看图页不需要限宽，宽屏上直接铺满
           contentMaxWidth: double.infinity,
-          title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
+          title: Text(title, maxLines: 1, overflow: .ellipsis),
           actions: <Widget>[
             PopupMenuButton<PictureMenu>(
               tooltip: '图片操作',

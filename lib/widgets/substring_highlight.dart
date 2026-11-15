@@ -30,7 +30,7 @@ class SubstringHighlight extends StatelessWidget {
     final textHighlightStyle = textStyle.merge(
       TextStyle(
         color: Theme.of(context).colorScheme.primary,
-        fontWeight: FontWeight.w600,
+        fontWeight: .w600,
       ),
     );
 
@@ -67,7 +67,7 @@ class SubstringHighlight extends StatelessWidget {
       return RichText(
         text: TextSpan(children: children),
         maxLines: maxLines,
-        overflow: overflow ?? TextOverflow.clip,
+        overflow: overflow ?? .clip,
       );
     }
   }
@@ -82,7 +82,7 @@ class SubstringHighlight extends StatelessWidget {
 Widget substringHighlightPreview() => PreviewFrame(
   width: 400,
   child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: .start,
     children: <Widget>[
       const SubstringHighlight(text: '阳台储物柜里的电动螺丝刀', term: '储物'),
       const SizedBox(height: AppSpacing.md),

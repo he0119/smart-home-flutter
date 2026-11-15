@@ -39,7 +39,7 @@ class ScannerErrorWidget extends StatelessWidget {
       color: Colors.black,
       child: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             const Padding(
               padding: EdgeInsets.only(bottom: 16),
@@ -80,14 +80,14 @@ class ScannedBarcodeLabel extends StatelessWidget {
         if (scannedBarcodes.isEmpty) {
           return const Text(
             '请扫描二维码',
-            overflow: TextOverflow.fade,
+            overflow: .fade,
             style: TextStyle(color: Colors.white),
           );
         }
 
         return Text(
           values.isEmpty ? 'No display value.' : values,
-          overflow: TextOverflow.fade,
+          overflow: .fade,
           style: const TextStyle(color: Colors.white),
         );
       },

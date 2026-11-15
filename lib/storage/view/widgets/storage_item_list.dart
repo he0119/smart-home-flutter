@@ -70,7 +70,7 @@ class _HighlightRow extends StatelessWidget {
         text: supporting,
         term: term,
         maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+        overflow: .ellipsis,
       ),
       onTap: () {
         if (isItem) {
@@ -100,7 +100,7 @@ class _ContentItemRow extends StatelessWidget {
       supporting: Text(
         description,
         maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+        overflow: .ellipsis,
       ),
       onTap: () {
         if (isItem) {

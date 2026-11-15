@@ -100,8 +100,8 @@ class UpdateListener extends ConsumerWidget {
               builder: (_) => AlertDialog(
                 title: const Text('更新'),
                 content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: .min,
+                  crossAxisAlignment: .start,
                   children: [
                     Text('发现新版本：${state.version}'),
                     if (state.changelog != null) ...[

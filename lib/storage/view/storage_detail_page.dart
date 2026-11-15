@@ -205,7 +205,7 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
       child: SizedBox(
         height: 48,
         child: ListView.separated(
-          scrollDirection: Axis.horizontal,
+          scrollDirection: .horizontal,
           shrinkWrap: true,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           itemCount: paths.length + 1,

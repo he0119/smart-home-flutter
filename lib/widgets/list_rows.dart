@@ -159,11 +159,11 @@ class InfoRow extends StatelessWidget {
           vertical: AppSpacing.md,
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: <Widget>[
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: .start,
                 children: <Widget>[
                   Text(
                     label,
@@ -224,7 +224,7 @@ class ListBottomPadding extends StatelessWidget {
 Widget sectionHeaderPreview() => PreviewFrame(
   width: 400,
   child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: .start,
     children: <Widget>[
       const SectionHeader(title: '最近添加'),
       SectionHeader(

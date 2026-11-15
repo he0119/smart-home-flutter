@@ -63,8 +63,8 @@ class _TextEditPageState extends State<TextEditPage> {
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.md),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: .start,
+            crossAxisAlignment: .start,
             children: [
               Form(
                 key: _formKey,
@@ -77,7 +77,7 @@ class _TextEditPageState extends State<TextEditPage> {
                     }
                     return null;
                   },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  autovalidateMode: .onUserInteraction,
                   inputFormatters: widget.inputFormatters,
                   keyboardType: widget.keyboardType,
                   decoration: const InputDecoration(errorMaxLines: 2),

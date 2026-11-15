@@ -61,7 +61,7 @@ class _ConsumableEditPageState extends ConsumerState<ConsumableEditPage> {
       title: const Text('耗材编辑'),
       sliver: SliverToBoxAdapter(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: .stretch,
           children: <Widget>[
             const SectionHeader(
               title: '已添加的耗材',

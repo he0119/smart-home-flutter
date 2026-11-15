@@ -54,7 +54,7 @@ Widget myCircleAvatarPreview() => const PreviewFrame(
   width: 180,
   padding: EdgeInsets.all(AppSpacing.md),
   child: Row(
-    mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisAlignment: .center,
     children: <Widget>[
       MyCircleAvatar(
         avatarUrl: 'https://avatars.githubusercontent.com/u/5219550?v=4',

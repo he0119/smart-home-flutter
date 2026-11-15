@@ -31,8 +31,8 @@ class TopicItem extends StatelessWidget {
     }
     if (showBody) {
       return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: .start,
+        crossAxisAlignment: .start,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
@@ -75,7 +75,7 @@ class TopicItem extends StatelessWidget {
       return ListTile(
         leading: MyCircleAvatar(avatarUrl: topic.user?.avatarUrl),
         title: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: <Widget>[
             if (flags.isNotEmpty) ...<Widget>[
               ...flags,
@@ -85,7 +85,7 @@ class TopicItem extends StatelessWidget {
               child: Text(
                 topic.title!,
                 maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                overflow: .ellipsis,
               ),
             ),
           ],
@@ -94,7 +94,7 @@ class TopicItem extends StatelessWidget {
           '${topic.user?.username ?? '匿名'} · 最近回复 '
           '${activeAt == null ? '未知' : activeAt.differenceFromNowStr()}',
           maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          overflow: .ellipsis,
         ),
         onTap: () async {
           context.goTopicDetail(topic.id);

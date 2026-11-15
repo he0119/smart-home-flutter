@@ -172,7 +172,7 @@ class _EditPage extends StatelessWidget {
                   }
                   return null;
                 },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
+                autovalidateMode: .onUserInteraction,
               ),
               TextFormField(
                 controller: descriptionController,
@@ -189,7 +189,7 @@ class _EditPage extends StatelessWidget {
                   }
                   return null;
                 },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
+                autovalidateMode: .onUserInteraction,
               ),
             ],
           ),

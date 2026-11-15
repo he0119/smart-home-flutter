@@ -145,7 +145,7 @@ class _StorageEditPageState extends ConsumerState<StorageEditPage> {
                     controller: _nameController,
                     decoration: const InputDecoration(labelText: '名称'),
                     inputFormatters: [LengthLimitingTextInputFormatter(200)],
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    autovalidateMode: .onUserInteraction,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return '名称不能为空';
@@ -164,7 +164,7 @@ class _StorageEditPageState extends ConsumerState<StorageEditPage> {
                   ),
                   StorageFormField(
                     decoration: const InputDecoration(labelText: '属于'),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    autovalidateMode: .onUserInteraction,
                     onChanged: (Storage? value) {
                       // 家的 id 是空字符串，服务器只能接受 null
                       if (value != null) {

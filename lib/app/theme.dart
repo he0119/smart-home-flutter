@@ -13,7 +13,7 @@ ThemeData buildDarkTheme(ColorScheme? scheme) => _buildTheme(
   scheme ??
       ColorScheme.fromSeed(
         seedColor: brandSeedColor,
-        brightness: Brightness.dark,
+        brightness: .dark,
       ),
 );
 
@@ -106,7 +106,7 @@ ThemeData _buildTheme(ColorScheme scheme) {
         horizontal: AppSpacing.lg,
         vertical: AppSpacing.sm,
       ),
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),

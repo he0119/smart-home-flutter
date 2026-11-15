@@ -73,7 +73,7 @@ class LoadingState extends StatelessWidget {
     final theme = Theme.of(context);
     return Center(
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: <Widget>[
           const SizedBox(
             width: 32,
@@ -172,14 +172,14 @@ class _StateLayout extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 320),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: <Widget>[
               Container(
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
                   color: iconBackground,
-                  shape: BoxShape.circle,
+                  shape: .circle,
                 ),
                 child: Icon(icon, size: 28, color: iconColor),
               ),
@@ -187,7 +187,7 @@ class _StateLayout extends StatelessWidget {
               Text(
                 title,
                 style: theme.textTheme.titleMedium,
-                textAlign: TextAlign.center,
+                textAlign: .center,
               ),
               if (message != null && message!.isNotEmpty) ...<Widget>[
                 const SizedBox(height: AppSpacing.sm),
@@ -196,7 +196,7 @@ class _StateLayout extends StatelessWidget {
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
-                  textAlign: TextAlign.center,
+                  textAlign: .center,
                 ),
               ],
               if (action != null) ...<Widget>[
