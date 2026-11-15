@@ -18,11 +18,7 @@ class CommentOrderPage extends ConsumerWidget {
             tiles: [
               SettingsTile(
                 title: '正序',
-                trailing: trailingWidget(
-                  context,
-                  false,
-                  settings.commentDescending,
-                ),
+                trailing: SelectionCheck(selected: !settings.commentDescending),
                 onPressed: (context) {
                   ref
                       .read(settingsProvider.notifier)
@@ -31,11 +27,7 @@ class CommentOrderPage extends ConsumerWidget {
               ),
               SettingsTile(
                 title: '倒序',
-                trailing: trailingWidget(
-                  context,
-                  true,
-                  settings.commentDescending,
-                ),
+                trailing: SelectionCheck(selected: settings.commentDescending),
                 onPressed: (context) {
                   ref
                       .read(settingsProvider.notifier)
@@ -47,11 +39,5 @@ class CommentOrderPage extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  Widget trailingWidget(BuildContext context, bool descending, bool current) {
-    return (descending == current)
-        ? Icon(Icons.check, color: Theme.of(context).colorScheme.secondary)
-        : const Icon(null);
   }
 }

@@ -6,102 +6,12 @@ import 'package:smarthome/widgets/bottom_loader.dart';
 /// 无限长列表
 ///
 /// 随着用户的滚动载入新数据
-///
-/// 使用的 [ListView.separated], 分隔为 [Divider]
-class InfiniteList<T> extends StatefulWidget {
-  final List<T> items;
-  final List<Widget>? top;
-  final List<Widget>? botton;
-  final Widget Function(BuildContext context, T item) itemBuilder;
-  final bool hasReachedMax;
-  final VoidCallback? onFetch;
-  final double threshold;
-
-  const InfiniteList({
-    super.key,
-    required this.items,
-    this.top,
-    this.botton,
-    required this.itemBuilder,
-    this.hasReachedMax = true,
-    this.onFetch,
-    this.threshold = 200,
-  });
-
-  @override
-  State<InfiniteList<T>> createState() => _InfiniteListState<T>();
-}
-
-class _InfiniteListState<T> extends State<InfiniteList<T>> {
-  final _scrollController = ScrollController();
-
-  int current = 0;
-  bool get canFetch {
-    if (current != widget.items.length) {
-      current = widget.items.length;
-      return true;
-    }
-    return false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final topCount = widget.top?.length ?? 0;
-    final bottonCount = widget.botton?.length ?? 0;
-    return Scrollbar(
-      controller: _scrollController,
-      child: ListView.separated(
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemCount: !widget.hasReachedMax
-            ? widget.items.length + 1 + topCount + bottonCount
-            : widget.items.length + topCount + bottonCount,
-        itemBuilder: (context, index) {
-          if (index < topCount) {
-            return widget.top![index];
-          }
-          if (index >= topCount && index < widget.items.length + topCount) {
-            return widget.itemBuilder(context, widget.items[index - topCount]);
-          }
-          if (index >= widget.items.length + topCount &&
-              index < widget.items.length + topCount + bottonCount) {
-            return widget.botton![index - widget.items.length - topCount];
-          }
-          return const BottomLoader();
-        },
-        separatorBuilder: (contexit, index) => const Divider(),
-        controller: _scrollController,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= widget.threshold &&
-        !widget.hasReachedMax) {
-      if (widget.onFetch != null && canFetch) widget.onFetch!();
-    }
-  }
-}
-
-/// 无限长列表
-///
-/// 随着用户的滚动载入新数据
 class SliverInfiniteList<T> extends StatefulWidget {
   final List<T> items;
   final Widget Function(BuildContext context, T item) itemBuilder;
+
+  /// 行与行之间的分隔线，只在两行之间插入，最后一行后面不会多一条
+  final Widget Function(BuildContext context, T item)? separatorBuilder;
   final bool hasReachedMax;
   final VoidCallback? onFetch;
   final int invisibleItemsThreshold;
@@ -110,6 +20,7 @@ class SliverInfiniteList<T> extends StatefulWidget {
     super.key,
     required this.items,
     required this.itemBuilder,
+    this.separatorBuilder,
     this.hasReachedMax = true,
     this.onFetch,
     this.invisibleItemsThreshold = 3,
@@ -129,19 +40,25 @@ class _SliverInfiniteListState<T> extends State<SliverInfiniteList<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final separator = widget.separatorBuilder;
+    // 有分隔线时子项数量是 2n-1，奇偶交错
+    final contentCount = separator == null
+        ? widget.items.length
+        : max(0, widget.items.length * 2 - 1);
     return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          _onBuildChildItem(index);
-          if (index < widget.items.length) {
-            return widget.itemBuilder(context, widget.items[index]);
-          }
+      delegate: SliverChildBuilderDelegate((context, index) {
+        _onBuildChildItem(index);
+        if (index >= contentCount) {
           return const BottomLoader();
-        },
-        childCount: !widget.hasReachedMax
-            ? widget.items.length + 1
-            : widget.items.length,
-      ),
+        }
+        if (separator != null && index.isOdd) {
+          return separator(context, widget.items[index ~/ 2]);
+        }
+        return widget.itemBuilder(
+          context,
+          widget.items[separator == null ? index : index ~/ 2],
+        );
+      }, childCount: !widget.hasReachedMax ? contentCount + 1 : contentCount),
     );
   }
 

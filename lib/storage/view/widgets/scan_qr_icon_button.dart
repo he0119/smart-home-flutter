@@ -11,17 +11,14 @@ class ScanQRIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: '扫描二维码',
-      child: IconButton(
-        tooltip: '扫描二维码',
-        icon: const Icon(Icons.qr_code),
-        onPressed: () {
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (_) => const ScanQRPage()));
-        },
-      ),
+    return IconButton(
+      tooltip: '扫描二维码',
+      icon: const Icon(Icons.qr_code),
+      onPressed: () {
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => const ScanQRPage()));
+      },
     );
   }
 }

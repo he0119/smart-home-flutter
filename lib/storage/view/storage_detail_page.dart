@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/model/popup_menu.dart';
 import 'package:smarthome/storage/storage.dart';
@@ -10,8 +11,9 @@ import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
-import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
+import 'package:smarthome/widgets/list_rows.dart';
+import 'package:smarthome/widgets/state_views.dart';
 
 class StorageDetailPage extends StatelessWidget {
   final String storageId;
@@ -67,6 +69,7 @@ class _StorageDetailScreenState extends ConsumerState<StorageDetailScreen> {
         const SearchIconButton(),
         if (state.storage.id != homeStorage.id)
           PopupMenuButton<StorageDetailMenu>(
+            tooltip: '更多操作',
             onSelected: (value) async {
               final navigator = Navigator.of(context);
 
@@ -133,8 +136,8 @@ class _StorageDetailScreenState extends ConsumerState<StorageDetailScreen> {
             delegate: PathBarDelegate(paths: paths),
           ),
         if (state.status == StorageDetailStatus.failure)
-          SliverErrorMessageButton(
-            onPressed: () {
+          SliverErrorState(
+            onRetry: () {
               ref
                   .read(storageDetailProvider(widget.storageId).notifier)
                   .refresh();
@@ -143,6 +146,14 @@ class _StorageDetailScreenState extends ConsumerState<StorageDetailScreen> {
           ),
         if (state.status == StorageDetailStatus.loading)
           const SliverCenterLoadingIndicator(),
+        if (state.status == StorageDetailStatus.success &&
+            (state.storage.items?.isEmpty ?? true) &&
+            (state.storage.children?.isEmpty ?? true))
+          const SliverEmptyState(
+            icon: Icons.folder_outlined,
+            title: '这个位置还是空的',
+            message: '可以添加子位置，或者往里放物品',
+          ),
         if (state.status == StorageDetailStatus.success)
           StorageItemList(
             items: state.storage.items!.toList(),
@@ -152,6 +163,8 @@ class _StorageDetailScreenState extends ConsumerState<StorageDetailScreen> {
                 .read(storageDetailProvider(widget.storageId).notifier)
                 .fetchMore(),
           ),
+        if (state.status == StorageDetailStatus.success)
+          const SliverToBoxAdapter(child: ListBottomPadding()),
       ],
       floatingActionButton: FloatingActionButton(
         tooltip: '添加物品',
@@ -185,40 +198,49 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     return Material(
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        itemCount: paths.length + 1,
-        itemBuilder: (BuildContext context, int index) {
-          return index == 0
-              ? IconButton(
-                  tooltip: '回到「家」',
-                  icon: const Icon(Icons.home),
-                  onPressed: () {
-                    // 回到根位置
-                    // 计算需要回退的层数
-                    // 如果是从物品详情中转跳过来的，则 paths 没有根位置
-                    // 需要将最下面的页面替换成根位置
-                    final hasRoot =
-                        paths.isNotEmpty && paths.first.id == homeStorage.id;
-                    final popCount = paths.length + (hasRoot ? 0 : -1);
-                    final navigator = Navigator.of(context);
-                    for (var i = 0; i < popCount; i++) {
-                      if (navigator.canPop()) {
-                        navigator.pop();
-                      }
+      color: scheme.surface,
+      child: SizedBox(
+        height: 48,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          itemCount: paths.length + 1,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return IconButton(
+                tooltip: '回到「家」',
+                icon: const Icon(Icons.home_outlined),
+                onPressed: () {
+                  // 回到根位置
+                  // 计算需要回退的层数
+                  // 如果是从物品详情中转跳过来的，则 paths 没有根位置
+                  // 需要将最下面的页面替换成根位置
+                  final hasRoot =
+                      paths.isNotEmpty && paths.first.id == homeStorage.id;
+                  final popCount = paths.length + (hasRoot ? 0 : -1);
+                  final navigator = Navigator.of(context);
+                  for (var i = 0; i < popCount; i++) {
+                    if (navigator.canPop()) {
+                      navigator.pop();
                     }
-                    if (!hasRoot) {
-                      context.replaceStorageRootDetail();
-                    }
-                  },
-                )
-              : InkWell(
-                  onTap: () {
-                    // 单击当前位置的时候，不做任何转跳
-                    // 禁止原地 TP
-                    if (index != paths.length) {
+                  }
+                  if (!hasRoot) {
+                    context.replaceStorageRootDetail();
+                  }
+                },
+              );
+            }
+            final isCurrent = index == paths.length;
+            // 单击当前位置的时候不做转跳，直接给 null 让读屏也知道这不可点
+            return InkWell(
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+              onTap: isCurrent
+                  ? null
+                  : () {
                       // 计算需要回退的层数
                       // paths.length 是当前位置的深度（包括当前页面）
                       // index 是点击的位置索引（从1开始，因为0是home图标）
@@ -230,31 +252,47 @@ class PathBarDelegate extends SliverPersistentHeaderDelegate {
                           navigator.pop();
                         }
                       }
-                    }
-                  },
+                    },
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minWidth: 48),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.sm,
+                  ),
                   child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Text(
-                        paths[index - 1].name,
-                        style: const TextStyle(fontSize: 16),
+                    child: Text(
+                      paths[index - 1].name,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: isCurrent
+                            ? scheme.onSurface
+                            : scheme.onSurfaceVariant,
+                        fontWeight: isCurrent ? FontWeight.w600 : null,
                       ),
                     ),
                   ),
-                );
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return const Icon(Icons.arrow_forward_ios, size: 12);
-        },
+                ),
+              ),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return Center(
+              child: Icon(
+                Icons.chevron_right,
+                size: 16,
+                color: scheme.onSurfaceVariant,
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
   @override
-  double get maxExtent => 40;
+  double get maxExtent => 48;
 
   @override
-  double get minExtent => 40;
+  double get minExtent => 48;
 
   @override
   bool shouldRebuild(covariant PathBarDelegate oldDelegate) {

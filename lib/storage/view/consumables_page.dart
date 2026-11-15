@@ -6,9 +6,10 @@ import 'package:smarthome/storage/providers/consumables_provider.dart';
 
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
-import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
+import 'package:smarthome/widgets/state_views.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
+import 'package:smarthome/widgets/list_rows.dart';
 
 class ConsumablesPage extends StatelessWidget {
   const ConsumablesPage({super.key});
@@ -29,9 +30,9 @@ class ConsumablesScreen extends ConsumerWidget {
       title: const Text('耗材管理'),
       slivers: [
         if (state.status == ConsumablesStatus.failure)
-          SliverErrorMessageButton(
+          SliverErrorState(
             message: state.errorMessage,
-            onPressed: () {
+            onRetry: () {
               ref.read(consumablesProvider.notifier).fetch(cache: false);
             },
           ),
@@ -53,31 +54,53 @@ class ConsumablesScreen extends ConsumerWidget {
 }
 
 Widget _buildItem(BuildContext context, Item item) {
-  return Card(
-    child: Column(
-      children: <Widget>[
-        ListTile(
-          title: Text(item.name),
-          onTap: () {
+  final theme = Theme.of(context);
+  final scheme = theme.colorScheme;
+  final consumables = item.consumables ?? const <Item>[];
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: <Widget>[
+      SectionHeader(
+        title: item.name,
+        padding: const EdgeInsets.fromLTRB(16, 16, 8, 4),
+        action: TextButton(
+          onPressed: () {
             context.goItemDetail(item.id);
           },
+          child: const Text('查看'),
         ),
-        if (item.consumables != null)
-          for (Item consumable in item.consumables!)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-              child: ListTile(
-                title: Text(consumable.name),
-                subtitle: consumable.expiredAt != null
-                    ? Text(consumable.expiredAt!.differenceFromNowStr())
-                    : null,
-                onTap: () {
-                  context.goItemDetail(consumable.id);
-                },
-                trailing: Text(consumable.number.toString()),
+      ),
+      if (consumables.isEmpty)
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: Text(
+            '没有耗材',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: scheme.onSurfaceVariant,
+            ),
+          ),
+        )
+      else
+        for (var i = 0; i < consumables.length; i++) ...<Widget>[
+          ContentRow(
+            icon: Icons.inventory_2_outlined,
+            title: Text(consumables[i].name),
+            supporting: consumables[i].expiredAt == null
+                ? null
+                : Text(consumables[i].expiredAt!.differenceFromNowStr()),
+            trailing: Text(
+              '× ${consumables[i].number}',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: scheme.onSurfaceVariant,
               ),
             ),
-      ],
-    ),
+            onTap: () {
+              context.goItemDetail(consumables[i].id);
+            },
+          ),
+          if (i < consumables.length - 1) const ContentDivider(),
+        ],
+    ],
   );
 }

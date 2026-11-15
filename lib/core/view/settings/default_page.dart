@@ -18,10 +18,8 @@ class DefaultPage extends ConsumerWidget {
             tiles: [
               SettingsTile(
                 title: AppTab.storage.name,
-                trailing: trailingWidget(
-                  context,
-                  AppTab.storage,
-                  settings.defaultPage,
+                trailing: SelectionCheck(
+                  selected: AppTab.storage == settings.defaultPage,
                 ),
                 onPressed: (context) {
                   ref
@@ -31,10 +29,8 @@ class DefaultPage extends ConsumerWidget {
               ),
               SettingsTile(
                 title: AppTab.blog.name,
-                trailing: trailingWidget(
-                  context,
-                  AppTab.blog,
-                  settings.defaultPage,
+                trailing: SelectionCheck(
+                  selected: AppTab.blog == settings.defaultPage,
                 ),
                 onPressed: (context) {
                   ref
@@ -44,10 +40,8 @@ class DefaultPage extends ConsumerWidget {
               ),
               SettingsTile(
                 title: AppTab.board.name,
-                trailing: trailingWidget(
-                  context,
-                  AppTab.board,
-                  settings.defaultPage,
+                trailing: SelectionCheck(
+                  selected: AppTab.board == settings.defaultPage,
                 ),
                 onPressed: (context) {
                   ref
@@ -60,11 +54,5 @@ class DefaultPage extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  Widget trailingWidget(BuildContext context, AppTab appTab, AppTab current) {
-    return (appTab == current)
-        ? Icon(Icons.check, color: Theme.of(context).colorScheme.secondary)
-        : const Icon(null);
   }
 }

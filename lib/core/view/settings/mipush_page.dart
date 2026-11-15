@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/home_page.dart';
+import 'package:smarthome/widgets/list_rows.dart';
 
 class MiPushPage extends ConsumerWidget {
   const MiPushPage({super.key});
@@ -23,36 +24,52 @@ class MiPushPage extends ConsumerWidget {
     }
 
     return MySliverScaffold(
+      appBarSize: AppBarSize.normal,
       title: const Text('小米推送'),
       actions: [
-        Tooltip(
-          message: '同步',
-          child: IconButton(
-            tooltip: '重新获取',
-            icon: const Icon(Icons.sync),
-            onPressed: () {
-              // 重新同步本地与服务器的注册数据
-              final local = localRegId;
-              if (local != null) {
-                ref.read(pushProvider.notifier).refreshPush(local);
-              } else {
-                ref.read(pushProvider.notifier).startPush();
-              }
-            },
-          ),
+        IconButton(
+          tooltip: '重新同步注册信息',
+          icon: const Icon(Icons.sync),
+          // 注册中不让连点，避免重复请求
+          onPressed: pushInfo.isLoading
+              ? null
+              : () {
+                  final local = localRegId;
+                  if (local != null) {
+                    ref.read(pushProvider.notifier).refreshPush(local);
+                  } else {
+                    ref.read(pushProvider.notifier).startPush();
+                  }
+                },
         ),
       ],
       sliver: SliverList(
         delegate: SliverChildListDelegate([
-          ListTile(title: const Text('状态'), subtitle: Text(status)),
-          ListTile(
-            title: const Text('注册识别码（本地）'),
-            subtitle: Text(localRegId ?? ''),
+          const SectionHeader(
+            title: '注册状态',
+            padding: EdgeInsets.fromLTRB(16, 8, 16, 4),
           ),
-          ListTile(
-            title: const Text('注册识别码（服务器）'),
-            subtitle: Text(serverRegId ?? '单击同步按钮获取并同步服务器数据'),
+          InfoRow(
+            label: '状态',
+            value: Text(status, style: Theme.of(context).textTheme.bodyLarge),
           ),
+          const ContentDivider(indent: 16),
+          InfoRow(
+            label: '注册识别码（本地）',
+            value: Text(
+              localRegId ?? '尚未注册',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+          const ContentDivider(indent: 16),
+          InfoRow(
+            label: '注册识别码（服务器）',
+            value: Text(
+              serverRegId ?? '点右上角按钮同步获取',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+          const ListBottomPadding(height: 24),
         ]),
       ),
     );

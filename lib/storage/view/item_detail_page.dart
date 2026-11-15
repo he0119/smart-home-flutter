@@ -13,8 +13,9 @@ import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
-import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
+import 'package:smarthome/widgets/state_views.dart';
+import 'package:smarthome/widgets/list_rows.dart';
 
 class ItemDetailPage extends StatelessWidget {
   final String itemId;
@@ -118,9 +119,14 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
                   value: ItemDetailMenu.consumable,
                   child: Text('耗材编辑'),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: ItemDetailMenu.delete,
-                  child: Text('删除'),
+                  child: Text(
+                    '删除',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -141,8 +147,8 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
           ref.read(itemDetailProvider(widget.itemId).notifier).refresh();
         },
         slivers: [
-          SliverErrorMessageButton(
-            onPressed: () {
+          SliverErrorState(
+            onRetry: () {
               ref.read(itemDetailProvider(widget.itemId).notifier).refresh();
             },
             message: error.toString(),
@@ -160,94 +166,97 @@ class _ItemDetailList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final consumables = item.consumables ?? const <Item>[];
+    final pictures = item.pictures ?? const <Picture>[];
+    final sectionPadding = const EdgeInsets.fromLTRB(16, 24, 16, 4);
+
+    final basicRows = <Widget>[
+      InfoRow(label: '数量', value: Text(item.number.toString())),
+      if (item.description != null && item.description!.isNotEmpty)
+        InfoRow(label: '备注', value: Text(item.description!)),
+      if (item.storage != null)
+        InfoRow(
+          label: '属于',
+          value: Text(item.storage!.name),
+          trailing: Icon(Icons.chevron_right, color: scheme.onSurfaceVariant),
+          onTap: () {
+            context.goStorageDetail(item.storage!.id);
+          },
+        ),
+      if (item.price != null)
+        InfoRow(label: '价格', value: Text(item.price.toString())),
+      if (item.expiredAt != null)
+        InfoRow(label: '有效期至', value: Text(item.expiredAt!.toLocalStr())),
+    ];
+
+    final recordRows = <Widget>[
+      if (item.editedBy != null)
+        InfoRow(label: '修改人', value: Text(item.editedBy!.username)),
+      InfoRow(label: '修改时间', value: Text(item.editedAt?.toLocalStr() ?? '')),
+      if (item.createdBy != null)
+        InfoRow(label: '录入人', value: Text(item.createdBy!.username)),
+      InfoRow(label: '录入时间', value: Text(item.createdAt?.toLocalStr() ?? '')),
+      if (item.deletedAt != null)
+        InfoRow(label: '删除时间', value: Text(item.deletedAt!.toLocalStr())),
+    ];
+
     return SliverList(
       delegate: SliverChildListDelegate(<Widget>[
-        ListTile(
-          title: const Text('数量'),
-          subtitle: Text(item.number.toString()),
+        const SectionHeader(
+          title: '基本信息',
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
         ),
-        if (item.description != null && item.description!.isNotEmpty)
-          ListTile(title: const Text('备注'), subtitle: Text(item.description!)),
-        if (item.storage != null)
-          ListTile(
-            title: const Text('属于'),
-            subtitle: InkWell(
-              child: Text(
-                item.storage!.name,
-                style: const TextStyle(decoration: TextDecoration.underline),
+        ..._withDividers(basicRows),
+        if (consumables.isNotEmpty) ...<Widget>[
+          SectionHeader(title: '耗材', padding: sectionPadding),
+          for (var i = 0; i < consumables.length; i++) ...<Widget>[
+            ContentRow(
+              icon: Icons.inventory_2_outlined,
+              title: Text(consumables[i].name),
+              supporting: consumables[i].expiredAt == null
+                  ? null
+                  : Text(consumables[i].expiredAt!.differenceFromNowStr()),
+              onTap: () {
+                context.goItemDetail(consumables[i].id);
+              },
+            ),
+            if (i < consumables.length - 1) const ContentDivider(),
+          ],
+        ],
+        SectionHeader(title: '记录', padding: sectionPadding),
+        ..._withDividers(recordRows),
+        if (pictures.isNotEmpty) ...<Widget>[
+          SectionHeader(title: '图片', padding: sectionPadding),
+          for (var i = 0; i < pictures.length; i++) ...<Widget>[
+            ContentRow(
+              icon: Icons.photo_outlined,
+              title: Text(
+                pictures[i].description.isEmpty
+                    ? '未命名图片'
+                    : pictures[i].description,
               ),
               onTap: () {
-                context.goStorageDetail(item.storage!.id);
+                context.goPictureDetail(pictures[i].id);
               },
             ),
-          ),
-        if (item.price != null)
-          ListTile(
-            title: const Text('价格'),
-            subtitle: Text(item.price.toString()),
-          ),
-        if (item.expiredAt != null)
-          ListTile(
-            title: const Text('有效期至'),
-            subtitle: Text(item.expiredAt?.toLocalStr() ?? ''),
-          ),
-        if (item.consumables!.isNotEmpty)
-          ListTile(
-            title: const Text('耗材'),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: item.consumables!
-                  .map(
-                    (item) => InkWell(
-                      child: Text(
-                        item.name,
-                        style: const TextStyle(
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      onTap: () {
-                        context.goItemDetail(item.id);
-                      },
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        if (item.editedBy != null)
-          ListTile(
-            title: const Text('修改人'),
-            subtitle: Text(item.editedBy!.username),
-          ),
-        ListTile(
-          title: const Text('修改时间'),
-          subtitle: Text(item.editedAt?.toLocalStr() ?? ''),
-        ),
-        if (item.createdBy != null)
-          ListTile(
-            title: const Text('录入人'),
-            subtitle: Text(item.createdBy!.username),
-          ),
-        ListTile(
-          title: const Text('录入时间'),
-          subtitle: Text(item.createdAt?.toLocalStr() ?? ''),
-        ),
-        if (item.deletedAt != null)
-          ListTile(
-            title: const Text('删除时间'),
-            subtitle: Text(item.deletedAt?.toLocalStr() ?? ''),
-          ),
-        if (item.pictures!.isNotEmpty)
-          for (Picture picture in item.pictures!)
-            ListTile(
-              title: picture.description.isNotEmpty
-                  ? Text('图片（${picture.description}）')
-                  : const Text('图片（未命名）'),
-              subtitle: const Text('单击查看'),
-              onTap: () {
-                context.goPictureDetail(picture.id);
-              },
-            ),
+            if (i < pictures.length - 1) const ContentDivider(),
+          ],
+        ],
+        const ListBottomPadding(),
       ]),
     );
+  }
+
+  /// 字段行之间加细分隔线，一组信息才看得出是一条一条的
+  List<Widget> _withDividers(List<Widget> rows) {
+    final children = <Widget>[];
+    for (var i = 0; i < rows.length; i++) {
+      children.add(rows[i]);
+      if (i < rows.length - 1) {
+        children.add(const ContentDivider(indent: 16));
+      }
+    }
+    return children;
   }
 }

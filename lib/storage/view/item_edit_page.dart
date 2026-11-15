@@ -76,135 +76,151 @@ class _ItemEditPageState extends ConsumerState<ItemEditPage> {
           : const Text('添加物品'),
       sliver: SliverFillRemaining(
         hasScrollBody: false,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              spacing: AppSpacing.md,
-              children: <Widget>[
-                TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(labelText: '名称'),
-                  inputFormatters: [LengthLimitingTextInputFormatter(200)],
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return '名称不能为空';
-                    }
-                    return null;
-                  },
-                  textInputAction: TextInputAction.next,
-                  focusNode: _nameFocusNode,
-                  onFieldSubmitted: (_) {
-                    _fieldFocusChange(
-                      context,
-                      _nameFocusNode,
-                      _numberFocusNode,
-                    );
-                  },
-                ),
-                TextFormField(
-                  controller: _numberController,
-                  decoration: const InputDecoration(labelText: '数量'),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return '数量不能为空';
-                    }
-                    return null;
-                  },
-                  textInputAction: TextInputAction.next,
-                  focusNode: _numberFocusNode,
-                  onFieldSubmitted: (_) {
-                    _fieldFocusChange(
-                      context,
-                      _numberFocusNode,
-                      _descriptionFocusNode,
-                    );
-                  },
-                ),
-                StorageFormField(
-                  decoration: const InputDecoration(labelText: '属于'),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  onChanged: (Storage? value) {
-                    if (value != null) {
-                      storageId = value.id;
-                    }
-                  },
-                  initialValue: widget.isEditing
-                      ? widget.item!.storage
-                      : widget.storage,
-                  validator: (value) {
-                    if (value == null) {
-                      return '请选择一个存放位置';
-                    } else if (value.id == homeStorage.id) {
-                      return '家不能作为存放位置';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: const InputDecoration(labelText: '备注'),
-                  inputFormatters: [LengthLimitingTextInputFormatter(200)],
-                  textInputAction: TextInputAction.next,
-                  focusNode: _descriptionFocusNode,
-                  onFieldSubmitted: (_) {
-                    _fieldFocusChange(
-                      context,
-                      _descriptionFocusNode,
-                      _priceFocusNode,
-                    );
-                  },
-                ),
-                TextFormField(
-                  controller: _priceController,
-                  decoration: const InputDecoration(labelText: '价格'),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
-                  ],
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmpty) return null;
-                    final parts = value.split('.');
-                    if (parts.length > 2) {
-                      return '价格最多只能有两位小数且不超过一亿';
-                    }
-                    if (parts[0].length > 8) {
-                      return '价格不能超过一亿';
-                    }
-                    if (parts.length == 2 && parts[1].length > 2) {
-                      return '价格最多只能有两位小数';
-                    }
-                    return null;
-                  },
-                  focusNode: _priceFocusNode,
-                ),
-                DateTimePickerFormField(
-                  format: DateTime.now().localFormat,
-                  initialValue: widget.isEditing
-                      ? widget.item!.expiredAt?.toLocal()
-                      : null,
-                  decoration: const InputDecoration(labelText: '有效期至'),
-                  onChanged: (value) {
-                    expiredAt = value;
-                  },
-                ),
-                RoundedRaisedButton(
-                  onPressed: (state.status != ItemEditStatus.loading)
-                      ? () {
-                          if (_formKey.currentState!.validate()) {
-                            _onSubmitPressed();
-                          }
-                        }
-                      : null,
-                  child: const Text('提交'),
-                ),
-              ],
+        child: SafeArea(
+          top: false,
+          minimum: const EdgeInsets.only(bottom: AppSpacing.md),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.md,
+              AppSpacing.lg,
+              AppSpacing.xl,
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                spacing: AppSpacing.md,
+                children: <Widget>[
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(labelText: '名称'),
+                    inputFormatters: [LengthLimitingTextInputFormatter(200)],
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return '名称不能为空';
+                      }
+                      return null;
+                    },
+                    textInputAction: TextInputAction.next,
+                    focusNode: _nameFocusNode,
+                    onFieldSubmitted: (_) {
+                      _fieldFocusChange(
+                        context,
+                        _nameFocusNode,
+                        _numberFocusNode,
+                      );
+                    },
+                  ),
+                  TextFormField(
+                    controller: _numberController,
+                    decoration: const InputDecoration(labelText: '数量'),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return '数量不能为空';
+                      }
+                      return null;
+                    },
+                    textInputAction: TextInputAction.next,
+                    focusNode: _numberFocusNode,
+                    onFieldSubmitted: (_) {
+                      _fieldFocusChange(
+                        context,
+                        _numberFocusNode,
+                        _descriptionFocusNode,
+                      );
+                    },
+                  ),
+                  StorageFormField(
+                    decoration: const InputDecoration(labelText: '属于'),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    onChanged: (Storage? value) {
+                      if (value != null) {
+                        storageId = value.id;
+                      }
+                    },
+                    initialValue: widget.isEditing
+                        ? widget.item!.storage
+                        : widget.storage,
+                    validator: (value) {
+                      if (value == null) {
+                        return '请选择一个存放位置';
+                      } else if (value.id == homeStorage.id) {
+                        return '家不能作为存放位置';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: _descriptionController,
+                    decoration: const InputDecoration(labelText: '备注'),
+                    inputFormatters: [LengthLimitingTextInputFormatter(200)],
+                    textInputAction: TextInputAction.next,
+                    focusNode: _descriptionFocusNode,
+                    onFieldSubmitted: (_) {
+                      _fieldFocusChange(
+                        context,
+                        _descriptionFocusNode,
+                        _priceFocusNode,
+                      );
+                    },
+                  ),
+                  TextFormField(
+                    controller: _priceController,
+                    decoration: const InputDecoration(labelText: '价格'),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+                    ],
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value!.isEmpty) return null;
+                      // 只输入一个「.」时 double.parse 会抛异常，先挡掉
+                      if (double.tryParse(value) == null) {
+                        return '价格格式不完整';
+                      }
+                      final parts = value.split('.');
+                      if (parts.length > 2) {
+                        return '价格最多只能有两位小数且不超过一亿';
+                      }
+                      if (parts[0].length > 8) {
+                        return '价格不能超过一亿';
+                      }
+                      if (parts.length == 2 && parts[1].length > 2) {
+                        return '价格最多只能有两位小数';
+                      }
+                      return null;
+                    },
+                    focusNode: _priceFocusNode,
+                  ),
+                  DateTimePickerFormField(
+                    format: DateTime.now().localFormat,
+                    initialValue: widget.isEditing
+                        ? widget.item!.expiredAt?.toLocal()
+                        : null,
+                    decoration: const InputDecoration(labelText: '有效期至'),
+                    onChanged: (value) {
+                      expiredAt = value;
+                    },
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: RoundedRaisedButton(
+                      onPressed: (state.status != ItemEditStatus.loading)
+                          ? () {
+                              if (_formKey.currentState!.validate()) {
+                                _onSubmitPressed();
+                              }
+                            }
+                          : null,
+                      child: const Text('提交'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

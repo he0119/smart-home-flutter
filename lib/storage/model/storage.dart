@@ -8,6 +8,17 @@ part 'storage.g.dart';
 
 enum ItemType { expired, nearExpired, recentlyCreated, recentlyEdited, all }
 
+/// 物品种类在界面上的名字，首页分组和「查看全部」页共用
+extension ItemTypeDisplay on ItemType {
+  String get sectionTitle => switch (this) {
+    ItemType.expired => '过期物品',
+    ItemType.nearExpired => '即将过期',
+    ItemType.recentlyCreated => '最近录入',
+    ItemType.recentlyEdited => '最近修改',
+    ItemType.all => '全部物品',
+  };
+}
+
 @JsonSerializable()
 class Storage extends Equatable {
   final String id;

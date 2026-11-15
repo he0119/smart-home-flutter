@@ -73,6 +73,7 @@ class NestedWebviewController {
         onProgress: onProgress,
         onPageStarted: onPageStarted,
         onPageFinished: onPageFinished,
+        onWebResourceError: onWebResourceError,
       ),
     );
     _webviewController.loadRequest(Uri.parse(initialUrl));
@@ -101,6 +102,12 @@ class NestedWebviewController {
 
   void onProgress(int progress) {
     progressNotifier.value = progress;
+  }
+
+  void dispose() {
+    scrollHeightNotifier.dispose();
+    webViewStatusNotifier.dispose();
+    progressNotifier.dispose();
   }
 }
 

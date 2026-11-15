@@ -9,9 +9,10 @@ import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
-import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
+import 'package:smarthome/widgets/state_views.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
+import 'package:smarthome/widgets/list_rows.dart';
 
 class RecycleBinPage extends StatelessWidget {
   const RecycleBinPage({super.key});
@@ -35,9 +36,9 @@ class RecycleBinScreen extends ConsumerWidget {
       },
       slivers: [
         if (state.status == RecycleBinStatus.failure)
-          SliverErrorMessageButton(
+          SliverErrorState(
             message: state.errorMessage,
-            onPressed: () {
+            onRetry: () {
               ref.read(recycleBinProvider.notifier).fetch(cache: false);
             },
           ),
@@ -46,6 +47,7 @@ class RecycleBinScreen extends ConsumerWidget {
         if (state.status == RecycleBinStatus.success)
           SliverInfiniteList(
             itemBuilder: (context, item) => _buildItem(context, item, ref),
+            separatorBuilder: (context, item) => const ContentDivider(),
             items: state.items,
             hasReachedMax: state.hasReachedMax,
             onFetch: () => ref.read(recycleBinProvider.notifier).fetch(),
@@ -56,57 +58,43 @@ class RecycleBinScreen extends ConsumerWidget {
 }
 
 Widget _buildItem(BuildContext context, Item item, WidgetRef ref) {
-  final text = RichText(
-    text: TextSpan(
-      style: DefaultTextStyle.of(context).style,
-      children: <TextSpan>[
-        TextSpan(
-          text: item.name,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        TextSpan(text: '（${item.deletedAt!.differenceFromNowStr()}删除）'),
-      ],
-    ),
-  );
   final description = item.description;
-  return ListTile(
-    leading: Icon(
-      Icons.inventory_2_outlined,
-      color: Theme.of(context).colorScheme.onSurfaceVariant,
-    ),
-    title: text,
-    subtitle: (description == null || description.isEmpty)
-        ? null
-        : Text(description),
+  final supporting = <String>[
+    '${item.deletedAt!.differenceFromNowStr()}删除',
+    if (description != null && description.isNotEmpty) description,
+  ].join(' · ');
+
+  return ContentRow(
+    icon: Icons.inventory_2_outlined,
+    title: Text(item.name),
+    supporting: Text(supporting),
     onTap: () {
       context.goItemDetail(item.id);
     },
-    trailing: Tooltip(
-      message: '恢复',
-      child: IconButton(
-        icon: const Icon(Icons.undo),
-        onPressed: () async {
-          final confirmed = await showConfirmDialog(
-            context,
-            title: '恢复物品',
-            message: '确认把「${item.name}」恢复到原来的位置？',
-            confirmLabel: '恢复',
-          );
-          if (!confirmed) {
-            return;
-          }
-          showInfoSnackBar('正在恢复...', duration: 1);
-          await ref.read(itemEditProvider.notifier).restoreItem(item);
+    trailing: IconButton(
+      tooltip: '恢复',
+      icon: const Icon(Icons.undo),
+      onPressed: () async {
+        final confirmed = await showConfirmDialog(
+          context,
+          title: '恢复物品',
+          message: '确认把「${item.name}」恢复到原来的位置？',
+          confirmLabel: '恢复',
+        );
+        if (!confirmed) {
+          return;
+        }
+        showInfoSnackBar('正在恢复...', duration: 1);
+        await ref.read(itemEditProvider.notifier).restoreItem(item);
 
-          final state = ref.read(itemEditProvider);
-          if (state.status == ItemEditStatus.restoreSuccess) {
-            showInfoSnackBar('物品 ${item.name} 恢复成功', duration: 2);
-            ref.read(recycleBinProvider.notifier).fetch(cache: false);
-          } else if (state.status == ItemEditStatus.failure) {
-            showErrorSnackBar(state.errorMessage);
-          }
-        },
-      ),
+        final state = ref.read(itemEditProvider);
+        if (state.status == ItemEditStatus.restoreSuccess) {
+          showInfoSnackBar('物品 ${item.name} 恢复成功', duration: 2);
+          ref.read(recycleBinProvider.notifier).fetch(cache: false);
+        } else if (state.status == ItemEditStatus.failure) {
+          showErrorSnackBar(state.errorMessage);
+        }
+      },
     ),
   );
 }

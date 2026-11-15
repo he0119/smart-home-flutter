@@ -35,6 +35,7 @@ class SettingsScreen extends ConsumerWidget {
             title: '通用',
             tiles: [
               SettingsTile(
+                leading: Icons.palette_outlined,
                 title: '主题',
                 subtitle: settings.themeMode.toReadable(),
                 onPressed: (context) {
@@ -42,6 +43,7 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               SettingsTile(
+                leading: Icons.dns_outlined,
                 title: '服务器网址',
                 subtitle: settings.apiUrl,
                 onPressed: (context) {
@@ -49,6 +51,7 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               SettingsTile(
+                leading: Icons.admin_panel_settings_outlined,
                 title: '管理网址',
                 subtitle: settings.adminUrl,
                 onPressed: (context) {
@@ -56,6 +59,7 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               SettingsTile(
+                leading: Icons.home_outlined,
                 title: '默认主页',
                 subtitle: settings.defaultPage.name,
                 onPressed: (context) {
@@ -64,7 +68,9 @@ class SettingsScreen extends ConsumerWidget {
               ),
               if (!kIsWeb && Platform.isAndroid) const MiPushSettingsTile(),
               SettingsTile(
-                title: '登陆设备管理',
+                leading: Icons.devices_outlined,
+                title: '登录设备管理',
+                subtitle: '查看并移除已登录的设备',
                 onPressed: (context) {
                   // 初始化 session provider 并导航到 SessionPage
                   ref.read(sessionProvider.notifier).fetchSessions();
@@ -77,6 +83,7 @@ class SettingsScreen extends ConsumerWidget {
             title: '博客',
             tiles: [
               SettingsTile(
+                leading: Icons.link,
                 title: '博客网址',
                 subtitle: settings.blogUrl,
                 onPressed: (context) {
@@ -84,6 +91,7 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               SettingsTile(
+                leading: Icons.admin_panel_settings_outlined,
                 title: '博客管理网址',
                 subtitle: settings.blogAdminUrl ?? '请单击输入',
                 onPressed: (context) {
@@ -96,6 +104,7 @@ class SettingsScreen extends ConsumerWidget {
             title: '留言板',
             tiles: [
               SettingsTile(
+                leading: Icons.sort,
                 title: '评论排序',
                 subtitle: settings.commentDescending ? '倒序' : '正序',
                 onPressed: (context) {

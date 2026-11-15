@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:smarthome/app/dimens.dart';
+import 'package:smarthome/widgets/list_rows.dart';
 
 class SettingsSection extends StatelessWidget {
   final String? title;
@@ -12,29 +12,9 @@ class SettingsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (title != null)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.lg,
-              AppSpacing.xl,
-              AppSpacing.lg,
-              AppSpacing.sm,
-            ),
-            child: Text(
-              title!,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
-        ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: tiles.length,
-          itemBuilder: (context, index) {
-            return tiles[index];
-          },
-        ),
+        if (title != null) SectionHeader(title: title!),
+        // 直接铺开，不需要套一层不能滚动的 ListView
+        ...tiles,
       ],
     );
   }
