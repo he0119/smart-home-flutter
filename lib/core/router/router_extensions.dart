@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smarthome/core/core.dart';
 
+import 'package:smarthome/storage/model/storage.dart';
+
 import 'app_router.dart';
 
 // GoRouter扩展
@@ -39,6 +41,9 @@ extension GoRouterExtension on BuildContext {
       push(AppRoutes.storageDetailPath(storageId));
 
   void goItemDetail(String itemId) => push(AppRoutes.itemDetailPath(itemId));
+
+  void goItemTypeItems(ItemType type) =>
+      push(AppRoutes.itemTypeItemsPath(type.name));
 
   void goTopicDetail(String topicId) =>
       push(AppRoutes.topicDetailPath(topicId));

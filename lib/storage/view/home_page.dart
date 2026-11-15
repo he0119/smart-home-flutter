@@ -8,10 +8,10 @@ import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/storage/storage.dart';
+import 'package:smarthome/storage/view/widgets/item_row.dart';
 import 'package:smarthome/storage/view/widgets/scan_qr_icon_button.dart';
 import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/utils/constants.dart';
-import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/list_rows.dart';
@@ -121,24 +121,14 @@ class _StorageHomeScreenState extends ConsumerState<StorageHomeScreen> {
     );
 
     final sections = <_HomeSection>[
-      _HomeSection(
-        type: ItemType.expired,
-        title: '过期物品',
-        items: state.expiredItems,
-      ),
-      _HomeSection(
-        type: ItemType.nearExpired,
-        title: '即将过期',
-        items: state.nearExpiredItems,
-      ),
+      _HomeSection(type: ItemType.expired, items: state.expiredItems),
+      _HomeSection(type: ItemType.nearExpired, items: state.nearExpiredItems),
       _HomeSection(
         type: ItemType.recentlyEdited,
-        title: '最近修改',
         items: state.recentlyEditedItems,
       ),
       _HomeSection(
         type: ItemType.recentlyCreated,
-        title: '最近录入',
         items: state.recentlyCreatedItems,
       ),
     ];
@@ -160,11 +150,12 @@ class _StorageHomeScreenState extends ConsumerState<StorageHomeScreen> {
         slivers.add(
           SliverToBoxAdapter(
             child: _SectionBlock(
-              title: section.title,
+              title: section.type.sectionTitle,
               count: section.items?.length ?? 0,
               collapsed: _collapsed.contains(section.type),
               duration: _collapseDuration,
               onToggle: () => _toggleSection(section.type),
+              onShowAll: () => context.goItemTypeItems(section.type),
               // 内容始终按原尺寸排好，只改变露出来的高度：收起时行是往上滑走、
               // 被裁掉，而不是整块瞬间消失留一片空白
               body: _buildSectionBody(section),
@@ -183,60 +174,19 @@ class _StorageHomeScreenState extends ConsumerState<StorageHomeScreen> {
     return Column(
       children: <Widget>[
         for (var i = 0; i < items.length; i++) ...<Widget>[
-          _buildItemRow(context, items[i], section.type),
+          ItemRow(item: items[i], type: section.type),
           if (i < items.length - 1) const ContentDivider(),
         ],
       ],
-    );
-  }
-
-  Widget _buildItemRow(BuildContext context, Item item, ItemType type) {
-    final time = switch (type) {
-      ItemType.expired ||
-      ItemType.nearExpired => item.expiredAt!.differenceFromNowStr(),
-      ItemType.recentlyCreated => item.createdAt!.differenceFromNowStr(),
-      ItemType.recentlyEdited => item.editedAt!.differenceFromNowStr(),
-      ItemType.all => '',
-    };
-    // 副标题优先放备注，没有备注再退到位置名；时间放在尾部，
-    // 这样「最近修改」分组里的时间一眼能看到，也不挤掉原来的备注
-    final description = item.description;
-    final storageName = item.storage?.name;
-    final supporting = (description != null && description.isNotEmpty)
-        ? description
-        : storageName;
-
-    return ContentRow(
-      icon: Icons.inventory_2_outlined,
-      title: Text(item.name),
-      supporting: supporting == null || supporting.isEmpty
-          ? null
-          : Text(supporting),
-      trailing: time.isEmpty
-          ? null
-          : Text(
-              time,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-      onTap: () async {
-        context.goItemDetail(item.id);
-      },
     );
   }
 }
 
 class _HomeSection {
   final ItemType type;
-  final String title;
   final List<Item>? items;
 
-  const _HomeSection({
-    required this.type,
-    required this.title,
-    required this.items,
-  });
+  const _HomeSection({required this.type, required this.items});
 }
 
 /// 分组标题：整行都能点，箭头跟着转；固定在顶部，滚动时不会跑掉。
@@ -246,6 +196,7 @@ class _SectionHeaderBar extends StatelessWidget {
   final bool collapsed;
   final Duration duration;
   final VoidCallback onTap;
+  final VoidCallback onShowAll;
 
   const _SectionHeaderBar({
     required this.title,
@@ -253,6 +204,7 @@ class _SectionHeaderBar extends StatelessWidget {
     required this.collapsed,
     required this.duration,
     required this.onTap,
+    required this.onShowAll,
   });
 
   @override
@@ -290,6 +242,21 @@ class _SectionHeaderBar extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
+                // 首页每个分组只显示第一页，想看这一类全部就走这里
+                Tooltip(
+                  message: '查看全部$title',
+                  child: TextButton(
+                    onPressed: onShowAll,
+                    style: TextButton.styleFrom(
+                      visualDensity: VisualDensity.compact,
+                      minimumSize: const Size(48, 40),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.sm,
+                      ),
+                    ),
+                    child: const Text('全部'),
+                  ),
+                ),
                 AnimatedRotation(
                   turns: collapsed ? -0.25 : 0,
                   duration: duration,
@@ -316,6 +283,7 @@ class _SectionBlock extends StatelessWidget {
   final bool collapsed;
   final Duration duration;
   final VoidCallback onToggle;
+  final VoidCallback onShowAll;
   final Widget body;
 
   const _SectionBlock({
@@ -324,6 +292,7 @@ class _SectionBlock extends StatelessWidget {
     required this.collapsed,
     required this.duration,
     required this.onToggle,
+    required this.onShowAll,
     required this.body,
   });
 
@@ -343,6 +312,7 @@ class _SectionBlock extends StatelessWidget {
               collapsed: collapsed,
               duration: duration,
               onTap: onToggle,
+              onShowAll: onShowAll,
             ),
           ),
         ),

@@ -113,6 +113,19 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
 
+      // 某一类物品的完整列表
+      GoRoute(
+        path: AppRoutes.itemTypeItems,
+        builder: (context, state) {
+          final name = state.pathParameters['type'] ?? '';
+          final type = ItemType.values.firstWhere(
+            (value) => value.name == name,
+            orElse: () => ItemType.recentlyEdited,
+          );
+          return ItemTypeItemsPage(itemType: type);
+        },
+      ),
+
       // 位置详情
       GoRoute(
         path: AppRoutes.storageDetail,

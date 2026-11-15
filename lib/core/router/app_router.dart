@@ -9,6 +9,7 @@ class AppRoutes {
   // 物品管理
   static const String storage = '/storage';
   static const String storageDetail = '/storage/:id';
+  static const String itemTypeItems = '/storage/type/:type';
   static const String itemDetail = '/item/:id';
   static const String itemEdit = '/item/:id/edit';
   static const String pictureDetail = '/picture/:id';
@@ -46,6 +47,8 @@ class AppRoutes {
   static String storageDetailPath(String storageId) {
     return storageId.isEmpty ? storageRootDetail : '$storage/$storageId';
   }
+
+  static String itemTypeItemsPath(String type) => '/storage/type/$type';
 
   static String itemDetailPath(String itemId) => '/item/$itemId';
 

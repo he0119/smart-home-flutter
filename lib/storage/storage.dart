@@ -5,6 +5,7 @@ export 'view/consumables_page.dart';
 export 'view/home_page.dart';
 export 'view/item_detail_page.dart';
 export 'view/item_edit_page.dart';
+export 'view/item_type_items_page.dart';
 export 'view/picture_add_page.dart';
 export 'view/picture_page.dart';
 export 'view/recycle_bin_page.dart';
