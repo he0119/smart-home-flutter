@@ -7,6 +7,9 @@ import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/avatar.dart';
 import 'package:smarthome/widgets/markdown.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
+import 'package:smarthome/user/user.dart';
 
 class TopicItem extends StatelessWidget {
   final Topic topic;
@@ -100,3 +103,54 @@ class TopicItem extends StatelessWidget {
     }
   }
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+@Preview(name: 'TopicItem 列表', group: previewGroupBoard, size: Size(400, 240))
+Widget topicItemPreview() => PreviewFrame(
+  width: 400,
+  padding: EdgeInsets.zero,
+  child: Column(
+    children: <Widget>[
+      TopicItem(
+        topic: Topic(
+          id: 'topic-1',
+          title: '阳台储物柜怎么整理比较好？',
+          user: const User(username: '橙子', email: 'chengzi@example.com'),
+          createdAt: DateTime(2026, 11, 10, 9, 30),
+          editedAt: DateTime(2026, 11, 10, 9, 30),
+          comments: <Comment>[
+            Comment(id: 'comment-1', createdAt: DateTime(2026, 11, 12, 20)),
+          ],
+        ),
+      ),
+      TopicItem(
+        topic: Topic(
+          id: 'topic-2',
+          title: '公告：物品录入要不要写备注',
+          isPinned: true,
+          isClosed: true,
+          user: const User(username: '管理员', email: 'admin@example.com'),
+          createdAt: DateTime(2026, 11, 1, 8),
+        ),
+      ),
+    ],
+  ),
+);
+
+@Preview(name: 'TopicItem 详情', group: previewGroupBoard, size: Size(480, 420))
+Widget topicItemDetailPreview() => PreviewFrame(
+  width: 480,
+  child: TopicItem(
+    showBody: true,
+    topic: Topic(
+      id: 'topic-1',
+      title: '阳台储物柜怎么整理比较好？',
+      description:
+          '柜子有点满，想按使用频率重新分层。\n\n现在常用的都堆在最里面，'
+          '每次都要蹲下去掏半天。',
+      user: const User(username: '橙子', email: 'chengzi@example.com'),
+      createdAt: DateTime(2026, 11, 10, 9, 30),
+      editedAt: DateTime(2026, 11, 10, 9, 30),
+    ),
+  ),
+);

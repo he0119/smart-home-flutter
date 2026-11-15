@@ -1,4 +1,7 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:smarthome/app/dimens.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 
 /// https://gist.github.com/ltOgt/3771c824fc1c8811f5ec1a81a9a4937b
 /// Conditionally wrap a subtree with a parent widget without breaking the code tree.
@@ -50,3 +53,39 @@ class ConditionalParentWidget extends StatelessWidget {
     return condition ? conditionalBuilder(child) : child;
   }
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+/// 左右两行对比：condition 为 true 时才套上外层 Card。
+@Preview(
+  name: 'ConditionalParentWidget',
+  group: previewGroupWidgets,
+  size: Size(400, 240),
+)
+Widget conditionalParentWidgetPreview() => PreviewFrame(
+  width: 400,
+  child: Column(
+    children: <Widget>[
+      ConditionalParentWidget(
+        condition: true,
+        conditionalBuilder: (Widget child) => Card(
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: child,
+          ),
+        ),
+        child: const Text('condition: true，外面多了一层 Card'),
+      ),
+      const SizedBox(height: AppSpacing.lg),
+      ConditionalParentWidget(
+        condition: false,
+        conditionalBuilder: (Widget child) => Card(
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: child,
+          ),
+        ),
+        child: const Text('condition: false，原样显示'),
+      ),
+    ],
+  ),
+);

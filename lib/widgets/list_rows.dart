@@ -1,5 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/app/dimens.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 
 /// 分组标题。全站统一：titleSmall + 次要色，上 24、下 8。
 ///
@@ -212,3 +214,95 @@ class ListBottomPadding extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SizedBox(height: height);
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+@Preview(
+  name: 'SectionHeader',
+  group: previewGroupWidgets,
+  size: Size(400, 200),
+)
+Widget sectionHeaderPreview() => PreviewFrame(
+  width: 400,
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      const SectionHeader(title: '最近添加'),
+      SectionHeader(
+        title: '全部物品',
+        action: TextButton(onPressed: () {}, child: const Text('全部')),
+      ),
+    ],
+  ),
+);
+
+@Preview(name: 'EntryRow', group: previewGroupWidgets, size: Size(400, 200))
+Widget entryRowPreview() => PreviewFrame(
+  width: 400,
+  padding: EdgeInsets.zero,
+  child: Column(
+    children: <Widget>[
+      EntryRow(icon: Icons.settings_outlined, title: '设置', onTap: () {}),
+      EntryRow(
+        icon: Icons.info_outline,
+        title: '关于',
+        supporting: '版本 1.2.3',
+        onTap: () {},
+      ),
+    ],
+  ),
+);
+
+@Preview(name: 'ContentRow', group: previewGroupWidgets, size: Size(400, 200))
+Widget contentRowPreview() => PreviewFrame(
+  width: 400,
+  padding: EdgeInsets.zero,
+  child: Column(
+    children: <Widget>[
+      ContentRow(
+        icon: Icons.inbox_outlined,
+        title: const Text('电动螺丝刀'),
+        supporting: const Text('阳台储物柜 · 3 天前'),
+        onTap: () {},
+      ),
+      ContentRow(
+        icon: Icons.inbox_outlined,
+        title: const Text('备用电池'),
+        trailing: const Text('2 个'),
+      ),
+    ],
+  ),
+);
+
+@Preview(name: 'InfoRow', group: previewGroupWidgets, size: Size(400, 200))
+Widget infoRowPreview() => PreviewFrame(
+  width: 400,
+  padding: EdgeInsets.zero,
+  child: Column(
+    children: <Widget>[
+      InfoRow(
+        label: '存放位置',
+        value: const Text('阳台储物柜'),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {},
+      ),
+      const InfoRow(label: '购买日期', value: Text('2026-05-21')),
+    ],
+  ),
+);
+
+@Preview(
+  name: 'ContentDivider',
+  group: previewGroupWidgets,
+  size: Size(400, 240),
+)
+Widget contentDividerPreview() => PreviewFrame(
+  width: 400,
+  padding: EdgeInsets.zero,
+  child: Column(
+    children: <Widget>[
+      ContentRow(icon: Icons.inbox_outlined, title: const Text('电动螺丝刀')),
+      const ContentDivider(),
+      ContentRow(icon: Icons.inbox_outlined, title: const Text('备用电池')),
+    ],
+  ),
+);

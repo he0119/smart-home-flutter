@@ -9,6 +9,9 @@ import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/markdown.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
+import 'package:smarthome/user/user.dart';
 
 class CommentItem extends ConsumerWidget {
   final Comment comment;
@@ -79,3 +82,22 @@ class CommentItem extends ConsumerWidget {
     );
   }
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+@Preview(name: 'CommentItem', group: previewGroupBoard, size: Size(480, 280))
+Widget commentItemPreview() => PreviewFrame(
+  width: 480,
+  padding: EdgeInsets.zero,
+  child: PreviewProviders(
+    child: CommentItem(
+      comment: Comment(
+        id: 'comment-1',
+        body: '我按「常用 / 备用 / 一年没动」分了三层，找东西快很多。',
+        user: const User(username: '橙子', email: 'chengzi@example.com'),
+        createdAt: DateTime(2026, 11, 12, 20),
+        editedAt: DateTime(2026, 11, 12, 20),
+      ),
+      showMenu: true,
+    ),
+  ),
+);

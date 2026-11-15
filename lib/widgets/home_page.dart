@@ -1,10 +1,13 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/conditional_parent_widget.dart';
 import 'package:smarthome/widgets/drawer.dart';
+import 'package:smarthome/widgets/list_rows.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 import 'package:smarthome/widgets/tab_selector.dart';
 
 class MyHomePage extends ConsumerWidget {
@@ -182,3 +185,45 @@ class MySliverScaffold extends StatelessWidget {
     );
   }
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+/// 它是二级页的通用骨架：普通 AppBar + 限宽内容 + 可选的 FAB。
+@Preview(
+  name: 'MySliverScaffold',
+  group: previewGroupWidgets,
+  size: Size(720, 560),
+)
+Widget mySliverScaffoldPreview() => PreviewFrame(
+  width: 720,
+  padding: EdgeInsets.zero,
+  withScaffold: false,
+  child: MySliverScaffold(
+    title: const Text('物品'),
+    appBarSize: AppBarSize.normal,
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {},
+      child: const Icon(Icons.add),
+    ),
+    slivers: <Widget>[
+      SliverList.list(
+        children: <Widget>[
+          const SectionHeader(title: '最近添加'),
+          ContentRow(
+            icon: Icons.inbox_outlined,
+            title: const Text('电动螺丝刀'),
+            supporting: const Text('阳台储物柜 · 3 天前'),
+            onTap: () {},
+          ),
+          const ContentDivider(),
+          ContentRow(
+            icon: Icons.inbox_outlined,
+            title: const Text('备用电池'),
+            supporting: const Text('客厅 · 上周'),
+            onTap: () {},
+          ),
+          const ListBottomPadding(),
+        ],
+      ),
+    ],
+  ),
+);

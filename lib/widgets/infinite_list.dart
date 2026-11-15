@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/widgets/bottom_loader.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/list_rows.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 
 /// 无限长列表
 ///
@@ -88,3 +91,26 @@ class _SliverInfiniteListState<T> extends State<SliverInfiniteList<T>> {
     }
   }
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+/// hasReachedMax 为 false，底部那条转圈就是「还有下一页」的样子。
+@Preview(
+  name: 'SliverInfiniteList',
+  group: previewGroupWidgets,
+  size: Size(400, 480),
+)
+Widget sliverInfiniteListPreview() => PreviewFrame(
+  width: 400,
+  padding: EdgeInsets.zero,
+  child: CustomScrollView(
+    slivers: <Widget>[
+      SliverInfiniteList<String>(
+        items: const <String>['电动螺丝刀', '备用电池', '雨伞'],
+        itemBuilder: (BuildContext context, String item) =>
+            ContentRow(icon: Icons.inbox_outlined, title: Text(item)),
+        hasReachedMax: false,
+        onFetch: () {},
+      ),
+    ],
+  ),
+);
