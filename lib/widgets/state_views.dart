@@ -78,7 +78,13 @@ class LoadingState extends StatelessWidget {
           const SizedBox(
             width: 32,
             height: 32,
-            child: CircularProgressIndicator(strokeWidth: 3),
+            // 转圈本身没有文字，读屏只能靠这个标签，所以固定说「正在加载」。
+            // 具体的业务说明交给下面那行 message 文字，不塞进语义值：
+            // 不确定进度的转圈里，语义值表示的是完成百分比，念一句话会很怪。
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              semanticsLabel: '正在加载',
+            ),
           ),
           if (message != null) ...<Widget>[
             const SizedBox(height: AppSpacing.md),
