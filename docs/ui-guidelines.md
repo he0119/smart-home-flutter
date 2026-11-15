@@ -477,6 +477,24 @@ return MySliverScaffold(
 
 ---
 
+### 6.8 可收起的分组
+
+分组标题整行可点，命中区高度 48；收起用「卷帘」而不是「整块消失」：
+
+```dart
+TweenAnimationBuilder<double>(
+  tween: Tween<double>(begin: 0, end: collapsed ? 0 : 1),
+  duration: const Duration(milliseconds: 240),
+  curve: Curves.easeInOutCubic,
+  builder: (context, factor, child) => ClipRect(
+    child: Align(alignment: Alignment.topCenter, heightFactor: factor, child: child),
+  ),
+  child: body, // 内容始终按原尺寸排好
+)
+```
+
+要点：内容不要换成 `SizedBox(height: 0)`，否则行会瞬间消失、留下一块正在缩小的空白；收起后包一层 `ExcludeSemantics`，否则读屏还会念到被裁掉的行；箭头用 `AnimatedRotation(turns: collapsed ? -0.25 : 0)`，时长和展开一致。
+
 ## 7. 表单
 
 ### 7.1 骨架
@@ -827,7 +845,7 @@ tooltip 文案写**动作**（「搜索」「添加物品」「恢复」「编�
 
 | 页面 | 入口文件 | 骨架 | 用到的组件 | 要点 |
 | --- | --- | --- | --- | --- |
-| 存储首页 | `lib/storage/view/home_page.dart` | `MyHomePage`（大标题 FAB） | `EntryRow`（「所有位置」，只在未筛选时显示）、`SectionHeader` + `IconButton`（吸顶分组）、`ContentRow`、`ContentDivider`、`ListBottomPadding`、`SliverInfiniteList` | 四个分组按顺序：过期物品 / 即将过期 / 最近修改 / 最近录入，各一个吸顶头，空的分组不渲染；分组头右侧是展开/收起；FAB 添加物品；返回键从筛选态回「全部」 |
+| 存储首页 | `lib/storage/view/home_page.dart` | `MyHomePage`（大标题 FAB） | `EntryRow`（「所有位置」）、`_SectionBlock`（48 高、整行可点的分组头 + 卷帘式内容）、`ContentRow`、`ContentDivider`、`ListBottomPadding` | 四个分组按顺序：过期物品 / 即将过期 / 最近修改 / 最近录入，空的分组不渲染；分组头显示名称和数量，点整行收起/展开（240ms，内容按原尺寸裁切而不是瞬间消失，收起时读屏也不再念），箭头同步旋转；分组头不做吸顶（吸顶会被固定在 AppBar 下面看不见）；FAB 添加物品 |
 | 位置详情 | `lib/storage/view/storage_detail_page.dart` | `MySliverScaffold` + 普通 AppBar | 顶部路径栏 `PathBarDelegate`（48 高）、`StorageItemList`（位置在前、物品在后）、`ContentRow`、`ContentDivider`、`ListBottomPadding`、`SliverCenterLoadingIndicator`、`SliverErrorState` | AppBar 右上角依次：添加位置、搜索、更多菜单（编辑 / 删除 / 二维码）；删除走 `showConfirmDialog(destructive: true)`；下拉刷新 |
 | 搜索 | `lib/storage/view/search_page.dart` | `MySliverScaffold` + `AppBarSize.normal`，标题位放 `SearchBar` | `SearchBar`（高 48、无阴影）+ `MyChoiceChip`（已删除 / 无位置，`appbarBottom` 高 56）、`StorageItemList`（`isHighlight: true`）、`SliverEmptyState`、`SliverErrorState` | 三态都要有：刚进页面 / 搜不到 / 出错；输入防抖 300 毫秒；清除按钮 20 图标 + `tooltip: '清除'` |
 | 回收站 | `lib/storage/view/recycle_bin_page.dart` | `MySliverScaffold` + 普通 AppBar | `ContentRow`（`trailing` 一个恢复按钮）、`ContentDivider`、`SliverInfiniteList`、`SliverErrorState`、`SliverCenterLoadingIndicator` | 副标题「3 天前删除 · 备注」；恢复前先确认（非危险，`destructive: false`），恢复中给 1 秒提示 |
