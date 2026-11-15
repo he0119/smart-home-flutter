@@ -363,6 +363,13 @@ Text('备注', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color
 
 ### 6.2 行高 56 / 72
 
+同一个列表里只能用一种行高。两种做法二选一，不要混着来：
+
+- **整页都不放副标题**：存储首页，行里只有名称和相对时间，统一 56；备注放到分类完整列表和详情页。
+- **整页都保留副标题行**：分类完整列表、搜索结果、位置详情。有备注显示备注（搜索还会拼上位置名），没有备注就留空一行占位，统一 72。
+
+判断方法：`ContentRow` 的 `supporting` 传 `null` 就是 56，传 `Text('')` 或任何文字就是 72。一屏里只要出现两种，行高就会交替，看起来像列表在抖。副标题记得 `maxLines: 1` + 省略号，否则长备注会把行撑得更高。
+
 - 只有标题：56。
 - 标题 + 副标题：72。
 - 不要写 `SizedBox(height: ...)`，也不要给 `ListTile` 传 `minVerticalPadding` 去微调。
@@ -847,8 +854,8 @@ tooltip 文案写**动作**（「搜索」「添加物品」「恢复」「编�
 
 | 页面 | 入口文件 | 骨架 | 用到的组件 | 要点 |
 | --- | --- | --- | --- | --- |
-| 存储首页 | `lib/storage/view/home_page.dart` | `MyHomePage`（大标题 FAB） | `EntryRow`（「所有位置」）、`_SectionBlock`（48 高、整行可点的分组头 + 卷帘式内容）、`ItemRow`、`ContentDivider`、`ListBottomPadding` | 四个分组按顺序：过期物品 / 即将过期 / 最近修改 / 最近录入，空的分组不渲染；分组头显示名称和数量，点整行收起/展开（240ms，内容按原尺寸裁切而不是瞬间消失，收起时读屏也不再念），箭头同步旋转；右侧「全部」进入该类完整列表；分组头不做吸顶（吸顶会被固定在 AppBar 下面看不见）；FAB 添加物品 |
-| 分类全部列表 | `lib/storage/view/item_type_items_page.dart` | `MySliverScaffold` + 普通 AppBar | `SliverInfiniteList` + `ItemRow` + `ContentDivider`、`SliverEmptyState`、`SliverErrorState`、`SliverCenterLoadingIndicator` | 标题用 `itemType.sectionTitle`；数据来自 `itemTypeItemsProvider(type)`，独立的 provider，不会覆盖首页状态；分页滚到底自动加载；下拉刷新 |
+| 存储首页 | `lib/storage/view/home_page.dart` | `MyHomePage`（大标题 FAB） | `EntryRow`（「所有位置」）、`_SectionBlock`（48 高、整行可点的分组头 + 卷帘式内容）、`ItemRow`、`ContentDivider`、`ListBottomPadding` | 四个分组按顺序：过期物品 / 即将过期 / 最近修改 / 最近录入，空的分组不渲染；分组头显示名称和数量，点整行收起/展开（240ms，内容按原尺寸裁切而不是瞬间消失，收起时读屏也不再念），箭头同步旋转；右侧「全部」进入该类完整列表；首页行只显示名称和相对时间（不显示备注，行高固定 56，整页节奏一致，备注在分类列表和详情页里看）；分组头不做吸顶（吸顶会被固定在 AppBar 下面看不见）；FAB 添加物品 |
+| 分类全部列表 | `lib/storage/view/item_type_items_page.dart` | `MySliverScaffold` + 普通 AppBar | `SliverInfiniteList` + `ItemRow`（带副标题）+ `ContentDivider`、`SliverEmptyState`、`SliverErrorState`、`SliverCenterLoadingIndicator` | 标题用 `itemType.sectionTitle`；数据来自 `itemTypeItemsProvider(type)`，独立的 provider，不会覆盖首页状态；行里显示备注（没有备注显示位置名）；分页滚到底自动加载；下拉刷新 |
 | 位置详情 | `lib/storage/view/storage_detail_page.dart` | `MySliverScaffold` + 普通 AppBar | 顶部路径栏 `PathBarDelegate`（48 高）、`StorageItemList`（位置在前、物品在后）、`ContentRow`、`ContentDivider`、`ListBottomPadding`、`SliverCenterLoadingIndicator`、`SliverErrorState` | AppBar 右上角依次：添加位置、搜索、更多菜单（编辑 / 删除 / 二维码）；删除走 `showConfirmDialog(destructive: true)`；下拉刷新 |
 | 搜索 | `lib/storage/view/search_page.dart` | `MySliverScaffold` + `AppBarSize.normal`，标题位放 `SearchBar` | `SearchBar`（高 48、无阴影）+ `MyChoiceChip`（已删除 / 无位置，`appbarBottom` 高 56）、`StorageItemList`（`isHighlight: true`）、`SliverEmptyState`、`SliverErrorState` | 三态都要有：刚进页面 / 搜不到 / 出错；输入防抖 300 毫秒；清除按钮 20 图标 + `tooltip: '清除'` |
 | 回收站 | `lib/storage/view/recycle_bin_page.dart` | `MySliverScaffold` + 普通 AppBar | `ContentRow`（`trailing` 一个恢复按钮）、`ContentDivider`、`SliverInfiniteList`、`SliverErrorState`、`SliverCenterLoadingIndicator` | 副标题「3 天前删除 · 备注」；恢复前先确认（非危险，`destructive: false`），恢复中给 1 秒提示 |

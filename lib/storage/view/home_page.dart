@@ -174,7 +174,7 @@ class _StorageHomeScreenState extends ConsumerState<StorageHomeScreen> {
     return Column(
       children: <Widget>[
         for (var i = 0; i < items.length; i++) ...<Widget>[
-          ItemRow(item: items[i], type: section.type),
+          ItemRow(item: items[i], type: section.type, showSupporting: false),
           if (i < items.length - 1) const ContentDivider(),
         ],
       ],
