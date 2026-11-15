@@ -22,6 +22,8 @@ class SliverWebview extends StatelessWidget {
             double y = scrollOffset;
             if (Platform.isAndroid) {
               // https://github.com/flutter/flutter/issues/75841
+              // 这段坐标补偿是给旧的平台视图合成方式打的补丁。启用 HCPP 后滚动坐标的换算规则
+              // 可能变了，这里是否还需要乘 devicePixelRatio 需要在真机上验证；确认不需要再单独清理。
               y *= View.of(context).devicePixelRatio;
             }
             controller.webviewController.scrollTo(0, y.ceil());
