@@ -59,7 +59,7 @@ Widget _buildItem(BuildContext context, Item item) {
   final consumables = item.consumables ?? const <Item>[];
 
   return Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
+    crossAxisAlignment: .stretch,
     children: <Widget>[
       SectionHeader(
         title: item.name,

@@ -205,7 +205,7 @@ class _DropdownSearchDialogState<T> extends State<_DropdownSearchDialog<T>> {
   Widget build(BuildContext context) {
     return Dialog(
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           TextField(
             controller: _searchController,

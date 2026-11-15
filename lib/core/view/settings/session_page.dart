@@ -66,7 +66,7 @@ class SessionPage extends ConsumerWidget {
                           builder: (context) => AlertDialog(
                             title: const Text('设备详情'),
                             content: Column(
-                              mainAxisSize: MainAxisSize.min,
+                              mainAxisSize: .min,
                               children: <Widget>[
                                 InfoRow(label: 'IP', value: Text(session.ip)),
                                 InfoRow(

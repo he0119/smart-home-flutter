@@ -37,7 +37,7 @@ class SettingsTile extends StatelessWidget {
           ? Text(
               subtitle!,
               maxLines: subtitleMaxLines,
-              overflow: TextOverflow.ellipsis,
+              overflow: .ellipsis,
             )
           : null,
       trailing:

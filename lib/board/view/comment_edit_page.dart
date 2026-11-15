@@ -158,7 +158,7 @@ class _EditPage extends StatelessWidget {
                   }
                   return null;
                 },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
+                autovalidateMode: .onUserInteraction,
               ),
             ],
           ),

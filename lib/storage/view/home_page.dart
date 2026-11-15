@@ -248,7 +248,7 @@ class _SectionHeaderBar extends StatelessWidget {
                   child: TextButton(
                     onPressed: onShowAll,
                     style: TextButton.styleFrom(
-                      visualDensity: VisualDensity.compact,
+                      visualDensity: .compact,
                       minimumSize: const Size(48, 40),
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.sm,
@@ -299,7 +299,7 @@ class _SectionBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: .stretch,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top: AppSpacing.md),
@@ -326,7 +326,7 @@ class _SectionBlock extends StatelessWidget {
             builder: (context, factor, child) {
               return ClipRect(
                 child: Align(
-                  alignment: Alignment.topCenter,
+                  alignment: .topCenter,
                   heightFactor: factor,
                   child: child,
                 ),

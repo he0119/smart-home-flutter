@@ -31,7 +31,7 @@ Widget tabSelectorPreview() => PreviewFrame(
   width: 400,
   padding: EdgeInsets.zero,
   child: Align(
-    alignment: Alignment.bottomCenter,
+    alignment: .bottomCenter,
     child: TabSelector(activeTab: AppTab.storage, onTabSelected: (_) {}),
   ),
 );

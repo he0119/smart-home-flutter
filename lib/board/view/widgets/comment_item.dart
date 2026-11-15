@@ -28,8 +28,8 @@ class CommentItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: .start,
+      crossAxisAlignment: .start,
       children: <Widget>[
         ItemTitle(
           user: comment.user!,

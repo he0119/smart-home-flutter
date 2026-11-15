@@ -49,7 +49,7 @@ class ItemRow extends StatelessWidget {
       title: Text(item.name),
       supporting: supporting == null
           ? null
-          : Text(supporting, maxLines: 1, overflow: TextOverflow.ellipsis),
+          : Text(supporting, maxLines: 1, overflow: .ellipsis),
       trailing: time.isEmpty
           ? null
           : Text(

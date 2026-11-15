@@ -95,7 +95,7 @@ class _ItemEditPageState extends ConsumerState<ItemEditPage> {
                     controller: _nameController,
                     decoration: const InputDecoration(labelText: '名称'),
                     inputFormatters: [LengthLimitingTextInputFormatter(200)],
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    autovalidateMode: .onUserInteraction,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return '名称不能为空';
@@ -117,7 +117,7 @@ class _ItemEditPageState extends ConsumerState<ItemEditPage> {
                     decoration: const InputDecoration(labelText: '数量'),
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    autovalidateMode: .onUserInteraction,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return '数量不能为空';
@@ -136,7 +136,7 @@ class _ItemEditPageState extends ConsumerState<ItemEditPage> {
                   ),
                   StorageFormField(
                     decoration: const InputDecoration(labelText: '属于'),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    autovalidateMode: .onUserInteraction,
                     onChanged: (Storage? value) {
                       if (value != null) {
                         storageId = value.id;
@@ -175,7 +175,7 @@ class _ItemEditPageState extends ConsumerState<ItemEditPage> {
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
                     ],
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    autovalidateMode: .onUserInteraction,
                     validator: (value) {
                       if (value!.isEmpty) return null;
                       // 只输入一个「.」时 double.parse 会抛异常，先挡掉

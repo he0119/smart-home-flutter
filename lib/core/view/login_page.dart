@@ -114,7 +114,7 @@ class _ApiUrlFormState extends ConsumerState<ApiUrlForm> {
                     controller: _controller,
                     keyboardType: TextInputType.url,
                     textInputAction: TextInputAction.done,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    autovalidateMode: .onUserInteraction,
                     decoration: const InputDecoration(
                       labelText: '服务器网址',
                       helperText: '修改后需要重新登录',

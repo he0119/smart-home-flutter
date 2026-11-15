@@ -101,7 +101,7 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
       title: Text(
         state.topic.title ?? '',
         maxLines: 2,
-        overflow: TextOverflow.ellipsis,
+        overflow: .ellipsis,
       ),
       actions: <Widget>[
         PopupMenuButton<TopicDetailMenu>(
@@ -245,7 +245,7 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
         if (state.topic.user != null)
           SliverToBoxAdapter(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: .start,
               children: <Widget>[
                 ItemTitle(
                   user: state.topic.user!,
@@ -351,7 +351,7 @@ class CommentOrder extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scheme = Theme.of(context).colorScheme;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: .stretch,
       children: <Widget>[
         const Divider(height: 1),
         SectionHeader(

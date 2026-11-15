@@ -59,7 +59,7 @@ Future<StoragePickerResult?> showStoragePicker(
       context: context,
       builder: (BuildContext dialogContext) {
         return Dialog(
-          clipBehavior: Clip.antiAlias,
+          clipBehavior: .antiAlias,
           insetPadding: const EdgeInsets.all(24),
           backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
           child: SizedBox(
@@ -308,7 +308,7 @@ class _StoragePickerState extends State<StoragePicker> {
                   widget.title,
                   style: theme.textTheme.titleLarge,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: .ellipsis,
                 ),
               ),
               IconButton(
@@ -351,7 +351,7 @@ class _StoragePickerState extends State<StoragePicker> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
             child: Align(
-              alignment: Alignment.centerLeft,
+              alignment: .centerLeft,
               child: Text(
                 matches.isEmpty ? '没有匹配的位置' : '共 ${matches.length} 个结果',
                 style: theme.textTheme.bodySmall?.copyWith(
@@ -374,7 +374,7 @@ class _StoragePickerState extends State<StoragePicker> {
     return SingleChildScrollView(
       padding: const EdgeInsets.only(top: 4, bottom: 8),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: <Widget>[for (final root in _roots) _buildNode(root, 0)],
       ),
     );
@@ -386,7 +386,7 @@ class _StoragePickerState extends State<StoragePicker> {
     final expanded = _expanded.contains(node.storage.id);
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: <Widget>[
         _StorageTile(
           key: selected ? _selectedKey : null,
@@ -404,10 +404,10 @@ class _StoragePickerState extends State<StoragePicker> {
             child: AnimatedSize(
               duration: const Duration(milliseconds: 180),
               curve: Curves.easeOutCubic,
-              alignment: Alignment.topCenter,
+              alignment: .topCenter,
               child: expanded
                   ? Column(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisSize: .min,
                       children: <Widget>[
                         for (final child in node.children)
                           _buildNode(child, depth + 1),
@@ -462,7 +462,7 @@ class _StoragePickerState extends State<StoragePicker> {
                 color: colors.onSurfaceVariant,
               ),
               maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              overflow: .ellipsis,
             ),
           ),
           if (current != null)
@@ -571,7 +571,7 @@ class _StorageTile extends StatelessWidget {
           child: Material(
             color: selected ? colors.secondaryContainer : Colors.transparent,
             borderRadius: BorderRadius.circular(AppRadius.md),
-            clipBehavior: Clip.antiAlias,
+            clipBehavior: .antiAlias,
             child: InkWell(
               key: ValueKey<String>('storage-picker-row-${storage.id}'),
               onTap: onTap,
@@ -591,7 +591,7 @@ class _StorageTile extends StatelessWidget {
                                 key: ValueKey<String>(
                                   'storage-picker-expand-${storage.id}',
                                 ),
-                                behavior: HitTestBehavior.opaque,
+                                behavior: .opaque,
                                 onTap: onToggle,
                                 child: Center(
                                   child: AnimatedRotation(
@@ -612,9 +612,9 @@ class _StorageTile extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: .center,
+                        crossAxisAlignment: .start,
+                        mainAxisSize: .min,
                         children: <Widget>[
                           _buildName(theme, foreground, colors),
                           if (showPath && subtitle.isNotEmpty)
@@ -628,7 +628,7 @@ class _StorageTile extends StatelessWidget {
                                     : colors.onSurfaceVariant,
                               ),
                               maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                              overflow: .ellipsis,
                             ),
                         ],
                       ),
@@ -670,7 +670,7 @@ class _StorageTile extends StatelessWidget {
         storage.name,
         style: style,
         maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+        overflow: .ellipsis,
       );
     }
     return Text.rich(
@@ -681,7 +681,7 @@ class _StorageTile extends StatelessWidget {
             text: storage.name.substring(index, index + query.length),
             style: TextStyle(
               color: colors.primary,
-              fontWeight: FontWeight.w600,
+              fontWeight: .w600,
             ),
           ),
           TextSpan(text: storage.name.substring(index + query.length)),
@@ -689,7 +689,7 @@ class _StorageTile extends StatelessWidget {
       ),
       style: style,
       maxLines: 1,
-      overflow: TextOverflow.ellipsis,
+      overflow: .ellipsis,
     );
   }
 }

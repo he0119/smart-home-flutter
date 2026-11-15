@@ -13,7 +13,7 @@ class SettingsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       children: [
         if (title != null) SectionHeader(title: title!),
         // 直接铺开，不需要套一层不能滚动的 ListView
@@ -33,7 +33,7 @@ Widget settingsSectionPreview() => PreviewFrame(
   width: 400,
   padding: EdgeInsets.zero,
   child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: .start,
     children: <Widget>[
       SettingsSection(
         title: '通用',

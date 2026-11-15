@@ -99,11 +99,11 @@ class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
                             kIsWeb
                                 ? Image.network(
                                     picturePath!,
-                                    fit: BoxFit.contain,
+                                    fit: .contain,
                                   )
                                 : Image.file(
                                     File(picturePath!),
-                                    fit: BoxFit.contain,
+                                    fit: .contain,
                                   ),
                             if (state.status == PictureEditStatus.loading)
                               const CircularProgressIndicator(),
@@ -116,7 +116,7 @@ class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
                         ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: .center,
                   children: [
                     FilledButton.tonal(
                       onPressed: () async {
