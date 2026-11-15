@@ -9,7 +9,16 @@ class ItemRow extends StatelessWidget {
   final Item item;
   final ItemType type;
 
-  const ItemRow({super.key, required this.item, required this.type});
+  /// 是否显示副标题（备注，没有备注时退到位置名）。
+  /// 首页只要名称和时间，副标题会关掉；分类完整列表里才显示。
+  final bool showSupporting;
+
+  const ItemRow({
+    super.key,
+    required this.item,
+    required this.type,
+    this.showSupporting = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +33,11 @@ class ItemRow extends StatelessWidget {
     // 这样「最近修改」这类列表里的时间一眼能看到，也不挤掉原来的备注
     final description = item.description;
     final storageName = item.storage?.name;
-    final supporting = (description != null && description.isNotEmpty)
-        ? description
-        : storageName;
+    final supporting = !showSupporting
+        ? null
+        : ((description != null && description.isNotEmpty)
+              ? description
+              : storageName);
 
     return ContentRow(
       icon: Icons.inventory_2_outlined,
