@@ -1,4 +1,7 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/app/dimens.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 
 class MyChoiceChip extends StatelessWidget {
   final Widget label;
@@ -51,3 +54,42 @@ class MyFilterChip extends StatelessWidget {
     );
   }
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+@Preview(name: 'MyChoiceChip', group: previewGroupWidgets, size: Size(400, 120))
+Widget myChoiceChipPreview() => PreviewFrame(
+  child: Wrap(
+    spacing: AppSpacing.sm,
+    children: <Widget>[
+      MyChoiceChip(
+        label: const Text('已选中'),
+        selected: true,
+        onSelected: (_) {},
+      ),
+      MyChoiceChip(
+        label: const Text('未选中'),
+        selected: false,
+        onSelected: (_) {},
+      ),
+    ],
+  ),
+);
+
+@Preview(name: 'MyFilterChip', group: previewGroupWidgets, size: Size(400, 120))
+Widget myFilterChipPreview() => PreviewFrame(
+  child: Wrap(
+    spacing: AppSpacing.sm,
+    children: <Widget>[
+      MyFilterChip(
+        label: const Text('已选中'),
+        selected: true,
+        onSelected: (_) {},
+      ),
+      MyFilterChip(
+        label: const Text('未选中'),
+        selected: false,
+        onSelected: (_) {},
+      ),
+    ],
+  ),
+);

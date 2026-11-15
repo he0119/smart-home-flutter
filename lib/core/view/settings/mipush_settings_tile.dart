@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/core/router/app_router.dart';
 import 'package:smarthome/widgets/settings/settings.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 
 class MiPushSettingsTile extends ConsumerWidget {
   const MiPushSettingsTile({super.key});
@@ -32,3 +34,18 @@ class MiPushSettingsTile extends ConsumerWidget {
     );
   }
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+@Preview(
+  name: 'MiPushSettingsTile 已注册',
+  group: previewGroupSettings,
+  size: Size(400, 120),
+)
+Widget miPushSettingsTilePreview() => PreviewFrame(
+  width: 400,
+  padding: EdgeInsets.zero,
+  child: PreviewProviders(
+    settings: previewSettings(miPushRegId: 'preview-reg-id'),
+    child: const MiPushSettingsTile(),
+  ),
+);

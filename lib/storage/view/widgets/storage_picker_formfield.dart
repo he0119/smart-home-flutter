@@ -3,6 +3,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/storage/storage.dart';
 import 'package:smarthome/storage/view/widgets/storage_picker_sheet.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 
 class StorageFormField extends ConsumerStatefulWidget {
   const StorageFormField({
@@ -156,3 +158,31 @@ class _StorageFieldState extends ConsumerState<StorageFormField> {
   bool shouldShowClearIcon([InputDecoration? decoration]) =>
       (_controller.text != '' || hasFocus) && decoration?.suffixIcon == null;
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+@Preview(
+  name: 'StorageFormField 空',
+  group: previewGroupStorage,
+  size: Size(400, 160),
+)
+Widget storageFormFieldEmptyPreview() => const PreviewFrame(
+  width: 360,
+  child: PreviewProviders(
+    child: StorageFormField(decoration: InputDecoration(labelText: '存放位置')),
+  ),
+);
+
+@Preview(
+  name: 'StorageFormField 已选',
+  group: previewGroupStorage,
+  size: Size(400, 160),
+)
+Widget storageFormFieldSelectedPreview() => const PreviewFrame(
+  width: 360,
+  child: PreviewProviders(
+    child: StorageFormField(
+      decoration: InputDecoration(labelText: '存放位置'),
+      initialValue: Storage(id: 'cabinet', name: '阳台储物柜'),
+    ),
+  ),
+);

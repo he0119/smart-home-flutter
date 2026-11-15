@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 import 'package:intl/intl.dart';
 
 class DateTimePickerFormField extends StatefulWidget {
@@ -112,18 +113,16 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
   }
 }
 
-Widget _dateTimePickerPreviewFrame(Widget child) {
-  return MaterialApp(
-    home: Scaffold(
-      body: Center(child: SizedBox(width: 360, child: child)),
-    ),
-  );
-}
-
-@Preview(name: 'DateTimePickerFormField empty')
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+@Preview(
+  name: 'DateTimePickerFormField empty',
+  group: previewGroupWidgets,
+  size: Size(400, 160),
+)
 Widget dateTimePickerFormFieldEmptyPreview() {
-  return _dateTimePickerPreviewFrame(
-    DateTimePickerFormField(
+  return PreviewFrame(
+    width: 360,
+    child: DateTimePickerFormField(
       decoration: const InputDecoration(labelText: '有效期至'),
       format: DateFormat.yMMMd().add_Hms(),
       onChanged: (_) {},
@@ -131,10 +130,15 @@ Widget dateTimePickerFormFieldEmptyPreview() {
   );
 }
 
-@Preview(name: 'DateTimePickerFormField selected')
+@Preview(
+  name: 'DateTimePickerFormField selected',
+  group: previewGroupWidgets,
+  size: Size(400, 160),
+)
 Widget dateTimePickerFormFieldSelectedPreview() {
-  return _dateTimePickerPreviewFrame(
-    DateTimePickerFormField(
+  return PreviewFrame(
+    width: 360,
+    child: DateTimePickerFormField(
       decoration: const InputDecoration(labelText: '有效期至'),
       format: DateFormat.yMMMd().add_Hms(),
       initialValue: DateTime(2026, 5, 21, 12, 30),

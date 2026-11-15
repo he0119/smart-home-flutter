@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/storage/model/storage.dart';
 import 'package:smarthome/storage/providers/storage_detail_provider.dart';
 import 'package:smarthome/storage/view/storage_edit_page.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 
 class AddStorageIconButton extends ConsumerWidget {
   final Storage? storage;
@@ -28,3 +30,15 @@ class AddStorageIconButton extends ConsumerWidget {
     );
   }
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+@Preview(
+  name: 'AddStorageIconButton',
+  group: previewGroupStorage,
+  size: Size(120, 80),
+)
+Widget addStorageIconButtonPreview() => const PreviewFrame(
+  width: 120,
+  padding: EdgeInsets.zero,
+  child: Center(child: PreviewProviders(child: AddStorageIconButton())),
+);

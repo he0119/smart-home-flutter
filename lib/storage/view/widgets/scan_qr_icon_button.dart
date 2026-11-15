@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 
 class ScanQRIconButton extends StatelessWidget {
   const ScanQRIconButton({super.key});
@@ -198,3 +200,61 @@ class _ScanQRPageState extends State<ScanQRPage> {
     }
   }
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+@Preview(
+  name: 'ScanQRIconButton',
+  group: previewGroupStorage,
+  size: Size(120, 80),
+)
+Widget scanQrIconButtonPreview() => const PreviewFrame(
+  width: 120,
+  padding: EdgeInsets.zero,
+  child: Center(child: ScanQRIconButton()),
+);
+
+@Preview(
+  name: 'ScannerErrorWidget',
+  group: previewGroupStorage,
+  size: Size(360, 240),
+)
+Widget scannerErrorWidgetPreview() => const PreviewFrame(
+  width: 360,
+  padding: EdgeInsets.zero,
+  child: ScannerErrorWidget(
+    error: MobileScannerException(
+      errorCode: MobileScannerErrorCode.permissionDenied,
+      errorDetails: MobileScannerErrorDetails(message: '用户拒绝了相机权限'),
+    ),
+  ),
+);
+
+@Preview(
+  name: 'ScannedBarcodeLabel',
+  group: previewGroupStorage,
+  size: Size(360, 200),
+)
+Widget scannedBarcodeLabelPreview() => PreviewFrame(
+  width: 360,
+  padding: EdgeInsets.zero,
+  child: Builder(
+    builder: (BuildContext context) => ColoredBox(
+      // 这个组件本来就盖在相机画面上，用遮罩色当底才看得见白字
+      color: Theme.of(context).colorScheme.scrim,
+      child: Center(
+        child: ScannedBarcodeLabel(
+          barcodes: Stream<BarcodeCapture>.value(
+            const BarcodeCapture(
+              barcodes: <Barcode>[
+                Barcode(
+                  rawValue: 'https://smart.example.com/storage/U3RvcmFnZTo1',
+                  displayValue: 'U3RvcmFnZTo1',
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+  ),
+);

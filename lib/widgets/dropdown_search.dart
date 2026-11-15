@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:material_ui/material_ui.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 
 /// 按关键字加载候选项的回调。关键字为空时返回全部候选项。
 typedef DropdownItemsLoader<T> = Future<List<T>> Function(String text);
@@ -254,3 +256,25 @@ class _DropdownSearchDialogState<T> extends State<_DropdownSearchDialog<T>> {
     );
   }
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+/// 点一下输入框能看到候选弹窗，弹窗里的数据来自下面这个假加载器。
+@Preview(
+  name: 'MyDropdownSearch',
+  group: previewGroupWidgets,
+  size: Size(400, 200),
+)
+Widget myDropdownSearchPreview() => PreviewFrame(
+  width: 400,
+  child: MyDropdownSearch<String>(
+    label: '存放位置',
+    selectedItem: '阳台储物柜',
+    showClearButton: true,
+    items: (String text) async => const <String>[
+      '阳台',
+      '客厅',
+      '阳台储物柜',
+    ].where((String name) => name.contains(text)).toList(),
+    onSelected: (_) {},
+  ),
+);

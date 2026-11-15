@@ -18,6 +18,8 @@ import 'package:smarthome/widgets/list_rows.dart';
 import 'package:smarthome/widgets/state_views.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 import 'package:smarthome/widgets/markdown.dart';
+import 'package:flutter/widget_previews.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 
 class TopicDetailPage extends StatelessWidget {
   final String topicId;
@@ -389,3 +391,13 @@ class CommentOrder extends ConsumerWidget {
     );
   }
 }
+
+/// 开发时在 IDE 里直接看效果，不依赖后端数据。
+@Preview(name: 'CommentOrder', group: previewGroupBoard, size: Size(400, 120))
+Widget commentOrderPreview() => const PreviewFrame(
+  width: 400,
+  padding: EdgeInsets.zero,
+  child: PreviewProviders(
+    child: CommentOrder(topicId: 'topic-1', descending: true),
+  ),
+);

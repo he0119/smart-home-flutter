@@ -4,8 +4,8 @@ import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/storage/model/storage.dart';
-import 'package:smarthome/app/theme.dart';
 import 'package:smarthome/utils/constants.dart';
+import 'package:smarthome/widgets/preview_frame.dart';
 import 'package:smarthome/widgets/state_views.dart';
 
 /// [showStoragePicker] 的返回值。
@@ -712,29 +712,32 @@ class _EmptySearch extends StatelessWidget {
 }
 
 /// 开发时在 IDE 里直接看效果，不依赖后端数据。
-@Preview(name: 'StoragePicker')
+@Preview(
+  name: 'StoragePicker',
+  group: previewGroupStorage,
+  size: Size(400, 480),
+)
 Widget storagePickerPreview() {
   const balcony = Storage(id: 'balcony', name: '阳台', parent: homeStorage);
   const cabinet = Storage(id: 'cabinet', name: '阳台储物柜', parent: balcony);
-  return MaterialApp(
-    theme: buildLightTheme(null),
-    home: Scaffold(
-      body: StoragePicker(
-        storages: const <Storage>[
-          balcony,
-          cabinet,
-          Storage(id: 'toolbox', name: '工具箱', parent: balcony),
-          Storage(id: 'toolbox-2', name: '工具箱2', parent: balcony),
-          Storage(id: 'box-123', name: '123'),
-          Storage(
-            id: 'box-1231',
-            name: '1231',
-            parent: Storage(id: 'box-123', name: '123'),
-          ),
-          Storage(id: 'box-23123', name: '23123'),
-        ],
-        current: cabinet,
-      ),
+  return PreviewFrame(
+    width: 400,
+    padding: EdgeInsets.zero,
+    child: StoragePicker(
+      storages: const <Storage>[
+        balcony,
+        cabinet,
+        Storage(id: 'toolbox', name: '工具箱', parent: balcony),
+        Storage(id: 'toolbox-2', name: '工具箱2', parent: balcony),
+        Storage(id: 'box-123', name: '123'),
+        Storage(
+          id: 'box-1231',
+          name: '1231',
+          parent: Storage(id: 'box-123', name: '123'),
+        ),
+        Storage(id: 'box-23123', name: '23123'),
+      ],
+      current: cabinet,
     ),
   );
 }
