@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smarthome/core/core.dart';
+import 'package:smarthome/core/router/app_router.dart';
 import 'package:smarthome/core/router/router_extensions.dart';
 import 'package:smarthome/utils/launch_url.dart';
 import 'package:smarthome/utils/show_confirm_dialog.dart';
@@ -18,6 +20,8 @@ class MyDrawer extends ConsumerWidget {
     final adminUrl = settings.adminUrl;
     final loginUser = settings.loginUser;
     final scheme = Theme.of(context).colorScheme;
+    // 高亮当前所在页面，抽屉里能看出自己在哪里
+    final location = GoRouterState.of(context).matchedLocation;
     return Drawer(
       child: ListView(
         children: [
@@ -30,7 +34,7 @@ class MyDrawer extends ConsumerWidget {
                 style: TextStyle(color: scheme.onPrimaryContainer),
               ),
               accountEmail: Text(
-                loginUser.email!,
+                loginUser.email ?? '未绑定邮箱',
                 style: TextStyle(color: scheme.onPrimaryContainer),
               ),
               currentAccountPicture: MyCircleAvatar(
@@ -40,6 +44,7 @@ class MyDrawer extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.inventory_2_outlined),
             title: const Text('耗材管理'),
+            selected: location.startsWith(AppRoutes.consumables),
             onTap: () {
               context.goConsumables();
             },
@@ -47,6 +52,7 @@ class MyDrawer extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.delete_outline),
             title: const Text('回收站'),
+            selected: location.startsWith(AppRoutes.recycleBin),
             onTap: () {
               context.goRecycleBin();
             },
@@ -54,6 +60,7 @@ class MyDrawer extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.admin_panel_settings_outlined),
             title: const Text('管理'),
+            selected: location.startsWith(AppRoutes.admin),
             onTap: () {
               if (!kIsWeb && !Platform.isWindows) {
                 context.goAdmin();
@@ -65,6 +72,7 @@ class MyDrawer extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.settings_outlined),
             title: const Text('设置'),
+            selected: location.startsWith(AppRoutes.settings),
             onTap: () {
               context.goSettings();
             },
@@ -79,9 +87,9 @@ class MyDrawer extends ConsumerWidget {
                 showAboutDialog(
                   context: context,
                   applicationVersion: currentVersion.toString(),
-                  applicationIcon: const ImageIcon(
-                    AssetImage('assets/icon/icon.webp'),
-                    color: Color(0xFFF15713),
+                  applicationIcon: ImageIcon(
+                    const AssetImage('assets/icon/icon.webp'),
+                    color: scheme.primary,
                   ),
                   applicationLegalese: '智慧家庭的客户端',
                 );

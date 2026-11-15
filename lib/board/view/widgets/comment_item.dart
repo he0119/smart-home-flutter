@@ -4,6 +4,7 @@ import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/providers/comment_edit_provider.dart';
 import 'package:smarthome/board/view/comment_edit_page.dart';
 import 'package:smarthome/board/view/widgets/item_title.dart';
+import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
@@ -66,8 +67,13 @@ class CommentItem extends ConsumerWidget {
               : null,
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-          child: MyMarkdownBody(data: comment.body!),
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            0,
+            AppSpacing.lg,
+            AppSpacing.md,
+          ),
+          child: MyMarkdownBody(data: comment.body ?? ''),
         ),
       ],
     );

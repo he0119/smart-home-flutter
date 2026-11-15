@@ -19,10 +19,8 @@ class ThemeModePage extends ConsumerWidget {
             tiles: [
               SettingsTile(
                 title: ThemeMode.system.toReadable(),
-                trailing: trailingWidget(
-                  context,
-                  ThemeMode.system,
-                  settings.themeMode,
+                trailing: SelectionCheck(
+                  selected: ThemeMode.system == settings.themeMode,
                 ),
                 onPressed: (context) {
                   ref
@@ -32,10 +30,8 @@ class ThemeModePage extends ConsumerWidget {
               ),
               SettingsTile(
                 title: ThemeMode.light.toReadable(),
-                trailing: trailingWidget(
-                  context,
-                  ThemeMode.light,
-                  settings.themeMode,
+                trailing: SelectionCheck(
+                  selected: ThemeMode.light == settings.themeMode,
                 ),
                 onPressed: (context) {
                   ref
@@ -45,10 +41,8 @@ class ThemeModePage extends ConsumerWidget {
               ),
               SettingsTile(
                 title: ThemeMode.dark.toReadable(),
-                trailing: trailingWidget(
-                  context,
-                  ThemeMode.dark,
-                  settings.themeMode,
+                trailing: SelectionCheck(
+                  selected: ThemeMode.dark == settings.themeMode,
                 ),
                 onPressed: (context) {
                   ref

@@ -3,7 +3,6 @@ import 'package:smarthome/app/dimens.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
-import 'package:smarthome/widgets/rounded_raised_button.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -89,51 +88,64 @@ class _ApiUrlFormState extends ConsumerState<ApiUrlForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            spacing: AppSpacing.lg,
-            children: [
-              Image.asset(
-                'assets/icon/icon.webp',
-                width: 100.0,
-                height: 100.0,
-                semanticLabel: 'icon',
+    return SafeArea(
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.xl,
+          ),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                spacing: AppSpacing.lg,
+                children: <Widget>[
+                  Image.asset(
+                    'assets/icon/icon.webp',
+                    width: 100.0,
+                    height: 100.0,
+                    semanticLabel: 'icon',
+                  ),
+                  TextFormField(
+                    controller: _controller,
+                    keyboardType: TextInputType.url,
+                    textInputAction: TextInputAction.done,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: const InputDecoration(
+                      labelText: '服务器网址',
+                      helperText: '修改后需要重新登录',
+                      errorMaxLines: 2,
+                    ),
+                    validator: (value) {
+                      final text = value ?? '';
+                      if (text.startsWith(RegExp(r'^https?://'))) {
+                        return null;
+                      }
+                      return '网址必须以 http:// 或 https:// 开头';
+                    },
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          ref
+                              .read(graphQLApiClientProvider)
+                              .initialize(_controller!.text);
+                          ref
+                              .read(settingsProvider.notifier)
+                              .updateApiUrl(_controller!.text);
+                          widget.onTapNext();
+                        }
+                      },
+                      child: const Text('下一步'),
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: TextFormField(
-                  decoration: const InputDecoration(labelText: '服务器网址'),
-                  controller: _controller,
-                  validator: (value) {
-                    if (value!.startsWith(RegExp(r'^https?://'))) {
-                      return null;
-                    }
-                    return '网址必须为 http:// 或 https:// 开头，请输入正确的网址';
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                ),
-              ),
-              RoundedRaisedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    ref
-                        .read(graphQLApiClientProvider)
-                        .initialize(_controller!.text);
-                    ref
-                        .read(settingsProvider.notifier)
-                        .updateApiUrl(_controller!.text);
-                    widget.onTapNext();
-                  }
-                },
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [Text('下一步'), Icon(Icons.chevron_right)],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -143,7 +155,7 @@ class _ApiUrlFormState extends ConsumerState<ApiUrlForm> {
 
 /// 输入用户名密码的登录界面
 class LoginForm extends ConsumerStatefulWidget {
-  final Function onTapBack;
+  final VoidCallback onTapBack;
 
   const LoginForm({super.key, required this.onTapBack});
 
@@ -154,6 +166,7 @@ class LoginForm extends ConsumerStatefulWidget {
 enum LoginMethod { password, oidc }
 
 class _LoginFormState extends ConsumerState<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -189,38 +202,47 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     });
 
     final authState = ref.watch(authenticationProvider);
-    return Builder(
-      builder: (context) {
-        return Center(
-          child: SingleChildScrollView(
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    return SafeArea(
+      child: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            AppSpacing.xl,
+            AppSpacing.lg,
+            AppSpacing.xl + MediaQuery.viewInsetsOf(context).bottom,
+          ),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
             child: Form(
+              key: _formKey,
               child: AutofillGroup(
                 child: Column(
-                  children: [
+                  spacing: AppSpacing.md,
+                  children: <Widget>[
                     Image.asset(
                       'assets/icon/icon.webp',
                       width: 100.0,
                       height: 100.0,
                       semanticLabel: 'icon',
                     ),
-                    const SizedBox(height: 20),
-                    // 登录方式选择
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                    const SizedBox(height: AppSpacing.sm),
+                    SizedBox(
+                      width: double.infinity,
                       child: SegmentedButton<LoginMethod>(
-                        segments: const [
+                        showSelectedIcon: false,
+                        segments: const <ButtonSegment<LoginMethod>>[
                           ButtonSegment(
                             value: LoginMethod.password,
-                            label: Text('密码登录'),
-                            icon: Icon(Icons.password),
+                            label: Text('密码登录', softWrap: false, maxLines: 1),
                           ),
                           ButtonSegment(
                             value: LoginMethod.oidc,
-                            label: Text('单点登录'),
-                            icon: Icon(Icons.login),
+                            label: Text('单点登录', softWrap: false, maxLines: 1),
                           ),
                         ],
-                        selected: {loginMethod},
+                        selected: <LoginMethod>{loginMethod},
                         onSelectionChanged: (Set<LoginMethod> newSelection) {
                           ref
                               .read(settingsProvider.notifier)
@@ -232,58 +254,61 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                         },
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    // 用户名输入框（两种登录方式都需要）
-                    if (loginMethod == LoginMethod.password) ...[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                        child: TextFormField(
-                          enableSuggestions: false,
-                          decoration: const InputDecoration(labelText: '用户名'),
-                          controller: _usernameController,
-                          autofillHints: const <String>[AutofillHints.username],
+                    if (loginMethod == LoginMethod.password) ...<Widget>[
+                      TextFormField(
+                        enableSuggestions: false,
+                        decoration: const InputDecoration(labelText: '用户名'),
+                        controller: _usernameController,
+                        textInputAction: TextInputAction.next,
+                        autofillHints: const <String>[AutofillHints.username],
+                        validator: (value) =>
+                            (value == null || value.isEmpty) ? '请输入用户名' : null,
+                      ),
+                      TextFormField(
+                        enableSuggestions: false,
+                        decoration: const InputDecoration(labelText: '密码'),
+                        controller: _passwordController,
+                        obscureText: true,
+                        textInputAction: TextInputAction.done,
+                        autofillHints: const <String>[AutofillHints.password],
+                        validator: (value) =>
+                            (value == null || value.isEmpty) ? '请输入密码' : null,
+                        onFieldSubmitted: (_) {
+                          if (_formKey.currentState!.validate()) {
+                            onLoginButtonPressed();
+                          }
+                        },
+                      ),
+                    ] else
+                      Text(
+                        '点击下方按钮将进行单点登录',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: scheme.onSurfaceVariant,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                        child: TextFormField(
-                          enableSuggestions: false,
-                          decoration: const InputDecoration(labelText: '密码'),
-                          controller: _passwordController,
-                          obscureText: true,
-                          autofillHints: const <String>[AutofillHints.password],
-                        ),
-                      ),
-                    ] else ...[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 20,
-                        ),
-                        child: Text(
-                          '点击下方按钮将进行单点登录',
-                          style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ),
-                    ],
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Center(
-                        child: FilledButton(
-                          onPressed: !authState.isLoading
-                              ? onLoginButtonPressed
-                              : null,
-                          child: const Text('登录'),
-                        ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed: authState.isLoading
+                            ? null
+                            : () {
+                                if (_formKey.currentState!.validate()) {
+                                  onLoginButtonPressed();
+                                }
+                              },
+                        child: authState.isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Text('登录'),
                       ),
                     ),
-                    const SizedBox(height: 8),
                     TextButton(
-                      onPressed: widget.onTapBack as void Function()?,
+                      onPressed: widget.onTapBack,
                       child: const Text('返回'),
                     ),
                   ],
@@ -291,8 +316,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

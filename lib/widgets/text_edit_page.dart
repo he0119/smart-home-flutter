@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
+import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/widgets/home_page.dart';
 
 class TextEditPage extends StatefulWidget {
@@ -47,23 +48,20 @@ class _TextEditPageState extends State<TextEditPage> {
     return MySliverScaffold(
       title: Text(widget.title),
       actions: <Widget>[
-        Tooltip(
-          message: '确认',
-          child: IconButton(
-            tooltip: '保存',
-            icon: const Icon(Icons.check),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                widget.onSubmit(_textController.text);
-                Navigator.of(context).pop();
-              }
-            },
-          ),
+        IconButton(
+          tooltip: '保存',
+          icon: const Icon(Icons.check),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              widget.onSubmit(_textController.text);
+              Navigator.of(context).pop();
+            }
+          },
         ),
       ],
       sliver: SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(AppSpacing.md),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,10 +80,16 @@ class _TextEditPageState extends State<TextEditPage> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   inputFormatters: widget.inputFormatters,
                   keyboardType: widget.keyboardType,
+                  decoration: const InputDecoration(errorMaxLines: 2),
                 ),
               ),
-              const SizedBox(height: 12),
-              Text(widget.description),
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                widget.description,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
             ],
           ),
         ),

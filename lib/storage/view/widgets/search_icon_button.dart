@@ -6,14 +6,12 @@ class SearchIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: '搜索',
-      child: IconButton(
-        icon: const Icon(Icons.search),
-        onPressed: () {
-          context.goSearch();
-        },
-      ),
+    return IconButton(
+      tooltip: '搜索',
+      icon: const Icon(Icons.search),
+      onPressed: () {
+        context.goSearch();
+      },
     );
   }
 }

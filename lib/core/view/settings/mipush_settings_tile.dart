@@ -22,8 +22,10 @@ class MiPushSettingsTile extends ConsumerWidget {
       status = '已注册';
     }
     return SettingsTile(
+      leading: Icons.notifications_outlined,
       title: '小米推送',
       subtitle: status,
+      subtitleMaxLines: 2,
       onPressed: (context) {
         context.push(AppRoutes.miPushSettings);
       },

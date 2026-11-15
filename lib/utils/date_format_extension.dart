@@ -12,6 +12,11 @@ extension LocalDatetimeExtension on DateTime {
     return localFormat.format(toLocal());
   }
 
+  /// 不显示秒的本地时间，列表里一行放得下
+  String toLocalShortStr() {
+    return DateFormat.yMMMd().add_Hm().format(toLocal());
+  }
+
   /// 获得本地习惯的时间差距表示
   String differenceStr(DateTime other) {
     final localNow = toLocal();

@@ -27,7 +27,6 @@ class SearchScreen extends ConsumerStatefulWidget {
 }
 
 class _SearchScreenState extends ConsumerState<SearchScreen> {
-  bool _showClearButton = false;
   bool _isDeleted = false;
   bool _missingStorage = false;
 
@@ -38,10 +37,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   void initState() {
     super.initState();
     _textController.addListener(() {
-      setState(() {
-        if (_textController.text.isNotEmpty) _showClearButton = true;
-        if (_textController.text.isEmpty) _showClearButton = false;
-      });
+      setState(() {});
       doSearch();
     });
   }
@@ -53,17 +49,22 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     super.dispose();
   }
 
+  /// 立即搜索，用于切筛选条件
+  void _searchNow() {
+    _debounceTimer?.cancel();
+    ref
+        .read(searchProvider.notifier)
+        .search(
+          _textController.text,
+          isDeleted: _isDeleted,
+          missingStorage: _missingStorage,
+        );
+  }
+
+  /// 输入时防抖
   void doSearch() {
     _debounceTimer?.cancel();
-    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
-      ref
-          .read(searchProvider.notifier)
-          .search(
-            _textController.text,
-            isDeleted: _isDeleted,
-            missingStorage: _missingStorage,
-          );
-    });
+    _debounceTimer = Timer(const Duration(milliseconds: 300), _searchNow);
   }
 
   @override
@@ -75,7 +76,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         hintText: '搜索物品和位置',
         leading: const Icon(Icons.search, size: 20),
         trailing: <Widget>[
-          if (_showClearButton)
+          if (_textController.text.isNotEmpty)
             IconButton(
               tooltip: '清除',
               icon: const Icon(Icons.close, size: 20),
@@ -94,71 +95,74 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         // 点页面其它区域时收起键盘
         onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       ),
-      appbarBottom: PreferredSize(
-        preferredSize: const Size.fromHeight(56),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-          child: SizedBox(
-            width: double.infinity,
+      slivers: <Widget>[
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.md,
+              AppSpacing.sm,
+              AppSpacing.md,
+              0,
+            ),
             child: Wrap(
               children: <Widget>[
-                MyChoiceChip(
+                MyFilterChip(
                   label: const Text('已删除'),
                   selected: _isDeleted,
                   onSelected: (value) {
                     setState(() {
                       _isDeleted = value;
-                      doSearch();
                     });
+                    _searchNow();
                   },
                 ),
-                MyChoiceChip(
+                MyFilterChip(
                   label: const Text('无位置'),
                   selected: _missingStorage,
                   onSelected: (value) {
                     setState(() {
                       _missingStorage = value;
-                      doSearch();
                     });
+                    _searchNow();
                   },
                 ),
               ],
             ),
           ),
         ),
-      ),
-      sliver: Consumer(
-        builder: (BuildContext context, WidgetRef ref, _) {
-          final state = ref.watch(searchProvider);
-          if (state.status == SearchStatus.loading) {
-            return const SliverCenterLoadingIndicator();
-          }
-          if (state.status == SearchStatus.failure) {
-            return SliverErrorState(message: state.errorMessage);
-          }
-          if (state.status == SearchStatus.success) {
-            if (state.items.isEmpty && state.storages.isEmpty) {
-              return const SliverEmptyState(
-                icon: Icons.search_off,
-                title: '没有找到相关内容',
-                message: '换个关键字试试，或者关掉筛选条件',
-              );
-            } else {
-              return StorageItemList(
-                items: state.items,
-                storages: state.storages,
-                isHighlight: true,
-                term: state.term,
-              );
+        Consumer(
+          builder: (BuildContext context, WidgetRef ref, _) {
+            final state = ref.watch(searchProvider);
+            if (state.status == SearchStatus.loading) {
+              return const SliverCenterLoadingIndicator();
             }
-          }
-          return const SliverEmptyState(
-            icon: Icons.search,
-            title: '搜索物品和位置',
-            message: '输入名称或备注里的关键字',
-          );
-        },
-      ),
+            if (state.status == SearchStatus.failure) {
+              return SliverErrorState(message: state.errorMessage);
+            }
+            if (state.status == SearchStatus.success) {
+              if (state.items.isEmpty && state.storages.isEmpty) {
+                return const SliverEmptyState(
+                  icon: Icons.search_off,
+                  title: '没有找到相关内容',
+                  message: '换个关键字试试，或者关掉筛选条件',
+                );
+              } else {
+                return StorageItemList(
+                  items: state.items,
+                  storages: state.storages,
+                  isHighlight: true,
+                  term: state.term,
+                );
+              }
+            }
+            return const SliverEmptyState(
+              icon: Icons.search,
+              title: '搜索物品和位置',
+              message: '输入名称或备注里的关键字',
+            );
+          },
+        ),
+      ],
     );
   }
 }

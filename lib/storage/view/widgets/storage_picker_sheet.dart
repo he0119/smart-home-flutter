@@ -2,8 +2,11 @@ import 'dart:math' as math;
 
 import 'package:flutter/widget_previews.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/storage/model/storage.dart';
+import 'package:smarthome/app/theme.dart';
 import 'package:smarthome/utils/constants.dart';
+import 'package:smarthome/widgets/state_views.dart';
 
 /// [showStoragePicker] 的返回值。
 ///
@@ -297,7 +300,7 @@ class _StoragePickerState extends State<StoragePicker> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 4, 8, 0),
+          padding: const EdgeInsets.fromLTRB(16, 4, 8, 0),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -346,7 +349,7 @@ class _StoragePickerState extends State<StoragePicker> {
         ),
         if (searching)
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 4),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -449,7 +452,7 @@ class _StoragePickerState extends State<StoragePicker> {
           top: BorderSide(color: colors.outlineVariant.withValues(alpha: 0.6)),
         ),
       ),
-      padding: const EdgeInsets.fromLTRB(20, 6, 8, 6),
+      padding: const EdgeInsets.fromLTRB(16, 6, 8, 6),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -567,7 +570,7 @@ class _StorageTile extends StatelessWidget {
         child: ExcludeSemantics(
           child: Material(
             color: selected ? colors.secondaryContainer : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppRadius.md),
             clipBehavior: Clip.antiAlias,
             child: InkWell(
               key: ValueKey<String>('storage-picker-row-${storage.id}'),
@@ -581,7 +584,7 @@ class _StorageTile extends StatelessWidget {
                       const SizedBox(width: 8)
                     else
                       SizedBox(
-                        width: 40,
+                        width: 48,
                         height: 48,
                         child: hasChildren
                             ? GestureDetector(
@@ -699,30 +702,11 @@ class _EmptySearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(Icons.search_off, size: 40, color: colors.onSurfaceVariant),
-            const SizedBox(height: 12),
-            Text('没有找到「$query」', style: theme.textTheme.titleMedium),
-            const SizedBox(height: 4),
-            Text(
-              '换个名字试试，或者清空搜索浏览全部位置',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: colors.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            TextButton(onPressed: onClear, child: const Text('清空搜索')),
-          ],
-        ),
-      ),
+    return EmptyState(
+      icon: Icons.search_off,
+      title: '没有找到「$query」',
+      message: '换个名字试试，或者清空搜索浏览全部位置',
+      action: TextButton(onPressed: onClear, child: const Text('清空搜索')),
     );
   }
 }
@@ -733,10 +717,7 @@ Widget storagePickerPreview() {
   const balcony = Storage(id: 'balcony', name: '阳台', parent: homeStorage);
   const cabinet = Storage(id: 'cabinet', name: '阳台储物柜', parent: balcony);
   return MaterialApp(
-    theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6750A4)),
-      useMaterial3: true,
-    ),
+    theme: buildLightTheme(null),
     home: Scaffold(
       body: StoragePicker(
         storages: const <Storage>[

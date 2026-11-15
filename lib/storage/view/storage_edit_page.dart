@@ -126,70 +126,82 @@ class _StorageEditPageState extends ConsumerState<StorageEditPage> {
           : const Text('添加位置'),
       sliver: SliverFillRemaining(
         hasScrollBody: false,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              spacing: AppSpacing.md,
-              children: <Widget>[
-                TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(labelText: '名称'),
-                  inputFormatters: [LengthLimitingTextInputFormatter(200)],
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return '名称不能为空';
-                    }
-                    return null;
-                  },
-                  textInputAction: TextInputAction.next,
-                  focusNode: _nameFocusNode,
-                  onFieldSubmitted: (_) {
-                    _fieldFocusChange(
-                      context,
-                      _nameFocusNode!,
-                      _descriptionFocusNode,
-                    );
-                  },
-                ),
-                StorageFormField(
-                  decoration: const InputDecoration(labelText: '属于'),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  onChanged: (Storage? value) {
-                    // 家的 id 是空字符串，服务器只能接受 null
-                    if (value != null) {
-                      parentId = value.id == homeStorage.id ? null : value.id;
-                    }
-                  },
-                  initialValue: widget.isEditing
-                      ? widget.storage!.parent ?? homeStorage
-                      : widget.storage,
-                  validator: (value) {
-                    if (value == null) {
-                      return '请选择一个位置';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: const InputDecoration(labelText: '备注'),
-                  inputFormatters: [LengthLimitingTextInputFormatter(200)],
-                  focusNode: _descriptionFocusNode,
-                ),
-                RoundedRaisedButton(
-                  onPressed: (state.status != StorageEditStatus.loading)
-                      ? () {
-                          if (_formKey.currentState!.validate()) {
-                            _onSubmitPressed();
-                          }
-                        }
-                      : null,
-                  child: const Text('提交'),
-                ),
-              ],
+        child: SafeArea(
+          top: false,
+          minimum: const EdgeInsets.only(bottom: AppSpacing.md),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.md,
+              AppSpacing.lg,
+              AppSpacing.xl,
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                spacing: AppSpacing.md,
+                children: <Widget>[
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(labelText: '名称'),
+                    inputFormatters: [LengthLimitingTextInputFormatter(200)],
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return '名称不能为空';
+                      }
+                      return null;
+                    },
+                    textInputAction: TextInputAction.next,
+                    focusNode: _nameFocusNode,
+                    onFieldSubmitted: (_) {
+                      _fieldFocusChange(
+                        context,
+                        _nameFocusNode!,
+                        _descriptionFocusNode,
+                      );
+                    },
+                  ),
+                  StorageFormField(
+                    decoration: const InputDecoration(labelText: '属于'),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    onChanged: (Storage? value) {
+                      // 家的 id 是空字符串，服务器只能接受 null
+                      if (value != null) {
+                        parentId = value.id == homeStorage.id ? null : value.id;
+                      }
+                    },
+                    initialValue: widget.isEditing
+                        ? widget.storage!.parent ?? homeStorage
+                        : widget.storage,
+                    validator: (value) {
+                      if (value == null) {
+                        return '请选择一个位置';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: _descriptionController,
+                    decoration: const InputDecoration(labelText: '备注'),
+                    inputFormatters: [LengthLimitingTextInputFormatter(200)],
+                    focusNode: _descriptionFocusNode,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: RoundedRaisedButton(
+                      onPressed: (state.status != StorageEditStatus.loading)
+                          ? () {
+                              if (_formKey.currentState!.validate()) {
+                                _onSubmitPressed();
+                              }
+                            }
+                          : null,
+                      child: const Text('提交'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

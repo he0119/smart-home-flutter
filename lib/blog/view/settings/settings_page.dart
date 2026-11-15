@@ -29,6 +29,7 @@ class BlogSettingsScreen extends ConsumerWidget {
             title: '网址',
             tiles: [
               SettingsTile(
+                leading: Icons.link,
                 title: '博客网址',
                 subtitle: settings.blogUrl,
                 onPressed: (context) {
@@ -36,6 +37,7 @@ class BlogSettingsScreen extends ConsumerWidget {
                 },
               ),
               SettingsTile(
+                leading: Icons.admin_panel_settings_outlined,
                 title: '博客管理网址',
                 subtitle: settings.blogAdminUrl ?? '请单击输入',
                 onPressed: (context) {

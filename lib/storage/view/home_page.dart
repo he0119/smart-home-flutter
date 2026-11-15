@@ -12,9 +12,10 @@ import 'package:smarthome/storage/view/widgets/search_icon_button.dart';
 import 'package:smarthome/utils/constants.dart';
 import 'package:smarthome/utils/date_format_extension.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
-import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
+import 'package:smarthome/widgets/list_rows.dart';
+import 'package:smarthome/widgets/state_views.dart';
 
 class StorageHomePage extends StatelessWidget {
   const StorageHomePage({super.key});
@@ -84,8 +85,8 @@ class StorageHomeScreen extends ConsumerWidget {
 
     if (state.status == StorageHomeStatus.failure) {
       listofWidget.add(
-        SliverErrorMessageButton(
-          onPressed: () {
+        SliverErrorState(
+          onRetry: () {
             ref
                 .read(storageHomeProvider.notifier)
                 .fetch(itemType: state.itemType, cache: false);
@@ -97,16 +98,11 @@ class StorageHomeScreen extends ConsumerWidget {
       // 仅在主界面添加所有位置按钮
       if (state.itemType == ItemType.all) {
         listofWidget.add(
-          // 和下面的物品行用同一套网格：leading 图标 16、标题 72 起，
-          // 不再套 Card，避免卡片外边距把整行往右推 16dp
           SliverToBoxAdapter(
-            child: ListTile(
-              leading: Icon(
-                Icons.storage,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              title: const Text('所有位置'),
-              trailing: const Icon(Icons.chevron_right),
+            child: EntryRow(
+              icon: Icons.storage,
+              title: '所有位置',
+              supporting: '全部位置和物品',
               onTap: () {
                 context.goStorageDetail(homeStorage.id);
               },
@@ -162,8 +158,26 @@ class StorageHomeScreen extends ConsumerWidget {
           ),
         );
       }
+      final hasAnyItem = <List<Item>?>[
+        state.expiredItems,
+        state.nearExpiredItems,
+        state.recentlyEditedItems,
+        state.recentlyCreatedItems,
+      ].any((items) => items?.isNotEmpty ?? false);
+      if (!hasAnyItem) {
+        listofWidget.add(
+          const SliverEmptyState(
+            icon: Icons.inventory_2_outlined,
+            title: '还没有物品',
+            message: '点右下角的 + 添加第一个物品',
+          ),
+        );
+      }
     } else if (state.status == StorageHomeStatus.loading) {
       listofWidget.add(const SliverCenterLoadingIndicator());
+    }
+    if (state.status == StorageHomeStatus.success) {
+      listofWidget.add(const SliverToBoxAdapter(child: ListBottomPadding()));
     }
     return listofWidget;
   }
@@ -195,38 +209,35 @@ class StorageHomeScreen extends ConsumerWidget {
     }
     return SliverStickyHeader(
       header: Container(
-        height: 60.0,
         color: Theme.of(context).colorScheme.surface,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        alignment: Alignment.centerLeft,
-        child: Row(
-          children: <Widget>[
-            Text(headerText),
-            const Spacer(),
-            IconButton(
-              tooltip: currentType == ItemType.all ? '展开全部' : '收起',
-              icon: Icon(
-                currentType == ItemType.all
-                    ? Icons.expand_more
-                    : Icons.expand_less,
-              ),
-              onPressed: () {
-                ref
-                    .read(storageHomeProvider.notifier)
-                    .fetch(
-                      itemType: currentType != ItemType.all
-                          ? ItemType.all
-                          : listType,
-                    );
-              },
+        child: SectionHeader(
+          title: headerText,
+          padding: const EdgeInsets.fromLTRB(16, 8, 8, 4),
+          action: IconButton(
+            tooltip: currentType == ItemType.all ? '展开全部' : '收起',
+            visualDensity: VisualDensity.compact,
+            icon: Icon(
+              currentType == ItemType.all
+                  ? Icons.expand_more
+                  : Icons.expand_less,
             ),
-          ],
+            onPressed: () {
+              ref
+                  .read(storageHomeProvider.notifier)
+                  .fetch(
+                    itemType: currentType != ItemType.all
+                        ? ItemType.all
+                        : listType,
+                  );
+            },
+          ),
         ),
       ),
       sliver: SliverInfiniteList<Item>(
         items: items,
+        separatorBuilder: (context, item) => const ContentDivider(),
         itemBuilder: (context, item) {
-          return _buildItemListItem(context, item, listType, currentType);
+          return _buildItemRow(context, item, listType);
         },
         hasReachedMax: hasReachedMax,
         onFetch: () {
@@ -236,49 +247,36 @@ class StorageHomeScreen extends ConsumerWidget {
     );
   }
 
-  ListTile _buildItemListItem(
-    BuildContext context,
-    Item item,
-    ItemType type,
-    ItemType currentType,
-  ) {
-    String? differenceText;
-    switch (type) {
-      case ItemType.expired:
-      case ItemType.nearExpired:
-        differenceText = '（${item.expiredAt!.differenceFromNowStr()}）';
-        break;
-      case ItemType.recentlyCreated:
-        differenceText = '（${item.createdAt!.differenceFromNowStr()}）';
-        break;
-      case ItemType.recentlyEdited:
-        differenceText = '（${item.editedAt!.differenceFromNowStr()}）';
-        break;
-      case ItemType.all:
-        break;
-    }
-    final text = RichText(
-      text: TextSpan(
-        style: DefaultTextStyle.of(context).style,
-        children: <TextSpan>[
-          TextSpan(
-            text: item.name,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          TextSpan(text: differenceText),
-        ],
-      ),
-    );
+  Widget _buildItemRow(BuildContext context, Item item, ItemType type) {
+    final time = switch (type) {
+      ItemType.expired ||
+      ItemType.nearExpired => item.expiredAt!.differenceFromNowStr(),
+      ItemType.recentlyCreated => item.createdAt!.differenceFromNowStr(),
+      ItemType.recentlyEdited => item.editedAt!.differenceFromNowStr(),
+      ItemType.all => '',
+    };
+    // 副标题优先放备注，没有备注再退到位置名；时间放在尾部，
+    // 这样「最近修改」分组里的时间一眼能看到，也不挤掉原来的备注
     final description = item.description;
-    return ListTile(
-      leading: Icon(
-        Icons.inventory_2_outlined,
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
-      ),
-      title: text,
-      subtitle: (description == null || description.isEmpty)
+    final storageName = item.storage?.name;
+    final supporting = (description != null && description.isNotEmpty)
+        ? description
+        : storageName;
+
+    return ContentRow(
+      icon: Icons.inventory_2_outlined,
+      title: Text(item.name),
+      supporting: supporting == null || supporting.isEmpty
           ? null
-          : Text(description),
+          : Text(supporting),
+      trailing: time.isEmpty
+          ? null
+          : Text(
+              time,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
       onTap: () async {
         context.goItemDetail(item.id);
       },

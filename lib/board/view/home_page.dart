@@ -6,9 +6,10 @@ import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
-import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
+import 'package:smarthome/widgets/list_rows.dart';
+import 'package:smarthome/widgets/state_views.dart';
 
 class BoardHomePage extends StatelessWidget {
   const BoardHomePage({super.key});
@@ -43,23 +44,32 @@ class BoardHomeScreen extends ConsumerWidget {
       ),
       slivers: [
         if (state.status == BoardHomeStatus.failure)
-          SliverErrorMessageButton(
-            onPressed: () {
+          SliverErrorState(
+            onRetry: () {
               ref.read(boardHomeProvider.notifier).fetch(cache: false);
             },
             message: state.errorMessage,
           ),
         if (state.status == BoardHomeStatus.loading)
           const SliverCenterLoadingIndicator(),
+        if (state.status == BoardHomeStatus.success && state.topics.isEmpty)
+          const SliverEmptyState(
+            icon: Icons.forum_outlined,
+            title: '还没有话题',
+            message: '点右下角写第一条留言',
+          ),
         if (state.status == BoardHomeStatus.success)
           SliverInfiniteList<Topic>(
             items: state.topics,
             hasReachedMax: state.hasReachedMax,
+            separatorBuilder: (context, item) => const ContentDivider(),
             itemBuilder: (context, item) => TopicItem(topic: item),
             onFetch: () {
               ref.read(boardHomeProvider.notifier).fetch();
             },
           ),
+        if (state.status == BoardHomeStatus.success)
+          const SliverToBoxAdapter(child: ListBottomPadding()),
       ],
       onRefresh: () async {
         ref.read(boardHomeProvider.notifier).fetch(cache: false);

@@ -55,6 +55,7 @@ class _StorageFieldState extends ConsumerState<StorageFormField> {
     return TextField(
       focusNode: _focusNode,
       controller: _controller,
+      enabled: widget.enabled,
       decoration: effectiveDecoration.copyWith(
         errorText: _errorText,
         suffixIcon: shouldShowClearIcon(effectiveDecoration)
@@ -103,8 +104,7 @@ class _StorageFieldState extends ConsumerState<StorageFormField> {
   }
 
   void _hideKeyboard() {
-    // ignore: use_build_context_synchronously
-    Future.microtask(() => FocusScope.of(context).requestFocus(FocusNode()));
+    FocusScope.of(context).unfocus();
   }
 
   Future<void> requestUpdate() async {

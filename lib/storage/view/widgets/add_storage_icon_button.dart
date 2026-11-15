@@ -11,23 +11,20 @@ class AddStorageIconButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Tooltip(
-      message: '添加位置',
-      child: IconButton(
-        tooltip: '添加位置',
-        icon: const Icon(Icons.add),
-        onPressed: () async {
-          final r = await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) =>
-                  StorageEditPage(isEditing: false, storage: storage),
-            ),
-          );
-          if (r == true && storage != null) {
-            ref.read(storageDetailProvider(storage!.id).notifier).refresh();
-          }
-        },
-      ),
+    // IconButton.tooltip 自带悬停提示和语义标签，外面再包 Tooltip 会念两遍
+    return IconButton(
+      tooltip: '添加位置',
+      icon: const Icon(Icons.create_new_folder_outlined),
+      onPressed: () async {
+        final r = await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => StorageEditPage(isEditing: false, storage: storage),
+          ),
+        );
+        if (r == true && storage != null) {
+          ref.read(storageDetailProvider(storage!.id).notifier).refresh();
+        }
+      },
     );
   }
 }

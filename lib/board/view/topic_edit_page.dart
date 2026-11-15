@@ -1,5 +1,7 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/providers/topic_edit_provider.dart';
 import 'package:smarthome/board/view/widgets/topic_item.dart';
@@ -38,6 +40,37 @@ class _TopicEditPageState extends ConsumerState<TopicEditPage> {
     super.dispose();
   }
 
+  void _submit() {
+    final title = _titleController.text.trim();
+    final description = _descriptionController.text.trim();
+    if (title.isEmpty) {
+      showErrorSnackBar('请填写标题');
+      return;
+    }
+    if (description.isEmpty) {
+      showErrorSnackBar('请填写内容');
+      return;
+    }
+    // 在「编辑」tab 时顺带亮行内校验；在「预览」tab 时 Form 已被销毁，
+    // 这里用 currentState? 而不是 !，避免切到预览后点发送直接崩
+    _formKey.currentState?.validate();
+
+    if (widget.isEditing) {
+      ref
+          .read(topicEditProvider.notifier)
+          .updateTopic(
+            id: widget.topic!.id,
+            title: title,
+            description: description,
+          );
+    } else {
+      ref
+          .read(topicEditProvider.notifier)
+          .addTopic(title: title, description: description);
+    }
+    showInfoSnackBar('正在提交...', duration: 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     final tabs = <String>['编辑', '预览'];
@@ -57,38 +90,19 @@ class _TopicEditPageState extends ConsumerState<TopicEditPage> {
       }
     });
 
+    final submitting =
+        ref.watch(topicEditProvider).status == TopicEditStatus.loading;
+
     return DefaultTabController(
       length: tabs.length,
       child: MySliverScaffold(
+        appBarSize: AppBarSize.normal,
         title: widget.isEditing ? const Text('编辑话题') : const Text('新话题'),
         actions: [
-          Tooltip(
-            message: '提交',
-            child: IconButton(
-              tooltip: '发送',
-              icon: const Icon(Icons.send),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  if (widget.isEditing) {
-                    ref
-                        .read(topicEditProvider.notifier)
-                        .updateTopic(
-                          id: widget.topic!.id,
-                          title: _titleController.text,
-                          description: _descriptionController.text,
-                        );
-                  } else {
-                    ref
-                        .read(topicEditProvider.notifier)
-                        .addTopic(
-                          title: _titleController.text,
-                          description: _descriptionController.text,
-                        );
-                  }
-                  showInfoSnackBar('正在提交...', duration: 1);
-                }
-              },
-            ),
+          IconButton(
+            tooltip: '发布',
+            icon: const Icon(Icons.send),
+            onPressed: submitting ? null : _submit,
           ),
         ],
         appbarBottom: TabBar(tabs: [for (final tab in tabs) Tab(text: tab)]),
@@ -132,18 +146,25 @@ class _EditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.sm,
+        AppSpacing.lg,
+        AppSpacing.lg,
+      ),
       child: Form(
         key: formKey,
         child: SingleChildScrollView(
           child: Column(
+            spacing: AppSpacing.md,
             children: [
               TextFormField(
                 controller: titleController,
+                textInputAction: TextInputAction.next,
+                inputFormatters: [LengthLimitingTextInputFormatter(200)],
                 decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: '添加标题',
-                  hintStyle: TextStyle(fontSize: 18),
+                  labelText: '标题',
+                  hintText: '一句话说清话题',
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -155,11 +176,12 @@ class _EditPage extends StatelessWidget {
               ),
               TextFormField(
                 controller: descriptionController,
+                minLines: 8,
                 maxLines: null,
+                keyboardType: TextInputType.multiline,
                 decoration: const InputDecoration(
-                  border: InputBorder.none,
+                  labelText: '内容',
                   hintText: '想说点什么？',
-                  hintStyle: TextStyle(fontSize: 18),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {

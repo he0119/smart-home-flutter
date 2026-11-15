@@ -68,6 +68,7 @@ class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
     });
 
     return MySliverScaffold(
+      appBarSize: AppBarSize.normal,
       title: const Text('添加图片'),
       sliver: SliverFillRemaining(
         hasScrollBody: false,
@@ -96,8 +97,14 @@ class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
                           alignment: AlignmentDirectional.center,
                           children: <Widget>[
                             kIsWeb
-                                ? Image.network(picturePath!)
-                                : Image.file(File(picturePath!)),
+                                ? Image.network(
+                                    picturePath!,
+                                    fit: BoxFit.contain,
+                                  )
+                                : Image.file(
+                                    File(picturePath!),
+                                    fit: BoxFit.contain,
+                                  ),
                             if (state.status == PictureEditStatus.loading)
                               const CircularProgressIndicator(),
                           ],
@@ -111,7 +118,7 @@ class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    RoundedRaisedButton(
+                    FilledButton.tonal(
                       onPressed: () async {
                         final image = await _picker.pickImage(
                           source: ImageSource.gallery,
@@ -122,9 +129,9 @@ class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
                       },
                       child: const Text('相册'),
                     ),
-                    if (!kIsWeb) const SizedBox(width: 20),
+                    if (!kIsWeb) const SizedBox(width: AppSpacing.xl),
                     if (!kIsWeb)
-                      RoundedRaisedButton(
+                      FilledButton.tonal(
                         onPressed: () async {
                           final photo = await _picker.pickImage(
                             source: ImageSource.camera,
@@ -140,17 +147,20 @@ class _PictureAddScreenState extends ConsumerState<PictureAddScreen> {
                 SafeArea(
                   top: false,
                   minimum: const EdgeInsets.only(top: 8, bottom: 8),
-                  child: RoundedRaisedButton(
-                    onPressed:
-                        (state.status != PictureEditStatus.loading &&
-                            picturePath != null)
-                        ? () {
-                            if (_formKey.currentState!.validate()) {
-                              _onSubmitPressed();
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: RoundedRaisedButton(
+                      onPressed:
+                          (state.status != PictureEditStatus.loading &&
+                              picturePath != null)
+                          ? () {
+                              if (_formKey.currentState!.validate()) {
+                                _onSubmitPressed();
+                              }
                             }
-                          }
-                        : null,
-                    child: const Text('上传'),
+                          : null,
+                      child: const Text('上传'),
+                    ),
                   ),
                 ),
               ],

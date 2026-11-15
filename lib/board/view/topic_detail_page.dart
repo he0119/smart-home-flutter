@@ -8,12 +8,14 @@ import 'package:smarthome/board/view/comment_edit_page.dart';
 import 'package:smarthome/board/view/topic_edit_page.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
 import 'package:smarthome/board/view/widgets/item_title.dart';
+import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/core/core.dart';
 import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
-import 'package:smarthome/widgets/error_message_button.dart';
 import 'package:smarthome/widgets/home_page.dart';
+import 'package:smarthome/widgets/list_rows.dart';
+import 'package:smarthome/widgets/state_views.dart';
 import 'package:smarthome/widgets/infinite_list.dart';
 import 'package:smarthome/widgets/markdown.dart';
 
@@ -94,9 +96,14 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
     final state = ref.watch(topicDetailProvider(widget.topicId));
 
     return MySliverScaffold(
-      title: Text(state.topic.title ?? ''),
+      title: Text(
+        state.topic.title ?? '',
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
       actions: <Widget>[
         PopupMenuButton<TopicDetailMenu>(
+          tooltip: '话题操作',
           onSelected: (value) async {
             if (value == TopicDetailMenu.edit) {
               final r = await Navigator.of(context).push(
@@ -233,30 +240,40 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
         ),
       ],
       slivers: [
-        if (state.topic.description != null)
+        if (state.topic.user != null)
           SliverToBoxAdapter(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 ItemTitle(
                   user: state.topic.user!,
                   createdAt: state.topic.createdAt!,
                   editedAt: state.topic.editedAt!,
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                  child: MyMarkdownBody(data: state.topic.description!),
-                ),
+                if (state.topic.description != null &&
+                    state.topic.description!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSpacing.lg,
+                      AppSpacing.sm,
+                      AppSpacing.lg,
+                      AppSpacing.lg,
+                    ),
+                    child: MyMarkdownBody(data: state.topic.description!),
+                  ),
               ],
             ),
           ),
-        SliverToBoxAdapter(
-          child: CommentOrder(topicId: state.topic.id, descending: descending),
-        ),
+        if (state.status == TopicDetailStatus.success)
+          SliverToBoxAdapter(
+            child: CommentOrder(
+              topicId: state.topic.id,
+              descending: descending,
+            ),
+          ),
         if (state.status == TopicDetailStatus.failure)
-          SliverErrorMessageButton(
-            onPressed: () {
+          SliverErrorState(
+            onRetry: () {
               ref
                   .read(topicDetailProvider(widget.topicId).notifier)
                   .refresh(descending: descending);
@@ -268,6 +285,7 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
         if (state.status == TopicDetailStatus.success)
           SliverInfiniteList<Comment>(
             items: state.comments,
+            separatorBuilder: (context, item) => const ContentDivider(),
             itemBuilder: (context, item) => CommentItem(
               comment: item,
               showMenu: loginUser == item.user,
@@ -284,6 +302,8 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
             },
             hasReachedMax: state.hasReachedMax,
           ),
+        if (state.status == TopicDetailStatus.success)
+          const SliverToBoxAdapter(child: ListBottomPadding()),
       ],
       onRefresh: () async {
         ref
@@ -291,9 +311,9 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
             .refresh(descending: descending);
       },
       floatingActionButton:
-          (state.status == TopicDetailStatus.success && state.topic.isClosed!)
-          ? null
-          : FloatingActionButton(
+          (state.status == TopicDetailStatus.success &&
+              !(state.topic.isClosed ?? false))
+          ? FloatingActionButton(
               tooltip: '添加评论',
               child: const Icon(Icons.add_comment),
               onPressed: () async {
@@ -309,7 +329,8 @@ class _TopicDetailScreenState extends ConsumerState<TopicDetailScreen> {
                       .refresh(descending: descending);
                 }
               },
-            ),
+            )
+          : null,
     );
   }
 }
@@ -326,45 +347,45 @@ class CommentOrder extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-      child: Column(
-        children: [
-          const Divider(),
-          Row(
-            children: <Widget>[
-              const Text('全部评论', style: TextStyle(fontSize: 16)),
-              const Spacer(),
-              PopupMenuButton(
-                tooltip: '评论排序',
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.sort),
-                      const SizedBox(width: 4),
-                      Text(descending ? '倒序' : '正序'),
-                    ],
-                  ),
-                ),
-                onSelected: (dynamic value) {
-                  ref
-                      .read(settingsProvider.notifier)
-                      .updateCommentDescending(value);
-                  ref
-                      .read(topicDetailProvider(topicId).notifier)
-                      .refresh(descending: value);
-                },
-                itemBuilder: (context) => <PopupMenuItem<bool>>[
-                  const PopupMenuItem(value: false, child: Text('正序')),
-                  const PopupMenuItem(value: true, child: Text('倒序')),
-                ],
+    final scheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        const Divider(height: 1),
+        SectionHeader(
+          title: '全部评论',
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            AppSpacing.md,
+            AppSpacing.sm,
+            AppSpacing.sm,
+          ),
+          action: PopupMenuButton<bool>(
+            tooltip: '评论排序',
+            icon: Icon(Icons.sort, color: scheme.onSurfaceVariant),
+            onSelected: (bool value) {
+              ref
+                  .read(settingsProvider.notifier)
+                  .updateCommentDescending(value);
+              ref
+                  .read(topicDetailProvider(topicId).notifier)
+                  .refresh(descending: value);
+            },
+            itemBuilder: (context) => <PopupMenuEntry<bool>>[
+              CheckedPopupMenuItem<bool>(
+                value: false,
+                checked: !descending,
+                child: const Text('正序'),
+              ),
+              CheckedPopupMenuItem<bool>(
+                value: true,
+                checked: descending,
+                child: const Text('倒序'),
               ),
             ],
           ),
-          const Divider(),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

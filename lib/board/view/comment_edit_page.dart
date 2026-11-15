@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:smarthome/app/dimens.dart';
 import 'package:smarthome/board/model/board.dart';
 import 'package:smarthome/board/providers/comment_edit_provider.dart';
 import 'package:smarthome/board/view/widgets/comment_item.dart';
@@ -41,6 +42,27 @@ class _CommentEditPageState extends ConsumerState<CommentEditPage> {
     super.dispose();
   }
 
+  void _submit() {
+    final body = _bodyController.text.trim();
+    if (body.isEmpty) {
+      showErrorSnackBar('请填写内容');
+      return;
+    }
+    // 预览 tab 下 Form 已被销毁，用 currentState? 避免空断言崩溃
+    _formKey.currentState?.validate();
+
+    if (widget.isEditing) {
+      ref
+          .read(commentEditProvider.notifier)
+          .updateComment(id: widget.comment!.id, body: body);
+    } else {
+      ref
+          .read(commentEditProvider.notifier)
+          .addComment(topicId: widget.topic!.id, body: body);
+    }
+    showInfoSnackBar('正在提交...', duration: 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     final tabs = <String>['编辑', '预览'];
@@ -60,37 +82,19 @@ class _CommentEditPageState extends ConsumerState<CommentEditPage> {
       }
     });
 
+    final submitting =
+        ref.watch(commentEditProvider).status == CommentEditStatus.loading;
+
     return DefaultTabController(
       length: tabs.length,
       child: MySliverScaffold(
+        appBarSize: AppBarSize.normal,
         title: widget.isEditing ? const Text('编辑评论') : const Text('新评论'),
         actions: [
-          Tooltip(
-            message: '提交',
-            child: IconButton(
-              tooltip: '发送',
-              icon: const Icon(Icons.send),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  if (widget.isEditing) {
-                    ref
-                        .read(commentEditProvider.notifier)
-                        .updateComment(
-                          id: widget.comment!.id,
-                          body: _bodyController.text,
-                        );
-                  } else {
-                    ref
-                        .read(commentEditProvider.notifier)
-                        .addComment(
-                          topicId: widget.topic!.id,
-                          body: _bodyController.text,
-                        );
-                  }
-                  showInfoSnackBar('正在提交...', duration: 1);
-                }
-              },
-            ),
+          IconButton(
+            tooltip: '发布',
+            icon: const Icon(Icons.send),
+            onPressed: submitting ? null : _submit,
           ),
         ],
         appbarBottom: TabBar(tabs: [for (final tab in tabs) Tab(text: tab)]),
@@ -128,7 +132,12 @@ class _EditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.sm,
+        AppSpacing.lg,
+        AppSpacing.lg,
+      ),
       child: Form(
         key: formKey,
         child: SingleChildScrollView(
@@ -136,11 +145,12 @@ class _EditPage extends StatelessWidget {
             children: [
               TextFormField(
                 controller: bodyController,
+                minLines: 8,
                 maxLines: null,
+                keyboardType: TextInputType.multiline,
                 decoration: const InputDecoration(
-                  border: InputBorder.none,
+                  labelText: '内容',
                   hintText: '想说点什么？',
-                  hintStyle: TextStyle(fontSize: 18),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {

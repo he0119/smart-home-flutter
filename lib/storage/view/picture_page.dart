@@ -10,7 +10,8 @@ import 'package:smarthome/utils/parse_url.dart';
 import 'package:smarthome/utils/show_confirm_dialog.dart';
 import 'package:smarthome/utils/show_snack_bar.dart';
 import 'package:smarthome/widgets/center_loading_indicator.dart';
-import 'package:smarthome/widgets/error_message_button.dart';
+import 'package:smarthome/widgets/home_page.dart';
+import 'package:smarthome/widgets/state_views.dart';
 
 class PicturePage extends StatelessWidget {
   /// 图片 ID
@@ -49,13 +50,19 @@ class _PictureScreenState extends ConsumerState<PictureScreen> {
     });
 
     return state.when(
-      data: (picture) => Scaffold(
-        appBar: AppBar(
-          title: picture.description.isNotEmpty
-              ? Text('${picture.item!.name}（${picture.description}）')
-              : Text('${picture.item!.name}（未命名）'),
-          actions: [
+      data: (picture) {
+        final itemName = picture.item?.name ?? '图片';
+        final title = picture.description.isEmpty
+            ? '$itemName（未命名）'
+            : '$itemName（${picture.description}）';
+        return MySliverScaffold(
+          appBarSize: AppBarSize.normal,
+          // 看图页不需要限宽，宽屏上直接铺满
+          contentMaxWidth: double.infinity,
+          title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
+          actions: <Widget>[
             PopupMenuButton<PictureMenu>(
+              tooltip: '图片操作',
               onSelected: (value) async {
                 if (value == PictureMenu.delete) {
                   final confirmed = await showConfirmDialog(
@@ -72,7 +79,7 @@ class _PictureScreenState extends ConsumerState<PictureScreen> {
                   ref.read(pictureEditProvider.notifier).deletePicture(picture);
                 }
               },
-              itemBuilder: (context) => [
+              itemBuilder: (context) => <PopupMenuEntry<PictureMenu>>[
                 const PopupMenuItem(
                   value: PictureMenu.delete,
                   child: Text('删除'),
@@ -80,37 +87,43 @@ class _PictureScreenState extends ConsumerState<PictureScreen> {
               ],
             ),
           ],
-        ),
-        body: PhotoView(
-          loadingBuilder: (context, event) => const CenterLoadingIndicator(),
-          imageProvider: CachedNetworkImageProvider(
-            picture.url!,
-            cacheKey: getCacheKey(picture.url!),
+          sliver: SliverFillRemaining(
+            hasScrollBody: false,
+            child: PhotoView(
+              loadingBuilder: (context, event) =>
+                  const CenterLoadingIndicator(),
+              imageProvider: CachedNetworkImageProvider(
+                picture.url!,
+                cacheKey: getCacheKey(picture.url!),
+              ),
+              minScale: PhotoViewComputedScale.contained,
+              maxScale: PhotoViewComputedScale.covered * 5,
+              backgroundDecoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+              ),
+            ),
           ),
-          minScale: PhotoViewComputedScale.contained,
-          maxScale: PhotoViewComputedScale.covered * 5,
-          backgroundDecoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-          ),
-        ),
-        floatingActionButton: kIsWeb
-            ? FloatingActionButton(
-                tooltip: '在新标签页中打开',
-                onPressed: () async {
-                  await launchUrl(picture.url!);
-                },
-                child: const Icon(Icons.open_in_new),
-              )
-            : null,
+          floatingActionButton: kIsWeb
+              ? FloatingActionButton(
+                  tooltip: '在新标签页中打开',
+                  onPressed: () async {
+                    await launchUrl(picture.url!);
+                  },
+                  child: const Icon(Icons.open_in_new),
+                )
+              : null,
+        );
+      },
+      loading: () => const MySliverScaffold(
+        appBarSize: AppBarSize.normal,
+        title: Text('图片'),
+        sliver: SliverCenterLoadingIndicator(),
       ),
-      loading: () => Scaffold(
-        appBar: AppBar(title: const Text('加载中...')),
-        body: const CenterLoadingIndicator(),
-      ),
-      error: (error, stack) => Scaffold(
-        appBar: AppBar(title: const Text('图片')),
-        body: ErrorMessageButton(
-          onPressed: () {
+      error: (error, stack) => MySliverScaffold(
+        appBarSize: AppBarSize.normal,
+        title: const Text('图片'),
+        sliver: SliverErrorState(
+          onRetry: () {
             ref.read(pictureProvider(widget.pictureId).notifier).refresh();
           },
           message: error.toString(),
