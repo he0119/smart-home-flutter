@@ -1,0 +1,21 @@
+# Codecov 判定规则，字段含义见 https://docs.codecov.com/docs/codecov-yaml
+#
+# 这份配置要解决的问题：只改界面和组件预览的 PR，会因为没有对应测试而直接染红。
+# 项目整体覆盖率约 30%，测试主要打在 provider 和 repository 上，页面和组件基本靠人看。
+
+coverage:
+  status:
+    project:
+      default:
+        # 和主分支比，允许整体覆盖率小幅下降（界面改动一多，掉零点几个百分点是常态）
+        target: auto
+        threshold: 1%
+    patch:
+      default:
+        # 新增代码的覆盖率只作为信息展示，不当作合入门槛
+        informational: true
+
+# 只在 IDE 的 Widget Previewer 里用、不会进入正式运行路径的文件，不计入覆盖率统计
+ignore:
+  - "lib/widgets/app_preview.dart"
+  - "lib/widgets/preview_frame.dart"

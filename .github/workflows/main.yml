@@ -124,8 +124,12 @@ jobs:
           cache: true
 
       - name: Build web version
+        # --web-content-hash：入口文件和静态资源都带上内容哈希，发新版后浏览器不会再端着旧缓存跑。
+        # 前提是服务器把 index.html 和 flutter_bootstrap.js 设成 no-cache（或每次回源校验），
+        # 否则浏览器可能拿着旧 index.html 去找一个已经不存在的旧哈希文件。
+        # canvaskit 那批文件因为用了 --no-web-resources-cdn，不会带哈希，不能设长期缓存。
         run: |
-          flutter build web --source-maps --no-web-resources-cdn -t ./lib/main_$ENVIRONMENT.dart
+          flutter build web --source-maps --no-web-resources-cdn --web-content-hash -t ./lib/main_$ENVIRONMENT.dart
         env:
           ENVIRONMENT: ${{ needs.test.outputs.environment }}
           SENTRY_RELEASE: ${{ needs.test.outputs.release }}
